@@ -4,19 +4,17 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Runtime.Serialization;
+    using System.Net;
 
     using Carbon.Data;
-    using System.Net;
+
 
     [Table("AppErrors")]
     public class AppError : IAppError
     {
         private static readonly Sequence sequence = new Sequence(0, 0);
 
-        public static Sequence Sequence
-        {
-            get { return sequence; }
-        }
+        public static Sequence Sequence => sequence;
 
         [Column("appId"), Key]
         public int AppId { get; set; }
@@ -102,9 +100,6 @@
         public object User { get; set; }
 
         [IgnoreDataMember]
-        public DateTime Date
-        {
-            get { return UnixTime.ToDate((int)(Id >> Sequence.TimestampLeftShift)); }
-        }
+        public DateTime Date => DateTimeOffset.FromUnixTimeSeconds((int)(Id >> Sequence.TimestampLeftShift)).UtcDateTime;
     }
 }

@@ -31,10 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Carbon.Core, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\Carbon.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Carbon.Data, Version=1.3.6.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Carbon.Data.dll</HintPath>
@@ -53,7 +49,7 @@
     <Compile Include="Apps\Errors\AppError.cs" />
     <Compile Include="Apps\IAppVersion.cs" />
     <Compile Include="Apps\Instances\AppInstance.cs" />
-    <Compile Include="Building\Models\BuildStatus.cs" />
+    <Compile Include="Building\BuildStatus.cs" />
     <Compile Include="Apps\AppTagId.cs" />
     <Compile Include="Apps\Logging\AppActivity.cs" />
     <Compile Include="Infrastructure\IMachine.cs" />
@@ -61,16 +57,14 @@
     <Compile Include="Infrastructure\Reports\AppInstanceReport.cs" />
     <Compile Include="Infrastructure\Reports\MachineReport.cs" />
     <Compile Include="Infrastructure\Reports\NetworkInterfaceReport.cs" />
-    <Compile Include="Infrastructure\Reports\ProcessorReport.cs" />
     <Compile Include="Infrastructure\Reports\VolumeReport.cs" />
     <Compile Include="Infrastructure\TerminationReason.cs" />
     <Compile Include="Building\IBuilder.cs" />
-    <Compile Include="Building\Models\IBuild.cs" />
+    <Compile Include="Building\IBuild.cs" />
     <Compile Include="Apps\Errors\IAppError.cs" />
     <Compile Include="Diagnostics\DiagnosticList.cs" />
     <Compile Include="Diagnostics\Diagnostic.cs" />
-    <Compile Include="Building\Models\BuildResult.cs" />
-    <Compile Include="Environments\IEnvironment.cs" />
+    <Compile Include="Building\BuildResult.cs" />
     <Compile Include="Exceptions\IError.cs" />
     <Compile Include="Frontends\FrontendFile.cs" />
     <Compile Include="Frontends\FrontendVersion.cs" />
@@ -92,7 +86,7 @@
     <Compile Include="Helpers\StreamExtensions.cs" />
     <Compile Include="Hosting\IAppHost.cs" />
     <Compile Include="Hosting\AppHostConfiguration.cs" />
-    <Compile Include="Bindings\BindingInfo.cs" />
+    <Compile Include="Hosting\BindingInfo.cs" />
     <Compile Include="Apps\AppVersion.cs" />
     <Compile Include="Apps\IApp.cs" />
     <Compile Include="Apps\Instances\IAppInstance.cs" />
