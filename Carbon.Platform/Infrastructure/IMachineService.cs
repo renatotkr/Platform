@@ -4,7 +4,7 @@
 
     public interface IMachineService
     {
-        Task<MachineInfo> GetCurrent();
+        Task<MachineInfo> GetAsync();
 
         Task<int> RegisterAsync(MachineInfo machine);
 

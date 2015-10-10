@@ -1,10 +1,11 @@
 ﻿namespace Carbon.Platform
 {
 	using System;
-	using System.Collections.Generic;
 
 	public class MachineObservation : IObservation
 	{
+        public int MachineId { get; set; }
+
 		public ProcessorObservation Processor { get; set; }
 
 		public NetworkInterfaceObservation[] NetworkInterfaces { get; set; } 

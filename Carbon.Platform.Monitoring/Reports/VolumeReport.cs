@@ -1,16 +1,14 @@
 ﻿namespace Carbon.Platform
 {
-	using System;
+    using System;
 	using System.ComponentModel.DataAnnotations;
 	using System.ComponentModel.DataAnnotations.Schema;
 	using System.Diagnostics;
-	using System.Runtime.Serialization;
 
-	using Carbon;
 	using Carbon.Data;
 
 	[Table("VolumeReports")]
-	public class VolumeReport : IReport
+	public class VolumeReport
 	{
 		[Column("vid"), Key]
 		public string VolumeId { get; set; }
@@ -60,22 +58,11 @@
 		[Column("wt")]
 		public float WriteTime { get; set; }
 
-		#region Helpers
-
-		[IgnoreDataMember]
-		public DateRange Period
-		{
-			get { return ReportIdentity.Create(ReportId).ToDateRange(); }
-			set { this.ReportId = ReportIdentity.Create(value).Value; }
-		}
-
-		#endregion
-
-		public static VolumeReport FromObservations(VolumeObservation one, VolumeObservation two)
+        public static VolumeReport FromObservations(VolumeObservation one, VolumeObservation two)
 		{
 			var report = new VolumeReport {
 				VolumeId	= one.Volume.FullName,
-				Period		= new DateRange(one.Date, two.Date),
+                ReportId    = ReportIdentity.Create(one.Date, two.Date),
 				Available	= two.Available,
 				Used		= two.Used,
 				Size		= two.Size,

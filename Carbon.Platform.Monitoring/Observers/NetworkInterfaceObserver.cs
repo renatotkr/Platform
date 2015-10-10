@@ -13,7 +13,7 @@
 		{
 			#region Preconditions
 
-			if (networkInterface == null) throw new ArgumentNullException("networkInterface");
+			if (networkInterface == null) throw new ArgumentNullException(nameof(networkInterface));
 
 			#endregion
 

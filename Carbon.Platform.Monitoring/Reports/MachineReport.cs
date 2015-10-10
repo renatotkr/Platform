@@ -1,16 +1,14 @@
 ﻿namespace Carbon.Platform
 {
-	using System;
 	using System.ComponentModel.DataAnnotations;
 	using System.ComponentModel.DataAnnotations.Schema;
 	using System.Runtime.Serialization;
 
-	using Carbon;
 	using Carbon.Data;
 	
 	[Table("MachineReports")]
-	public class MachineReport : IReport
-	{
+	public class MachineReport : ReportBase
+    {
 		[Key, Column("mid")] 
 		[DataMember(Name = "name")]
 		public int MachineId { get; set; }
@@ -36,26 +34,15 @@
 		[Column("sr")]
 		public int SendRate { get; set; }
 
-		#region Helpers
-
-		[IgnoreDataMember]
-		public DateRange Period
-		{
-			get { return ReportIdentity.Create(ReportId).ToDateRange(); }
-			set { this.ReportId = ReportIdentity.Create(value).Value; }
-		}
-
-		#endregion
-
 		public static MachineReport FromObservations(MachineObservation one, MachineObservation two)
 		{
 			var processor = ProcessorReport.FromObservations(one.Processor, two.Processor);
 
-			var memory = new MemoryObserver().Observe();
+			var memory = LocalMemory.Observe();
 
 			var report = new MachineReport {
-				MachineId	= Machine.GetAsync().Result.Id,
-				Period		= new DateRange(one.Date, two.Date),
+                ReportId    = ReportIdentity.Create(one.Date, two.Date),
+				MachineId	= one.MachineId,
 				CpuTime		= processor.ProcessingTime,
 				MemoryUsed	= memory.Used
 			};

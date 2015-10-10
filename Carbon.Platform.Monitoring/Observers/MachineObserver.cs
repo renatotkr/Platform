@@ -6,11 +6,13 @@
 
 	public class MachineObserver : IDisposable
 	{
+        private readonly int machineId;
 		private readonly ProcessorObserver processorObserver;
 		private readonly NetworkInterfaceObserver[] networkInterfaceObservers;
 
-		public MachineObserver(bool observeNetwork = false)
+		public MachineObserver(int machineId, bool observeNetwork = false)
 		{
+            this.machineId = machineId;
 			this.processorObserver = new ProcessorObserver("_Total");
 
 			try
@@ -23,6 +25,7 @@
 		public MachineObservation Observe()
 		{
 			var machineObservation = new MachineObservation {
+                MachineId = machineId,
 				Processor = processorObserver.Observe(),
 				Date = DateTime.UtcNow
 			};
@@ -40,21 +43,17 @@
 			processorObserver.Dispose();
 		}
 
-
-
 		public IEnumerable<NetworkInterfaceObserver> GetNetworkInterfaceMonitors()
 		{
 			
 			foreach (var ni in Machine.GetActiveNetworkInterfaces())
 			{
-				var observer = ni.GetObserver();
+                var observer = new NetworkInterfaceObserver(ni);
 
-				observer.Observe(); // Get an observation out of the way to make sure we don't throw later
+				observer.Observe(); // Make an initial observersation to make sure things are OK
 
 				yield return observer;
-			}
-
-	
+			}	
 		}
 	}
 }

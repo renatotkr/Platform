@@ -20,10 +20,5 @@
 
 		[DataMember(Name = "ipAddresses")]
 		public IList<IPAddress> IpAddresses { get; set; }
-
-		public NetworkInterfaceObserver GetObserver()
-		{
-			return new NetworkInterfaceObserver(this);
-		}
 	}
 }

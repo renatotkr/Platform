@@ -30,7 +30,7 @@
 
                 try
                 {
-                    current.MemoryTotal = new MemoryObserver().Observe().Total;
+                    current.MemoryTotal = LocalMemory().Observe().Total;
                     current.Ips = GetIps().Select(ip => ip.ToString()).ToArray();
 
                     current.VolumeNames = GetVolumes().Select(c => c.Name).ToArray();

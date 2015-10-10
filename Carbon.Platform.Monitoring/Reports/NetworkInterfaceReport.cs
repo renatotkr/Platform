@@ -5,11 +5,10 @@
 	using System.Diagnostics;
 	using System.Runtime.Serialization;
 
-	using Carbon;
 	using Carbon.Data;
 
 	[Table("NetworkInterfaceReports")]
-	public class NetworkInterfaceReport : IReport
+	public class NetworkInterfaceReport
 	{
 		[Column("mac"), Key]
 		public string MacAddress { get; set; }
@@ -46,8 +45,8 @@
 			int sendRate = (int)CounterSample.Calculate(o1.SendRateSample, o2.SendRateSample);			// bytes per second
 
 			return new NetworkInterfaceReport {
-				MacAddress = o1.NetworkInterface.MacAddress,
-				Period		= new DateRange(o1.Date, o2.Date),
+                ReportId    = ReportIdentity.Create(o1.Date, o2.Date),
+				MacAddress  = o1.NetworkInterface.MacAddress,
 				ReceiveRate = receiveRate,
 				SendRate	= sendRate
 			};

@@ -44,15 +44,10 @@
         [IgnoreDataMember]
         public DriveInfo DriveInfo { get; set; }
 
-        public string GetInstanceName()
-        {
-            return DriveInfo.Name.Substring(0, 2);
-        }
+        public string GetInstanceName() => DriveInfo.Name.Substring(0, 2);
 
         [IgnoreDataMember]
         public string FullName => MachineId + "/" + Name;
-
-        public VolumeObserver GetObserver() => new VolumeObserver(this);
 
         public void Refresh()
         {

@@ -5,11 +5,13 @@
 
 	using Carbon;
 
-	public class ProcessorReport : IReport
+	public class ProcessorReport
 	{
-		public DateRange Period { get; set; }
+        public DateTime Start { get; set; }
 
-		/// <summary>
+        public DateTime End { get; set; }
+	
+        /// <summary>
 		/// The amount of time the processor was budy during the reporting period
 		/// </summary>
 		public float ProcessingTime { get; set; }
@@ -19,7 +21,8 @@
 			float processingTime = CounterSample.Calculate(one.ProcessorTimeSample, two.ProcessorTimeSample);
 
 			return new ProcessorReport 	{
-				Period = new DateRange(one.Date, two.Date),
+                Start = one.Date,
+                End = two.Date,
 				ProcessingTime = (float)Math.Round(processingTime, 3)
 			};
 		}

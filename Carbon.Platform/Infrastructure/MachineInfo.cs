@@ -4,9 +4,9 @@
 	using System.ComponentModel.DataAnnotations;
 	using System.ComponentModel.DataAnnotations.Schema;
 	using System.Runtime.Serialization;
+    using System.Net;
 
-	using Carbon.Data;
-	using System.Net;
+    using Carbon.Data;
 
 	[Table("Machines")]
 	public class MachineInfo : IMachine
@@ -32,7 +32,7 @@
 
 		[Column("instanceId")]
 		[DataMember(Name = "instanceId")]
-		[Index("instanceId-index")]			// includes id
+		[Index("instanceId-index")]
 		public string InstanceId { get; set; }
 
 		[Column("imageId")]
@@ -46,8 +46,6 @@
 		[Column("availabilityZone")]
 		[DataMember(Name = "availabilityZone")]
 		public string AvailabilityZone { get; set; }
-
-		// Processor Ids?
 
 		[Column("processorCount")]
 		[DataMember(Name = "processorCount")]
@@ -71,8 +69,6 @@
 
         [Column("heartbeat")]
         public DateTime? Heartbeat { get; set; }
-
-		// TODO: Public Ip
 
 		[Column("memoryTotal")]
 		[IgnoreDataMember]
