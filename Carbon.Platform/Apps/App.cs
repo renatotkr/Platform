@@ -37,14 +37,11 @@
 		// The current activated version (release)
 		[Column("activeVersion")]
 		public int ActiveVersion { get; set; }
-	
-		#region Configuration
 
-		[IgnoreDataMember]
-		public bool AutoStart
-		{
-			get { return true; }
-		}
+        #region Configuration
+
+        [IgnoreDataMember]
+        public bool AutoStart => true;
 
 		#endregion
 
@@ -55,7 +52,7 @@
 		[IgnoreDataMember]
 		public IList<AppVersion> Versions { get; set; }
 
-		[IgnoreDataMember]	// Domains
+        [IgnoreDataMember]	// Domains
 		[DataMember(Name = "bindings")]
 		public IList<BindingInfo> Bindings
 		{

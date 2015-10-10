@@ -7,8 +7,6 @@
 
     using Carbon.Data;
 
-    // An app version is also a tag
-
     [Table("AppVersions")]
     public class AppVersion : IAppVersion
     {
@@ -18,12 +16,12 @@
         {
             #region Preconditions
 
-            if (app == null) throw new ArgumentNullException("app");
+            if (app == null) throw new ArgumentNullException(nameof(app));
 
             #endregion
 
-            this.AppId = app.Id;
-            this.Number = number;
+            AppId = app.Id;
+            Number = number;
         }
 
         [Column("appId"), Key]
@@ -32,19 +30,17 @@
         [Column("num"), Key]
         public int Number { get; set; }
 
+        [Column("releaseId")]
+        public Guid ReleaseId { get; set; }
+
         [Column("commit")]
         public string Commit { get; set; }
 
-        [Column("hash")]        // Package hash
+        [Column("hash")]  // Package hash
         public byte[] Hash { get; set; }
 
         [Column("signature")]   // Package signature
         public byte[] Signature { get; set; }
-
-        /*
-		[Column("buildId")]
-		public long? BuildId { get; set; }
-		*/
 
         [Column("created")]
         [TimePrecision(TimePrecision.Second)]
@@ -54,22 +50,18 @@
         [TimePrecision(TimePrecision.Second)]
         public DateTime? Deployed { get; set; }
 
+        // Verified ?
+
         [Column("activated")]
         [TimePrecision(TimePrecision.Second)]
         public DateTime? Activated { get; set; }
 
         #region Helpers
 
-        public long GetKey()
-        {
-            return AppTagId.Create(AppId, Number).Value;
-        }
+        public long GetKey() => AppTagId.Create(AppId, Number).Value;
 
         [IgnoreDataMember]
-        public string HashHex
-        {
-            get { return HexString.FromBytes(Hash); }
-        }
+        public string HashHex => HexString.FromBytes(Hash);
 
         #endregion
     }

@@ -43,7 +43,10 @@
         [Column("host")] // Machine Host Name
         public string Host { get; set; }
 
-        // Current Version
+        // TODO: Replace App Version
+        [Column("releaseId")]
+        public Guid ReleaseId { get; set; }
+
         [Column("appVersion")]
         public int AppVersion { get; set; }
 
@@ -104,8 +107,7 @@
             var int2 = BitConverter.ToInt32(hex, 4);
             var int3 = BitConverter.ToInt32(hex, 8);
 
-            return new AppInstance
-            {
+            return new AppInstance {
                 AppId = int2,
                 AppVersion = int1,
                 MachineId = int3

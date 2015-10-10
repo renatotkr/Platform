@@ -8,12 +8,6 @@
 
 		Uri RepositoryUrl { get; }
 
-		// int Version { get; }
-
-		// int ActiveVersion { get; }
-
-		// Versions
-
-		// Environments
+        // Releases
 	}
 }
