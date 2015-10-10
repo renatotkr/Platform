@@ -1,11 +1,7 @@
 ﻿namespace Carbon.Platform
 {
-    using System;
 	using System.ComponentModel.DataAnnotations;
 	using System.ComponentModel.DataAnnotations.Schema;
-	using System.Diagnostics;
-
-	using Carbon.Data;
 
 	[Table("VolumeReports")]
 	public class VolumeReport
@@ -57,22 +53,5 @@
 		/// </summary>
 		[Column("wt")]
 		public float WriteTime { get; set; }
-
-        public static VolumeReport FromObservations(VolumeObservation one, VolumeObservation two)
-		{
-			var report = new VolumeReport {
-				VolumeId	= one.Volume.FullName,
-                ReportId    = ReportIdentity.Create(one.Date, two.Date),
-				Available	= two.Available,
-				Used		= two.Used,
-				Size		= two.Size,
-				ReadTime	= CounterSample.Calculate(one.ReadTimeSample, two.ReadTimeSample),
-				WriteTime	= CounterSample.Calculate(one.WriteTimeSample, two.WriteTimeSample),
-				ReadRate	= (int)CounterSample.Calculate(one.ReadRateSample, two.ReadRateSample),
-				WriteRate	= (int)CounterSample.Calculate(one.WriteRateSample, two.WriteRateSample)
-			};
-
-			return report;
-		}
 	}
 }

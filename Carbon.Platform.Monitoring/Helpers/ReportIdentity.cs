@@ -4,7 +4,7 @@
 	using System.Runtime.InteropServices;
 
 	[StructLayout(LayoutKind.Explicit)]
-	public struct ReportIdentity : IRange<DateTime>
+	public struct ReportIdentity
 	{
 		public static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 

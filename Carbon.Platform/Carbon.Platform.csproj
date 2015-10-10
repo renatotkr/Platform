@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Carbon.Platform</RootNamespace>
     <AssemblyName>Carbon.Platform</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -57,6 +58,11 @@
     <Compile Include="Apps\Logging\AppActivity.cs" />
     <Compile Include="Infrastructure\IMachine.cs" />
     <Compile Include="Infrastructure\LocalMemory.cs" />
+    <Compile Include="Infrastructure\Reports\AppInstanceReport.cs" />
+    <Compile Include="Infrastructure\Reports\MachineReport.cs" />
+    <Compile Include="Infrastructure\Reports\NetworkInterfaceReport.cs" />
+    <Compile Include="Infrastructure\Reports\ProcessorReport.cs" />
+    <Compile Include="Infrastructure\Reports\VolumeReport.cs" />
     <Compile Include="Infrastructure\TerminationReason.cs" />
     <Compile Include="Building\IBuilder.cs" />
     <Compile Include="Building\Models\IBuild.cs" />
@@ -83,7 +89,6 @@
     <Compile Include="Bundling\Bundle.cs" />
     <Compile Include="Helpers\AssetExtensions.cs" />
     <Compile Include="Helpers\Hash.cs" />
-    <Compile Include="Helpers\ReportIdentity.cs" />
     <Compile Include="Helpers\StreamExtensions.cs" />
     <Compile Include="Hosting\IAppHost.cs" />
     <Compile Include="Hosting\AppHostConfiguration.cs" />
@@ -96,7 +101,6 @@
     <Compile Include="Infrastructure\MachineInfo.cs" />
     <Compile Include="Infrastructure\NetworkInterfaceInfo.cs" />
     <Compile Include="Helpers\IObservation.cs" />
-    <Compile Include="Helpers\IReport.cs" />
     <Compile Include="Infrastructure\VolumeInfo.cs" />
     <Compile Include="Infrastructure\DeviceStatus.cs" />
     <Compile Include="Amazon\Ec2Instance.cs" />
