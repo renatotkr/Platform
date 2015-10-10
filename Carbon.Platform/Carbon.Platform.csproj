@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2003EABF-FAB5-48D2-A921-0901494A54B5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Carbon.Platform</RootNamespace>
+    <AssemblyName>Carbon.Platform</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Carbon.Core, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Carbon.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Carbon.Data, Version=1.3.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Carbon.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Apps\AppType.cs" />
+    <Compile Include="Apps\Errors\AppError.cs" />
+    <Compile Include="Apps\IAppVersion.cs" />
+    <Compile Include="Apps\Instances\AppInstanceObservation.cs" />
+    <Compile Include="Apps\Instances\AppInstance.cs" />
+    <Compile Include="Apps\Instances\AppInstanceReport.cs" />
+    <Compile Include="Building\Models\BuildStatus.cs" />
+    <Compile Include="Apps\AppTagId.cs" />
+    <Compile Include="Apps\Logging\AppActivity.cs" />
+    <Compile Include="Infrastructure\TerminationReason.cs" />
+    <Compile Include="Building\IBuilder.cs" />
+    <Compile Include="Building\Models\IBuild.cs" />
+    <Compile Include="Apps\Errors\IAppError.cs" />
+    <Compile Include="Diagnostics\DiagnosticList.cs" />
+    <Compile Include="Diagnostics\Diagnostic.cs" />
+    <Compile Include="Building\Models\BuildResult.cs" />
+    <Compile Include="Environments\IEnvironment.cs" />
+    <Compile Include="Exceptions\IError.cs" />
+    <Compile Include="Frontends\FrontendFile.cs" />
+    <Compile Include="Frontends\FrontendVersion.cs" />
+    <Compile Include="Frontends\IFrontend.cs" />
+    <Compile Include="Frontends\Frontend.cs" />
+    <Compile Include="Infrastructure\IMachineService.cs" />
+    <Compile Include="Infrastructure\MachineConfiguration.cs" />
+    <Compile Include="Infrastructure\Machines\IMachine.cs" />
+    <Compile Include="Packaging\Stores\IPackageStore.cs" />
+    <Compile Include="Packaging\SiteManifest.cs" />
+    <Compile Include="Packaging\Stores\PackageStoreOld.cs" />
+    <Compile Include="Exceptions\IAppErrorLog.cs" />
+    <Compile Include="Runtime\AppService.cs" />
+    <Compile Include="Testing\TestRuns.cs" />
+    <Compile Include="Deployment\IAppDeployer.cs" />
+    <Compile Include="Apps\App.cs" />
+    <Compile Include="Apps\Builds\AppBuild.cs" />
+    <Compile Include="Bundling\Bundle.cs" />
+    <Compile Include="Helpers\AssetExtensions.cs" />
+    <Compile Include="Helpers\Hash.cs" />
+    <Compile Include="Helpers\ReportIdentity.cs" />
+    <Compile Include="Helpers\StreamExtensions.cs" />
+    <Compile Include="Hosting\IAppHost.cs" />
+    <Compile Include="Hosting\AppHostConfiguration.cs" />
+    <Compile Include="Bindings\BindingInfo.cs" />
+    <Compile Include="Apps\AppVersion.cs" />
+    <Compile Include="Apps\IApp.cs" />
+    <Compile Include="Apps\Instances\IAppInstance.cs" />
+    <Compile Include="Helpers\InstanceName.cs" />
+    <Compile Include="Infrastructure\Machines\Machine.cs" />
+    <Compile Include="Infrastructure\Machines\MachineInfo.cs" />
+    <Compile Include="Infrastructure\Machines\MachineObservation.cs" />
+    <Compile Include="Infrastructure\Machines\MachineObserver.cs" />
+    <Compile Include="Infrastructure\Machines\MachineReport.cs" />
+    <Compile Include="Infrastructure\Memory\MemoryObservation.cs" />
+    <Compile Include="Infrastructure\Memory\MemoryObserver.cs" />
+    <Compile Include="Infrastructure\Memory\MemoryReport.cs" />
+    <Compile Include="Infrastructure\NetworkInterfaces\NetworkInterfaceInfo.cs" />
+    <Compile Include="Infrastructure\NetworkInterfaces\NetworkInterfaceObservation.cs" />
+    <Compile Include="Infrastructure\NetworkInterfaces\NetworkInterfaceObserver.cs" />
+    <Compile Include="Infrastructure\NetworkInterfaces\NetworkInterfaceReport.cs" />
+    <Compile Include="Helpers\IObservation.cs" />
+    <Compile Include="Infrastructure\Processors\ProcessorObservation.cs" />
+    <Compile Include="Infrastructure\Processors\ProcessorObserver.cs" />
+    <Compile Include="Infrastructure\Processors\ProcessorReport.cs" />
+    <Compile Include="Helpers\IReport.cs" />
+    <Compile Include="Infrastructure\Volumes\VolumeInfo.cs" />
+    <Compile Include="Infrastructure\Volumes\VolumeObservation.cs" />
+    <Compile Include="Infrastructure\Volumes\VolumeObserver.cs" />
+    <Compile Include="Infrastructure\Volumes\VolumeReport.cs" />
+    <Compile Include="Infrastructure\DeviceStatus.cs" />
+    <Compile Include="Amazon\Ec2Instance.cs" />
+    <Compile Include="Packaging\Assets\ZipEntryAsset.cs" />
+    <Compile Include="Packaging\Assets\FileAsset.cs" />
+    <Compile Include="Helpers\Format.cs" />
+    <Compile Include="Packaging\IAsset.cs" />
+    <Compile Include="Packaging\Package.cs" />
+    <Compile Include="Packaging\Packages\DirectoryPackage.cs" />
+    <Compile Include="Repositories\ICommit.cs" />
+    <Compile Include="Packaging\Packages\ZipPackage.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\IRepository.cs" />
+    <Compile Include="Repositories\Revision.cs" />
+    <Compile Include="Repositories\IRepositoryClient.cs" />
+    <Compile Include="Testing\TestResult.cs" />
+    <Compile Include="Validation\HostName.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
