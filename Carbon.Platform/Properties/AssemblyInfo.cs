@@ -4,10 +4,14 @@
 [assembly: AssemblyProduct("Carbon")]
 [assembly: AssemblyCopyright("© 2012 - 2015 Jason Nelson")]
 
-[assembly: AssemblyVersion("0.2.0")]
+[assembly: AssemblyVersion("0.3.0")]
 
 /*
-0.1.1 (2014-04-10)
+  0.1.1 (2014-04-10)
+ -----------------------------------------------------
+ - Breakout observerations
+
+  0.1.1 (2014-04-10)
  -----------------------------------------------------
  - Change application version to an Int32 (The version record can keep track of details)
  - Add AppError

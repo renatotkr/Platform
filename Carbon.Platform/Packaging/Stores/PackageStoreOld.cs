@@ -20,9 +20,7 @@
 		{
 			#region Preconditions
 
-			if (package == null)	throw new ArgumentNullException("package");
-
-			if (package.Disposed)	throw new ObjectDisposedException("package");
+			if (package == null) throw new ArgumentNullException(nameof(package));
 
 			#endregion
 

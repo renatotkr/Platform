@@ -19,8 +19,6 @@
 		public string Message { get; set; }
 	}
 
-	// Location
-
 	public enum DiagnosticType
 	{
 		Hidden	= 0,

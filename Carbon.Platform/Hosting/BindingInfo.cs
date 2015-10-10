@@ -8,8 +8,7 @@
 		{
 			#region Preconditions
 
-			if (port < 80) 
-				throw new ArgumentNullException(paramName: "port", message: "Must be greater than 80");
+			if (port < 80) throw new ArgumentNullException(paramName: nameof(port), message: "Must be greater than 80");
 
 			#endregion
 
@@ -29,7 +28,7 @@
 		{
 			#region Preconditions
 
-			if (text == null) throw new ArgumentNullException("text");
+			if (text == null) throw new ArgumentNullException(nameof(text));
 
 			#endregion
 

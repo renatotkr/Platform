@@ -6,7 +6,7 @@
 	[Table("AppInstanceReports")]
 	public class AppInstanceReport
 	{
-		[Column("iid"), Key]					// AppId + MachineId
+		[Column("iid"), Key] // AppId + MachineId
 		public long AppInstanceId { get; set; }
 
 		[Column("rid"), Key] 

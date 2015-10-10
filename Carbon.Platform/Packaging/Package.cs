@@ -13,8 +13,6 @@
 
 		public abstract void Dispose();
 
-		public bool Disposed { get; set; }
-
 		#region IEnumerable
 
 		IEnumerator<IAsset> IEnumerable<IAsset>.GetEnumerator()
@@ -33,7 +31,7 @@
 		{
 			#region Preconditions
 
-			if (target == null) throw new ArgumentNullException("target");
+			if (target == null) throw new ArgumentNullException(nameof(target));
 
 			if (target.Exists) throw new Exception("Target directory already exists.");
 
@@ -93,7 +91,7 @@
 			}
 		}
 
-		#region Static Constructors
+		#region Helpers
 
 		public static Package FromDirectory(DirectoryInfo root)
 		{

@@ -1,6 +1,5 @@
 ﻿namespace Carbon.Platform.Hosting
 {
-    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 

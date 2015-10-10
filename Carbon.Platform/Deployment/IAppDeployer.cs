@@ -31,10 +31,10 @@
 
 	Coordinator
 
-	POST	/apps/{id}/versions									{ name: "portfolio/1.1.1-beta", signature: "12345123" }
-	PUT		/machines											{ name: "S14" }												-> 201 { }
-	POST	/apps												{ name: "portfolio" ] }										-> 201 { }
-	POST	/apps/{id}/versions								{ name: "2.1.1", packageName: "portfolio/1.1.1-beta" }		-> 201 { }
+	POST	/apps/{id}/versions			{ name: "portfolio/1.1.1-beta", signature: "12345123" }
+	PUT		/machines					{ name: "S14" }												-> 201 { }
+	POST	/apps						{ name: "portfolio" ] }										-> 201 { }
+	POST	/apps/{id}/versions			{ name: "2.1.1", packageName: "portfolio/1.1.1-beta" }		-> 201 { }
 	
 	PUT	/apps/{name}/enviroments/beta/versions/2.1.1/activate	{ version: "2.1.1" }										-> 200 { }
 	
@@ -55,21 +55,3 @@ You may set :branch, which is the reference to the branch, tag, or any SHA1 you 
 set :branch, "master"
  * 
 */
-
-
-
-
-/*
-var deployment = new Deployment {
-	Started = DateTime.UtcNow
-};
-
-// Get the app instances for within the specific environment
-foreach (var instance in environment.Instances)
-{
-	// Notify each instance to pull the new version
-}
-
-return deployment;
-*/
-	
