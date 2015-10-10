@@ -8,10 +8,10 @@
 		// ListBranches
 		// GetBranch
 
-		Task<Package> Download(Revision revision);
+		Task<Package> DownloadAsync(Revision revision);
 
-		Task<ICommit> GetCommit(Revision revision);
+		Task<ICommit> GetCommitAsync(Revision revision);
 
-		Task Tag(ICommit commit, string name);
+		Task TagAsync(ICommit commit, string name);
 	}
 }
