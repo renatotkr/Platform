@@ -1,9 +1,14 @@
 ﻿namespace Carbon.Libraries
 {
+    using System.Threading.Tasks;
+
+    
     public class LibraryManager
     {
-        public LibraryRelease Query(string name, Semver version)
+        public LibraryRelease Find(string name, Semver version)
         {
+            // What store should we query?
+
             switch (version.Level)
             {
                 case MatchLevel.Patch: // find exact
@@ -14,24 +19,28 @@
 
             return null;
         }
-
-        public LibraryRelease PublishAsync(Library library, Semver version)
+        
+        public async Task<LibraryRelease> PublishAsync(Library library, Semver version)
         {
             // - Get source from GIT
             // - Verify source
             // - Read package.json
-            // As meeded
-            // - Extract TypeScript and build
-            // - Extract SASS and build
-
-            // Create release record
 
             // Make sure version is incrimental within the series
 
+
+            // As needed
+            // - Extract TypeScript and build
+            // - Extract SASS and build
+
+
+
             // Push to CDN
 
-            // OK
+            // Create release record
+            // Where? DynamoDb or RelationalDB?
 
+            // TODO: return record
             return null;
         }
 

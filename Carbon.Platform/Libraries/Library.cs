@@ -1,5 +1,6 @@
 ﻿namespace Carbon.Libraries
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -28,14 +29,13 @@
         [Column("version")] // e.g. 2.1.1
         public Semver Version { get; set; }
 
-        public LibraryDependency[] Dependencies { get; set; }
-    }
+        // The cdn url the library was deployed too
+        // e.g. https://cmcdn.net/core/1.1.1/core.js
+        [Column("url")]
+        public Uri Url { get; set; }
 
-    public class LibraryDependency
-    {
-        public string Name { get; set; }
-
-        public string Version { get; set; }
+        // Read from package.json
+        public Dependency[] Dependencies { get; set; }
     }
 }
 
