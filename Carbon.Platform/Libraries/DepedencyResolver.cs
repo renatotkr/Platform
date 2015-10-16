@@ -1,19 +1,19 @@
 ﻿namespace Carbon.Libraries
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
 
-    public interface IPackage
+    public interface ILibrary
     {
         Dependency[] Dependencies { get; }
     }
 
     public class DepedencyResolver
     {
-        // Given a set of depedencies, solve for a common set.
-
         private readonly LibraryManager manager = new LibraryManager();
 
-        public DependencyGraph Expand(IPackage package)
+        public DependencyGraph Expand(ILibrary package)
         {
             var graph = new DependencyGraph();
 
@@ -22,12 +22,13 @@
             return graph;
         }
 
-        private void Expand(IPackage package, DependencyGraph graph)
+        private void Expand(ILibrary package, DependencyGraph graph)
         {
             // Build up the graph
-
             foreach (var dep in package.Dependencies)
             {
+                if (!dep.IsResolved) Resolve(dep);
+
                 var node = graph.FindOrAdd(dep);
 
                 // TODO: Throw if there's a circular reference
@@ -39,10 +40,7 @@
 
                     node.AddEdge(childNode);
 
-                    if (childDep.Dependencies.Length > 0)
-                    {
-                        Expand(childDep, graph);
-                    }
+                    Expand(childDep, graph);
                 }
             }
         }
@@ -61,6 +59,11 @@
     {
         private readonly Dictionary<string, Node<Dependency>> map = new Dictionary<string, Node<Dependency>>();
 
+        public IEnumerable<Node<Dependency>> GetNodes()
+        {
+            return map.Values;
+        }
+
         public Node<Dependency> FindOrAdd(Dependency depedency)
         {
             Node<Dependency> node;
@@ -77,18 +80,49 @@
             return node;
         }
 
-        // It is possible to derive an evaluation order or the absence of an evaluation order that respects the given dependencies from the dependency graph.
+        private readonly List<Node<Dependency>> sortedNodes = new List<Node<Dependency>>();
 
-        // http://www.electricmonk.nl/docs/dependency_resolving_algorithm/dependency_resolving_algorithm.html
+        private HashSet<Node<Dependency>> visitedNodes = new HashSet<Node<Dependency>>();
 
-        // Topological_sorting
-        // https://en.wikipedia.org/wiki/Topological_sorting
-
-        public LibraryRelease[] Sort()
+        private void VisitNode(Node<Dependency> node)
         {
-            // use a topological sorting algorithm
+            if (IsFirstVisit(node))
+            {
+                foreach (var dependencyNode in node.Outgoing.Select(dep => dep))
+                {
+                    VisitNode(dependencyNode);
+                }
 
-            return null;
+                sortedNodes.Add(node);
+            }
+        }
+
+        internal bool IsFirstVisit(Node<Dependency> node)
+        {
+            var isFirstVisit = !visitedNodes.Contains(node);
+
+            if (isFirstVisit)
+            {
+                visitedNodes.Add(node);
+            }
+
+            return isFirstVisit;
+        }
+
+        // It is possible to derive an evaluation order or the absence of an evaluation 
+        // order that respects the given dependencies from the dependency graph.
+
+        // ... using
+        // Topological sorting (https://en.wikipedia.org/wiki/Topological_sorting)
+
+        public IList<LibraryRelease> Sort()
+        {
+            foreach (var node in GetNodes())
+            {
+                VisitNode(node);
+            }
+
+            return sortedNodes.Select(n => n.Value.Release).ToArray();
         }
     }
 
@@ -97,39 +131,23 @@
         public T Value { get; set; }
 
         // Dependencies
-        public List<Edge<T>> Outgoing { get; } = new List<Edge<T>>();
+        public List<Node<T>> Outgoing { get; } = new List<Node<T>>();
         
-        public List<Edge<T>> Incoming { get; } = new List<Edge<T>>();
-
+        public List<Node<T>> Incoming { get; } = new List<Node<T>>();
+        
         // Lower level depedency
         // e.g. A (source) depends on C (target)
         public void AddEdge(Node<T> value)
         {
             // Add Outgoing Edge
-            Outgoing.Add(new Edge<T>(this, value));
+            Outgoing.Add(value);
 
             // Add Incoming Edge (Reverse)
-            value.Incoming.Add(new Edge<T>(value, this));
+            value.Incoming.Add(this);
         }
     }
 
-    public class Edge<T>
-    {
-        // source -> target
-
-        public Edge(Node<T> source, Node<T> target)
-        {
-            Source = source;
-            Target = target;
-        }
-
-        public Node<T> Source { get; } 
-
-        public Node<T> Target { get; }
-    }
-   
-
-    public class Dependency : IPackage
+    public class Dependency : ILibrary
     {
         public string Name { get; set; }
 
@@ -137,8 +155,9 @@
 
         public Dependency[] Dependencies { get; set; }
 
+        public bool IsResolved { get; set; }
+
+        // Null until resolved
         public LibraryRelease Release { get; set; }
     }
-
-
 }
