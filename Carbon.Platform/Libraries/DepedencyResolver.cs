@@ -1,13 +1,7 @@
 ﻿namespace Carbon.Libraries
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    public interface ILibrary
-    {
-        Dependency[] Dependencies { get; }
-    }
 
     public class DepedencyResolver
     {
@@ -45,11 +39,13 @@
             }
         }
 
-        public LibraryRelease Resolve(Dependency depedency)
+        public void Resolve(LibraryRelease depedency)
         {
-            depedency.Release = manager.Find(depedency.Name, depedency.Version);
+            var release = manager.Find(depedency.Name, depedency.Version);
 
-            return depedency.Release;
+            depedency.Version = release.Version;
+            depedency.Dependencies = release.Dependencies;
+            
         }
     }
 
@@ -57,20 +53,20 @@
 
     public class DependencyGraph
     {
-        private readonly Dictionary<string, Node<Dependency>> map = new Dictionary<string, Node<Dependency>>();
+        private readonly Dictionary<string, Node<LibraryRelease>> map = new Dictionary<string, Node<LibraryRelease>>();
 
-        public IEnumerable<Node<Dependency>> GetNodes()
+        public IEnumerable<Node<LibraryRelease>> GetNodes()
         {
             return map.Values;
         }
 
-        public Node<Dependency> FindOrAdd(Dependency depedency)
+        public Node<LibraryRelease> FindOrAdd(LibraryRelease depedency)
         {
-            Node<Dependency> node;
+            Node<LibraryRelease> node;
 
             if (!map.TryGetValue(depedency.Name, out node))
             {
-                node = new Node<Dependency> {
+                node = new Node<LibraryRelease> {
                     Value = depedency
                 };
 
@@ -80,11 +76,11 @@
             return node;
         }
 
-        private readonly List<Node<Dependency>> sortedNodes = new List<Node<Dependency>>();
+        private readonly List<Node<LibraryRelease>> sortedNodes = new List<Node<LibraryRelease>>();
 
-        private HashSet<Node<Dependency>> visitedNodes = new HashSet<Node<Dependency>>();
+        private HashSet<Node<LibraryRelease>> visitedNodes = new HashSet<Node<LibraryRelease>>();
 
-        private void VisitNode(Node<Dependency> node)
+        private void VisitNode(Node<LibraryRelease> node)
         {
             if (IsFirstVisit(node))
             {
@@ -97,7 +93,7 @@
             }
         }
 
-        internal bool IsFirstVisit(Node<Dependency> node)
+        internal bool IsFirstVisit(Node<LibraryRelease> node)
         {
             var isFirstVisit = !visitedNodes.Contains(node);
 
@@ -122,7 +118,7 @@
                 VisitNode(node);
             }
 
-            return sortedNodes.Select(n => n.Value.Release).ToArray();
+            return sortedNodes.Select(n => n.Value).ToArray();
         }
     }
 
@@ -145,19 +141,5 @@
             // Add Incoming Edge (Reverse)
             value.Incoming.Add(this);
         }
-    }
-
-    public class Dependency : ILibrary
-    {
-        public string Name { get; set; }
-
-        public Semver Version { get; set; }
-
-        public Dependency[] Dependencies { get; set; }
-
-        public bool IsResolved { get; set; }
-
-        // Null until resolved
-        public LibraryRelease Release { get; set; }
     }
 }

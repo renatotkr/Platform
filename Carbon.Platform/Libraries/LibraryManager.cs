@@ -2,7 +2,6 @@
 {
     using System.Threading.Tasks;
 
-    
     public class LibraryManager
     {
         public LibraryRelease Find(string name, Semver version)
@@ -11,11 +10,14 @@
 
             switch (version.Level)
             {
-                case MatchLevel.Patch: // find exact
-                case MatchLevel.Minor: // find highest matching major & minor
-                case MatchLevel.Major: // find higest matching major 
+                case VersionCategory.Patch: // find exact
+                case VersionCategory.Minor: // find highest matching major & minor
+                case VersionCategory.Major: // find higest matching major 
                     break;
             }
+
+        
+            // Get release depedencies
 
             return null;
         }
@@ -28,12 +30,9 @@
 
             // Make sure version is incrimental within the series
 
-
             // As needed
             // - Extract TypeScript and build
             // - Extract SASS and build
-
-
 
             // Push to CDN
 
