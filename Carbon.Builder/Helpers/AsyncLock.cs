@@ -1,4 +1,4 @@
-﻿namespace TypeScript
+﻿namespace Carbon.Platform
 {
     using System;
     using System.Threading;

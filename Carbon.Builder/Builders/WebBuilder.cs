@@ -38,6 +38,7 @@
             #endregion
 
             this.log = log;
+            this.fs = fs;
             this.package = package;
             this.buildId = new Guid().ToString();
             this.basePath = $@"D:/builds/{buildId}/";
@@ -127,9 +128,7 @@
                 {
                     await fs.CreateAsync(item.Name, await ToMemoryStreamAsync(item).ConfigureAwait(false)).ConfigureAwait(false);
                 }
-              
             }
-
 
             result.Elapsed = sw.Elapsed;
 
