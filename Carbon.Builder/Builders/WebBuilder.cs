@@ -1,11 +1,12 @@
 ﻿namespace Carbon.Builder
 {
     using System;
+    using System.Diagnostics;
     using System.IO;
     using System.Text;
     using System.Linq;
     using System.Threading.Tasks;
-    
+
     using Carbon.Css;
     using Carbon.Platform;
     using Carbon.Logging;
@@ -13,7 +14,7 @@
 
     using TypeScript;
 
-    public abstract class WebBuilder
+    public class WebBuilder
     {
         private static readonly TypeScriptCompiler compiler = new TypeScriptCompiler();
 
@@ -35,8 +36,6 @@
 
             #endregion
 
-            // {version.FrontendName}/{version.Number}
-
             this.log = log;
             this.package = package;
             this.buildId = new Guid().ToString();
@@ -45,11 +44,13 @@
             this.cssResolver = new CssPackageResolver(basePath, package);
         }
 
-        // Builds a project to the provided file system 
-        // Could be a CDN, package, etc.
+        // Builds a project to the provided file system, package, etc
 
-        public async Task BuildAsync(IFileSystem fs)
+        public async Task<BuildResult> BuildAsync(IFileSystem fs)
         {
+            var sw = Stopwatch.StartNew();
+            var result = new BuildResult();
+
             var assets = package.ToArray();
 
             // TODO: Copy over typescript files
@@ -69,7 +70,6 @@
 
             foreach (var item in assets)
             {
-             
                 if (item.Name.EndsWith(".scss"))
                 {
                     var compiledName = item.Name.Replace(".scss", ".css");
@@ -106,6 +106,10 @@
                 }
               
             }
+
+            result.Elapsed = sw.Elapsed;
+
+            return result;
         }
 
 
@@ -174,8 +178,6 @@
             Directory.Delete(basePath, recursive: true);
         }
 
-
-
         #region Helpers
 
         private static async Task<MemoryStream> ToMemoryStreamAsync(IAsset asset)
@@ -194,8 +196,6 @@
 
         #endregion
     }
-
-
 
 }
 
