@@ -2,9 +2,11 @@
 {
     using System.Threading.Tasks;
 
+    using Carbon.Platform;
+
     public class LibraryManager
     {
-        public LibraryRelease Find(string name, Semver version)
+        public Library Find(string name, Semver version)
         {
             // What store should we query?
 
@@ -16,13 +18,12 @@
                     break;
             }
 
-        
             // Get release depedencies
 
             return null;
         }
         
-        public async Task<LibraryRelease> PublishAsync(Library library, Semver version)
+        public async Task<Library> PublishAsync(Library library, Semver version)
         {
             // - Get source from GIT
             // - Verify source

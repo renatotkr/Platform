@@ -7,7 +7,7 @@
     {
         private readonly LibraryManager manager = new LibraryManager();
 
-        public DependencyGraph Expand(ILibrary package)
+        public DependencyGraph Expand(Library package)
         {
             var graph = new DependencyGraph();
 
@@ -16,7 +16,7 @@
             return graph;
         }
 
-        private void Expand(ILibrary package, DependencyGraph graph)
+        private void Expand(Library package, DependencyGraph graph)
         {
             // Build up the graph
             foreach (var dep in package.Dependencies)
@@ -39,7 +39,7 @@
             }
         }
 
-        public void Resolve(LibraryRelease depedency)
+        public void Resolve(Library depedency)
         {
             var release = manager.Find(depedency.Name, depedency.Version);
 
@@ -53,20 +53,20 @@
 
     public class DependencyGraph
     {
-        private readonly Dictionary<string, Node<LibraryRelease>> map = new Dictionary<string, Node<LibraryRelease>>();
+        private readonly Dictionary<string, Node<Library>> map = new Dictionary<string, Node<Library>>();
 
-        public IEnumerable<Node<LibraryRelease>> GetNodes()
+        public IEnumerable<Node<Library>> GetNodes()
         {
             return map.Values;
         }
 
-        public Node<LibraryRelease> FindOrAdd(LibraryRelease depedency)
+        public Node<Library> FindOrAdd(Library depedency)
         {
-            Node<LibraryRelease> node;
+            Node<Library> node;
 
             if (!map.TryGetValue(depedency.Name, out node))
             {
-                node = new Node<LibraryRelease> {
+                node = new Node<Library> {
                     Value = depedency
                 };
 
@@ -76,11 +76,11 @@
             return node;
         }
 
-        private readonly List<Node<LibraryRelease>> sortedNodes = new List<Node<LibraryRelease>>();
+        private readonly List<Node<Library>> sortedNodes = new List<Node<Library>>();
 
-        private HashSet<Node<LibraryRelease>> visitedNodes = new HashSet<Node<LibraryRelease>>();
+        private HashSet<Node<Library>> visitedNodes = new HashSet<Node<Library>>();
 
-        private void VisitNode(Node<LibraryRelease> node)
+        private void VisitNode(Node<Library> node)
         {
             if (IsFirstVisit(node))
             {
@@ -93,7 +93,7 @@
             }
         }
 
-        internal bool IsFirstVisit(Node<LibraryRelease> node)
+        internal bool IsFirstVisit(Node<Library> node)
         {
             var isFirstVisit = !visitedNodes.Contains(node);
 
@@ -111,7 +111,7 @@
         // ... using
         // Topological sorting (https://en.wikipedia.org/wiki/Topological_sorting)
 
-        public IList<LibraryRelease> Sort()
+        public IList<Library> Sort()
         {
             foreach (var node in GetNodes())
             {
