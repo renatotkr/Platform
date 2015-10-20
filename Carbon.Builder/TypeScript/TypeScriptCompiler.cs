@@ -2,48 +2,61 @@
 {
     using System;
     using System.Diagnostics;
+    using System.IO;
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
 
-    public class TypeScriptCompiler
+    using Carbon.Platform;
+
+    public class TypeScriptCompiler : IBuilder
     {
-        private AsyncLock semaphore = new AsyncLock();
+        // Global lock
+        private static AsyncLock semaphore = new AsyncLock();
 
         public static string WorkingDirectory = @"D:\tsc\";
+
+        private readonly TypeScriptCompileOptions options;
+
+        public TypeScriptCompiler(string projectPath)
+            : this(new TypeScriptCompileOptions(projectPath: projectPath))
+        { }
+
+        public TypeScriptCompiler(TypeScriptCompileOptions options)
+        {
+            #region Preconditions
+
+            if (options == null) throw new ArgumentNullException(nameof(options));
+
+            #endregion
+
+            this.options = options;
+        }
+
+        public async Task<BuildResult> BuildAsync()
+        {
+            using (await semaphore.LockAsync().ConfigureAwait(false))
+            {
+                return Execute();
+            }
+        }
 
         public Task<IDisposable> LockAsync(TimeSpan timeout)
         {
             return semaphore.LockAsync(timeout);
         }
 
-        public async Task<CompileResult> BuildAsync(string tsPath)
-        {
-            using (await semaphore.LockAsync().ConfigureAwait(false))
-            {
-                return Compile(null,
-                    new TypeScriptCompileOptions {
-                        ProjectPath = tsPath
-                    }
-                );
-            }
-        }
-
-        public CompileResult Compile(string tsPath, TypeScriptCompileOptions options)
+        private BuildResult Execute()
         {
             var command = "tsc ";
 
-            if (tsPath != null)
-            {
-                command += tsPath + " ";
-            }
-
             command += options.ToString();
+
+            var result = new BuildResult();
 
             var timeout = TimeSpan.FromSeconds(10);
 
-            var psi = new ProcessStartInfo(WorkingDirectory + "node", command)
-            {
+            var psi = new ProcessStartInfo(WorkingDirectory + "node", command) {
                 CreateNoWindow = true,
                 UseShellExecute = false,
                 RedirectStandardError = true,
@@ -95,28 +108,26 @@
                         // if there were errors, throw an exception
                         if (error.Length > 0) throw new Exception(error.ToString());
 
-                        return new CompileResult(output.ToString()) {
-                            Command = command
-                        };
+                        var text = output.ToString();
+
+                        string line;
+
+                        using (var reader = new StringReader(text))
+                        {
+                            while ((line = reader.ReadLine()) != null)
+                            {
+                                result.Diagnostics.Add(TypeScriptDiagonstic.Parse(line));
+                            }
+                        }
+
+                        return result;
                     }
                     else
                     {
-                        throw new Exception("Compile operation timed out.");
+                        throw new BuildTimeout(timeout);
                     }
                 };
             }
         }
-    }
-
-    public class CompileResult
-    {
-        public CompileResult(string text)
-        {
-            OutputText = text;
-        }
-
-        public string OutputText { get; }
-
-        public string Command { get; set; }
     }
 }

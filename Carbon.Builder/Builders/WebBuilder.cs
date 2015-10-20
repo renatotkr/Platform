@@ -16,7 +16,7 @@
 
     public class WebBuilder
     {
-        private static readonly TypeScriptCompiler compiler = new TypeScriptCompiler();
+        private readonly TypeScriptCompiler typescript;
 
         private readonly Package package;
    
@@ -27,8 +27,9 @@
         private readonly ILogger log;
 
         private readonly CssPackageResolver cssResolver;
+        private readonly IFileSystem fs;
 
-        public WebBuilder(ILogger log, Package package)
+        public WebBuilder(ILogger log, Package package, IFileSystem fs)
         {
             #region Preconditions
 
@@ -41,21 +42,27 @@
             this.buildId = new Guid().ToString();
             this.basePath = $@"D:/builds/{buildId}/";
 
+            this.typescript = new TypeScriptCompiler(this.basePath);
+
             this.cssResolver = new CssPackageResolver(basePath, package);
         }
 
         // Builds a project to the provided file system, package, etc
 
-        public async Task<BuildResult> BuildAsync(IFileSystem fs)
+        public async Task<BuildResult> BuildAsync()
         {
             var sw = Stopwatch.StartNew();
             var result = new BuildResult();
+
+            var hasTypeScript = false;
 
             var assets = package.ToArray();
 
             // TODO: Copy over typescript files
             foreach (var file in assets)
             {
+                hasTypeScript = true;
+
                 if (file.Name.EndsWith(".ts") || file.Name == "tsconfig.json")
                 {
                     var tempSourcePath = basePath + file.Name;
@@ -65,7 +72,14 @@
                         // This helper creates the directory if it exists
                         await stream.CopyToFileAsync(tempSourcePath).ConfigureAwait(false);
                     }
+
+                    hasTypeScript = true;
                 }
+            }
+
+            if (hasTypeScript)
+            {
+                await typescript.BuildAsync().ConfigureAwait(false);
             }
 
             foreach (var item in assets)
@@ -93,12 +107,21 @@
                 {
                     var compiledName = item.Name.Replace(".ts", ".js");
 
-                    using (var compiled = await CompileTypeScriptAsync(item).ConfigureAwait(false))
-                    {
-                        log.Info($"Compiled '{compiledName}'");
+                    var outputPath = basePath + compiledName;
 
-                        await fs.CreateAsync(compiledName, compiled).ConfigureAwait(false);
+                    var ms = new MemoryStream();
+
+                    using (var outputStream = File.Open(outputPath, FileMode.Open))
+                    {
+                        await outputStream.CopyToAsync(ms).ConfigureAwait(false);
                     }
+
+                    ms.Position = 0;
+
+                    await fs.CreateAsync(compiledName, ms);
+
+                    // TODO: Add hook for testing
+
                 }
                 else if (item.IsStatic())
                 {
@@ -107,35 +130,13 @@
               
             }
 
+
             result.Elapsed = sw.Elapsed;
 
             return result;
         }
 
-
         #region Compilers
-
-        private async Task<MemoryStream> CompileTypeScriptAsync(IAsset asset)
-        {
-            var outputPath = basePath + asset.Name.Replace(".ts", ".js");
-
-            // Skip if we've already built the file
-            if (!File.Exists(outputPath))
-            {
-                await compiler.BuildAsync(basePath).ConfigureAwait(false);
-            }
-
-            var ms = new MemoryStream();
-
-            using (var outputStream = File.Open(outputPath, FileMode.Open))
-            {
-                await outputStream.CopyToAsync(ms).ConfigureAwait(false);
-            }
-
-            ms.Position = 0;
-
-            return ms;
-        }
 
         private async Task<MemoryStream> CompileCssAsync(IAsset asset)
         {
@@ -168,7 +169,6 @@
 
             return output;
         }
-
 
         #endregion
 

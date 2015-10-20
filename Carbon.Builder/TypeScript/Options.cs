@@ -1,5 +1,6 @@
 ﻿namespace TypeScript
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -14,7 +15,14 @@
 
     public class TypeScriptCompileOptions
     {
-        public string ProjectPath { get; set; }
+        public TypeScriptCompileOptions(string projectPath)
+        {
+            if (projectPath == null) throw new ArgumentNullException(nameof(projectPath));
+
+            this.ProjectPath = projectPath;
+        }
+
+        public string ProjectPath { get;  }
 
         public bool EmitComments { get; set; }
 

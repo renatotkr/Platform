@@ -4,7 +4,7 @@
 
 	public interface IBuilder
 	{
-		Task<BuildResult> BuildAsync(Package source);
+		Task<BuildResult> BuildAsync();
 	}
 }
 

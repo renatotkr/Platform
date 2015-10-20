@@ -8,6 +8,6 @@
 
 		public BuildStatus Status { get; set; }
 
-		public DiagnosticList Diagnostics { get; set; }
+        public DiagnosticList Diagnostics { get; } = new DiagnosticList();
 	}
 }

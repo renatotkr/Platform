@@ -49,23 +49,5 @@
         }
     }
 
-    public class ErrorList : Collection<TypeScriptDiagonstic>
-    {
-        public static ErrorList Parse(string text)
-        {
-            var list = new ErrorList();
-
-            string line;
-
-            using (var reader = new StringReader(text))
-            {
-                while ((line = reader.ReadLine()) != null)
-                {
-                    list.Add(TypeScriptDiagonstic.Parse(line));
-                }
-            }
-
-            return list;
-        }
-    }
+    
 }
