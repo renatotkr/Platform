@@ -38,6 +38,20 @@
 
         public static CodeSource Parse(string text)
         {
+            #region Preconditions
+
+            if (text == null) throw new ArgumentNullException(nameof(text));
+
+            #endregion
+
+            var hasHost = text.Contains(":");
+
+            if (text.Contains("://"))
+            {
+                // Strip off the protocal
+                text = text.Substring(text.IndexOf("://") + 3);
+            }
+
             var result = new CodeSource();          
 
             var i = 0;
@@ -46,9 +60,9 @@
             {
                 if (i == 0)
                 {
-                    if (text.Contains(":"))
+                    if (hasHost)
                     {
-                        result.Host = (CodeHost)Enum.Parse(typeof(CodeHost), part, true);
+                        result.Host = GetHost(part);
                     }
                     else
                     {
@@ -89,9 +103,35 @@
                 i++;
             }
 
+            if (result.RepositoryName.EndsWith(".git"))
+            {
+                result.RepositoryName = result.RepositoryName.Replace(".git", "");
+            }
+
             return result;
         }
+
+        private static CodeHost GetHost(string text)
+        {
+            switch (text.ToLower())
+            {
+                case "bitbucket":
+                case "bitbucket.org": return CodeHost.BitBucket;
+
+                case "github":
+                case "github.com": return CodeHost.GitHub;
+
+                case "gist": return CodeHost.Gist;
+
+                case "gitlab": return CodeHost.GitLab;
+
+                default: throw new Exception("Unexpected host: " + text);
+
+            }
+        }
     }
+
+ 
     
     public enum CodeHost
     {
@@ -103,5 +143,8 @@
 }
 
 
-// git://github.com/carbonmade/backend#123123123
 // visionmedia/mocha#4727d357ea
+
+/*
+git://github.com/user/project.git#commit-ish
+*/

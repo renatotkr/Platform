@@ -42,9 +42,6 @@
             if (credentials == null)    throw new ArgumentNullException(nameof(credentials));
 
             #endregion
-
-            // https://bitbucket.org/carbonmade/lefty.git
-
         
             this.accountName = accountName;
             this.repositoryName = repositoryName;
@@ -63,7 +60,6 @@
 
             return commit;
         }
-
 
         public Task TagAsync(ICommit commit, string name)
         {
