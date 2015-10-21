@@ -7,7 +7,7 @@
     {
         public CodeHost Host { get; set; }
 
-        public string OrganizationName { get; set; }
+        public string AccountName { get; set; }
 
         public string RepositoryName { get; set; }
 
@@ -23,7 +23,7 @@
                 sb.Append(":");
             }
 
-            sb.Append(OrganizationName);
+            sb.Append(AccountName);
             sb.Append("/");
             sb.Append(RepositoryName);
 
@@ -53,15 +53,15 @@
                     else
                     {
                         result.Host = CodeHost.GitHub;
-                        result.OrganizationName = part;
+                        result.AccountName = part;
                     }
                 }
 
                 if (i == 1)
                 {
-                    if (result.OrganizationName == null)
+                    if (result.AccountName == null)
                     {
-                        result.OrganizationName = part;
+                        result.AccountName = part;
                     }
                     else
                     {

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Threading.Tasks;
+    using System.Net;
 
     using Carbon.Platform;
 
@@ -12,13 +13,12 @@
 
         private readonly BitbucketClient client;
 
-        public BitbucketRepository(Uri url, string userName, string password)
+        public BitbucketRepository(Uri url, NetworkCredential credentials)
         {
             #region Preconditions
 
-            if (url == null) throw new ArgumentNullException(nameof(url));
-            if (userName == null) throw new ArgumentNullException(nameof(userName));
-            if (password == null) throw new ArgumentNullException(nameof(password));
+            if (url == null)            throw new ArgumentNullException(nameof(url));
+            if (credentials == null)    throw new ArgumentNullException(nameof(credentials));
 
             #endregion
 
@@ -30,7 +30,26 @@
             this.accountName = split[0];
             this.repositoryName = split[1];
 
-            this.client = new BitbucketClient(userName, password);
+            this.client = new BitbucketClient(credentials);
+        }
+
+        public BitbucketRepository(string accountName, string repositoryName, NetworkCredential credentials)
+        {
+            #region Preconditions
+
+            if (accountName == null)    throw new ArgumentNullException(nameof(accountName));
+            if (repositoryName == null) throw new ArgumentNullException(nameof(repositoryName));
+            if (credentials == null)    throw new ArgumentNullException(nameof(credentials));
+
+            #endregion
+
+            // https://bitbucket.org/carbonmade/lefty.git
+
+        
+            this.accountName = accountName;
+            this.repositoryName = repositoryName;
+
+            this.client = new BitbucketClient(credentials);
         }
 
         public async Task<ICommit> GetCommitAsync(Revision revision)

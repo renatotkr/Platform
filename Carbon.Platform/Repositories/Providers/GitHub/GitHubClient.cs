@@ -78,6 +78,7 @@
             return result.As<GitBranch>();
         }
 
+        
         public async Task<GitRef> GetRef(string accountName, string repoName, string refName)
         {
             #region Preconditions

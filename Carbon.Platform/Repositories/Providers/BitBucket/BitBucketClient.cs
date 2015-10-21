@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Text;
@@ -15,13 +16,11 @@
 
         private readonly HttpClient httpClient = new HttpClient();
 
-        private readonly string userName;
-        private readonly string password;
+        private readonly NetworkCredential credentials;
 
-        public BitbucketClient(string userName, string password)
+        public BitbucketClient(NetworkCredential credentials)
         {
-            this.userName = userName;
-            this.password = password;
+            this.credentials = credentials;
         }
 
         public async Task<BitbucketCommit> GetCommit(string accountName, string repoName, string revision)
@@ -50,7 +49,7 @@
 
             httpRequest.Headers.Authorization = new AuthenticationHeaderValue(
                 scheme: "Basic",
-                parameter: Convert.ToBase64String(Encoding.ASCII.GetBytes($"{userName}:{password}"))
+                parameter: Convert.ToBase64String(Encoding.ASCII.GetBytes($"{credentials.UserName}:{credentials.Password}"))
             );
 
             using (var response = await httpClient.SendAsync(httpRequest).ConfigureAwait(false))
@@ -59,7 +58,7 @@
                 {
                     var responseText = response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-                    throw new Exception(responseText + " : " + httpRequest.RequestUri.ToString());
+                    throw new Exception(responseText + " : " + httpRequest.RequestUri);
                 }
                 
                 var ms = new MemoryStream();
@@ -75,13 +74,13 @@
             }
         }
 
-        public async Task<XNode> Send(HttpRequestMessage httpRequest)
+        private async Task<XNode> Send(HttpRequestMessage httpRequest)
         {
             httpRequest.Headers.UserAgent.Add(new ProductInfoHeaderValue("Carbon", "1.0.0"));
 
             httpRequest.Headers.Authorization = new AuthenticationHeaderValue(
                 scheme: "Basic",
-                parameter: Convert.ToBase64String(Encoding.ASCII.GetBytes($"{userName}:{password}"))
+                parameter: Convert.ToBase64String(Encoding.ASCII.GetBytes($"{credentials.UserName}:{credentials.Password}"))
             );
 
             using (var response = await httpClient.SendAsync(httpRequest).ConfigureAwait(false))
