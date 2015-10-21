@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+    using System.Linq;
 	using System.IO;
 	using System.IO.Compression;
 	using System.Threading.Tasks;
@@ -25,7 +26,10 @@
 			return GetItems().GetEnumerator();
 		}
 
-		#endregion
+        #endregion
+
+        public IAsset Find(string absolutePath) => 
+            this.FirstOrDefault(item => item.Name == absolutePath);
 
 		public async Task ExtractToDirectoryAsync(DirectoryInfo target)
 		{
@@ -91,12 +95,9 @@
 			}
 		}
 
-		#region Helpers
+        #region Helpers
 
-		public static Package FromDirectory(DirectoryInfo root)
-		{
-			return new DirectoryPackage(root);
-		}
+        public static Package FromDirectory(DirectoryInfo root) => new DirectoryPackage(root);
 
 		#endregion
 	}

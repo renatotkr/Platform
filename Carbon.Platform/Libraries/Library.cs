@@ -31,7 +31,7 @@
         // The cdn url the library was deployed too
         // e.g. https://cmcdn.net/libs/core/1.1.0/core.js
         [Column("url")]
-        public Uri Url { get; set; }
+        public string Url { get; set; }
 
         [Column("created")]
         public DateTime Created { get; set; }

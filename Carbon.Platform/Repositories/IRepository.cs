@@ -6,10 +6,6 @@
 	{
 		string Name { get; }
 
-		// Heads
-
-		// Tags
-
 		Uri Url { get; }
 	}
 }

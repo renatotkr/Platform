@@ -7,6 +7,7 @@
 
 	using Carbon.Storage;
 
+    [Obsolete]
 	public class PackageStoreOld : IPackageStore
 	{
 		private readonly IBlobStore blobStore;

@@ -18,7 +18,7 @@
         {
             #region Preconditions
 
-            if (stream == null) throw new ArgumentNullException("stream");
+            if (stream == null) throw new ArgumentNullException(nameof(stream));
 
             #endregion
 

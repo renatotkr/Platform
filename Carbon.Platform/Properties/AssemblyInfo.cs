@@ -4,9 +4,18 @@
 [assembly: AssemblyProduct("Carbon")]
 [assembly: AssemblyCopyright("© 2012 - 2015 Jason Nelson")]
 
-[assembly: AssemblyVersion("0.3.0")]
+[assembly: AssemblyVersion("0.4.0")]
 
 /*
+  0.4.0 (2015-10-15)
+  - Add BitBucket
+  - Add GitHub
+
+  0.3.0 (2015-10-01)
+ -----------------------------------------------------
+ - Update to .NET 4.6
+ - Remove Carbon.Core depedency
+
   0.1.1 (2014-04-10)
  -----------------------------------------------------
  - Breakout observerations

@@ -8,7 +8,7 @@
 	[Table("FrontendFiles")]
 	public class FrontendFile : IAssetInfo
 	{
-		[Key, Column("frontend")] // {frontend}/{head}
+		[Column("frontend"), Key] // {frontend}/{head}
 		[Required]
 		public string Frontend { get; set; }
 
