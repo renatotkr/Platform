@@ -19,7 +19,7 @@
 
             if (Host != CodeHost.GitHub)
             {
-                sb.Append(Host.ToString());
+                sb.Append(Host.ToString().ToLower());
                 sb.Append(":");
             }
 

@@ -16,14 +16,11 @@ namespace Carbon.Platform
 
 		public byte[] Data { get; }
 
-		public string ToHex()
-		{
-			return HexString.FromBytes(Data);
-		}
+        public string ToHex() => HexString.FromBytes(Data);
 
 		public static Hash ComputeSHA1(string text)
 		{
-			using(var algorithm = SHA1.Create())
+			using (var algorithm = SHA1.Create())
 			{
 				return new Hash(algorithm.ComputeHash(Encoding.UTF8.GetBytes(text)));
 			}
@@ -33,7 +30,7 @@ namespace Carbon.Platform
 		{
 			#region Preconditions
 
-			if (stream == null) throw new ArgumentNullException("stream");
+			if (stream == null) throw new ArgumentNullException(nameof(stream));
 
 			#endregion
 
@@ -43,10 +40,16 @@ namespace Carbon.Platform
 				{
 					return new Hash(algorithm.ComputeHash(stream));
 				}
+
+               
 			}
 			finally
 			{
-				if (!leaveOpen)
+                if (leaveOpen)
+                {
+                    if (stream.CanSeek) stream.Position = 0;
+                }
+				else
 				{
 					stream.Dispose();
 				}

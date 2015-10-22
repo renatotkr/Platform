@@ -10,6 +10,14 @@
     [Table("Libraries")]
     public class Library
     {
+        public Library() { }
+
+        public Library(string name, Semver version)
+        {
+            Name = name;
+            Version = version;
+        }
+
         [Column("name"), Key]
         public string Name { get; set; }
         
@@ -19,22 +27,25 @@
       
         [Column("isLatest")]
         [Index("isLatest-index")]
-        public bool IsLatest { get; set; }
+        public int? IsLatest { get; set; }
 
         [Column("sha256")]
+        [Index("sha256-index")]
         public byte[] Sha256 { get; set; }
 
-        // codesource
+        // TODO: Package SHA1
+
         [Column("source")]
         public string Source { get; set; }
-
-        // The cdn url the library was deployed too
-        // e.g. https://cmcdn.net/libs/core/1.1.0/core.js
-        [Column("url")]
-        public string Url { get; set; }
+        
+        [Column("path")]
+        public string Path { get; set; }
 
         [Column("created")]
         public DateTime Created { get; set; }
+
+        [Column("deployerId")]
+        public int? DeployerId { get; set; }
 
         // Read from package.json
         public Library[] Dependencies { get; set; }

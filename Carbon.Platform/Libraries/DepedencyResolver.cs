@@ -4,11 +4,11 @@
 
     public class DepedencyResolver
     {
-        private readonly ILibraryManager manager;
+        private readonly ILibraryRegistry registry;
 
-        public DepedencyResolver(ILibraryManager manager)
+        public DepedencyResolver(ILibraryRegistry registry)
         {
-            this.manager = manager;
+            this.registry = registry;
         }
 
         public DependencyGraph Expand(Library package)
@@ -45,7 +45,7 @@
 
         private async Task ResolveAsync(Library depedency)
         {
-            var release = await manager.FindAsync(depedency.Name, depedency.Version).ConfigureAwait(false);
+            var release = await registry.FindAsync(depedency.Name, depedency.Version).ConfigureAwait(false);
 
             depedency.Version = release.Version;
             depedency.Dependencies = release.Dependencies;
