@@ -31,6 +31,12 @@
         public IAsset Find(string absolutePath) => 
             this.FirstOrDefault(item => item.Name == absolutePath);
 
+
+        public IAsset[] List(string prefix)
+        {
+            return this.Where(item => item.Name.StartsWith(prefix)).ToArray();
+        }
+
 		public async Task ExtractToDirectoryAsync(DirectoryInfo target)
 		{
 			#region Preconditions
