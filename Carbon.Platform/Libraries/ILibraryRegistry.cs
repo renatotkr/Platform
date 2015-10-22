@@ -4,10 +4,12 @@
 
     using Carbon.Platform;
 
-    public interface ILibraryManager
+    public interface ILibraryRegistry
     {
+        Task<Library> FindAsync(Hash hash);
+
         Task<Library> FindAsync(string name, Semver version);
 
-        Task<Library> PublishAsync(Library library);
+        Task<Library> FindAsync(string name, SemverRange range);
     }  
 }
