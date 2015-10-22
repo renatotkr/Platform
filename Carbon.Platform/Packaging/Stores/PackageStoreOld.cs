@@ -35,7 +35,7 @@
 					{ "Content-Type", "application/zip" }
 				};
 
-				await blobStore.Put(key, blob).ConfigureAwait(false);
+				await blobStore.PutAsync(key, blob).ConfigureAwait(false);
 			}
 		}
 
@@ -43,7 +43,7 @@
 		{
 			var ms = new MemoryStream();
 
-			using (var blob = await blobStore.Get(key).ConfigureAwait(false))
+			using (var blob = await blobStore.GetAsync(key).ConfigureAwait(false))
 			{
 				await blob.CopyToAsync(ms).ConfigureAwait(false);
 			}
@@ -57,7 +57,7 @@
 		{
 			using (var ms = new MemoryStream())
 			{
-				using (var blob = await blobStore.Get(key).ConfigureAwait(false))
+				using (var blob = await blobStore.GetAsync(key).ConfigureAwait(false))
 				{
 					await blob.CopyToAsync(ms).ConfigureAwait(false);
 				}
