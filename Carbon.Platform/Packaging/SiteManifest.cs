@@ -8,7 +8,7 @@
 
 	using Carbon.Data;
 
-	// Consider renaming PackageManifest
+	// Rename to PackageManifest
 
 	public class SiteManifest : Dictionary<string, IAssetInfo>
 	{
@@ -26,15 +26,12 @@
 
 			IAssetInfo item;
 
-			this.TryGetValue(name, out item);
+			TryGetValue(name, out item);
 
 			return item;
 		}
 
-		public bool Contains(string name)
-		{
-			return ContainsKey(name);
-		}
+        public bool Contains(string name) => ContainsKey(name);
 
 		public override string ToString()
 		{
@@ -83,56 +80,43 @@
 
 		public static SiteManifest FromPackage(Package package)
 		{
-			return new SiteManifest(package.Select(file => (IAssetInfo)new AssetInfo(file)));
+			return new SiteManifest(package.Select(file => (IAssetInfo) new AssetInfo(file)));
 		}
 	}
 
 	public struct AssetInfo : IAssetInfo
 	{
-		private readonly string name;
-		private readonly DateTime modified;
-		private readonly byte[] hash;
-
 		public AssetInfo(IAsset file)
 		{
 			using (var stream = file.Open())
 			{
-				this.hash = Carbon.Platform.Hash.ComputeSHA256(stream).Data;
+				Hash = Platform.Hash.ComputeSHA256(stream).Data;
 			}
 
-			this.name = file.Name;
-			this.modified = file.Modified;
+			Name = file.Name;
+			Modified = file.Modified;
 		}
 
 		public AssetInfo(string name, byte[] hash, DateTime modified)
 		{
 			#region Preconditions
 
-			if (name == null) throw new ArgumentNullException("name");
+			if (name == null) throw new ArgumentNullException(nameof(name));
 
-			if (name.Length == 0) throw new ArgumentException("Must not be empty", "name");
+			if (name.Length == 0) throw new ArgumentException("Must not be empty", nameof(name));
 
 			#endregion
 
-			this.name = name;
-			this.hash = hash;
-			this.modified = modified;
+			Name = name;
+			Hash = hash;
+			Modified = modified;
 		}
 
-		public string Name
-		{
-			get { return name; }
-		}
+		public string Name { get; }
 
-		public byte[] Hash
-		{
-			get { return hash; }
-		}
+		public byte[] Hash { get; }
 
-		public DateTime Modified
-		{
-			get { return modified; }
-		}
+		public DateTime Modified { get; }
 	}
 
 	/*

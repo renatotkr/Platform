@@ -1,6 +1,8 @@
 ﻿namespace Carbon.Platform
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
+    using System.Collections.Generic;
 
     using System.Threading.Tasks;
 
@@ -11,29 +13,101 @@
         [Required]
         public string Name { get; set; }
 
-        public string Version { get; set; }
+        [Required]
+        public Semver Version { get; set; }
 
         public string Description { get; set; }
 
         public PackageContributor[] Contributors { get; set; }
 
-        public StringMap Scripts { get; set; }
-
         public string Main { get; set; }
 
         public string License { get; set; }
 
-        public StringMap Dependencies { get; set; }
+        public IList<PackageDependency> Dependencies { get; } = new List<PackageDependency>();
+
+        public CodeSource Repository { get; set; }
+
+        public string[] Files { get; set; }
 
         public static PackageMetadata Parse(string text)
-        {            
-            return XObject.Parse(text).As<PackageMetadata>();
+        {
+            var json = XObject.Parse(text);
+
+            var metadata = new PackageMetadata {
+                Name  = (string) json["name"]
+            };
+
+            if (json.ContainsKey("version"))
+            {
+                metadata.Version = Semver.Parse(json["version"].ToString());
+            }
+
+            if (json.ContainsKey("main"))
+            {
+                metadata.Main = json["main"].ToString();
+            }
+
+            if (json.ContainsKey("repository"))
+            {
+                var repositoryNode = json["repository"];
+
+                if (repositoryNode.Type == XType.String)
+                {
+                    metadata.Repository = CodeSource.Parse((string)repositoryNode);
+                }
+            }
+
+
+            if (json.ContainsKey("dependencies"))
+            {
+                foreach (var pair in (XObject)json["dependencies"])
+                {
+                    var dep = new PackageDependency(pair.Key, pair.Value.ToString());
+
+                    metadata.Dependencies.Add(dep);
+                }
+            }
+   
+            if (json.ContainsKey("files"))
+            {
+                metadata.Files = ((XArray)json["files"]).ToArrayOf<string>();
+            }
+
+            if (json.ContainsKey("contributors"))
+            {
+                metadata.Contributors = ((XArray)json["contributors"]).ToArrayOf<PackageContributor>();
+            }
+
+            return metadata;
         }
 
         public static async Task<PackageMetadata> FromAsset(IAsset asset)
+            => Parse(await asset.ReadStringAsync().ConfigureAwait(false));
+    }
+
+    public class PackageDependency
+    {
+        public PackageDependency(string name, string text)
         {
-            return Parse(await asset.ReadStringAsync().ConfigureAwait(false));
+            #region Preconditions
+
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            if (text == null) throw new ArgumentNullException(nameof(text));
+
+            #endregion
+
+            Name = name;
+            Value = text;
         }
+
+        public string Name { get; }
+
+        public string Value { get; }
+
+        public bool IsFile => !char.IsDigit(Value[0]);
+
+        public SemverRange Version => Semver.Parse(Value).GetRange();
     }
 
     public class PackageContributor

@@ -7,17 +7,16 @@
 
 	using Carbon.Storage;
 
-    [Obsolete]
-	public class PackageStoreOld : IPackageStore
+	public class PackageStore : IPackageStore
 	{
 		private readonly IBlobStore blobStore;
 
-		public PackageStoreOld(IBlobStore blobStore)
+		public PackageStore(IBlobStore blobStore)
 		{
 			this.blobStore = blobStore;
 		}
 
-		public async Task PutAsync(string key, Package package)
+		public async Task<Hash> PutAsync(string key, Package package)
 		{
 			#region Preconditions
 
@@ -27,7 +26,9 @@
 
 			using (var ms = new MemoryStream())
 			{
-				await package.ZipToAsync(ms).ConfigureAwait(false);
+                var hash = Hash.ComputeSHA256(ms, true);
+
+                await package.ZipToAsync(ms).ConfigureAwait(false);
 
 				ms.Seek(0, SeekOrigin.Begin);
 
@@ -36,6 +37,8 @@
 				};
 
 				await blobStore.PutAsync(key, blob).ConfigureAwait(false);
+
+                return hash;
 			}
 		}
 

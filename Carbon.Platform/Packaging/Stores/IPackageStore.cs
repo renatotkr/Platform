@@ -6,6 +6,6 @@
 	{
 		Task<Package> GetAsync(string name);
 
-		Task PutAsync(string name, Package package);
+		Task<Hash> PutAsync(string name, Package package);
 	}
 }

@@ -3,17 +3,21 @@
 	using System;
 	using System.IO;
 
-	public interface IAsset : IAssetInfo
+	public interface IAsset
 	{
-		Stream Open();
+        string Name { get; }
+
+        DateTime Modified { get; }
+
+        Stream Open();
 	}
 
 	public interface IAssetInfo
 	{
-		string Name { get; }	// e.g. img/c.gif
+		string Name { get; }    // e.g. img/c.gif
 
-		byte[] Hash { get; }	// 20 (sha1) or 32 bytes (sha256)
+        DateTime Modified { get; }
 
-		DateTime Modified { get; }
-	}
+        byte[] Hash { get; }    // 20 (sha1) or 32 bytes (sha256)
+    }
 }

@@ -33,15 +33,5 @@
 		{
 			return file.Open(FileMode.Open, FileAccess.Read, FileShare.Read); 
 		}
-
-		#region Hash
-
-		byte[] IAssetInfo.Hash
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		#endregion
-
 	}
 }

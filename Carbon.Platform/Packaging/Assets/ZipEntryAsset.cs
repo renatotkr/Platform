@@ -1,42 +1,31 @@
 ﻿namespace Carbon.Platform
 {
-	using System;
-	using System.IO;
-	using System.IO.Compression;
+    using System;
+    using System.IO;
+    using System.IO.Compression;
 
-	internal class ZipEntryAsset : IAsset
-	{
-		private readonly ZipArchiveEntry entry;
+    internal class ZipEntryAsset : IAsset
+    {
+        private readonly ZipArchiveEntry entry;
 
-		public ZipEntryAsset(string name, ZipArchiveEntry entry)
-		{
-			#region Preconditions
+        public ZipEntryAsset(string name, ZipArchiveEntry entry)
+        {
+            #region Preconditions
 
-			if (name == null)	throw new ArgumentNullException("key");
-			if (entry == null)	throw new ArgumentNullException("entry");
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            if (entry == null) throw new ArgumentNullException(nameof(entry));
 
-			#endregion
+            #endregion
 
-			Name = name;
-			this.entry = entry;
-		}
+            Name = name;
 
-		public string Name { get; }
+            this.entry = entry;
+        }
 
-		public DateTime Modified => entry.LastWriteTime.UtcDateTime;
+        public string Name { get; }
 
-		public Stream Open()
-		{
-			return entry.Open();
-		}
+        public DateTime Modified => entry.LastWriteTime.UtcDateTime;
 
-		#region IAsset
-
-		byte[] IAssetInfo.Hash
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		#endregion
-	}
+        public Stream Open() => entry.Open();
+    }
 }

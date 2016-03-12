@@ -1,21 +1,15 @@
-﻿namespace Carbon.Platform
+﻿using System;
+using System.Runtime.Serialization;
+using System.Text;
+
+namespace Carbon.Platform
 {
-    using System;
-    using System.Text;
-
-    /*
-    MAJOR version when you make incompatible API changes,
-    MINOR version when you add functionality in a backwards-compatible manner, and
-    PATCH version when you make backwards-compatible bug fixes.
-    */
-
-  
     public struct Semver : IComparable<Semver>, IEquatable<Semver>
     {
         public static readonly Semver Zero = new Semver(0, 0, 0);
 
         private static readonly Semver Latest = new Semver(-1, -1, -1);
-
+        
         public Semver(int major, int minor = -1, int patch = -1)
         {
             Major = major;
@@ -29,6 +23,7 @@
 
         public int Patch { get; }
 
+        [IgnoreDataMember]
         public VersionCategory Level
         {
             get
@@ -158,33 +153,27 @@
             return hash;
         }
 
-        private static int CombineHashes(int h1, int h2)
-        {
-            return (((h1 << 5) + h1) ^ h2);
-        }
+        private static int CombineHashes(int h1, int h2) => (((h1 << 5) + h1) ^ h2);
 
         #endregion
 
         #region Operators
 
-        public static bool operator ==(Semver v1, Semver v2) => v1.Equals(v2);
+        public static bool operator == (Semver v1, Semver v2) => v1.Equals(v2);
 
-        public static bool operator !=(Semver v1, Semver v2) => !(v1 == v2);
+        public static bool operator != (Semver v1, Semver v2) => !(v1 == v2);
 
-        public static bool operator <(Semver v1, Semver v2) => v1.CompareTo(v2) < 0;
+        public static bool operator <  (Semver v1, Semver v2) => v1.CompareTo(v2) < 0;
 
-        public static bool operator <=(Semver v1, Semver v2) => v1.CompareTo(v2) <= 0;
+        public static bool operator <= (Semver v1, Semver v2) => v1.CompareTo(v2) <= 0;
 
-        public static bool operator >(Semver v1, Semver v2) => v2 < v1;
+        public static bool operator > (Semver v1, Semver v2) => v2 < v1;
 
-        public static bool operator >=(Semver v1, Semver v2) => v2 <= v1;
+        public static bool operator >= (Semver v1, Semver v2) => v2 <= v1;
 
         #endregion
     }
-
-    // The tilde can also be used, e.g. ~1.3.15. 
-    // This would mean that you want either 1.3.15 or a higher version number that starts with 1.3 (it is in the same minor range).
-
+    
     public struct SemverRange
     {
         public static readonly SemverRange Latest = new SemverRange(Semver.Zero, new Semver(999, 999, 9999));
@@ -204,7 +193,13 @@
 
         public Semver End { get; }
 
-        // TODO: Parse
+        public static SemverRange Parse(string text)
+        {
+            // The tilde can also be used, e.g. ~1.3.15. 
+            // This would mean that you want either 1.3.15 or a higher version number that starts with 1.3 (it is in the same minor range).
+
+            return Semver.Parse(text).GetRange();
+        }
     }
 
     public enum VersionCategory
@@ -216,8 +211,11 @@
 
 
     // Dynamo Serialization
-
-
     /// 001.001.0000
-   
 }
+
+/*
+MAJOR version when you make incompatible API changes,
+MINOR version when you add functionality in a backwards-compatible manner, and
+PATCH version when you make backwards-compatible bug fixes.
+*/
