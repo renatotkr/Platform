@@ -3,12 +3,12 @@
     using Carbon.Css;
     using Carbon.Platform;
 
-    internal class CssPackageResolver : ICssResolver
+    internal class CssResolver : ICssResolver
     {
         private readonly string scopedPath;
         private readonly Package package;
 
-        public CssPackageResolver(string scopedPath, Package package)
+        public CssResolver(string scopedPath, Package package)
         {
             this.scopedPath = scopedPath;
             this.package = package;

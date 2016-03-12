@@ -13,6 +13,7 @@
     using Carbon.Helpers;
 
     using TypeScript;
+    using Storage;
 
     public class WebBuilder
     {
@@ -26,14 +27,15 @@
 
         private readonly ILogger log;
 
-        private readonly CssPackageResolver cssResolver;
-        private readonly IFileSystem fs;
+        private readonly CssResolver cssResolver;
+        private readonly IBlobStore fs;
 
-        public WebBuilder(ILogger log, Package package, IFileSystem fs)
+        public WebBuilder(ILogger log, Package package, IBlobStore fs)
         {
             #region Preconditions
 
             if (package == null) throw new ArgumentNullException(nameof(package));
+            if (fs == null)      throw new ArgumentNullException(nameof(fs));
 
             #endregion
 
@@ -45,7 +47,7 @@
 
             this.typescript = new TypeScriptCompiler(this.basePath);
 
-            this.cssResolver = new CssPackageResolver(basePath, package);
+            this.cssResolver = new CssResolver(basePath, package);
         }
 
         // Builds a project to the provided file system, package, etc
@@ -53,6 +55,7 @@
         public async Task<BuildResult> BuildAsync()
         {
             var sw = Stopwatch.StartNew();
+
             var result = new BuildResult();
 
             var hasTypeScript = false;
@@ -100,9 +103,8 @@
 
                         log.Info($"Compiled '{compiledName}'");
 
-                        await fs.CreateAsync(compiledName, compiled).ConfigureAwait(false);
+                        await fs.PutAsync(compiledName, compiled).ConfigureAwait(false);
                     }
-                       
                 }
                 else if (item.Name.EndsWith(".ts"))
                 {
@@ -110,23 +112,16 @@
 
                     var outputPath = basePath + compiledName;
 
-                    var ms = new MemoryStream();
+                    var blob = Blob.FromFile(outputPath);
 
-                    using (var outputStream = File.Open(outputPath, FileMode.Open))
-                    {
-                        await outputStream.CopyToAsync(ms).ConfigureAwait(false);
-                    }
-
-                    ms.Position = 0;
-
-                    await fs.CreateAsync(compiledName, ms);
+                    await fs.PutAsync(compiledName, blob);
 
                     // TODO: Add hook for testing
 
                 }
                 else if (item.IsStatic())
                 {
-                    await fs.CreateAsync(item.Name, await ToMemoryStreamAsync(item).ConfigureAwait(false)).ConfigureAwait(false);
+                    await fs.PutAsync(item.Name, await ToBlob(item).ConfigureAwait(false)).ConfigureAwait(false);
                 }
             }
 
@@ -137,7 +132,7 @@
 
         #region Compilers
 
-        private async Task<MemoryStream> CompileCssAsync(IAsset asset)
+        private async Task<Blob> CompileCssAsync(IAsset asset)
         {
             var sourceText = await asset.ReadStringAsync().ConfigureAwait(false);
 
@@ -166,7 +161,11 @@
 
             output.Position = 0;
 
-            return output;
+            return new Blob(output) {
+                Metadata = {
+                    ["Content-Type"] = "text/css"
+                }
+            };
         }
 
         #endregion
@@ -179,7 +178,7 @@
 
         #region Helpers
 
-        private static async Task<MemoryStream> ToMemoryStreamAsync(IAsset asset)
+        private static async Task<Blob> ToBlob(IAsset asset)
         {
             var ms = new MemoryStream();
 
@@ -189,8 +188,8 @@
             }
 
             ms.Position = 0;
-
-            return ms;
+            
+            return new Blob(ms);
         }
 
         #endregion
