@@ -1,15 +1,9 @@
-﻿namespace Carbon.Libraries
+﻿namespace Carbon.Platform
 {
-    using System.Threading.Tasks;
-
-    using Carbon.Platform;
-
     public interface ILibraryRegistry
     {
-        Task<Library> FindAsync(Hash hash);
+        Library Find(string name, Semver version);
 
-        Task<Library> FindAsync(string name, Semver version);
-
-        Task<Library> FindAsync(string name, SemverRange range);
+        Library Find(string name, SemverRange range);
     }  
 }

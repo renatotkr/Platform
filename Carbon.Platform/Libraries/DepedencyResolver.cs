@@ -1,7 +1,5 @@
-﻿namespace Carbon.Libraries
+﻿namespace Carbon.Platform
 {
-    using System.Threading.Tasks;
-
     public class DepedencyResolver
     {
         private readonly ILibraryRegistry registry;
@@ -25,7 +23,7 @@
             // Build up the graph
             foreach (var dep in package.Dependencies)
             {
-                if (!dep.IsResolved) ResolveAsync(dep).Wait();
+                if (!dep.IsResolved) Resolve(dep);
 
                 var node = graph.FindOrAdd(dep);
 
@@ -43,9 +41,9 @@
             }
         }
 
-        private async Task ResolveAsync(Library depedency)
+        private void Resolve(Library depedency)
         {
-            var release = await registry.FindAsync(depedency.Name, depedency.Version).ConfigureAwait(false);
+            var release = registry.Find(depedency.Name, depedency.Version);
 
             depedency.Version = release.Version;
             depedency.Dependencies = release.Dependencies;

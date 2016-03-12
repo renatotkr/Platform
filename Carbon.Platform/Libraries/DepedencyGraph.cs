@@ -1,18 +1,13 @@
-﻿namespace Carbon.Libraries
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace Carbon.Platform
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
-    // https://en.wikipedia.org/wiki/Dependency_graph
-
     public class DependencyGraph
     {
         private readonly Dictionary<string, Node<Library>> map = new Dictionary<string, Node<Library>>();
 
-        public IEnumerable<Node<Library>> GetNodes()
-        {
-            return map.Values;
-        }
+        public IEnumerable<Node<Library>> GetNodes() => map.Values;
 
         public Node<Library> FindOrAdd(Library depedency)
         {
@@ -30,10 +25,6 @@
             return node;
         }
 
-        private readonly List<Node<Library>> sortedNodes = new List<Node<Library>>();
-
-        private HashSet<Node<Library>> visitedNodes = new HashSet<Node<Library>>();
-
         private void VisitNode(Node<Library> node)
         {
             if (IsFirstVisit(node))
@@ -47,7 +38,7 @@
             }
         }
 
-        internal bool IsFirstVisit(Node<Library> node)
+        private bool IsFirstVisit(Node<Library> node)
         {
             var isFirstVisit = !visitedNodes.Contains(node);
 
@@ -65,8 +56,14 @@
         // ... using
         // Topological sorting (https://en.wikipedia.org/wiki/Topological_sorting)
 
+        private List<Node<Library>> sortedNodes;
+        private HashSet<Node<Library>> visitedNodes;
+
         public IList<Library> Sort()
         {
+            sortedNodes = new List<Node<Library>>();
+            visitedNodes = new HashSet<Node<Library>>();
+
             foreach (var node in GetNodes())
             {
                 VisitNode(node);
@@ -97,3 +94,5 @@
         }
     }
 }
+
+// https://en.wikipedia.org/wiki/Dependency_graph
