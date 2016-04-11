@@ -1,20 +1,20 @@
-﻿namespace Carbon.Builder
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
+
+using TypeScript;
+
+namespace Carbon.Builder
 {
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Text;
-    using System.Linq;
-    using System.Threading.Tasks;
-
-    using Carbon.Css;
-    using Carbon.Platform;
-    using Carbon.Logging;
-    using Carbon.Helpers;
-
-    using TypeScript;
+    using Css;
+    using Data;
+    using Platform;
+    using Logging;
     using Storage;
-
+    
     public class WebBuilder
     {
         private readonly TypeScriptCompiler typescript;
@@ -42,7 +42,7 @@
             this.log = log;
             this.fs = fs;
             this.package = package;
-            this.buildId = new Guid().ToString();
+            this.buildId = DateTime.UtcNow.ToString("yyyyMMddHHmmss") + "-" + HexString.FromBytes(Guid.NewGuid().ToByteArray()).Substring(0, 16);
             this.basePath = $@"D:/builds/{buildId}/";
 
             this.typescript = new TypeScriptCompiler(this.basePath);
@@ -195,5 +195,33 @@
         #endregion
     }
 
+    public static class StreamExtensions
+    {
+        public static async Task CopyToFileAsync(this Stream stream, string destinationFilePath)
+        {
+            #region Preconditions
+
+            if (stream == null)
+                throw new ArgumentNullException(nameof(stream));
+
+            if (destinationFilePath == null)
+                throw new ArgumentNullException(nameof(destinationFilePath));
+
+            #endregion
+
+            #region Ensure the directory exists
+
+            var di = new DirectoryInfo(Path.GetDirectoryName(destinationFilePath));
+
+            if (!di.Exists) di.Create();
+
+            #endregion
+
+            using (var writeStream = new FileStream(destinationFilePath, FileMode.CreateNew))
+            {
+                await stream.CopyToAsync(writeStream).ConfigureAwait(false);
+            }
+        }
+    }
 }
 

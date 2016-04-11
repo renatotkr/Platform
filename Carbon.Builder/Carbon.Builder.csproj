@@ -24,27 +24,30 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Carbon.Core">
-      <HintPath>..\lib\Carbon.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Carbon.Css">
       <HintPath>..\lib\Carbon.Css.dll</HintPath>
+    </Reference>
+    <Reference Include="Carbon.Data, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Carbon.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Carbon.Logging">
+      <HintPath>..\lib\Carbon.Logging.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Builders\CssPackageResolver.cs" />
-    <Compile Include="Builders\IFileSystem.cs" />
+    <Compile Include="Builders\CssResolver.cs" />
+    <Compile Include="Builders\PackageResolver.cs" />
     <Compile Include="Builders\WebBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Helpers\AsyncLock.cs" />
     <Compile Include="TypeScript\Diagnostics\TypeScriptDiagonstic.cs" />
     <Compile Include="TypeScript\Options.cs" />
     <Compile Include="TypeScript\TypeScriptCompiler.cs" />

@@ -1,18 +1,17 @@
-﻿namespace TypeScript
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
+using Carbon.Platform;
+
+namespace TypeScript
 {
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Text;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    using Carbon.Platform;
-
     public class TypeScriptCompiler : IBuilder
     {
-        // Global lock
-        private static AsyncLock semaphore = new AsyncLock();
+        private static SemaphoreSlim _gate = new SemaphoreSlim(1, 1);
 
         public static string WorkingDirectory = @"D:\tsc\";
 
@@ -35,26 +34,42 @@
 
         public async Task<BuildResult> BuildAsync()
         {
-            using (await semaphore.LockAsync().ConfigureAwait(false))
+            var sw = Stopwatch.StartNew();
+
+            await _gate.WaitAsync().ConfigureAwait(false);
+
+            sw.Stop();
+
+            BuildResult result;
+              
+            try
             {
-                return Execute();
+                result = Execute();
+
+                result.WaitTime = sw.Elapsed;
+
             }
+            finally
+            {
+                _gate.Release();
+            }
+
+            return result;
         }
 
-        public Task<IDisposable> LockAsync(TimeSpan timeout)
-        {
-            return semaphore.LockAsync(timeout);
-        }
+        public static SemaphoreSlim GlobalLock => _gate;
 
         private BuildResult Execute()
         {
+            var sw = Stopwatch.StartNew();
+
             var command = "tsc ";
 
             command += options.ToString();
 
             var result = new BuildResult();
 
-            var timeout = TimeSpan.FromSeconds(10);
+            var timeout = TimeSpan.FromSeconds(15);
 
             var psi = new ProcessStartInfo(WorkingDirectory + "node", command) {
                 CreateNoWindow = true,
@@ -119,6 +134,8 @@
                                 result.Diagnostics.Add(TypeScriptDiagonstic.Parse(line));
                             }
                         }
+
+                        result.Elapsed = sw.Elapsed;
 
                         return result;
                     }
