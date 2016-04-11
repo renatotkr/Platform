@@ -1,8 +1,8 @@
-﻿namespace Carbon.Platform.Hosting
-{
-    using System.Configuration;
-    using System.IO;
+﻿using System.Configuration;
+using System.IO;
 
+namespace Carbon.Platform.Hosting
+{
     public class AppHostConfiguration
     {
         private readonly DirectoryInfo root;

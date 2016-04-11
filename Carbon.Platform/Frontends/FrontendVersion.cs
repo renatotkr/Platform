@@ -1,75 +1,75 @@
-﻿namespace Carbon.Platform
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
+
+using Carbon.Data;
+
+namespace Carbon.Platform
 {
-	using System;
-	using System.ComponentModel.DataAnnotations;
-	using System.ComponentModel.DataAnnotations.Schema;
-	using System.Runtime.Serialization;
+    [Table("FrontendVersions")]
+    public class FrontendVersion
+    {
+        public FrontendVersion() { }
 
-	using Carbon.Data;
+        public FrontendVersion(IFrontend frontend, int number)
+        {
+            FrontendName = frontend.Name;
+            Number = number.ToString();
+        }
 
-	[Table("FrontendVersions")]
-	public class FrontendVersion
-	{
-		public FrontendVersion() { }
+        [Key, Column("frontend")] // Rename Id
+        public string FrontendName { get; set; }
 
-		public FrontendVersion(IFrontend frontend, int number) 
-		{
-			FrontendName = frontend.Name;
-			Number = number.ToString();
-		}
+        [Key, Column("name")] // TODO, change to a number type
+        public string Number { get; set; }
 
-		[Key, Column("frontend")] // Rename Id
-		public string FrontendName { get; set; }
+        [Column("commit")]
+        [StringLength(20)]
+        public string Commit { get; set; }
 
-		[Key, Column("name")] // TODO, change to a number type
-		public string Number { get; set; }
+        [Column("verified")]
+        [TimePrecision(TimePrecision.Second)]
+        public DateTime? Verified { get; set; }
 
-		[Column("commit")]
-		[StringLength(20)]
-		public string Commit { get; set; }
+        [Column("flags")]
+        public FrontendFlags Flags { get; set; }
 
-		[Column("verified")]
-		[TimePrecision(TimePrecision.Second)]
-		public DateTime? Verified { get; set; }
+        [Column("deployed")]
+        [TimePrecision(TimePrecision.Second)]
+        public DateTime? Deployed { get; set; }
 
-		[Column("flags")]
-		public FrontendFlags Flags { get; set; }
+        [Column("activated")]
+        [TimePrecision(TimePrecision.Second)]
+        public DateTime? Activated { get; set; }
 
-		[Column("deployed")]
-		[TimePrecision(TimePrecision.Second)]
-		public DateTime? Deployed { get; set; }
+        [Column("created")]
+        [TimePrecision(TimePrecision.Second)]
+        public DateTime Created { get; set; }
 
-		[Column("activated")]
-		[TimePrecision(TimePrecision.Second)]
-		public DateTime? Activated { get; set; }
+        [Column("creatorId")]
+        public int CreatorId { get; set; }
 
-		[Column("created")]
-		[TimePrecision(TimePrecision.Second)]
-		public DateTime Created { get; set; }
+        #region Helpers
 
-		[Column("creatorId")]
-		public int CreatorId { get; set; }
+        public bool Hotfix => Flags.HasFlag(FrontendFlags.Hotfix);
 
-		#region Helpers
+        [IgnoreDataMember]
+        public object Creator { get; set; }
 
-		public bool Hotfix => Flags.HasFlag(FrontendFlags.Hotfix);
+        [IgnoreDataMember]
+        public string Path => FrontendName + "/" + Number;
 
-		[IgnoreDataMember]
-		public object Creator { get; set; }
+        // lefty/1.0.2
 
-		[IgnoreDataMember]
-		public string Path => FrontendName + "/" + Number;
+        #endregion
+    }
 
-		// lefty/1.0.2
+    [Flags]
+    public enum FrontendFlags
+    {
+        None = 0,
 
-		#endregion
-	}
-
-	[Flags]
-	public enum FrontendFlags
-	{
-		None	= 0,
-
-		Hotfix	= 1 << 5
-	}
+        Hotfix = 1 << 5
+    }
 }

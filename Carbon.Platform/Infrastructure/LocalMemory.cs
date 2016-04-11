@@ -1,15 +1,15 @@
-﻿namespace Carbon.Platform
+﻿using System;
+using System.Runtime.InteropServices;
+
+namespace Carbon.Platform
 {
-    using System;
-    using System.Runtime.InteropServices;
-
     public struct LocalMemory
-	{
-		public long Available { get; set; }
+    {
+        public long Available { get; set; }
 
-		public long Used { get; set; }
-		
-		public long Total { get; set; }
+        public long Used { get; set; }
+
+        public long Total { get; set; }
 
         public static LocalMemory Observe()
         {
@@ -17,8 +17,7 @@
 
             if (GlobalMemoryStatusEx(memoryStatus))
             {
-                var observation = new LocalMemory
-                {
+                var observation = new LocalMemory {
                     Total = (long)memoryStatus.ullTotalPhys,
                     Available = (long)memoryStatus.ullAvailPhys
                 };

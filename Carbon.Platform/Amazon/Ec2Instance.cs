@@ -1,9 +1,9 @@
-﻿namespace Carbon.Platform
-{
-	using System;
-	using System.Net.Http;
-	using System.Threading.Tasks;
+﻿using System;
+using System.Net.Http;
+using System.Threading.Tasks;
 
+namespace Carbon.Platform
+{
 	using Carbon.Data;
 
 	public class Ec2Instance
@@ -12,37 +12,6 @@
 
 		// http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AESDG-chapter-instancedata.html
 
-		private static readonly HttpClient httpClient = new HttpClient {
-			Timeout = TimeSpan.FromSeconds(5)
-		};
-
-		public static async Task<string> GetInstanceId()
-		{
-			return await httpClient.GetStringAsync(baseUri + "/latest/meta-data/instance-id").ConfigureAwait(false);
-		}
-
-		public static async Task<byte[]> GetUserData()
-		{
-			return await httpClient.GetByteArrayAsync(baseUri + "/latest/user-data").ConfigureAwait(false);
-		}
-
-		public static async Task<string> GetUserDataString()
-		{
-			return await httpClient.GetStringAsync(baseUri + "/latest/user-data").ConfigureAwait(false);
-		}
-
-		public static async Task<string> GetAvailabilityZone()
-		{
-			return await httpClient.GetStringAsync(baseUri + "/latest/meta-data/placement/availability-zone").ConfigureAwait(false);
-		}
-
-		public static async Task<Ec2Instance> GetCurrent()
-		{
-			var text = await httpClient.GetStringAsync(baseUri + "/latest/dynamic/instance-identity/document").ConfigureAwait(false);
-
-			return XObject.Parse(text).As<Ec2Instance>();
-
-		}
 		public string InstanceId { get; set; }
 
 		public string ImageId { get; set; }
@@ -54,7 +23,35 @@
 		public string AvailabilityZone { get; set; }
 
 		public string PrivateIp { get; set; }
-	}
+
+
+        private static readonly HttpClient httpClient = new HttpClient {
+            Timeout = TimeSpan.FromSeconds(5)
+        };
+
+        public static Task<string> GetInstanceId()
+            => httpClient.GetStringAsync(baseUri + "/latest/meta-data/instance-id");
+
+        public static Task<string> GetPublicIpAsync()
+            => httpClient.GetStringAsync(baseUri + "/latest/meta-data/public-ipv4");
+
+        public static Task<byte[]> GetUserData()
+            => httpClient.GetByteArrayAsync(baseUri + "/latest/user-data");
+
+        public static Task<string> GetUserDataString()
+            => httpClient.GetStringAsync(baseUri + "/latest/user-data");
+
+        public static Task<string> GetAvailabilityZone()
+            => httpClient.GetStringAsync(baseUri + "/latest/meta-data/placement/availability-zone");
+
+        public static async Task<Ec2Instance> FetchAsync()
+        {
+            var text = await httpClient.GetStringAsync(baseUri + "/latest/dynamic/instance-identity/document").ConfigureAwait(false);
+
+            return XObject.Parse(text).As<Ec2Instance>();
+        }
+
+    }
 }
 
 

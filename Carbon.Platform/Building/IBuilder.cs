@@ -1,11 +1,11 @@
-﻿namespace Carbon.Platform
-{
-	using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-	public interface IBuilder
-	{
-		Task<BuildResult> BuildAsync();
-	}
+namespace Carbon.Platform
+{
+    public interface IBuilder
+    {
+        Task<BuildResult> BuildAsync();
+    }
 }
 
 // BuildStyles

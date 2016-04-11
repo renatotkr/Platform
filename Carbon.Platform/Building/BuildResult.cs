@@ -1,13 +1,15 @@
-﻿namespace Carbon.Platform
+﻿using System;
+
+namespace Carbon.Platform
 {
-	using System;
+    public class BuildResult
+    {
+        public TimeSpan WaitTime { get; set; }
 
-	public class BuildResult
-	{
-		public TimeSpan Elapsed { get; set; }
+        public TimeSpan Elapsed { get; set; }
 
-		public BuildStatus Status { get; set; }
+        public BuildStatus Status { get; set; }
 
         public DiagnosticList Diagnostics { get; } = new DiagnosticList();
-	}
+    }
 }

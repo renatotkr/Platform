@@ -1,11 +1,11 @@
-﻿namespace Carbon.Platform
-{
-    using System;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Runtime.Serialization;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
 
-    using Carbon.Data;
+namespace Carbon.Platform
+{
+    using Data;
 
     [Table("AppVersions")]
     public class AppVersion : IAppVersion

@@ -12,10 +12,10 @@
         {
             if (IsInitialized) return;
 
-            lock(_sync)
+            lock (_sync)
             {
                 if (!IsInitialized)
-                {                  
+                {
                     ConverterFactory.Add<Semver>(new SemverConverter());
 
                     IsInitialized = true;

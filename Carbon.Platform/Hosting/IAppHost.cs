@@ -1,8 +1,8 @@
-﻿namespace Carbon.Platform.Hosting
-{
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
+namespace Carbon.Platform.Hosting
+{
     // This could be IIS, Apache, Unicorn, or a Self Host
 
     public interface IAppHost
@@ -11,15 +11,15 @@
 
         AppInstance Find(string name); // TODO (id)
 
-        void Create(IApp app);
+        Task CreateAsync(IApp app);
 
-        void Delete(IApp app);
+        Task DeleteAsync(IApp app);
 
-        Task Deploy(IApp app, int version, Package package);
+        Task DeployAsync(IApp app, int version, Package package);
 
-        Task<AppInstance> Activate(IApp app, int version);
+        Task<AppInstance> ActivateAsync(IApp app, int version);
 
-        void Reload(IApp app);
+        Task ReloadAsync(IApp app);
 
         bool IsDeployed(IApp app, int version);
     }

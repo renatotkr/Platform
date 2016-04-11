@@ -1,8 +1,8 @@
-﻿namespace Carbon.Platform
-{
-    using System.IO;
-    using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 
+namespace Carbon.Platform
+{
     public static class AssetExtensions
     {
         public static bool IsStatic(this IAsset asset)

@@ -112,7 +112,7 @@
             var result = await Send(request).ConfigureAwait(false);
 
             var refs = new GetRefsResult();
-
+            
             foreach (var item in (XArray)result)
             {
                 refs.Add(item.As<GitRef>());
@@ -130,14 +130,7 @@
 
             var result = await Send(request).ConfigureAwait(false);
 
-            var branches = new List<GitBranch>();
-
-            foreach (var item in (XArray)result)
-            {
-                branches.Add(item.As<GitBranch>());
-            }
-
-            return branches;
+            return ((XArray)result).ToArrayOf<GitBranch>();
         }
 
         /// <summary>

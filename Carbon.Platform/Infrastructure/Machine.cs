@@ -1,15 +1,15 @@
-﻿namespace Carbon.Platform
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Net.NetworkInformation;
-    using System.Net.Sockets;
-    using System.Threading;
-    using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
+using System.Threading;
+using System.Threading.Tasks;
 
+namespace Carbon.Platform
+{
     public static class Machine
     {
         private static MachineInfo current;
@@ -31,9 +31,8 @@
                 try
                 {
                     current.MemoryTotal = LocalMemory.Observe().Total;
-                    current.Ips = GetIps().Select(ip => ip.ToString()).ToArray();
 
-                    current.VolumeNames = GetVolumes().Select(c => c.Name).ToArray();
+                    current.VolumeNames = GetVolumes(current).Select(c => c.Name).ToArray();
                 }
                 catch { }
 
@@ -45,7 +44,7 @@
 
                 try
                 {
-                    var ec2 = await Ec2Instance.GetCurrent().ConfigureAwait(false);
+                    var ec2 = await Ec2Instance.FetchAsync().ConfigureAwait(false);
 
                     current.InstanceId = ec2.InstanceId;
                     current.AvailabilityZone = ec2.AvailabilityZone;
@@ -56,6 +55,14 @@
                     {
                         current.PrivateIp = IPAddress.Parse(ec2.PrivateIp);
                     }
+
+                    try
+                    {
+                        var publicIp = await Ec2Instance.GetPublicIpAsync().ConfigureAwait(false);
+
+                        current.PublicIp = IPAddress.Parse(publicIp);
+                    }
+                    catch { }
                 }
                 catch (Exception ex)
                 {
@@ -77,20 +84,11 @@
             // Combine the machine volume & mac ids to get it's hash
             // Future, just use the InstanceId
 
-            var vols = GetVolumes().ToArray();
-
             if (info.Macs == null) throw new ArgumentNullException("No macs were found on the machine");
 
             var items = new List<string>();
 
             items.AddRange(info.Macs);
-
-            var volIds = vols.Select(v => v.Guid).ToArray();
-
-            if (volIds.Length != 0)
-            {
-                items.AddRange(volIds);
-            }
 
             var text = string.Join("/", items.OrderBy(i => i));
 
@@ -109,8 +107,7 @@
 
                 if (ni.OperationalStatus == OperationalStatus.Up && macAddress.Length > 0 && macAddress != "00000000000000E0")
                 {
-                    yield return new NetworkInterfaceInfo
-                    {
+                    yield return new NetworkInterfaceInfo {
                         Description = ni.Description,
                         IpAddresses = GetNetworkInterfaceIps(ni),
                         InstanceName = InstanceName.FromDescription(ni.Description),
@@ -120,11 +117,11 @@
             }
         }
 
-        public static IEnumerable<VolumeInfo> GetVolumes()
+        public static IEnumerable<VolumeInfo> GetVolumes(MachineInfo machine)
         {
             foreach (var driveInfo in DriveInfo.GetDrives().Where(d => d.IsReady && d.DriveType == DriveType.Fixed))
             {
-                yield return VolumeInfo.FromDriveInfo(driveInfo);
+                yield return driveInfo.ToVolumeInfo(machine);
             }
         }
 
@@ -135,29 +132,6 @@
                 .Where(ip => !IPAddress.IsLoopback(ip.Address) && ip.Address.AddressFamily == AddressFamily.InterNetwork)
                 .Select(ip => ip.Address)
                 .ToArray();
-        }
-
-        public static IEnumerable<IPAddress> GetIps()
-        {
-            foreach (var ni in NetworkInterface.GetAllNetworkInterfaces())
-            {
-                if (ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
-                {
-                    foreach (var ip in ni.GetIPProperties().UnicastAddresses)
-                    {
-                        // Skip the loopback address
-                        if (IPAddress.IsLoopback(ip.Address)) continue;
-
-                        // Skip non-IE4 addresses
-                        if (ip.Address.AddressFamily != AddressFamily.InterNetwork) continue;
-
-                        // Skip the 169 family
-                        if (ip.Address.ToString().StartsWith("169.")) continue;
-
-                        yield return ip.Address;
-                    }
-                }
-            }
         }
     }
 }

@@ -1,9 +1,9 @@
-﻿namespace Carbon.Platform
-{
-    using System;
-    using System.IO;
-    using System.IO.Compression;
+﻿using System;
+using System.IO;
+using System.IO.Compression;
 
+namespace Carbon.Platform
+{
     public static class StreamExtensions
     {
         public static void GZip(this Stream sourceStream, Stream targetStream, bool leaveOpen = true)
@@ -18,7 +18,8 @@
         {
             #region Preconditions
 
-            if (stream == null) throw new ArgumentNullException(nameof(stream));
+            if (stream == null)
+                throw new ArgumentNullException(nameof(stream));
 
             #endregion
 

@@ -53,6 +53,8 @@
     <Compile Include="Apps\AppTagId.cs" />
     <Compile Include="Apps\Logging\AppActivity.cs" />
     <Compile Include="Building\BuildTimeout.cs" />
+    <Compile Include="Infrastructure\Helpers\DriveInfoExtensions.cs" />
+    <Compile Include="Infrastructure\Helpers\NetworkInterfaceExtensions.cs" />
     <Compile Include="Infrastructure\IMachine.cs" />
     <Compile Include="Infrastructure\LocalMemory.cs" />
     <Compile Include="Infrastructure\Reports\AppInstanceReport.cs" />

@@ -1,7 +1,7 @@
-﻿namespace Carbon.Platform
-{
-    using System;
+﻿using System;
 
+namespace Carbon.Platform
+{
     public class BuildTimeout : Exception
     {
         public BuildTimeout(TimeSpan duration)

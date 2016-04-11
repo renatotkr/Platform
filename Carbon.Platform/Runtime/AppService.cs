@@ -1,49 +1,49 @@
-﻿namespace Carbon.Platform
+﻿using System;
+using System.IO;
+
+namespace Carbon.Platform
 {
-	using System;
-	using System.IO;
+    public class AppService
+    {
+        private static AppInstance instance;
 
-	public class AppService
-	{
-		private static AppInstance instance;
+        private readonly object mutex = new object();
 
-		private readonly object mutex = new object();
+        public AppInstance GetCurrentInstance()
+        {
+            if (instance == null)
+            {
+                var fileName = GetInstanceFileName();
 
-		public AppInstance GetCurrentInstance()
-		{
-			if(instance == null)
-			{
-				var fileName = GetInstanceFileName();
+                if (!File.Exists(fileName)) return null;
 
-				if (!File.Exists(fileName)) return null;
+                lock (mutex)
+                {
+                    var text = File.ReadAllText(fileName);
 
-				lock (mutex)
-				{
-					var text = File.ReadAllText(fileName);
+                    instance = AppInstance.FromKey(text);
 
-					instance = AppInstance.FromKey(text);
+                    // 1a0000000a0000002a000000
 
-					// 1a0000000a0000002a000000
+                    // AppTagId.Create()
 
-					// AppTagId.Create()
+                }
+            }
 
-				}
-			}
+            return instance;
+        }
 
-			return instance;
-		}
+        #region Helpers
 
-		#region Helpers
+        private string GetInstanceFileName()
+        {
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
-		private string GetInstanceFileName()
-		{
-			var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            return Path.Combine(baseDirectory, "instance.txt");
+        }
 
-			return Path.Combine(baseDirectory, "instance.txt");
-		}
-
-		#endregion
-	}
+        #endregion
+    }
 }
 
 /*

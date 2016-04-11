@@ -1,13 +1,11 @@
-﻿namespace Carbon.Platform
+﻿using System;
+
+namespace Carbon.Platform
 {
-	using System;
+    public interface IFrontend
+    {
+        string Name { get; }
 
-	public interface IFrontend
-	{
-		string Name { get; }
-
-		Uri RepositoryUrl { get; }
-
-        // Releases
-	}
+        Uri RepositoryUrl { get; }
+    }
 }

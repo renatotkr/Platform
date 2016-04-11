@@ -1,9 +1,9 @@
-﻿namespace Carbon.Platform
-{
-	using System;
+﻿using System;
 
-	public interface IObservation
-	{
-		DateTime Date { get; set; }
-	}
+namespace Carbon.Platform
+{
+    public interface IObservation
+    {
+        DateTime Date { get; set; }
+    }
 }
