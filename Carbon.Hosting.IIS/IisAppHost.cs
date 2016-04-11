@@ -1,21 +1,20 @@
-﻿namespace Carbon.Platform.Hosting
+﻿using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.AccessControl;
+using System.Threading.Tasks;
+
+using Microsoft.Web.Administration;
+
+namespace Carbon.Platform.Hosting
 {
-    using System;
-    using System.IO;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Security.AccessControl;
-    using System.Threading.Tasks;
-
-    using Carbon.Logging;
-    using Carbon.Helpers;
-
-    using Microsoft.Web.Administration;
+    using Logging;
 
     public class IisAppHost : IAppHost, IDisposable
     {
         private readonly AppHostConfiguration config;
-        private readonly ServerManager serverManager;
+        private readonly ServerManager serverManager = new ServerManager();
 
         private readonly MachineInfo machine;
         private readonly ILogger log;
@@ -25,7 +24,6 @@
             this.machine = machine;
             this.config = config;
             this.log = log;
-            this.serverManager = new ServerManager();
         }
 
         public IEnumerable<AppInstance> Scan()
@@ -47,7 +45,7 @@
             return FromSite(site);
         }
 
-        public void Create(IApp app)
+        public Task CreateAsync(IApp app)
         {
             int version = 0;
 
@@ -55,7 +53,7 @@
             {
                 log.Info($"Pool {app.Name} exists. Skipping");
 
-                return;
+                return Task.CompletedTask;
             }
 
             // Create a new pool
@@ -91,9 +89,11 @@
 
             // Commit the changes to the server
             serverManager.CommitChanges();
+
+            return Task.CompletedTask;
         }
 
-        public async Task Deploy(IApp app, int version, Package package)
+        public async Task DeployAsync(IApp app, int version, Package package)
         {
             #region Ensure the app exists
 
@@ -101,7 +101,7 @@
 
             if (instance == null)
             {
-                Create(app);
+                await CreateAsync(app).ConfigureAwait(false);
             }
 
             #endregion
@@ -143,14 +143,13 @@
                 AccessControlType.Allow
             ));
 
-
             try
             {
                 directory.SetAccessControl(accessControl);
             }
             catch (Exception ex)
             {
-                log.Error("Error creating ACL", ex);
+                log.Error($"Error creating ACL. {ex.Message}");
             }
 
             #endregion
@@ -168,18 +167,19 @@
 
             foreach (var folder in new DirectoryInfo(root).EnumerateDirectories())
             {
-                var number = folder.Name.ToInt();
+                int number;
 
-                if (number != 0) yield return number;
+                if (int.TryParse(folder.Name, out number))
+                {
+                    yield return number;
+                }
             }
         }
 
         public bool IsDeployed(IApp app, int version)
-        {
-            return GetAppPath(app, version).Exists;
-        }
+            => GetAppPath(app, version).Exists;
 
-        public async Task<AppInstance> Activate(IApp app, int version)
+        public Task<AppInstance> ActivateAsync(IApp app, int version)
         {
             var site = serverManager.Sites[app.Name];
 
@@ -214,17 +214,19 @@
 
             File.WriteAllText(instanceTxtFile, instance.GetKey());
 
-            return instance;
+            return Task.FromResult(instance);
         }
 
-        public void Reload(IApp app)
+        public Task ReloadAsync(IApp app)
         {
             var pool = serverManager.ApplicationPools[app.Name];
 
             pool.Recycle();
+
+            return Task.CompletedTask;
         }
 
-        public void Delete(IApp app)
+        public Task DeleteAsync(IApp app)
         {
             var site = serverManager.Sites[app.Name];
 
@@ -233,6 +235,8 @@
             serverManager.CommitChanges();
 
             // Remove the AppPool & Site
+
+            return Task.CompletedTask;
         }
 
         public void Dispose()
@@ -372,7 +376,6 @@
         }
 
         #endregion
-
 
         // Start, Stop
     }
