@@ -4,26 +4,25 @@ using System.Threading.Tasks;
 
 namespace Carbon.Platform
 {
-	using Carbon.Data;
+    using Data;
 
-	public class Ec2Instance
-	{
-		public const string baseUri = "http://169.254.169.254";
+    public class Ec2Instance
+    {
+        const string baseUri = "http://169.254.169.254";
 
-		// http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AESDG-chapter-instancedata.html
+        // http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AESDG-chapter-instancedata.html
 
-		public string InstanceId { get; set; }
+        public string InstanceId { get; set; }
 
-		public string ImageId { get; set; }
+        public string ImageId { get; set; }
 
-		public string InstanceType { get; set; }
+        public string InstanceType { get; set; }
 
-		public string Region { get; set; }
+        public string Region { get; set; }
 
-		public string AvailabilityZone { get; set; }
+        public string AvailabilityZone { get; set; }
 
-		public string PrivateIp { get; set; }
-
+        public string PrivateIp { get; set; }
 
         private static readonly HttpClient httpClient = new HttpClient {
             Timeout = TimeSpan.FromSeconds(5)

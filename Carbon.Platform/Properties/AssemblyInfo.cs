@@ -4,9 +4,14 @@
 [assembly: AssemblyProduct("Carbon")]
 [assembly: AssemblyCopyright("© 2012 - 2016 Jason Nelson")]
 
-[assembly: AssemblyVersion("0.5.0")]
+[assembly: AssemblyVersion("1.0.0")]
 
 /*
+  1.0.0 (2016-09-01)
+  - Breakout packaging
+  - Move semver to data
+  - Move data model to SQL (remove depedency from Dynamo)
+
   0.4.0 (2015-10-15)
   - Add BitBucket
   - Add GitHub

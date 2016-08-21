@@ -1,11 +1,11 @@
-﻿namespace Carbon.Platform
+﻿using System;
+
+namespace Carbon.Platform
 {
-	using System;
+    public interface IRepository
+    {
+        long Id { get; }
 
-	public interface IRepository
-	{
-		string Name { get; }
-
-		Uri Url { get; }
-	}
+        Uri Url { get; }
+    }
 }
