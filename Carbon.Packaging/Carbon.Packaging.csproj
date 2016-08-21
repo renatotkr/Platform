@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D16FF06D-597C-4E1A-86A9-3E3E1F3BF29B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Carbon.Packaging</RootNamespace>
+    <AssemblyName>Carbon.Packaging</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Carbon.Data">
+      <HintPath>..\lib\Carbon.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Files\Helpers\FileHelper.cs" />
+    <Compile Include="Files\Helpers\IFileExtensions.cs" />
+    <Compile Include="Files\Helpers\StreamExtensions.cs" />
+    <Compile Include="Files\IFile.cs" />
+    <Compile Include="Files\MemoryFile.cs" />
+    <Compile Include="Files\VolumeFile.cs" />
+    <Compile Include="Files\ZipFile.cs" />
+    <Compile Include="Libraries\DepedencyResolver.cs" />
+    <Compile Include="Libraries\ILibraryRegistry.cs" />
+    <Compile Include="Libraries\Library.cs" />
+    <Compile Include="Libraries\LibraryRegistry.cs" />
+    <Compile Include="Libraries\StaticLibraryRegistry.cs" />
+    <Compile Include="Manifest\PackageManifest.cs" />
+    <Compile Include="Metadata\PackageMetadata.cs" />
+    <Compile Include="Fetching\PackageFetcher.cs" />
+    <Compile Include="Packages\Package.cs" />
+    <Compile Include="Packages\DirectoryPackage.cs" />
+    <Compile Include="Packages\MutablePackage.cs" />
+    <Compile Include="Packages\XarPackage.cs" />
+    <Compile Include="Packages\ZipPackage.cs" />
+    <Compile Include="Repositories\ICommit.cs" />
+    <Compile Include="Repositories\Providers\BitBucket\BitBucketClient.cs" />
+    <Compile Include="Repositories\Providers\BitBucket\BitBucketRepository.cs" />
+    <Compile Include="Repositories\Providers\BitBucket\Models\RevisionInfo.cs" />
+    <Compile Include="Repositories\Providers\GitHub\GitCredentials.cs" />
+    <Compile Include="Repositories\Providers\GitHub\GitHubClient.cs" />
+    <Compile Include="Repositories\Providers\GitHub\GitRepository.cs" />
+    <Compile Include="Repositories\Providers\GitHub\Models\AuthorizationRequest.cs" />
+    <Compile Include="Repositories\Providers\GitHub\Models\GetArchiveLinkRequest.cs" />
+    <Compile Include="Repositories\Providers\GitHub\Models\GetRefsResult.cs" />
+    <Compile Include="Repositories\Providers\GitHub\Models\GitAgent.cs" />
+    <Compile Include="Repositories\Providers\GitHub\Models\GitBranch.cs" />
+    <Compile Include="Repositories\Providers\GitHub\Models\GitCommit.cs" />
+    <Compile Include="Repositories\Providers\GitHub\Models\GitObject.cs" />
+    <Compile Include="Repositories\Providers\GitHub\Models\GitRef.cs" />
+    <Compile Include="Repositories\Providers\GitHub\Models\GitUser.cs" />
+    <Compile Include="Repositories\Providers\IRepositoryClient.cs" />
+    <Compile Include="Repositories\RepositoryDetails.cs" />
+    <Compile Include="Repositories\RepositoryHost.cs" />
+    <Compile Include="Repositories\Revision.cs" />
+    <Compile Include="Stores\IPackageStore.cs" />
+    <Compile Include="Stores\PackageStore.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Carbon.Platform\Carbon.Platform.csproj">
+      <Project>{2003eabf-fab5-48d2-a921-0901494a54b5}</Project>
+      <Name>Carbon.Platform</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

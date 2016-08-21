@@ -1,0 +1,19 @@
+﻿using System;
+
+namespace Carbon.Packaging
+{
+    internal static class FileHelper
+    {
+        private static readonly string[] txtFormats = { "css", "html", "js", "mtpl", "tpl", "txt" };
+
+        private static readonly string[] staticFormats = {
+            "css", "eot", "gif", "html", "ico", "jpeg", "jpg", "js", "png", "svg", "swf", "ttf", "webm", "webp", "woff"
+        };
+
+        public static bool IsText(string format)
+            => Array.BinarySearch(txtFormats, format) > 0;
+
+        public static bool IsStatic(string format)
+            => Array.BinarySearch(staticFormats, format) > -1;
+    }
+}
