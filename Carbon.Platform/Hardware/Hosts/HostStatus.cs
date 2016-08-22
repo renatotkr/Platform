@@ -4,16 +4,16 @@
     {
         Pending     = 0, // provisioning
         Running     = 1,
-        Suspending  = 5, // stopping
-        Suspended   = 6, // stopped
-        Terminating = 2, // shutting down ?
-        Terminated  = 7
+        Suspending  = 2, // stopping
+        Suspended   = 3, // stopped
+        Terminating = 4, // shutting down ?
+        Terminated  = 5 
     }
 }
 
 /* 
 EC2
-0 : pending
+0  : pending
 16 : running
 32 : shutting-down
 48 : terminated

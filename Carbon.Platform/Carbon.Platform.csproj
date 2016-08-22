@@ -39,13 +39,13 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Amazon\Ec2Instance.cs" />
+    <Compile Include="Containers\Container.cs" />
+    <Compile Include="Hardware\Hosts\Ec2Instance.cs" />
     <Compile Include="Depedencies\DepedencyGraph.cs" />
     <Compile Include="Hardware\Hosts\HostInfo.cs" />
-    <Compile Include="Hardware\MemoryInfo.cs" />
-    <Compile Include="Hardware\Hosts\TerminationReason.cs" />
-    <Compile Include="Hardware\NetworkInterfaces\Helpers\NetworkInterfaceExtensions.cs" />
-    <Compile Include="Hardware\NetworkInterfaces\NetworkInterfaceInfo.cs" />
+    <Compile Include="Hardware\Hosts\HostStatus.cs" />
+    <Compile Include="Hardware\NetworkInterfaceInfo.cs" />
+    <Compile Include="Hardware\Volumes\VolumeStatus.cs" />
     <Compile Include="Libraries\ILibrary.cs" />
     <Compile Include="Libraries\LibraryDepedency.cs" />
     <Compile Include="Libraries\LibraryPackageFile.cs" />
@@ -57,19 +57,19 @@
     <Compile Include="Repositories\RepositoryInfo.cs" />
     <Compile Include="Repositories\RepositoryType.cs" />
     <Compile Include="Programs\ProgramType.cs" />
-    <Compile Include="Processes\Process.cs" />
+    <Compile Include="Processes\ProcessInfo.cs" />
     <Compile Include="Frontends\FrontendFileInfo.cs" />
     <Compile Include="Frontends\FrontendRelease.cs" />
     <Compile Include="Hardware\Hosts\IHost.cs" />
     <Compile Include="Programs\ProgramInfo.cs" />
     <Compile Include="Programs\ProgramRelease.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Hardware\Hosts\Helpers\HostName.cs" />
+    <Compile Include="Helpers\HostName.cs" />
     <Compile Include="Frontends\FrontendInfo.cs" />
     <Compile Include="Backends\BackendInfo.cs" />
-    <Compile Include="Hardware\Volumes\Helpers\DriveInfoExtensions.cs" />
     <Compile Include="Hardware\Volumes\VolumeInfo.cs" />
-    <Compile Include="Zones\CloudId.cs" />
+    <Compile Include="Zones\ZoneLevel.cs" />
+    <Compile Include="Zones\ProviderId.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -17,18 +17,21 @@ namespace Carbon.Platform
         public long ZoneId { get; }
 
         [Member(4)]
+        public VolumeStatus Status { get; }
+
+        [Member(5)]
         public long Size { get; set; } // in octets
         
-        [Member(5), Optional, Indexed]
+        [Member(6), Optional, Indexed]
         public long? SourceId { get; set; }
 
-        [Member(6, Mutable = true)]
+        [Member(7, Mutable = true)]
         public long FreeSpace { get; set; }
 
-        [Member(7, Mutable = true), Indexed] // Can volumes be shared between hosts?
+        [Member(8, Mutable = true), Indexed] // Can volumes be shared between hosts?
         public long? HostId { get; set; }
 
-        [Member(8, Mutable = true)]
+        [Member(9, Mutable = true)]
         public string DeviceName { get; set; } // e.g. D, dev/disk1
          
         [Member(10), Version(false)] // snapshot date if from source

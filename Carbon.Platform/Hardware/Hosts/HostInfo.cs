@@ -21,25 +21,22 @@ namespace Carbon.Platform
         [Member(4)]
         public IPAddress PrivateIp { get; set; }
 
-        [Member(5), Optional]
-        public IPAddress PublicIp { get; set; }
-
-        [Member(6)]
+        [Member(5)]
         public long ImageId { get; set; }
 
-        [Member(7), Version]
+        [Member(6), Version]
         public DateTime Created { get; set; }
 
-        [Member(8, Mutable = true)]
+        [Member(7, Mutable = true)]
         public long MemoryUsed { get; set; }
 
-        [Member(9)]
+        [Member(8)]
         public long MemoryTotal { get; set; }
 
-        [Member(10)] // For virtualized hosts
+        [Member(9)] // For virtualized hosts
         public long? ParentId { get; set; }
 
-        [Member(12, MaxLength = 32), Indexed]
+        [Member(10, MaxLength = 32), Indexed]
         public string InstanceId { get; set; }
 
         #region Helpers
@@ -53,6 +50,8 @@ namespace Carbon.Platform
         #endregion
     }
 }
+
+//         public IPAddress Address { get; set; }          // IP6, immutable within region ?
 
 // tags?
 // hypervisor?
