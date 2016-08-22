@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{518B0B69-CBEB-48DA-87AD-7D8A2F9D3FA0}</ProjectGuid>
+    <ProjectGuid>{5390C71C-CA5E-4039-92D0-D44F11A60E00}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Carbon.Builder</RootNamespace>
-    <AssemblyName>Carbon.Builder</AssemblyName>
+    <RootNamespace>Carbon.Web.Building</RootNamespace>
+    <AssemblyName>Carbon.Web.Building</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -24,36 +24,43 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\release\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Carbon.Data.Annotations">
-      <HintPath>..\lib\Carbon.Data.Annotations.dll</HintPath>
+    <Reference Include="Carbon.Css">
+      <HintPath>..\lib\Carbon.Css.dll</HintPath>
+    </Reference>
+    <Reference Include="Carbon.Data">
+      <HintPath>..\lib\Carbon.Data.dll</HintPath>
     </Reference>
     <Reference Include="Carbon.Logging">
       <HintPath>..\lib\Carbon.Logging.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Build.cs" />
-    <Compile Include="Models\BuildResult.cs" />
-    <Compile Include="Models\BuildStatus.cs" />
-    <Compile Include="Models\BuildTimeout.cs" />
-    <Compile Include="Models\IBuild.cs" />
-    <Compile Include="Models\IBuilder.cs" />
-    <Compile Include="Diagnostics\Diagnostic.cs" />
-    <Compile Include="Diagnostics\DiagnosticList.cs" />
+    <Compile Include="Builders\CssResolver.cs" />
+    <Compile Include="Builders\WebBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TypeScript\Diagnostics\TypeScriptDiagonstic.cs" />
+    <Compile Include="TypeScript\Options.cs" />
+    <Compile Include="TypeScript\TypeScriptCompiler.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Carbon.Builder\Carbon.Builder.csproj">
+      <Project>{518b0b69-cbeb-48da-87ad-7d8a2f9d3fa0}</Project>
+      <Name>Carbon.Builder</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj">
       <Project>{d16ff06d-597c-4e1a-86a9-3e3e1f3bf29b}</Project>
       <Name>Carbon.Packaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Carbon.Platform\Carbon.Platform.csproj">
+      <Project>{2003eabf-fab5-48d2-a921-0901494a54b5}</Project>
+      <Name>Carbon.Platform</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

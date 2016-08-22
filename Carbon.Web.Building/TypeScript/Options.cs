@@ -1,9 +1,9 @@
-﻿namespace TypeScript
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
+namespace TypeScript
+{
     public enum JavaScriptVersion
     {
         ES3,

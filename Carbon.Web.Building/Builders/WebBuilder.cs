@@ -11,10 +11,11 @@ namespace Carbon.Builder
 {
     using Css;
     using Data;
-    using Platform;
     using Logging;
     using Storage;
-    
+    using Packaging;
+    using Building;
+
     public class WebBuilder
     {
         private readonly TypeScriptCompiler typescript;
@@ -132,9 +133,9 @@ namespace Carbon.Builder
 
         #region Compilers
 
-        private async Task<Blob> CompileCssAsync(IAsset asset)
+        private async Task<Blob> CompileCssAsync(IFile file)
         {
-            var sourceText = await asset.ReadStringAsync().ConfigureAwait(false);
+            var sourceText = await file.ReadStringAsync().ConfigureAwait(false);
 
             if (sourceText == null || sourceText.Length == 0)
             {
@@ -143,7 +144,7 @@ namespace Carbon.Builder
 
             if (sourceText.StartsWith("//= partial")) return null;
 
-            var basePath = "/" + asset.Name.Replace(Path.GetFileName(asset.Name), "");
+            var basePath = "/" + file.Name.Replace(Path.GetFileName(file.Name), "");
 
             var output = new MemoryStream();
 
@@ -178,7 +179,7 @@ namespace Carbon.Builder
 
         #region Helpers
 
-        private static async Task<Blob> ToBlob(IAsset asset)
+        private static async Task<Blob> ToBlob(IFile asset)
         {
             var ms = new MemoryStream();
 

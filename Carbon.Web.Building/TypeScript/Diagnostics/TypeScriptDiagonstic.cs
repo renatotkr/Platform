@@ -1,11 +1,9 @@
-﻿namespace TypeScript
+﻿using System;
+
+using Carbon.Diagnostics;
+
+namespace TypeScript
 {
-    using System;
-    using System.Collections.ObjectModel;
-    using System.IO;
-
-    using Carbon.Platform;
-
     public class TypeScriptDiagonstic : Diagnostic
     {
         public static TypeScriptDiagonstic Parse(string text)
@@ -48,6 +46,4 @@
             return error;
         }
     }
-
-    
 }

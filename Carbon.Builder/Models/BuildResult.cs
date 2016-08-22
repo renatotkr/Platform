@@ -2,6 +2,8 @@
 
 namespace Carbon.Building
 {
+    using Diagnostics;
+
     public class BuildResult
     {
         public TimeSpan WaitTime { get; set; }
@@ -10,6 +12,6 @@ namespace Carbon.Building
 
         public BuildStatus Status { get; set; }
 
-        // public DiagnosticList Diagnostics { get; } = new DiagnosticList();
+        public DiagnosticList Diagnostics { get; } = new DiagnosticList();
     }
 }

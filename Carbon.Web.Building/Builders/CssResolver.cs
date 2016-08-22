@@ -1,7 +1,7 @@
 ﻿namespace Carbon.Builder
 {
-    using Carbon.Css;
-    using Carbon.Platform;
+    using Css;
+    using Packaging;
 
     internal class CssResolver : ICssResolver
     {

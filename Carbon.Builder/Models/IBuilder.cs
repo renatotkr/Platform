@@ -7,7 +7,3 @@ namespace Carbon.Building
         Task<BuildResult> BuildAsync();
     }
 }
-
-// BuildStyles
-// BuildScripts
-// BuildCode
