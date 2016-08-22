@@ -49,7 +49,7 @@ namespace Carbon.Platform
         [Member(8, Mutable = true)] // a code indication weather we succesfully exited or not...
         public int? ExitStatus { get; set; }
 
-        [Member(8), Version]
+        [Member(8), Timestamp(false)]
         public DateTime Created { get; set; }
 
         #region Stats

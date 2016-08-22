@@ -17,7 +17,7 @@ namespace Carbon.Platform
         [Member(4)]
         public long RepositoryId { get; }
 
-        [Member(5), Version(false)]
+        [Member(5), Timestamp(false)]
         public DateTime Created { get; set; }
     }
 }

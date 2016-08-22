@@ -24,7 +24,7 @@ namespace Carbon.Platform
         [Member(5)]
         public long ImageId { get; set; }
 
-        [Member(6), Version]
+        [Member(6), Timestamp(false)]
         public DateTime Created { get; set; }
 
         [Member(7, Mutable = true)]

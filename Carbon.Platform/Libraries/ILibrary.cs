@@ -4,6 +4,8 @@
     {
         long Id { get; }
 
+        string Slug { get; }
+
         Semver Version { get; }
     }
 }

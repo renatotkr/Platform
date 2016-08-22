@@ -34,7 +34,7 @@ namespace Carbon.Platform
         [Member(9, Mutable = true)]
         public string DeviceName { get; set; } // e.g. D, dev/disk1
          
-        [Member(10), Version(false)] // snapshot date if from source
+        [Member(10), Timestamp(false)] // snapshot date if from source
         public DateTime Created { get; }
     }
 

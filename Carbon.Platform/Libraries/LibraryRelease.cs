@@ -7,7 +7,7 @@ namespace Carbon.Platform
     using Data.Annotations;
 
     [Record(TableName = "LibraryReleases")]
-    public class LibraryRelease
+    public class LibraryRelease : ILibrary
     {
         public LibraryRelease() { }
 
@@ -24,13 +24,13 @@ namespace Carbon.Platform
         public Semver Version { get; set; }
 
         [Member(3)]
-        public string LibraryName { get; set; }
+        public string LibrarySlug { get; set; }
 
         [Member(4)]
         public long RepositoryId { get; }
 
-        [Member(5, MaxLength = 40)]
-        public string Commit { get; set; }
+        [Member(5, MaxLength = 40)] // Commit or named tag
+        public string Revision { get; set; }
 
         [Member(6), Unique]
         public CryptographicHash Hash { get; set; }
@@ -38,7 +38,7 @@ namespace Carbon.Platform
         [Member(7)]
         public long CreatorId { get; set; }
 
-        [Member(8), Version(false)]
+        [Member(8), Timestamp(false)]
         public DateTime Created { get; set; }
 
         #region Maps
@@ -51,6 +51,15 @@ namespace Carbon.Platform
 
         #endregion
 
-        public override string ToString() => LibraryName + "@" + Version;
+
+        #region ILibrary
+
+        long ILibrary.Id => LibraryId;
+
+        string ILibrary.Slug => LibrarySlug;
+        
+        #endregion
+
+        public override string ToString() => LibrarySlug + "@" + Version;
     }  
 }
