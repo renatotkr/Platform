@@ -14,24 +14,16 @@
         [Member(3)]
         public ZoneLevel Level { get; }
     }
-
-    public enum ZoneLevel
-    {
-        Cloud      = 0, // aws
-        Region     = 1, // us-west1
-        Datacenter = 2, // A
-        Rack       = 3  // 352
-    }
 }
 
 /*
 Google regions
 
-us-west1	        10.138.0.0/20	10.138.0.1
-us-central1	        10.128.0.0/20	10.128.0.1
-us-east1	        10.142.0.0/20	10.142.0.1
-europe-west1	    10.132.0.0/20	10.132.0.1
-asia-east1	        10.140.0.0/20	10.140.0.1
+us-west1
+us-central1
+us-east1
+europe-west1
+asia-east1
 
 ref:  https://cloud.google.com/compute/docs/regions-zones/regions-zones
 
