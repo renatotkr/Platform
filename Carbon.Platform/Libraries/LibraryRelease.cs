@@ -51,7 +51,6 @@ namespace Carbon.Platform
 
         #endregion
 
-        public override string ToString()
-            => LibraryName + "@" + Version;
+        public override string ToString() => LibraryName + "@" + Version;
     }  
 }

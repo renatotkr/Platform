@@ -44,7 +44,7 @@ namespace Carbon.Platform
 
         #region Helpers
 
-        [Exclude] // disks?
+        [Exclude]
         public IList<VolumeInfo> Volumes { get; set; }
 
         [Exclude]

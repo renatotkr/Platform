@@ -16,16 +16,12 @@ namespace Carbon.Platform
         [Member(3, Mutable = true)]
         public long RequestCount { get; set; }
 
-        // Last Load
-
         [Exclude] // current processes
         public IList<ProcessInfo> Processes { get; set; }
     }
 
-
-    // A backend is an autoscaling group of programs hosted behind a load balancer
-
-    // A backend spawns one or more processes to handle requests
+    // - spawns one or more processes to handle requests (autoscales)
+    // - hosted behind a load balancer
 
     // bindings (host, protocal, port)
 }
