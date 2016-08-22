@@ -34,7 +34,6 @@
       <HintPath>..\lib\Carbon.Data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
@@ -53,7 +52,6 @@
     <Compile Include="Files\ZipFile.cs" />
     <Compile Include="Libraries\DepedencyResolver.cs" />
     <Compile Include="Libraries\ILibraryRegistry.cs" />
-    <Compile Include="Libraries\Library.cs" />
     <Compile Include="Libraries\LibraryRegistry.cs" />
     <Compile Include="Libraries\StaticLibraryRegistry.cs" />
     <Compile Include="Manifest\PackageManifest.cs" />
