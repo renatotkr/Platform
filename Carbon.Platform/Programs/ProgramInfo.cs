@@ -24,8 +24,7 @@ namespace Carbon.Platform
 
         [Exclude]
         public IList<ProgramRelease> Releases { get; set; } // TODO
-    }
 
-    // TODO: Bindings
-    // TODO: Permissions
+        // TODO: Ports & Permissions
+    }
 }

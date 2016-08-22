@@ -5,8 +5,6 @@ namespace Carbon.Platform
     using Data;
     using Data.Annotations;
 
-    // A specific packaged version of a program (either static, or with a list of depedencies)
-
     [Record(TableName = "ProgramReleases")]
     public class ProgramRelease
     {
@@ -44,3 +42,5 @@ namespace Carbon.Platform
         public DateTime Created { get; set; }
     }
 }
+
+// A specific packaged version of a program (either static, or with a list of depedencies)

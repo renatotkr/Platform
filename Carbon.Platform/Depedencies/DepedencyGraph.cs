@@ -5,21 +5,21 @@ namespace Carbon.Platform
 {
     public class DependencyGraph<T>
     {
-        private readonly Dictionary<string, Node<T>> map = new Dictionary<string, Node<T>>();
+        private readonly Dictionary<long, Node<T>> map = new Dictionary<long, Node<T>>();
 
         public IEnumerable<Node<T>> GetNodes() => map.Values;
 
-        public Node<T> FindOrAdd(string name, T depedency)
+        public Node<T> FindOrAdd(long id, T depedency)
         {
             Node<T> node;
 
-            if (!map.TryGetValue(name, out node))
+            if (!map.TryGetValue(id, out node))
             {
                 node = new Node<T> {
                     Value = depedency
                 };
 
-                map.Add(name, node);
+                map.Add(id, node);
             }
 
             return node;

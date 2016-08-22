@@ -4,8 +4,6 @@ namespace Carbon.Platform
 {
     using Data.Annotations;
 
-    // An instance of a computer program that is being executed
-
     [Record(TableName = "Processes")]
     public class ProcessInfo
     {
@@ -70,6 +68,8 @@ namespace Carbon.Platform
         #endregion
     }
 }
+
+// An instance of a computer program that is being executed
 
 
 // When a process dies, do we automatically respawn a new one -- or is this a higher level (i.e. backend) concern
