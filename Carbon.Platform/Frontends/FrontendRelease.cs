@@ -15,8 +15,8 @@
         [Member(3)]
         public long RepositoryId { get; set; }
 
-        [Member(4, MaxLength = 40)] // stringlength
-        public string Commit { get; set; }
+        [Member(4, MaxLength = 40)] // Commit or named tag
+        public string Revision { get; set; }
 
         [Member(5)]
         public CryptographicHash Signature { get; set; }

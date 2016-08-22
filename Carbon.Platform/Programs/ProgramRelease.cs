@@ -33,8 +33,8 @@ namespace Carbon.Platform
         [Member(3)]
         public string ProgramSlug { get; set; }
 
-        [Member(4, MaxLength = 40)] // [StringLength(40)]
-        public string Commit { get; set; }
+        [Member(4, MaxLength = 40)] // Commit or named tag
+        public string Revision { get; set; }
 
         [Member(5)] 
         public long RepositoryId { get; set; }
@@ -42,7 +42,7 @@ namespace Carbon.Platform
         [Member(6)]
         public CryptographicHash Hash { get; set; } // Package hash
 
-        [Member(7), Version]
+        [Member(7), Timestamp(false)]
         public DateTime Created { get; set; }
 
         #region IProgram
