@@ -6,7 +6,7 @@ namespace Carbon.Platform
     using Data.Annotations;
 
     [Record(TableName = "ProgramReleases")]
-    public class ProgramRelease
+    public class ProgramRelease : IProgram
     {
         public ProgramRelease() { }
 
@@ -20,6 +20,7 @@ namespace Carbon.Platform
             #endregion
 
             ProgramId = program.Id;
+            ProgramSlug = program.Slug;
             Version   = version;
         }
 
@@ -29,17 +30,31 @@ namespace Carbon.Platform
         [Member(2), Key]
         public Semver Version { get; set; }
 
-        [Member(3, MaxLength = 40)] // [StringLength(40)]
+        [Member(3)]
+        public string ProgramSlug { get; set; }
+
+        [Member(4, MaxLength = 40)] // [StringLength(40)]
         public string Commit { get; set; }
 
-        [Member(4)] 
+        [Member(5)] 
         public long RepositoryId { get; set; }
 
-        [Member(5)]
+        [Member(6)]
         public CryptographicHash Hash { get; set; } // Package hash
 
-        [Member(6), Version]
+        [Member(7), Version]
         public DateTime Created { get; set; }
+
+        #region IProgram
+
+        long IProgram.Id => ProgramId;
+
+        string IProgram.Slug => ProgramSlug;
+
+        #endregion
+
+        // borg@1.2.1
+        public override string ToString() => ProgramSlug + "@" + Version.ToString();
     }
 }
 

@@ -6,6 +6,6 @@
 
         string Slug { get; }
 
-        ProgramType Type { get; }
+        Semver Version { get; }
     }
 }

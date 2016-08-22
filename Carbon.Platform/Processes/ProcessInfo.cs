@@ -31,19 +31,22 @@ namespace Carbon.Platform
         [Member(2), Indexed]
         public long ProgramId { get; set; }
 
-        [Member(3)] 
-        public Semver ProgramVersion { get; set; }
+        [Member(3)]
+        public string Slug { get; set; }    // program slug
 
-        [Member(4), Indexed]
+        [Member(4)] 
+        public Semver Version { get; set; } // program version
+
+        [Member(5), Indexed]
         public long HostId { get; set; }
 
-        [Member(5), Indexed, Optional] // if servicing a backend
+        [Member(6), Indexed, Optional] // if servicing a backend
         public long? BackendId { get; set; }
 
-        [Member(6)]
+        [Member(7)]
         public int PID { get; set; } // https://en.wikipedia.org/wiki/Process_identifier
 
-        [Member(7, Mutable = true)] // a code indication weather we succesfully exited or not...
+        [Member(8, Mutable = true)] // a code indication weather we succesfully exited or not...
         public int? ExitStatus { get; set; }
 
         [Member(8), Version]

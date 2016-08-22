@@ -3,5 +3,7 @@
     public interface ILibrary
     {
         long Id { get; }
+
+        Semver Version { get; }
     }
 }
