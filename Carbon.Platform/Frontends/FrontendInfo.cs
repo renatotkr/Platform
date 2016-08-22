@@ -5,17 +5,19 @@
     [Record(TableName = "Frontends")]
     public class FrontendInfo
     {
-        [Identity]
+        [Member(1), Identity]
         public long Id { get; set; }
 
-        [Unique]
+        [Member(2), Unique]
         public string Slug { get; set; } // e.g. lefty
         
-        [Mutable]
+        [Member(3, Mutable = true)]
         public Semver Version { get; set; }
 
+        [Member(4)]
         public long BackendId { get; set; }
 
+        [Member(5)]
         public long RepositoryId { get; set; }
     }
 }

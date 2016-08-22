@@ -7,9 +7,10 @@ namespace Carbon.Platform
     [Record(TableName = "Repositories")]
     public class RepositoryInfo : IRepository
     {
-        [Identity]
+        [Member(1), Identity]
         public long Id { get; set; }
         
+        [Member(2)]
         public Uri Url { get; set; }
     }
 }

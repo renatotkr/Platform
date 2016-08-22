@@ -36,42 +36,40 @@
       <HintPath>..\lib\Carbon.Data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Amazon\Ec2Instance.cs" />
     <Compile Include="Depedencies\DepedencyGraph.cs" />
-    <Compile Include="Hosts\HostInfo.cs" />
-    <Compile Include="Hosts\IHostService.cs" />
-    <Compile Include="Hosts\MemoryInfo.cs" />
-    <Compile Include="Hosts\TerminationReason.cs" />
-    <Compile Include="NetworkInterfaces\Helpers\NetworkInterfaceExtensions.cs" />
-    <Compile Include="NetworkInterfaces\NetworkInterfaceInfo.cs" />
+    <Compile Include="Hardware\Hosts\HostInfo.cs" />
+    <Compile Include="Hardware\MemoryInfo.cs" />
+    <Compile Include="Hardware\Hosts\TerminationReason.cs" />
+    <Compile Include="Hardware\NetworkInterfaces\Helpers\NetworkInterfaceExtensions.cs" />
+    <Compile Include="Hardware\NetworkInterfaces\NetworkInterfaceInfo.cs" />
+    <Compile Include="Libraries\ILibrary.cs" />
+    <Compile Include="Libraries\LibraryDepedency.cs" />
+    <Compile Include="Libraries\LibraryPackageFile.cs" />
+    <Compile Include="Libraries\LibraryRelease.cs" />
+    <Compile Include="Libraries\Library.cs" />
+    <Compile Include="Programs\IProgram.cs" />
     <Compile Include="Zones\ZoneInfo.cs" />
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\RepositoryInfo.cs" />
     <Compile Include="Repositories\RepositoryType.cs" />
     <Compile Include="Programs\ProgramType.cs" />
     <Compile Include="Processes\Process.cs" />
-    <Compile Include="Logging\ProgramEvent.cs" />
     <Compile Include="Frontends\FrontendFileInfo.cs" />
     <Compile Include="Frontends\FrontendRelease.cs" />
-    <Compile Include="Hosts\IHost.cs" />
-    <Compile Include="Initialization\PlatformInitializer.cs" />
+    <Compile Include="Hardware\Hosts\IHost.cs" />
     <Compile Include="Programs\ProgramInfo.cs" />
     <Compile Include="Programs\ProgramRelease.cs" />
-    <Compile Include="Programs\IProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Hosts\Helpers\HostName.cs" />
+    <Compile Include="Hardware\Hosts\Helpers\HostName.cs" />
     <Compile Include="Frontends\FrontendInfo.cs" />
     <Compile Include="Backends\BackendInfo.cs" />
-    <Compile Include="Versioning\Semversion.cs" />
-    <Compile Include="Volumes\Helpers\DriveInfoExtensions.cs" />
-    <Compile Include="Volumes\VolumeInfo.cs" />
-    <Compile Include="Zones\CloudProvider.cs" />
+    <Compile Include="Hardware\Volumes\Helpers\DriveInfoExtensions.cs" />
+    <Compile Include="Hardware\Volumes\VolumeInfo.cs" />
+    <Compile Include="Zones\CloudId.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

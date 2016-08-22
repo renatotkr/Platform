@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace Carbon.Platform
 {
@@ -9,15 +8,16 @@ namespace Carbon.Platform
     [Record(TableName = "FrontendFiles")]
     public class FrontendFileInfo
     {
-        [Key]
+        [Member(1), Key]
         public long FrontendId { get; set; }
 
-        [Key]
+        [Member(2), Key]
         public string Name { get; set; }
 
+        [Member(3)] 
         public CryptographicHash Hash { get; set; }
 
-        [Timestamp]
+        [Member(4), Version]
         public DateTime Timestamp { get; set; }
     }
 

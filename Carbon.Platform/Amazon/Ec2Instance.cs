@@ -49,10 +49,8 @@ namespace Carbon.Platform
 
             return XObject.Parse(text).As<Ec2Instance>();
         }
-
     }
 }
-
 
 /*
 {

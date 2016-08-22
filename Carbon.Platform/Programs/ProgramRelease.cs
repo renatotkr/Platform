@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace Carbon.Platform
 {
@@ -26,20 +25,22 @@ namespace Carbon.Platform
             Version   = version;
         }
 
-        [Key]
+        [Member(1), Key]
         public long ProgramId { get; set; }
 
-        [Key]
+        [Member(2), Key]
         public Semver Version { get; set; }
 
-        [StringLength(40)]
+        [Member(3, MaxLength = 40)] // [StringLength(40)]
         public string Commit { get; set; }
 
+        [Member(4)] 
         public long RepositoryId { get; set; }
 
+        [Member(5)]
         public CryptographicHash Hash { get; set; } // Package hash
 
-        [Timestamp]
+        [Member(6), Version]
         public DateTime Created { get; set; }
     }
 }

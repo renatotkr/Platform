@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Carbon.Platform
+﻿namespace Carbon.Platform
 {
     using Data;
     using Data.Annotations;
@@ -8,19 +6,22 @@ namespace Carbon.Platform
     [Record(TableName = "FrontendReleases")]
     public class FrontendRelease
     {
-        [Key]
+        [Member(1), Key]
         public long FrontendId { get; set; }
 
-        [Key]
+        [Member(2), Key]
         public Semver Version { get; set; }
 
-        [StringLength(40)]
-        public string Commit { get; set; }
-
+        [Member(3)]
         public long RepositoryId { get; set; }
 
+        [Member(4, MaxLength = 40)] // stringlength
+        public string Commit { get; set; }
+
+        [Member(5)]
         public CryptographicHash Signature { get; set; }
 
+        [Member(6)]
         public long CreatorId { get; set; }
     }
 

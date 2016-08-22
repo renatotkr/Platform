@@ -7,13 +7,13 @@ namespace Carbon.Platform
     [Record(TableName = "Backends")]
     public class BackendInfo
     {
-        [Identity]
+        [Member(1), Identity]
         public long Id { get; set; }
         
-        [Unique]
+        [Member(2), Unique]
         public string Slug { get; set; } // e.g. carbonmade
 
-        [Mutable]
+        [Member(3, Mutable = true)]
         public long RequestCount { get; set; }
 
         // Last Load

@@ -8,25 +8,25 @@ namespace Carbon.Platform
     [Record(TableName = "NetworkInterfaces")]
     public class NetworkInterfaceInfo
     {
-        [Identity]
+        [Member(1), Identity]
         public long Id { get; set; }
      
-        [Indexed] // AKA mac
+        [Member(2), Indexed] // AKA mac
         public string PhysicalAddress { get; set; }
 
-        [Mutable] // in octects
+        [Member(3, Mutable = true)] // in octects
         public long Speed { get; set; }
 
-        [Mutable] // in octects
+        [Member(4, Mutable = true)]  // in octects
         public long DataIn { get; }
 
-        [Mutable] // in octects
+        [Member(5, Mutable = true)]  // in octects
         public long DataOut { get; }
 
-        [Mutable] // in octects
+        [Member(6, Mutable = true)]  // in octects
         public long PacketsIn { get; }
 
-        [Mutable] // in octects
+        [Member(7, Mutable = true)]  // in octects
         public long PacketsOut { get; }
 
         // [Mutable]

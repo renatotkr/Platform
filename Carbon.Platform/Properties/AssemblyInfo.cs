@@ -11,6 +11,7 @@
   - Breakout packaging
   - Move semver to data
   - Move data model to SQL (remove depedency from Dynamo)
+  - Remove System.ComponentModel.DataAnnotations depedency
 
   0.4.0 (2015-10-15)
   - Add BitBucket

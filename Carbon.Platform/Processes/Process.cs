@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace Carbon.Platform
 {
@@ -28,42 +27,44 @@ namespace Carbon.Platform
             HostId    = host.Id;
         }
 
-        [Identity]
+        [Member(1), Identity]
         public long Id { get; set; }
        
-        [Indexed]
+        [Member(2), Indexed]
         public long ProgramId { get; set; }
 
+        [Member(3)] 
         public Semver ProgramVersion { get; set; }
 
-        [Indexed]
+        [Member(4), Indexed]
         public long HostId { get; set; }
 
-        [Mutable] // a code indication weather we succesfully exited or not...
-        public int? ExitStatus { get; set; }
-
-        [Indexed, Optional] // if servicing a backend
+        [Member(5), Indexed, Optional] // if servicing a backend
         public long? BackendId { get; set; }
 
-        int PID { get; set; } // https://en.wikipedia.org/wiki/Process_identifier
+        [Member(6)]
+        public int PID { get; set; } // https://en.wikipedia.org/wiki/Process_identifier
 
-        [Timestamp]
+        [Member(7, Mutable = true)] // a code indication weather we succesfully exited or not...
+        public int? ExitStatus { get; set; }
+
+        [Member(8), Version]
         public DateTime Created { get; set; }
 
         #region Stats
 
         // CPU Cycles / load
 
-        [Mutable]
-        public long MemoryUsed { get; set; }
-
-        [Mutable]
+        [Member(10, Mutable = true)]
         public long CallCount { get; set; }
 
-        [Mutable]
+        [Member(11, Mutable = true)]
+        public long MemoryUsed { get; set; }
+
+        [Member(12, Mutable = true)]
         public long DataIn { get; }
 
-        [Mutable]
+        [Member(13, Mutable = true)]
         public long DataOut { get; }
 
         #endregion

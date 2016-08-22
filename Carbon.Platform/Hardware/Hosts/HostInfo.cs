@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Net;
 
 namespace Carbon.Platform
@@ -10,21 +9,22 @@ namespace Carbon.Platform
     [Record(TableName = "Hosts")]
     public class HostInfo : IHost
     {
-        [Identity]
+        [Member(1), Identity]
         public long Id { get; set; }
 
-        [Indexed]
-        [MaxLength(32)]
+        [Member(2, MaxLength = 32), Indexed]
         public string InstanceId { get; set; }
 
+        [Member(3)]
         public long ZoneId { get; set; }
 
+        [Member(4)]
         public IPAddress PrivateIp { get; set; }
 
-        [Optional]
+        [Member(5), Optional]
         public IPAddress PublicIp { get; set; }
 
-        [Timestamp]
+        [Version]
         public DateTime Created { get; set; }
 
         #region Helpers
