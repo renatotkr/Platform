@@ -51,7 +51,6 @@ namespace Carbon.Platform
 
         #endregion
 
-
         #region ILibrary
 
         long ILibrary.Id => LibraryId;

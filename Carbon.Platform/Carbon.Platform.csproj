@@ -31,9 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Carbon.Data, Version=1.3.6.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Carbon.Data, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Carbon.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Carbon.Data.Annotations">
+      <HintPath>..\lib\Carbon.Data.Annotations.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Net.Http" />

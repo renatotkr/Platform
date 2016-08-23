@@ -16,12 +16,13 @@ namespace Carbon.Platform
         [Member(3, Mutable = true)]
         public long RequestCount { get; set; }
 
-        [Exclude] // current processes
         public IList<ProcessInfo> Processes { get; set; }
     }
-
-    // - spawns one or more processes to handle requests (autoscales)
-    // - hosted behind a load balancer
-
-    // bindings (host, protocal, port)
 }
+
+// A backend service....
+
+// - spawns one or more processes to handle requests (autoscales)
+// - hosted behind a load balancer
+
+// bindings (host, protocal, port)

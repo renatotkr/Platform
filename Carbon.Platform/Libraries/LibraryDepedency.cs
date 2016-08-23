@@ -10,7 +10,6 @@ namespace Carbon.Platform
         [Member(2)]
         public SemverRange Version { get; set; } 
 
-        [Exclude]
         public LibraryRelease ResolvedLibrary { get; set; }
     }
 }

@@ -20,7 +20,7 @@ namespace Carbon.Platform
         [Member(4, Mutable = true), Indexed]
         public long? HostId { get; set; }
 
-        #region Stats
+        #region Stats (5-8)
 
         [Member(5, Mutable = true)]  // in octects
         public long DataIn { get; }
@@ -41,9 +41,7 @@ namespace Carbon.Platform
 
         #endregion
 
-        [Exclude]
         public IList<IPAddress> Addresses { get; set; }
-
     }
 }
 

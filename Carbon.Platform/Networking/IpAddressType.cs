@@ -1,45 +1,18 @@
-﻿using System.Net;
-
-namespace Carbon.Networking
+﻿namespace Carbon.Networking
 {
-    // 2001:0db8:3c4d:0015:0000:0000:1a2f:1a2b
-
-    public class IpAddress
+    public enum IPAddressType
     {
-        public long Id { get; set; }
-
-        // 4  = IP4
-        // 16 = IP6
-        IPAddress Value { get; }
-
-        // A subnet network divides your global network in to regional subnets, each with its own IPv4 prefix. 
-
-        // AddressType Type { get; }
-
-        // Region
-
-        // Created
-
-        // physical or virtual
-
-        // Users?
+        Anycast = 1, // many routes
+        Unicast = 2, // 1 route 
+        Private = 3
     }
 
-    // internal / external
-
-    public enum AddressType
+    public enum NetworkLayer
     {
-        Global,     // anycast      many routes
-        Public,     // unicast      1 route 
-        Private
-    }
-
-    public enum Layer
-    {
-        Physical = 1,
-        Datalink = 2,
-        Internet = 3,
-        EndToEnd = 4,
+        Physical     = 1,
+        Datalink     = 2,
+        Internet     = 3,
+        EndToEnd     = 4,
         Applications = 7
     }
 }

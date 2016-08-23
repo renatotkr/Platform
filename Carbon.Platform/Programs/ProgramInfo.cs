@@ -3,6 +3,7 @@
 namespace Carbon.Platform
 {
     using Data.Annotations;
+    using Networking;
 
     [Record(TableName = "Programs")]
     public class ProgramInfo : IProgram
@@ -22,9 +23,9 @@ namespace Carbon.Platform
         [Member(5, Mutable = true)] // highmark
         public Semver Version { get; set; }
 
-        [Exclude]
-        public IList<ProgramRelease> Releases { get; set; } // TODO
+        [Member(6, Mutable = true)]
+        public NetworkPortList Ports { get; set; }
 
-        // TODO: Ports & Permissions
+        public IList<ProgramRelease> Releases { get; set; }
     }
 }
