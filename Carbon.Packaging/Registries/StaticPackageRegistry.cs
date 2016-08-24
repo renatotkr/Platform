@@ -38,5 +38,10 @@ namespace Carbon.Packaging
                
             return new StaticPackageRegistry(XArray.Parse(text).ToArrayOf<PackageRelease>());
         }
+
+        public Task CreateAsync(PackageRelease package)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

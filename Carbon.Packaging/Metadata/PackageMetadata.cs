@@ -88,7 +88,7 @@ namespace Carbon.Packaging
             return metadata;
         }
 
-        public static async Task<PackageMetadata> FromFile(IFile file)
+        public static async Task<PackageMetadata> Load(IFile file)
             => Parse(await file.ReadStringAsync().ConfigureAwait(false));
     }
 

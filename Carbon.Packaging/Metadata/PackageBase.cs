@@ -5,28 +5,12 @@ namespace Carbon.Packaging
 {
     using Data;
     using Data.Annotations;
-    
-    // A versioned immutable instance of a package
 
-    [Record(TableName = "PackageReleases")]
-    public class PackageRelease : IPackage
+    public class PackageBase
     {
-        public PackageRelease() { }
-
-        public PackageRelease(IPackage package, Semver version)
-        {
-            Id = package.Id;
-            Version = version;
-        }
-
-        [Member(1), Key] // PackageId
-        public long Id { get; set; }
-
-        [Member(2), Key] // PackageVersion
-        public Semver Version { get; set; }
-
-        [Member(3)] // May change over the life of a package... 
-        public string Name { get; set; }
+        // 1 = Id
+        // 2 = Version
+        // 3 = Name
 
         [Member(4)]
         public long RepositoryId { get; }
@@ -50,7 +34,5 @@ namespace Carbon.Packaging
         // e.g. cropper@5.5
 
         // carbon.cropper
-
-        public override string ToString() => Name + "@" + Version;
     }
 }

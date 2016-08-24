@@ -4,6 +4,7 @@ using System.Net;
 
 using Carbon.Platform;
 using Carbon.Packaging;
+using Carbon;
 
 namespace Bitbucket
 {
@@ -62,7 +63,7 @@ namespace Bitbucket
             return commit;
         }
 
-        public Task TagAsync(ICommit commit, string name)
+        public Task TagAsync(ICommit commit, Semver version)
         {
             throw new NotImplementedException();
         }

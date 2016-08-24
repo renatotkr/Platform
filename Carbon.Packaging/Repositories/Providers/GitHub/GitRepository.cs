@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 using Carbon.Platform;
 using Carbon.Packaging;
+using Carbon;
 
 namespace GitHub
 {
@@ -73,7 +74,7 @@ namespace GitHub
             return client.GetBranches(accountName, repositoryName);
         }
 
-        public Task TagAsync(ICommit commit, string name)
+        public Task TagAsync(ICommit commit, Semver version)
         {
             throw new NotImplementedException();
         }

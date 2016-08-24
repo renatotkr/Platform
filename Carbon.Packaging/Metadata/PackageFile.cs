@@ -13,7 +13,7 @@
         public Semver PackageVersion { get; set; }
 
         [Member(3), Key]
-        public string Name { get; set; }
+        public string Name { get; set; } // IsMain?
 
         [Member(4)]
         public CryptographicHash Hash { get; set; }

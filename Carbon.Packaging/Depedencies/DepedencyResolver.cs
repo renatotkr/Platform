@@ -11,7 +11,7 @@ namespace Carbon.Packaging
         public DepedencyResolver(IPackageRegistry registry)
         {
             this.registry = registry;
-            this.graph = new DependencyGraph<IPackage>(); ;
+            this.graph = new DependencyGraph<IPackage>();
         }
 
         private async Task ExpandAsync(IPackage package)
