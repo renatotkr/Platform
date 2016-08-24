@@ -21,29 +21,32 @@ namespace Carbon.Platform
         [Member(4)]
         public IPAddress PrivateIp { get; set; }
 
-        [Member(5)]
+        [Member(5), Optional]
+        public IPAddress PublicIp { get; set; }
+
+        [Member(6)]
         public long ImageId { get; set; }
 
-        [Member(6, MaxLength = 32), Indexed]
+        [Member(7, MaxLength = 32), Indexed]
         public string InstanceId { get; set; }
 
-        [Member(7), Timestamp(false)]
+        [Member(8), Timestamp(false)]
         public DateTime Created { get; set; }
 
-        [Member(8, mutable: true)]
+        [Member(9, mutable: true)]
         public long MemoryUsed { get; set; }
 
-        [Member(9)]
+        [Member(10)]
         public long MemoryTotal { get; set; }
 
-        [Member(10)] // For virtualized hosts
+        [Member(11)] // For virtualized hosts
         public long? ParentId { get; set; }
 
         #region Helpers
 
         public IList<VolumeInfo> Volumes { get; set; }
 
-        public IList<NetworkInterfaceInfo> NetworkInterfaces { get; set; }
+        public IList<NetworkInterface> NetworkInterfaces { get; set; }
 
         #endregion
     }

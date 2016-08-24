@@ -9,7 +9,7 @@
 /*
   1.0.0 (2016-09-01)
   - Breakout packaging
-  - Move semver to data
+  - Move semver to Carbon.Data
   - Move data model to SQL (remove depedency from Dynamo)
   - Remove System.ComponentModel.DataAnnotations depedency
 

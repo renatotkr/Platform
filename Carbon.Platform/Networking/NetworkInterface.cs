@@ -1,16 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 
-namespace Carbon.Platform
+namespace Carbon.Networking
 {
     using Data.Annotations;
 
     [Record(TableName = "NetworkInterfaces")]
-    public class NetworkInterfaceInfo
+    public class NetworkInterface
     {
         [Member(1), Identity]
         public long Id { get; set; }
-     
+
+        [Member(2)]
+        public long NetworkId { get; set; }
+
         [Member(2), Indexed] // AKA mac
         public string PhysicalAddress { get; set; }
 
