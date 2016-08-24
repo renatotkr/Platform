@@ -1,11 +1,11 @@
-﻿namespace Carbon.Platform.Tests
-{
-    using System.Linq;
+﻿using System.Linq;
 
-	using Xunit;
-	
-	public class PackageMetadataTests
-	{
+using Xunit;
+
+namespace Carbon.Packaging.Tests
+{
+    public class PackageMetadataTests
+    {
         [Fact]
         public void Velocity()
         {
@@ -61,7 +61,7 @@
             Assert.Equal(4, package.Files.Length);
 
             Assert.Equal("velocity.js", package.Files[0]);
-   
+
         }
 
         [Fact]
@@ -99,9 +99,9 @@
         }
 
         [Fact]
-		public void Test1()
-		{
-			var x = @"{
+        public void Test1()
+        {
+            var x = @"{
   ""name"": ""module-name"",
   ""version"": ""10.3.1"",
   ""description"": ""An example module to illustrate the usage of a package.json"",

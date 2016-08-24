@@ -25,47 +25,40 @@ namespace Carbon.Platform.Tests
             Assert.Equal("master", x.Revision);
 
             Assert.Equal("carbon/cropper#master", x.ToString());
-
         }
 
-        [Fact]
-        public void ParseUrl()
+        [Theory]
+        [InlineData("git://github.com/carbon/cropper.git#branch")]
+        [InlineData("git+https://github.com/carbon/cropper.git#branch")]
+        [InlineData("git+ssh://github.com/carbon/cropper.git#branch")]
+        [InlineData("https://github.com/carbon/cropper.git#branch")]
+        [InlineData("http://github.com/carbon/cropper.git#branch")]
+        [InlineData("github:carbon/cropper#branch")]
+        [InlineData("GITHUB:carbon/cropper.git#branch")]
+        [InlineData("carbon/cropper#branch")]
+        [InlineData("carbon/cropper.git#branch")]
+        public void ParseUrl(string url)
         {
-            foreach (var url in new[] {
-                "git://github.com/carbon/cropper.git#branch",
-                "git+https://github.com/carbon/cropper.git#branch",
-                "git+ssh://github.com/carbon/cropper.git#branch",
-                "https://github.com/carbon/cropper.git#branch",
-                "http://github.com/carbon/cropper.git#branch",
-                "github:carbon/cropper#branch",
-                "GITHUB:carbon/cropper.git#branch",
-                "carbon/cropper#branch",
-                "carbon/cropper.git#branch"
-            })
-            {
-                var x = RepositoryDetails.Parse(url);
+            var x = RepositoryDetails.Parse(url);
 
-                Assert.Equal(RepositoryProviderId.GitHub, x.Provider);
-                Assert.Equal("carbon", x.AccountName);
-                Assert.Equal("cropper", x.Name);
-                Assert.Equal("branch", x.Revision);
-            }
+            Assert.Equal(RepositoryProviderId.GitHub, x.Provider);
+            Assert.Equal("carbon", x.AccountName);
+            Assert.Equal("cropper", x.Name);
+            Assert.Equal("branch", x.Revision);
+            
         }
 
-        [Fact]
-        public void ParseBitbucket()
+        [Theory]
+        [InlineData("bitbucket:example/repo")]
+        [InlineData("https://bitbucket.org/example/repo")]
+        public void ParseBitbucket(string url)
         {
-            foreach (var url in new[] {
-                "bitbucket:example/repo",
-                "https://bitbucket.org/example/repo"
-            })
-            {
-                var x = RepositoryDetails.Parse(url);
+            var x = RepositoryDetails.Parse(url);
 
-                Assert.Equal(RepositoryProviderId.BitBucket, x.Provider);
-                Assert.Equal("example", x.AccountName);
-                Assert.Equal("repo", x.Name);
-            }
+            Assert.Equal(RepositoryProviderId.BitBucket, x.Provider);
+            Assert.Equal("example", x.AccountName);
+            Assert.Equal("repo", x.Name);
+            
         }
     }
 }

@@ -10,13 +10,6 @@ namespace Carbon.Packaging.Tests
     public class AssetTests
     {
         [Fact]
-        public void VersionFormat()
-        {
-            Assert.Equal("3", (3f).ToString());
-            Assert.Equal("3.1", (3.1f).ToString());
-        }
-
-        [Fact]
         public void HiddenTests()
         {
             Assert.True(new AssetStub(".asset.jpg").IsHidden());

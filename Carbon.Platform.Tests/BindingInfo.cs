@@ -1,17 +1,17 @@
-﻿namespace Carbon.Platform.Tests
-{
-	using Xunit;
-	
-	public class BindingInfoTests
-	{
-		[Fact]
-		public void ParseBindingInfoTest()
-		{
-			var bindingInfo = BindingInfo.Parse("*:80:");
+﻿using Xunit;
 
-			Assert.Equal("*", bindingInfo.IpAddress);
-			Assert.Equal(80,  bindingInfo.Port);
-			Assert.Equal("", bindingInfo.HostName);
-		}
-	}
+namespace Carbon.Hosting.Tests
+{
+    public class BindingInfoTests
+    {
+        [Fact]
+        public void Parse1()
+        {
+            var info = SiteBindingInfo.Parse("*:80:");
+
+            Assert.Equal("*", info.Ip);
+            Assert.Equal(80,  info.Port);
+            Assert.Equal("",  info.HostName);
+        }
+    }
 }
