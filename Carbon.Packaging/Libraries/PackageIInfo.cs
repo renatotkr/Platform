@@ -29,6 +29,9 @@ namespace Carbon.Packaging
         public DateTime Created { get; set; }
 
         public IList<PackageDependency> Dependencies { get; set; }
+
+        public IList<PackageRelease> Releases { get; set; }
+
     }
 
     // Libraries are just a type of package...

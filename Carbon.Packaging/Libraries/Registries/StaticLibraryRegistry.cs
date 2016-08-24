@@ -7,27 +7,24 @@ namespace Carbon.Packaging
 {
     using Data;
 
-    public class StaticPackageManager : Collection<PackageRelease>, IPackageRegistry
+    public class StaticPackageRegistry : Collection<PackageRelease>, IPackageRegistry
     {
-        public StaticPackageManager() { }
+        public StaticPackageRegistry() { }
 
-        internal StaticPackageManager(PackageRelease[] list)
+        internal StaticPackageRegistry(PackageRelease[] list)
             : base(list)
         { }
 
-        public PackageRelease Find(CryptographicHash hash)
-            => this.First(l => l.Hash == hash);
+        public long LookupId(string name) 
+            => this.First(p => p.Name == name).Id;
 
-        public Task<IPackage> FindAsync(string name, SemverRange range)
-            => Task.FromResult<IPackage>(this.First(l => l.Name == name));
-
-        public Task<IPackage> FindAsync(string name, Semver version)
-            => Task.FromResult<IPackage>(this.FirstOrDefault(l => l.Name == name && l.Version == version));
+        public Task<IPackage> FindAsync(long id, Semver version)
+            => Task.FromResult<IPackage>(this.FirstOrDefault(l => l.Id == id && l.Version == version));
 
         public string Serialize()
             => XNode.FromObject(this).ToString();
 
-        public static StaticPackageManager Deserialize(string text)
+        public static StaticPackageRegistry Deserialize(string text)
         {
             #region Preconditions
 
@@ -39,7 +36,7 @@ namespace Carbon.Packaging
          
             // TODO: Use protobuff....
                
-            return new StaticPackageManager(XArray.Parse(text).ToArrayOf<PackageRelease>());
+            return new StaticPackageRegistry(XArray.Parse(text).ToArrayOf<PackageRelease>());
         }
     }
 }
