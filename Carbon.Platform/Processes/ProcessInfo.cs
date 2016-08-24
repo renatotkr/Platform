@@ -87,5 +87,3 @@ namespace Carbon.Platform
 // ResourceLimits
 
 // An instance of a computer program that is being executed
-
-// When a process dies, do we automatically respawn a new one -- or is this a higher level (i.e. backend) concern

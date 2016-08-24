@@ -33,5 +33,6 @@ namespace Carbon.Platform
 
 // - spawns one or more processes to handle user requests (autoscales)
 // - hosted behind a load balancer
+// - responsible for monitoring the health of the processes (taking them into and out of service as needed)
 
 // bindings (host, protocal, port)
