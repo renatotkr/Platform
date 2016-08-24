@@ -1,27 +1,27 @@
-﻿namespace Carbon.Platform.Tests
-{
-	using Xunit;
-	
-	public class CodeSourceTests
-	{
-		[Fact]
-		public void ParseTests()
-		{
-            var x = CodeSource.Parse("npm/npm");
+﻿using Xunit;
 
-            Assert.Equal(CodeHost.GitHub, x.Host);
+namespace Carbon.Platform.Tests
+{
+    public class CodeSourceTests
+    {
+        [Fact]
+        public void ParseTests()
+        {
+            var x = RepositoryDetails.Parse("npm/npm");
+
+            Assert.Equal(RepositoryProviderId.GitHub, x.Provider);
             Assert.Equal("npm", x.AccountName);
-            Assert.Equal("npm", x.RepositoryName);
+            Assert.Equal("npm", x.Name);
         }
 
         [Fact]
         public void ParseTests2()
         {
-            var x = CodeSource.Parse("carbon/cropper#master");
+            var x = RepositoryDetails.Parse("carbon/cropper#master");
 
-            Assert.Equal(CodeHost.GitHub, x.Host);
+            Assert.Equal(RepositoryProviderId.GitHub, x.Provider);
             Assert.Equal("carbon", x.AccountName);
-            Assert.Equal("cropper", x.RepositoryName);
+            Assert.Equal("cropper", x.Name);
             Assert.Equal("master", x.Revision);
 
             Assert.Equal("carbon/cropper#master", x.ToString());
@@ -43,11 +43,11 @@
                 "carbon/cropper.git#branch"
             })
             {
-                var x = CodeSource.Parse(url);
+                var x = RepositoryDetails.Parse(url);
 
-                Assert.Equal(CodeHost.GitHub, x.Host);
+                Assert.Equal(RepositoryProviderId.GitHub, x.Provider);
                 Assert.Equal("carbon", x.AccountName);
-                Assert.Equal("cropper", x.RepositoryName);
+                Assert.Equal("cropper", x.Name);
                 Assert.Equal("branch", x.Revision);
             }
         }
@@ -60,13 +60,12 @@
                 "https://bitbucket.org/example/repo"
             })
             {
-                var x = CodeSource.Parse(url);
+                var x = RepositoryDetails.Parse(url);
 
-                Assert.Equal(CodeHost.BitBucket, x.Host);
+                Assert.Equal(RepositoryProviderId.BitBucket, x.Provider);
                 Assert.Equal("example", x.AccountName);
-                Assert.Equal("repo", x.RepositoryName);
+                Assert.Equal("repo", x.Name);
             }
         }
-
     }
 }

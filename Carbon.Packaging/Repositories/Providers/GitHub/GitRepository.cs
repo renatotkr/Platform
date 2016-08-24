@@ -14,7 +14,7 @@ namespace GitHub
 
         private readonly GitHubClient client;
 
-        public GitRepository(Uri url, GitCredentials credentials)
+        public GitRepository(Uri url, GitHubCredentials credentials)
         {
             // https://github.com/orgName/repoName.git
 
@@ -27,7 +27,7 @@ namespace GitHub
             this.client = new GitHubClient(credentials);
         }
 
-        public GitRepository(string accountName, string repositoryName, GitCredentials credentials)
+        public GitRepository(string accountName, string repositoryName, GitHubCredentials credentials)
         {
             #region Preconditions
 

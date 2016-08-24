@@ -15,6 +15,20 @@
            };
 
            Assert.Equal("cropper@1.2.3", lib.ToString());
-        }    
+        }
+
+
+        [Fact]
+        public void DepTests()
+        {
+            var lib = new PackageDependency("a", "1.0.0");
+
+            Assert.False(lib.IsFile);
+
+            lib = new PackageDependency("b", "./hi.jpeg");
+
+            Assert.True(lib.IsFile);
+
+        }
     }
 }

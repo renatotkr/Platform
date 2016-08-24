@@ -6,11 +6,6 @@ namespace Carbon.Platform
 
     public interface IRepositoryClient
     {
-        // ListBranches
-        // GetBranch
-
-        // Task<Package> DownloadAsync(Semver version);
-
         Task<Package> DownloadAsync(Revision revision);
 
         Task<ICommit> GetCommitAsync(Revision revision);

@@ -65,7 +65,7 @@ namespace Carbon.Packaging
                 {
                     var parts = line.Split(' ');
 
-                    files.Add(new AssetInfo(
+                    files.Add(new PackageFileInfo(
                         name     : parts[0],
                         sha256   : Convert.FromBase64String(parts[1]),
                         modified : XDate.Parse(parts[2]).ToDateTime()
@@ -78,13 +78,13 @@ namespace Carbon.Packaging
 
         public static PackageManifest FromPackage(Package package)
         {
-            return new PackageManifest(package.Select(file => (IFileInfo)new AssetInfo(file)));
+            return new PackageManifest(package.Select(file => (IFileInfo)new PackageFileInfo(file)));
         }
     }
 
-    internal struct AssetInfo : IFileInfo
+    internal struct PackageFileInfo : IFileInfo
     {
-        public AssetInfo(IFile file)
+        public PackageFileInfo(IFile file)
         {
             using (var stream = file.Open())
             {
@@ -95,13 +95,15 @@ namespace Carbon.Packaging
             Modified = file.Modified;
         }
 
-        public AssetInfo(string name, byte[] sha256, DateTime modified)
+        public PackageFileInfo(string name, byte[] sha256, DateTime modified)
         {
             #region Preconditions
 
-            if (name == null) throw new ArgumentNullException(nameof(name));
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
 
-            if (name.Length == 0) throw new ArgumentException("Must not be empty", nameof(name));
+            if (name.Length == 0)
+                throw new ArgumentException("Must not be empty", nameof(name));
 
             #endregion
 
@@ -116,13 +118,4 @@ namespace Carbon.Packaging
 
         public DateTime Modified { get; }
     }
-
-    /*
-	[Flags]
-	public enum AssetType
-	{
-		File,
-		Folder
-	}
-	*/
 }

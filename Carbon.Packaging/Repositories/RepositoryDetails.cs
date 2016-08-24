@@ -6,15 +6,19 @@ namespace Carbon.Platform
 {
     public struct RepositoryDetails
     {
-        public RepositoryDetails(RepositoryProviderId host, string accountName, string name, string revision)
+        public RepositoryDetails(
+            RepositoryProviderId provider, 
+            string accountName, 
+            string name, 
+            string revision)
         {
-            HostType = host;
+            Provider = provider;
             AccountName = accountName;
             Name = name;
             Revision = revision;
         }
 
-        public RepositoryProviderId HostType { get; }
+        public RepositoryProviderId Provider { get; }
 
         public string AccountName { get; }
 
@@ -26,9 +30,9 @@ namespace Carbon.Platform
         {
             var sb = new StringBuilder();
 
-            if (HostType != RepositoryProviderId.GitHub)
+            if (Provider != RepositoryProviderId.GitHub)
             {
-                sb.Append(HostType.ToString().ToLower());
+                sb.Append(Provider.ToString().ToLower());
                 sb.Append(":");
             }
 

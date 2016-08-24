@@ -59,11 +59,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StaticRegistryTests.cs" />
     <Compile Include="AssetTests.cs" />
     <Compile Include="CodeSourceTests.cs" />
     <Compile Include="LibTests.cs" />
     <Compile Include="Packaging\PackageMetadataTests.cs" />
-    <Compile Include="SemanticVersionTests.cs" />
     <Compile Include="BindingInfo.cs" />
     <Compile Include="FrontendTests.cs" />
     <Compile Include="HostNameTests.cs" />
@@ -76,9 +76,9 @@
     <Compile Include="StreamTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Carbon.Platform.Monitoring\Carbon.Platform.Monitoring.csproj">
-      <Project>{2e2207ec-903e-45eb-adaa-512ec001d04d}</Project>
-      <Name>Carbon.Platform.Monitoring</Name>
+    <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj">
+      <Project>{d16ff06d-597c-4e1a-86a9-3e3e1f3bf29b}</Project>
+      <Name>Carbon.Packaging</Name>
     </ProjectReference>
     <ProjectReference Include="..\Carbon.Platform\Carbon.Platform.csproj">
       <Project>{2003eabf-fab5-48d2-a921-0901494a54b5}</Project>
@@ -91,9 +91,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Libraries\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

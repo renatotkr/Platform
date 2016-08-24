@@ -6,25 +6,25 @@ namespace Carbon.Packaging
     using Data;
     using Data.Annotations;
 
-    [Record(TableName = "LibraryReleases")]
-    public class LibraryRelease : IPackage
+    [Record(TableName = "PackageReleases")]
+    public class PackageRelease : IPackage
     {
-        public LibraryRelease() { }
+        public PackageRelease() { }
 
-        public LibraryRelease(Library library, Semver version)
+        public PackageRelease(IPackage package, Semver version)
         {
-            LibraryId = library.Id;
+            PackageId = package.Id;
             Version = version;
         }
 
         [Member(1), Key]
-        public long LibraryId { get; set; }
+        public long PackageId { get; set; }
 
         [Member(2), Key]
         public Semver Version { get; set; }
 
-        [Member(3)] // Indexed?
-        public string LibraryName { get; set; }
+        [Member(3)]
+        public string PackageName { get; set; }
 
         [Member(4)]
         public long RepositoryId { get; }
@@ -43,22 +43,24 @@ namespace Carbon.Packaging
 
         #region Maps
 
-        public IList<LibraryDepedency> Dependencies { get; set; }
+        public IList<PackageDependency> Dependencies { get; set; }
 
-        public IList<LibraryPackageFile> Files { get; set; }
+        public IList<PackageFile> Files { get; set; }
 
         #endregion
 
         #region IPackage
 
-        long IPackage.Id => LibraryId;
+        long IPackage.Id => PackageId;
 
-        string IPackage.Name => LibraryName;
+        string IPackage.Name => PackageName;
         
         #endregion
 
         // e.g. cropper@5.5
 
-        public override string ToString() => LibraryName + "@" + Version;
-    }  
+        // carbon.cropper
+
+        public override string ToString() => PackageName + "@" + Version;
+    }
 }

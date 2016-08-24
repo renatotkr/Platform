@@ -7,8 +7,8 @@ namespace Carbon.Packaging
 
     public interface IPackageStore
     {
-        Task<Package> GetAsync(string name);
+        Task<Package> GetAsync(string name, Semver version);
 
-        Task<CryptographicHash> PutAsync(string name, Package package);
+        Task<CryptographicHash> PutAsync(Package package);
     }
 }

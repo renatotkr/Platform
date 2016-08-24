@@ -6,7 +6,99 @@
 	
 	public class PackageMetadataTests
 	{
-		[Fact]
+        [Fact]
+        public void Velocity()
+        {
+            var x = @"{
+  ""name"": ""velocity-animate"",
+  ""version"": ""1.2.3"",
+  ""description"": ""Accelerated JavaScript animation."",
+  ""keywords"": [
+    ""velocity"",
+    ""animation"",
+    ""jquery"",
+    ""animate"",
+    ""ui"",
+    ""velocity.js"",
+    ""velocityjs"",
+    ""javascript""
+  ],
+  ""homepage"": ""http://velocityjs.org"",
+  ""bugs"": {
+    ""url"": ""http://github.com/julianshapiro/velocity/issues""
+  },
+  ""license"": ""MIT"",
+  ""authors"": [
+    {
+      ""name"": ""Julian Shapiro"",
+      ""url"": ""http://julian.com/""
+    }
+  ],
+  ""main"": ""velocity.js"",
+  ""repository"": ""julianshapiro/velocity"",
+  ""files"": [
+    ""velocity.js"",
+    ""velocity.min.js"",
+    ""velocity.ui.js"",
+    ""velocity.ui.min.js""
+  ],
+  ""dependencies"": {
+    ""jquery"": "">= 1.4.3""
+  },
+  ""devDependencies"": {
+    ""grunt"": ""^0.4.4"",
+    ""grunt-contrib-concat"": ""~0.4.0"",
+    ""grunt-contrib-jshint"": ""~0.6.3"",
+    ""grunt-contrib-nodeunit"": ""~0.2.0"",
+    ""grunt-contrib-requirejs"": ""~0.4.4"",
+    ""grunt-contrib-uglify"": ""~0.2.2""
+  }
+}";
+            var package = PackageMetadata.Parse(x);
+
+            Assert.Equal("velocity.js", package.Main);
+
+            Assert.Equal(4, package.Files.Length);
+
+            Assert.Equal("velocity.js", package.Files[0]);
+   
+        }
+
+        [Fact]
+        public void Bower()
+        {
+            var x = @"{
+  ""name"": ""d3"",
+  ""main"": ""d3.js"",
+  ""scripts"": [
+    ""d3.js""
+  ],
+  ""ignore"": [
+    "".DS_Store"",
+    "".git"",
+    "".gitignore"",
+    "".npmignore"",
+    "".spmignore"",
+    "".travis.yml"",
+    ""Makefile"",
+    ""bin"",
+    ""component.json"",
+    ""composer.json"",
+    ""index.js"",
+    ""lib"",
+    ""node_modules"",
+    ""package.json"",
+    ""src"",
+    ""test""
+  ]
+    }";
+
+            var package = PackageMetadata.Parse(x);
+
+            Assert.Equal("d3.js", package.Main);
+        }
+
+        [Fact]
 		public void Test1()
 		{
 			var x = @"{
@@ -69,12 +161,15 @@
             Assert.Equal("Foo Bar", package.Contributors[0].Name);
 
             Assert.Equal("module-name", package.Name);
-            Assert.Equal("10.3.1", package.Version);
+            Assert.Equal("10.3.1", package.Version.ToString());
 
             Assert.Equal(6, package.Dependencies.Count);
 
-            Assert.Equal("primus", package.Dependencies.First().Key);
-            Assert.Equal("*", package.Dependencies.First().Value);
+            Assert.Equal("primus", package.Dependencies[0].Name);
+            Assert.Equal("*", package.Dependencies[0].Value);
+
+            Assert.Equal("async", package.Dependencies[1].Name);
+            Assert.Equal("~0.8.0", package.Dependencies[1].Value);
 
         }
     }

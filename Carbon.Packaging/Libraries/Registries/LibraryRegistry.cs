@@ -9,9 +9,9 @@ namespace Carbon.Packaging
 
     public class LibraryRegistry2 : IPackageRegistry
     {
-        private readonly ITable<LibraryRelease> table;
+        private readonly ITable<PackageRelease> table;
 
-        public LibraryRegistry2(ITable<LibraryRelease> table)
+        public LibraryRegistry2(ITable<PackageRelease> table)
         {
             #region Preconditions
 
@@ -45,7 +45,7 @@ namespace Carbon.Packaging
 
         private long LookupId(string name)
         {
-            return table.QueryFirstOrDefaultAsync(Eq("librarySlug", name)).Result.LibraryId;
+            return table.QueryFirstOrDefaultAsync(Eq("packageName", name)).Result.PackageId;
         }
     }
 }

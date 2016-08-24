@@ -1,11 +1,11 @@
-﻿namespace GitHub
-{
-    using System;
-    using System.Net.Http.Headers;
+﻿using System;
+using System.Net.Http.Headers;
 
-    public class GitCredentials
+namespace GitHub
+{
+    public class GitHubCredentials
     {
-        public GitCredentials(string token, AuthorizationType type = AuthorizationType.Token)
+        public GitHubCredentials(string token, AuthorizationType type = AuthorizationType.Token)
         {
             #region Preconditions
 
@@ -21,17 +21,14 @@
 
         public AuthorizationType Type { get; }
 
+        // "Authorization: token OAUTH-TOKEN"
+
         public AuthenticationHeaderValue ToHeader()
-        {
-            // "Authorization: token OAUTH-TOKEN"
-            return new AuthenticationHeaderValue("token", Token);
-        }
+            => new AuthenticationHeaderValue("token", Token);
     }
 
     public enum AuthorizationType
     {
         Token = 1
     }
-
-    // TODO: Username + Password
 }

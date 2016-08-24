@@ -7,26 +7,28 @@ using System.Threading.Tasks;
 
 using Microsoft.Web.Administration;
 
-namespace Carbon.Platform.Hosting
+namespace Carbon.Hosting.IIS
 {
     using Logging;
+    using Packaging;
+    using Platform;
 
-    public class IisAppHost : IAppHost, IDisposable
+    public class IisAppHost : IProgramHost, IDisposable
     {
-        private readonly AppHostConfiguration config;
+        private readonly ProgramEnvironment env;
         private readonly ServerManager serverManager = new ServerManager();
 
-        private readonly MachineInfo machine;
+        private readonly HostInfo host;
         private readonly ILogger log;
 
-        public IisAppHost(MachineInfo machine, AppHostConfiguration config, ILogger log)
+        public IisAppHost(HostInfo machine, ProgramEnvironment env, ILogger log)
         {
-            this.machine = machine;
-            this.config = config;
+            this.host = machine;
+            this.env = env;
             this.log = log;
         }
 
-        public IEnumerable<AppInstance> Scan()
+        public IEnumerable<ProcessInfo> Scan()
         {
             foreach (var site in serverManager.Sites)
             {
@@ -36,19 +38,17 @@ namespace Carbon.Platform.Hosting
             }
         }
 
-        public AppInstance Find(string name)
+        public ProcessInfo Find(string slug)
         {
-            var site = serverManager.Sites[name];
+            var site = serverManager.Sites[slug];
 
             if (site == null) return null;
 
             return FromSite(site);
         }
 
-        public Task CreateAsync(IApp app)
+        public Task CreateAsync(IProgram app)
         {
-            int version = 0;
-
             if (serverManager.ApplicationPools[app.Name] != null)
             {
                 log.Info($"Pool {app.Name} exists. Skipping");
@@ -81,7 +81,7 @@ namespace Carbon.Platform.Hosting
             // - Set path to a placeholder root directory
             // - Setup bindings
 
-            var site = GetConfiguredSite(app, version);
+            var site = GetConfiguredSite(app);
 
             serverManager.Sites.Add(site);
 
@@ -93,7 +93,7 @@ namespace Carbon.Platform.Hosting
             return Task.CompletedTask;
         }
 
-        public async Task DeployAsync(IApp app, int version, Package package)
+        public async Task DeployAsync(IProgram app, Package package)
         {
             #region Ensure the app exists
 
@@ -106,7 +106,7 @@ namespace Carbon.Platform.Hosting
 
             #endregion
 
-            var directory = GetAppPath(app, version);
+            var directory = GetAppPath(app);
 
             if (directory.Exists) throw new Exception($"Directory '{directory.FullName}' already exists");
 
@@ -157,11 +157,11 @@ namespace Carbon.Platform.Hosting
             // Ensure the rights have propogated
             await Task.Delay(10).ConfigureAwait(false);
 
-            LogInfo(app, $"Deployed v{version}");
+            LogInfo(app, $"Deployed v{app.Version}");
         }
 
 
-        public IEnumerable<int> GetDeployedVersions(IApp app)
+        public IEnumerable<int> GetDeployedVersions(IProgram app)
         {
             var root = GetAppRoot(app);
 
@@ -176,10 +176,10 @@ namespace Carbon.Platform.Hosting
             }
         }
 
-        public bool IsDeployed(IApp app, int version)
-            => GetAppPath(app, version).Exists;
+        public bool IsDeployed(IProgram release)
+            => GetAppPath(release).Exists;
 
-        public Task<AppInstance> ActivateAsync(IApp app, int version)
+        public Task<ProcessInfo> ActivateAsync(IProgram app)
         {
             var site = serverManager.Sites[app.Name];
 
@@ -189,7 +189,7 @@ namespace Carbon.Platform.Hosting
             var pool = serverManager.ApplicationPools[app.Name];
 
             // e.g. D:/apps/portfolio/2.1.3
-            var newPath = GetAppPath(app, version);
+            var newPath = GetAppPath(app);
 
             if (!newPath.Exists)
             {
@@ -205,19 +205,23 @@ namespace Carbon.Platform.Hosting
 
             log.Info($"Recycled app pool {pool.Name}");
 
-            LogInfo(app, $"Activated v{version}");
+            LogInfo(app, $"Activated v{app.Version}");
+
+            var instance = FromSite(site);
 
             // Write an instance.txt file to the deploy directory
-            var instance = FromSite(site);
+            /*/
+            
 
             var instanceTxtFile = Path.Combine(newPath.FullName, "instance.txt");
 
             File.WriteAllText(instanceTxtFile, instance.GetKey());
+            */
 
             return Task.FromResult(instance);
         }
 
-        public Task ReloadAsync(IApp app)
+        public Task ReloadAsync(IProgram app)
         {
             var pool = serverManager.ApplicationPools[app.Name];
 
@@ -226,7 +230,7 @@ namespace Carbon.Platform.Hosting
             return Task.CompletedTask;
         }
 
-        public Task DeleteAsync(IApp app)
+        public Task DeleteAsync(IProgram app)
         {
             var site = serverManager.Sites[app.Name];
 
@@ -249,27 +253,28 @@ namespace Carbon.Platform.Hosting
 
         #region Helpers
 
-        private Site GetConfiguredSite(IApp app, int version)
+        private Site GetConfiguredSite(IProgram program)
         {
             #region Preconditions
 
-            if (app == null) throw new ArgumentNullException("app");
+            if (program == null)
+                throw new ArgumentNullException(nameof(program));
 
             #endregion
 
-            var physicalPath = GetAppPath(app, version);
+            var physicalPath = GetAppPath(program);
 
             var site = serverManager.Sites.CreateElement();
 
-            site.Id = app.Id;
-            site.Name = app.Name;
-            site.ServerAutoStart = true;    // Start the server automatically
-            site.LogFile.Enabled = false;   // Disable site logging
+            site.Id              = program.Id;
+            site.Name            = program.Name;
+            site.ServerAutoStart = true;                            // Start the server automatically
+            site.LogFile.Enabled = false;                           // Disable site logging
 
-            var siteApp = site.Applications.CreateElement(); // Create a site app
+            var siteApp = site.Applications.CreateElement();        // Create a site app
 
-            siteApp.Path = "/";                         // Site the root path
-            siteApp.ApplicationPoolName = app.Name;     // Site the pool name
+            siteApp.Path = "/";                                     // Site the root path
+            siteApp.ApplicationPoolName = program.Name;      // Site the pool name
 
             site.Applications.Add(siteApp);
 
@@ -281,24 +286,27 @@ namespace Carbon.Platform.Hosting
 
             siteApp.VirtualDirectories.Add(virtualDirectory);
 
-            foreach (var a in ((App)app).Bindings)
+            if (program is ISite)
             {
-                var binding = site.Bindings.CreateElement();
+                foreach (var a in ((ISite)program).Bindings)
+                {
+                    var binding = site.Bindings.CreateElement();
 
-                binding.Protocol = a.Protocol;
-                binding.BindingInformation = a.ToString();
+                    binding.Protocol = a.Protocol;
+                    binding.BindingInformation = a.ToString();
 
-                site.Bindings.Add(binding);
+                    site.Bindings.Add(binding);
+                }
             }
 
             return site;
         }
 
-        private void LogInfo(IApp app, string message)
+        private void LogInfo(IProgram app, string message)
         {
-            var logsDir = Path.Combine(config.Root.FullName.TrimEnd('/'), app.Name, "logs");
+            var logsDir = Path.Combine(env.Root.FullName.TrimEnd('/'), app.Name, "logs");
 
-            var path = Path.Combine(config.Root.FullName.TrimEnd('/'), app.Name, "logs", "deploy.txt");
+            var path = Path.Combine(env.Root.FullName.TrimEnd('/'), app.Name, "logs", "deploy.txt");
 
             // Make sure the directory exists
             if (!Directory.Exists(logsDir))
@@ -311,23 +319,23 @@ namespace Carbon.Platform.Hosting
             File.AppendAllLines(path, new[] { line });
         }
 
-        private string GetAppRoot(IApp app)
+        private string GetAppRoot(IProgram app)
         {
-            return Path.Combine(config.Root.FullName.TrimEnd('/'), app.Name);
+            return Path.Combine(env.Root.FullName.TrimEnd('/'), app.Name);
         }
 
-        private DirectoryInfo GetAppPath(IApp app, float version)
+        private DirectoryInfo GetAppPath(IProgram app)
         {
             // {root}/{name}/{version}
 
-            var path = Path.Combine(GetAppRoot(app), version.ToString());
+            var path = Path.Combine(GetAppRoot(app), app.Version.ToString());
 
             return new DirectoryInfo(path);
         }
 
-        public IList<Request> GetActiveRequests(AppInstance instance, TimeSpan elapsedFilter)
+        public IList<Request> GetActiveRequests(ProcessInfo instance, TimeSpan elapsedFilter)
         {
-            var pool = serverManager.ApplicationPools[instance.AppName];
+            var pool = serverManager.ApplicationPools[instance.Slug];
 
             var requests = new List<Request>();
 
@@ -342,7 +350,7 @@ namespace Carbon.Platform.Hosting
             return requests;
         }
 
-        public AppInstance FromSite(Site site)
+        public ProcessInfo FromSite(Site site)
         {
             var application = site.Applications["/"]; // or 0
             var directory = application.VirtualDirectories["/"];
@@ -361,18 +369,13 @@ namespace Carbon.Platform.Hosting
 
             // portfolio/1.5
 
-            var app = new App
-            {
-                Name = site.Name,
-                Id = (int)site.Id
+            var app = new ProcessInfo {
+                Slug = site.Name,
+                Id = site.Id
             };
 
-            return new AppInstance(app, machine)
-            {
-                AppVersion = version,
-                Started = DateTime.UtcNow,
-                Site = site
-            };
+
+            return app;
         }
 
         #endregion

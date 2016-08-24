@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Carbon.Packaging
 {
     using Data.Annotations;
 
-    [Record(TableName = "Libraries")]
-    public class Library : IPackage
+    [Record(TableName = "Packages")]
+    public class PackageInfo : IPackage
     {
         [Member(1), Identity]
         public long Id { get; set; }
@@ -24,6 +25,8 @@ namespace Carbon.Packaging
 
         [Member(6), Timestamp(false)]
         public DateTime Created { get; set; }
+
+        public IList<PackageDependency> Dependencies { get; set; }
     }
 
     // Libraries are just a type of package...

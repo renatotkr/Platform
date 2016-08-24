@@ -13,7 +13,7 @@ namespace Carbon.Platform
         [Member(2), Unique]
         public string Slug { get; set; } // e.g. carbonmade
 
-        [Member(3, Mutable = true)]
+        [Member(3, mutable: true)]
         public long RequestCount { get; set; }
 
         public IList<ProcessInfo> Processes { get; set; }

@@ -10,13 +10,13 @@ namespace Carbon.Packaging
 
     public class PackageMetadata
     {
-        // Required
+        [Member(1)] // Required
         public string Name { get; set; }
-
-        // Required
+        
+        [Member(2)] // Required
         public Semver Version { get; set; }
 
-        [Optional]
+        [Member(3), Optional]
         public string Description { get; set; }
 
         [Optional]
@@ -29,7 +29,7 @@ namespace Carbon.Packaging
         public string License { get; set; }
 
         [Optional]
-        public IList<PackageDependency> Dependencies { get; } = new List<PackageDependency>();
+        public IList<PackageDependencyInfo> Dependencies { get; } = new List<PackageDependencyInfo>();
 
         [Optional]
         public PackageRepository Repository { get; set; }
@@ -42,17 +42,17 @@ namespace Carbon.Packaging
             var json = XObject.Parse(text);
 
             var metadata = new PackageMetadata {
-                Name  = (string) json["name"]
+                Name = json["name"]
             };
 
             if (json.ContainsKey("version"))
             {
-                metadata.Version = Semver.Parse(json["version"].ToString());
+                metadata.Version = Semver.Parse(json["version"]);
             }
 
             if (json.ContainsKey("main"))
             {
-                metadata.Main = json["main"].ToString();
+                metadata.Main = json["main"];
             }
 
             if (json.ContainsKey("repository"))
@@ -61,9 +61,7 @@ namespace Carbon.Packaging
 
                 if (repositoryNode.Type == XType.String)
                 {
-                    metadata.Repository = new PackageRepository {
-                        Url = repositoryNode.ToString()
-                    };
+                    metadata.Repository = new PackageRepository(RepositoryType.Git, repositoryNode);
                 }
             }
 
@@ -71,7 +69,7 @@ namespace Carbon.Packaging
             {
                 foreach (var pair in (XObject)json["dependencies"])
                 {
-                    var dep = new PackageDependency(pair.Key, pair.Value.ToString());
+                    var dep = new PackageDependencyInfo(pair.Key, pair.Value);
 
                     metadata.Dependencies.Add(dep);
                 }
@@ -90,13 +88,13 @@ namespace Carbon.Packaging
             return metadata;
         }
 
-        public static async Task<PackageMetadata> FromAsset(IFile asset)
-            => Parse(await asset.ReadStringAsync().ConfigureAwait(false));
+        public static async Task<PackageMetadata> FromFile(IFile file)
+            => Parse(await file.ReadStringAsync().ConfigureAwait(false));
     }
 
-    public class PackageDependency
+    public struct PackageDependencyInfo
     {
-        public PackageDependency(string name, string text)
+        public PackageDependencyInfo(string name, string text)
         {
             #region Preconditions
 
@@ -115,7 +113,7 @@ namespace Carbon.Packaging
 
         public bool IsFile => !char.IsDigit(Value[0]);
 
-        public SemverRange Version => Semver.Parse(Value).GetRange();
+        public Semver Version => Semver.Parse(Value);
     }
 
     /*
@@ -125,11 +123,17 @@ namespace Carbon.Packaging
     }
     */
 
-    public class PackageRepository
+    public struct PackageRepository
     {
-        public string Type { get; set; }
+        public PackageRepository(RepositoryType type, string url)
+        {
+            Type = type;
+            Url = url;
+        }
 
-        public string Url { get; set; }
+        public RepositoryType Type { get; }
+
+        public string Url { get; }
     }
 
     public class PackageContributor

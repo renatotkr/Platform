@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.IO.Compression;
 using System.Threading.Tasks;
 
 namespace Carbon.Packaging
@@ -17,13 +16,15 @@ namespace Carbon.Packaging
             this.blobStore = blobStore;
         }
 
-        public async Task<CryptographicHash> PutAsync(string key, Package package)
+        public async Task<CryptographicHash> PutAsync(Package package)
         {
             #region Preconditions
 
             if (package == null) throw new ArgumentNullException(nameof(package));
 
             #endregion
+
+            var key = package.Name + "/" + package.Version; // + ".zip" ?
 
             using (var ms = new MemoryStream())
             {
@@ -43,8 +44,10 @@ namespace Carbon.Packaging
             }
         }
 
-        public async Task<Package> GetAsync(string key)
+        public async Task<Package> GetAsync(string name, Semver version)
         {
+            var key = name + "/" + version.ToString();
+
             var ms = new MemoryStream();
 
             using (var blob = await blobStore.GetAsync(key).ConfigureAwait(false))
@@ -57,6 +60,7 @@ namespace Carbon.Packaging
             return ZipPackage.FromStream(ms, stripFirstLevel: false);
         }
 
+        /*
         public async Task DownloadToAsync(string key, DirectoryInfo target)
         {
             using (var ms = new MemoryStream())
@@ -74,6 +78,7 @@ namespace Carbon.Packaging
                 }
             }
         }
+        */
     }
 }
 

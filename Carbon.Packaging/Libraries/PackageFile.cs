@@ -3,14 +3,14 @@
     using Data;
     using Data.Annotations;
 
-    [Record(TableName = "LibraryPackageFiles")]
-    public class LibraryPackageFile
+    [Record(TableName = "PackageFiles")]
+    public class PackageFile
     {
         [Member(1), Key]
-        public long LibraryId { get; set; }
+        public long PackageId { get; set; }
 
         [Member(2), Key]
-        public Semver LibraryVersion { get; set; }
+        public Semver PackageVersion { get; set; }
 
         [Member(3), Key]
         public string Name { get; set; }

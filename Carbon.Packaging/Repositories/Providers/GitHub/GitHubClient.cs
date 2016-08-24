@@ -19,9 +19,9 @@ namespace GitHub
 
         public const int Version = 3;
 
-        private readonly GitCredentials auth;
+        private readonly GitHubCredentials auth;
 
-        public GitHubClient(GitCredentials credentials)
+        public GitHubClient(GitHubCredentials credentials)
         {
             #region Preconditions
 

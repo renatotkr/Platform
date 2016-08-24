@@ -7,22 +7,22 @@ namespace Carbon.Packaging
 {
     using Data;
 
-    public class StaticPackageManager : Collection<LibraryRelease>, IPackageRegistry
+    public class StaticPackageManager : Collection<PackageRelease>, IPackageRegistry
     {
         public StaticPackageManager() { }
 
-        internal StaticPackageManager(LibraryRelease[] list)
+        internal StaticPackageManager(PackageRelease[] list)
             : base(list)
         { }
 
-        public LibraryRelease Find(CryptographicHash hash)
+        public PackageRelease Find(CryptographicHash hash)
             => this.First(l => l.Hash == hash);
 
         public Task<IPackage> FindAsync(string name, SemverRange range)
-            => Task.FromResult<IPackage>(this.First(l => l.LibraryName == name));
+            => Task.FromResult<IPackage>(this.First(l => l.PackageName == name));
 
         public Task<IPackage> FindAsync(string name, Semver version)
-            => Task.FromResult<IPackage>(this.FirstOrDefault(l => l.LibraryName == name && l.Version == version));
+            => Task.FromResult<IPackage>(this.FirstOrDefault(l => l.PackageName == name && l.Version == version));
 
         public string Serialize()
             => XNode.FromObject(this).ToString();
@@ -39,7 +39,7 @@ namespace Carbon.Packaging
          
             // TODO: Use protobuff....
                
-            return new StaticPackageManager(XArray.Parse(text).ToArrayOf<LibraryRelease>());
+            return new StaticPackageManager(XArray.Parse(text).ToArrayOf<PackageRelease>());
         }
     }
 }

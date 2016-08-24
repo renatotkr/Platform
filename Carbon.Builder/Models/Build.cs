@@ -21,10 +21,10 @@ namespace Carbon.Building
         [Member(5)]
         public DateTime Created { get; set; }
 
-        [Member(6, Mutable = true)]
+        [Member(6, mutable: true)]
         public DateTime? Started { get; set; }
 
-        [Member(7, Mutable = true)]
+        [Member(7, mutable: true)]
         public DateTime? Completed { get; set; }
     }
 }
