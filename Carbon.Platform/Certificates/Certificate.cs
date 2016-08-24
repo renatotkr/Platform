@@ -13,9 +13,6 @@ namespace Carbon.Platform
         [Member(2)] // Subjects?
         public string[] Hosts { get; set; }
 
-        [Member(4), Timestamp(false)]
-        public DateTime Created { get; set; }
-
         [Member(5, mutable: true)]
         public DateTime? Expires { get; set; }
 
@@ -28,7 +25,10 @@ namespace Carbon.Platform
         public string KeyAlgorithm { get; set; }
 
         public string SerialNumber { get; set; }
-        
+
+
+        [Member(12), Timestamp(false)]
+        public DateTime Created { get; set; }
         // VersionNumber
         // SerialNumber
         // RSA_2048

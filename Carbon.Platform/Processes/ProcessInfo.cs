@@ -28,27 +28,28 @@ namespace Carbon.Platform
 
         [Member(1), Identity]
         public long Id { get; set; }
-       
+
         [Member(2), Indexed]
         public long ProgramId { get; set; }
 
-        [Member(3)] 
-        public Semver Version { get; set; } // program version
 
-        [Member(4)]
-        public string Slug { get; set; }    // program slug
-
-        [Member(5), Indexed]
-        public long HostId { get; set; }
-
-        [Member(6), Indexed] // if servicing a backend
+        [Member(3), Indexed] // if servicing a backend
         public long? BackendId { get; set; }
 
-        [Member(7)]
+        [Member(4), Indexed]
+        public long HostId { get; set; }
+
+        [Member(5), Optional] // if running inside a docker container
+        public string ContainerId { get; set; } // 8fddbcbb101c
+
+        [Member(6)]
         public int PID { get; set; } // https://en.wikipedia.org/wiki/Process_identifier
 
-        [Member(8), Optional] // if running inside a docker container
-        public string ContainerId { get; set; } // 8fddbcbb101c
+        [Member(7)] 
+        public Semver ProgramVersion { get; set; }
+
+        [Member(8)]
+        public string ProgramSlug { get; set; }
 
         [Member(9, mutable: true)] // a code indication weather we succesfully exited or not...
         public int? ExitStatus { get; set; }
@@ -56,23 +57,23 @@ namespace Carbon.Platform
         [Member(10)]
         public NetworkPortList Ports { get; set; }
 
-        [Member(11), Timestamp(false)]
+        [Member(12), Timestamp(false)]
         public DateTime Created { get; set; }
 
         #region Stats
 
         // CPU Cycles / load
 
-        [Member(12, mutable: true)]
+        [Member(20, mutable: true)]
         public long CallCount { get; set; }
 
-        [Member(13, mutable: true)]
+        [Member(21, mutable: true)]
         public long MemoryUsed { get; set; }
 
-        [Member(14, mutable: true)]
+        [Member(22, mutable: true)]
         public long DataIn { get; } // egress?
 
-        [Member(15, mutable: true)]
+        [Member(23, mutable: true)]
         public long DataOut { get; }
 
         #endregion

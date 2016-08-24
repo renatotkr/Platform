@@ -33,16 +33,19 @@ namespace Carbon.Platform
         [Member(3)]
         public string Name { get; set; }
 
-        [Member(4)]
+        [Member(5)]
         public long RepositoryId { get; set; }
 
-        [Member(5, MaxLength = 40)] // Commit or named tag
+        [Member(6, MaxLength = 40)] // Commit or named tag
         public string Revision { get; set; }
 
-        [Member(6)]
-        public CryptographicHash Hash { get; set; } // Package hash
+        [Member(7)] // packageHash
+        public CryptographicHash Hash { get; set; }
 
-        [Member(7), Timestamp(false)]
+        [Member(11)]
+        public long CreatorId { get; set; }
+
+        [Member(12), Timestamp(false)]
         public DateTime Created { get; set; }
 
         // name@1.2.1

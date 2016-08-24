@@ -17,7 +17,7 @@ namespace Carbon.Platform
         [Member(4)]
         public long ProgramId { get; set; }
 
-        [Member(5)]
+        [Member(5, mutable: true)]
         public Semver ProgramVersion { get; set; }
 
         [Member(6, mutable: true)]
