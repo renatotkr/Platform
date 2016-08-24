@@ -20,6 +20,9 @@ namespace Carbon.Networking
         [Member(4)]
         public long ZoneId { get; set; }
 
+        [Member(5)] // So we don't have to lookup through zone...
+        public long ProviderId { get; set; }
+
         [Member(5)] // Provides WAN access
         public IPAddress Gateway { get; set; } // 10.1.1.0
 

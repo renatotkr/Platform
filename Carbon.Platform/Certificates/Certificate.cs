@@ -10,7 +10,7 @@ namespace Carbon.Platform
         [Member(1), Identity]
         public long Id { get; }
 
-        [Member(2)]
+        [Member(2)] // Subjects?
         public string[] Hosts { get; set; }
 
         [Member(4), Timestamp(false)]
@@ -27,9 +27,32 @@ namespace Carbon.Platform
 
         public string KeyAlgorithm { get; set; }
 
+        public string SerialNumber { get; set; }
+        
+        // VersionNumber
+        // SerialNumber
         // RSA_2048
         // OwnerId
     }
 
     //  PENDING_VALIDATION | ISSUED | INACTIVE | EXPIRED | VALIDATION_TIMED_OUT | REVOKED | FAILED
 }
+
+
+/*
+Certificate
+Version Number
+Serial Number
+Signature Algorithm ID
+Issuer Name
+Validity period
+Not Before
+Not After
+Subject name
+Subject Public Key Info
+Public Key Algorithm
+Subject Public Key
+Issuer Unique Identifier (optional)
+Subject Unique Identifier (optional)
+Extensions (optional)
+*/

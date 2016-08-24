@@ -11,7 +11,10 @@ namespace Carbon.Platform
         [Member(1), Identity]
         public long Id { get; set; }
 
-        [Member(2), Unique]
+        [Member(2, mutable: true)] // highmark
+        public Semver Version { get; set; }
+
+        [Member(3), Unique]
         public string Name { get; set; }
 
         [Member(3)]
@@ -20,8 +23,8 @@ namespace Carbon.Platform
         [Member(4)]
         public long RepositoryId { get; set; }
 
-        [Member(5, mutable: true)] // highmark
-        public Semver Version { get; set; }
+        [Member(5, MaxLength = 40)] // Commit or named tag
+        public string Revision { get; set; }
 
         [Member(6, mutable: true)] // when would a programs ports change?
         public NetworkPortList Ports { get; set; }

@@ -48,11 +48,6 @@
     <Compile Include="Hardware\Hosts\HostStatus.cs" />
     <Compile Include="Hardware\NetworkInterfaces\NetworkInterfaceInfo.cs" />
     <Compile Include="Hardware\Volumes\VolumeStatus.cs" />
-    <Compile Include="Libraries\ILibrary.cs" />
-    <Compile Include="Libraries\LibraryDepedency.cs" />
-    <Compile Include="Libraries\LibraryPackageFile.cs" />
-    <Compile Include="Libraries\LibraryRelease.cs" />
-    <Compile Include="Libraries\Library.cs" />
     <Compile Include="Networking\NetworkProtocal.cs" />
     <Compile Include="Networking\NetworkRule.cs" />
     <Compile Include="Networking\IpAddressType.cs" />

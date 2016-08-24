@@ -19,25 +19,25 @@ namespace Carbon.Platform
 
             #endregion
 
-            ProgramId = program.Id;
-            ProgramSlug = program.Name;
-            Version   = version;
+            Id      = program.Id;
+            Name    = program.Name;
+            Version = version;
         }
 
         [Member(1), Key]
-        public long ProgramId { get; set; }
+        public long Id { get; set; }
 
         [Member(2), Key]
         public Semver Version { get; set; }
 
         [Member(3)]
-        public string ProgramSlug { get; set; }
+        public string Name { get; set; }
 
-        [Member(4, MaxLength = 40)] // Commit or named tag
-        public string Revision { get; set; }
-
-        [Member(5)] 
+        [Member(4)]
         public long RepositoryId { get; set; }
+
+        [Member(5, MaxLength = 40)] // Commit or named tag
+        public string Revision { get; set; }
 
         [Member(6)]
         public CryptographicHash Hash { get; set; } // Package hash
@@ -45,16 +45,8 @@ namespace Carbon.Platform
         [Member(7), Timestamp(false)]
         public DateTime Created { get; set; }
 
-        #region IProgram
-
-        long IProgram.Id => ProgramId;
-
-        string IProgram.Name => ProgramSlug;
-
-        #endregion
-
-        // borg@1.2.1
-        public override string ToString() => ProgramSlug + "@" + Version.ToString();
+        // name@1.2.1
+        public override string ToString() => Name + "@" + Version.ToString();
     }
 }
 

@@ -2,10 +2,10 @@
 {
     public interface IProgram
     {
-        long Id { get; }
+        long Id { get; }        // 1
 
-        string Name { get; }
+        Semver Version { get; } // 2
 
-        Semver Version { get; }
+        string Name { get; }    // 3
     }
 }

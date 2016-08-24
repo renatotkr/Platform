@@ -14,7 +14,7 @@ namespace Carbon.Platform
         [Member(2), Key]
         public string Name { get; set; }
 
-        [Member(3)] 
+        [Member(3)]
         public CryptographicHash Hash { get; set; }
 
         [Member(4), Timestamp]

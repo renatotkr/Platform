@@ -4,26 +4,29 @@
     using Data.Annotations;
 
     [Record(TableName = "FrontendReleases")]
-    public class FrontendRelease
+    public class FrontendRelease : IFrontend
     {
-        [Member(1), Key]
-        public long FrontendId { get; set; }
+        [Member(1), Key] // frontendId
+        public long Id { get; set; }
 
         [Member(2), Key]
         public Semver Version { get; set; }
 
         [Member(3)]
+        public string Name { get; set; }
+
+        [Member(4)]
         public long RepositoryId { get; set; }
 
-        [Member(4, MaxLength = 40)] // Commit or named tag
+        [Member(5, MaxLength = 40)] // Commit or named tag
         public string Revision { get; set; }
 
-        [Member(5)]
-        public CryptographicHash Signature { get; set; }
+        [Member(6)] // packageHash
+        public CryptographicHash Hash { get; set; }
 
         [Member(6)]
         public long CreatorId { get; set; }
-    }
 
-    // 1/1.0.2
+        public override string ToString() => Name + "@" + Version.ToString();  // lefty@1.0.2
+    }
 }

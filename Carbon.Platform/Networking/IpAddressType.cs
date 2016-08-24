@@ -6,15 +6,6 @@
         Unicast = 2, // 1 route 
         Private = 3
     }
-
-    public enum NetworkLayer
-    {
-        Physical     = 1,
-        Datalink     = 2,
-        Internet     = 3,
-        EndToEnd     = 4,
-        Applications = 7
-    }
 }
 
 

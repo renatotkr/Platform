@@ -2,7 +2,6 @@
 
 namespace Carbon.Networking
 {
-    // e.g. 10.138.0.0/20
     public struct IPAddressRange
     {
         public IPAddress Prefix { get; set; } 
@@ -21,7 +20,7 @@ namespace Carbon.Networking
 
         #endregion
 
-        // 10.1.1.1/24
+        // 10.138.0.0/20
         // 192.168.2.0/24
 
         public static IPAddressRange Parse(string text)
