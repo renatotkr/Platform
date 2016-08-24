@@ -22,17 +22,13 @@ namespace Carbon.Packaging
             this.table = table;
         }
 
-        public async Task<IPackage> FindAsync(string name, Semver version)
+        public async Task<IPackage> FindAsync(long id, Semver version)
         {
-            var id = LookupId(name);
-
             return await table.QueryFirstOrDefaultAsync(Eq("id", id), Eq("version", version)).ConfigureAwait(false);
         }
 
-        public async Task<IPackage> FindAsync(string name, SemverRange range)
+        public async Task<IPackage> FindAsync(long id, SemverRange range)
         {
-            var id = LookupId(name);
-
             var query = new Query(
                 Order.Descending("id"), 
                 Eq("id", id),
@@ -43,9 +39,9 @@ namespace Carbon.Packaging
             return await table.QueryFirstOrDefaultAsync(query).ConfigureAwait(false);
         }
 
-        private long LookupId(string name)
+        public long LookupId(string name)
         {
-            return table.QueryFirstOrDefaultAsync(Eq("packageName", name)).Result.PackageId;
+            return table.QueryFirstOrDefaultAsync(Eq("packageName", name)).Result.Id;
         }
     }
 }

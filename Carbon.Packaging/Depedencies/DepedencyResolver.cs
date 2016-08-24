@@ -1,4 +1,4 @@
-﻿using Carbon.Platform;
+﻿using System.Threading.Tasks;
 
 namespace Carbon.Packaging
 {
@@ -6,21 +6,22 @@ namespace Carbon.Packaging
     {
         private readonly IPackageRegistry registry;
 
-        private readonly DependencyGraph<IPackage> graph = new DependencyGraph<IPackage>();
+        private readonly DependencyGraph<IPackage> graph;
 
         public DepedencyResolver(IPackageRegistry registry)
         {
             this.registry = registry;
+            this.graph = new DependencyGraph<IPackage>(); ;
         }
 
-        private void Expand(IPackage package)
+        private async Task ExpandAsync(IPackage package)
         {
             // Build up the graph
             foreach (var dep in package.Dependencies)
             {
                 if (dep.ResolvedPackage == null)
                 {
-                    dep.ResolvedPackage = Resolve(dep);
+                    dep.ResolvedPackage = await ResolveAsync(dep).ConfigureAwait(false);
                 }
 
                 var node = graph.FindOrAdd(dep.PackageId, dep.ResolvedPackage);
@@ -34,14 +35,14 @@ namespace Carbon.Packaging
 
                     node.AddEdge(childNode);
 
-                    Expand(childDep.ResolvedPackage);
+                    await ExpandAsync(childDep.ResolvedPackage).ConfigureAwait(false);
                 }
             }
         }
 
-        private IPackage Resolve(PackageDependency depedency)
+        private async Task<IPackage> ResolveAsync(PackageDependency dep)
         {
-            return registry.FindAsync(depedency.DepedencyName, depedency.DependencyVersion).Result;
+            return await registry.FindAsync(dep.DependencyId, dep.DependencyVersion).ConfigureAwait(false);
         }
     }
 }

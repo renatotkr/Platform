@@ -10,10 +10,10 @@ namespace Carbon.Packaging
         public long PackageId { get; set; }
 
         [Member(2), Key]
-        public long DependencyId { get; set; }
+        public Semver PackageVersion { get; set; }
 
-        [Member(3)]
-        public string DepedencyName { get; set; }
+        [Member(3), Key] // Lookup name...
+        public long DependencyId { get; set; }
 
         [Member(4)]
         public Semver DependencyVersion { get; set; } 

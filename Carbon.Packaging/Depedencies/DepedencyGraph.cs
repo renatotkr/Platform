@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Carbon.Platform
+namespace Carbon.Packaging
 {
     public class DependencyGraph<T>
     {

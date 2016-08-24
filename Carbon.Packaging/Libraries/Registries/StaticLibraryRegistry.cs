@@ -19,10 +19,10 @@ namespace Carbon.Packaging
             => this.First(l => l.Hash == hash);
 
         public Task<IPackage> FindAsync(string name, SemverRange range)
-            => Task.FromResult<IPackage>(this.First(l => l.PackageName == name));
+            => Task.FromResult<IPackage>(this.First(l => l.Name == name));
 
         public Task<IPackage> FindAsync(string name, Semver version)
-            => Task.FromResult<IPackage>(this.FirstOrDefault(l => l.PackageName == name && l.Version == version));
+            => Task.FromResult<IPackage>(this.FirstOrDefault(l => l.Name == name && l.Version == version));
 
         public string Serialize()
             => XNode.FromObject(this).ToString();

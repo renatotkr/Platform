@@ -2,10 +2,10 @@
 
 namespace Carbon.Packaging
 {
-    public interface IPackageRepository // Registry?
+    public interface IPackageRepository
     {
-        Task<Package> GetAsync(string name, Semver version);
+        Task<Package> GetAsync(long id, Semver version);
 
-        Task Publish(Package package);
+        Task PublishAsync(Package package);
     }
 }

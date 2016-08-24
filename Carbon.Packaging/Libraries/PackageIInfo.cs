@@ -5,6 +5,8 @@ namespace Carbon.Packaging
 {
     using Data.Annotations;
 
+    // Latest release of a package...
+
     [Record(TableName = "Packages")]
     public class PackageInfo : IPackage
     {
