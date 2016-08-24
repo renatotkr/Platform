@@ -42,18 +42,25 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Containers\Container.cs" />
+    <Compile Include="Certificates\Certificate.cs" />
     <Compile Include="Hardware\Hosts\Ec2Instance.cs" />
-    <Compile Include="Depedencies\DepedencyGraph.cs" />
     <Compile Include="Hardware\Hosts\HostInfo.cs" />
     <Compile Include="Hardware\Hosts\HostStatus.cs" />
-    <Compile Include="Hardware\NetworkInterfaceInfo.cs" />
+    <Compile Include="Hardware\NetworkInterfaces\NetworkInterfaceInfo.cs" />
     <Compile Include="Hardware\Volumes\VolumeStatus.cs" />
     <Compile Include="Libraries\ILibrary.cs" />
     <Compile Include="Libraries\LibraryDepedency.cs" />
     <Compile Include="Libraries\LibraryPackageFile.cs" />
     <Compile Include="Libraries\LibraryRelease.cs" />
     <Compile Include="Libraries\Library.cs" />
+    <Compile Include="Networking\NetworkProtocal.cs" />
+    <Compile Include="Networking\NetworkRule.cs" />
+    <Compile Include="Networking\IpAddressType.cs" />
+    <Compile Include="Networking\IPAddressRange.cs" />
+    <Compile Include="Networking\Network.cs" />
+    <Compile Include="Networking\NetworkPort.cs" />
+    <Compile Include="Networking\NetworkRoute.cs" />
+    <Compile Include="Networking\UrlRoute.cs" />
     <Compile Include="Programs\IProgram.cs" />
     <Compile Include="Zones\ZoneInfo.cs" />
     <Compile Include="Repositories\IRepository.cs" />

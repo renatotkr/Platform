@@ -2,34 +2,29 @@
 
 namespace Carbon.Platform
 {
-    public static class RepositoryHost
+    public static class RepositoryProvider
     {
-        public static RepositoryHostType Parse(string text)
+        public static RepositoryProviderId Parse(string text)
         {
             switch (text.ToLower())
             {
                 case "bitbucket":
-                case "bitbucket.org": return RepositoryHostType.BitBucket;
+                case "bitbucket.org": return RepositoryProviderId.BitBucket;
 
                 case "github":
-                case "github.com": return RepositoryHostType.GitHub;
+                case "github.com": return RepositoryProviderId.GitHub;
 
-                case "gist": return RepositoryHostType.Gist;
-
-                case "gitlab": return RepositoryHostType.GitLab;
+                case "gitlab": return RepositoryProviderId.GitLab;
 
                 default: throw new Exception("Unexpected host: " + text);
             }
-        }
-
-        
+        }        
     }
 
-    public enum RepositoryHostType
+    public enum RepositoryProviderId
     {
-        GitHub,
-        BitBucket,
-        Gist,
-        GitLab
+        GitHub = 5000,
+        BitBucket = 5001,
+        GitLab = 5002
     }
 }

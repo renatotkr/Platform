@@ -12,7 +12,7 @@ namespace Carbon.Platform
         public long Id { get; set; }
 
         [Member(2), Unique]
-        public string Slug { get; set; }
+        public string Name { get; set; }
 
         [Member(3)]
         public ProgramType Type { get; set; }
@@ -20,10 +20,10 @@ namespace Carbon.Platform
         [Member(4)]
         public long RepositoryId { get; set; }
 
-        [Member(5, Mutable = true)] // highmark
+        [Member(5, mutable: true)] // highmark
         public Semver Version { get; set; }
 
-        [Member(6, Mutable = true)]
+        [Member(6, mutable: true)] // when would a programs ports change?
         public NetworkPortList Ports { get; set; }
 
         public IList<ProgramRelease> Releases { get; set; }

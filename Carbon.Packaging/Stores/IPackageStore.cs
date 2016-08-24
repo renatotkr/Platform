@@ -1,11 +1,14 @@
-﻿using System.Threading.Tasks;
+﻿using Carbon.Data;
+using System.Threading.Tasks;
 
 namespace Carbon.Packaging
 {
+    // Add version? 
+
     public interface IPackageStore
     {
         Task<Package> GetAsync(string name);
 
-        Task<Hash> PutAsync(string name, Package package);
+        Task<CryptographicHash> PutAsync(string name, Package package);
     }
 }

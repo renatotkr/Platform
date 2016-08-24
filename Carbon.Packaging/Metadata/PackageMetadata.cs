@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 
 using System.Threading.Tasks;
@@ -7,27 +6,35 @@ using System.Threading.Tasks;
 namespace Carbon.Packaging
 {
     using Data;
+    using Data.Annotations;
 
     public class PackageMetadata
     {
-        [Required]
+        // Required
         public string Name { get; set; }
 
-        [Required]
+        // Required
         public Semver Version { get; set; }
 
+        [Optional]
         public string Description { get; set; }
 
+        [Optional]
         public PackageContributor[] Contributors { get; set; }
 
+        [Optional]
         public string Main { get; set; }
 
+        [Optional]
         public string License { get; set; }
 
+        [Optional]
         public IList<PackageDependency> Dependencies { get; } = new List<PackageDependency>();
 
+        [Optional]
         public PackageRepository Repository { get; set; }
 
+        [Optional]
         public string[] Files { get; set; }
 
         public static PackageMetadata Parse(string text)

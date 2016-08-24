@@ -17,7 +17,7 @@ namespace Carbon.Platform
         [Member(3)] 
         public CryptographicHash Hash { get; set; }
 
-        [Member(4), Version]
+        [Member(4), Timestamp]
         public DateTime Timestamp { get; set; }
     }
 

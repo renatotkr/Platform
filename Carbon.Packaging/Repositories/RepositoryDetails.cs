@@ -6,7 +6,7 @@ namespace Carbon.Platform
 {
     public struct RepositoryDetails
     {
-        public RepositoryDetails(RepositoryHostType host, string accountName, string name, string revision)
+        public RepositoryDetails(RepositoryProviderId host, string accountName, string name, string revision)
         {
             HostType = host;
             AccountName = accountName;
@@ -14,7 +14,7 @@ namespace Carbon.Platform
             Revision = revision;
         }
 
-        public RepositoryHostType HostType { get; }
+        public RepositoryProviderId HostType { get; }
 
         public string AccountName { get; }
 
@@ -26,7 +26,7 @@ namespace Carbon.Platform
         {
             var sb = new StringBuilder();
 
-            if (HostType != RepositoryHostType.GitHub)
+            if (HostType != RepositoryProviderId.GitHub)
             {
                 sb.Append(HostType.ToString().ToLower());
                 sb.Append(":");
@@ -61,7 +61,7 @@ namespace Carbon.Platform
                 text = text.Substring(text.IndexOf("://") + 3);
             }
 
-            var hostType = RepositoryHostType.GitHub;
+            var hostType = RepositoryProviderId.GitHub;
             string accountName = null;
             string repositoryName = null;
             string revision = null;
@@ -74,11 +74,11 @@ namespace Carbon.Platform
                 {
                     if (hasHost)
                     {
-                        hostType = RepositoryHost.Parse(part);
+                        hostType = RepositoryProvider.Parse(part);
                     }
                     else
                     {
-                        hostType = RepositoryHostType.GitHub;
+                        hostType = RepositoryProviderId.GitHub;
                         accountName = part;
                     }
                 }

@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Carbon.Platform
+namespace Carbon.Packaging
 {
     using Data;
     using Data.Annotations;
 
     [Record(TableName = "LibraryReleases")]
-    public class LibraryRelease : ILibrary
+    public class LibraryRelease : IPackage
     {
         public LibraryRelease() { }
 
-        public LibraryRelease(ILibrary library, Semver version)
+        public LibraryRelease(Library library, Semver version)
         {
             LibraryId = library.Id;
             Version = version;
@@ -23,8 +23,8 @@ namespace Carbon.Platform
         [Member(2), Key]
         public Semver Version { get; set; }
 
-        [Member(3)]
-        public string LibrarySlug { get; set; }
+        [Member(3)] // Indexed?
+        public string LibraryName { get; set; }
 
         [Member(4)]
         public long RepositoryId { get; }
@@ -43,22 +43,22 @@ namespace Carbon.Platform
 
         #region Maps
 
-        [Exclude]
         public IList<LibraryDepedency> Dependencies { get; set; }
 
-        [Exclude]
         public IList<LibraryPackageFile> Files { get; set; }
 
         #endregion
 
-        #region ILibrary
+        #region IPackage
 
-        long ILibrary.Id => LibraryId;
+        long IPackage.Id => LibraryId;
 
-        string ILibrary.Slug => LibrarySlug;
+        string IPackage.Name => LibraryName;
         
         #endregion
 
-        public override string ToString() => LibrarySlug + "@" + Version;
+        // e.g. cropper@5.5
+
+        public override string ToString() => LibraryName + "@" + Version;
     }  
 }

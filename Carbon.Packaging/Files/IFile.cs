@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Carbon.Packaging
 {
-    public interface IFile
+    public interface IFile // IBlob?
     {
         string Name { get; }
 

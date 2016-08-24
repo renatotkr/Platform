@@ -1,6 +1,6 @@
 ﻿using Carbon.Data.Annotations;
 
-namespace Carbon.Platform
+namespace Carbon.Packaging
 {
     public class LibraryDepedency
     {

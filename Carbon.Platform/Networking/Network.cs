@@ -50,9 +50,6 @@ namespace Carbon.Networking
         // Tells packets where to go leaving a network interface
         public IList<NetworkRoute> Routes { get; set; }
 
-        // 10.1.1.1/24
-        // 192.168.2.0/24
-
         public static Network Parse(string text)
         {
             var parts = text.Split('/');

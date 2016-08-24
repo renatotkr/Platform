@@ -93,13 +93,6 @@ namespace Carbon.Networking
             return Start + "/" + Protocal.ToString().ToLower();
         }
     }
-
-    public enum NetworkProtocal
-    {
-        TPC = 1,
-        UDP = 2,
-        Any = 3
-    }
 }
 
 // e.g.

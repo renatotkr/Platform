@@ -20,7 +20,7 @@ namespace Carbon.Platform
             #endregion
 
             ProgramId = program.Id;
-            ProgramSlug = program.Slug;
+            ProgramSlug = program.Name;
             Version   = version;
         }
 
@@ -49,7 +49,7 @@ namespace Carbon.Platform
 
         long IProgram.Id => ProgramId;
 
-        string IProgram.Slug => ProgramSlug;
+        string IProgram.Name => ProgramSlug;
 
         #endregion
 

@@ -9,10 +9,12 @@ namespace Carbon.Platform
         // ListBranches
         // GetBranch
 
+        // Task<Package> DownloadAsync(Semver version);
+
         Task<Package> DownloadAsync(Revision revision);
 
         Task<ICommit> GetCommitAsync(Revision revision);
 
-        Task TagAsync(ICommit commit, string name);
+        Task TagAsync(ICommit commit, Semver version);
     }
 }

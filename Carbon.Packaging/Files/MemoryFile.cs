@@ -19,11 +19,13 @@ namespace Carbon.Packaging
             Name = name;
 
             this.stream = stream;
+
+            Modified = DateTime.UtcNow;
         }
 
         public string Name { get; }
 
-        public DateTime Modified => DateTime.UtcNow;
+        public DateTime Modified { get; }
 
         public Stream Open() => stream;
     }

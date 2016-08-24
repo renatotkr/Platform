@@ -1,4 +1,4 @@
-﻿namespace Carbon.Platform
+﻿namespace Carbon.Packaging
 {
     using Data;
     using Data.Annotations;

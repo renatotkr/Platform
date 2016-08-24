@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace GitHub
 {
@@ -27,14 +26,14 @@ namespace GitHub
         /// [Optional]  OAuth app client key for which to create the token.
         /// </summary>
         [DataMember(Name = "client_id", EmitDefaultValue = false)]
-        [StringLength(20)]
+        // [StringLength(20)]
         public string ClientId { get; set; }
 
         // <summary>
         /// [Optional] OAuth app client secret for which to create the token.
         /// </summary>
         [DataMember(Name = "client_secret", EmitDefaultValue = false)]
-        [StringLength(40)]
+        // [StringLength(40)]
         public string ClientSecret { get; set; }
     }
 }

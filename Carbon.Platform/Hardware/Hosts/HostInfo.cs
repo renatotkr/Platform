@@ -24,27 +24,25 @@ namespace Carbon.Platform
         [Member(5)]
         public long ImageId { get; set; }
 
-        [Member(6), Timestamp(false)]
+        [Member(6, MaxLength = 32), Indexed]
+        public string InstanceId { get; set; }
+
+        [Member(7), Timestamp(false)]
         public DateTime Created { get; set; }
 
-        [Member(7, Mutable = true)]
+        [Member(8, mutable: true)]
         public long MemoryUsed { get; set; }
 
-        [Member(8)]
+        [Member(9)]
         public long MemoryTotal { get; set; }
 
-        [Member(9)] // For virtualized hosts
+        [Member(10)] // For virtualized hosts
         public long? ParentId { get; set; }
-
-        [Member(10, MaxLength = 32), Indexed]
-        public string InstanceId { get; set; }
 
         #region Helpers
 
-        [Exclude]
         public IList<VolumeInfo> Volumes { get; set; }
 
-        [Exclude]
         public IList<NetworkInterfaceInfo> NetworkInterfaces { get; set; }
 
         #endregion

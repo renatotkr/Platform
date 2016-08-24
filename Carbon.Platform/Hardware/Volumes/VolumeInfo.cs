@@ -25,13 +25,13 @@ namespace Carbon.Platform
         [Member(6), Optional, Indexed]
         public long? SourceId { get; set; }
 
-        [Member(7, Mutable = true)]
+        [Member(7, mutable: true)]
         public long FreeSpace { get; set; }
 
-        [Member(8, Mutable = true), Indexed] // Can volumes be shared between hosts?
+        [Member(8, mutable: true), Indexed] // Can volumes be shared between hosts?
         public long? HostId { get; set; }
 
-        [Member(9, Mutable = true)]
+        [Member(9, mutable: true)]
         public string DeviceName { get; set; } // e.g. D, dev/disk1
          
         [Member(10), Timestamp(false)] // snapshot date if from source

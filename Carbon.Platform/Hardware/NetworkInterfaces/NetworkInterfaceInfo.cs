@@ -17,21 +17,21 @@ namespace Carbon.Platform
         [Member(3)] // in octects
         public long Speed { get; set; }
 
-        [Member(4, Mutable = true), Indexed]
+        [Member(4, mutable: true), Indexed]
         public long? HostId { get; set; }
 
         #region Stats (5-8)
 
-        [Member(5, Mutable = true)]  // in octects
+        [Member(5, mutable: true)]  // in octects
         public long DataIn { get; }
 
-        [Member(6, Mutable = true)]  // in octects
+        [Member(6, mutable: true)]  // in octects
         public long DataOut { get; }
 
-        [Member(7, Mutable = true)]  // in octects
+        [Member(7, mutable: true)]  // in octects
         public long PacketsIn { get; }
 
-        [Member(8, Mutable = true)]  // in octects
+        [Member(8, mutable: true)]  // in octects
         public long PacketsOut { get; }
 
         // [Mutable]
@@ -46,12 +46,7 @@ namespace Carbon.Platform
 }
 
 /*
-/// <summary>
-/// e.g. Intel(R) PRO/1000 MT Network Connection
-/// </summary>
-[Exclude]
-public string Description { get; set; }
+public string Description { get; set; } //  e.g. Intel(R) PRO/1000 MT Network Connection
 
-[Exclude]
 public string InstanceName { get; set; }
 */

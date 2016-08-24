@@ -2,7 +2,6 @@
 
 namespace GitHub
 {
-
     public class GitBranch
     {
         [DataMember(Name = "name")]
@@ -15,10 +14,10 @@ namespace GitHub
 
 /*
 {
-	"name": "master",
-	"commit": {
-		"sha": "6dcb09b5b57875f334f61aebed695e2e4193db5e",
-		"url": "https://api.github.com/repos/octocat/Hello-World/commits/c5b97d5ae6c19d5c5df71a34c7fbeeda2479ccbc"
-	}
+  "name": "master",
+    "commit": {
+      "sha": "6dcb09b5b57875f334f61aebed695e2e4193db5e",
+      "url": "https://api.github.com/repos/octocat/Hello-World/commits/c5b97d5ae6c19d5c5df71a34c7fbeeda2479ccbc"
+    }
 }
 */

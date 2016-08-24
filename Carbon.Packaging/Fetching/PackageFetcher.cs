@@ -15,21 +15,21 @@ namespace Carbon.Packaging.Resolvers
 
         public NetworkCredential BitBucketCredentials { get; set; }
 
-        public IRepositoryClient GetRepository(RepositoryInfo source)
+        public IRepositoryClient GetRepository(RepositoryDetails repository)
         {
-            switch (source.HostingService)
+            switch (repository.HostType)
             {
-                case RepositoryHostType.BitBucket:
-                    return new BitbucketRepository(source.AccountName, source.RepositoryName, BitBucketCredentials);
+                case RepositoryProviderId.BitBucket:
+                    return new BitbucketRepository(repository.AccountName, repository.Name, BitBucketCredentials);
 
-                case RepositoryHostType.GitHub:
-                    return new GitRepository(source.AccountName, source.RepositoryName, GitHubCredentials);
+                case RepositoryProviderId.GitHub:
+                    return new GitRepository(repository.AccountName, repository.Name, GitHubCredentials);
 
-                default: throw new Exception("Unexpected source type:" + source.HostingService);
+                default: throw new Exception("Unsupported repository provider:" + repository.HostType);
             }
         }
 
-        public Task<Package> GetAsync(RepositoryInfo source)
+        public Task<Package> GetAsync(RepositoryDetails source)
         {
             var revision = Revision.Parse(source.Revision);
 

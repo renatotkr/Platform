@@ -11,7 +11,7 @@
         [Member(2), Unique]
         public string Slug { get; set; } // e.g. lefty
         
-        [Member(3, Mutable = true)]
+        [Member(3, mutable: true)] // highmark
         public Semver Version { get; set; }
 
         [Member(4)]

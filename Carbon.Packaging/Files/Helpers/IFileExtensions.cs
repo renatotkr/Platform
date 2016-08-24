@@ -5,6 +5,13 @@ namespace Carbon.Packaging
 {
     public static class AssetExtensions
     {
+        public static bool IsStatic(this IFileInfo file)
+        {
+            var format = Path.GetExtension(file.Name).TrimStart('.');
+
+            return FileHelper.IsStatic(format);
+        }
+
         public static bool IsStatic(this IFile file)
         {
             var format = Path.GetExtension(file.Name).TrimStart('.');
@@ -23,7 +30,7 @@ namespace Carbon.Packaging
             }
         }
 
-        public static bool IsHidden(this IFile asset)
+        public static bool IsHidden(this IFileInfo asset)
         {
             // contains a period in the path....
 

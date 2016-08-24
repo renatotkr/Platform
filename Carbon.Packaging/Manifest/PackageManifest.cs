@@ -82,22 +82,13 @@ namespace Carbon.Packaging
         }
     }
 
-    public interface IFileInfo
-    {
-        string Name { get; }    // e.g. img/c.gif
-
-        DateTime Modified { get; }
-
-        Hash Hash { get; }    // 20 (sha1) or 32 bytes (sha256)
-    }
-
     internal struct AssetInfo : IFileInfo
     {
         public AssetInfo(IFile file)
         {
             using (var stream = file.Open())
             {
-                Hash = Hash.ComputeSHA256(stream);
+                Hash = CryptographicHash.ComputeSHA256(stream);
             }
 
             Name = file.Name;
@@ -115,13 +106,13 @@ namespace Carbon.Packaging
             #endregion
 
             Name = name;
-            Hash = new Hash(sha256);
+            Hash = new CryptographicHash(HashAlgorithmType.SHA256, sha256);
             Modified = modified;
         }
 
         public string Name { get; }
 
-        public Hash Hash { get; }
+        public CryptographicHash Hash { get; }
 
         public DateTime Modified { get; }
     }

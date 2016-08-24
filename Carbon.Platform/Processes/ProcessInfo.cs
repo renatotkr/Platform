@@ -50,7 +50,7 @@ namespace Carbon.Platform
         [Member(8), Optional] // if running inside a docker container
         public string ContainerId { get; set; } // 8fddbcbb101c
 
-        [Member(9, Mutable = true)] // a code indication weather we succesfully exited or not...
+        [Member(9, mutable: true)] // a code indication weather we succesfully exited or not...
         public int? ExitStatus { get; set; }
 
         [Member(10)]
@@ -63,21 +63,23 @@ namespace Carbon.Platform
 
         // CPU Cycles / load
 
-        [Member(12, Mutable = true)]
+        [Member(12, mutable: true)]
         public long CallCount { get; set; }
 
-        [Member(13, Mutable = true)]
+        [Member(13, mutable: true)]
         public long MemoryUsed { get; set; }
 
-        [Member(14, Mutable = true)]
+        [Member(14, mutable: true)]
         public long DataIn { get; } // egress?
 
-        [Member(15, Mutable = true)]
+        [Member(15, mutable: true)]
         public long DataOut { get; }
 
         #endregion
     }
 }
+
+// IsolationLevel: PhysicalHost, VirtualHost, Container
 
 // In docker, we may need to assign dynamic ports to processes if we're sharing a single IP address on the host.
 
