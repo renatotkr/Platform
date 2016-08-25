@@ -23,6 +23,10 @@ namespace Carbon.Packaging
 
         public Semver Version => version;
 
+        public long RepositoryId { get; set; }
+
+        public Revision Revision { get; set; }
+
         public IList<PackageDependency> Dependencies => new List<PackageDependency>();
 
         public void Set(string name, Semver version)

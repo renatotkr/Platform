@@ -1,4 +1,4 @@
-﻿namespace Carbon.Platform
+﻿namespace Carbon.Hosting
 {
     public interface IHost
     {

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using Carbon.Platform;
-using Carbon.Packaging;
 using Carbon;
+using Carbon.Packaging;
+using Carbon.Storage;
 
 namespace GitHub
 {
@@ -46,14 +46,10 @@ namespace GitHub
         #region Refs
 
         public Task<GitRef> GetRef(string refName)
-        {
-            return client.GetRef(accountName, repositoryName, refName);
-        }
+            => client.GetRef(accountName, repositoryName, refName);
 
-        public Task<GetRefsResult> GetRefs()
-        {
-            return client.GetRefs(accountName, repositoryName);
-        }
+        public Task<GitRef[]> GetRefs()
+            => client.GetRefs(accountName, repositoryName);
 
         #endregion
 
@@ -70,9 +66,7 @@ namespace GitHub
         }
 
         public Task<IList<GitBranch>> GetBranches()
-        {
-            return client.GetBranches(accountName, repositoryName);
-        }
+            => client.GetBranches(accountName, repositoryName);
 
         public Task TagAsync(ICommit commit, Semver version)
         {

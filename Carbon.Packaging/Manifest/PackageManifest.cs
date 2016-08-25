@@ -88,7 +88,7 @@ namespace Carbon.Packaging
         {
             using (var stream = file.Open())
             {
-                Hash = CryptographicHash.ComputeSHA256(stream);
+                Hash = Hash.ComputeSHA256(stream);
             }
 
             Name = file.Name;
@@ -108,13 +108,13 @@ namespace Carbon.Packaging
             #endregion
 
             Name = name;
-            Hash = new CryptographicHash(HashAlgorithmType.SHA256, sha256);
+            Hash = new Hash(HashAlgorithmType.SHA256, sha256);
             Modified = modified;
         }
 
         public string Name { get; }
 
-        public CryptographicHash Hash { get; }
+        public Hash Hash { get; }
 
         public DateTime Modified { get; }
     }

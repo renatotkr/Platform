@@ -27,7 +27,7 @@ namespace Carbon.Packaging
 
         public async Task<PackageInfo> FindAsync(long id, bool includeReleases = true)
         {
-            var package = await db.Packages.GetAsync(new Key("id", id)).ConfigureAwait(false);
+            var package = await db.Packages.GetAsync(new RecordKey("id", id)).ConfigureAwait(false);
 
             if (includeReleases)
             {
@@ -42,7 +42,7 @@ namespace Carbon.Packaging
 
         public async Task<IPackage> FindAsync(long id, Semver version)
         {
-            if (version.Level == VersionCategory.Patch && version.Flags == SemverFlags.None)
+            if (version.Level == SemverLevel.Patch && version.Flags == SemverFlags.None)
             {
                 return await db.PackageReleases.QueryFirstOrDefaultAsync(
                     Eq("id", id),
@@ -63,10 +63,10 @@ namespace Carbon.Packaging
             }
         }
 
-        public Task<PackageRelease> FindAsync(CryptographicHash hash)
+        public Task<PackageInfo> FindAsync(Hash hash)
             => db.PackageReleases.QueryFirstOrDefaultAsync(Eq("hash", hash));
 
-        public async Task CreateAsync(PackageRelease release)
+        public async Task CreateAsync(PackageInfo release)
         {
             #region Preconditions
 
@@ -78,7 +78,7 @@ namespace Carbon.Packaging
 
             #endregion
 
-            if (release.Version.Level != VersionCategory.Minor)
+            if (release.Version.Level != SemverLevel.Minor)
                 throw new Exception("All version levels must be assigned");
 
             if (release.Version.Flags != SemverFlags.None)
@@ -90,7 +90,7 @@ namespace Carbon.Packaging
 
     public interface IPackageDb
     {
-        ITable<PackageInfo>    Packages        { get; }
-        ITable<PackageRelease> PackageReleases { get; }
+        ITable<PackageInfo> Packages        { get; }
+        ITable<PackageInfo> PackageReleases { get; }
     }
 }

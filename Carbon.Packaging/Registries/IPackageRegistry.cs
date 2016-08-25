@@ -8,7 +8,7 @@ namespace Carbon.Packaging
 
         Task<IPackage> FindAsync(long id, Semver version);
 
-        Task CreateAsync(PackageRelease package);
+        Task CreateAsync(PackageInfo package);
     }
 }
 

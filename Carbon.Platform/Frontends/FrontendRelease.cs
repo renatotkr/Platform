@@ -17,14 +17,14 @@ namespace Carbon.Platform
         [Member(3)]
         public string Name { get; set; }
 
-        [Member(5)]
-        public long RepositoryId { get; set; }
+        [Member(4)]
+        public long RepositoryId { get; }
 
-        [Member(6, MaxLength = 40)] // Commit or named tag
-        public string Revision { get; set; }
+        [Member(5, MaxLength = 40)] // Commit or named tag
+        public Revision Revision { get; set; }
 
-        [Member(7)] // packageHash
-        public CryptographicHash Hash { get; set; }
+        [Member(6)]
+        public Hash Hash { get; set; }
 
         [Member(11)]
         public long CreatorId { get; set; }

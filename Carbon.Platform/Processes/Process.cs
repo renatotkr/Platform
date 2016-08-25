@@ -1,16 +1,17 @@
 ﻿using System;
 
-namespace Carbon.Platform
+namespace Carbon.Hosting
 {
     using Data.Annotations;
     using Networking;
+    using Programming;
 
     [Record(TableName = "Processes")]
-    public class ProcessInfo
+    public class Process
     {
-        public ProcessInfo() { }
+        public Process() { }
 
-        public ProcessInfo(IProgram program, IHost host)
+        public Process(IProgram program, IHost host)
         {
             #region Preconditions
 
@@ -32,7 +33,6 @@ namespace Carbon.Platform
         [Member(2), Indexed]
         public long ProgramId { get; set; }
 
-
         [Member(3), Indexed] // if servicing a backend
         public long? BackendId { get; set; }
 
@@ -45,11 +45,11 @@ namespace Carbon.Platform
         [Member(6)]
         public int PID { get; set; } // https://en.wikipedia.org/wiki/Process_identifier
 
-        [Member(7)] 
-        public Semver ProgramVersion { get; set; }
+        [Member(7)]
+        public string Name { get; set; }
 
-        [Member(8)]
-        public string ProgramSlug { get; set; }
+        [Member(8)] 
+        public Semver Version { get; set; }
 
         [Member(9, mutable: true)] // a code indication weather we succesfully exited or not...
         public int? ExitStatus { get; set; }

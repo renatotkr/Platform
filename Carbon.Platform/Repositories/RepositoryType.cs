@@ -1,4 +1,4 @@
-﻿namespace Carbon
+﻿namespace Carbon.Storage
 {
     public enum RepositoryType
     {

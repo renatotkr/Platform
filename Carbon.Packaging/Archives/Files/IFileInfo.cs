@@ -10,6 +10,6 @@ namespace Carbon.Packaging
 
         DateTime Modified { get; }
 
-        CryptographicHash Hash { get; } // sha256
+        Hash Hash { get; } // sha256
     }
 }

@@ -1,12 +1,20 @@
 ﻿using System;
 
-namespace Carbon.Platform
+namespace Carbon.Storage
 {
     using Data.Annotations;
 
     [Record(TableName = "Repositories")]
     public class RepositoryInfo : IRepository
     {
+        public RepositoryInfo() { }
+
+        public RepositoryInfo(RepositoryType type, Uri url)
+        {
+            Type = type;
+            Url = url;
+        }
+
         [Member(1), Identity]
         public long Id { get; set; }
         

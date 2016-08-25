@@ -2,7 +2,7 @@
 
 using System.Text;
 
-namespace Carbon.Platform
+namespace Carbon.Packaging
 {
     public struct RepositoryDetails
     {

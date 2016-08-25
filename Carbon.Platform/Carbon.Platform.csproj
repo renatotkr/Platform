@@ -43,12 +43,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Certificates\Certificate.cs" />
-    <Compile Include="Hardware\Hosts\Ec2Instance.cs" />
-    <Compile Include="Hardware\Hosts\HostInfo.cs" />
-    <Compile Include="Hardware\Hosts\HostStatus.cs" />
-    <Compile Include="Hardware\NetworkInterfaces\NetworkInterfaceInfo.cs" />
-    <Compile Include="Hardware\Volumes\VolumeStatus.cs" />
+    <Compile Include="Frontends\IFrontend.cs" />
+    <Compile Include="Hosting\Ec2Instance.cs" />
+    <Compile Include="Hosting\Host.cs" />
+    <Compile Include="Hosting\HostStatus.cs" />
+    <Compile Include="Networking\NetworkInterface.cs" />
+    <Compile Include="Repositories\ICommit.cs" />
+    <Compile Include="Repositories\Revision.cs" />
+    <Compile Include="Storage\VolumeStatus.cs" />
+    <Compile Include="Networking\NetworkLayer.cs" />
     <Compile Include="Networking\NetworkProtocal.cs" />
+    <Compile Include="Networking\NetworkPeer.cs" />
     <Compile Include="Networking\NetworkRule.cs" />
     <Compile Include="Networking\IpAddressType.cs" />
     <Compile Include="Networking\IPAddressRange.cs" />
@@ -62,17 +67,16 @@
     <Compile Include="Repositories\RepositoryInfo.cs" />
     <Compile Include="Repositories\RepositoryType.cs" />
     <Compile Include="Programs\ProgramType.cs" />
-    <Compile Include="Processes\ProcessInfo.cs" />
+    <Compile Include="Processes\Process.cs" />
     <Compile Include="Frontends\FrontendFileInfo.cs" />
     <Compile Include="Frontends\FrontendRelease.cs" />
-    <Compile Include="Hardware\Hosts\IHost.cs" />
-    <Compile Include="Programs\ProgramInfo.cs" />
-    <Compile Include="Programs\ProgramRelease.cs" />
+    <Compile Include="Hosting\IHost.cs" />
+    <Compile Include="Programs\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\HostName.cs" />
     <Compile Include="Frontends\FrontendInfo.cs" />
     <Compile Include="Backends\BackendInfo.cs" />
-    <Compile Include="Hardware\Volumes\VolumeInfo.cs" />
+    <Compile Include="Storage\VolumeInfo.cs" />
     <Compile Include="Zones\ZoneLevel.cs" />
     <Compile Include="Zones\ProviderId.cs" />
   </ItemGroup>

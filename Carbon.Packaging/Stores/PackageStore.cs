@@ -16,7 +16,7 @@ namespace Carbon.Packaging
             this.blobStore = blobStore;
         }
 
-        public async Task<CryptographicHash> PutAsync(Package package)
+        public async Task<Hash> PutAsync(Package package)
         {
             #region Preconditions
 
@@ -28,7 +28,7 @@ namespace Carbon.Packaging
 
             using (var ms = new MemoryStream())
             {
-                var hash = CryptographicHash.ComputeSHA256(ms, true);
+                var hash = Hash.ComputeSHA256(ms, true);
 
                 await package.ZipToAsync(ms).ConfigureAwait(false);
 

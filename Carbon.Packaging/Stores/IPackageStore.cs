@@ -9,6 +9,6 @@ namespace Carbon.Packaging
     {
         Task<Package> GetAsync(string name, Semver version);
 
-        Task<CryptographicHash> PutAsync(Package package);
+        Task<Hash> PutAsync(Package package);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-using Carbon.Platform;
+using Carbon.Storage;
 
 namespace GitHub
 {
@@ -23,10 +23,7 @@ namespace GitHub
         #region ICommit
 
         [IgnoreDataMember]
-        string ICommit.Id
-        {
-            get { return Sha; }
-        }
+        string ICommit.Id => Sha;
 
         #endregion
     }

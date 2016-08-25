@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Carbon.Platform
+namespace Carbon.Packaging
 {
     public static class RepositoryProvider
     {
@@ -23,8 +23,8 @@ namespace Carbon.Platform
 
     public enum RepositoryProviderId
     {
-        GitHub = 5000,
+        GitHub    = 5000,
         BitBucket = 5001,
-        GitLab = 5002
+        GitLab    = 5002
     }
 }

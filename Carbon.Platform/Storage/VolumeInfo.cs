@@ -1,10 +1,8 @@
 ﻿using System;
 
-namespace Carbon.Platform
+namespace Carbon.Storage
 {
     using Data.Annotations;
-
-    // Are images & snapshots volumes
 
     [Record(TableName = "Volumes")]
     public class VolumeInfo
@@ -12,11 +10,11 @@ namespace Carbon.Platform
         [Member(1), Identity]
         public long Id { get; set; }
 
-        [Member(2)]
-        public VolumeType Type { get; set; }
-
-        [Member(3), Unique] // guid by default?
+        [Member(2), Unique] // guid by default?
         public string Name { get; set; }
+
+        [Member(3)]
+        public VolumeType Type { get; set; }
 
         [Member(4)]
         public VolumeStatus Status { get; }
@@ -55,6 +53,4 @@ namespace Carbon.Platform
     // A volume may also be a snapshot or image...
 
     // EncrpytionKey
- 
-    // snapshot / source?
 }

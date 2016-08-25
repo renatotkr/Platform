@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Carbon.Platform
+namespace Carbon.Hosting
 {
     using Data;
 
@@ -47,7 +47,7 @@ namespace Carbon.Platform
         {
             var text = await httpClient.GetStringAsync(baseUri + "/latest/dynamic/instance-identity/document").ConfigureAwait(false);
 
-            return XObject.Parse(text).As<Ec2Instance>();
+            return JsonObject.Parse(text).As<Ec2Instance>();
         }
     }
 }

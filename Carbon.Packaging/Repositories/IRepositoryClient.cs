@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Carbon.Platform
+namespace Carbon.Packaging
 {
-    using Packaging;
+    using Storage;
 
     public interface IRepositoryClient
     {

@@ -1,8 +1,8 @@
-﻿namespace GitHub
-{
-    using System;
-    using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
+namespace GitHub
+{
     public class GitRef
     {
         [DataMember(Name = "ref")]
@@ -17,7 +17,6 @@
 }
 
 /*
-
 {
     "ref": "refs/heads/master",
     "url": "https://api.github.com/repos/octocat/Hello-World/git/refs/heads/master",

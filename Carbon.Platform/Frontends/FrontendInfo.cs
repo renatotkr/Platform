@@ -20,7 +20,6 @@
         [Member(5, MaxLength = 40)] // Commit or named tag
         public string Revision { get; set; }
 
-
         [Member(7)]
         public long BackendId { get; set; }
     }

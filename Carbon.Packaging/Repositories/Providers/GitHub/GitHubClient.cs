@@ -15,7 +15,10 @@ namespace GitHub
         private static readonly ProductInfoHeaderValue userAgent = new ProductInfoHeaderValue("Carbon", "1.0.0");
 
         private readonly string baseUri = "https://api.github.com";
-        private readonly HttpClient httpClient;
+
+        private readonly HttpClient httpClient = new HttpClient(new HttpClientHandler {
+            AllowAutoRedirect = false
+        });
 
         public const int Version = 3;
 
@@ -30,15 +33,12 @@ namespace GitHub
             #endregion
 
             this.auth = credentials;
-            
-            this.httpClient = new HttpClient(new HttpClientHandler {
-                AllowAutoRedirect = false
-            });
+           
         }
 
         public async Task<string> CreateAuthorization(string userName, string password, AuthorizationRequest request)
         {
-            var postData = XObject.FromObject(request).ToString();
+            var postData = JsonObject.FromObject(request).ToString();
 
             // POST /authorizations
             var httpRequest = new HttpRequestMessage(HttpMethod.Post, baseUri + "/authorizations") {
@@ -46,8 +46,8 @@ namespace GitHub
             };
 
             httpRequest.Headers.Authorization = new AuthenticationHeaderValue(
-                scheme: "Basic",
-                parameter: Convert.ToBase64String(Encoding.ASCII.GetBytes($"{userName}:{password}"))
+                scheme    : "Basic",
+                parameter : Convert.ToBase64String(Encoding.ASCII.GetBytes($"{userName}:{password}"))
             );
 
             using (var response = await httpClient.SendAsync(httpRequest).ConfigureAwait(false))
@@ -102,7 +102,7 @@ namespace GitHub
             return result.As<GitRef>();
         }
 
-        public async Task<GetRefsResult> GetRefs(string accountName, string repoName)
+        public async Task<GitRef[]> GetRefs(string accountName, string repoName)
         {
             // GET /repos/:owner/:repo/git/refs
             var request = new HttpRequestMessage(HttpMethod.Get, 
@@ -111,14 +111,7 @@ namespace GitHub
 
             var result = await Send(request).ConfigureAwait(false);
 
-            var refs = new GetRefsResult();
-            
-            foreach (var item in (XArray)result)
-            {
-                refs.Add(item.As<GitRef>());
-            }
-
-            return refs;
+            return result.ToArrayOf<GitRef>();
         }
 
         public async Task<IList<GitBranch>> GetBranches(string accountName, string repoName)
@@ -130,7 +123,7 @@ namespace GitHub
 
             var result = await Send(request).ConfigureAwait(false);
 
-            return ((XArray)result).ToArrayOf<GitBranch>();
+            return result.ToArrayOf<GitBranch>();
         }
 
         /// <summary>
@@ -165,7 +158,7 @@ namespace GitHub
 
         #region Helpers
 
-        private async Task<XNode> Send(HttpRequestMessage httpRequest, bool authorize = true)
+        private async Task<JsonNode> Send(HttpRequestMessage httpRequest, bool authorize = true)
         {
             if (authorize)
             {
@@ -183,7 +176,7 @@ namespace GitHub
                     throw new Exception(responseText + " : " + httpRequest.RequestUri);
                 }
 
-                return XNode.Parse(responseText);
+                return JsonNode.Parse(responseText);
             }
         }
 

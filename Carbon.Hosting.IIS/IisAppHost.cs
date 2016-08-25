@@ -11,6 +11,7 @@ namespace Carbon.Hosting.IIS
 {
     using Logging;
     using Packaging;
+    using Programming;
     using Platform;
 
     public class IisAppHost : IProgramHost, IDisposable
@@ -18,17 +19,17 @@ namespace Carbon.Hosting.IIS
         private readonly ProgramEnvironment env;
         private readonly ServerManager serverManager = new ServerManager();
 
-        private readonly HostInfo host;
+        private readonly Host host;
         private readonly ILogger log;
 
-        public IisAppHost(HostInfo machine, ProgramEnvironment env, ILogger log)
+        public IisAppHost(Host machine, ProgramEnvironment env, ILogger log)
         {
             this.host = machine;
             this.env = env;
             this.log = log;
         }
 
-        public IEnumerable<ProcessInfo> Scan()
+        public IEnumerable<Process> Scan()
         {
             foreach (var site in serverManager.Sites)
             {
@@ -38,7 +39,7 @@ namespace Carbon.Hosting.IIS
             }
         }
 
-        public ProcessInfo Find(string slug)
+        public Process Find(string slug)
         {
             var site = serverManager.Sites[slug];
 
@@ -179,7 +180,7 @@ namespace Carbon.Hosting.IIS
         public bool IsDeployed(IProgram release)
             => GetAppPath(release).Exists;
 
-        public Task<ProcessInfo> ActivateAsync(IProgram app)
+        public Task<Process> ActivateAsync(IProgram app)
         {
             var site = serverManager.Sites[app.Name];
 
@@ -333,9 +334,9 @@ namespace Carbon.Hosting.IIS
             return new DirectoryInfo(path);
         }
 
-        public IList<Request> GetActiveRequests(ProcessInfo instance, TimeSpan elapsedFilter)
+        public IList<Request> GetActiveRequests(Process instance, TimeSpan elapsedFilter)
         {
-            var pool = serverManager.ApplicationPools[instance.Slug];
+            var pool = serverManager.ApplicationPools[instance.Name];
 
             var requests = new List<Request>();
 
@@ -350,7 +351,7 @@ namespace Carbon.Hosting.IIS
             return requests;
         }
 
-        public ProcessInfo FromSite(Site site)
+        public Process FromSite(Site site)
         {
             var application = site.Applications["/"]; // or 0
             var directory = application.VirtualDirectories["/"];
@@ -369,11 +370,10 @@ namespace Carbon.Hosting.IIS
 
             // portfolio/1.5
 
-            var app = new ProcessInfo {
-                Slug = site.Name,
-                Id = site.Id
+            var app = new Process {
+                Id   = site.Id,
+                Name = site.Name
             };
-
 
             return app;
         }

@@ -3,6 +3,7 @@
 namespace Carbon.Platform
 {
     using Data.Annotations;
+    using Hosting;
     using Networking;
 
     [Record(TableName = "Backends")]
@@ -25,7 +26,7 @@ namespace Carbon.Platform
 
         public UrlRoute Routes { get; set; }
 
-        public IList<ProcessInfo> Processes { get; set; }
+        public IList<Process> Processes { get; set; }
     }
 }
 

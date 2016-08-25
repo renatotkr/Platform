@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Net;
 
-namespace Carbon.Platform
+namespace Carbon.Hosting
 {
     using Data.Annotations;
     using Networking;
+    using Storage;
 
     [Record(TableName = "Hosts")]
-    public class HostInfo : IHost
+    public class Host : IHost
     {
         [Member(1), Identity]
         public long Id { get; set; }

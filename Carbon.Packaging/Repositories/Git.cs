@@ -5,7 +5,7 @@ using System.Net;
 using Bitbucket;
 using GitHub;
 
-namespace Carbon.Packaging.Resolvers
+namespace Carbon.Packaging
 {
     using Platform;
 

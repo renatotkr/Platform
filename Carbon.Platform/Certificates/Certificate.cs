@@ -24,11 +24,12 @@ namespace Carbon.Platform
 
         public string KeyAlgorithm { get; set; }
 
+        [Member(7)]
         public string SerialNumber { get; set; }
-
 
         [Member(12), Timestamp(false)]
         public DateTime Created { get; set; }
+
         // VersionNumber
         // SerialNumber
         // RSA_2048

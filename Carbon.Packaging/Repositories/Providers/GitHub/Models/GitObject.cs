@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-using Carbon.Platform;
+using Carbon.Packaging;
 
 namespace GitHub
 {
@@ -22,8 +22,7 @@ namespace GitHub
         {
             if (Type != "commit") throw new Exception("Not a commit. Was " + Type);
 
-            return new GitCommit
-            {
+            return new GitCommit {
                 Sha = Sha,
                 Url = Url
             };

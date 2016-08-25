@@ -1,4 +1,4 @@
-﻿namespace Carbon.Platform
+﻿namespace Carbon.Programming
 {
     public enum ProgramType
     {

@@ -74,7 +74,7 @@ namespace Bitbucket
             }
         }
 
-        private async Task<XNode> Send(HttpRequestMessage httpRequest)
+        private async Task<JsonObject> Send(HttpRequestMessage httpRequest)
         {
             httpRequest.Headers.UserAgent.Add(new ProductInfoHeaderValue("Carbon", "1.0.0"));
 
@@ -92,7 +92,7 @@ namespace Bitbucket
                     throw new Exception(responseText + " : " + httpRequest.RequestUri.ToString());
                 }
 
-                return XObject.Parse(responseText);
+                return JsonObject.Parse(responseText);
             }
         }
     }

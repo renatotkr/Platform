@@ -7,11 +7,11 @@ namespace Carbon.Packaging
 {
     using Data;
 
-    public class StaticPackageRegistry : Collection<PackageRelease>, IPackageRegistry
+    public class StaticPackageRegistry : Collection<PackageInfo>, IPackageRegistry
     {
         public StaticPackageRegistry() { }
 
-        internal StaticPackageRegistry(PackageRelease[] list)
+        internal StaticPackageRegistry(PackageInfo[] list)
             : base(list)
         { }
 
@@ -22,7 +22,7 @@ namespace Carbon.Packaging
             => Task.FromResult<IPackage>(this.FirstOrDefault(l => l.Id == id && l.Version == version));
 
         public string Serialize()
-            => XNode.FromObject(this).ToString();
+            => JsonObject.FromObject(this).ToString();
 
         public static StaticPackageRegistry Deserialize(string text)
         {
@@ -36,10 +36,10 @@ namespace Carbon.Packaging
          
             // TODO: Use protobuff....
                
-            return new StaticPackageRegistry(XArray.Parse(text).ToArrayOf<PackageRelease>());
+            return new StaticPackageRegistry(JsonArray.Parse(text).ToArrayOf<PackageInfo>());
         }
 
-        public Task CreateAsync(PackageRelease package)
+        public Task CreateAsync(PackageInfo package)
         {
             throw new NotImplementedException();
         }

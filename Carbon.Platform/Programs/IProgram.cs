@@ -1,11 +1,11 @@
-﻿namespace Carbon.Platform
+﻿namespace Carbon.Programming
 {
     public interface IProgram
     {
-        long Id { get; }        // 1
+        long Id { get; }
 
-        Semver Version { get; } // 2
+        Semver Version { get; }
 
-        string Name { get; }    // 3
+        string Name { get; }
     }
 }

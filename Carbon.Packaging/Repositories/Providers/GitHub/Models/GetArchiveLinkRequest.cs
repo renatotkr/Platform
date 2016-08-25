@@ -1,6 +1,5 @@
 ﻿using System;
-
-using Carbon.Platform;
+using Carbon;
 
 namespace GitHub
 {

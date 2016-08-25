@@ -7,6 +7,7 @@ namespace Carbon.Packaging
 {
     using Data;
     using Data.Annotations;
+    using Storage;
 
     public class PackageMetadata
     {
@@ -32,14 +33,14 @@ namespace Carbon.Packaging
         public IList<PackageDependencyInfo> Dependencies { get; } = new List<PackageDependencyInfo>();
 
         [Optional]
-        public PackageRepository Repository { get; set; }
+        public RepositoryInfo Repository { get; set; }
 
         [Optional]
         public string[] Files { get; set; }
 
         public static PackageMetadata Parse(string text)
         {
-            var json = XObject.Parse(text);
+            var json = JsonObject.Parse(text);
 
             var metadata = new PackageMetadata {
                 Name = json["name"]
@@ -59,15 +60,26 @@ namespace Carbon.Packaging
             {
                 var repositoryNode = json["repository"];
 
-                if (repositoryNode.Type == XType.String)
+                if (repositoryNode.IsObject)
                 {
-                    metadata.Repository = new PackageRepository(RepositoryType.Git, repositoryNode);
+                    /*
+                    { 
+                      "type" : "git",
+                      "url" : "https://github.com/npm/npm.git"
+                    }
+                    */
+
+                    metadata.Repository = new RepositoryInfo(RepositoryType.Git, new Uri(repositoryNode["url"]));
+                }
+                else
+                {
+                    metadata.Repository = new RepositoryInfo(RepositoryType.Git, new Uri(repositoryNode));
                 }
             }
 
             if (json.ContainsKey("dependencies"))
             {
-                foreach (var pair in (XObject)json["dependencies"])
+                foreach (var pair in (JsonObject)json["dependencies"])
                 {
                     var dep = new PackageDependencyInfo(pair.Key, pair.Value);
 
@@ -77,12 +89,12 @@ namespace Carbon.Packaging
    
             if (json.ContainsKey("files"))
             {
-                metadata.Files = ((XArray)json["files"]).ToArrayOf<string>();
+                metadata.Files = json["files"].ToArrayOf<string>();
             }
 
             if (json.ContainsKey("contributors"))
             {
-                metadata.Contributors = ((XArray)json["contributors"]).ToArrayOf<PackageContributor>();
+                metadata.Contributors = json["contributors"].ToArrayOf<PackageContributor>();
             }
 
             return metadata;
@@ -114,26 +126,6 @@ namespace Carbon.Packaging
         public bool IsFile => !char.IsDigit(Value[0]);
 
         public Semver Version => Semver.Parse(Value);
-    }
-
-    /*
-    { 
-      "type" : "git",
-      "url" : "https://github.com/npm/npm.git"
-    }
-    */
-
-    public struct PackageRepository
-    {
-        public PackageRepository(RepositoryType type, string url)
-        {
-            Type = type;
-            Url = url;
-        }
-
-        public RepositoryType Type { get; }
-
-        public string Url { get; }
     }
 
     public class PackageContributor
