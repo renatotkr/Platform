@@ -1,11 +1,10 @@
 ﻿using System;
 
-namespace Carbon.Platform
+namespace Carbon.Hosting
 {
-    // TODO: Move to core
     // http://tools.ietf.org/html/rfc952
 
-    public class HostName
+    public class Hostname
     {
         public static bool IsValid(string text)
             => Uri.CheckHostName(text) != UriHostNameType.Unknown;

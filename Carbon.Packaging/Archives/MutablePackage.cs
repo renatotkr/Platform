@@ -4,10 +4,12 @@ using System.IO;
 
 namespace Carbon.Packaging
 {
+    using Storage;
+
     public class MutablePackage : Package
     {
         private readonly Package basePackage;
-        private readonly List<IFile> files = new List<IFile>();
+        private readonly List<IBlob> files = new List<IBlob>();
 
         public MutablePackage(Package basePackage)
         {
@@ -25,7 +27,7 @@ namespace Carbon.Packaging
             files.Add(new MemoryFile(name, stream));
         }
 
-        public override IEnumerable<IFile> Enumerate()
+        public override IEnumerable<IBlob> Enumerate()
         {
             foreach (var entry in basePackage.Enumerate())
             {

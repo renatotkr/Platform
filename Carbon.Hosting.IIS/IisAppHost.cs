@@ -12,7 +12,6 @@ namespace Carbon.Hosting.IIS
     using Logging;
     using Packaging;
     using Programming;
-    using Platform;
 
     public class IisAppHost : IProgramHost, IDisposable
     {

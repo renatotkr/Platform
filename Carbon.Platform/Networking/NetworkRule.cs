@@ -4,7 +4,7 @@
 
     // AKA firewall rule
 
-    [Record(TableName = "NetworkRules")]
+    [Dataset("Rules", Schema = "Networking")]
     public class NetworkRule
     {
         [Member(1), Key]
@@ -25,7 +25,16 @@
 
     public enum MatchAction
     {
-        Allow,
-        Deny
+        Allow = 1,
+        Deny  = 2,
+        Log   = 3
     }   
 }
+
+
+// Google Cloud Notes:
+
+// By default, all incoming traffic from outside a network is blocked and no packet is allowed into an instance without an appropriate firewall rule.
+// Firewall rules only regulate incoming traffic to an instance.
+// Once a connection has been established with an instance, traffic is permitted in both directions over that connection. 
+// All instances are configured with a "hidden" firewall rule that drops TCP connections after 10 minutes of inactivity. 

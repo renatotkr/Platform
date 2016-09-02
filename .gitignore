@@ -4,3 +4,5 @@ bin
 Carbon.Platform.csproj.user
 .vs
 /release
+*.xproj.user
+*project.lock.json

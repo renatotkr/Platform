@@ -3,7 +3,7 @@
     using Data;
     using Data.Annotations;
 
-    [Record(TableName = "PackageFiles")]
+    [Dataset("PackageFiles", Schema = "packaging")]
     public class PackageFile
     {
         [Member(1), Key]

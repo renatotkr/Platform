@@ -4,7 +4,7 @@ namespace Carbon.Networking
 {
     using Data.Annotations;
 
-    [Record(TableName = "NetworkRoutes")]
+    [Dataset("Routes", Schema = "Networking")]
     public class NetworkRoute
     {
         [Member(1), Key]

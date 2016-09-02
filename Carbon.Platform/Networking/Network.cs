@@ -5,7 +5,7 @@ namespace Carbon.Networking
 {
     using Data.Annotations;
 
-    [Record(TableName = "Networks")]
+    [Dataset("Networks", Schema = "Networking")]
     public class Network
     {
         [Member(1)]
@@ -65,12 +65,6 @@ namespace Carbon.Networking
     }
 }
 
-// Google Cloud Notes:
-
-// By default, all incoming traffic from outside a network is blocked and no packet is allowed into an instance without an appropriate firewall rule.
-// Firewall rules only regulate incoming traffic to an instance.
-// Once a connection has been established with an instance, traffic is permitted in both directions over that connection. 
-// All instances are configured with a "hidden" firewall rule that drops TCP connections after 10 minutes of inactivity. 
 
 /*
 us-west1	    10.138.0.0/20	10.138.0.1

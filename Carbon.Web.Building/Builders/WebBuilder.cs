@@ -29,9 +29,9 @@ namespace Carbon.Builder
         private readonly ILogger log;
 
         private readonly CssResolver cssResolver;
-        private readonly IBlobStore fs;
+        private readonly IBucket fs;
 
-        public WebBuilder(ILogger log, Package package, IBlobStore fs)
+        public WebBuilder(ILogger log, Package package, IBucket fs)
         {
             #region Preconditions
 
@@ -133,7 +133,7 @@ namespace Carbon.Builder
 
         #region Compilers
 
-        private async Task<Blob> CompileCssAsync(IFile file)
+        private async Task<Blob> CompileCssAsync(IBlob file)
         {
             var sourceText = await file.ReadStringAsync().ConfigureAwait(false);
 
@@ -179,7 +179,7 @@ namespace Carbon.Builder
 
         #region Helpers
 
-        private static async Task<Blob> ToBlob(IFile asset)
+        private static async Task<Blob> ToBlob(IBlob asset)
         {
             var ms = new MemoryStream();
 

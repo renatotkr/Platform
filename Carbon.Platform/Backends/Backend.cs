@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 
-namespace Carbon.Platform
+namespace Carbon.Computing
 {
     using Data.Annotations;
     using Hosting;
     using Networking;
 
-    [Record(TableName = "Backends")]
-    public class BackendInfo
+    [Dataset("Backends")]
+    public class Backend
     {
         [Member(1), Identity]
         public long Id { get; set; }
@@ -15,22 +15,22 @@ namespace Carbon.Platform
         [Member(2), Unique]
         public string Name { get; set; } // e.g. carbonmade
 
-        [Member(4)]
+        [Member(3)]
         public long ProgramId { get; set; }
 
-        [Member(5, mutable: true)]
+        [Member(5), Mutable]
         public Semver ProgramVersion { get; set; }
 
-        [Member(6, mutable: true)]
+        [Member(6), Mutable]
         public long RequestCount { get; set; }
 
-        public UrlRoute Routes { get; set; }
+        public IList<UrlRoute> Routes { get; set; }
 
         public IList<Process> Processes { get; set; }
     }
 }
 
-// A backend service....
+// A backend exposes a program over a service (http or borg) .... 
 
 // - spawns one or more processes to handle user requests (autoscales)
 // - hosted behind a load balancer

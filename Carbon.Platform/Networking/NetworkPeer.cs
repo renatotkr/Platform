@@ -2,7 +2,7 @@
 {
     using Data.Annotations;
 
-    [Record(TableName = "NetworkPeers")]
+    [Dataset("Peers", Schema = "Networking")]
     public class NetworkPeer
     {
         [Member(1), Key]

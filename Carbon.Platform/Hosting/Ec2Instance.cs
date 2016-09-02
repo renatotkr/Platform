@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Carbon.Hosting
 {
-    using Data;
+    using Json;
 
     public class Ec2Instance
     {

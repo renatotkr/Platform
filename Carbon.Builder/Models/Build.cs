@@ -18,13 +18,16 @@ namespace Carbon.Building
         [Member(4)] // a commit or tag (named commit)
         public string Revision { get; set; }
 
-        [Member(5)]
-        public DateTime Created { get; set; }
-
         [Member(6, mutable: true)]
         public DateTime? Started { get; set; }
 
         [Member(7, mutable: true)]
         public DateTime? Completed { get; set; }
+
+        [Member(11)]
+        public long? CreatorId { get; set; }
+
+        [Member(12), Timestamp(false)]
+        public DateTime Created { get; set; }
     }
 }

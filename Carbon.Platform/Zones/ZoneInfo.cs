@@ -2,7 +2,7 @@
 {
     using Data.Annotations;
 
-    [Record(TableName = "Zones")]
+    [Dataset("Zones")]
     public class ZoneInfo
     {
         [Member(1), Identity]

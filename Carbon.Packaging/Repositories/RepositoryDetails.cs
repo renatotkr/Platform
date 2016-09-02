@@ -1,16 +1,17 @@
 ﻿using System;
-
 using System.Text;
 
 namespace Carbon.Packaging
 {
+    using Storage;
+
     public struct RepositoryDetails
     {
         public RepositoryDetails(
             RepositoryProviderId provider, 
             string accountName, 
             string name, 
-            string revision)
+            Revision? revision)
         {
             Provider = provider;
             AccountName = accountName;
@@ -24,7 +25,7 @@ namespace Carbon.Packaging
 
         public string Name { get; }
 
-        public string Revision { get; }
+        public Revision? Revision { get; }
 
         public override string ToString()
         {
@@ -43,7 +44,7 @@ namespace Carbon.Packaging
             if (Revision != null)
             {
                 sb.Append("#");
-                sb.Append(Revision);
+                sb.Append(Revision.Value);
             }
 
             return sb.ToString();
@@ -68,7 +69,7 @@ namespace Carbon.Packaging
             var hostType = RepositoryProviderId.GitHub;
             string accountName = null;
             string repositoryName = null;
-            string revision = null;
+            Revision? revision = null;
 
             var i = 0;
 
@@ -107,13 +108,13 @@ namespace Carbon.Packaging
                     }
                     else
                     {
-                        revision = part;
+                        revision = Carbon.Storage.Revision.Parse(part);
                     }
                 }
 
                 if (i == 3)
                 {
-                    revision = part;
+                    revision = Carbon.Storage.Revision.Parse(part);
                 }
 
                 i++;

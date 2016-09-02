@@ -5,7 +5,7 @@ namespace Carbon.Networking
 {
     using Data.Annotations;
 
-    [Record(TableName = "NetworkInterfaces")]
+    [Dataset("Interfaces", Schema = "Networking")]
     public class NetworkInterface
     {
         [Member(1), Identity]
@@ -20,21 +20,21 @@ namespace Carbon.Networking
         [Member(3)] // in octects
         public long Speed { get; set; }
 
-        [Member(4, mutable: true), Indexed]
+        [Member(4), Mutable, Indexed]
         public long? HostId { get; set; }
 
         #region Stats (5-8)
 
-        [Member(5, mutable: true)]  // in octects
+        [Member(5), Mutable]  // in octects
         public long DataIn { get; }
 
-        [Member(6, mutable: true)]  // in octects
+        [Member(6), Mutable]  // in octects
         public long DataOut { get; }
 
-        [Member(7, mutable: true)]  // in octects
+        [Member(7), Mutable]  // in octects
         public long PacketsIn { get; }
 
-        [Member(8, mutable: true)]  // in octects
+        [Member(8), Mutable]  // in octects
         public long PacketsOut { get; }
 
         // [Mutable]

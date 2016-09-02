@@ -6,7 +6,7 @@ namespace Carbon.Hosting
     using Networking;
     using Programming;
 
-    [Record(TableName = "Processes")]
+    [Dataset("Processes")]
     public class Process
     {
         public Process() { }
@@ -33,14 +33,14 @@ namespace Carbon.Hosting
         [Member(2), Indexed]
         public long ProgramId { get; set; }
 
-        [Member(3), Indexed] // if servicing a backend
-        public long? BackendId { get; set; }
-
-        [Member(4), Indexed]
+        [Member(3), Indexed]
         public long HostId { get; set; }
 
-        [Member(5), Optional] // if running inside a docker container
+        [Member(4), Optional] // if running inside a docker container
         public string ContainerId { get; set; } // 8fddbcbb101c
+
+        [Member(5), Indexed] // if servicing a backend
+        public long? BackendId { get; set; }
 
         [Member(6)]
         public int PID { get; set; } // https://en.wikipedia.org/wiki/Process_identifier
@@ -51,29 +51,29 @@ namespace Carbon.Hosting
         [Member(8)] 
         public Semver Version { get; set; }
 
-        [Member(9, mutable: true)] // a code indication weather we succesfully exited or not...
+        [Member(9), Mutable] // a code indication weather we succesfully exited or not...
         public int? ExitStatus { get; set; }
 
         [Member(10)]
         public NetworkPortList Ports { get; set; }
 
-        [Member(12), Timestamp(false)]
+        [Member(12), Timestamp]
         public DateTime Created { get; set; }
 
         #region Stats
 
         // CPU Cycles / load
 
-        [Member(20, mutable: true)]
+        [Member(20), Mutable]
         public long CallCount { get; set; }
 
-        [Member(21, mutable: true)]
+        [Member(21), Mutable]
         public long MemoryUsed { get; set; }
 
-        [Member(22, mutable: true)]
+        [Member(22), Mutable]
         public long DataIn { get; } // egress?
 
-        [Member(23, mutable: true)]
+        [Member(23), Mutable]
         public long DataOut { get; }
 
         #endregion

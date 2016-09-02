@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Carbon.Packaging
 {
-    using Data;
+    using Json;
 
     public class StaticPackageRegistry : Collection<PackageInfo>, IPackageRegistry
     {

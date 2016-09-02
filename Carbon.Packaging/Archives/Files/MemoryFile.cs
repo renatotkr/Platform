@@ -3,7 +3,10 @@ using System.IO;
 
 namespace Carbon.Packaging
 {
-    internal class MemoryFile : IFile
+    using Data;
+    using Storage;
+
+    internal class MemoryFile : IBlob
     {
         private readonly Stream stream;
 
@@ -26,6 +29,10 @@ namespace Carbon.Packaging
         public string Name { get; }
 
         public DateTime Modified { get; }
+
+        public Hash Hash => Hash.ComputeSHA256(Open());
+
+        public long Size => stream.Length;
 
         public Stream Open() => stream;
     }

@@ -4,7 +4,10 @@ using System.IO.Compression;
 
 namespace Carbon.Packaging
 {
-    internal class ZipFile : IFile
+    using Data;
+    using Storage;
+
+    internal class ZipFile : IBlob
     {
         private readonly ZipArchiveEntry entry;
 
@@ -25,6 +28,10 @@ namespace Carbon.Packaging
         public string Name { get; }
 
         public DateTime Modified => entry.LastWriteTime.UtcDateTime;
+
+        public Hash Hash => Hash.ComputeSHA256(Open());
+
+        public long Size => entry.Length;
 
         public Stream Open() => entry.Open();
     }

@@ -4,7 +4,7 @@ namespace Carbon.Storage
 {
     using Data.Annotations;
 
-    [Record(TableName = "Repositories")]
+    [Dataset("Repositories")]
     public class RepositoryInfo : IRepository
     {
         public RepositoryInfo() { }

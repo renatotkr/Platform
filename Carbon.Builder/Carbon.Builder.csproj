@@ -50,12 +50,6 @@
     <Compile Include="Diagnostics\DiagnosticList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj">
-      <Project>{d16ff06d-597c-4e1a-86a9-3e3e1f3bf29b}</Project>
-      <Name>Carbon.Packaging</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

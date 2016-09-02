@@ -62,11 +62,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="StaticRegistryTests.cs" />
-    <Compile Include="AssetTests.cs" />
-    <Compile Include="CodeSourceTests.cs" />
-    <Compile Include="PackageInfoTests.cs" />
-    <Compile Include="Packaging\PackageMetadataTests.cs" />
     <Compile Include="BindingInfo.cs" />
     <Compile Include="HostNameTests.cs" />
     <Compile Include="ReportIdTests.cs" />
@@ -75,20 +70,6 @@
     <Compile Include="InstanceNameTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamTests.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Carbon.Hosting\Carbon.Hosting.csproj">
-      <Project>{6ac707d2-af74-4ddf-a4bf-a3f090803a8e}</Project>
-      <Name>Carbon.Hosting</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj">
-      <Project>{d16ff06d-597c-4e1a-86a9-3e3e1f3bf29b}</Project>
-      <Name>Carbon.Packaging</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Carbon.Platform\Carbon.Platform.csproj">
-      <Project>{2003eabf-fab5-48d2-a921-0901494a54b5}</Project>
-      <Name>Carbon.Platform</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

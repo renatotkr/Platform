@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Carbon.Data;
+using Carbon.Json;
 
 namespace Bitbucket
 {

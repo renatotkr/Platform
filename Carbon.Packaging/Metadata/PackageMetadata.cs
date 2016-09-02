@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using System.Threading.Tasks;
 
 namespace Carbon.Packaging
 {
-    using Data;
     using Data.Annotations;
+    using Json;
     using Storage;
 
     public class PackageMetadata
@@ -100,7 +99,7 @@ namespace Carbon.Packaging
             return metadata;
         }
 
-        public static async Task<PackageMetadata> Load(IFile file)
+        public static async Task<PackageMetadata> Load(IBlob file)
             => Parse(await file.ReadStringAsync().ConfigureAwait(false));
     }
 

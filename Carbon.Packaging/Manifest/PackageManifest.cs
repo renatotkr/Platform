@@ -7,10 +7,12 @@ using System.IO;
 namespace Carbon.Packaging
 {
     using Data;
+    using Json;
+    using Storage;
 
-    public class PackageManifest : Dictionary<string, IFileInfo>
+    public class PackageManifest : Dictionary<string, IBlobInfo>
     {
-        public PackageManifest(IEnumerable<IFileInfo> files)
+        public PackageManifest(IEnumerable<IBlobInfo> files)
         {
             foreach (var file in files)
             {
@@ -18,11 +20,11 @@ namespace Carbon.Packaging
             }
         }
 
-        public IFileInfo Find(string name)
+        public IBlobInfo Find(string name)
         {
             name = name.Trim('/');
 
-            IFileInfo item;
+            IBlobInfo item;
 
             TryGetValue(name, out item);
 
@@ -55,7 +57,7 @@ namespace Carbon.Packaging
 
         public static PackageManifest Parse(string text)
         {
-            var files = new List<IFileInfo>();
+            var blobs = new List<IBlobInfo>();
 
             string line;
 
@@ -65,34 +67,31 @@ namespace Carbon.Packaging
                 {
                     var parts = line.Split(' ');
 
-                    files.Add(new PackageFileInfo(
+                    blobs.Add(new PackageFileInfo(
                         name     : parts[0],
                         sha256   : Convert.FromBase64String(parts[1]),
-                        modified : XDate.Parse(parts[2]).ToDateTime()
+                        modified : IsoDate.Parse(parts[2]).ToDateTime()
                     ));
                 }
             }
 
-            return new PackageManifest(files);
+            return new PackageManifest(blobs);
         }
 
         public static PackageManifest FromPackage(Package package)
         {
-            return new PackageManifest(package.Select(file => (IFileInfo)new PackageFileInfo(file)));
+            return new PackageManifest(package.Select(file => (IBlobInfo)new PackageFileInfo(file)));
         }
     }
 
-    internal struct PackageFileInfo : IFileInfo
+    internal struct PackageFileInfo : IBlobInfo
     {
-        public PackageFileInfo(IFile file)
+        public PackageFileInfo(IBlob file)
         {
-            using (var stream = file.Open())
-            {
-                Hash = Hash.ComputeSHA256(stream);
-            }
-
-            Name = file.Name;
+            Name     = file.Name;
             Modified = file.Modified;
+            Size     = file.Size;
+            Hash     = file.Hash;
         }
 
         public PackageFileInfo(string name, byte[] sha256, DateTime modified)
@@ -110,9 +109,12 @@ namespace Carbon.Packaging
             Name = name;
             Hash = new Hash(HashAlgorithmType.SHA256, sha256);
             Modified = modified;
+            Size = 0;
         }
 
         public string Name { get; }
+
+        public long Size { get; }
 
         public Hash Hash { get; }
 

@@ -84,6 +84,9 @@ namespace Carbon.Packaging
             if (release.Version.Flags != SemverFlags.None)
                 throw new Exception("A release must have a fixed version number");
 
+
+            // if it's the latest version, update the main record
+
             await db.PackageReleases.InsertAsync(release).ConfigureAwait(false);
         }
     }

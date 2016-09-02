@@ -3,7 +3,10 @@ using System.IO;
 
 namespace Carbon.Packaging
 {
-    internal class VolumeFile : IFile
+    using Data;
+    using Storage;
+
+    internal class VolumeFile : IBlob
     {
         private readonly FileInfo file;
 
@@ -27,6 +30,10 @@ namespace Carbon.Packaging
         public string Name { get; }
 
         public DateTime Modified => file.LastWriteTimeUtc;
+
+        public Hash Hash => Hash.ComputeSHA256(Open());
+
+        public long Size => file.Length;
 
         public Stream Open() => file.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
     }

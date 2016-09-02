@@ -5,13 +5,16 @@ namespace Carbon.Platform
     using Data;
     using Data.Annotations;
 
-    [Record(TableName = "FrontendFiles")]
-    public class FrontendFileInfo
+    [Dataset("FrontendFiles")]
+    public class FrontendFile
     {
         [Member(1), Key]
         public long FrontendId { get; set; }
 
         [Member(2), Key]
+        public Semver Version { get; set; }
+
+        [Member(3), Key]
         public string Name { get; set; }
 
         [Member(3)]

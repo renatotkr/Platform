@@ -1,7 +1,10 @@
-﻿using Carbon.Data.Annotations;
+﻿using System;
 
 namespace Carbon.Networking
 {
+    using Data.Annotations;
+
+    [Dataset("UrlRoutes")]
     public class UrlRoute
     {
         [Member(1), Key]
@@ -12,15 +15,26 @@ namespace Carbon.Networking
         
         [Member(3)]
         public string Path { get; set; }
+        
+        // public string EntryPoint { get ;set; } // e.g. FancyFunction
 
         [Member(4)]
         public int Order { get; set; }
 
         [Member(5)]
         public long BackendId { get; set; }
+    }
 
-        [Member(6)]
-        public long? CertificateId { get; set; }
+    public class UrlHost
+    {
+        [Member(1), Key]
+        public string Name { get; set; } // data.gov
+     
+        [Member(2), Mutable]
+        public DateTime? Verified { get; set; }
+
+        [Member(3), Mutable] 
+        public long CertificateId { get; set; }
     }
 }
 

@@ -6,7 +6,7 @@ namespace Carbon.Packaging
     using Data;
     using Data.Annotations;
 
-    [Record(TableName = "Packages")]
+    [Dataset("Packages", Schema = "packaging")]
     [Versioned(TableName = "PackageReleases")]
     public class PackageInfo : IPackage
     {
@@ -21,17 +21,17 @@ namespace Carbon.Packaging
         [Member(1), Identity]
         public long Id { get; set; }
 
-        [Member(2, mutable: true), Version]
+        [Member(2), Version]
         public Semver Version { get; set; }
 
-        [Member(3, mutable: true), Unique]
+        [Member(3), Mutable, Unique]
         public string Name { get; set; }
 
         [Member(4)]
         public long RepositoryId { get; set; }
 
-        [Member(5, MaxLength = 40)] // Commit or named tag
-        public Revision Revision { get; set; }
+        [Member(5), StringLength(40)]
+        public string Commit { get; set; }
 
         [Member(6), Unique]
         public Hash Hash { get; set; }

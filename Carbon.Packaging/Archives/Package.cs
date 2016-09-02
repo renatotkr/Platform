@@ -8,12 +8,14 @@ using System.Threading.Tasks;
 
 namespace Carbon.Packaging
 {
-    public abstract class Package : IEnumerable<IFile>, IPackage, IDisposable
+    using Storage;
+
+    public abstract class Package : IEnumerable<IBlob>, IPackage, IDisposable
     {
         private string name;
         private Semver version;
 
-        public abstract IEnumerable<IFile> Enumerate();
+        public abstract IEnumerable<IBlob> Enumerate();
 
         public abstract void Dispose();
 
@@ -25,7 +27,7 @@ namespace Carbon.Packaging
 
         public long RepositoryId { get; set; }
 
-        public Revision Revision { get; set; }
+        public string Commit { get; set; } // The resolved commit of the package
 
         public IList<PackageDependency> Dependencies => new List<PackageDependency>();
 
@@ -35,11 +37,11 @@ namespace Carbon.Packaging
             this.version = version;
         }
 
-        public IFile Find(string absolutePath) =>
+        public IBlob Find(string absolutePath) =>
             this.FirstOrDefault(item => item.Name == absolutePath);
 
 
-        public IFile[] List(string prefix)
+        public IBlob[] List(string prefix)
             => this.Where(item => item.Name.StartsWith(prefix)).ToArray();
 
         public async Task ExtractToDirectoryAsync(DirectoryInfo target)
@@ -112,7 +114,7 @@ namespace Carbon.Packaging
 
         #region IEnumerable
 
-        IEnumerator<IFile> IEnumerable<IFile>.GetEnumerator()
+        IEnumerator<IBlob> IEnumerable<IBlob>.GetEnumerator()
             => Enumerate().GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator()

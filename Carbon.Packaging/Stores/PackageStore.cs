@@ -9,11 +9,11 @@ namespace Carbon.Packaging
 
     public class PackageStore : IPackageStore
     {
-        private readonly IBlobStore blobStore;
+        private readonly IBucket bucket;
 
-        public PackageStore(IBlobStore blobStore)
+        public PackageStore(IBucket bucket)
         {
-            this.blobStore = blobStore;
+            this.bucket = bucket;
         }
 
         public async Task<Hash> PutAsync(Package package)
@@ -38,7 +38,7 @@ namespace Carbon.Packaging
                     { "Content-Type", "application/zip" }
                 };
 
-                await blobStore.PutAsync(key, blob).ConfigureAwait(false);
+                await bucket.PutAsync(key, blob).ConfigureAwait(false);
 
                 return hash;
             }
@@ -50,7 +50,7 @@ namespace Carbon.Packaging
 
             var ms = new MemoryStream();
 
-            using (var blob = await blobStore.GetAsync(key).ConfigureAwait(false))
+            using (var blob = await bucket.GetAsync(key).ConfigureAwait(false))
             {
                 await blob.CopyToAsync(ms).ConfigureAwait(false);
             }

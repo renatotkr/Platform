@@ -8,7 +8,7 @@ namespace Carbon.Hosting
     using Networking;
     using Storage;
 
-    [Record(TableName = "Hosts")]
+    [Dataset("Hosts")]
     public class Host : IHost
     {
         [Member(1), Identity]
@@ -29,10 +29,10 @@ namespace Carbon.Hosting
         [Member(6)] // volumeId used to create the base image
         public long ImageId { get; set; }
 
-        [Member(7, MaxLength = 255), Indexed]
+        [Member(7), StringLength(255), Indexed]
         public string InstanceId { get; set; }
 
-        [Member(8, mutable: true)]
+        [Member(8), Mutable]
         public long MemoryUsed { get; set; }
 
         [Member(9)]
@@ -44,7 +44,7 @@ namespace Carbon.Hosting
         [Member(11)] // For nested VMs
         public long? ParentId { get; set; }
 
-        [Member(12), Timestamp(false)]
+        [Member(12), Timestamp]
         public DateTime Created { get; set; }
 
         #region Helpers

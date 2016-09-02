@@ -4,6 +4,8 @@ using System.IO;
 
 namespace Carbon.Packaging
 {
+    using Storage;
+
     internal class DirectoryPackage : Package
     {
         private readonly DirectoryInfo root;
@@ -19,7 +21,7 @@ namespace Carbon.Packaging
             this.root = root;
         }
 
-        public override IEnumerable<IFile> Enumerate()
+        public override IEnumerable<IBlob> Enumerate()
         {
             foreach (var file in GetFilesRecursive(root))
             {

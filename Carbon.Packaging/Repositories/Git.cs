@@ -7,15 +7,11 @@ using GitHub;
 
 namespace Carbon.Packaging
 {
-    using Platform;
-
     public static class Git
     {
         public static Task<Package> GetPackageAsync(RepositoryDetails source, GitCredentials credentials)
         {
-            var revision = Revision.Parse(source.Revision);
-
-            return GetRepository(source, credentials).DownloadAsync(revision);
+            return GetRepository(source, credentials).DownloadAsync(source.Revision.Value);
         }
 
         #region Helpers

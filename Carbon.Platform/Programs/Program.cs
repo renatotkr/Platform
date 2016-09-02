@@ -7,7 +7,8 @@ namespace Carbon.Programming
     using Data.Annotations;
     using Networking;
 
-    [Record(TableName = "Programs"), Versioned(TableName = "ProgramReleases")] 
+    [Dataset("Programs")]
+    [Versioned(TableName = "ProgramReleases")] 
     public class Program : IProgram
     {
         public Program() { }
@@ -21,7 +22,7 @@ namespace Carbon.Programming
         [Member(1), Identity]
         public long Id { get; set; }
 
-        [Member(2, mutable: true), Version] // highmark
+        [Member(2), Version] // highmark
         public Semver Version { get; set; }
 
         [Member(3), Unique]
@@ -33,19 +34,19 @@ namespace Carbon.Programming
         [Member(5)]
         public long RepositoryId { get; set; }
 
-        [Member(6, MaxLength = 40)] // Commit or named tag
-        public string Revision { get; set; }
+        [Member(6), StringLength(40), Mutable]
+        public string Commit { get; set; }
 
-        [Member(7, mutable: true)]
+        [Member(7), Mutable]
         public Hash Hash { get; set; }
 
-        [Member(8, mutable: true)]
+        [Member(8), Mutable]
         public NetworkPortList Ports { get; set; }
 
-        [Member(11, mutable: true)]
+        [Member(11), Mutable]
         public long CreatorId { get; set; }
 
-        [Member(12), Timestamp(false)]
+        [Member(12), Timestamp]
         public DateTime Created { get; set; }
 
         // ProgramReleases

@@ -4,7 +4,7 @@ namespace Carbon.Storage
 {
     using Data.Annotations;
 
-    [Record(TableName = "Volumes")]
+    [Dataset("Volumes")]
     public class VolumeInfo
     {
         [Member(1), Identity]
@@ -28,26 +28,20 @@ namespace Carbon.Storage
         [Member(7), Optional, Indexed]
         public long? SourceId { get; set; }
 
-        [Member(8, mutable: true)]
+        [Member(8), Mutable]
         public long FreeSpace { get; set; }
 
-        [Member(9, mutable: true), Indexed] // Can volumes be shared between hosts?
+        [Member(9), Mutable, Indexed] // Can volumes be shared between hosts?
         public long? HostId { get; set; }
 
-        [Member(10, mutable: true)]
+        [Member(10), Mutable]
         public string DeviceName { get; set; } // e.g. D, dev/disk1
          
         [Member(11)]
         public long? CreatorId { get; set; }
 
-        [Member(12), Timestamp(false)] // snapshot date if from source
+        [Member(12), Timestamp] // snapshot date if from source
         public DateTime Created { get; }
-    }
-
-    public enum VolumeType
-    {
-        SSD    = 1,
-        Optane = 2
     }
 
     // A volume may also be a snapshot or image...
