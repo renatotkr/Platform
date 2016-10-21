@@ -6,8 +6,8 @@ namespace Carbon.Computing
     using Hosting;
     using Networking;
 
-    [Dataset("Backends")]
-    public class Backend
+    [Dataset("Apps")]
+    public class App
     {
         [Member(1), Identity]
         public long Id { get; set; }
@@ -24,13 +24,13 @@ namespace Carbon.Computing
         [Member(6), Mutable]
         public long RequestCount { get; set; }
 
-        public IList<UrlRoute> Routes { get; set; }
+        // public IList<UrlRoute> Routes { get; set; }
 
-        public IList<Process> Processes { get; set; }
+        // public IList<Process> Processes { get; set; }
     }
 }
 
-// A backend exposes a program over a service (http or borg) .... 
+// An app exposes a program as service (http or borg) .... 
 
 // - spawns one or more processes to handle user requests (autoscales)
 // - hosted behind a load balancer
