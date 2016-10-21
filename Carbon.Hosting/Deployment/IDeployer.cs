@@ -44,7 +44,6 @@ namespace Carbon.Platform
 }
 
 
-
 /*
 repository "git://git.apache.org/couchdb.git"
 reference "master"

@@ -13,7 +13,7 @@ namespace Carbon.Hosting.IIS
     using Packaging;
     using Programming;
 
-    public class IisAppHost : IProgramHost, IDisposable
+    public class IISHost : IProgramHost, IDisposable
     {
         private readonly ProgramEnvironment env;
         private readonly ServerManager serverManager = new ServerManager();
@@ -21,7 +21,7 @@ namespace Carbon.Hosting.IIS
         private readonly Host host;
         private readonly ILogger log;
 
-        public IisAppHost(Host machine, ProgramEnvironment env, ILogger log)
+        public IISHost(Host machine, ProgramEnvironment env, ILogger log)
         {
             this.host = machine;
             this.env = env;
