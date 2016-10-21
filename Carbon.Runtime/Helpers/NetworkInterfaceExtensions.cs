@@ -7,7 +7,7 @@ namespace Carbon.Platform.Helpers
 {
     public static class NetworkInterfaceExtensions
     {
-        public static IEnumerable<IPAddress> GetIps(this System.Net.NetworkInformation.NetworkInterface ni)
+        public static IEnumerable<IPAddress> GetIps(this NetworkInterface ni)
         {
             foreach (var ip in ni.GetIPProperties().UnicastAddresses)
             {

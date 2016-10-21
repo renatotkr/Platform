@@ -34,10 +34,10 @@ namespace Carbon.Platform
         #region Helpers
 
         [return: MarshalAs(UnmanagedType.Bool)]
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         static extern bool GlobalMemoryStatusEx([In, Out] MemoryStatusEx lpBuffer);
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         private class MemoryStatusEx
         {
             public uint dwLength;
@@ -52,7 +52,7 @@ namespace Carbon.Platform
 
             public MemoryStatusEx()
             {
-                this.dwLength = (uint)Marshal.SizeOf(typeof(MemoryStatusEx));
+                this.dwLength = (uint)Marshal.SizeOf<MemoryStatusEx>();
             }
         }
         #endregion

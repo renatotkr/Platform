@@ -13,15 +13,15 @@ namespace Carbon.Hosting.IIS
     using Packaging;
     using Programming;
 
-    public class IISHost : IProgramHost, IDisposable
+    public class IISHost : IAppHost, IDisposable
     {
-        private readonly ProgramEnvironment env;
+        private readonly HostingEnvironment env;
         private readonly ServerManager serverManager = new ServerManager();
 
         private readonly Host host;
         private readonly ILogger log;
 
-        public IISHost(Host machine, ProgramEnvironment env, ILogger log)
+        public IISHost(Host machine, HostingEnvironment env, ILogger log)
         {
             this.host = machine;
             this.env = env;
@@ -163,7 +163,7 @@ namespace Carbon.Hosting.IIS
 
         public IEnumerable<int> GetDeployedVersions(IProgram app)
         {
-            var root = GetAppRoot(app);
+            var root = GetAppFolder(app);
 
             foreach (var folder in new DirectoryInfo(root).EnumerateDirectories())
             {
@@ -304,9 +304,9 @@ namespace Carbon.Hosting.IIS
 
         private void LogInfo(IProgram app, string message)
         {
-            var logsDir = Path.Combine(env.Root.FullName.TrimEnd('/'), app.Name, "logs");
+            var logsDir = Path.Combine(env.AppsRoot.FullName.TrimEnd('/'), app.Name, "logs");
 
-            var path = Path.Combine(env.Root.FullName.TrimEnd('/'), app.Name, "logs", "deploy.txt");
+            var path = Path.Combine(env.AppsRoot.FullName.TrimEnd('/'), app.Name, "logs", "deploy.txt");
 
             // Make sure the directory exists
             if (!Directory.Exists(logsDir))
@@ -319,16 +319,16 @@ namespace Carbon.Hosting.IIS
             File.AppendAllLines(path, new[] { line });
         }
 
-        private string GetAppRoot(IProgram app)
+        private string GetAppFolder(IProgram app)
         {
-            return Path.Combine(env.Root.FullName.TrimEnd('/'), app.Name);
+            return Path.Combine(env.AppsRoot.FullName.TrimEnd('/'), app.Name);
         }
 
         private DirectoryInfo GetAppPath(IProgram app)
         {
             // {root}/{name}/{version}
 
-            var path = Path.Combine(GetAppRoot(app), app.Version.ToString());
+            var path = Path.Combine(GetAppFolder(app), app.Version.ToString());
 
             return new DirectoryInfo(path);
         }

@@ -14,7 +14,7 @@ namespace Carbon.Storage
         public string Name { get; set; }
 
         [Member(3)]
-        public VolumeType Type { get; set; }
+        public DriveType Type { get; set; }
 
         [Member(4)]
         public VolumeStatus Status { get; }

@@ -83,9 +83,9 @@ namespace Carbon.Platform
             return current;
         }
 
-        public static IEnumerable<Carbon.Networking.NetworkInterface> GetActiveNetworkInterfaces()
+        public static IEnumerable<Networking.NetworkInterface> GetActiveNetworkInterfaces()
         {
-            var networkInterfaces = System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces();
+            var networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
 
             foreach (var ni in networkInterfaces)
             {
@@ -95,11 +95,11 @@ namespace Carbon.Platform
 
                 if (ni.OperationalStatus == OperationalStatus.Up && physicalAddress.Length > 0 && physicalAddress != "00000000000000E0")
                 {
-                    yield return new Carbon.Networking.NetworkInterface {
+                    yield return new Networking.NetworkInterface {
                         // Description      = ni.Description,
-                        Addresses        = GetNetworkInterfaceIps(ni),
-                        // InstanceName     = InstanceName.FromDescription(ni.Description),
-                        PhysicalAddress  = physicalAddress
+                        Addresses       = GetNetworkInterfaceIps(ni),
+                        // InstanceName    = InstanceName.FromDescription(ni.Description),
+                        PhysicalAddress = physicalAddress
                     };
                 }
             }
@@ -107,13 +107,13 @@ namespace Carbon.Platform
 
         public static IEnumerable<VolumeInfo> GetVolumes(Host machine)
         {
-            foreach (var drive in DriveInfo.GetDrives().Where(d => d.IsReady && d.DriveType == DriveType.Fixed))
+            foreach (var drive in DriveInfo.GetDrives().Where(d => d.IsReady && d.DriveType == System.IO.DriveType.Fixed))
             {
                 yield return drive.ToVolumeInfo();
             }
         }
 
-        public static IPAddress[] GetNetworkInterfaceIps(System.Net.NetworkInformation.NetworkInterface ni)
+        public static IPAddress[] GetNetworkInterfaceIps(NetworkInterface ni)
         {
             return ni
                 .GetIPProperties().UnicastAddresses

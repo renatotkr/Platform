@@ -15,7 +15,6 @@ namespace Carbon.Hosting
             HostName = hostName;
             Port = port;
             Ip = ip;
-
         }
 
         public string Protocol => "http";

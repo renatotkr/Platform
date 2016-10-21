@@ -1,7 +1,7 @@
-﻿namespace Carbon.Metrics.Tests
-{
-	using Xunit;
+﻿using Xunit;
 
+namespace Carbon.Metrics.Tests
+{
     public class MetricTests
     {
 		/*

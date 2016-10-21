@@ -2,9 +2,9 @@
   "version": "0.5.1",
 
   "dependencies": {
-    "Carbon.Data": "0.6.9",
+    "Carbon.Data": "0.6.10",
     "Carbon.Storage": "0.6.2",
-    "Carbon.Platform": "0.5.*"
+    "Carbon.Platform": "0.5.3"
   },
 
   "frameworks": {
