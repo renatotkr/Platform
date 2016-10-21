@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -34,9 +35,9 @@ namespace Carbon.Packaging
 
                 ms.Seek(0, SeekOrigin.Begin);
 
-                var blob = new Blob(ms) {
+                var blob = new Blob(ms, new Dictionary<string, string>() {
                     { "Content-Type", "application/zip" }
-                };
+                });
 
                 await bucket.PutAsync(key, blob).ConfigureAwait(false);
 
@@ -50,35 +51,17 @@ namespace Carbon.Packaging
 
             var ms = new MemoryStream();
 
-            using (var blob = await bucket.GetAsync(key).ConfigureAwait(false))
+            var blob = await bucket.GetAsync(key);
+
+            using (var channel = blob.Open())
             {
-                await blob.CopyToAsync(ms).ConfigureAwait(false);
+                await channel.CopyToAsync(ms).ConfigureAwait(false);
             }
 
             ms.Seek(0, SeekOrigin.Begin);
 
             return ZipPackage.FromStream(ms, stripFirstLevel: false);
-        }
-
-        /*
-        public async Task DownloadToAsync(string key, DirectoryInfo target)
-        {
-            using (var ms = new MemoryStream())
-            {
-                using (var blob = await blobStore.GetAsync(key).ConfigureAwait(false))
-                {
-                    await blob.CopyToAsync(ms).ConfigureAwait(false);
-                }
-
-                ms.Seek(0, SeekOrigin.Begin);
-
-                using (var archive = new ZipArchive(ms, ZipArchiveMode.Read))
-                {
-                    archive.ExtractToDirectory(target.FullName);
-                }
-            }
-        }
-        */
+        }       
     }
 }
 

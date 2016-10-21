@@ -6,7 +6,7 @@ namespace Carbon.Packaging
     using Data;
     using Data.Annotations;
 
-    [Dataset("Packages", Schema = "packaging")]
+    [Dataset("Packages", Schema = "storage")]
     [Versioned(TableName = "PackageReleases")]
     public class PackageInfo : IPackage
     {

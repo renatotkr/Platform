@@ -15,7 +15,8 @@ namespace Carbon.Packaging
 
             if (!map.TryGetValue(id, out node))
             {
-                node = new Node<T> {
+                node = new Node<T>
+                {
                     Value = depedency
                 };
 
@@ -79,17 +80,15 @@ namespace Carbon.Packaging
 
         // Dependencies
         public List<Node<T>> Outgoing { get; } = new List<Node<T>>();
-        
+
         public List<Node<T>> Incoming { get; } = new List<Node<T>>();
-        
+
         // Lower level depedency
         // e.g. A (source) depends on C (target)
         public void AddEdge(Node<T> value)
         {
-            // Add Outgoing Edge
             Outgoing.Add(value);
 
-            // Add Incoming Edge (Reverse)
             value.Incoming.Add(this);
         }
     }

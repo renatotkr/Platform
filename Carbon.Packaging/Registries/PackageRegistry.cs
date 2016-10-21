@@ -22,11 +22,14 @@ namespace Carbon.Packaging
             this.db = db;
         }
 
-        public long LookupId(string name) 
+        public long Lookup(string name) 
             => db.Packages.QueryFirstOrDefaultAsync(Eq("name", name)).Result.Id;
 
         public async Task<PackageInfo> FindAsync(long id, bool includeReleases = true)
         {
+            return null;
+
+            /*
             var package = await db.Packages.GetAsync(new RecordKey("id", id)).ConfigureAwait(false);
 
             if (includeReleases)
@@ -38,21 +41,22 @@ namespace Carbon.Packaging
             }
 
             return package;
+            */
         }
 
-        public async Task<IPackage> FindAsync(long id, Semver version)
+        public async Task<IPackage> GetAsync(long id, Semver version)
         {
             if (version.Level == SemverLevel.Patch && version.Flags == SemverFlags.None)
             {
                 return await db.PackageReleases.QueryFirstOrDefaultAsync(
-                    Eq("id", id),
-                    Eq("version", version)
+                    Conjunction(Eq("id", id), Eq("version", version))
                 ).ConfigureAwait(false);
             }
             else
             {
                 var range = version.GetRange();
 
+                /*
                 var query = new Query(
                    Order.Descending("id"),
                    Eq("id", id),
@@ -60,6 +64,10 @@ namespace Carbon.Packaging
                 );
 
                 return await db.PackageReleases.QueryFirstOrDefaultAsync(query).ConfigureAwait(false);
+                */
+
+                return null;
+
             }
         }
 
@@ -93,7 +101,7 @@ namespace Carbon.Packaging
 
     public interface IPackageDb
     {
-        ITable<PackageInfo> Packages        { get; }
-        ITable<PackageInfo> PackageReleases { get; }
+        IDataset<PackageInfo> Packages        { get; }
+        IDataset<PackageInfo> PackageReleases { get; }
     }
 }

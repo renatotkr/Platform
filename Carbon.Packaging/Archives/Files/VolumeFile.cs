@@ -31,8 +31,6 @@ namespace Carbon.Packaging
 
         public DateTime Modified => file.LastWriteTimeUtc;
 
-        public Hash Hash => Hash.ComputeSHA256(Open());
-
         public long Size => file.Length;
 
         public Stream Open() => file.Open(FileMode.Open, FileAccess.Read, FileShare.Read);

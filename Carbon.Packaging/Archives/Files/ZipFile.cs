@@ -29,8 +29,6 @@ namespace Carbon.Packaging
 
         public DateTime Modified => entry.LastWriteTime.UtcDateTime;
 
-        public Hash Hash => Hash.ComputeSHA256(Open());
-
         public long Size => entry.Length;
 
         public Stream Open() => entry.Open();

@@ -1,12 +1,13 @@
-﻿using Carbon.Storage;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 
 namespace Carbon.Packaging
 {
+    using Storage;
+
     public static class AssetExtensions
     {
-        public static bool IsStatic(this IBlobInfo file)
+        public static bool IsStatic(this IBlob file)
         {
             var format = Path.GetExtension(file.Name).TrimStart('.');
 
@@ -24,7 +25,7 @@ namespace Carbon.Packaging
             }
         }
 
-        public static bool IsHidden(this IBlobInfo blob)
+        public static bool IsHidden(this IBlob blob)
         {
             // contains a period in the path....
 

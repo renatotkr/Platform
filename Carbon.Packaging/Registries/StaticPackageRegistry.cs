@@ -15,10 +15,10 @@ namespace Carbon.Packaging
             : base(list)
         { }
 
-        public long LookupId(string name) 
+        public long Lookup(string name) 
             => this.First(p => p.Name == name).Id;
 
-        public Task<IPackage> FindAsync(long id, Semver version)
+        public Task<IPackage> GetAsync(long id, Semver version)
             => Task.FromResult<IPackage>(this.FirstOrDefault(l => l.Id == id && l.Version == version));
 
         public string Serialize()
@@ -28,9 +28,11 @@ namespace Carbon.Packaging
         {
             #region Preconditions
 
-            if (text == null) throw new ArgumentNullException(nameof(text));
+            if (text == null)
+                throw new ArgumentNullException(nameof(text));
 
-            if (text.Length == 0) throw new ArgumentException("Must not be empty", paramName: nameof(text));
+            if (text.Length == 0)
+                throw new ArgumentException("Must not be empty", paramName: nameof(text));
 
             #endregion
          

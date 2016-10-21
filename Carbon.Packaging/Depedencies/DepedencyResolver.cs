@@ -42,7 +42,7 @@ namespace Carbon.Packaging
 
         private async Task<IPackage> ResolveAsync(PackageDependency dep)
         {
-            return await registry.FindAsync(dep.DependencyId, dep.DependencyVersion).ConfigureAwait(false);
+            return await registry.GetAsync(dep.DependencyId, dep.DependencyVersion).ConfigureAwait(false);
         }
     }
 }

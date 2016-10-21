@@ -2,9 +2,9 @@
 {
     public enum PackageProvider
     {
-        Borg  = 1,
-        NPM   = 2,
-        Nuget = 3
+        _Reserved  = 1,
+        NPM        = 10,
+        Nuget      = 20
     }
 
     // APT:  Dpkg --  APT (advanced packaging tool), aptitude, etc

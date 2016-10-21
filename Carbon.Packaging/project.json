@@ -1,16 +1,35 @@
-﻿{
-  "version": "1.0.0-*",
+{
+  "version": "0.5.1",
 
   "dependencies": {
-    "Carbon.Data"         : "0.6.7",
-    "Carbon.Platform": "0.5.0-*",
-    "System.IO.Compression.ZipFile": "4.0.1",
-    "NETStandard.Library" : "1.6.0"
+    "Carbon.Data": "0.6.9",
+    "Carbon.Storage": "0.6.2",
+    "Carbon.Platform": "0.5.*"
   },
 
   "frameworks": {
+    "net461": {
+      "frameworkAssemblies": {
+        "System.IO.Compression": "4.0.0.0"
+      }
+    },
     "netstandard1.6": {
-      "imports": "dnxcore50"
+      "imports": "dnxcore50",
+      "dependencies": {
+        "System.IO.Compression.ZipFile": "4.0.1",
+        "NETStandard.Library": "1.6.0"
+      }
+    }
+  },
+
+  "packOptions": {
+    "summary": "Packaging primitives",
+    "tags": [ "packaging" ],
+    "owners": [ "Jason Nelson" ],
+    "requireLicenseAcceptance": false,
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/carbon/Platform"
     }
   }
 }

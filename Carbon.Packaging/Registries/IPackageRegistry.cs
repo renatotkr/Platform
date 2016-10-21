@@ -4,9 +4,9 @@ namespace Carbon.Packaging
 {
     public interface IPackageRegistry
     {
-        long LookupId(string name);
+        long Lookup(string name);
 
-        Task<IPackage> FindAsync(long id, Semver version);
+        Task<IPackage> GetAsync(long id, Semver version);
 
         Task CreateAsync(PackageInfo package);
     }

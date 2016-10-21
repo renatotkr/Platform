@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace Carbon.Packaging
 {
+    using Storage;
+
     public class ZipPackage : Package
     {
         private readonly ZipArchive archive;
@@ -24,7 +26,7 @@ namespace Carbon.Packaging
             this.stripFirstLevel = stripFirstLevel;
         }
 
-        public override IEnumerable<IFile> Enumerate()
+        public override IEnumerable<IBlob> Enumerate()
         {
             foreach (var entry in archive.Entries)
             {
@@ -58,7 +60,7 @@ namespace Carbon.Packaging
             archive.Dispose();
         }
 
-        public static async Task<Package> DownloadAsync(Uri url, bool stripFirstLevel = true)
+        public static async Task<Package> FetchAsync(Uri url, bool stripFirstLevel = true)
         {
             using (var httpClient = new HttpClient())
             {

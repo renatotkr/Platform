@@ -10,21 +10,29 @@ namespace Carbon.Packaging
     using Json;
     using Storage;
 
-    public class PackageManifest : Dictionary<string, IBlobInfo>
+    public class PackageManifest : Dictionary<string, PackageFileInfo>
     {
-        public PackageManifest(IEnumerable<IBlobInfo> files)
+        public PackageManifest(IEnumerable<IBlob> blobs)
         {
-            foreach (var file in files)
+            foreach (var blob in blobs)
             {
-                Add(file.Name, file);
+                Add(blob.Name, new PackageFileInfo(blob));
             }
         }
 
-        public IBlobInfo Find(string name)
+        public PackageManifest(IEnumerable<PackageFileInfo> blobs)
+        {
+            foreach (var blob in blobs)
+            {
+                Add(blob.Name, blob);
+            }
+
+        }
+        public PackageFileInfo Find(string name)
         {
             name = name.Trim('/');
 
-            IBlobInfo item;
+            PackageFileInfo item;
 
             TryGetValue(name, out item);
 
@@ -57,7 +65,7 @@ namespace Carbon.Packaging
 
         public static PackageManifest Parse(string text)
         {
-            var blobs = new List<IBlobInfo>();
+            var blobs = new List<PackageFileInfo>();
 
             string line;
 
@@ -79,19 +87,17 @@ namespace Carbon.Packaging
         }
 
         public static PackageManifest FromPackage(Package package)
-        {
-            return new PackageManifest(package.Select(file => (IBlobInfo)new PackageFileInfo(file)));
-        }
+            => new PackageManifest(package.Select(file => new PackageFileInfo(file)));
     }
 
-    internal struct PackageFileInfo : IBlobInfo
+    public struct PackageFileInfo
     {
         public PackageFileInfo(IBlob file)
         {
             Name     = file.Name;
             Modified = file.Modified;
             Size     = file.Size;
-            Hash     = file.Hash;
+            Hash     = Hash.Compute(HashType.SHA256, file.Open());
         }
 
         public PackageFileInfo(string name, byte[] sha256, DateTime modified)
@@ -107,7 +113,7 @@ namespace Carbon.Packaging
             #endregion
 
             Name = name;
-            Hash = new Hash(HashAlgorithmType.SHA256, sha256);
+            Hash = new Hash(HashType.SHA256, sha256);
             Modified = modified;
             Size = 0;
         }

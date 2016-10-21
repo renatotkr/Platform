@@ -30,8 +30,6 @@ namespace Carbon.Packaging
 
         public DateTime Modified { get; }
 
-        public Hash Hash => Hash.ComputeSHA256(Open());
-
         public long Size => stream.Length;
 
         public Stream Open() => stream;
