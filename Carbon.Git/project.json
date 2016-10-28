@@ -1,0 +1,20 @@
+{
+  "version": "0.6.0",
+  "authors": [ "iamcarbon" ],
+
+  "dependencies": {
+    "Carbon.Platform": "0.6.2",
+    "Carbon.Packaging": "0.7.0",
+    "Carbon.Repositories": "0.6.1"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50",
+      "dependencies": {
+        "NETStandard.Library": "1.6.0"
+      }
+    },
+    "net461": { }
+  }
+}
