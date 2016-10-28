@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Net;
 
-namespace Carbon.Hosting
+namespace Carbon.Computing
 {
     using Data.Annotations;
     using Networking;
-    using Storage;
 
     [Dataset("Hosts")]
     public class Host : IHost
@@ -32,19 +31,13 @@ namespace Carbon.Hosting
         [Member(7), StringLength(255), Indexed]
         public string InstanceId { get; set; }
 
-        [Member(8), Mutable]
-        public long MemoryUsed { get; set; }
-
         [Member(9)]
         public long MemoryTotal { get; set; }
 
-        [Member(10), Indexed] // The backend managing the host lifetime
-        public long? BackendId { get; set; }
-
-        [Member(11)] // For nested VMs
+        [Member(10)] // For nested VMs
         public long? ParentId { get; set; }
 
-        [Member(12), Timestamp]
+        [Member(11), Timestamp]
         public DateTime Created { get; set; }
 
         #region Helpers

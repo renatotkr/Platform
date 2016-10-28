@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Carbon.Platform
+namespace Carbon.Deployment
 {
-    using Programming;
+    using Computing;
 
     public interface IDeployer
     {

@@ -3,7 +3,6 @@ using System.IO;
 
 namespace Carbon.Packaging
 {
-    using Data;
     using Storage;
 
     internal class MemoryFile : IBlob
@@ -33,5 +32,10 @@ namespace Carbon.Packaging
         public long Size => stream.Length;
 
         public Stream Open() => stream;
+
+        public void Dispose()
+        {
+            stream.Dispose();
+        }
     }
 }

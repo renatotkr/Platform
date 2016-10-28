@@ -18,8 +18,9 @@ namespace Carbon.Platform
         [Member(3)]
         public string Name { get; set; }
 
-        [Member(4)]
-        public long RepositoryId { get; }
+        // e.g. git://github.com/user/project.git#commit-ish
+        [Member(4), Mutable]
+        public Uri RepositoryUrl { get; }
 
         [Member(5), StringLength(40)]
         public string Commit { get; set; }

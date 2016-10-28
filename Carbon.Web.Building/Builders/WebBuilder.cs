@@ -163,9 +163,7 @@ namespace Carbon.Builder
             output.Position = 0;
 
             return new Blob(output) {
-                Metadata = {
-                    ["Content-Type"] = "text/css"
-                }
+                ContentType = "text/css"
             };
         }
 

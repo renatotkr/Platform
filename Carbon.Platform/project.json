@@ -1,9 +1,9 @@
 {
-  "version": "0.5.3",
+  "version": "0.6.2",
 
   "dependencies": {
-    "Carbon.Data": "0.6.9",
-    "Carbon.Storage": "0.6.2"
+    "Carbon.Data": "0.7.1",
+    "Carbon.Storage": "0.7.1"
   },
 
   "frameworks": {
@@ -21,7 +21,7 @@
   },
 
   "packOptions": {
-    "summary": "Abstractions for the cloud",
+    "summary": "Cloud & hosting abstractions",
     "tags": [ "cloud" ],
     "owners": [ "Jason Nelson" ],
     "requireLicenseAcceptance": false,

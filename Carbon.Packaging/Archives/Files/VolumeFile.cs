@@ -3,7 +3,6 @@ using System.IO;
 
 namespace Carbon.Packaging
 {
-    using Data;
     using Storage;
 
     internal class VolumeFile : IBlob
@@ -34,5 +33,7 @@ namespace Carbon.Packaging
         public long Size => file.Length;
 
         public Stream Open() => file.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
+
+        public void Dispose() { }
     }
 }

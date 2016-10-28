@@ -1,4 +1,4 @@
-﻿namespace Carbon.Programming
+﻿namespace Carbon.Computing
 {
     public interface IProgram
     {

@@ -32,37 +32,40 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Carbon.Data, Version=0.6.9.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Carbon.Data.0.6.10\lib\net461\Carbon.Data.dll</HintPath>
+    <Reference Include="Carbon.Data, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Carbon.Data.0.7.1\lib\net461\Carbon.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Carbon.Data.Annotations, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Carbon.Data.Annotations.0.6.2\lib\net461\Carbon.Data.Annotations.dll</HintPath>
+    <Reference Include="Carbon.Data.Annotations, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Carbon.Data.Annotations.0.7.0\lib\net461\Carbon.Data.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Carbon.Hosting, Version=0.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Carbon.Hosting.0.5.0\lib\net461\Carbon.Hosting.dll</HintPath>
+      <HintPath>..\packages\Carbon.Hosting.0.6.1\lib\net461\Carbon.Hosting.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Carbon.Logging">
       <HintPath>..\lib\Carbon.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="Carbon.Packaging, Version=0.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Carbon.Packaging.0.5.1\lib\net461\Carbon.Packaging.dll</HintPath>
+    <Reference Include="Carbon.Packaging, Version=0.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Carbon.Packaging.0.7.1\lib\net461\Carbon.Packaging.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Carbon.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Carbon.Platform.0.5.3\lib\net461\Carbon.Platform.dll</HintPath>
+      <HintPath>..\packages\Carbon.Platform.0.6.2\lib\net461\Carbon.Platform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Carbon.Security, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Carbon.Security.0.2.0\lib\net461\Carbon.Security.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Carbon.Storage, Version=0.0.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Carbon.Storage.0.6.2\lib\net461\Carbon.Storage.dll</HintPath>
+      <HintPath>..\packages\Carbon.Storage.0.7.1\lib\net461\Carbon.Storage.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Web.Administration, Version=7.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\Microsoft.Web.Administration.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\Bootstrapper\bin\Debug\Microsoft.Web.Administration.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections" />

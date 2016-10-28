@@ -1,6 +1,6 @@
-﻿namespace Carbon.Platform
+﻿namespace Carbon.Computing
 {
-    public enum ZoneLevel
+    public enum ZoneLevel : byte
     {
         Provider    = 0, // aws
         Region      = 1, // us-west1

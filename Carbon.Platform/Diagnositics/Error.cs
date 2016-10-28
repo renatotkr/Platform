@@ -5,17 +5,20 @@ namespace Carbon.Platform
 {
     using Data.Annotations;
 
-    [Dataset("Error")]
+    // Diagonistic?
+
+    [Dataset("AppErrors")]
     public class Error
     {
-        [PartitionKey]
-        public long ProgramId { get; set; }
+        [Member(1), Key, PartitionKey]
+        public long AppId { get; set; }
 
-        [Identity]
+        [Member(2), Identity]
         public long Id { get; set; }
         
-        public Semver Version { get; set; }
+        public Semver AppVersion { get; set; }
 
+        [Member(2)]
         public long HostId { get; set; }
 
         public string Type { get; set; }

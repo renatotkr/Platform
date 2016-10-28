@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 
 namespace Carbon.Networking
 {
@@ -14,15 +15,18 @@ namespace Carbon.Networking
 
         public IPAddress Broadcast => null;
 
-        public IPAddress Start => new IPAddress(Prefix.Address & Netmask);  // 10.1.1.1
+        public IPAddress Start => new IPAddress(IP4Number(Prefix) & Netmask);  // 10.1.1.1
         
-        public IPAddress End => new IPAddress((Prefix.Address & Netmask) | ~Netmask);    // 10.1.1.254
+        public IPAddress End => new IPAddress((IP4Number(Prefix) & Netmask) | ~Netmask);    // 10.1.1.254
 
         #endregion
 
         // 10.138.0.0/20
         // 192.168.2.0/24
 
+        private static int IP4Number(IPAddress ip)
+            => BitConverter.ToInt32(ip.GetAddressBytes(), 0);
+        
         public static IPAddressRange Parse(string text)
         {
             var parts = text.Split('/');

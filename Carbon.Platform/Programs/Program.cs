@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Carbon.Programming
+namespace Carbon.Computing
 {
     using Data;
     using Data.Annotations;

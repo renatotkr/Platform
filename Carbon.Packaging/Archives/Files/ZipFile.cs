@@ -4,7 +4,6 @@ using System.IO.Compression;
 
 namespace Carbon.Packaging
 {
-    using Data;
     using Storage;
 
     internal class ZipFile : IBlob
@@ -32,5 +31,7 @@ namespace Carbon.Packaging
         public long Size => entry.Length;
 
         public Stream Open() => entry.Open();
+
+        public void Dispose() { }
     }
 }

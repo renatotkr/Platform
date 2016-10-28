@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -35,9 +34,9 @@ namespace Carbon.Packaging
 
                 ms.Seek(0, SeekOrigin.Begin);
 
-                var blob = new Blob(ms, new Dictionary<string, string>() {
-                    { "Content-Type", "application/zip" }
-                });
+                var blob = new Blob(ms) {
+                    ContentType = "application/zip"
+                };
 
                 await bucket.PutAsync(key, blob).ConfigureAwait(false);
 

@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace Carbon.Hosting
+namespace Carbon.Computing
 {
     // http://tools.ietf.org/html/rfc952
 
-    public class Hostname
+    public static class Hostname
     {
         public static bool IsValid(string text)
             => Uri.CheckHostName(text) != UriHostNameType.Unknown;

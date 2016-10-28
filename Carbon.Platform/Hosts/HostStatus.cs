@@ -1,4 +1,4 @@
-﻿namespace Carbon.Hosting
+﻿namespace Carbon.Computing
 {
     public enum HostStatus
     {

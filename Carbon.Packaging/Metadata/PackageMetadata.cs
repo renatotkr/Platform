@@ -32,7 +32,7 @@ namespace Carbon.Packaging
         public IList<PackageDependencyInfo> Dependencies { get; } = new List<PackageDependencyInfo>();
 
         [Optional]
-        public RepositoryInfo Repository { get; set; }
+        public Uri RepositoryUrl { get; set; }
 
         [Optional]
         public string[] Files { get; set; }
@@ -68,11 +68,11 @@ namespace Carbon.Packaging
                     }
                     */
 
-                    metadata.Repository = new RepositoryInfo(RepositoryType.Git, new Uri(repositoryNode["url"]));
+                    metadata.RepositoryUrl = new Uri(repositoryNode["url"]);
                 }
                 else
                 {
-                    metadata.Repository = new RepositoryInfo(RepositoryType.Git, new Uri(repositoryNode));
+                    metadata.RepositoryUrl = new Uri(repositoryNode);
                 }
             }
 

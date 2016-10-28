@@ -10,7 +10,7 @@ namespace Carbon.Platform
         [Member(1), Key]
         public long ProgramId { get; set; }
 
-        [Member(2), Key, Timestamp]
+        [Member(2), Key]
         public long Id { get; set; }
 
         [Member(3)]

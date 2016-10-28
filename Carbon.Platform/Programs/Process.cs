@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace Carbon.Hosting
+namespace Carbon.Computing
 {
     using Data.Annotations;
     using Networking;
-    using Programming;
 
     [Dataset("Processes")]
     public class Process
@@ -49,7 +48,7 @@ namespace Carbon.Hosting
         public string Name { get; set; }
 
         [Member(8)] 
-        public Semver Version { get; set; }
+        public Semver ProgramVersion { get; set; }
 
         [Member(9), Mutable] // a code indication weather we succesfully exited or not...
         public int? ExitStatus { get; set; }

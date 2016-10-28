@@ -9,9 +9,9 @@ using Microsoft.Web.Administration;
 
 namespace Carbon.Hosting.IIS
 {
+    using Computing;
     using Logging;
     using Packaging;
-    using Programming;
 
     public class IISHost : IAppHost, IDisposable
     {
@@ -159,7 +159,6 @@ namespace Carbon.Hosting.IIS
 
             LogInfo(app, $"Deployed v{app.Version}");
         }
-
 
         public IEnumerable<int> GetDeployedVersions(IProgram app)
         {

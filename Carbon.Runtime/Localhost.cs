@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace Carbon.Platform
 {
-    using Hosting;
+    using Computing;
     using Storage;
-    
+
     public static class Localhost
     {
         private static Host current;

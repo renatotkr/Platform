@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Carbon.Hosting
+namespace Carbon.Computing
 {
     using Json;
 
