@@ -13,13 +13,18 @@ namespace TypeScript
 
     // https://github.com/Microsoft/TypeScript/wiki/Compiler-Options
 
-    public class TypeScriptCompileOptions
+    public class CompilerOptions
     {
-        public TypeScriptCompileOptions(string projectPath)
+        public CompilerOptions(string projectPath)
         {
-            if (projectPath == null) throw new ArgumentNullException(nameof(projectPath));
+            #region Preconditions
 
-            this.ProjectPath = projectPath;
+            if (projectPath == null)
+                throw new ArgumentNullException(nameof(projectPath));
+
+            #endregion
+
+            ProjectPath = projectPath;
         }
 
         public string ProjectPath { get;  }
@@ -41,11 +46,9 @@ namespace TypeScript
             // By invoking tsc with no input files and a - project(or just - p) command line option
             // that specifies the path of a directory containing a tsconfig.json file.
 
-            if (ProjectPath != null)
-            {
-                d.Add("-p", ProjectPath);
-            }
-
+           
+            d.Add("-p", ProjectPath);
+ 
             if (EmitComments == false)
             {
                 d.Add("--removeComments", null);

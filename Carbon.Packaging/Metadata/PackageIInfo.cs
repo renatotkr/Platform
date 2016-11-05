@@ -5,8 +5,9 @@ namespace Carbon.Packaging
 {
     using Data;
     using Data.Annotations;
+    using Repositories;
 
-    [Dataset("Packages", Schema = "storage")]
+    [Dataset("Packages")]
     [Versioned(TableName = "PackageReleases")]
     public class PackageInfo : IPackage
     {
@@ -27,10 +28,11 @@ namespace Carbon.Packaging
         [Member(3), Mutable, Unique]
         public string Name { get; set; }
 
-        [Member(4)]
-        public long RepositoryId { get; set; }
+        [Member(4), Mutable]
+        public RepositoryInfo Repository { get; set; }
 
-        [Member(5), StringLength(40)]
+        [Member(5), Mutable]
+        [StringLength(40)]
         public string Commit { get; set; }
 
         [Member(6), Unique]

@@ -1,13 +1,11 @@
-﻿using Carbon.Security;
-using System;
+﻿using System;
 
 namespace Carbon.Packaging
 {
+    using Protection;
 
     public static class PackageProtector
     {
-
-
         // Key & IV are derived
         public static AesProtector Create(byte[] password, byte[] salt)
         {
@@ -21,15 +19,7 @@ namespace Carbon.Packaging
 
             #endregion
 
-
             var secret = SecretKey.Create(password, salt);
-
-            /*
-            var derivedKey = KeyDerivation.Pbkdf2(password, salt, KeyDerivationPrf.HMACSHA256,
-                iterationCount      : 10000,
-                numBytesRequested   : (256 / 8) + (128 / 8)
-            );
-            */
 
             return new AesProtector(secret);
         }

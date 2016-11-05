@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 
-namespace Carbon.Networking
+namespace Carbon.Computing
 {
     using Data.Annotations;
 
-    [Dataset("Interfaces", Schema = "Networking")]
+    [Dataset("NetworkInterfaces")]
     public class NetworkInterface
     {
         [Member(1), Identity]
@@ -26,10 +26,10 @@ namespace Carbon.Networking
         #region Stats (5-8)
 
         [Member(5), Mutable]  // in octects
-        public long DataIn { get; }
+        public long NetworkIn { get; }
 
         [Member(6), Mutable]  // in octects
-        public long DataOut { get; }
+        public long NetworkOut { get; }
 
         [Member(7), Mutable]  // in octects
         public long PacketsIn { get; }
@@ -43,6 +43,8 @@ namespace Carbon.Networking
         // DatagramSize (largest)
 
         #endregion
+
+        public string InstanceName { get; set; }
 
         public IList<IPAddress> Addresses { get; set; }
     }

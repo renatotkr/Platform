@@ -26,9 +26,6 @@ namespace Carbon.Computing
         [Member(6), Indexed]
         public long? SourceId { get; set; }
 
-        [Member(7), Mutable]
-        public long FreeSpace { get; set; }
-
         [Member(8), Mutable, Indexed] // Can volumes be shared between hosts?
         public long? HostId { get; set; }
 
@@ -41,8 +38,4 @@ namespace Carbon.Computing
         [Member(11), Timestamp] // snapshot date if from source
         public DateTime Created { get; }
     }
-
-    // A volume may also be a snapshot or image...
-
-    // EncrpytionKey
 }

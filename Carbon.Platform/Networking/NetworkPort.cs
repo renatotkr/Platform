@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace Carbon.Networking
+namespace Carbon.Computing
 {
     public class NetworkPortList : Collection<NetworkPort>
     {
@@ -22,9 +22,7 @@ namespace Carbon.Networking
         }
 
         public override string ToString()
-        {
-            return string.Join(",", this);
-        }
+            => string.Join(",", this);
     }
 
     public struct NetworkPort

@@ -1,20 +1,28 @@
 {
-  "version": "0.6.0",
+  "version": "0.7.8",
   "authors": [ "iamcarbon" ],
 
   "dependencies": {
-    "Carbon.Platform": "0.6.2",
-    "Carbon.Packaging": "0.7.0",
-    "Carbon.Repositories": "0.6.1"
+    "Carbon.Json": "0.7.7",
+    "Carbon.Platform": "0.7.8",
+    "Carbon.Packaging": "0.7.8",
+    "Carbon.Repositories": "0.7.0"
   },
 
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "NETStandard.Library": "1.6.0"
+        "System.Runtime": "4.1.0",
+        "System.Runtime.Serialization.Primitives": "4.1.1",
+        "System.Net.Http": "4.1.0"
       }
     },
-    "net461": { }
+    "net461": {
+      "frameworkAssemblies": {
+        "System.Runtime.Serialization": "4.0.0.0",
+        "System.Net.Http": "4.0.0.0"
+      }
+    }
   }
 }

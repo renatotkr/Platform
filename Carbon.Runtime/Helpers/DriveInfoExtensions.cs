@@ -1,15 +1,16 @@
-﻿using Carbon.Computing;
-using System.IO;
+﻿using System.IO;
 
 namespace Carbon.Storage
 {
+    using Computing;
+
     public static class DriveInfoExtensions
     {
         public static VolumeInfo ToVolumeInfo(this DriveInfo drive)
             => new VolumeInfo {
                 DeviceName = drive.Name.Substring(0, 1),
                 Size       = drive.TotalSize,
-                FreeSpace  = drive.TotalFreeSpace
+                // FreeSpace  = drive.TotalFreeSpace
            };
     }
 }

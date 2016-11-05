@@ -1,18 +1,21 @@
 {
-  "version": "0.7.1",
+  "version": "0.7.9",
+  "authors": [ "iamcarbon " ],
 
-  "authors": [ "iamcarbon "],
   "dependencies": {
-    "Carbon.Data": "0.7.1",
-    "Carbon.Storage": "0.7.1",
-    "Carbon.Platform": "0.6.1",
-    "Carbon.Security": "0.2.0"
+    "Carbon.Data": "0.7.9",
+    "Carbon.Json": "0.7.7",
+    "Carbon.Storage": "0.7.5",
+    "Carbon.Protection": "0.6.0",
+    "Carbon.Versioning": "1.0.0",
+    "Carbon.Repositories": "0.7.0"
   },
 
   "frameworks": {
     "net461": {
       "frameworkAssemblies": {
-        "System.IO.Compression": "4.0.0.0"
+        "System.IO.Compression": "4.0.0.0",
+        "System.Net.Http": "4.0.0.0"
       }
     },
     "netstandard1.6": {

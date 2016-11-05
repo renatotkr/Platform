@@ -24,5 +24,3 @@ namespace Carbon.Computing
 
     }
 }
-
-// - responsible for monitoring the health of the processes (taking them into and out of service as needed)

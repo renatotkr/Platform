@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 
-namespace Carbon.Networking
+namespace Carbon.Computing
 {
     using Data.Annotations;
 
-    [Dataset("Networks", Schema = "Networking")]
+    [Dataset("Networks")]
     public class Network
     {
-        [Member(1)]
+        [Member(1), Identity]
         public long Id { get; set; }
 
         [Member(2)] // 10.1.1.0
@@ -21,7 +22,7 @@ namespace Carbon.Networking
         public long ZoneId { get; set; }
 
         [Member(5)] // So we don't have to lookup through zone...
-        public long ProviderId { get; set; }
+        public ProviderId ProviderId { get; set; }
 
         [Member(5)] // Provides WAN access
         public IPAddress Gateway { get; set; } // 10.1.1.0
@@ -41,17 +42,17 @@ namespace Carbon.Networking
 
         public IPAddress Broadcast => null;
 
-        public IPAddress Start => new IPAddress(Prefix.Address & Netmask);  // 10.1.1.1
+        public IPAddress Start => new IPAddress(IP4Number(Prefix) & Netmask);  // 10.1.1.1
         
-        public IPAddress End => new IPAddress((Prefix.Address & Netmask) | ~Netmask);    // 10.1.1.254
+        public IPAddress End => new IPAddress((IP4Number(Prefix) & Netmask) | ~Netmask);    // 10.1.1.254
 
         #endregion
 
         // The rules form the firewall
-        public IList<NetworkRule> Rules { get; set; }
+        // public IList<NetworkRule> Rules { get; set; }
 
         // Tells packets where to go leaving a network interface
-        public IList<NetworkRoute> Routes { get; set; }
+        // public IList<NetworkRoute> Routes { get; set; }
 
         public static Network Parse(string text)
         {
@@ -62,6 +63,9 @@ namespace Carbon.Networking
                 Cidr = int.Parse(parts[1])
             };
         }
+
+        private static int IP4Number(IPAddress ip)
+          => BitConverter.ToInt32(ip.GetAddressBytes(), 0);
     }
 }
 

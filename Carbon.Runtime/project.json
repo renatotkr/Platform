@@ -1,8 +1,9 @@
 {
-  "version": "0.5.0",
-
+  "version": "0.7.8",
+  "authors": [ "iamcarbon" ],
   "dependencies": {
-    "Carbon.Platform": "0.6.1"
+    "Carbon.Json": "0.7.7",
+    "Carbon.Platform": "0.7.8"
   },
 
   "frameworks": {
@@ -15,6 +16,10 @@
         "System.Net.NetworkInformation": "4.1.0"
       }
     },
-    "net461": { }
+    "net461": {
+      "frameworkAssemblies": {
+        "System.Net.Http": "4.0.0.0"
+      }
+    }
   }
 }

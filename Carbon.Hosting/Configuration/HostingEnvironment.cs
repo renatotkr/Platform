@@ -7,34 +7,34 @@ namespace Carbon.Hosting
 
     public class HostingEnvironment
     {
-        private readonly DirectoryInfo root;
-
         public HostingEnvironment()
         {
             var configFile = new FileInfo(Path.Combine(AppContext.BaseDirectory, "config.json"));
 
             if (configFile != null)
             {
-                var config = JsonObject.Parse(configFile);
+                var text = configFile.OpenText().ReadToEnd();
+
+                var config = JsonObject.Parse(text);
 
                 if (config.ContainsKey("appsRoot"))
                 {
-                    root = new DirectoryInfo(config["appsRoot"]);
+                    AppsRoot = new DirectoryInfo(config["appsRoot"]);
 
                     return;
                 }
             }
-            
-            root = new DirectoryInfo("C:/apps/");
+
+            AppsRoot = new DirectoryInfo("C:/apps/");
         }
 
         public HostingEnvironment(DirectoryInfo root)
         {
-            this.root = root;
+            AppsRoot = root;
         }
 
         // C:/apps/
-        public DirectoryInfo AppsRoot => root;
+        public DirectoryInfo AppsRoot { get; }
     }
 }
 

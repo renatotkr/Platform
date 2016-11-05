@@ -5,7 +5,6 @@ using System.Net;
 namespace Carbon.Computing
 {
     using Data.Annotations;
-    using Networking;
 
     [Dataset("Hosts")]
     public class Host : IHost
@@ -28,7 +27,8 @@ namespace Carbon.Computing
         [Member(6)] // volumeId used to create the base image
         public long ImageId { get; set; }
 
-        [Member(7), StringLength(255), Indexed]
+        [Member(7), Indexed]
+        [StringLength(255)]
         public string InstanceId { get; set; }
 
         [Member(9)]

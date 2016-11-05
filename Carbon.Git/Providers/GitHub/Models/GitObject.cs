@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-using Carbon.Packaging;
+using Carbon.Repositories;
 
 namespace GitHub
 {
@@ -18,7 +18,7 @@ namespace GitHub
 
         #region Helpers
 
-        public ICommit ToCommit()
+        public IGitCommit ToCommit()
         {
             if (Type != "commit") throw new Exception("Not a commit. Was " + Type);
 

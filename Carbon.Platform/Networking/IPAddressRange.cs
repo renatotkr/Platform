@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace Carbon.Networking
+namespace Carbon.Computing
 {
     public struct IPAddressRange
     {
@@ -15,9 +15,11 @@ namespace Carbon.Networking
 
         public IPAddress Broadcast => null;
 
-        public IPAddress Start => new IPAddress(IP4Number(Prefix) & Netmask);  // 10.1.1.1
+        public IPAddress Start 
+            => new IPAddress(IP4Number(Prefix) & Netmask);  // 10.1.1.1
         
-        public IPAddress End => new IPAddress((IP4Number(Prefix) & Netmask) | ~Netmask);    // 10.1.1.254
+        public IPAddress End 
+            => new IPAddress((IP4Number(Prefix) & Netmask) | ~Netmask);    // 10.1.1.254
 
         #endregion
 

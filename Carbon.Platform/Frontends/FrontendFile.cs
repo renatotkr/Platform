@@ -17,10 +17,10 @@ namespace Carbon.Platform
         [Member(3), Key]
         public string Name { get; set; }
 
-        [Member(3)]
+        [Member(4)]
         public Hash Hash { get; set; }
 
-        [Member(4), Timestamp]
+        [Member(5), Timestamp]
         public DateTime Timestamp { get; set; }
     }
 

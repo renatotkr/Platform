@@ -1,9 +1,12 @@
 {
-  "version": "0.6.2",
-
+  "version": "0.7.9",
+  "authors": [ "iamcarbon" ],
   "dependencies": {
-    "Carbon.Data": "0.7.1",
-    "Carbon.Storage": "0.7.1"
+    "Carbon.Data": "0.7.9",
+    "Carbon.Data.Annotations": "0.7.5",
+    "Carbon.Storage": "0.7.5",
+    "Carbon.Repositories": "0.7.0",
+    "Carbon.Versioning": "1.0.0"
   },
 
   "frameworks": {
@@ -14,9 +17,7 @@
       }
     },
     "net461": {
-      "frameworkAssemblies": {
-        "System.Net.Http": "4.0.0.0"
-      }
+     
     }
   },
 

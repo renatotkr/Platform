@@ -11,17 +11,17 @@ namespace TypeScript
 {
     public class TypeScriptCompiler : IBuilder
     {
-        private static SemaphoreSlim _gate = new SemaphoreSlim(1, 1);
+        private static readonly SemaphoreSlim _gate = new SemaphoreSlim(1, 1);
 
         public static string WorkingDirectory = @"D:\tsc\";
 
-        private readonly TypeScriptCompileOptions options;
+        private readonly CompilerOptions options;
 
         public TypeScriptCompiler(string projectPath)
-            : this(new TypeScriptCompileOptions(projectPath: projectPath))
+            : this(new CompilerOptions(projectPath))
         { }
 
-        public TypeScriptCompiler(TypeScriptCompileOptions options)
+        public TypeScriptCompiler(CompilerOptions options)
         {
             #region Preconditions
 
@@ -40,14 +40,15 @@ namespace TypeScript
 
             sw.Stop();
 
+            var waitTime = sw.Elapsed;
+
             BuildResult result;
               
             try
             {
                 result = Execute();
 
-                result.WaitTime = sw.Elapsed;
-
+                result.WaitTime = waitTime;
             }
             finally
             {

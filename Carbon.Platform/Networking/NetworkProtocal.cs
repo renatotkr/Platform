@@ -1,4 +1,4 @@
-﻿namespace Carbon.Networking
+﻿namespace Carbon.Computing
 {
     public enum NetworkProtocal
     {

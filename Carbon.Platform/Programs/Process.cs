@@ -3,7 +3,6 @@
 namespace Carbon.Computing
 {
     using Data.Annotations;
-    using Networking;
 
     [Dataset("Processes")]
     public class Process
@@ -38,8 +37,8 @@ namespace Carbon.Computing
         [Member(4), Optional] // if running inside a docker container
         public string ContainerId { get; set; } // 8fddbcbb101c
 
-        [Member(5), Indexed] // if servicing a backend
-        public long? BackendId { get; set; }
+        [Member(5), Indexed] // if servicing an app
+        public long? AppId { get; set; }
 
         [Member(6)]
         public int PID { get; set; } // https://en.wikipedia.org/wiki/Process_identifier
@@ -58,24 +57,6 @@ namespace Carbon.Computing
 
         [Member(12), Timestamp]
         public DateTime Created { get; set; }
-
-        #region Stats
-
-        // CPU Cycles / load
-
-        [Member(20), Mutable]
-        public long CallCount { get; set; }
-
-        [Member(21), Mutable]
-        public long MemoryUsed { get; set; }
-
-        [Member(22), Mutable]
-        public long DataIn { get; } // egress?
-
-        [Member(23), Mutable]
-        public long DataOut { get; }
-
-        #endregion
     }
 }
 
@@ -87,3 +68,11 @@ namespace Carbon.Computing
 // ResourceLimits
 
 // An instance of a computer program that is being executed
+
+
+// Metrics
+// CPUUtilization
+// callcount
+// memoryused
+// networkin
+// networkout

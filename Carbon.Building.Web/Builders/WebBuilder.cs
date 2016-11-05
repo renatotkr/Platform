@@ -10,7 +10,6 @@ using TypeScript;
 namespace Carbon.Builder
 {
     using Css;
-    using Data;
     using Logging;
     using Storage;
     using Packaging;
@@ -43,7 +42,7 @@ namespace Carbon.Builder
             this.log = log;
             this.fs = fs;
             this.package = package;
-            this.buildId = DateTime.UtcNow.ToString("yyyyMMddHHmmss") + "-" + HexString.FromBytes(Guid.NewGuid().ToByteArray()).Substring(0, 16);
+            this.buildId = DateTime.UtcNow.ToString("yyyyMMddHHmmss") + "-" + Guid.NewGuid().ToString().Replace("-", "").Substring(0, 16);
             this.basePath = $@"D:/builds/{buildId}/";
 
             this.typescript = new TypeScriptCompiler(this.basePath);
@@ -171,8 +170,7 @@ namespace Carbon.Builder
 
         public void Dispose()
         {
-            // Delete the build folder
-            Directory.Delete(basePath, recursive: true);
+            Directory.Delete(basePath, recursive: true);  // Delete the build folder
         }
 
         #region Helpers

@@ -5,12 +5,11 @@
 
     internal class CssResolver : ICssResolver
     {
-        private readonly string scopedPath;
         private readonly Package package;
 
         public CssResolver(string scopedPath, Package package)
         {
-            this.scopedPath = scopedPath;
+            ScopedPath = scopedPath;
             this.package = package;
         }
 
@@ -25,6 +24,6 @@
             return include.ReadStringAsync().Result;
         }
 
-        public string ScopedPath => scopedPath;
+        public string ScopedPath { get; }
     }
 }

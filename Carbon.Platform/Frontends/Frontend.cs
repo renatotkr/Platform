@@ -4,6 +4,7 @@ namespace Carbon.Platform
 {
     using Data;
     using Data.Annotations;
+    using Repositories;
 
     [Dataset("Frontends")]
     [Versioned(TableName = "FrontendReleases")]
@@ -18,11 +19,11 @@ namespace Carbon.Platform
         [Member(3)]
         public string Name { get; set; }
 
-        // e.g. git://github.com/user/project.git#commit-ish
-        [Member(4), Mutable]
-        public Uri RepositoryUrl { get; }
+        [Member(4), Mutable]  // e.g. carbonmade/lefty
+        public RepositoryInfo Repository { get; }
 
-        [Member(5), StringLength(40)]
+        [Member(5), Mutable]
+        [StringLength(40)]
         public string Commit { get; set; }
 
         [Member(6)]

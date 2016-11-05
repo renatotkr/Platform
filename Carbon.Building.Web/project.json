@@ -1,12 +1,11 @@
 {
-  "version": "0.5.0",
-
+  "version": "0.7.8",
+  "authors": [ "iamcarbon" ],
   "dependencies": {
     "Carbon.Css": "0.1.0",
     "Carbon.Logging": "1.0.0",
-    "Carbon.Building": "0.6.0",
-    "Carbon.Packaging": "0.6.0",
-    "Carbon.Platform": "0.6.1"
+    "Carbon.Building": "0.7.5",
+    "Carbon.Packaging": "0.7.8"
   },
 
   "frameworks": {

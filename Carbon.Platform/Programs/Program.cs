@@ -5,7 +5,7 @@ namespace Carbon.Computing
 {
     using Data;
     using Data.Annotations;
-    using Networking;
+    using Repositories;
 
     [Dataset("Programs")]
     [Versioned(TableName = "ProgramReleases")] 
@@ -22,7 +22,7 @@ namespace Carbon.Computing
         [Member(1), Identity]
         public long Id { get; set; }
 
-        [Member(2), Version] // highmark
+        [Member(2), Version] // latest
         public Semver Version { get; set; }
 
         [Member(3), Unique]
@@ -31,20 +31,17 @@ namespace Carbon.Computing
         [Member(4)]
         public ProgramType Type { get; set; }
 
-        [Member(5)]
-        public long RepositoryId { get; set; }
+        [Member(5), Mutable]
+        public RepositoryInfo Repository { get; set; }
 
         [Member(6), StringLength(40), Mutable]
         public string Commit { get; set; }
 
         [Member(7), Mutable]
-        public Hash Hash { get; set; }
+        public Hash Hash { get; set; } // signature?
 
         [Member(8), Mutable]
         public NetworkPortList Ports { get; set; }
-
-        [Member(11), Mutable]
-        public long CreatorId { get; set; }
 
         [Member(12), Timestamp]
         public DateTime Created { get; set; }

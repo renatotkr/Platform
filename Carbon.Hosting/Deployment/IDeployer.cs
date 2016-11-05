@@ -33,12 +33,12 @@ namespace Carbon.Deployment
 
 	Coordinator
 
-	POST	/programs/{id}/versions	 { name: "portfolio/1.1.1-beta", signature: "12345123" }
+	POST	/programs/{id}/versions	 { name: "portfolio/1.1.1-beta"}
 	PUT		/hosts					 { name: "S14" }										    -> 201 { }
 	POST	/programs				 { name: "portfolio" ] }								    -> 201 { }
 	POST	/programs/{id}/versions	 { name: "2.1.1", packageName: "portfolio/1.1.1-beta" }     -> 201 { }
 	
-	PUT	/programs/{name}/activate	 { version: "2.1.1" }									    -> 200 { }
+	PUT	/programs/{id}/activate	 { version: "2.1.1" }									    -> 200 { }
 	
 	---------------------------------------------------------------------------------- */
 }

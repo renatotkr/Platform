@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-using Carbon.Storage;
+using Carbon.Repositories;
 
 namespace GitHub
 {
-    public class GitCommit : ICommit
+    public class GitCommit : IGitCommit
     {
         [DataMember(Name = "sha")]
         public string Sha { get; set; }
@@ -23,7 +23,7 @@ namespace GitHub
         #region ICommit
 
         [IgnoreDataMember]
-        string ICommit.Id => Sha;
+        string IGitCommit.Hash => Sha;
 
         #endregion
     }

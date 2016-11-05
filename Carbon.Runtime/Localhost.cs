@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Carbon.Platform
 {
@@ -31,7 +31,7 @@ namespace Carbon.Platform
 
                 try
                 {
-                    // current.MemoryTotal = MemoryInfo.Observe().Total;
+                    current.MemoryTotal = MemoryInfo.Observe().Total;
 
                     current.Volumes = GetVolumes(current).ToList();
                 }
@@ -83,9 +83,9 @@ namespace Carbon.Platform
             return current;
         }
 
-        public static IEnumerable<Networking.NetworkInterface> GetActiveNetworkInterfaces()
+        public static IEnumerable<NetworkInterface> GetActiveNetworkInterfaces()
         {
-            var networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+            var networkInterfaces = System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces();
 
             foreach (var ni in networkInterfaces)
             {
@@ -95,9 +95,9 @@ namespace Carbon.Platform
 
                 if (ni.OperationalStatus == OperationalStatus.Up && physicalAddress.Length > 0 && physicalAddress != "00000000000000E0")
                 {
-                    yield return new Networking.NetworkInterface {
+                    yield return new NetworkInterface {
                         // Description      = ni.Description,
-                        Addresses       = GetNetworkInterfaceIps(ni),
+                        Addresses       = GetIps(ni),
                         // InstanceName    = InstanceName.FromDescription(ni.Description),
                         PhysicalAddress = physicalAddress
                     };
@@ -107,19 +107,30 @@ namespace Carbon.Platform
 
         public static IEnumerable<VolumeInfo> GetVolumes(Host machine)
         {
-            foreach (var drive in DriveInfo.GetDrives().Where(d => d.IsReady && d.DriveType == System.IO.DriveType.Fixed))
+            foreach (var drive in DriveInfo.GetDrives())
             {
-                yield return drive.ToVolumeInfo();
+                if (drive.IsReady && drive.DriveType == System.IO.DriveType.Fixed)
+                {
+                    yield return drive.ToVolumeInfo();
+                }
             }
         }
 
-        public static IPAddress[] GetNetworkInterfaceIps(NetworkInterface ni)
+        public static IPAddress[] GetIps(System.Net.NetworkInformation.NetworkInterface ni)
         {
-            return ni
-                .GetIPProperties().UnicastAddresses
-                .Where(ip => !IPAddress.IsLoopback(ip.Address) && ip.Address.AddressFamily == AddressFamily.InterNetwork)
-                .Select(ip => ip.Address)
-                .ToArray();
+            var ips = new List<IPAddress>();
+
+            foreach (var ip in ni.GetIPProperties().UnicastAddresses)
+            {
+                if (IPAddress.IsLoopback(ip.Address)) continue;
+
+                if (ip.Address.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    ips.Add(ip.Address);
+                }
+            }
+
+            return ips.ToArray();
         }
     }
 }
