@@ -10,36 +10,14 @@ namespace Carbon.Packaging
 {
     using Storage;
 
-    public abstract class Package : IEnumerable<IBlob>, IPackage, IDisposable
+    public abstract class Package : IEnumerable<IBlob>, IDisposable
     {
-        private string name;
-        private Semver version;
-
         public abstract IEnumerable<IBlob> Enumerate();
 
         public abstract void Dispose();
 
-        public long Id { get; set; }
-
-        public string Name => name;
-
-        public Semver Version => version;
-
-        public long RepositoryId { get; set; }
-
-        public string Commit { get; set; } // The resolved commit of the package
-
-        public IList<PackageDependency> Dependencies => new List<PackageDependency>();
-
-        public void Set(string name, Semver version)
-        {
-            this.name = name;
-            this.version = version;
-        }
-
         public IBlob Find(string absolutePath) =>
             this.FirstOrDefault(item => item.Name == absolutePath);
-
 
         public IBlob[] List(string prefix)
             => this.Where(item => item.Name.StartsWith(prefix)).ToArray();
@@ -83,7 +61,7 @@ namespace Carbon.Packaging
 
         public async Task ZipToAsync(Stream stream)
         {
-            using (var archive = new ZipArchive(stream, ZipArchiveMode.Create, true))
+            using (var archive = new System.IO.Compression.ZipArchive(stream, ZipArchiveMode.Create, true))
             {
                 foreach (var item in Enumerate())
                 {
@@ -108,7 +86,8 @@ namespace Carbon.Packaging
 
         #region Helpers
 
-        public static Package FromDirectory(DirectoryInfo root) => new DirectoryPackage(root);
+        public static Package FromDirectory(DirectoryInfo root) 
+            => new DirectoryPackage(root);
 
         #endregion
 

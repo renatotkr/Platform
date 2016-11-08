@@ -60,7 +60,7 @@ namespace Carbon.Packaging
             archive.Dispose();
         }
 
-        public static async Task<Package> FetchAsync(Uri url, bool stripFirstLevel = true)
+        public static async Task<ZipPackage> FetchAsync(Uri url, bool stripFirstLevel = true)
         {
             using (var httpClient = new HttpClient())
             {
@@ -86,7 +86,7 @@ namespace Carbon.Packaging
             if (stream.CanSeek) stream.Position = 0;
 
             // Dispose the stream when we've disposed the archive
-            var zip = new ZipArchive(stream, ZipArchiveMode.Read, leaveOpen);
+            var zip = new System.IO.Compression.ZipArchive(stream, ZipArchiveMode.Read, leaveOpen);
 
             return new ZipPackage(zip, stripFirstLevel);
         }

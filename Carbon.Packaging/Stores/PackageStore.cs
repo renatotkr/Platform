@@ -16,7 +16,7 @@ namespace Carbon.Packaging
             this.bucket = bucket;
         }
 
-        public async Task<Hash> PutAsync(Package package)
+        public async Task<Hash> PutAsync(string name, Semver version, Package package)
         {
             #region Preconditions
 
@@ -24,7 +24,7 @@ namespace Carbon.Packaging
 
             #endregion
 
-            var key = package.Name + "/" + package.Version; // + ".zip" ?
+            var key = name + "/" + version.ToString();
 
             using (var ms = new MemoryStream())
             {

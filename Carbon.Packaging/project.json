@@ -1,14 +1,16 @@
 {
-  "version": "0.7.9",
+  "version": "0.7.10",
+  "description": "Provides helpers to package up code for deployment",
   "authors": [ "iamcarbon " ],
+  "copyright": "© Jason Nelson",
 
   "dependencies": {
-    "Carbon.Data": "0.7.9",
-    "Carbon.Json": "0.7.7",
-    "Carbon.Storage": "0.7.5",
+    "Carbon.Json": "0.7.8",
     "Carbon.Protection": "0.6.0",
     "Carbon.Versioning": "1.0.0",
-    "Carbon.Repositories": "0.7.0"
+    "Carbon.Repositories": "0.7.0",
+    "Carbon.Data": "0.7.10",
+    "Carbon.Storage": "0.7.10"
   },
 
   "frameworks": {
@@ -32,6 +34,7 @@
     "tags": [ "packaging" ],
     "owners": [ "Jason Nelson" ],
     "requireLicenseAcceptance": false,
+    "licenseUrl": "https://opensource.org/licenses/MIT",
     "repository": {
       "type": "git",
       "url": "https://github.com/carbon/Platform"

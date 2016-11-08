@@ -26,26 +26,22 @@ namespace Carbon.Packaging
         public Semver Version { get; set; }
 
         [Member(3), Mutable, Unique]
+        [StringLength(50)]
         public string Name { get; set; }
 
         [Member(4), Mutable]
-        public RepositoryInfo Repository { get; set; }
-
-        [Member(5), Mutable]
-        [StringLength(40)]
-        public string Commit { get; set; }
-
-        [Member(6), Unique]
+        public RepositoryInfo Source { get; set; }
+   
+        [Member(5), Unique]
         public Hash Hash { get; set; }
 
-        [Member(11)]
-        public long CreatorId { get; set; }
+        [Member(6)]
+        public string Main { get; set; } // TODO
 
         [Member(12), Timestamp]
         public DateTime Created { get; set; }
 
-        public PackageFile Main { get; set; } // TODO
-
+        
         public IList<PackageDependency> Dependencies { get; set; }
 
         public IList<PackageFile> Files { get; set; }

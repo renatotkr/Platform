@@ -1,6 +1,6 @@
 ﻿namespace Carbon.Packaging
 {
-    public class XarPackage 
+    internal class Xar
     {
        // Placeholder....
        // basis of v2 of package (.pgk)
