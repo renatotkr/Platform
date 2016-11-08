@@ -1,7 +1,14 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Text;
 
 namespace Carbon.Computing
 {
+    // e.g.
+    // 22,80,444
+    // 1000-2000
+    // 22/tcp,433/tcp
+
     public class NetworkPortList : Collection<NetworkPort>
     {
         public NetworkPortList(params NetworkPort[] ports)
@@ -25,16 +32,24 @@ namespace Carbon.Computing
             => string.Join(",", this);
     }
 
-    public struct NetworkPort
+    public struct NetworkPort : IEquatable<NetworkPort>
     {
-        public static readonly NetworkPort SSH = new NetworkPort(22);
-        public static readonly NetworkPort HTTPS = new NetworkPort(433);
+        public static readonly NetworkPort SSH   = new NetworkPort(22, NetworkProtocal.TCP);
+        public static readonly NetworkPort HTTP  = new NetworkPort(80, NetworkProtocal.HTTP);
+        public static readonly NetworkPort HTTPS = new NetworkPort(443, NetworkProtocal.HTTPS);
 
-        public NetworkPort(ushort value, NetworkProtocal protocal = NetworkProtocal.TPC)
+        public NetworkPort(ushort value, NetworkProtocal protocal = NetworkProtocal.TCP)
             : this(value, 0, protocal) { }
 
-        public NetworkPort(ushort start, ushort end, NetworkProtocal protocal = NetworkProtocal.TPC)
-        {      
+        public NetworkPort(ushort start, ushort end, NetworkProtocal protocal = NetworkProtocal.TCP)
+        {
+            #region Preconditions
+
+            if (start == 0)
+                throw new ArgumentException("Must be greater than 0", paramName: nameof(start));
+
+            #endregion
+
             Start = start;
             End = end;
             Protocal = protocal;
@@ -48,52 +63,85 @@ namespace Carbon.Computing
 
         // 7100/tcp
         // 100-150/tcp
+        // 80/http
+
         public static NetworkPort Parse(string text)
         {
+            switch (text)
+            {
+                case "http"  : return HTTP;
+                case "https" : return HTTPS;
+            }
+
             var split = text.Split('/');
 
             var protocal = NetworkProtocal.Any;
 
             if (split.Length > 1)
             {
-                switch (split[1])
-                {
-                    case "UDP"  : protocal = NetworkProtocal.UDP; break;
-                    case "TCP"  : protocal = NetworkProtocal.TPC; break;
-                    default     : throw new System.Exception("Unexpected protocal:" + split[1]);
-                }
+                protocal = ParseProtocal(split[1]);
             }
-
-            ushort start = 0, end = 0;
 
             if (split[0].Contains("-"))
             {
                 var r = split[0].Split('-');
 
-                start = ushort.Parse(r[0]);
-                end = ushort.Parse(r[1]);
+                var start = ushort.Parse(r[0]);
+                var end = ushort.Parse(r[1]);
+
+                return new NetworkPort(start, end, protocal);
             }
             else
             {
-                start = ushort.Parse(split[0]);
-            }
+                var start = ushort.Parse(split[0]);
 
-            return new NetworkPort(start, end, protocal);
+                return new NetworkPort(start, protocal);
+            }
+        }
+
+        private static NetworkProtocal ParseProtocal(string text)
+        {
+            switch (text)
+            {
+                case "udp"   : return NetworkProtocal.UDP; 
+                case "tcp"   : return NetworkProtocal.TCP; 
+                case "http"  : return NetworkProtocal.HTTP;
+                case "https" : return NetworkProtocal.HTTPS;
+
+                default: throw new Exception("Unexpected protocal:" + text);
+            }
         }
 
         public override string ToString()
         {
+            if (Equals(HTTP))  return "http";
+            if (Equals(HTTPS)) return "https";
+
+            var sb = new StringBuilder();
+
+            sb.Append(Start);
+
             if (End != 0)
             {
-                return Start + "-" + End + "/" + Protocal.ToString().ToLower();
+                sb.Append("-");
+                sb.Append(End);
             }
 
-            return Start + "/" + Protocal.ToString().ToLower();
+            if (Protocal != NetworkProtocal.Any)
+            {
+                sb.Append("/");
+                sb.Append(Protocal.ToString().ToLower());
+            }
+
+            return sb.ToString();
         }
+
+        #region IEquatable<NetworkPort>
+
+        public bool Equals(NetworkPort other)
+            => Start == other.Start && End == other.End && Protocal == other.Protocal;
+
+        #endregion
+
     }
 }
-
-// e.g.
-// 22,80,444
-// 1000-2000
-// 22/tcp, 433,tcp
