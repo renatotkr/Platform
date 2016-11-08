@@ -34,13 +34,10 @@ namespace Carbon.Computing
         [Member(3), Indexed]
         public long HostId { get; set; }
 
-        [Member(4), Optional] // if running inside a docker container
-        public string ContainerId { get; set; } // 8fddbcbb101c
+        [Member(4)] // if running inside a docker container
+        public long? ContainerId { get; set; } // 8fddbcbb101c
 
-        [Member(5), Indexed] // if servicing an app
-        public long? AppId { get; set; }
-
-        [Member(6)]
+        [Member(5)]
         public int PID { get; set; } // https://en.wikipedia.org/wiki/Process_identifier
 
         [Member(7)]

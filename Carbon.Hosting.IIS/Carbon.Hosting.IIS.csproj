@@ -41,7 +41,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Carbon.Hosting, Version=0.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Carbon.Hosting.0.7.7\lib\net461\Carbon.Hosting.dll</HintPath>
+      <HintPath>..\packages\Carbon.Hosting.0.7.8\lib\net461\Carbon.Hosting.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Carbon.Json, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -53,15 +53,19 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Carbon.Packaging, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Carbon.Packaging.0.7.7\lib\net461\Carbon.Packaging.dll</HintPath>
+      <HintPath>..\packages\Carbon.Packaging.0.7.9\lib\net461\Carbon.Packaging.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Carbon.Platform, Version=0.7.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Carbon.Platform.0.7.7\lib\net461\Carbon.Platform.dll</HintPath>
+      <HintPath>..\packages\Carbon.Platform.0.7.9\lib\net461\Carbon.Platform.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Carbon.Protection, Version=0.6.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Carbon.Protection.0.6.0\lib\net461\Carbon.Protection.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Carbon.Repositories, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Carbon.Repositories.0.7.0\lib\net451\Carbon.Repositories.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Carbon.Security, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">

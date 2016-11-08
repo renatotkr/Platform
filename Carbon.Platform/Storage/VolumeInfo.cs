@@ -26,7 +26,8 @@ namespace Carbon.Computing
         [Member(6), Indexed]
         public long? SourceId { get; set; }
 
-        [Member(8), Mutable, Indexed] // Can volumes be shared between hosts?
+        [Member(8), Mutable] // Can volumes be shared between hosts?
+        [Indexed]
         public long? HostId { get; set; }
 
         [Member(9), Mutable]

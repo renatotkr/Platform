@@ -14,7 +14,7 @@ namespace Carbon.Computing
         [Member(2)]
         public long NetworkId { get; set; }
 
-        [Member(2), Indexed] // AKA mac
+        [Member(2), Indexed] // AKA mac address
         public string PhysicalAddress { get; set; }
 
         [Member(3)] // in octects
@@ -23,28 +23,7 @@ namespace Carbon.Computing
         [Member(4), Mutable, Indexed]
         public long? HostId { get; set; }
 
-        #region Stats (5-8)
-
-        [Member(5), Mutable]  // in octects
-        public long NetworkIn { get; }
-
-        [Member(6), Mutable]  // in octects
-        public long NetworkOut { get; }
-
-        [Member(7), Mutable]  // in octects
-        public long PacketsIn { get; }
-
-        [Member(8), Mutable]  // in octects
-        public long PacketsOut { get; }
-
-        // [Mutable]
-        // public long PacketsDiscarded { get; }
-
-        // DatagramSize (largest)
-
-        #endregion
-
-        public string InstanceName { get; set; }
+        // public string InstanceName { get; set; }
 
         public IList<IPAddress> Addresses { get; set; }
     }
@@ -54,4 +33,26 @@ namespace Carbon.Computing
 public string Description { get; set; } //  e.g. Intel(R) PRO/1000 MT Network Connection
 
 public string InstanceName { get; set; }
+
+     #region Stats (5-8)
+
+        [Member(5), Mutable]  // in octects
+        public long NetworkIn { get; }
+
+        [Member(6), Mutable]  // in octects
+        public long NetworkOut { get; }
+
+        [Member(7), Mutable]  // in octects
+        public long NetworkPacketsIn { get; }
+
+        [Member(8), Mutable]  // in octects
+        public long NetworkPacketsOut { get; }
+
+        // [Mutable]
+        // public long PacketsDiscarded { get; }
+
+        // DatagramSize (largest)
+
+        #endregion
+
 */

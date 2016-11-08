@@ -1,6 +1,8 @@
 {
   "version": "0.7.8",
   "authors": [ "iamcarbon" ],
+  "copyright": "© Jason Nelson",
+
   "dependencies": {
     "Carbon.Data.Annotations": "0.7.5"
   },
@@ -12,7 +14,7 @@
         "NETStandard.Library": "1.6.0"
       }
     },
-    "net451": { }
+    "net451": {}
   },
 
   "packOptions": {

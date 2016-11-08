@@ -17,14 +17,11 @@ namespace Carbon.Platform
         public Semver Version { get; set; }
 
         [Member(3)]
+        [StringLength(50)]
         public string Name { get; set; }
 
-        [Member(4), Mutable]  // e.g. carbonmade/lefty
-        public RepositoryInfo Repository { get; }
-
-        [Member(5), Mutable]
-        [StringLength(40)]
-        public string Commit { get; set; }
+        [Member(4), Mutable]  // e.g. carbonmade/lefty#commit
+        public RepositoryInfo Source { get; }
 
         [Member(6)]
         public Hash Hash { get; set; }

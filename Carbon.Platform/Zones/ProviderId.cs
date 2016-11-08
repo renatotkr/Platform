@@ -2,10 +2,12 @@
 {
     public enum ProviderId
     {
-        Amazon      = 5,      // AWS
-        Google      = 7,      // Google Cloud
-        Microsoft   = 9,      // Azure
-        GitHub      = 100,
-        BitBucket   = 101
+        Amazon      = 10,
+        Google      = 20,
+        Microsoft   = 30,
+
+        BitBucket   = 120,
+        GitHub      = 150
+
     }
 }

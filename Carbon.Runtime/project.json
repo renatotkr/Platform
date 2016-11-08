@@ -1,9 +1,12 @@
 {
-  "version": "0.7.8",
+  "title": "Carbon.Runtime",
+  "version": "0.7.12",
+  "description": "Provides a helper class for reading the current hosts environment & hardware",
+  "copyright": "© Jason Nelson",
   "authors": [ "iamcarbon" ],
   "dependencies": {
-    "Carbon.Json": "0.7.7",
-    "Carbon.Platform": "0.7.8"
+    "Carbon.Json": "0.7.8",
+    "Carbon.Platform": "0.7.12"
   },
 
   "frameworks": {
@@ -20,6 +23,14 @@
       "frameworkAssemblies": {
         "System.Net.Http": "4.0.0.0"
       }
+    }
+  },
+  "packOptions": {
+    "owners": [ "Jason Nelson" ],
+    "requireLicenseAcceptance": false,
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/carbon/Platform"
     }
   }
 }
