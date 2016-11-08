@@ -1,7 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Carbon.Packaging
+namespace Carbon.Git
 {
+    using Packaging;
     using Repositories;
 
     public interface IRepositoryClient

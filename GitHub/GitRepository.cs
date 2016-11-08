@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Carbon;
 using Carbon.Packaging;
 using Carbon.Repositories;
+using Carbon.Git;
 
 namespace GitHub
 {

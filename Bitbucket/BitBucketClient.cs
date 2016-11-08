@@ -6,12 +6,11 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-using Carbon.Data;
 using Carbon.Json;
 
 namespace Bitbucket
 {
-    public class BitbucketClient
+    public class BitbucketClient : IDisposable
     {
         const string baseUri = "https://bitbucket.org/api/2.0";
 
@@ -33,7 +32,6 @@ namespace Bitbucket
             var path = $"/repositories/{accountName}/{repoName}/commits/{revision}";
 
             var httpRequest = new HttpRequestMessage(HttpMethod.Get, baseUri + path);
-
 
             var response = await Send(httpRequest).ConfigureAwait(false);
 
@@ -95,6 +93,12 @@ namespace Bitbucket
 
                 return JsonObject.Parse(responseText);
             }
+        }
+
+
+        public void Dispose()
+        {
+            httpClient.Dispose();
         }
     }
 }

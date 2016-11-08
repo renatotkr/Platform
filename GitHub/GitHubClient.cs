@@ -12,7 +12,7 @@ namespace GitHub
 {
     public class GitHubClient
     {
-        private static readonly ProductInfoHeaderValue userAgent = new ProductInfoHeaderValue("Carbon", "2.0.0");
+        private static readonly ProductInfoHeaderValue userAgent = new ProductInfoHeaderValue("Carbon", "2.1.0");
 
         private readonly string baseUri = "https://api.github.com";
 
