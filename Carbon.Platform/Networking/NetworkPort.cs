@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Text;
 
 namespace Carbon.Computing
@@ -9,28 +8,8 @@ namespace Carbon.Computing
     // 1000-2000
     // 22/tcp,433/tcp
 
-    public class NetworkPortList : Collection<NetworkPort>
-    {
-        public NetworkPortList(params NetworkPort[] ports)
-            : base(ports) { }
-
-        public static NetworkPortList Parse(string text)
-        {
-            var ports = text.Split(',');
-
-            var list = new NetworkPort[ports.Length];
-
-            for (var i = 0; i < ports.Length; i++)
-            {
-                list[i] = NetworkPort.Parse(ports[i]);
-            }
-
-            return new NetworkPortList(list);
-        }
-
-        public override string ToString()
-            => string.Join(",", this);
-    }
+    // Listener Info ?
+    // IP, Host?
 
     public struct NetworkPort : IEquatable<NetworkPort>
     {

@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 
-[assembly: AssemblyTitle("Carbon Platform")]
-[assembly: AssemblyProduct("Carbon")]
-[assembly: AssemblyCopyright("© 2012 - 2016 Jason Nelson")]
+[assembly: AssemblyTitle("Carbon.Platform")]
+[assembly: AssemblyCopyright("© Jason Nelson")]
 
-[assembly: AssemblyVersion("0.7.6")]
+[assembly: AssemblyVersion("0.8.1")]

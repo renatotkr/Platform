@@ -9,8 +9,8 @@ namespace Carbon.Git
     {
         Task<Package> DownloadAsync(Revision revision);
 
-        Task<IGitCommit> GetCommitAsync(Revision revision);
+        Task<ICommit> GetCommitAsync(Revision revision);
 
-        Task TagAsync(IGitCommit commit, Semver version);
+        Task TagAsync(ICommit commit, SemanticVersion version);
     }
 }

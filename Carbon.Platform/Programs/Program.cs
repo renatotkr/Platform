@@ -3,17 +3,16 @@ using System.Collections.Generic;
 
 namespace Carbon.Computing
 {
-    using Data;
     using Data.Annotations;
+    using Protection;
     using Repositories;
 
-    [Dataset("Programs")]
-    [Versioned(TableName = "ProgramReleases")] 
+    [Dataset("Programs")] //  VersionTable = "ProgramReleases")]
     public class Program : IProgram
     {
         public Program() { }
 
-        public Program(long id, Semver version)
+        public Program(long id, SemanticVersion version)
         {
             Id      = id;
             Version = version;
@@ -23,25 +22,23 @@ namespace Carbon.Computing
         public long Id { get; set; }
 
         [Member(2), Version] // latest
-        public Semver Version { get; set; }
+        public SemanticVersion Version { get; set; }
 
         [Member(3), Unique]
+        [StringLength(50)]
         public string Name { get; set; }
 
         [Member(4)]
         public ProgramType Type { get; set; }
 
         [Member(5), Mutable]
-        public RepositoryInfo Repository { get; set; }
-
-        [Member(6), StringLength(40), Mutable]
-        public string Commit { get; set; }
+        public RepositoryInfo Source { get; set; }
 
         [Member(7), Mutable]
         public Hash Hash { get; set; } // signature?
 
         [Member(8), Mutable]
-        public NetworkPortList Ports { get; set; }
+        public List<NetworkPort> Listeners { get; set; }
 
         [Member(12), Timestamp]
         public DateTime Created { get; set; }

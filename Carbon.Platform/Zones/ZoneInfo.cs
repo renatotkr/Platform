@@ -1,19 +1,6 @@
 ﻿namespace Carbon.Computing
 {
-    using Data.Annotations;
-
-    [Dataset("Zones")]
-    public class ZoneInfo
-    {
-        [Member(1), Identity]
-        public long Id { get; }
-
-        [Member(2), Unique] // aws/us-east-1/A
-        public string Path { get; set; }
-
-        [Member(3)]
-        public ZoneLevel Level { get; }
-    }
+    
 }
 
 /*

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 
 namespace Carbon.Computing
 {
     using Data.Annotations;
+    using Extensions;
 
     [Dataset("Networks")]
     public class Network
@@ -22,7 +21,7 @@ namespace Carbon.Computing
         public long ZoneId { get; set; }
 
         [Member(5)] // So we don't have to lookup through zone...
-        public ProviderId ProviderId { get; set; }
+        public ComputeProviderId ProviderId { get; set; }
 
         [Member(5)] // Provides WAN access
         public IPAddress Gateway { get; set; } // 10.1.1.0
@@ -42,9 +41,11 @@ namespace Carbon.Computing
 
         public IPAddress Broadcast => null;
 
-        public IPAddress Start => new IPAddress(IP4Number(Prefix) & Netmask);  // 10.1.1.1
+        public IPAddress Start 
+            => new IPAddress(Prefix.IP4Number() & Netmask);                 // 10.1.1.1
         
-        public IPAddress End => new IPAddress((IP4Number(Prefix) & Netmask) | ~Netmask);    // 10.1.1.254
+        public IPAddress End 
+            => new IPAddress((Prefix.IP4Number() & Netmask) | ~Netmask);    // 10.1.1.254
 
         #endregion
 
@@ -64,8 +65,7 @@ namespace Carbon.Computing
             };
         }
 
-        private static int IP4Number(IPAddress ip)
-          => BitConverter.ToInt32(ip.GetAddressBytes(), 0);
+     
     }
 }
 

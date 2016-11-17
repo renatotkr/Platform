@@ -54,7 +54,7 @@ namespace GitHub
 
         #endregion
 
-        public async Task<IGitCommit> GetCommitAsync(Revision revision)
+        public async Task<ICommit> GetCommitAsync(Revision revision)
         {
             var reference = await GetRef(revision.Path).ConfigureAwait(false);
 
@@ -69,7 +69,7 @@ namespace GitHub
         public Task<IList<GitBranch>> GetBranches()
             => client.GetBranches(accountName, repositoryName);
 
-        public Task TagAsync(IGitCommit commit, Semver version)
+        public Task TagAsync(ICommit commit, SemanticVersion version)
         {
             throw new NotImplementedException();
         }

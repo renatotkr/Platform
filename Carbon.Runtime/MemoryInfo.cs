@@ -6,10 +6,10 @@ namespace Carbon.Platform
     public struct MemoryInfo
     {
         public long Available { get; set; }
-
-        public long Used { get; set; }
-
+     
         public long Total { get; set; }
+
+        public long Used => Total - Available;
 
         public static MemoryInfo Observe()
         {
@@ -17,14 +17,10 @@ namespace Carbon.Platform
 
             if (GlobalMemoryStatusEx(memoryStatus))
             {
-                var observation = new MemoryInfo {
+                return new MemoryInfo {
                     Total = (long)memoryStatus.ullTotalPhys,
                     Available = (long)memoryStatus.ullAvailPhys
                 };
-
-                observation.Used = observation.Total - observation.Available;
-
-                return observation;
             }
 
 

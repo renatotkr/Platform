@@ -18,7 +18,7 @@ namespace GitHub
 
         #region Helpers
 
-        public IGitCommit ToCommit()
+        public ICommit ToCommit()
         {
             if (Type != "commit") throw new Exception("Not a commit. Was " + Type);
 

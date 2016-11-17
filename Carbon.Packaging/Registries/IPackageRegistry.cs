@@ -6,7 +6,7 @@ namespace Carbon.Packaging
     {
         long Lookup(string name);
 
-        Task<IPackage> GetAsync(long id, Semver version);
+        Task<IPackage> GetAsync(long id, SemanticVersion version);
 
         Task CreateAsync(PackageInfo package);
     }

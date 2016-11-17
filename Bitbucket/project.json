@@ -1,12 +1,12 @@
 ﻿{
-  "version": "0.7.10",
+  "version": "0.8.0",
   "authors": [ "iamcarbon" ],
 
   "dependencies": {
-    "Carbon.Git": "0.7.10",
-    "Carbon.Json": "0.7.7",
-    "Carbon.Packaging": "0.7.10",
-    "Carbon.Repositories": "0.7.0"
+    "Carbon.Git": "0.8.0",
+    "Carbon.Json": "1.0.0",
+    "Carbon.Packaging": "0.8.0",
+    "Carbon.Repositories": "1.0.0"
   },
 
   "frameworks": {

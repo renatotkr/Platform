@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Carbon.Packaging
@@ -33,6 +34,8 @@ namespace Carbon.Packaging
         public long Size => file.Length;
 
         public Stream Open() => file.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
+
+        IDictionary<string, string> IBlob.Metadata => null;
 
         public void Dispose() { }
     }

@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Collections.Generic;
 
 namespace Carbon.Platform
 {
@@ -6,12 +7,25 @@ namespace Carbon.Platform
     using Computing;
     using Data;
 
-    public class NetworkPortListHandler : DbTypeHandler<NetworkPortList>
+    public class NetworkPortListHandler : DbTypeHandler<List<NetworkPort>>
     {
-        public override NetworkPortList Parse(object value)
-            => NetworkPortList.Parse((string)value);
+        public override List<NetworkPort> Parse(object value)
+        {
+            var text = (string)value;
 
-        public override void SetValue(IDbDataParameter parameter, NetworkPortList value)
+            var ports = text.Split(',');
+
+            var list = new List<NetworkPort>(ports.Length);
+
+            foreach (var p in ports)
+            {
+                list.Add(NetworkPort.Parse(p));
+            }
+
+            return list;
+        }
+
+        public override void SetValue(IDbDataParameter parameter, List<NetworkPort> value)
         {
             parameter.Value = value.ToString();
             parameter.DbType = DbType.AnsiString;

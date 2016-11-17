@@ -8,7 +8,7 @@ namespace Carbon.Packaging
 
         string Name { get; }
 
-        Semver Version { get; }
+        SemanticVersion Version { get; }
 
         IList<PackageDependency> Dependencies { get; }
     }

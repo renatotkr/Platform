@@ -52,7 +52,7 @@ namespace Bitbucket
             this.client = new BitbucketClient(credentials);
         }
 
-        public async Task<IGitCommit> GetCommitAsync(Revision revision)
+        public async Task<ICommit> GetCommitAsync(Revision revision)
         {
             var commit = await client.GetCommit(accountName, repositoryName, revision.Name).ConfigureAwait(false);
 
@@ -64,7 +64,7 @@ namespace Bitbucket
             return commit;
         }
 
-        public Task TagAsync(IGitCommit commit, Semver version)
+        public Task TagAsync(ICommit commit, SemanticVersion version)
         {
             throw new NotImplementedException();
         }

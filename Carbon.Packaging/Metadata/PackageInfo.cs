@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace Carbon.Packaging
 {
-    using Data;
     using Data.Annotations;
+    using Protection;
     using Repositories;
 
     [Dataset("Packages")]
-    [Versioned(TableName = "PackageReleases")]
+    // [Versioned(TableName = "PackageReleases")]
     public class PackageInfo : IPackage
     {
         public PackageInfo() { }
 
-        public PackageInfo(string name, Semver version)
+        public PackageInfo(string name, SemanticVersion version)
         {
             Name = name;
             Version = version;
@@ -23,7 +23,7 @@ namespace Carbon.Packaging
         public long Id { get; set; }
 
         [Member(2), Version]
-        public Semver Version { get; set; }
+        public SemanticVersion Version { get; set; }
 
         [Member(3), Mutable, Unique]
         [StringLength(50)]

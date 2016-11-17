@@ -1,29 +1,31 @@
 {
-  "version": "0.7.9",
+  "title": "Carbon Platform",
+  "description": "Platform primitives for operating a multicloud service.",
   "authors": [ "iamcarbon" ],
+
+  "version": "0.8.1",
+
   "dependencies": {
-    "Carbon.Data": "0.7.9",
-    "Carbon.Data.Annotations": "0.7.5",
-    "Carbon.Storage": "0.7.5",
-    "Carbon.Repositories": "0.7.0",
-    "Carbon.Versioning": "1.0.0"
+    "Carbon.Data.Annotations": "0.8.2",
+    "Carbon.Protection": "1.0.0",
+    "Carbon.Repositories": "1.0.0",
+    "Carbon.Versioning": "1.1.0"
   },
 
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "NETStandard.Library": "1.6.0"
+        "System.Runtime": "4.1.0",
+        "System.Runtime.Extensions": "4.1.0",
+        "System.Net.Primitives": "4.0.11"
       }
     },
-    "net461": {
-     
-    }
+    "net451": {}
   },
 
   "packOptions": {
-    "summary": "Cloud & hosting abstractions",
-    "tags": [ "cloud" ],
+    "tags": [ "cloud", "carbon" ],
     "owners": [ "Jason Nelson" ],
     "requireLicenseAcceptance": false,
     "repository": {

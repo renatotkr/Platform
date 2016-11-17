@@ -44,12 +44,16 @@ namespace Carbon.Hosting
             return new SiteBindingInfo(port, host, ip);
         }
 
-        public string GetInformation()
-        {
-            return string.Format("{0}:{1}:{2}", Ip ?? "*", Port.ToString(), HostName ?? "");
-        }
-
         // 192.169.4.2:80:hostName
-        public override string ToString() => GetInformation();
+
+        public string GetInformation()
+            => string.Format("{0}:{1}:{2}", 
+                /*0*/ Ip ?? "*",
+                /*1*/ Port,
+                /*2*/ HostName ?? "");
+
+   
+        public override string ToString() 
+            => GetInformation();
     }
 }

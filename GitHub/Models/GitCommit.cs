@@ -5,7 +5,7 @@ using Carbon.Repositories;
 
 namespace GitHub
 {
-    public class GitCommit : IGitCommit
+    public class GitCommit : ICommit
     {
         [DataMember(Name = "sha")]
         public string Sha { get; set; }
@@ -23,7 +23,7 @@ namespace GitHub
         #region ICommit
 
         [IgnoreDataMember]
-        string IGitCommit.Hash => Sha;
+        string ICommit.Id => Sha;
 
         #endregion
     }

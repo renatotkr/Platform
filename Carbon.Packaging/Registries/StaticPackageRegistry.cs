@@ -18,7 +18,7 @@ namespace Carbon.Packaging
         public long Lookup(string name) 
             => this.First(p => p.Name == name).Id;
 
-        public Task<IPackage> GetAsync(long id, Semver version)
+        public Task<IPackage> GetAsync(long id, SemanticVersion version)
             => Task.FromResult<IPackage>(this.FirstOrDefault(l => l.Id == id && l.Version == version));
 
         public string Serialize()

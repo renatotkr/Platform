@@ -2,19 +2,18 @@
 
 namespace Carbon.Platform
 {
-    using Data;
     using Data.Annotations;
+    using Protection;
     using Repositories;
 
-    [Dataset("Frontends")]
-    [Versioned(TableName = "FrontendReleases")]
+    [Dataset("Frontends")] //  VersionTable = "FrontendReleases")]
     public class Frontend : IFrontend
     {
         [Member(1), Key] // frontendId
         public long Id { get; set; }
 
         [Member(2), Version]
-        public Semver Version { get; set; }
+        public SemanticVersion Version { get; set; }
 
         [Member(3)]
         [StringLength(50)]

@@ -15,7 +15,7 @@ namespace Carbon.Computing
         public long NetworkId { get; set; }
 
         [Member(2), Indexed] // AKA mac address
-        public string PhysicalAddress { get; set; }
+        public string Mac { get; set; }
 
         [Member(3)] // in octects
         public long Speed { get; set; }

@@ -14,7 +14,7 @@ namespace Carbon.Packaging
         public string Name { get; set; }
         
         [Member(2)] // Required
-        public Semver Version { get; set; }
+        public SemanticVersion Version { get; set; }
 
         [Member(3), Optional]
         public string Description { get; set; }
@@ -47,7 +47,7 @@ namespace Carbon.Packaging
 
             if (json.ContainsKey("version"))
             {
-                metadata.Version = Semver.Parse(json["version"]);
+                metadata.Version = SemanticVersion.Parse(json["version"]);
             }
 
             if (json.ContainsKey("main"))
@@ -124,7 +124,7 @@ namespace Carbon.Packaging
 
         public bool IsFile => !char.IsDigit(Value[0]);
 
-        public Semver Version => Semver.Parse(Value);
+        public SemanticVersion Version => SemanticVersion.Parse(Value);
     }
 
     public class PackageContributor

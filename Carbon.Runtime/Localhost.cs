@@ -31,7 +31,7 @@ namespace Carbon.Platform
 
                 try
                 {
-                    current.MemoryTotal = MemoryInfo.Observe().Total;
+                    // current.MemoryTotal = MemoryInfo.Observe().Total;
 
                     current.Volumes = GetVolumes(current).ToList();
                 }
@@ -51,28 +51,22 @@ namespace Carbon.Platform
 
                     // lookup zone...
 
-                    /*
-                    current.AvailabilityZone = ec2.AvailabilityZone;
+                    current.Provider = ComputeProviderId.Amazon;
+                    current.Location = ec2.Region + "/" + ec2.AvailabilityZone;
                     current.InstanceType = ec2.InstanceType;
-                    current.ImageId = ec2.ImageId;
-                    */
+                    current.PrivateIp = ec2.PrivateIp;
 
-                    if (ec2.PrivateIp != null)
-                    {
-                        current.PrivateIp = IPAddress.Parse(ec2.PrivateIp);
-                    }
+                    // current.ImageId = ec2.ImageId;
 
                     try
                     {
-                        var publicIp = await Ec2Instance.GetPublicIpAsync().ConfigureAwait(false);
-
-                        current.PublicIp = IPAddress.Parse(publicIp);
+                        current.PublicIp = await Ec2Instance.GetPublicIpAsync().ConfigureAwait(false);
                     }
                     catch { }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("EC2Instance was not found" + ex.Message);
+                    // Console.WriteLine("EC2Instance was not found" + ex.Message);
                 }
             }
             finally
@@ -99,7 +93,7 @@ namespace Carbon.Platform
                         // Description      = ni.Description,
                         Addresses       = GetIps(ni),
                         // InstanceName    = InstanceName.FromDescription(ni.Description),
-                        PhysicalAddress = physicalAddress
+                        Mac = physicalAddress
                     };
                 }
             }

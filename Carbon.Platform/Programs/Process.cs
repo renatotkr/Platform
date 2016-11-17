@@ -44,13 +44,10 @@ namespace Carbon.Computing
         public string Name { get; set; }
 
         [Member(8)] 
-        public Semver ProgramVersion { get; set; }
+        public SemanticVersion ProgramVersion { get; set; }
 
         [Member(9), Mutable] // a code indication weather we succesfully exited or not...
         public int? ExitStatus { get; set; }
-
-        [Member(10)]
-        public NetworkPortList Ports { get; set; }
 
         [Member(12), Timestamp]
         public DateTime Created { get; set; }

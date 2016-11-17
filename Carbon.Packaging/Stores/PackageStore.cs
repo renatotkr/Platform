@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Carbon.Packaging
 {
-    using Data;
+    using Protection;
     using Storage;
 
     public class PackageStore : IPackageStore
@@ -16,7 +16,7 @@ namespace Carbon.Packaging
             this.bucket = bucket;
         }
 
-        public async Task<Hash> PutAsync(string name, Semver version, Package package)
+        public async Task<Hash> PutAsync(string name, SemanticVersion version, Package package)
         {
             #region Preconditions
 
@@ -44,7 +44,7 @@ namespace Carbon.Packaging
             }
         }
 
-        public async Task<Package> GetAsync(string name, Semver version)
+        public async Task<Package> GetAsync(string name, SemanticVersion version)
         {
             var key = name + "/" + version.ToString();
 

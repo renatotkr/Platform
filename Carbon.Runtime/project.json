@@ -1,12 +1,14 @@
 {
-  "title": "Carbon.Runtime",
-  "version": "0.7.12",
-  "description": "Provides a helper class for reading the current hosts environment & hardware",
-  "copyright": "© Jason Nelson",
+  "title": "Carbon Runtime",
+  "description": "Provides a helper class for reading the current hosts environment & hardware.",
+  "copyright": "Copyright(c) Jason Nelson",
   "authors": [ "iamcarbon" ],
+
+  "version": "0.8.0",
+
   "dependencies": {
-    "Carbon.Json": "0.7.8",
-    "Carbon.Platform": "0.7.12"
+    "Carbon.Json": "1.0.0",
+    "Carbon.Platform": "0.8.1"
   },
 
   "frameworks": {
@@ -14,9 +16,10 @@
       "imports": "dnxcore50",
 
       "dependencies": {
-        "NETStandard.Library": "1.6.0",
-        "System.IO.FileSystem.DriveInfo": "4.0.0",
-        "System.Net.NetworkInformation": "4.1.0"
+        "System.Runtime": "4.3.0",
+        "System.IO.FileSystem.DriveInfo": "4.3.0",
+        "System.Net.NetworkInformation": "4.3.0",
+        "System.Net.Http": "4.3.0"
       }
     },
     "net461": {
@@ -26,7 +29,8 @@
     }
   },
   "packOptions": {
-    "owners": [ "Jason Nelson" ],
+    "tags": [ "carbon" ],
+    "licenseUrl": "https://opensource.org/licenses/MIT",
     "requireLicenseAcceptance": false,
     "repository": {
       "type": "git",

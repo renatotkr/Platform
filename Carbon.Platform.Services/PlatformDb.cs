@@ -11,7 +11,7 @@
             // Add types?
 
             Backends          = new Table<Backend>(context);
-            Containers        = new Table<Container>(context);
+            // Containers        = new Table<Container>(context);
             Networks          = new Table<Network>(context);
             NetworkInterfaces = new Table<NetworkInterface>(context);
             Packages          = new Table<PackageInfo>(context);
@@ -22,7 +22,7 @@
         }
 
         public Table<Backend>          Backends          { get; }
-        public Table<Container>        Containers        { get; }
+        // public Table<Container>        Containers        { get; }
         public Table<Network>          Networks          { get; }
         public Table<NetworkInterface> NetworkInterfaces { get; }
         public Table<PackageInfo>      Packages          { get; }
@@ -32,3 +32,5 @@
         public Table<VolumeInfo>       Volumes           { get; }
     }
 }
+
+

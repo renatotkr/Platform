@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Carbon.Packaging
 {
-    using Data;
+    using Protection;
     using Storage;
 
     public class ProtectedPackageStore

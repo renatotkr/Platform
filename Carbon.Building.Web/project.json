@@ -1,19 +1,22 @@
 {
-  "version": "0.7.8",
+  "version": "0.8.1",
   "authors": [ "iamcarbon" ],
+  "copyright": "© Jason Nelson",
+
   "dependencies": {
-    "Carbon.Css": "0.1.0",
+    "Carbon.Css": "0.3.0",
     "Carbon.Logging": "1.0.0",
-    "Carbon.Building": "0.7.5",
-    "Carbon.Packaging": "0.7.8"
+    "Carbon.Building": "0.8.1",
+    "Carbon.Packaging": "0.8.1"
   },
 
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "NETStandard.Library": "1.6.0",
-        "System.Diagnostics.Process": "4.1.0"
+        "System.Runtime": "4.3.0",
+        "System.Diagnostics.Process": "4.3.0",
+        "System.Linq": "4.3.0"
       }
     },
     "net461": {}

@@ -7,6 +7,7 @@ using System.IO;
 namespace Carbon.Packaging
 {
     using Data;
+    using Protection;
     using Json;
     using Storage;
 

@@ -4,7 +4,7 @@
     {
         long Id { get; }
 
-        Semver Version { get; }
+        SemanticVersion Version { get; }
 
         string Name { get; }
     }

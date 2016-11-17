@@ -10,13 +10,13 @@ namespace Carbon.Packaging
         public long PackageId { get; set; }
 
         [Member(2), Key]
-        public Semver PackageVersion { get; set; }
+        public SemanticVersion PackageVersion { get; set; }
 
         [Member(3), Key] // Lookup name...
         public long DependencyId { get; set; }
 
         [Member(4)]
-        public Semver DependencyVersion { get; set; } 
+        public SemanticVersion DependencyVersion { get; set; } 
 
         public IPackage ResolvedPackage { get; set; }
 
@@ -26,7 +26,7 @@ namespace Carbon.Packaging
 
         string IPackage.Name => ResolvedPackage.Name;
 
-        Semver IPackage.Version => ResolvedPackage.Version;
+        SemanticVersion IPackage.Version => ResolvedPackage.Version;
 
         IList<PackageDependency> IPackage.Dependencies => ResolvedPackage.Dependencies;
 

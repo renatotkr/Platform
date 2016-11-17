@@ -1,7 +1,7 @@
 ﻿namespace Carbon.Packaging
 {
-    using Data;
     using Data.Annotations;
+    using Protection;
 
     [Dataset("PackageFiles")]
     public class PackageFile
@@ -10,7 +10,7 @@
         public long PackageId { get; set; }
 
         [Member(2), Key]
-        public Semver PackageVersion { get; set; }
+        public SemanticVersion PackageVersion { get; set; }
 
         [Member(3), Key]
         public string Name { get; set; } 

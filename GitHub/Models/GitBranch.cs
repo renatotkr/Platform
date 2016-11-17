@@ -1,14 +1,22 @@
-﻿using System.Runtime.Serialization;
+﻿using Carbon.Repositories;
+using System.Runtime.Serialization;
+using System;
 
 namespace GitHub
 {
-    public class GitBranch
+    public class GitBranch : IBranch
     {
         [DataMember(Name = "name")]
         public string Name { get; set; }
 
         [DataMember(Name = "commit")]
         public GitCommit Commit { get; set; }
+
+        #region IBranch
+
+        ICommit IBranch.Commit => Commit;
+
+        #endregion
     }
 }
 

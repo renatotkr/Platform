@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Carbon.Packaging
@@ -32,6 +33,8 @@ namespace Carbon.Packaging
         public long Size => stream.Length;
 
         public Stream Open() => stream;
+
+        IDictionary<string, string> IBlob.Metadata => null;
 
         public void Dispose()
         {

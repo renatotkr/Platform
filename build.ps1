@@ -5,3 +5,6 @@ dotnet pack ./Carbon.Packaging         -o ./build/Carbon.Packaging/
 dotnet pack ./Carbon.Platform          -o ./build/Carbon.Platform/
 dotnet pack ./Carbon.Platform.Services -o ./build/Carbon.Platform.Services/
 dotnet pack ./Carbon.Runtime           -o ./build/Carbon.Runtime/
+dotnet pack ./GitHub                   -o ./build/GitHub/
+dotnet pack ./Bitbucket                -o ./build/Bitbucket/
+dotnet pack ./Carbon.Git               -o ./build/Carbon.Git/

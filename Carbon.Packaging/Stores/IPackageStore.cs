@@ -1,14 +1,13 @@
-﻿using Carbon.Data;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Carbon.Packaging
 {
-    // Add version? 
+    using Protection;
 
     public interface IPackageStore
     {
-        Task<Package> GetAsync(string name, Semver version);
+        Task<Package> GetAsync(string name, SemanticVersion version);
 
-        Task<Hash> PutAsync(string name, Semver version, Package package);
+        Task<Hash> PutAsync(string name, SemanticVersion version, Package package);
     }
 }

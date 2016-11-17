@@ -1,16 +1,16 @@
 {
-  "version": "0.7.10",
-  "description": "Provides helpers to package up code for deployment",
-  "authors": [ "iamcarbon " ],
-  "copyright": "© Jason Nelson",
+  "title": "Carbon Packaging",
+  "version": "0.8.1",
+  "description": "Provides helpers to package up code for deployment.",
+  "authors": [ "iamcarbon" ],
 
   "dependencies": {
-    "Carbon.Json": "0.7.8",
-    "Carbon.Protection": "0.6.0",
-    "Carbon.Versioning": "1.0.0",
-    "Carbon.Repositories": "0.7.0",
-    "Carbon.Data": "0.7.10",
-    "Carbon.Storage": "0.7.10"
+    "Carbon.Json": "1.0.0",
+    "Carbon.Storage": "1.0.0",
+    "Carbon.Versioning": "1.1.0",
+    "Carbon.Data.Annotations": "0.8.2",
+    "Carbon.Repositories": "1.0.0",
+    "Carbon.Protection": "1.1.0"
   },
 
   "frameworks": {
@@ -23,8 +23,8 @@
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "System.IO.Compression.ZipFile": "4.0.1",
-        "NETStandard.Library": "1.6.0"
+        "NETStandard.Library": "1.6.1",
+        "System.IO.Compression.ZipFile": "4.3.0"
       }
     }
   },

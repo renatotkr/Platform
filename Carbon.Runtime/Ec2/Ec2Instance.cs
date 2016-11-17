@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Carbon.Computing
@@ -22,7 +23,7 @@ namespace Carbon.Computing
 
         public string AvailabilityZone { get; set; }
 
-        public string PrivateIp { get; set; }
+        public IPAddress PrivateIp { get; set; }
 
         private static readonly HttpClient httpClient = new HttpClient {
             Timeout = TimeSpan.FromSeconds(5)
@@ -31,8 +32,14 @@ namespace Carbon.Computing
         public static Task<string> GetInstanceId()
             => httpClient.GetStringAsync(baseUri + "/latest/meta-data/instance-id");
 
-        public static Task<string> GetPublicIpAsync()
-            => httpClient.GetStringAsync(baseUri + "/latest/meta-data/public-ipv4");
+        public static async Task<IPAddress> GetPublicIpAsync()
+        {
+            var result = await httpClient.GetStringAsync(baseUri + "/latest/meta-data/public-ipv4");
+
+            if (result.Length == 0) return null;
+
+            return IPAddress.Parse(result);
+        }
 
         public static Task<byte[]> GetUserData()
             => httpClient.GetByteArrayAsync(baseUri + "/latest/user-data");

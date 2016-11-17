@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Linq;
 
 namespace Carbon.Computing
 {
@@ -16,28 +17,37 @@ namespace Carbon.Computing
         public HostStatus Status { get; set; }
 
         [Member(3)]
-        public long ZoneId { get; set; }
+        public ComputeProviderId Provider { get; set; }
 
         [Member(4)]
+        [StringLength(50)]
+        public string Location { get; set; }  // e.g. us-east-1/A
+
+        [Member(5)]
         public IPAddress PrivateIp { get; set; }
 
-        [Member(5), Optional]
-        public IPAddress PublicIp { get; set; }
+        [Member(6)]
+        public IPAddress PublicIp { get; set; }     
 
-        [Member(6)] // volumeId used to create the base image
-        public long ImageId { get; set; }
+        [Member(8)] // volumeId used to create the base image
+        public long? ImageId { get; set; }
 
-        [Member(7), Indexed]
-        [StringLength(255)]
+        // Instance Ids
+        // google cloud : UInt64
+        // aws          : 17-character string
+
+        [Member(9), Indexed]
+        [StringLength(100)]
         public string InstanceId { get; set; }
 
-        [Member(9)]
-        public long MemoryTotal { get; set; }
+        [Member(10)]
+        [StringLength(100)] // Provides a provider specific map to the underlying hardware (memory, processors, etc)
+        public string InstanceType { get; set; }
 
-        [Member(10)] // For nested VMs
+        [Member(11)] // For nested VMs
         public long? ParentId { get; set; }
 
-        [Member(11), Timestamp]
+        [Member(12), Timestamp]
         public DateTime Created { get; set; }
 
         #region Helpers
@@ -50,11 +60,3 @@ namespace Carbon.Computing
     }
 }
 
-//         public IPAddress Address { get; set; }          // IP6, immutable within region ?
-
-// tags?
-// hypervisor?
-
-// Instance Ids
-// google cloud : UInt64
-// aws          : 17-character string

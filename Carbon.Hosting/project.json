@@ -1,25 +1,27 @@
 {
-  "version": "0.7.8",
+  "title": "Carbon Hosting",
+  "description": "Hosting abstractions for operating a cross platform environment.",
   "authors": [ "iamcarbon" ],
+
+  "version": "0.8.1",
+
   "dependencies": {
-    "Carbon.Data": "0.7.9",
-    "Carbon.Packaging": "0.7.8",
-    "Carbon.Platform": "0.7.8"
+    "Carbon.Packaging": "0.8.1",
+    "Carbon.Platform": "0.8.1"
   },
 
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "System.Runtime": "4.1.0"
+        "System.Runtime": "4.3.0"
       }
     },
     "net461": {}
   },
 
   "packOptions": {
-    "summary": "Abstractions for hosts",
-    "tags": [ "cloud" ],
+    "tags": [ "cloud", "carbon" ],
     "owners": [ "Jason Nelson" ],
     "requireLicenseAcceptance": false,
     "repository": {
