@@ -9,14 +9,14 @@ using Carbon.Git;
 
 namespace GitHub
 {
-    public class GitRepository : IRepositoryClient
+    public class GitHubRepository : IRepositoryClient
     {
         private readonly string accountName;
         private readonly string repositoryName;
 
         private readonly GitHubClient client;
 
-        public GitRepository(Uri url, GitHubCredentials credentials)
+        public GitHubRepository(Uri url, GitHubCredentials credentials)
         {
             // https://github.com/orgName/repoName.git
 
@@ -29,7 +29,7 @@ namespace GitHub
             this.client = new GitHubClient(credentials);
         }
 
-        public GitRepository(string accountName, string repositoryName, GitHubCredentials credentials)
+        public GitHubRepository(string accountName, string repositoryName, GitHubCredentials credentials)
         {
             #region Preconditions
 

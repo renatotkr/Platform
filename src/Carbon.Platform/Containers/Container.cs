@@ -1,5 +1,6 @@
 ﻿using System;
 
+/*
 namespace Carbon.Computing
 {
     using Data.Annotations;
@@ -22,3 +23,4 @@ namespace Carbon.Computing
         public DateTime Created { get; set; }
     }
 }
+*/

@@ -14,7 +14,7 @@ namespace Carbon.Computing
         public long HostId { get; set; }
 
         [Member(3), Mutable] // Program version
-        public Semver Version { get; set; }
+        public SemanticVersion Version { get; set; }
 
         [Member(4), Mutable]
         public long? ProcessId { get; set; }

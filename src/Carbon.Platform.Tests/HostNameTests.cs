@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace Carbon.Hosting.Tests
+namespace Carbon.Computing.Tests
 {
     public class HostNameTests
     {

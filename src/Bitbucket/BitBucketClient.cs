@@ -75,7 +75,7 @@ namespace Bitbucket
 
         private async Task<JsonObject> Send(HttpRequestMessage httpRequest)
         {
-            httpRequest.Headers.UserAgent.Add(new ProductInfoHeaderValue("Carbon", "1.0.0"));
+            httpRequest.Headers.UserAgent.Add(new ProductInfoHeaderValue("Carbon", "1.1.0"));
 
             httpRequest.Headers.Authorization = new AuthenticationHeaderValue(
                 scheme: "Basic",

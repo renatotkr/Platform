@@ -1,23 +1,22 @@
 ﻿{
-  "title": "GitHub",
+  "title": "Bitbucket",
+  "version": "0.8.1",
   "authors": [ "iamcarbon" ],
 
-  "version": "0.8.0",
-
   "dependencies": {
+    "Carbon.Git": "0.8.0",
     "Carbon.Json": "1.0.0",
-    "Carbon.Packaging": "0.8.0",
-    "Carbon.Repositories": "1.0.0",
-    "Carbon.Git": "0.8.0"
+    "Carbon.Packaging": "0.8.1",
+    "Carbon.Repositories": "1.0.0"
   },
 
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "System.Runtime": "4.1.0",
-        "System.Runtime.Serialization.Primitives": "4.1.1",
-        "System.Net.Http": "4.1.0"
+        "System.Runtime": "4.3.0",
+        "System.Runtime.Serialization.Primitives": "4.3.0",
+        "System.Net.Http": "4.3.0"
       }
     },
     "net461": {

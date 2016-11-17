@@ -7,7 +7,7 @@ namespace Carbon.Computing
     [Dataset("Backends")]
     public class Backend
     {
-        [Member(1), Key]  // Assigned (1-1 w/ Program)
+        [Member(1), Identity]
         public long Id { get; set; }
 
         [Member(2), Unique]
@@ -15,16 +15,14 @@ namespace Carbon.Computing
         public string Name { get; set; } // e.g. carbonmade
 
         [Member(3)]
-        public NetworkPortList Listeners { get; set; } // e.g. 80/http
+        public List<NetworkPort> Listeners { get; set; } // e.g. 80/http
 
         [Member(4)]
         public long ProgramId { get; set; }         //  5
 
         [Member(5), Mutable]
-        public Semver Version { get; set; }    // Active version
+        public SemanticVersion Version { get; set; }    // Active version
         
-        // Hosts?
-
         public IList<BackendInstance> Instances { get; set; }
     }
 }
