@@ -1,30 +1,33 @@
 {
   "title": "Carbon Packaging",
-  "version": "0.8.1",
   "description": "Provides helpers to package up code for deployment.",
   "authors": [ "iamcarbon" ],
 
+  "version": "1.2.0",
+
   "dependencies": {
-    "Carbon.Json": "1.0.0",
-    "Carbon.Storage": "1.0.0",
-    "Carbon.Versioning": "1.1.0",
-    "Carbon.Data.Annotations": "0.8.2",
-    "Carbon.Repositories": "1.0.0",
-    "Carbon.Protection": "1.1.0"
+    "Carbon.Versioning": "1.2.0",
+    "Carbon.Json": "1.1.0",
+    "Carbon.Storage": "1.1.0",
+    "Carbon.Protection": "1.3.0"
   },
 
   "frameworks": {
     "net461": {
       "frameworkAssemblies": {
         "System.IO.Compression": "4.0.0.0",
-        "System.Net.Http": "4.0.0.0"
+        "System.Net.Http": "4.0.0.0",
+        "System.ComponentModel.DataAnnotations": "4.0.0.0"
+
       }
     },
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "NETStandard.Library": "1.6.1",
-        "System.IO.Compression.ZipFile": "4.3.0"
+        "System.Runtime": "4.3.0",
+        "System.IO.Compression.ZipFile": "4.3.0",
+        "System.ComponentModel.Annotations": "4.3.0",
+        "System.Net.Http": "4.3.0"
       }
     }
   },
@@ -33,8 +36,7 @@
     "summary": "Packaging primitives",
     "tags": [ "packaging" ],
     "owners": [ "Jason Nelson" ],
-    "requireLicenseAcceptance": false,
-    "licenseUrl": "https://opensource.org/licenses/MIT",
+    "licenseUrl": "https://github.com/carbon/Platform/blob/master/LICENCE",
     "repository": {
       "type": "git",
       "url": "https://github.com/carbon/Platform"

@@ -1,20 +1,21 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 
-namespace Carbon.Packaging
+namespace Carbon.Extensions
 {
+    using Packaging;
     using Storage;
 
-    public static class AssetExtensions
+    public static class BlobExtensions
     {
         public static bool IsStatic(this IBlob file)
         {
-            var format = Path.GetExtension(file.Name).TrimStart('.');
+            var format = Path.GetExtension(file.Name).TrimStart(Seperators.Period);
 
-            return FileHelper.IsStatic(format);
+            return FileFormat.IsStatic(format);
         }
-
-        public static async Task<string> ReadStringAsync(this IBlob blob)
+       
+        public static async Task<string> ReadAllTextAsync(this IBlob blob)
         {
             using (var stream = blob.Open())
             {
@@ -31,8 +32,8 @@ namespace Carbon.Packaging
 
             // .something.jpeg
             // /.git
-
-            foreach (var part in blob.Name.Split('/'))
+         
+            foreach (var part in blob.Name.Split(Seperators.ForwardSlash))
             {
                 if (part.Length > 0 && part[0] == '.') return true;
             }

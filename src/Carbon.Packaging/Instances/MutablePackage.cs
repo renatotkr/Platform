@@ -24,9 +24,18 @@ namespace Carbon.Packaging
 
         public void Add(string name, Stream stream)
         {
-            files.Add(new MemoryFile(name, stream));
-        }
+            #region Preconditions
 
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+            
+            #endregion
+
+            files.Add(new Blob(stream, stream.Length) {
+                Name = name,
+                Modified = DateTime.UtcNow
+            });
+        }
         public override IEnumerable<IBlob> Enumerate()
         {
             foreach (var entry in basePackage.Enumerate())

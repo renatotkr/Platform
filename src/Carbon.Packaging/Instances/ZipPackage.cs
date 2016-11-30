@@ -35,7 +35,7 @@ namespace Carbon.Packaging
                 // Skip directories & empty files
                 if (string.IsNullOrWhiteSpace(key) || key.EndsWith("/") || entry.CompressedLength == 0) continue;
 
-                yield return new ZipFile(key, entry);
+                yield return new ZippedBlob(key, entry);
             }
         }
 
@@ -45,7 +45,7 @@ namespace Carbon.Packaging
         {
             if (stripFirstLevel)
             {
-                var trim = key.Split('/')[0] + '/';
+                var trim = key.Split(Seperators.ForwardSlash)[0] + '/';
 
                 return key.Replace(trim, "");
             }

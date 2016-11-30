@@ -32,13 +32,15 @@ namespace Carbon.Packaging
         {
             using (var ms = new MemoryStream())
             {
-                await package.ZipToAsync(ms).ConfigureAwait(false);
+                await package.ZipToStreamAsync(ms).ConfigureAwait(false);
 
                 ms.Position = 0;
 
-                var hash = Hash.ComputeSHA256(ms, true);
+                var hash = Hash.ComputeSHA256(ms, leaveOpen: true);
 
-                var protector = PackageProtector.Create(password, hash.Data);
+                var secret = SecretKey.Derive(password, hash.Data);
+
+                var protector = new AesProtector(secret);
 
                 using (var packageStream = protector.EncryptStream(ms))
                 {
@@ -67,7 +69,9 @@ namespace Carbon.Packaging
 
             ms.Seek(0, SeekOrigin.Begin);
 
-            var protector = PackageProtector.Create(password, hash.Data);
+            var secret = SecretKey.Derive(password, hash.Data);
+
+            var protector = new AesProtector(secret);
 
             var stream = protector.DecryptStream(ms);
 

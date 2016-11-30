@@ -6,6 +6,7 @@ namespace Carbon.Packaging
 {
     using Protection;
     using Storage;
+    using Versioning;
 
     public class PackageStore : IPackageStore
     {
@@ -28,11 +29,9 @@ namespace Carbon.Packaging
 
             using (var ms = new MemoryStream())
             {
+                await package.ZipToStreamAsync(ms).ConfigureAwait(false);
+
                 var hash = Hash.ComputeSHA256(ms, true);
-
-                await package.ZipToAsync(ms).ConfigureAwait(false);
-
-                ms.Seek(0, SeekOrigin.Begin);
 
                 var blob = new Blob(ms) {
                     ContentType = "application/zip"
@@ -60,7 +59,7 @@ namespace Carbon.Packaging
             ms.Seek(0, SeekOrigin.Begin);
 
             return ZipPackage.FromStream(ms, stripFirstLevel: false);
-        }       
+        }     
     }
 }
 

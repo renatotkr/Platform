@@ -2,7 +2,7 @@
 
 namespace Carbon.Packaging
 {
-    internal static class FileHelper
+    public static class FileFormat
     {
         private static readonly string[] txtFormats = { "css", "html", "js", "mtpl", "tpl", "txt" };
 

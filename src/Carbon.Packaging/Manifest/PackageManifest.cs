@@ -11,54 +11,71 @@ namespace Carbon.Packaging
     using Json;
     using Storage;
 
-    public class PackageManifest : Dictionary<string, PackageFileInfo>
+    // TODO: Diffs between two manifests...
+
+    public class PackageManifest : Dictionary<string, ManifestEntry>
     {
         public PackageManifest(IEnumerable<IBlob> blobs)
         {
             foreach (var blob in blobs)
             {
-                Add(blob.Name, new PackageFileInfo(blob));
+                Add(blob.Name, ManifestEntry.FromBlob(blob));
             }
         }
 
-        public PackageManifest(IEnumerable<PackageFileInfo> blobs)
+        public PackageManifest(IEnumerable<ManifestEntry> items)
         {
-            foreach (var blob in blobs)
+            foreach (var item in items)
             {
-                Add(blob.Name, blob);
+                Add(item.Name, item);
+            }
+        }
+
+        public bool TryFind(string name, out ManifestEntry item)
+        {
+            #region Preconditions
+
+            if (name == null) throw new ArgumentNullException(nameof(name));
+
+            #endregion
+
+            if (name[0] == '/')
+            {
+                name = name.Trim(Seperators.ForwardSlash);
             }
 
-        }
-        public PackageFileInfo Find(string name)
-        {
-            name = name.Trim('/');
-
-            PackageFileInfo item;
-
-            TryGetValue(name, out item);
-
-            return item;
+            return TryGetValue(name, out item);
         }
 
-        public bool Contains(string name) => ContainsKey(name);
+        public bool Contains(string name) 
+            => ContainsKey(name);
 
         public override string ToString()
         {
             var sb = new StringBuilder();
 
-            // images/img.gif k345jkhwsgert== 2013-04-03T04:20:39.234324Z
+            var i = 0;
+
+            // sha-256:1234
+
+            // images/img.gif 2013-04-03T04:20:39.234324Z sha256-k345jkhwsgert==
             foreach (var item in this)
             {
+                if (i != 0) sb.AppendLine();
+
                 var file = item.Value;
 
                 // Sanity check
-                if (file.Name.Split('/').Last()[0] == '.' || file.Name.Contains(' ')) continue;
+                if (file.Name.Split(Seperators.ForwardSlash).Last()[0] == '.' || file.Name.Contains(' ')) continue;
 
-                sb.AppendLine(string.Format("{0} {1} {2}",
-                    file.Name,
-                    Convert.ToBase64String(file.Hash.Data),
-                    new XDate(file.Modified).ToIsoString()
-                ));
+                // {name} {modified} {hash}
+                sb.Append(file.Name);
+                sb.Append(" ");
+                sb.Append(new XDate(file.Modified).ToIsoString());
+                sb.Append(" ");
+                sb.Append(file.Hash.ToString());
+                
+                i++;
             }
 
             return sb.ToString();
@@ -66,7 +83,7 @@ namespace Carbon.Packaging
 
         public static PackageManifest Parse(string text)
         {
-            var blobs = new List<PackageFileInfo>();
+            var entries = new List<ManifestEntry>();
 
             string line;
 
@@ -74,57 +91,23 @@ namespace Carbon.Packaging
             {
                 while ((line = reader.ReadLine()) != null)
                 {
-                    var parts = line.Split(' ');
+                    var parts = line.Split(Seperators.Space);
 
-                    blobs.Add(new PackageFileInfo(
+                    // {name} {modified} {hash}
+
+                    entries.Add(new ManifestEntry(
                         name     : parts[0],
-                        sha256   : Convert.FromBase64String(parts[1]),
-                        modified : IsoDate.Parse(parts[2]).ToDateTime()
+                        modified : IsoDate.Parse(parts[1]).ToDateTime(),
+                        hash     : Hash.Parse(parts[2])
+                        
                     ));
                 }
             }
 
-            return new PackageManifest(blobs);
+            return new PackageManifest(entries);
         }
 
         public static PackageManifest FromPackage(Package package)
-            => new PackageManifest(package.Select(file => new PackageFileInfo(file)));
-    }
-
-    public struct PackageFileInfo
-    {
-        public PackageFileInfo(IBlob file)
-        {
-            Name     = file.Name;
-            Modified = file.Modified;
-            Size     = file.Size;
-            Hash     = Hash.Compute(HashType.SHA256, file.Open());
-        }
-
-        public PackageFileInfo(string name, byte[] sha256, DateTime modified)
-        {
-            #region Preconditions
-
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
-
-            if (name.Length == 0)
-                throw new ArgumentException("Must not be empty", nameof(name));
-
-            #endregion
-
-            Name = name;
-            Hash = new Hash(HashType.SHA256, sha256);
-            Modified = modified;
-            Size = 0;
-        }
-
-        public string Name { get; }
-
-        public long Size { get; }
-
-        public Hash Hash { get; }
-
-        public DateTime Modified { get; }
+            => new PackageManifest(package.Enumerate().Select(blob => ManifestEntry.FromBlob(blob)));
     }
 }

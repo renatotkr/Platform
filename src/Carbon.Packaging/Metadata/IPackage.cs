@@ -1,16 +1,12 @@
-﻿using System.Collections.Generic;
-
-namespace Carbon.Packaging
+﻿namespace Carbon.Packaging
 {
+    using Versioning;
+
     public interface IPackage
     {
-        long Id { get; }
-
         string Name { get; }
 
         SemanticVersion Version { get; }
-
-        IList<PackageDependency> Dependencies { get; }
     }
 }
 

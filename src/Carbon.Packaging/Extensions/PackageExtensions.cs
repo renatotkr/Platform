@@ -1,28 +1,13 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
 
 namespace Carbon.Packaging
 {
-    using Storage;
-
-    public abstract class Package : IEnumerable<IBlob>, IDisposable
+    public static class PackageExtensions
     {
-        public abstract IEnumerable<IBlob> Enumerate();
-
-        public abstract void Dispose();
-
-        public IBlob Find(string absolutePath) =>
-            this.FirstOrDefault(item => item.Name == absolutePath);
-
-        public IBlob[] List(string prefix)
-            => this.Where(item => item.Name.StartsWith(prefix)).ToArray();
-
-        public async Task ExtractToDirectoryAsync(DirectoryInfo target)
+        public static async Task ExtractToDirectoryAsync(this Package package, DirectoryInfo target)
         {
             #region Preconditions
 
@@ -34,7 +19,7 @@ namespace Carbon.Packaging
 
             target.Create();
 
-            foreach (var item in Enumerate())
+            foreach (var item in package.Enumerate())
             {
                 var filePath = Path.Combine(target.FullName, item.Name.Replace('/', Path.DirectorySeparatorChar));
 
@@ -59,15 +44,15 @@ namespace Carbon.Packaging
             }
         }
 
-        public async Task ZipToAsync(Stream stream)
+        public static async Task ZipToStreamAsync(this Package package, Stream stream)
         {
-            using (var archive = new System.IO.Compression.ZipArchive(stream, ZipArchiveMode.Create, true))
+            using (var archive = new ZipArchive(stream, ZipArchiveMode.Create, leaveOpen: true))
             {
-                foreach (var item in Enumerate())
+                foreach (var item in package.Enumerate())
                 {
-                    var format = Path.GetExtension(item.Name).Trim('.');
+                    var format = Path.GetExtension(item.Name).Trim(Seperators.Period);
 
-                    var compressionLevel = FileHelper.IsText(format)
+                    var compressionLevel = FileFormat.IsText(format)
                         ? CompressionLevel.Optimal
                         : CompressionLevel.NoCompression;
 
@@ -83,22 +68,5 @@ namespace Carbon.Packaging
                 }
             }
         }
-
-        #region Helpers
-
-        public static Package FromDirectory(DirectoryInfo root) 
-            => new DirectoryPackage(root);
-
-        #endregion
-
-        #region IEnumerable
-
-        IEnumerator<IBlob> IEnumerable<IBlob>.GetEnumerator()
-            => Enumerate().GetEnumerator();
-
-        IEnumerator IEnumerable.GetEnumerator()
-            => Enumerate().GetEnumerator();
-
-        #endregion
     }
 }

@@ -1,40 +1,40 @@
-﻿using System;
+﻿using System.Runtime.Serialization;
+using System.IO;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Carbon.Packaging
 {
-    using Data.Annotations;
     using Json;
     using Storage;
+    using Versioning;
 
-    public class PackageMetadata
+    public class PackageMetadata : IPackage
     {
-        [Member(1)] // Required
+        [DataMember(Name = "name")]
         public string Name { get; set; }
-        
-        [Member(2)] // Required
+
+        [DataMember(Name = "version")]
         public SemanticVersion Version { get; set; }
 
-        [Member(3), Optional]
+        [DataMember(Name = "description")]
         public string Description { get; set; }
 
-        [Optional]
+        [DataMember(Name = "author")]
+        public PackageContributor Author { get; set; }
+
+        [DataMember(Name = "contributors")]
         public PackageContributor[] Contributors { get; set; }
 
-        [Optional]
+        [DataMember(Name = "main")]
         public string Main { get; set; }
 
-        [Optional]
         public string License { get; set; }
 
-        [Optional]
-        public IList<PackageDependencyInfo> Dependencies { get; } = new List<PackageDependencyInfo>();
+        public IList<PackageDependency> Dependencies { get; } = new List<PackageDependency>();
 
-        [Optional]
-        public Uri RepositoryUrl { get; set; }
-
-        [Optional]
+        [DataMember(Name = "repository")]
+        public PackageRepository Repository { get; set; }
+    
         public string[] Files { get; set; }
 
         public static PackageMetadata Parse(string text)
@@ -57,9 +57,9 @@ namespace Carbon.Packaging
 
             if (json.ContainsKey("repository"))
             {
-                var repositoryNode = json["repository"];
+                var repository = json["repository"];
 
-                if (repositoryNode.IsObject)
+                if (repository is JsonObject)
                 {
                     /*
                     { 
@@ -68,11 +68,11 @@ namespace Carbon.Packaging
                     }
                     */
 
-                    metadata.RepositoryUrl = new Uri(repositoryNode["url"]);
+                    metadata.Repository = repository.As<PackageRepository>();
                 }
                 else
                 {
-                    metadata.RepositoryUrl = new Uri(repositoryNode);
+                    metadata.Repository = PackageRepository.Parse(repository);
                 }
             }
 
@@ -80,7 +80,7 @@ namespace Carbon.Packaging
             {
                 foreach (var pair in (JsonObject)json["dependencies"])
                 {
-                    var dep = new PackageDependencyInfo(pair.Key, pair.Value);
+                    var dep = new PackageDependency(pair.Key, pair.Value);
 
                     metadata.Dependencies.Add(dep);
                 }
@@ -91,6 +91,11 @@ namespace Carbon.Packaging
                 metadata.Files = json["files"].ToArrayOf<string>();
             }
 
+            if (json.ContainsKey("author"))
+            {
+                metadata.Author = json["author"].As<PackageContributor>();
+            }
+
             if (json.ContainsKey("contributors"))
             {
                 metadata.Contributors = json["contributors"].ToArrayOf<PackageContributor>();
@@ -99,38 +104,17 @@ namespace Carbon.Packaging
             return metadata;
         }
 
-        public static async Task<PackageMetadata> Load(IBlob file)
-            => Parse(await file.ReadStringAsync().ConfigureAwait(false));
-    }
-
-    public struct PackageDependencyInfo
-    {
-        public PackageDependencyInfo(string name, string text)
+        public static PackageMetadata Parse(Stream stream)
         {
-            #region Preconditions
+            using (var reader = new StreamReader(stream))
+            {
+                var text = reader.ReadToEnd();
 
-            if (name == null) throw new ArgumentNullException(nameof(name));
-            if (text == null) throw new ArgumentNullException(nameof(text));
-
-            #endregion
-
-            Name = name;
-            Value = text;
+                return Parse(text);
+            }
         }
 
-        public string Name { get; }
-
-        public string Value { get; }
-
-        public bool IsFile => !char.IsDigit(Value[0]);
-
-        public SemanticVersion Version => SemanticVersion.Parse(Value);
-    }
-
-    public class PackageContributor
-    {
-        public string Name { get; set; }
-
-        public string Email { get; set; }
+        public static PackageMetadata FromBlob(IBlob file)
+            => Parse(file.Open());
     }
 }

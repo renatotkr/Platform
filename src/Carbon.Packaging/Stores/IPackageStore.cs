@@ -3,6 +3,7 @@
 namespace Carbon.Packaging
 {
     using Protection;
+    using Versioning;
 
     public interface IPackageStore
     {
