@@ -1,33 +1,33 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Carbon.Security
 {
-    using Data.Annotations;
-
-    [Dataset("Certificates")]
+    [Table("Certificates")]
     public class Certificate
     {
-        [Member(1), Identity]
+        [Column, Key] // Identity
         public long Id { get; }
 
-        [Member(2)] // Subjects?
+        [Column] // Subjects?
         public string[] Hosts { get; set; }
 
-        [Member(5), Mutable]
+        [Column] // Mutable
         public DateTime? Expires { get; set; }
 
-        [Member(6), Mutable]
+        [Column] // Mutable
         public DateTime? Revoked { get; set; }
 
-        [Member(6)] // e.g. LetsEncrypt, Amazon, ...
+        [Column] // e.g. LetsEncrypt, Amazon, ...
         public long ProviderId { get; set; }
 
         public string KeyAlgorithm { get; set; }
 
-        [Member(7)]
+        [Column]
         public string SerialNumber { get; set; }
 
-        [Member(12), Timestamp]
+        [Column, Timestamp]
         public DateTime Created { get; set; }
 
         // Validity (may be in future)

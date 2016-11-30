@@ -1,29 +1,35 @@
 {
   "title": "Carbon Hosting",
-  "description": "Hosting abstractions for operating a cross platform environment.",
+  "description": "Hosting abstractions for operating a multi-cloud service.",
   "authors": [ "iamcarbon" ],
 
-  "version": "0.8.1",
+  "version": "0.8.4",
 
   "dependencies": {
-    "Carbon.Packaging": "0.8.1",
-    "Carbon.Platform": "0.8.1"
+    "Carbon.Platform": "0.8.4",
+    "Carbon.Packaging": "1.2.0"
   },
 
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "System.Runtime": "4.3.0"
+        "System.AppContext": "4.3.0",
+        "System.Runtime": "4.3.0",
+        "System.ComponentModel.Annotations": "4.3.0"
       }
     },
-    "net461": {}
+    "net461": {
+      "frameworkAssemblies": {
+        "System.ComponentModel.DataAnnotations": "4.0.0.0"
+      }
+    }
   },
 
   "packOptions": {
     "tags": [ "cloud", "carbon" ],
     "owners": [ "Jason Nelson" ],
-    "requireLicenseAcceptance": false,
+    "licenseUrl": "https://github.com/carbon/Platform/blob/master/LICENCE",
     "repository": {
       "type": "git",
       "url": "https://github.com/carbon/Platform"

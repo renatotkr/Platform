@@ -12,7 +12,7 @@ namespace Carbon.Hosting
     {
         IEnumerable<Process> Scan();
 
-        Process Find(string slug); // TODO (id)
+        Process Find(long id); 
 
         Task DeleteAsync(IProgram program);
 
