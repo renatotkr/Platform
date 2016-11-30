@@ -1,28 +1,31 @@
 {
   "title": "Carbon Building",
   "description": "Build abstractions for the cloud.",
-  "version": "0.8.1",
+  "version": "1.0.0",
   "authors": [ "iamcarbon" ],
   "copyright": "© Jason Nelson",
-
-  "dependencies": {
-    "Carbon.Data.Annotations": "0.8.2"
-  },
 
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "System.Runtime": "4.3.0"
+        "System.Runtime": "4.3.0",
+        "System.Threading": "4.3.0",
+        "System.Linq": "4.3.0",
+        "System.ComponentModel.Annotations": "4.3.0",
+        "System.Threading.Tasks": "4.3.0"
       }
     },
-    "net451": {}
+    "net451": {
+      "frameworkAssemblies": {
+        "System.ComponentModel.DataAnnotations": "4.0.0.0"
+      }
+    }
   },
-
   "packOptions": {
     "tags": [ "building", "carbon" ],
     "owners": [ "Jason Nelson" ],
-    "requireLicenseAcceptance": false,
+    "licenseUrl": "https://github.com/carbon/Platform/blob/master/LICENCE",
     "repository": {
       "type": "git",
       "url": "https://github.com/carbon/Platform"

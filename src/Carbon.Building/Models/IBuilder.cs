@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace Carbon.Building
 {
     public interface IBuilder
     {
-        Task<BuildResult> BuildAsync();
+        Task<BuildResult> BuildAsync(CancellationToken ct);
     }
 }

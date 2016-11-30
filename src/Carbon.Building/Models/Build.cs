@@ -1,33 +1,31 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Carbon.Building
 {
-    using Data.Annotations;
-
+    [Table("Builds")]
     public class Build : IBuild
     {
-        [Member(1)]
+        [Column("id"), Key]
         public long Id { get; set; }
 
-        [Member(2)]
+        [Column("status")]
         public BuildStatus Status { get; set; }
 
-        [Member(3)]
-        public long RepositoryId { get; set; }
+        [Column("source")] // RepositoryInfo (url + revision)
+        public string Source { get; set; }
 
-        [Member(4)] // a commit or tag (named commit)
-        public string Revision { get; set; }
-
-        [Member(6), Mutable]
+        [Column("started")]
         public DateTime? Started { get; set; }
 
-        [Member(7), Mutable]
+        [Column("completed")]
         public DateTime? Completed { get; set; }
 
-        [Member(11)]
+        [Column("creatorId")]
         public long? CreatorId { get; set; }
 
-        [Member(12), Timestamp]
+        [Column("created"), Timestamp]
         public DateTime Created { get; set; }
     }
 }
