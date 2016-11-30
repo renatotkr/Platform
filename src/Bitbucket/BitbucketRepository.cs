@@ -64,11 +64,6 @@ namespace Bitbucket
             return commit;
         }
 
-        public Task TagAsync(ICommit commit, SemanticVersion version)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<Package> DownloadAsync(Revision revision)
         {
             var stream = await client.GetZipStream(accountName, repositoryName, revision.Name).ConfigureAwait(false);

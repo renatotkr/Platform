@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using Carbon;
 using Carbon.Packaging;
 using Carbon.Repositories;
 using Carbon.Git;
@@ -16,7 +15,7 @@ namespace GitHub
 
         private readonly GitHubClient client;
 
-        public GitHubRepository(Uri url, GitHubCredentials credentials)
+        public GitHubRepository(Uri url, OAuth2Token credentials)
         {
             // https://github.com/orgName/repoName.git
 
@@ -29,7 +28,7 @@ namespace GitHub
             this.client = new GitHubClient(credentials);
         }
 
-        public GitHubRepository(string accountName, string repositoryName, GitHubCredentials credentials)
+        public GitHubRepository(string accountName, string repositoryName, OAuth2Token credentials)
         {
             #region Preconditions
 
@@ -68,11 +67,6 @@ namespace GitHub
 
         public Task<IList<GitBranch>> GetBranches()
             => client.GetBranches(accountName, repositoryName);
-
-        public Task TagAsync(ICommit commit, SemanticVersion version)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<Package> DownloadAsync(Revision revision)
         {

@@ -10,9 +10,9 @@ using Carbon.Json;
 
 namespace GitHub
 {
-    public class GitHubClient
+    public class GitHubClient : IDisposable
     {
-        private static readonly ProductInfoHeaderValue userAgent = new ProductInfoHeaderValue("Carbon", "2.1.0");
+        private static readonly ProductInfoHeaderValue userAgent = new ProductInfoHeaderValue("Carbon", "2.2.0");
 
         private readonly string baseUri = "https://api.github.com";
 
@@ -22,9 +22,9 @@ namespace GitHub
 
         public const int Version = 3;
 
-        private readonly GitHubCredentials auth;
+        private readonly OAuth2Token auth;
 
-        public GitHubClient(GitHubCredentials credentials)
+        public GitHubClient(OAuth2Token credentials)
         {
             #region Preconditions
 
@@ -33,7 +33,6 @@ namespace GitHub
             #endregion
 
             this.auth = credentials;
-           
         }
 
         public async Task<string> CreateAuthorization(string userName, string password, AuthorizationRequest request)
@@ -61,7 +60,7 @@ namespace GitHub
             // GET /users/:username
             var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"{baseUri}/users/{userName}");
 
-            var result = await Send(httpRequest, authorize: false).ConfigureAwait(false);
+            var result = await SendAsync(httpRequest, authorize: false).ConfigureAwait(false);
 
             return result.As<GitUser>();
         }
@@ -73,7 +72,7 @@ namespace GitHub
                 $"{baseUri}/{accountName}/{repoName}/commits/{sha}"
             );
 
-            var result = await Send(request).ConfigureAwait(false);
+            var result = await SendAsync(request).ConfigureAwait(false);
 
             return result.As<GitBranch>();
         }
@@ -97,7 +96,7 @@ namespace GitHub
                 $"{baseUri}/repos/{accountName}/{repoName}/git/refs/{refName}"
             );
 
-            var result = await Send(request).ConfigureAwait(false);
+            var result = await SendAsync(request).ConfigureAwait(false);
 
             return result.As<GitRef>();
         }
@@ -109,7 +108,7 @@ namespace GitHub
                 $"{baseUri}/repos/{accountName}/{repoName}/git/refs"
             );
 
-            var result = await Send(request).ConfigureAwait(false);
+            var result = await SendAsync(request).ConfigureAwait(false);
 
             return result.ToArrayOf<GitRef>();
         }
@@ -121,7 +120,7 @@ namespace GitHub
                 $"{baseUri}/repos/{accountName}/{repoName}/branches"
             );
 
-            var result = await Send(request).ConfigureAwait(false);
+            var result = await SendAsync(request).ConfigureAwait(false);
 
             return result.ToArrayOf<GitBranch>();
         }
@@ -158,7 +157,7 @@ namespace GitHub
 
         #region Helpers
 
-        private async Task<JsonNode> Send(HttpRequestMessage httpRequest, bool authorize = true)
+        private async Task<JsonNode> SendAsync(HttpRequestMessage httpRequest, bool authorize = true)
         {
             if (authorize)
             {
@@ -178,6 +177,11 @@ namespace GitHub
 
                 return JsonNode.Parse(responseText);
             }
+        }
+
+        public void Dispose()
+        {
+            httpClient.Dispose();
         }
 
         #endregion

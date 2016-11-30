@@ -10,7 +10,5 @@ namespace Carbon.Git
         Task<Package> DownloadAsync(Revision revision);
 
         Task<ICommit> GetCommitAsync(Revision revision);
-
-        Task TagAsync(ICommit commit, SemanticVersion version);
     }
 }

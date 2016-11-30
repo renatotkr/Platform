@@ -23,11 +23,12 @@ namespace Bitbucket
             this.credentials = credentials;
         }
 
+
         public async Task<BitbucketCommit> GetCommit(string accountName, string repoName, string revision)
         {
             // https://bitbucket.org/api/2.0
 
-            // POST /repositories/carbonmade/mason/commits/master
+            // GET /repositories/carbonmade/mason/commits/master
 
             var path = $"/repositories/{accountName}/{repoName}/commits/{revision}";
 
