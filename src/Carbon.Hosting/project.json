@@ -3,10 +3,10 @@
   "description": "Hosting abstractions for operating a multi-cloud service.",
   "authors": [ "iamcarbon" ],
 
-  "version": "0.8.4",
+  "version": "0.8.5",
 
   "dependencies": {
-    "Carbon.Platform": "0.8.4",
+    "Carbon.Platform": "0.8.5",
     "Carbon.Packaging": "1.2.0"
   },
 

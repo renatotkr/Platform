@@ -6,11 +6,12 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Linq;
 
 namespace Carbon.Platform
 {
+    using Carbon.Computing;
     using Computing;
+    using Networking;
     using Storage;
 
     public static class Localhost
@@ -33,13 +34,13 @@ namespace Carbon.Platform
                 {
                     // current.MemoryTotal = MemoryInfo.Observe().Total;
 
-                    current.Volumes = GetVolumes(current).ToList();
+                    // current.Volumes = GetVolumes(current).ToList();
                 }
                 catch { }
 
                 try
                 {
-                    current.NetworkInterfaces = GetActiveNetworkInterfaces().ToList();
+                    // current.NetworkInterfaces = GetActiveNetworkInterfaces().ToList();
                 }
                 catch { }
 
@@ -51,9 +52,9 @@ namespace Carbon.Platform
 
                     // lookup zone...
 
-                    current.Provider = ComputeProviderId.Amazon;
-                    current.Location = ec2.Region + "/" + ec2.AvailabilityZone;
-                    current.InstanceType = ec2.InstanceType;
+                    current.Provider = PlatformProviderId.Amazon;
+                    // current.Location = ec2.Region + "/" + ec2.AvailabilityZone;
+                    // current.InstanceType = ec2.InstanceType;
                     current.PrivateIp = ec2.PrivateIp;
 
                     // current.ImageId = ec2.ImageId;
@@ -74,12 +75,15 @@ namespace Carbon.Platform
                 mutex.Release();
             }
 
+            // Check with platform...
+            
+
             return current;
         }
 
-        public static IEnumerable<NetworkInterface> GetActiveNetworkInterfaces()
+        public static IEnumerable<NetworkInterfaceInfo> GetActiveNetworkInterfaces()
         {
-            var networkInterfaces = System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces();
+            var networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
 
             foreach (var ni in networkInterfaces)
             {
@@ -89,10 +93,10 @@ namespace Carbon.Platform
 
                 if (ni.OperationalStatus == OperationalStatus.Up && physicalAddress.Length > 0 && physicalAddress != "00000000000000E0")
                 {
-                    yield return new NetworkInterface {
-                        // Description      = ni.Description,
+                    yield return new NetworkInterfaceInfo {
+                        Description     = ni.Description,
                         Addresses       = GetIps(ni),
-                        // InstanceName    = InstanceName.FromDescription(ni.Description),
+                        // InstanceName = InstanceName.FromDescription(ni.Description),
                         Mac = physicalAddress
                     };
                 }
@@ -110,7 +114,7 @@ namespace Carbon.Platform
             }
         }
 
-        public static IPAddress[] GetIps(System.Net.NetworkInformation.NetworkInterface ni)
+        public static IPAddress[] GetIps(NetworkInterface ni)
         {
             var ips = new List<IPAddress>();
 

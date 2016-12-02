@@ -4,7 +4,6 @@ using System.Net;
 
 namespace Carbon.Platform
 {
-    using Data.Annotations;
     using Data;
 
     public class IPAddressListHandler : DbTypeHandler<List<IPAddress>>
@@ -25,9 +24,16 @@ namespace Carbon.Platform
             return list;
         }
 
+        // JSON when supported by Amazon Auroa...
+        
+        // NOTES:
+        // - May be a mix of IP4 & IP6 addresses
+        
         public override void SetValue(IDbDataParameter parameter, List<IPAddress> value)
         {
-            parameter.Value = value.ToString();
+            // e.g. 192.164.8.1,56.345.345.1
+
+            parameter.Value = string.Join(",", value);
             parameter.DbType = DbType.AnsiString;
         }
 

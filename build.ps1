@@ -1,4 +1,5 @@
 dotnet pack ./src/Carbon.Building          -o ./build/Carbon.Building
+dotnet pack ./src/Carbon.Building.Web      -o ./build/Carbon.Building.Web
 dotnet pack ./src/Carbon.Hosting           -o ./build/Carbon.Hosting
 dotnet pack ./src/Carbon.Hosting.IIS       -o ./build/Carbon.Hosting.IIS
 dotnet pack ./src/Carbon.Packaging         -o ./build/Carbon.Packaging
@@ -8,3 +9,4 @@ dotnet pack ./src/Carbon.Runtime           -o ./build/Carbon.Runtime
 dotnet pack ./src/GitHub                   -o ./build/GitHub
 dotnet pack ./src/Bitbucket                -o ./build/Bitbucket
 dotnet pack ./src/Carbon.Git               -o ./build/Carbon.Git
+dotnet pack ./src/Carbon.Libraries         -o ./build/Carbon.Libraries

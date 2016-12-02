@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 
 namespace Carbon.Hosting
 {
-    using Computing;
+    using Platform.Computing;
     using Packaging;
 
     // This could be IIS, Apache, Unicorn, or a Self Host
 
-    public interface IAppHost
+    public interface IHostService
     {
         IEnumerable<Process> Scan();
 

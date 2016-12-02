@@ -1,36 +1,46 @@
 ﻿namespace Carbon.Platform
 {
+    using Backends;
     using Computing;
+    using Frontends;
     using Data;
-    using Packaging;
+    using Networking;
+    using Storage;
 
     public class PlatformDb
     {
         public PlatformDb(IDbContext context)
         {
-            // Add types?
-
-            Backends          = new Table<Backend>(context);
-            // Containers        = new Table<Container>(context);
-            Networks          = new Table<Network>(context);
-            NetworkInterfaces = new Table<NetworkInterface>(context);
-            Packages          = new Table<PackageInfo>(context);
-            Programs          = new Table<Program>(context);
-            Processes         = new Table<Process>(context);
-            Hosts             = new Table<Host>(context);
-            Volumes           = new Table<VolumeInfo>(context);
+            Backends          = new Dataset<Backend>(context);
+            BackendInstances  = new Dataset<BackendInstance>(context);
+            Frontends         = new Dataset<Frontend>(context);
+            FrontendReleases  = new Dataset<FrontendRelease>(context);
+            Networks          = new Dataset<Network>(context);
+            NetworkInterfaces = new Dataset<NetworkInterfaceInfo>(context);
+            Programs          = new Dataset<Program>(context);
+            ProgramReleases   = new Dataset<ProgramRelease>(context);
+            Hosts             = new Dataset<Host>(context);
+            Volumes           = new Dataset<VolumeInfo>(context);
+            Images            = new Dataset<Image>(context);
         }
 
-        public Table<Backend>          Backends          { get; }
-        // public Table<Container>        Containers        { get; }
-        public Table<Network>          Networks          { get; }
-        public Table<NetworkInterface> NetworkInterfaces { get; }
-        public Table<PackageInfo>      Packages          { get; }
-        public Table<Program>          Programs          { get; }
-        public Table<Process>          Processes         { get; }
-        public Table<Host>             Hosts             { get; }
-        public Table<VolumeInfo>       Volumes           { get; }
+        public Dataset<Backend>               Backends          { get; }
+        public Dataset<BackendInstance>       BackendInstances  { get; }
+
+        public Dataset<Frontend>              Frontends         { get; }
+        public Dataset<FrontendRelease>       FrontendReleases  { get; }
+        public Dataset<Image>                 Images            { get; }
+
+        public Dataset<Network>               Networks          { get; }
+        public Dataset<NetworkInterfaceInfo>  NetworkInterfaces { get; } 
+
+        public Dataset<Program>               Programs          { get; }
+        public Dataset<ProgramRelease>        ProgramReleases   { get; }
+
+        public Dataset<Host>                  Hosts             { get; }
+
+        public Dataset<VolumeInfo>            Volumes           { get; }
     }
 }
 
-
+// Rebase on Dynamo?

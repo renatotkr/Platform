@@ -4,11 +4,11 @@
   "copyright": "Copyright(c) Jason Nelson",
   "authors": [ "iamcarbon" ],
 
-  "version": "0.8.0",
+  "version": "0.8.7",
 
   "dependencies": {
-    "Carbon.Json": "1.0.0",
-    "Carbon.Platform": "0.8.1"
+    "Carbon.Platform": "0.8.7",
+    "Carbon.Json": "1.1.0"
   },
 
   "frameworks": {
