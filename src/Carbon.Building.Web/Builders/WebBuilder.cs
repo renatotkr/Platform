@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using TypeScript;
@@ -10,6 +11,7 @@ using TypeScript;
 namespace Carbon.Builder
 {
     using Css;
+    using Extensions;
     using Logging;
     using Storage;
     using Packaging;
@@ -20,11 +22,8 @@ namespace Carbon.Builder
         private readonly TypeScriptCompiler typescript;
 
         private readonly Package package;
-   
         private readonly string basePath;
-
         private readonly string buildId;
-
         private readonly ILogger log;
 
         private readonly CssResolver cssResolver;
@@ -42,10 +41,13 @@ namespace Carbon.Builder
             this.log = log;
             this.fs = fs;
             this.package = package;
-            this.buildId = DateTime.UtcNow.ToString("yyyyMMddHHmmss") + "-" + Guid.NewGuid().ToString().Replace("-", "").Substring(0, 16);
+
+            var unique = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 16);
+
+            this.buildId = DateTime.UtcNow.ToString("yyyyMMddHHmmss") + "-" + unique;
             this.basePath = $@"D:/builds/{buildId}/";
 
-            this.typescript = new TypeScriptCompiler(this.basePath);
+            this.typescript = new TypeScriptCompiler(basePath);
 
             this.cssResolver = new CssResolver(basePath, package);
         }
@@ -54,6 +56,8 @@ namespace Carbon.Builder
 
         public async Task<BuildResult> BuildAsync()
         {
+            var ct = new CancellationTokenSource();
+
             var sw = Stopwatch.StartNew();
 
             var result = new BuildResult();
@@ -83,7 +87,7 @@ namespace Carbon.Builder
 
             if (hasTypeScript)
             {
-                await typescript.BuildAsync().ConfigureAwait(false);
+                await typescript.BuildAsync(ct.Token).ConfigureAwait(false);
             }
 
             foreach (var item in assets)
@@ -134,7 +138,7 @@ namespace Carbon.Builder
 
         private async Task<Blob> CompileCssAsync(IBlob file)
         {
-            var sourceText = await file.ReadStringAsync().ConfigureAwait(false);
+            var sourceText = await file.ReadAllTextAsync().ConfigureAwait(false);
 
             if (sourceText == null || sourceText.Length == 0)
             {

@@ -46,7 +46,6 @@ namespace TypeScript
             // By invoking tsc with no input files and a - project(or just - p) command line option
             // that specifies the path of a directory containing a tsconfig.json file.
 
-           
             d.Add("-p", ProjectPath);
  
             if (EmitComments == false)

@@ -1,4 +1,7 @@
-﻿namespace Carbon.Builder
+﻿using System;
+using System.IO;
+
+namespace Carbon.Builder
 {
     using Css;
     using Packaging;
@@ -9,19 +12,25 @@
 
         public CssResolver(string scopedPath, Package package)
         {
+            #region Preconditions
+
+            if (package == null) throw new ArgumentNullException(nameof(package));
+            
+            #endregion
+
             ScopedPath = scopedPath;
+
             this.package = package;
         }
 
-        public string GetText(string absolutePath)
+        public Stream Open(string absolutePath)
         {
-            absolutePath = absolutePath.TrimStart('/');
+            if (absolutePath.StartsWith("/"))
+            {
+                absolutePath = absolutePath.TrimStart('/');
+            }
 
-            var include = package.Find(absolutePath);
-
-            if (include == null) return null;
-
-            return include.ReadStringAsync().Result;
+            return package.Find(absolutePath)?.Open();
         }
 
         public string ScopedPath { get; }

@@ -1,13 +1,13 @@
 {
-  "version": "0.8.1",
+  "title": "Carbon Building Web",
+  "version": "0.9.2",
   "authors": [ "iamcarbon" ],
-  "copyright": "© Jason Nelson",
 
   "dependencies": {
-    "Carbon.Css": "0.3.0",
+    "Carbon.Css": "0.5.0",
     "Carbon.Logging": "1.0.0",
-    "Carbon.Building": "0.8.1",
-    "Carbon.Packaging": "0.8.1"
+    "Carbon.Building": "1.0.0",
+    "Carbon.Packaging": "1.2.0"
   },
 
   "frameworks": {
@@ -19,6 +19,15 @@
         "System.Linq": "4.3.0"
       }
     },
-    "net461": {}
+    "net461": { }
+  },
+
+  "packOptions": {
+    "tags": [ "typescript", "carbon" ],
+    "licenseUrl": "https://github.com/carbon/Platform/blob/master/LICENCE",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/carbon/Platform"
+    }
   }
 }

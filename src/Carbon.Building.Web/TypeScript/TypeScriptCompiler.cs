@@ -32,11 +32,11 @@ namespace TypeScript
             this.options = options;
         }
 
-        public async Task<BuildResult> BuildAsync()
+        public async Task<BuildResult> BuildAsync(CancellationToken ct)
         {
             var sw = Stopwatch.StartNew();
 
-            await _gate.WaitAsync().ConfigureAwait(false);
+            await _gate.WaitAsync(ct).ConfigureAwait(false);
 
             sw.Stop();
 
