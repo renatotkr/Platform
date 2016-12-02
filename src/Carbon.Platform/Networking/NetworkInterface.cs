@@ -1,58 +1,40 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 
-namespace Carbon.Computing
+namespace Carbon.Platform.Networking
 {
     using Data.Annotations;
 
     [Dataset("NetworkInterfaces")]
-    public class NetworkInterface
+    public class NetworkInterfaceInfo
     {
-        [Member(1), Identity]
+        [Member("id"), Identity]
         public long Id { get; set; }
 
-        [Member(2)]
+        [Member("networkId")]
+        [Indexed]
         public long NetworkId { get; set; }
 
-        [Member(2), Indexed] // AKA mac address
+        [Member("description")]
+        [StringLength(100)]
+        public string Description { get; set; }
+
+        [Member("mac"), Indexed] // AKA physicalAddress, format: MM:MM:MM:SS:SS:SS
+        [StringLength(30)]
         public string Mac { get; set; }
 
-        [Member(3)] // in octects
+        [Member("speed")] // in octects
         public long Speed { get; set; }
 
-        [Member(4), Mutable, Indexed]
+        [Member("hostId"), Mutable]
+        [Indexed] // Current Attachment
         public long? HostId { get; set; }
 
-        // public string InstanceName { get; set; }
+        [Member("refId"), Indexed]
+        [Ascii, StringLength(50)]
+        public string RefId { get; set; }
 
-        public IList<IPAddress> Addresses { get; set; }
+        [Member("addresses")]
+        public List<IPAddress> Addresses { get; set; }
     }
 }
-
-/*
-public string Description { get; set; } //  e.g. Intel(R) PRO/1000 MT Network Connection
-
-public string InstanceName { get; set; }
-
-     #region Stats (5-8)
-
-        [Member(5), Mutable]  // in octects
-        public long NetworkIn { get; }
-
-        [Member(6), Mutable]  // in octects
-        public long NetworkOut { get; }
-
-        [Member(7), Mutable]  // in octects
-        public long NetworkPacketsIn { get; }
-
-        [Member(8), Mutable]  // in octects
-        public long NetworkPacketsOut { get; }
-
-        // [Mutable]
-        // public long PacketsDiscarded { get; }
-
-        // DatagramSize (largest)
-
-        #endregion
-
-*/

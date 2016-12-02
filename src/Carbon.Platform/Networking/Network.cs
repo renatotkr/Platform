@@ -1,74 +1,57 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 
-namespace Carbon.Computing
+namespace Carbon.Platform.Networking
 {
     using Data.Annotations;
-    using Extensions;
 
     [Dataset("Networks")]
     public class Network
     {
-        [Member(1), Identity]
+        public Network() { }
+
+        public Network(Cidr cidr)
+        {
+            Cidr = cidr.ToString();
+        }
+
+        [Member("id"), Identity]
         public long Id { get; set; }
 
-        [Member(2)] // 10.1.1.0
-        public IPAddress Prefix { get; set; } 
+        [Member("description")]
+        [StringLength(100)]
+        public string Description { get; set; }
 
-        [Member(3)]
-        public int Cidr { get; set; } // 24
+        [Member("cidr")] // 10.1.1.0/24
+        [Ascii, StringLength(50)]
+        public string Cidr { get; set; } 
 
-        [Member(4)]
-        public long ZoneId { get; set; }
+        [Member("providerId")] 
+        public PlatformProviderId ProviderId { get; set; }
 
-        [Member(5)] // So we don't have to lookup through zone...
-        public ComputeProviderId ProviderId { get; set; }
-
-        [Member(5)] // Provides WAN access
+        [Member("gateway")] // Provides WAN access
         public IPAddress Gateway { get; set; } // 10.1.1.0
-
-        [Member(6)] // Networks may be divided...
-        public long? ParentId { get; set; }
-
-        [Member(7)]
-        public long OwnerId { get; set; }
-
-        [Member(8)] // AS226 (Autonomous System #)
-        public int? ASNumber { get; set; }
-
-        #region Helpers
-
-        public long Netmask => ~((1 << (32 - Cidr)) - 1);  // 255.255.255.0
-
-        public IPAddress Broadcast => null;
-
-        public IPAddress Start 
-            => new IPAddress(Prefix.IP4Number() & Netmask);                 // 10.1.1.1
         
-        public IPAddress End 
-            => new IPAddress((Prefix.IP4Number() & Netmask) | ~Netmask);    // 10.1.1.254
+        [Member("asn")] // Autonomous System Number, e.g. AS226
+        public int? ASN { get; set; }
 
-        #endregion
+        [Member("refId"), Indexed]
+        [Ascii, StringLength(50)]
+        public string RefId { get; set; }
+
+        [Member("created"), Timestamp]
+        public DateTime Created { get; set; }
 
         // The rules form the firewall
         // public IList<NetworkRule> Rules { get; set; }
 
         // Tells packets where to go leaving a network interface
         // public IList<NetworkRoute> Routes { get; set; }
-
-        public static Network Parse(string text)
-        {
-            var parts = text.Split('/');
-
-            return new Network  {
-                Prefix = IPAddress.Parse(parts[0]),
-                Cidr = int.Parse(parts[1])
-            };
-        }
-
      
     }
 }
 
+// A Network may be a VPC
 
 /*
 us-west1	    10.138.0.0/20	10.138.0.1

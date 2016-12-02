@@ -1,5 +1,7 @@
-﻿namespace Carbon.Computing
+﻿namespace Carbon.Platform.Computing
 {
+    using Versioning;
+
     public interface IProgram
     {
         long Id { get; }

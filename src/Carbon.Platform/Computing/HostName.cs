@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Carbon.Computing
+namespace Carbon.Platform.Computing
 {
     // http://tools.ietf.org/html/rfc952
 

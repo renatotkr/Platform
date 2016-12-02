@@ -1,8 +1,9 @@
 ﻿using System;
 
-namespace Carbon.Computing
+namespace Carbon.Platform.Computing
 {
     using Data.Annotations;
+    using Versioning;
 
     [Dataset("Processes")]
     public class Process
@@ -25,31 +26,31 @@ namespace Carbon.Computing
             HostId    = host.Id;
         }
 
-        [Member(1), Identity]
+        [Member("id"), Identity]
         public long Id { get; set; }
 
-        [Member(2), Indexed]
+        [Member("programId"), Indexed]
         public long ProgramId { get; set; }
 
-        [Member(3), Indexed]
+        [Member("hostId"), Indexed]
         public long HostId { get; set; }
 
-        [Member(4)] // if running inside a docker container
+        [Member("containerId")] // if running inside a docker container
         public long? ContainerId { get; set; } // 8fddbcbb101c
 
-        [Member(5)]
+        [Member("pid")]
         public int PID { get; set; } // https://en.wikipedia.org/wiki/Process_identifier
 
-        [Member(7)]
+        [Member("name")]
         public string Name { get; set; }
 
-        [Member(8)] 
+        [Member("programVersion")] 
         public SemanticVersion ProgramVersion { get; set; }
 
-        [Member(9), Mutable] // a code indication weather we succesfully exited or not...
+        [Member("exitStatus"), Mutable] // a code indication weather we succesfully exited or not...
         public int? ExitStatus { get; set; }
 
-        [Member(12), Timestamp]
+        [Member("created"), Timestamp]
         public DateTime Created { get; set; }
     }
 }

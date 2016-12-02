@@ -7,7 +7,6 @@
     "xunit": "2.2.0-beta3-build3402",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "Carbon.Hosting": { "target": "project" },
-    "Carbon.Platform": { "target": "project" },
     "Carbon.Packaging": { "target": "project" }
   },
 

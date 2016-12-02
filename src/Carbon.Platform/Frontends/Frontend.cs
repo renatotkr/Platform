@@ -1,37 +1,34 @@
 ﻿using System;
 
-namespace Carbon.Platform
+namespace Carbon.Platform.Frontends
 {
     using Data.Annotations;
-    using Protection;
-    using Repositories;
+    using Versioning;
 
-    [Dataset("Frontends")] //  VersionTable = "FrontendReleases")]
+    [Dataset("Frontends")]
     public class Frontend : IFrontend
     {
-        [Member(1), Key] // frontendId
+        [Member("id"), Key] 
         public long Id { get; set; }
 
-        [Member(2), Version]
+        [Member("version"), Version] // Current Active Version
         public SemanticVersion Version { get; set; }
 
-        [Member(3)]
+        [Member("name")]
         [StringLength(50)]
         public string Name { get; set; }
 
-        [Member(4), Mutable]  // e.g. carbonmade/lefty#commit
-        public RepositoryInfo Source { get; }
+        [Member("source"), Mutable]  // e.g. carbonmade/lefty#commit
+        [StringLength(100)]
+        public string Source { get; }
 
-        [Member(6)]
-        public Hash Hash { get; set; }
-
-        [Member(7)]
+        [Member("backendId")]
         public long BackendId { get; set; }
 
-        [Member(11)]
+        [Member("creatorId")]
         public long CreatorId { get; set; }
 
-        [Member(12), Timestamp]
+        [Member("created"), Timestamp]
         public DateTime Created { get; set; }
 
         public override string ToString() => Name + "@" + Version;  // lefty@1.0.2

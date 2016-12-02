@@ -1,4 +1,4 @@
-﻿namespace Carbon.Storage
+﻿namespace Carbon.Platform.Storage
 {
     public enum VolumeStatus
     {

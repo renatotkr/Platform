@@ -1,6 +1,6 @@
-﻿namespace Carbon.Computing
+﻿namespace Carbon.Platform.Computing
 {
-    public enum HostStatus
+    public enum InstanceStatus
     {
         Pending     = 0, // provisioning
         Running     = 1,
@@ -10,5 +10,5 @@
         Terminated  = 5 
     }
 
-    // Staging?
+    // Google Cloud: Staging?
 }

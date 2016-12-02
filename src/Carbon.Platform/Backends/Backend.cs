@@ -1,35 +1,59 @@
-﻿using System.Collections.Generic;
+﻿using System;
 
-namespace Carbon.Computing
+namespace Carbon.Platform.Backends
 {
     using Data.Annotations;
+    using Versioning;
+
+    // Webapp
+    // Worker
 
     [Dataset("Backends")]
-    public class Backend
+    public class Backend : IBackend
     {
-        [Member(1), Identity]
+        [Member("id"), Identity] // 1-1 w/ program?
         public long Id { get; set; }
 
-        [Member(2), Unique]
+        [Member("name"), Unique]
         [StringLength(50)]
         public string Name { get; set; } // e.g. carbonmade
 
-        [Member(3)]
-        public List<NetworkPort> Listeners { get; set; } // e.g. 80/http
+        [Member("type")]
+        public BackendType Type { get; }
 
-        [Member(4)]
-        public long ProgramId { get; set; }         //  5
+        [Member("programId")]
+        public long ProgramId { get; set; }
 
-        [Member(5), Mutable]
-        public SemanticVersion Version { get; set; }    // Active version
+        [Member("programRelease")]
+        public SemanticVersion ProgramVersion { get; set; }
+
+        [Member("env")] // JSON encoded environment data
+        public string Env { get; set; }
         
-        public IList<BackendInstance> Instances { get; set; }
+        // public long ImageId { get; set; }
+
+        [Member("modified"), Timestamp]
+        public DateTime Modified { get; set; }
     }
 }
 
-// An backend exposes a program as a load balanced service
+/*
+ 
+{
+   listener: "http://*:80",
+   machineType: "t2.xlarge"
+   ...
+}
 
-// - spawns one or more instances to handle user requests (autoscaling)
+ */
+
+// An backend exposes a program as a load balanced worker or web service
+
+// Web Role
+// - spawns one or more instances to handle user requests (autoscaling) [using containers, as needed]
 // - hosted behind a load balancer
 
 // bindings (host, protocal, port)
+
+// Worker Role
+// - Scales to queue...

@@ -3,34 +3,38 @@
   "description": "Platform primitives for operating a multicloud service.",
   "authors": [ "iamcarbon" ],
 
-  "version": "0.8.1",
+  "version": "0.8.7",
 
   "dependencies": {
-    "Carbon.Data.Annotations": "0.8.2",
-    "Carbon.Protection": "1.0.0",
-    "Carbon.Repositories": "1.0.0",
-    "Carbon.Versioning": "1.1.0"
+    "Carbon.Data.Annotations": "1.1.0",
+    "Carbon.Protection": "1.3.1",
+    "Carbon.Versioning": "1.2.0"
   },
 
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "System.Runtime": "4.1.0",
-        "System.Runtime.Extensions": "4.1.0",
-        "System.Net.Primitives": "4.0.11"
+        "System.Runtime": "4.3.0",
+        "System.Runtime.Extensions": "4.3.0",
+        "System.Net.Primitives": "4.3.0",
+        "System.ComponentModel.Annotations": "4.3.0"
       }
     },
-    "net451": {}
+    "net451": {
+      "frameworkAssemblies": {
+        "System.ComponentModel.DataAnnotations": "4.0.0.0"
+      }
+    }
   },
 
   "packOptions": {
     "tags": [ "cloud", "carbon" ],
     "owners": [ "Jason Nelson" ],
-    "requireLicenseAcceptance": false,
+    "licenseUrl": "https://github.com/carbon/Platform/blob/master/LICENCE",
     "repository": {
       "type": "git",
-      "url": "https://github.com/carbon/Data"
+      "url": "https://github.com/carbon/Platform"
     }
   }
 }

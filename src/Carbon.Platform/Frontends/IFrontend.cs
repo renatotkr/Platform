@@ -1,5 +1,7 @@
-﻿namespace Carbon.Platform
+﻿namespace Carbon.Platform.Frontends
 {
+    using Versioning;
+
     public interface IFrontend
     {
         long Id { get; }

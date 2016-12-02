@@ -1,4 +1,4 @@
-﻿namespace Carbon.Computing
+﻿namespace Carbon.Platform.Networking
 {
     public enum NetworkProtocal
     {
@@ -7,7 +7,7 @@
         /// <summary>
         /// Transmission Control Protocol
         /// </summary>
-        TCP = 6,
+        TCP   = 6,
         UDP   = 17,
         HTTP  = 100,
         HTTPS = 101
