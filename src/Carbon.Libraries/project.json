@@ -1,0 +1,34 @@
+﻿{
+  "title": "Carbon Libraries",
+
+  "version": "0.9.3",
+
+  "dependencies": {
+    "Carbon.Json": "1.1.0",
+    "Carbon.Versioning": "1.2.0"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50",
+
+      "dependencies": {
+        "System.Collections": "4.3.0",
+        "System.Runtime": "4.3.0",
+        "System.Runtime.Serialization.Primitives": "4.3.0",
+        "System.ComponentModel.Annotations": "4.3.0"
+      }
+    },
+
+    "net461": {
+      "frameworkAssemblies": {
+        "System.ComponentModel.DataAnnotations": "4.0.0.0"
+      }
+    }
+
+  },
+
+  "packOptions": {
+    "tags": [ "carbon" ]
+  }
+}
