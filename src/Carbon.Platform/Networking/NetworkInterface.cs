@@ -11,26 +11,27 @@ namespace Carbon.Platform.Networking
         [Member("id"), Identity]
         public long Id { get; set; }
 
-        [Member("networkId")]
-        [Indexed]
-        public long NetworkId { get; set; }
-
         [Member("description")]
         [StringLength(100)]
         public string Description { get; set; }
 
         [Member("mac"), Indexed] // AKA physicalAddress, format: MM:MM:MM:SS:SS:SS
         [StringLength(30)]
-        public string Mac { get; set; }
+        public string Mac { get; set; } // MacAddress?
 
+        /*
         [Member("speed")] // in octects
         public long Speed { get; set; }
+        */
 
         [Member("hostId"), Mutable]
         [Indexed] // Current Attachment
         public long? HostId { get; set; }
 
-        [Member("refId"), Indexed]
+        // [Member("networkId"), Indexed]
+        // public long? NetworkId { get; set; }
+
+        [Member("refId"), Unique]
         [Ascii, StringLength(50)]
         public string RefId { get; set; }
 

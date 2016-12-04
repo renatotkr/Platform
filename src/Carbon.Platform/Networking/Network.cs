@@ -35,7 +35,7 @@ namespace Carbon.Platform.Networking
         [Member("asn")] // Autonomous System Number, e.g. AS226
         public int? ASN { get; set; }
 
-        [Member("refId"), Indexed]
+        [Member("refId"), Unique]
         [Ascii, StringLength(50)]
         public string RefId { get; set; }
 

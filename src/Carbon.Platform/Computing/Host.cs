@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Runtime.Serialization;
 
 namespace Carbon.Platform.Computing
 {
     using Data.Annotations;
     using Extensions;
+    using Networking;
+    using Storage;
 
     // AKA: Linnode, Droplet, Instance, VM, Container ...
 
@@ -44,6 +47,7 @@ namespace Carbon.Platform.Computing
 
         #region Address Helpers
 
+        [IgnoreDataMember]
         public IPAddress PublicIp
         {
             get
@@ -60,6 +64,7 @@ namespace Carbon.Platform.Computing
             }
         }
 
+        [IgnoreDataMember]
         public IPAddress PrivateIp
         {
             get
@@ -90,12 +95,21 @@ namespace Carbon.Platform.Computing
         public string MachineType { get; set; }
 
         #endregion
+        
+        // TODO: Processors
 
-        [Member("refId"), Indexed]
+        public IList<VolumeInfo> Volumes { get; set; }
+
+        public IList<NetworkInterfaceInfo> NetworkInterfaces { get; set; }
+
+        [Member("refId"), Unique]
         [Ascii, StringLength(50)]
         public string RefId { get; set; }
 
-        [Member("created"), Timestamp]
+        [Member("modified")]
+        public DateTime Modified { get; set; }
+
+        [Member("created")]
         public DateTime Created { get; set; }
     }
 }

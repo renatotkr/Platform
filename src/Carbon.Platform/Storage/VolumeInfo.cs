@@ -15,12 +15,15 @@ namespace Carbon.Platform.Storage
         public string Description { get; set; }
 
         [Member("status"), Mutable]
-        public VolumeStatus Status { get; }
+        public VolumeStatus Status { get; set; }
 
         [Member("size")]
         public long Size { get; set; } // in octets
 
-        [Member("refId"), Indexed]
+        [Member("hostId"), Mutable]
+        public long? HostId { get; set; }
+
+        [Member("refId"), Unique]
         [Ascii, StringLength(50)]
         public string RefId { get; set; }
 

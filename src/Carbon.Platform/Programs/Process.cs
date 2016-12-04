@@ -1,5 +1,6 @@
 ﻿using System;
 
+/*
 namespace Carbon.Platform.Computing
 {
     using Data.Annotations;
@@ -10,7 +11,7 @@ namespace Carbon.Platform.Computing
     {
         public Process() { }
 
-        public Process(IProgram program, IHost host)
+        public Process(IApp program, IHost host)
         {
             #region Preconditions
 
@@ -54,6 +55,7 @@ namespace Carbon.Platform.Computing
         public DateTime Created { get; set; }
     }
 }
+*/
 
 // IsolationLevel: PhysicalHost, VirtualHost, Container
 

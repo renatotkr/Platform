@@ -2,10 +2,11 @@
 {
     public enum VolumeStatus
     {
-        Pending = 0,
-        Online = 1,
+        Pending     = 0,
+        Online      = 1,
         Unavailable = 2,
-        Faulted = 3,
-        Removed = 4
+        Detached    = 3,
+        Faulted     = 4,
+        Removed     = 5
     }
 }

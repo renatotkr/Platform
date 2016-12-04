@@ -10,7 +10,7 @@ namespace Carbon.Platform.Frontends
     {
         public FrontendRelease() { }
 
-        public FrontendRelease(int frontendId, SemanticVersion version)
+        public FrontendRelease(long frontendId, SemanticVersion version)
         {
             FrontendId = frontendId;
             Version = version;
