@@ -3,7 +3,7 @@
   "description": "Platform primitives for operating a multicloud service.",
   "authors": [ "iamcarbon" ],
 
-  "version": "0.9.0",
+  "version": "0.9.2",
 
   "dependencies": {
     "Carbon.Data.Annotations": "1.1.0",

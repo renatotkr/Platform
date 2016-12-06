@@ -23,11 +23,14 @@ namespace Carbon.Platform.Storage
         [Member("hostId"), Mutable]
         public long? HostId { get; set; }
 
+        [Member("provider")]
+        public PlatformProviderId Provider { get; set; }
+
         [Member("refId"), Unique]
         [Ascii, StringLength(50)]
         public string RefId { get; set; }
 
         [Member("created"), Timestamp]
-        public DateTime Created { get; }
+        public DateTime Created { get; set; }
     }
 }

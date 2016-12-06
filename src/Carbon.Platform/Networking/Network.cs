@@ -26,14 +26,14 @@ namespace Carbon.Platform.Networking
         [Ascii, StringLength(50)]
         public string Cidr { get; set; } 
 
-        [Member("providerId")] 
-        public PlatformProviderId ProviderId { get; set; }
-
         [Member("gateway")] // Provides WAN access
         public IPAddress Gateway { get; set; } // 10.1.1.0
         
         [Member("asn")] // Autonomous System Number, e.g. AS226
         public int? ASN { get; set; }
+
+        [Member("provider")]
+        public PlatformProviderId Provider { get; set; }
 
         [Member("refId"), Unique]
         [Ascii, StringLength(50)]

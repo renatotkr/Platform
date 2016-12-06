@@ -28,9 +28,6 @@ namespace Carbon.Platform.Computing
         [Member("type")] // Physical, Virtual, Container
         public HostType Type { get; set; }
 
-        [Member("provider")]
-        public PlatformProviderId Provider { get; set; }
-
         [Member("location")]
         [StringLength(50)]
         public string Location { get; set; }  // e.g. us-east-1/A
@@ -41,6 +38,9 @@ namespace Carbon.Platform.Computing
         // Can be used to lookup platform, hypervisor, etc
         [Member("imageId")]
         public long ImageId { get; set; }
+
+        [Member("heartbeat")]
+        public DateTime? Heartbeat { get; set; }
 
         // Memory (512MB)
         // Processors (1)
@@ -90,6 +90,7 @@ namespace Carbon.Platform.Computing
         // aws          : 17-character string
         // azure         : ?
 
+        // TODO: Use Id
         [Member("machineType")]
         [Ascii, StringLength(50)] // Provides a provider specific map to the underlying hardware (memory, processors, etc)
         public string MachineType { get; set; }
@@ -101,6 +102,9 @@ namespace Carbon.Platform.Computing
         public IList<VolumeInfo> Volumes { get; set; }
 
         public IList<NetworkInterfaceInfo> NetworkInterfaces { get; set; }
+
+        [Member("provider")]
+        public PlatformProviderId Provider { get; set; }
 
         [Member("refId"), Unique]
         [Ascii, StringLength(50)]

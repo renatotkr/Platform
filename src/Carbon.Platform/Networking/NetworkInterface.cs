@@ -31,6 +31,9 @@ namespace Carbon.Platform.Networking
         // [Member("networkId"), Indexed]
         // public long? NetworkId { get; set; }
 
+        [Member("provider")]
+        public PlatformProviderId Provider { get; set; }
+
         [Member("refId"), Unique]
         [Ascii, StringLength(50)]
         public string RefId { get; set; }

@@ -10,6 +10,21 @@ namespace Carbon.Platform.Apps
     [Dataset("Apps")]
     public class App : IApp
     {
+        public App() { }
+
+        public App(string name, AppType type)
+        {
+            #region Preconditions
+
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+
+            #endregion
+
+            Name = name;
+            Type = type;
+        }
+
         [Member("id"), Identity]
         public long Id { get; set; }
 

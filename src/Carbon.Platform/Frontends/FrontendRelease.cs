@@ -3,10 +3,11 @@
 namespace Carbon.Platform.Frontends
 {
     using Data.Annotations;
+    using Protection;
     using Versioning;
 
     [Dataset("FrontendReleases")]
-    public class FrontendRelease
+    public class FrontendRelease : IFrontend
     {
         public FrontendRelease() { }
 
@@ -21,8 +22,10 @@ namespace Carbon.Platform.Frontends
 
         [Member("version"), Key]
         public SemanticVersion Version { get; set; }
-        
-        // Name?
+
+        [Member("name")]
+        [StringLength(50)]
+        public string Name { get; set; }
 
         [Member("source")]
         public string Source { get; set; }
@@ -30,11 +33,23 @@ namespace Carbon.Platform.Frontends
         [Member("activated"), Mutable]
         public DateTime? Activated { get; set; }
 
+        [Member("digest")]
+        public Hash Digest { get; set; }
+
         [Member("creatorId")]
         public long CreatorId { get; set; }
 
         [Member("created")]
         public DateTime Created { get; set; }
+
+        #region Frontend
+
+        long IFrontend.Id => FrontendId;
+
+        SemanticVersion IFrontend.Version => Version;
+
+        #endregion
+
 
         /*
         #region Helpers

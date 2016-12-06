@@ -3,6 +3,7 @@
 namespace Carbon.Platform.Apps
 {
     using Data.Annotations;
+    using Protection;
     using Versioning;
 
     [Dataset("AppReleases")]
@@ -10,9 +11,23 @@ namespace Carbon.Platform.Apps
     {
         public AppRelease() { }
 
+        public AppRelease(IApp app, SemanticVersion version)
+        {
+            #region Preconditions
+
+            if (app == null)
+                throw new ArgumentNullException(nameof(app));
+
+            #endregion
+
+            AppId = app.Id;
+            Name = app.Name;
+            Version = version;
+        }
+
         public AppRelease(long appId, SemanticVersion version)
         {
-            AppId      = appId;
+            AppId   = appId;
             Version = version;
         }
 
@@ -29,11 +44,14 @@ namespace Carbon.Platform.Apps
         [Member("buildId")]
         public long? BuildId { get; set; }
 
-        // Build Digest?
+        [Member("creatorId")]
+        public long CreatorId { get; set; }
+
+        [Member("digest")]
+        public Hash Digest { get; set; }
 
         [Member("created"), Timestamp]
         public DateTime Created { get; set; }
-
 
         #region IApp
 
