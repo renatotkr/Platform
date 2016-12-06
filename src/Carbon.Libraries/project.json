@@ -1,10 +1,10 @@
 ﻿{
   "title": "Carbon Libraries",
 
-  "version": "0.9.3",
+  "version": "0.9.4",
 
   "dependencies": {
-    "Carbon.Json": "1.1.0",
+    "Carbon.Json": "1.2.0",
     "Carbon.Versioning": "1.2.0"
   },
 
