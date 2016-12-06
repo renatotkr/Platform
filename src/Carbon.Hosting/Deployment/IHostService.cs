@@ -3,26 +3,26 @@ using System.Threading.Tasks;
 
 namespace Carbon.Hosting
 {
-    using Platform.Computing;
+    using Platform.Apps;
     using Packaging;
 
     // This could be IIS, Apache, Unicorn, or a Self Host
 
     public interface IHostService
     {
-        IEnumerable<Process> Scan();
+        IEnumerable<IApp> Scan();
 
-        Process Find(long id); 
+        IApp Find(long id); 
 
-        Task DeleteAsync(IProgram program);
+        Task DeleteAsync(IApp app);
 
-        Task DeployAsync(IProgram program, Package package);
+        Task DeployAsync(IApp app, Package package);
 
         // This will install the program if it doesn't already exist
-        Task<Process> ActivateAsync(IProgram app); 
+        Task ActivateAsync(IApp app); 
 
-        Task ReloadAsync(IProgram app);
+        Task ReloadAsync(IApp app);
 
-        bool IsDeployed(IProgram app);
+        bool IsDeployed(IApp app);
     }
 }

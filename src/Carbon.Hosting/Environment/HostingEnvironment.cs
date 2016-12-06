@@ -17,19 +17,14 @@ namespace Carbon.Hosting
                 
                 var config = JsonObject.Parse(text);
 
-                if (config.ContainsKey("programsRoot"))
+                if (config.ContainsKey("appsRoot"))
                 {
-                    ProgramsRoot = new DirectoryInfo(config["programsRoot"]);
+                    AppsRoot = new DirectoryInfo(config["appsRoot"]);
                 }
 
                 if (config.ContainsKey("frontendsRoot"))
                 {
-                    ProgramsRoot = new DirectoryInfo(config["frontendsRoot"]);
-                }
-
-                if (config.ContainsKey("frontendsRoot"))
-                {
-                    ProgramsRoot = new DirectoryInfo(config["frontendsRoot"]);
+                    FrontendsRoot = new DirectoryInfo(config["frontendsRoot"]);
                 }
             }
 
@@ -37,9 +32,9 @@ namespace Carbon.Hosting
 
             // Get current drive letter?
 
-            if (ProgramsRoot == null)
+            if (AppsRoot == null)
             {
-                ProgramsRoot = new DirectoryInfo(driveLetter + ":/apps/");
+                AppsRoot = new DirectoryInfo(driveLetter + ":/apps/");
             }
 
             if (FrontendsRoot == null)
@@ -47,25 +42,17 @@ namespace Carbon.Hosting
                 FrontendsRoot = new DirectoryInfo(driveLetter + ":/frontends/");
             }
 
-            if (BackendsRoot == null)
-            {
-                BackendsRoot = new DirectoryInfo(driveLetter +  ":/backends/");
-            }
-
             // C:/frontends/1/1.0.0/...
         }
 
         public HostingEnvironment(DirectoryInfo root)
         {
-            ProgramsRoot = root;
+            AppsRoot = root;
         }
 
-        // C:/programs/
+        // C:/apps/
         // bootstrapper, supervisor, etc 
-        public DirectoryInfo ProgramsRoot { get; }
-
-        // c:/backends/
-        public DirectoryInfo BackendsRoot { get; }
+        public DirectoryInfo AppsRoot { get; }
 
         // C:/frontends/
         public DirectoryInfo FrontendsRoot { get; }
@@ -76,7 +63,7 @@ namespace Carbon.Hosting
 /*
 config.json
 { 
-  ""programsRoot"": "Z:/programs/"
+  ""appsRoot"": "Z:/apps/"
 }
 */ 
  

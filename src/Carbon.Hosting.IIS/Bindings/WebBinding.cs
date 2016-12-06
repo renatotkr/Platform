@@ -1,10 +1,20 @@
 ﻿using System;
 
-namespace Carbon.Hosting
+namespace Carbon.Hosting.IIS
 {
-    public struct SiteBindingInfo
+    using Platform.Networking;
+
+    // TODO: Replace with listener?
+
+    public class WebBinding
     {
-        public SiteBindingInfo(int port, string hostName = null, string ip = null)
+        public WebBinding(Listener listener)
+        {
+            Port = listener.Port;
+            HostName = listener.Host;
+        }
+
+        public WebBinding(int port, string hostName = null, string ip = null)
         {
             #region Preconditions
 
@@ -23,9 +33,9 @@ namespace Carbon.Hosting
 
         public int Port { get; }
 
-        public string Ip { get; set; }
+        public string Ip { get; }
 
-        public static SiteBindingInfo Parse(string text)
+        public static WebBinding Parse(string text)
         {
             #region Preconditions
 
@@ -41,7 +51,7 @@ namespace Carbon.Hosting
             var port = int.Parse(parts[1]);
             var host = parts[2];
 
-            return new SiteBindingInfo(port, host, ip);
+            return new WebBinding(port, host, ip);
         }
 
         // 192.169.4.2:80:hostName
@@ -52,7 +62,6 @@ namespace Carbon.Hosting
                 /*1*/ Port,
                 /*2*/ HostName ?? "");
 
-   
         public override string ToString() 
             => GetInformation();
     }

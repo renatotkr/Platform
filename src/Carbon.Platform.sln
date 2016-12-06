@@ -47,6 +47,10 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Carbon.Platform.Containers"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Carbon.Platform.Runtime", "Carbon.Platform.Runtime\Carbon.Platform.Runtime.xproj", "{D7F11D5C-576C-4F3A-9F1F-36A2D482981E}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Carbon.Platform.Client", "Carbon.Platform.Client\Carbon.Platform.Client.xproj", "{A20E4CD7-F98F-4E70-AE47-E987EC2A9ACE}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Carbon.Platform.Client.Tests", "Carbon.Platform.Client.Tests\Carbon.Platform.Client.Tests.xproj", "{15498D8B-5129-4DCB-B573-D869A390A4F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -129,6 +133,14 @@ Global
 		{D7F11D5C-576C-4F3A-9F1F-36A2D482981E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7F11D5C-576C-4F3A-9F1F-36A2D482981E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7F11D5C-576C-4F3A-9F1F-36A2D482981E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A20E4CD7-F98F-4E70-AE47-E987EC2A9ACE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A20E4CD7-F98F-4E70-AE47-E987EC2A9ACE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A20E4CD7-F98F-4E70-AE47-E987EC2A9ACE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A20E4CD7-F98F-4E70-AE47-E987EC2A9ACE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15498D8B-5129-4DCB-B573-D869A390A4F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15498D8B-5129-4DCB-B573-D869A390A4F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15498D8B-5129-4DCB-B573-D869A390A4F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15498D8B-5129-4DCB-B573-D869A390A4F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -140,5 +152,6 @@ Global
 		{7ACCF84D-00F6-45F2-BF39-862B733D8D04} = {DAC43875-7B0B-4536-8FF7-D643C6562B7A}
 		{535A6E9E-F824-4EDF-BD46-F3658A7EAD7C} = {DAC43875-7B0B-4536-8FF7-D643C6562B7A}
 		{B08FD5DB-B380-405C-BF16-CD0ADA19959E} = {3D8E22F9-6465-4993-BC9C-414B185E5155}
+		{15498D8B-5129-4DCB-B573-D869A390A4F2} = {99657337-0EDE-4049-B666-2D0A679E1FE2}
 	EndGlobalSection
 EndGlobal
