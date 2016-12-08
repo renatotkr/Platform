@@ -1,13 +1,13 @@
 {
   "title": "Carbon Building Web",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "authors": [ "iamcarbon" ],
 
   "dependencies": {
     "Carbon.Css": "0.5.2",
     "Carbon.Logging": "1.0.0",
     "Carbon.Building": "1.0.0",
-    "Carbon.Packaging": "1.2.1"
+    "Carbon.Storage": "1.2.0"
   },
 
   "frameworks": {

@@ -11,17 +11,15 @@ using TypeScript;
 namespace Carbon.Builder
 {
     using Css;
-    using Extensions;
     using Logging;
     using Storage;
-    using Packaging;
     using Building;
 
     public class WebBuilder
     {
         private readonly TypeScriptCompiler typescript;
 
-        private readonly Package package;
+        private readonly IPackage package;
         private readonly string basePath;
         private readonly string buildId;
         private readonly ILogger log;
@@ -29,7 +27,7 @@ namespace Carbon.Builder
         private readonly CssResolver cssResolver;
         private readonly IBucket fs;
 
-        public WebBuilder(ILogger log, Package package, IBucket fs)
+        public WebBuilder(ILogger log, IPackage package, IBucket fs)
         {
             #region Preconditions
 
@@ -64,7 +62,7 @@ namespace Carbon.Builder
 
             var hasTypeScript = false;
 
-            var assets = package.ToArray();
+            var assets = package.Enumerate().ToArray();
 
             // TODO: Copy over typescript files
             foreach (var file in assets)
@@ -90,13 +88,17 @@ namespace Carbon.Builder
                 await typescript.BuildAsync(ct.Token).ConfigureAwait(false);
             }
 
-            foreach (var item in assets)
+            foreach (var file in assets)
             {
-                if (item.Name.EndsWith(".scss"))
-                {
-                    var compiledName = item.Name.Replace(".scss", ".css");
+                var formatIndex = file.Name.LastIndexOf(".");
 
-                    using (var compiled = await CompileCssAsync(item).ConfigureAwait(false))
+                var format = formatIndex > -1 ? file.Name.Substring(formatIndex + 1) : "";
+
+                if (format == "scss")
+                {
+                    var compiledName = file.Name.Replace(".scss", ".css");
+
+                    using (var compiled = await CompileCssAsync(file).ConfigureAwait(false))
                     {
                         if (compiled == null)
                         {
@@ -110,9 +112,9 @@ namespace Carbon.Builder
                         await fs.PutAsync(compiledName, compiled).ConfigureAwait(false);
                     }
                 }
-                else if (item.Name.EndsWith(".ts"))
+                else if (format == "ts")
                 {
-                    var compiledName = item.Name.Replace(".ts", ".js");
+                    var compiledName = file.Name.Replace(".ts", ".js");
 
                     var outputPath = basePath + compiledName;
 
@@ -123,9 +125,9 @@ namespace Carbon.Builder
                     // TODO: Add hook for testing
 
                 }
-                else if (item.IsStatic())
+                else if (IsStaticFormat(format))
                 {
-                    await fs.PutAsync(item.Name, await ToBlob(item).ConfigureAwait(false)).ConfigureAwait(false);
+                    await fs.PutAsync(file.Name, await ToBlob(file).ConfigureAwait(false)).ConfigureAwait(false);
                 }
             }
 
@@ -133,6 +135,16 @@ namespace Carbon.Builder
 
             return result;
         }
+
+       
+        private static readonly string[] staticFormats = {
+            "css", "eot", "gif", "html", "ico", "jpeg", "jpg", "js", "png", "svg", "swf", "ttf", "webm", "webp", "woff"
+        };
+
+      
+        private static bool IsStaticFormat(string format)
+            => Array.BinarySearch(staticFormats, format) > -1;
+        
 
         #region Compilers
 
@@ -190,6 +202,8 @@ namespace Carbon.Builder
 
             ms.Position = 0;
             
+            // TODO: Add format...
+
             return new Blob(ms);
         }
 

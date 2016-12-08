@@ -4,13 +4,13 @@ using System.IO;
 namespace Carbon.Builder
 {
     using Css;
-    using Packaging;
+    using Storage;
 
     internal class CssResolver : ICssResolver
     {
-        private readonly Package package;
+        private readonly IPackage package;
 
-        public CssResolver(string scopedPath, Package package)
+        public CssResolver(string scopedPath, IPackage package)
         {
             #region Preconditions
 
