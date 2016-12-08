@@ -12,7 +12,7 @@ namespace GitHub
 {
     public class GitHubClient : IDisposable
     {
-        private static readonly ProductInfoHeaderValue userAgent = new ProductInfoHeaderValue("Carbon", "2.2.0");
+        private static readonly ProductInfoHeaderValue userAgent = new ProductInfoHeaderValue("Carbon", "1.0.0");
 
         private readonly string baseUri = "https://api.github.com";
 
@@ -20,7 +20,7 @@ namespace GitHub
             AllowAutoRedirect = false
         });
 
-        public const int Version = 3;
+        public static readonly int Version = 3;
 
         private readonly OAuth2Token auth;
 
@@ -28,7 +28,8 @@ namespace GitHub
         {
             #region Preconditions
 
-            if (credentials == null) throw new ArgumentNullException(nameof(credentials));
+            if (credentials == null)
+                throw new ArgumentNullException(nameof(credentials));
 
             #endregion
 
@@ -113,11 +114,11 @@ namespace GitHub
             return result.ToArrayOf<GitRef>();
         }
 
-        public async Task<IList<GitBranch>> GetBranches(string accountName, string repoName)
+        public async Task<IList<GitBranch>> GetBranches(string accountName, string repositoryName)
         {
             // GET /repos/:owner/:repo/branches
             var request = new HttpRequestMessage(HttpMethod.Get,
-                $"{baseUri}/repos/{accountName}/{repoName}/branches"
+                $"{baseUri}/repos/{accountName}/{repositoryName}/branches"
             );
 
             var result = await SendAsync(request).ConfigureAwait(false);

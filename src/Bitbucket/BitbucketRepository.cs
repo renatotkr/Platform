@@ -2,71 +2,77 @@
 using System.Threading.Tasks;
 using System.Net;
 
-using Carbon;
 using Carbon.Packaging;
 using Carbon.Repositories;
-using Carbon.Git;
+using Carbon.Storage;
 
 namespace Bitbucket
 {
     public class BitbucketRepository : IRepositoryClient
     {
-        private readonly string accountName;
-        private readonly string repositoryName;
-
         private readonly BitbucketClient client;
 
         public BitbucketRepository(Uri url, NetworkCredential credentials)
         {
             #region Preconditions
 
-            if (url == null)            throw new ArgumentNullException(nameof(url));
-            if (credentials == null)    throw new ArgumentNullException(nameof(credentials));
+            if (url == null)
+                throw new ArgumentNullException(nameof(url));
+
+            if (credentials == null)
+                throw new ArgumentNullException(nameof(credentials));
 
             #endregion
 
             // https://bitbucket.org/carbonmade/lefty.git
 
-            var path = url.AbsolutePath.Replace(".git", "");
-            var split = path.Trim('/').Split('/');
+            var repo = RepositoryInfo.Parse(url.ToString());
+            AccountName = repo.AccountName;
+            RepositoryName = repo.Name;
 
-            this.accountName = split[0];
-            this.repositoryName = split[1];
-
-            this.client = new BitbucketClient(credentials);
+            client = new BitbucketClient(credentials);
         }
+
+        public string AccountName { get; }
+
+        public string RepositoryName { get; }
 
         public BitbucketRepository(string accountName, string repositoryName, NetworkCredential credentials)
         {
             #region Preconditions
 
-            if (accountName == null)    throw new ArgumentNullException(nameof(accountName));
-            if (repositoryName == null) throw new ArgumentNullException(nameof(repositoryName));
-            if (credentials == null)    throw new ArgumentNullException(nameof(credentials));
+            if (accountName == null)
+                throw new ArgumentNullException(nameof(accountName));
+
+            if (repositoryName == null)
+                throw new ArgumentNullException(nameof(repositoryName));
+
+            if (credentials == null)
+                throw new ArgumentNullException(nameof(credentials));
 
             #endregion
         
-            this.accountName = accountName;
-            this.repositoryName = repositoryName;
+            AccountName = accountName;
+            RepositoryName = repositoryName;
 
             this.client = new BitbucketClient(credentials);
         }
 
         public async Task<ICommit> GetCommitAsync(Revision revision)
         {
-            var commit = await client.GetCommit(accountName, repositoryName, revision.Name).ConfigureAwait(false);
+            var commit = await client.GetCommitAsync(AccountName, RepositoryName, revision.Name).ConfigureAwait(false);
 
             if (commit == null)
             {
-                throw new Exception($"The repository '{repositoryName}' does not have a reference named '{revision.Path}'");
+                throw new Exception($"The repository '{RepositoryName}' does not have a reference named '{revision.Path}'");
             }
 
             return commit;
         }
 
-        public async Task<Package> DownloadAsync(Revision revision)
+        public async Task<IPackage> DownloadAsync(Revision revision)
         {
-            var stream = await client.GetZipStream(accountName, repositoryName, revision.Name).ConfigureAwait(false);
+            var stream = await client.GetZipStreamAsync(AccountName, RepositoryName, revision.Name).ConfigureAwait(false);
 
             return ZipPackage.FromStream(stream, stripFirstLevel: true);
         }

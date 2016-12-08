@@ -3,29 +3,25 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Carbon.Packaging;
+using Carbon.Storage;
 using Carbon.Repositories;
-using Carbon.Git;
 
 namespace GitHub
 {
     public class GitHubRepository : IRepositoryClient
     {
-        private readonly string accountName;
-        private readonly string repositoryName;
-
         private readonly GitHubClient client;
 
         public GitHubRepository(Uri url, OAuth2Token credentials)
         {
             // https://github.com/orgName/repoName.git
 
-            var path = url.AbsolutePath.Replace(".git", "");
-            var split = path.Trim('/').Split('/');
+            var info = RepositoryInfo.Parse(url.ToString());
+      
+            AccountName = info.AccountName;
+            RepositoryName = info.Name;
 
-            this.accountName = split[0];
-            this.repositoryName = split[1];
-
-            this.client = new GitHubClient(credentials);
+            client = new GitHubClient(credentials);
         }
 
         public GitHubRepository(string accountName, string repositoryName, OAuth2Token credentials)
@@ -37,40 +33,53 @@ namespace GitHub
 
             #endregion
 
-            this.accountName = accountName;
-            this.repositoryName = repositoryName;
+            AccountName = accountName;
+            RepositoryName = repositoryName;
 
-            this.client = new GitHubClient(credentials);
+            client = new GitHubClient(credentials);
         }
+
+        public string AccountName { get; }
+
+        public string RepositoryName { get; }
 
         #region Refs
 
-        public Task<GitRef> GetRef(string refName)
-            => client.GetRef(accountName, repositoryName, refName);
+        public Task<GitRef> GetRefAsync(string refName)
+        {
+            #region Preconditions
 
-        public Task<GitRef[]> GetRefs()
-            => client.GetRefs(accountName, repositoryName);
+            if (refName == null)
+                throw new ArgumentNullException(nameof(refName));
+
+            #endregion
+
+            return client.GetRef(AccountName, RepositoryName, refName);
+        }
+
+        public Task<GitRef[]> GetRefsAsync()
+            => client.GetRefs(AccountName, RepositoryName);
 
         #endregion
 
         public async Task<ICommit> GetCommitAsync(Revision revision)
         {
-            var reference = await GetRef(revision.Path).ConfigureAwait(false);
+            var reference = await GetRefAsync(revision.Path).ConfigureAwait(false);
 
             if (reference == null)
             {
-                throw new Exception($"The repository '{repositoryName}' does not have a reference named '{revision.Path}'");
+                throw new Exception($"The repository '{RepositoryName}' does not have a reference named '{revision.Path}'");
             }
 
             return reference.Object.ToCommit();
         }
 
-        public Task<IList<GitBranch>> GetBranches()
-            => client.GetBranches(accountName, repositoryName);
+        public Task<IList<GitBranch>> GetBranchesAsync()
+            => client.GetBranches(AccountName, RepositoryName);
 
-        public async Task<Package> DownloadAsync(Revision revision)
+        public async Task<IPackage> DownloadAsync(Revision revision)
         {
-            var request = new GetArchiveLinkRequest(accountName, repositoryName, revision, ArchiveFormat.Zipball);
+            var request = new GetArchiveLinkRequest(AccountName, RepositoryName, revision, format: ArchiveFormat.Zipball);
 
             var link = await client.GetArchiveLink(request).ConfigureAwait(false);
 
