@@ -1,6 +1,8 @@
-﻿namespace Carbon.Platform
+﻿using System.Data;
+
+namespace Carbon.Platform
 {
-    using Backends;
+    using Apps;
     using Computing;
     using Frontends;
     using Data;
@@ -9,38 +11,53 @@
 
     public class PlatformDb
     {
+        private readonly IDbContext context;
+
         public PlatformDb(IDbContext context)
         {
-            Backends          = new Dataset<Backend>(context);
-            BackendInstances  = new Dataset<BackendInstance>(context);
+            this.context = context;
+            
+            Apps              = new Dataset<App>(context);
+            AppInstances      = new Dataset<AppInstance>(context);
+            AppReleases       = new Dataset<AppRelease>(context);
+            AppEvents         = new Dataset<AppEvent>(context);
+
+            // Frontends
             Frontends         = new Dataset<Frontend>(context);
+            FrontendBranches  = new Dataset<FrontendBranch>(context);
             FrontendReleases  = new Dataset<FrontendRelease>(context);
+
+            // Networks
             Networks          = new Dataset<Network>(context);
             NetworkInterfaces = new Dataset<NetworkInterfaceInfo>(context);
-            Programs          = new Dataset<Program>(context);
-            ProgramReleases   = new Dataset<ProgramRelease>(context);
+
             Hosts             = new Dataset<Host>(context);
             Volumes           = new Dataset<VolumeInfo>(context);
             Images            = new Dataset<Image>(context);
         }
 
-        public Dataset<Backend>               Backends          { get; }
-        public Dataset<BackendInstance>       BackendInstances  { get; }
+        public IDbConnection GetConnection()
+            => context.GetConnection();
 
+        // Apps
+        public Dataset<App>                   Apps              { get; }
+        public Dataset<AppEvent>              AppEvents         { get; }
+        public Dataset<AppInstance>           AppInstances      { get; }
+        public Dataset<AppRelease>            AppReleases       { get; }
+        // AppErrors ?
+
+        // Frontends
         public Dataset<Frontend>              Frontends         { get; }
+        public Dataset<FrontendBranch>        FrontendBranches  { get; }
         public Dataset<FrontendRelease>       FrontendReleases  { get; }
+
         public Dataset<Image>                 Images            { get; }
 
         public Dataset<Network>               Networks          { get; }
         public Dataset<NetworkInterfaceInfo>  NetworkInterfaces { get; } 
-
-        public Dataset<Program>               Programs          { get; }
-        public Dataset<ProgramRelease>        ProgramReleases   { get; }
-
+  
         public Dataset<Host>                  Hosts             { get; }
 
         public Dataset<VolumeInfo>            Volumes           { get; }
     }
 }
-
-// Rebase on Dynamo?
