@@ -35,7 +35,7 @@ namespace Carbon.Packaging
                 // Skip directories & empty files
                 if (string.IsNullOrWhiteSpace(key) || key.EndsWith("/") || entry.CompressedLength == 0) continue;
 
-                yield return new ZippedBlob(key, entry);
+                yield return new ZipEntryBlob(key, entry);
             }
         }
 

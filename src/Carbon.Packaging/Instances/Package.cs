@@ -2,13 +2,12 @@
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Carbon.Packaging
 {
     using Storage;
 
-    public abstract class Package : IEnumerable<IBlob>, IDisposable
+    public abstract class Package : IPackage, IEnumerable<IBlob>, IDisposable
     {
         public abstract IEnumerable<IBlob> Enumerate();
 
@@ -27,8 +26,16 @@ namespace Carbon.Packaging
             return null;
         }
 
-        public IBlob[] List(string prefix)
-            => Enumerate().Where(item => item.Name.StartsWith(prefix)).ToArray();
+        public IEnumerable<IBlob> Filter(string prefix)
+        {
+            foreach (var blob in Enumerate())
+            {
+                if (blob.Name.StartsWith(prefix))
+                {
+                    yield return blob;
+                }
+            }
+        }
 
         #region Helpers
 

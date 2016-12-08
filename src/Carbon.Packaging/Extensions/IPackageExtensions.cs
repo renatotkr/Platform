@@ -5,15 +5,19 @@ using System.Threading.Tasks;
 
 namespace Carbon.Packaging
 {
-    public static class PackageExtensions
+    using Storage;
+
+    public static class IPackageExtensions
     {
-        public static async Task ExtractToDirectoryAsync(this Package package, DirectoryInfo target)
+        public static async Task ExtractToDirectoryAsync(this IPackage package, DirectoryInfo target)
         {
             #region Preconditions
 
-            if (target == null) throw new ArgumentNullException(nameof(target));
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
 
-            if (target.Exists) throw new Exception("Target directory already exists.");
+            if (target.Exists)
+                throw new Exception("Target directory already exists.");
 
             #endregion
 
@@ -44,7 +48,7 @@ namespace Carbon.Packaging
             }
         }
 
-        public static async Task ZipToStreamAsync(this Package package, Stream stream)
+        public static async Task ZipToStreamAsync(this IPackage package, Stream stream)
         {
             using (var archive = new ZipArchive(stream, ZipArchiveMode.Create, leaveOpen: true))
             {

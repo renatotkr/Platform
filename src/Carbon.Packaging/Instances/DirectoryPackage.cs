@@ -27,7 +27,7 @@ namespace Carbon.Packaging
             {
                 var key = GetKey(file);
 
-                yield return new VolumeFile(key, file);
+                yield return new PhysicalFileBlob(key, file);
             }
         }
 

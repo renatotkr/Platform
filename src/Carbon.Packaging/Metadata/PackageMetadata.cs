@@ -8,7 +8,7 @@ namespace Carbon.Packaging
     using Storage;
     using Versioning;
 
-    public class PackageMetadata : IPackage
+    public class PackageMetadata
     {
         [DataMember(Name = "name")]
         public string Name { get; set; }
@@ -118,3 +118,18 @@ namespace Carbon.Packaging
             => Parse(file.Open());
     }
 }
+
+
+
+/*
+NPM Description:
+A package is any of:
+
+a) a folder containing a program described by a package.json file
+b) a gzipped tarball containing(a)
+c) a url that resolves to(b)
+d) a <name>@<version> that is published on the registry with(c)
+e) a <name>@<tag> that points to(d)
+f) a <name> that has a latest tag satisfying(e)
+g) a git url that, when cloned, results in (a).
+*/

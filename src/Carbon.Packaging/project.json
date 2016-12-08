@@ -3,13 +3,13 @@
   "description": "Provides helpers to package up code for deployment.",
   "authors": [ "iamcarbon" ],
 
-  "version": "1.2.1",
+  "version": "1.3.0",
 
   "dependencies": {
-    "Carbon.Versioning": "1.2.0",
     "Carbon.Json": "1.2.0",
-    "Carbon.Storage": "1.1.0",
-    "Carbon.Protection": "1.3.1"
+    "Carbon.Protection": "1.3.3",
+    "Carbon.Storage": "1.2.0",
+    "Carbon.Versioning": "1.2.0"
   },
 
   "frameworks": {
@@ -33,8 +33,7 @@
   },
 
   "packOptions": {
-    "summary": "Packaging primitives",
-    "tags": [ "packaging" ],
+    "tags": [ "packaging", "carbon" ],
     "owners": [ "Jason Nelson" ],
     "licenseUrl": "https://github.com/carbon/Platform/blob/master/LICENCE",
     "repository": {

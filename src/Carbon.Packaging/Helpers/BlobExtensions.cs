@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Threading.Tasks;
 
 namespace Carbon.Extensions
 {
@@ -13,17 +12,6 @@ namespace Carbon.Extensions
             var format = Path.GetExtension(file.Name).TrimStart(Seperators.Period);
 
             return FileFormat.IsStatic(format);
-        }
-       
-        public static async Task<string> ReadAllTextAsync(this IBlob blob)
-        {
-            using (var stream = blob.Open())
-            {
-                using (var reader = new StreamReader(stream))
-                {
-                    return await reader.ReadToEndAsync().ConfigureAwait(false);
-                }
-            }
         }
 
         public static bool IsHidden(this IBlob blob)
