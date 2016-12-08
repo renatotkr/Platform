@@ -13,12 +13,14 @@
         "System.Threading": "4.3.0",
         "System.Linq": "4.3.0",
         "System.ComponentModel.Annotations": "4.3.0",
-        "System.Threading.Tasks": "4.3.0"
+        "System.Threading.Tasks": "4.3.0",
+        "System.Runtime.Serialization.Primitives": "4.3.0"
       }
     },
     "net451": {
       "frameworkAssemblies": {
-        "System.ComponentModel.DataAnnotations": "4.0.0.0"
+        "System.ComponentModel.DataAnnotations": "4.0.0.0",
+        "System.Runtime.Serialization": "4.0.0.0"
       }
     }
   },

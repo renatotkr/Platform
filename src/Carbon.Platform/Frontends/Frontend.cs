@@ -8,13 +8,27 @@ namespace Carbon.Platform.Frontends
     [Dataset("Frontends")]
     public class Frontend : IFrontend
     {
-        [Member("id"), Key] 
+        public Frontend() { }
+
+        public Frontend(string name)
+        {
+            #region Preconditions
+
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+
+            #endregion
+
+            Name = name;
+        }
+
+        [Member("id"), Identity] 
         public long Id { get; set; }
 
         [Member("version"), Mutable] // Active version
         public SemanticVersion Version { get; set; }
 
-        [Member("name")]
+        [Member("name"), Unique]
         [StringLength(50)]
         public string Name { get; set; }
 
@@ -24,9 +38,6 @@ namespace Carbon.Platform.Frontends
 
         [Member("appId")]
         public long AppId { get; set; }
-
-        [Member("creatorId")]
-        public long CreatorId { get; set; }
 
         [Member("modified"), Timestamp]
         public DateTime Modified { get; set; }

@@ -28,7 +28,6 @@ namespace Carbon.Platform.Apps
         [Indexed]
         public long HostId { get; set; }
 
-
         [Member("env")]
         public JsonObject Env { get; }
 
@@ -51,10 +50,8 @@ namespace Carbon.Platform.Apps
 
         [Member("heartbeat")]
         public DateTime? Heartbeat { get; set; }
-
         
         // requestCount ?
-
 
         // Port
 

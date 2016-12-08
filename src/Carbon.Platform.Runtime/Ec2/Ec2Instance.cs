@@ -50,7 +50,7 @@ namespace Carbon.Computing
         public static Task<string> GetAvailabilityZone()
             => httpClient.GetStringAsync(baseUri + "/latest/meta-data/placement/availability-zone");
 
-        public static async Task<Ec2Instance> FetchAsync()
+        public static async Task<Ec2Instance> GetAsync()
         {
             var text = await httpClient.GetStringAsync(baseUri + "/latest/dynamic/instance-identity/document").ConfigureAwait(false);
 

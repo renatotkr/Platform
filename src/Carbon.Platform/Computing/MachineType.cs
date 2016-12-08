@@ -1,15 +1,22 @@
 ﻿namespace Carbon.Platform.Computing
 {
-    /*
-    public class MachineInfo
+    using Data.Annotations;
+
+    [Dataset("MachineTypes")]
+    public class MachineType
     {
+        [Member("id"), Key]
         public long Id { get; set; }
 
+        [Member("name")]
+        [Indexed]
         public string Name { get; set; }
 
-        public int vCpu { get; set; }
+        [Member("provider")]
+        public PlatformProviderId Provider { get; set; }
+
+        // public int vCpu { get; set; }
     }
-    */
 }
 
 /*

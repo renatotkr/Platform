@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 
 namespace Carbon.Platform.Networking
@@ -40,5 +41,8 @@ namespace Carbon.Platform.Networking
 
         [Member("addresses")]
         public List<IPAddress> Addresses { get; set; }
+
+        [Member("created")]
+        public DateTime Created { get; set; }
     }
 }

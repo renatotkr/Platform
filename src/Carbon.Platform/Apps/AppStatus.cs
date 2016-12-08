@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-namespace Carbon.Platform.Apps
+﻿namespace Carbon.Platform.Apps
 {
     public enum AppStatus
     {

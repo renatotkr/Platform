@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Carbon.Platform.Apps
 {
@@ -33,7 +32,7 @@ namespace Carbon.Platform.Apps
 
         [Member("type")] // Webapp | Worker
         public AppType Type { get; set; }
-
+        
         [Member("name"), Unique]
         [StringLength(50)]
         public string Name { get; set; }
@@ -42,9 +41,7 @@ namespace Carbon.Platform.Apps
         [StringLength(2000)]
         public JsonObject Env { get; set; }
 
-        // Runtime...
-
-        [Member("source"), Mutable]
+        [Member("source")]
         [StringLength(100)]
         public string Source { get; set; }
 
@@ -54,10 +51,16 @@ namespace Carbon.Platform.Apps
         [Member("modified"), Timestamp]
         public DateTime Modified { get; set; }
 
-        public IList<AppInstance> Instances { get; set; }
+        #region Helpers
 
-        public IList<AppRelease> Releases { get; set; }
-        
+        public AppStatus Status { get; set; } = AppStatus.Running;
+
+        // public IList<AppInstance> Instances { get; set; }
+
+        // public IList<AppRelease> Releases { get; set; }
+
+        #endregion
+
         // name@1.2.1
         public override string ToString() => Name + "@" + Version;
     }

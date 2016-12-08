@@ -23,9 +23,9 @@ namespace Carbon.Platform.Frontends
         [Member("version"), Key]
         public SemanticVersion Version { get; set; }
 
-        [Member("name")]
+        [Member("frontendName")]
         [StringLength(50)]
-        public string Name { get; set; }
+        public string FrontendName { get; set; }
 
         [Member("source")]
         public string Source { get; set; }
@@ -42,9 +42,11 @@ namespace Carbon.Platform.Frontends
         [Member("created")]
         public DateTime Created { get; set; }
 
-        #region Frontend
+        #region IFrontend
 
         long IFrontend.Id => FrontendId;
+
+        string IFrontend.Name => FrontendName;
 
         SemanticVersion IFrontend.Version => Version;
 

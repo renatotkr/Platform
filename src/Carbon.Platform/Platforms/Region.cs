@@ -1,6 +1,6 @@
 ﻿namespace Carbon.Platform
 {
-    public class Region
+    public class PlatformRegion
     {
         public long Id { get; set; }
 
@@ -8,7 +8,7 @@
 
         public string Description { get; set; }
 
-        public PlatformProviderId ProviderId { get; set; }
+        public PlatformProviderId Provider { get; set; }
     }
 }
 

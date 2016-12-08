@@ -21,7 +21,7 @@ namespace Carbon.Platform.Apps
             #endregion
 
             AppId = app.Id;
-            Name = app.Name;
+            AppName = app.Name;
             Version = version;
         }
 
@@ -37,9 +37,9 @@ namespace Carbon.Platform.Apps
         [Member("version"), Key]
         public SemanticVersion Version { get; set; }
 
-        [Member("name")]
+        [Member("appName")]
         [StringLength(50)]
-        public string Name { get; set; }
+        public string AppName { get; set; }
 
         [Member("buildId")]
         public long? BuildId { get; set; }
@@ -57,9 +57,11 @@ namespace Carbon.Platform.Apps
 
         long IApp.Id => AppId;
 
+        string IApp.Name => AppName;
+
         #endregion
 
         // name@1.2.1
-        public override string ToString() => Name + "@" + Version;
+        public override string ToString() => AppName + "@" + Version;
     }
 }
