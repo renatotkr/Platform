@@ -17,7 +17,7 @@ namespace Carbon.Packaging
             this.bucket = bucket;
         }
 
-        public async Task<Hash> PutAsync(string name, SemanticVersion version, Package package)
+        public async Task<Hash> PutAsync(long id, SemanticVersion version, IPackage package)
         {
             #region Preconditions
 
@@ -25,13 +25,13 @@ namespace Carbon.Packaging
 
             #endregion
 
-            var key = name + "/" + version.ToString();
+            var key = id.ToString() + "/" + version.ToString();
 
             using (var ms = new MemoryStream())
             {
                 await package.ZipToStreamAsync(ms).ConfigureAwait(false);
 
-                var hash = Hash.ComputeSHA256(ms, true);
+                var hash = Hash.ComputeSHA256(ms, leaveOpen: true);
 
                 var blob = new Blob(ms) {
                     ContentType = "application/zip"
@@ -43,20 +43,21 @@ namespace Carbon.Packaging
             }
         }
 
-        public async Task<Package> GetAsync(string name, SemanticVersion version)
+        public async Task<IPackage> GetAsync(long id, SemanticVersion version)
         {
-            var key = name + "/" + version.ToString();
+            var key = id.ToString() + "/" + version.ToString();
 
             var ms = new MemoryStream();
 
-            var blob = await bucket.GetAsync(key);
-
-            using (var channel = blob.Open())
+            using (var blob = await bucket.GetAsync(key).ConfigureAwait(false))
             {
-                await channel.CopyToAsync(ms).ConfigureAwait(false);
+                using (var channel = blob.Open())
+                {
+                    await channel.CopyToAsync(ms).ConfigureAwait(false);
+                }
             }
 
-            ms.Seek(0, SeekOrigin.Begin);
+            ms.Position = 1;
 
             return ZipPackage.FromStream(ms, stripFirstLevel: false);
         }     

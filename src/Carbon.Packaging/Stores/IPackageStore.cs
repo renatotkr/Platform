@@ -3,12 +3,13 @@
 namespace Carbon.Packaging
 {
     using Protection;
+    using Storage;
     using Versioning;
 
     public interface IPackageStore
     {
-        Task<Package> GetAsync(string name, SemanticVersion version);
+        Task<IPackage> GetAsync(long id, SemanticVersion version);
 
-        Task<Hash> PutAsync(string name, SemanticVersion version, Package package);
+        Task<Hash> PutAsync(long id, SemanticVersion version, IPackage package);
     }
 }

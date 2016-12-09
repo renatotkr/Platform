@@ -6,30 +6,48 @@ namespace Carbon.Packaging
 {
     using Protection;
     using Storage;
+    using Versioning;
 
     public class ProtectedPackageStore
     {
-        private readonly IBucket blobStore;
+        private readonly IBucket bucket;
         private readonly byte[] password;
+        private readonly string prefix;
 
-        public ProtectedPackageStore(IBucket blobStore, byte[] password)
+        public ProtectedPackageStore(IBucket bucket, byte[] password, string prefix = null)
         {
             #region Preconditions
 
-            if (blobStore == null)
-                throw new ArgumentNullException(nameof(blobStore));
+            if (bucket == null)
+                throw new ArgumentNullException(nameof(bucket));
 
             if (password == null)
                 throw new ArgumentNullException(nameof(password));
 
             #endregion
 
-            this.blobStore = blobStore;
+            this.bucket = bucket;
             this.password = password;
+
+            if (prefix != null)
+            {
+                if (!prefix.EndsWith("/"))
+                {
+                    prefix = prefix + "/";
+                }
+
+                this.prefix = prefix;
+            }
+            else
+            {
+                this.prefix = "";
+            }
         }
 
-        public async Task<Hash> PutAsync(string name, Package package)
+        public async Task<Hash> PutAsync(long id, SemanticVersion version, IPackage package)
         {
+            var key = prefix + id.ToString() + "/" + version.ToString();
+
             using (var ms = new MemoryStream())
             {
                 await package.ZipToStreamAsync(ms).ConfigureAwait(false);
@@ -40,26 +58,29 @@ namespace Carbon.Packaging
 
                 var secret = SecretKey.Derive(password, hash.Data);
 
-                var protector = new AesProtector(secret);
-
-                using (var packageStream = protector.EncryptStream(ms))
+                using (var protector = new AesProtector(secret))
                 {
-                    var blob = new Blob(packageStream) {
-                        ContentType = "application/zip"
-                    };
+                    using (var packageStream = protector.EncryptStream(ms))
+                    {
+                        var blob = new Blob(packageStream) {
+                            ContentType = "application/zip"
+                        };
 
-                    await blobStore.PutAsync(name, blob).ConfigureAwait(false);
+                        await bucket.PutAsync(key, blob).ConfigureAwait(false);
+                    }
                 }
 
                 return hash;
             }
         }
 
-        public async Task<Package> GetAsync(string name, Hash hash)
+        public async Task<Package> GetAsync(long id, SemanticVersion version, Hash hash)
         {
+            var key = prefix + id.ToString() + "/" + version.ToString();
+
             var ms = new MemoryStream();
 
-            using (var blob = await blobStore.GetAsync(name))
+            using (var blob = await bucket.GetAsync(key))
             {
                 using (var data = blob.Open())
                 {
@@ -67,11 +88,11 @@ namespace Carbon.Packaging
                 }
             }
 
-            ms.Seek(0, SeekOrigin.Begin);
-
+            ms.Position = 0;
+            
             var secret = SecretKey.Derive(password, hash.Data);
 
-            var protector = new AesProtector(secret);
+            var protector = new AesProtector(secret); // dispose?
 
             var stream = protector.DecryptStream(ms);
 
@@ -79,12 +100,10 @@ namespace Carbon.Packaging
 
             var computedHash = Hash.ComputeSHA256(stream, true);
 
-            if (computedHash.ToHexString() != hash.ToHexString())
+            if (computedHash != hash)
             {
                 throw new IntegrityException(hash.Data, computedHash.Data);
             }
-
-            stream.Position = 0;
 
             #endregion
 
