@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 namespace Carbon.Hosting
 {
     using Platform.Apps;
-    using Packaging;
+    using Storage;
 
-    // This could be IIS, Apache, Unicorn, or a Self Host
+    // e.g. IIS, Apache, Unicorn, SelfHost, etc.
 
     public interface IHostService
     {
@@ -16,7 +16,7 @@ namespace Carbon.Hosting
 
         Task DeleteAsync(IApp app);
 
-        Task DeployAsync(IApp app, Package package);
+        Task DeployAsync(IApp app, IPackage package);
 
         // This will install the program if it doesn't already exist
         Task ActivateAsync(IApp app); 

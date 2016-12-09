@@ -16,6 +16,16 @@ namespace Carbon.Platform.Apps
 
         public AppInstance(IApp app, IHost host)
         {
+            #region Preconditions
+
+            if (app == null)
+                throw new ArgumentNullException(nameof(app));
+
+            if (host == null)
+                throw new ArgumentNullException(nameof(host));
+
+            #endregion
+
             AppId = app.Id;
             AppName = app.Name;
             HostId = host.Id;

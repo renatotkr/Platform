@@ -8,10 +8,10 @@ namespace Carbon.Packaging
 
     public class MutablePackage : Package
     {
-        private readonly Package basePackage;
+        private readonly IPackage basePackage;
         private readonly List<IBlob> files = new List<IBlob>();
 
-        public MutablePackage(Package basePackage)
+        public MutablePackage(IPackage basePackage)
         {
             #region Preconditions
 
@@ -51,7 +51,7 @@ namespace Carbon.Packaging
 
         public override void Dispose()
         {
-            basePackage.Dispose();
+            (basePackage as IDisposable)?.Dispose();
         }
     }
 }

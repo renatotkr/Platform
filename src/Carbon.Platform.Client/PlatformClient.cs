@@ -16,10 +16,21 @@ namespace Carbon.Platform
 
     public class PlatformClient
     {
+        private readonly HttpClient httpClient = new HttpClient();
+
+        private readonly string host;
+        private readonly SecretKey secret;
+
         public PlatformClient(string host, SecretKey secret)
         {
-            Secret = secret;
-            Host   = host;
+            #region Preconditions
+
+            if (host == null) throw new ArgumentNullException(nameof(host));
+
+            #endregion
+
+            this.host = host;
+            this.secret = secret;
 
             Apps              = new AppsClient(this);
             Hosts             = new HostsClient(this);
@@ -27,10 +38,6 @@ namespace Carbon.Platform
             NetworkInterfaces = new Dao<NetworkInterfaceInfo>("networkinterfaces", this);
             Volumes           = new Dao<VolumeInfo>("volumes", this);
         }
-
-        internal string Host { get; } // e.g. platform.myservice.com
-
-        internal SecretKey Secret { get; }
 
         #region Apps
 
@@ -42,7 +49,7 @@ namespace Carbon.Platform
                 : base("apps", platform) { }
 
             public Task<AppRelease> GetReleaseAsync(long appId, SemanticVersion version)
-                => GetAsync<AppRelease>($"apps/{appId}/releases/{version}");
+                => platform.GetAsync<AppRelease>($"apps/{appId}/releases/{version}");
 
             // Create
             // Delete
@@ -64,14 +71,21 @@ namespace Carbon.Platform
                 : base("hosts", platform) { }
 
             public Task<Host> GetAsync(PlatformProviderId provider, string refId)
-                => GetAsync<Host>("hosts/" + refId);
+                => platform.GetAsync<Host>("hosts/" + refId);
+
+            // Status...
 
             public Task<List<App>> GetAppsAsync(long id)
-                => GetAsync<List<App>>($"hosts/{id}/apps");
+                => platform.GetAsync<List<App>>($"hosts/{id}/apps");
+
+            public Task<List<VolumeInfo>> GetVolumesAsync(long id)
+                => platform.GetAsync<List<VolumeInfo>>($"hosts/{id}/volumes");
+
+            public Task<List<VolumeInfo>> GetNetworkInterfacesAsync(long id)
+                => platform.GetAsync<List<VolumeInfo>>($"hosts/{id}/networkinterfaces");
 
             // Register
         }
-
 
         #endregion
 
@@ -84,8 +98,14 @@ namespace Carbon.Platform
             public FrontendsClient(PlatformClient platform)
                 : base("frontends", platform) { }
 
-            public Task<AppRelease> GetRelease(long frontendId, SemanticVersion version)
-                => GetAsync<AppRelease>($"frontends/{frontendId}/releases/{version}");
+
+            // This only gets the version...
+
+            public Task<FrontendBranch> GetBranch(long frontendId, string name)
+                => platform.GetAsync<FrontendBranch>($"frontends/{frontendId}/{name}");
+
+            public Task<FrontendRelease> GetReleaseAsync(long frontendId, SemanticVersion version)
+                => platform.GetAsync<FrontendRelease>($"frontends/{frontendId}/releases/{version}");
         }
 
         #endregion
@@ -99,9 +119,7 @@ namespace Carbon.Platform
         public class Dao<T>
             where T : new()
         {
-            private readonly HttpClient httpClient = new HttpClient();
-
-            private readonly PlatformClient platform;
+            protected readonly PlatformClient platform;
             private readonly string prefix;
              
             public Dao(string prefix, PlatformClient platform)
@@ -111,31 +129,32 @@ namespace Carbon.Platform
             }
 
             public Task<T> GetAsync(long id)
-                => GetAsync<T>(prefix + "/" + id);
+                => platform.GetAsync<T>(prefix + "/" + id);
+            
+        }
 
-            protected async Task<T1> GetAsync<T1>(string path)
-                where T1: new()
+        protected async Task<T1> GetAsync<T1>(string path)
+               where T1 : new()
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, $"https://{host}/{path}") {
+                Headers = {
+                    { "Accept", "application/json" }
+                }
+            };
+
+            Signer.SignRequest(secret, request);
+
+            using (var response = await httpClient.SendAsync(request).ConfigureAwait(false))
             {
-                var request = new HttpRequestMessage(HttpMethod.Get, $"https://{platform.Host}/{path}") {
-                    Headers = {
-                        { "Accept", "application/json" }
-                    }
-                };
+                var text = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-                Signer.SignRequest(platform.Secret, request);
-
-                using (var response = await httpClient.SendAsync(request).ConfigureAwait(false))
+                try
                 {
-                    var text = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                    try
-                    {
-                        return JsonObject.Parse(text).As<T1>();
-                    }
-                    catch
-                    {
-                        throw new Exception("Error parsing:" + text);
-                    }
+                    return JsonObject.Parse(text).As<T1>();
+                }
+                catch
+                {
+                    throw new Exception("Error parsing:" + text);
                 }
             }
         }

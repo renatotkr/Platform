@@ -17,6 +17,19 @@ namespace Carbon.Platform.Frontends
             Version = version;
         }
 
+        public FrontendRelease(IFrontend frontend, SemanticVersion version)
+        {
+            #region Preconditions
+
+            if (frontend == null) throw new ArgumentNullException(nameof(frontend));
+
+            #endregion
+
+            FrontendId = frontend.Id;
+            FrontendName = frontend.Name;
+            Version = version;
+        }
+
         [Member("frontendId"), Key]
         public long FrontendId { get; set; }
 
