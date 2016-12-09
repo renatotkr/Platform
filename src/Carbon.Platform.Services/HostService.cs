@@ -109,7 +109,7 @@ namespace Carbon.Platform.Services
                     image = new Image
                     {
                         RefId = instance.ImageId,
-                        Architecture = instance.Architecture,
+                        // Architecture = instance.Architecture,
                         Created = DateTime.UtcNow
                     };
 
@@ -128,10 +128,12 @@ namespace Carbon.Platform.Services
                     var vv = await ec2.DescribeVolumeAsync(v.Ebs.VolumeId).ConfigureAwait(false);
 
                     var vol = new VolumeInfo {
-                        RefId = v.Ebs.VolumeId,
-                        Size = (long)vv.Size * 1073741824,
-                        HostId = host.Id,
-                        Created = vv.CreateTime
+                        RefId    = v.Ebs.VolumeId,
+                        Provider = PlatformProviderId.Amazon,
+                        Status   = VolumeStatus.Online,
+                        Size     = (long)vv.Size * 1073741824,
+                        HostId   = host.Id,
+                        Created  = vv.CreateTime
                     };
 
                     await db.Volumes.InsertAsync(vol).ConfigureAwait(false);
@@ -141,11 +143,27 @@ namespace Carbon.Platform.Services
             foreach (var ni in instance.NetworkInterfaces)
             {
                 var networkInterface = new NetworkInterfaceInfo {
-                    Mac = ni.MacAddress,
+                    MacAddress = ni.MacAddress,
+                    Provider = PlatformProviderId.Amazon,
                     RefId = ni.NetworkInterfaceId,
                     HostId = host.Id,
+                    Details = new JsonObject {
+                        { "subnetId", ni.SubnetId },
+                        { "vpcId", ni.VpcId }
+                    },
                     Created = DateTime.UtcNow
                 };
+
+                /*
+                if (ni.Groups != null)
+                {
+                    var list = new XList<string>(ni.Groups.Select(ni );
+
+                    foreach (var group in ni.Groups)
+                    {
+                    }
+                }
+                */
 
                 // ? IP addresses
                 // ? Security groups
