@@ -32,7 +32,7 @@ namespace Carbon.Platform.Apps
 
         [Member("type")] // Webapp | Worker
         public AppType Type { get; set; }
-        
+
         [Member("name"), Unique]
         [StringLength(50)]
         public string Name { get; set; }

@@ -52,28 +52,28 @@
       <HintPath>..\packages\Carbon.Logging.1.0.0\lib\net461\Carbon.Logging.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Carbon.Packaging, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Carbon.Packaging.1.2.1\lib\net461\Carbon.Packaging.dll</HintPath>
+    <Reference Include="Carbon.Packaging, Version=1.3.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Carbon.Packaging.1.3.2\lib\net461\Carbon.Packaging.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Carbon.Platform, Version=0.9.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Carbon.Platform.0.9.3\lib\net461\Carbon.Platform.dll</HintPath>
+    <Reference Include="Carbon.Platform, Version=0.9.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Carbon.Platform.0.9.5\lib\net461\Carbon.Platform.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Carbon.Protection, Version=1.3.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Carbon.Protection.1.3.3\lib\net451\Carbon.Protection.dll</HintPath>
+    <Reference Include="Carbon.Protection, Version=1.3.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Carbon.Protection.1.3.5\lib\net451\Carbon.Protection.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Carbon.Repositories, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Carbon.Repositories.1.1.0\lib\net451\Carbon.Repositories.dll</HintPath>
+      <HintPath>..\packages\Carbon.Repositories.1.2.0\lib\net451\Carbon.Repositories.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Carbon.Security, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Carbon.Security.0.2.0\lib\net461\Carbon.Security.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Carbon.Storage, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Carbon.Storage.1.1.0\lib\net451\Carbon.Storage.dll</HintPath>
+    <Reference Include="Carbon.Storage, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Carbon.Storage.1.2.1\lib\net451\Carbon.Storage.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Carbon.Versioning, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -82,7 +82,7 @@
     </Reference>
     <Reference Include="Microsoft.Web.Administration, Version=7.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Bootstrapper\bin\Debug\Microsoft.Web.Administration.dll</HintPath>
+      <HintPath>..\lib\Microsoft.Web.Administration.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
