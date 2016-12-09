@@ -2,4 +2,4 @@
 
 [assembly: AssemblyTitle("Carbon.Platform")]
 [assembly: AssemblyCopyright("© Jason Nelson")]
-[assembly: AssemblyVersion("0.9.2")]
+[assembly: AssemblyVersion("0.9.5")]

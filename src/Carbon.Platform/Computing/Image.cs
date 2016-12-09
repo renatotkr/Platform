@@ -3,6 +3,9 @@
 namespace Carbon.Platform.Computing
 {
     using Data.Annotations;
+    using Json;
+
+    // Images are immutable
 
     [Dataset("Images")]
     public class Image
@@ -14,23 +17,16 @@ namespace Carbon.Platform.Computing
         [StringLength(50)] // e.g. Windows 2016 / 2016/01/01
         public string Name { get; set; }
 
-        [Member("description")]
-        [StringLength(100)] // Ubuntu Server 8.04 (Hardy Heron)
-        public string Description { get; set; }
-
-        // [Member("os")]  // Windows/2016, Linux/4.34
-        // public string Platform { get; set; }
-
-        // i386 | x86_64 / ARM
-        [Member("architecture")]
-        public string Architecture { get; set; }
-
-        [Member("created")]
-        public DateTime Created { get; set; }
+        // { platform, architecture, ... }
+        [Member("details")]
+        public JsonObject Details { get; set; }
 
         [Member("refId"), Unique] // Provider Specific Id
         [Ascii, StringLength(50)]
         public string RefId { get; set; }
+
+        [Member("created"), Timestamp]
+        public DateTime Created { get; set; }
 
         // hypervisor
         // OS / Platform
@@ -43,8 +39,9 @@ namespace Carbon.Platform.Computing
 
     public enum ImageStatus
     {
-        Pending = 0,
-        Available = 1
+        Pending   = 0,
+        Available = 1,
+        Deleted   = 3
     }
 
     // machine | kernel | ramdisk

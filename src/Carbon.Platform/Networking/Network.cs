@@ -4,6 +4,7 @@ using System.Net;
 namespace Carbon.Platform.Networking
 {
     using Data.Annotations;
+    using Json;
 
     [Dataset("Networks")]
     public class Network
@@ -31,6 +32,9 @@ namespace Carbon.Platform.Networking
         
         [Member("asn")] // Autonomous System Number, e.g. AS226
         public int? ASN { get; set; }
+
+        [Member("details")]
+        public JsonObject Details { get; set; }
 
         [Member("provider")]
         public PlatformProviderId Provider { get; set; }

@@ -5,6 +5,7 @@ using System.Net;
 namespace Carbon.Platform.Networking
 {
     using Data.Annotations;
+    using Json;
 
     [Dataset("NetworkInterfaces")]
     public class NetworkInterfaceInfo
@@ -16,9 +17,9 @@ namespace Carbon.Platform.Networking
         [StringLength(100)]
         public string Description { get; set; }
 
-        [Member("mac"), Indexed] // AKA physicalAddress, format: MM:MM:MM:SS:SS:SS
+        [Member("macAddress"), Indexed] // AKA physicalAddress, format: MM:MM:MM:SS:SS:SS
         [StringLength(30)]
-        public string Mac { get; set; } // MacAddress?
+        public string MacAddress { get; set; }
 
         /*
         [Member("speed")] // in octects
@@ -28,6 +29,9 @@ namespace Carbon.Platform.Networking
         [Member("hostId"), Mutable]
         [Indexed] // Current Attachment
         public long? HostId { get; set; }
+
+        [Member("details")]
+        public JsonObject Details { get; set; }
 
         // [Member("networkId"), Indexed]
         // public long? NetworkId { get; set; }

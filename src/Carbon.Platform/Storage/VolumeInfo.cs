@@ -3,6 +3,7 @@
 namespace Carbon.Platform.Storage
 {
     using Data.Annotations;
+    using Json;
 
     [Dataset("Volumes")]
     public class VolumeInfo
@@ -29,6 +30,9 @@ namespace Carbon.Platform.Storage
         [Member("refId"), Unique]
         [Ascii, StringLength(50)]
         public string RefId { get; set; }
+
+        [Member("details")]
+        public JsonObject Details { get; set; }
 
         [Member("created"), Timestamp]
         public DateTime Created { get; set; }
