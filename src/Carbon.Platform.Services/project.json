@@ -1,13 +1,13 @@
 {
-  "version": "0.9.4",
+  "version": "0.9.6",
   "description": "Data access abstractions for operating a multicloud service.",
   "copyright": "© Jason Nelson",
   "authors": [ "iamcarbon" ],
   "dependencies": {
     "Amazon.Ec2":  "0.5.1",
-    "Carbon.Platform": "0.9.5",
+    "Carbon.Platform": "0.9.6",
     "Carbon.Json": "1.2.0",
-    "Carbon.Protection": "1.3.3",
+    "Carbon.Protection": "1.3.5",
     "Carbon.Data": "0.9.1",
     "Carbon.Data.Sql": "0.9.0"
   },

@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 
 namespace Carbon.Platform
 {
@@ -15,12 +16,20 @@ namespace Carbon.Platform
 
         public PlatformDb(IDbContext context)
         {
+            #region Preconditions
+
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
+            #endregion
+
             this.context = context;
             
             Apps              = new Dataset<App>(context);
             AppInstances      = new Dataset<AppInstance>(context);
             AppReleases       = new Dataset<AppRelease>(context);
             AppEvents         = new Dataset<AppEvent>(context);
+            AppErrors         = new Dataset<AppError>(context);
 
             // Frontends
             Frontends         = new Dataset<Frontend>(context);
@@ -44,7 +53,7 @@ namespace Carbon.Platform
         public Dataset<AppEvent>              AppEvents         { get; }
         public Dataset<AppInstance>           AppInstances      { get; }
         public Dataset<AppRelease>            AppReleases       { get; }
-        // AppErrors ?
+        public Dataset<AppError>              AppErrors         { get; }
 
         // Frontends
         public Dataset<Frontend>              Frontends         { get; }
