@@ -2,4 +2,12 @@
 
 [assembly: AssemblyTitle("Carbon.Platform")]
 [assembly: AssemblyCopyright("© Jason Nelson")]
-[assembly: AssemblyVersion("0.9.5")]
+[assembly: AssemblyVersion("1.1.0")]
+
+/*
+1.1
+- Add errorCount
+- Add regions
+
+
+*/

@@ -7,21 +7,6 @@ namespace Carbon.Platform.Frontends
     [Dataset("FrontendBranches")]
     public class FrontendBranch
     {
-        public FrontendBranch() { }
-
-        public FrontendBranch(long frontendId, string name)
-        {
-            FrontendId = frontendId;
-            Name = name;
-        }
-
-        public FrontendBranch(long frontendId, string name, DateTime modified)
-        {
-            FrontendId = frontendId;
-            Name = name;
-            Modified = modified;
-        }
-
         [Member("frontendId"), Key]
         public long FrontendId { get; set; }
 

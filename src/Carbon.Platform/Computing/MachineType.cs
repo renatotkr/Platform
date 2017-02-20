@@ -1,25 +1,53 @@
-﻿namespace Carbon.Platform.Computing
+﻿using System.Runtime.Serialization;
+
+namespace Carbon.Platform.ComputingUnique
 {
     using Data.Annotations;
+    using Json;
 
     [Dataset("MachineTypes")]
-    public class MachineType
+    [DataIndex(IndexFlags.Unique, new[] { "provider", "name" })]
+    public class MachineType : ICloudResource
     {
-        [Member("id"), Key]
+        [Member("id"), Identity]
         public long Id { get; set; }
 
-        [Member("name")]
-        [Indexed]
-        public string Name { get; set; }
-
         [Member("provider")]
-        public PlatformProviderId Provider { get; set; }
+        public string ProviderName { get; set; }
 
-        // public int vCpu { get; set; }
+        [Member("name")]
+        public string Name { get; set; }
+        
+        // cpuType, memory, etc...
+
+        [Member("details", TypeName = "varchar(1000)")]
+        public JsonObject Details { get; set; }
+
+        [IgnoreDataMember]
+        public CloudPlatformProvider Provider => CloudPlatformProvider.Parse(ProviderName);
+
+        #region IPlatformResource
+
+        ResourceType ICloudResource.Type => ResourceType.MachineType;
+
+        #endregion
     }
 }
 
-/*
+/* 
+Azure (Virtual Machine Sizes
+---------------------------------------------
+Standard_A0
+Standard_G3
+
+Google Cloud (Machine Types)
+---------------------------------------------
+n1-standard-1
+n1-standard-2
+n1-standard-4
+
+EC2 (Instance Types)
+---------------------------------------------
 c1.medium
 c1.xlarge
 c3.2xlarge

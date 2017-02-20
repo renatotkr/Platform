@@ -8,23 +8,19 @@ namespace Carbon.Platform.Computing
     using Data.Annotations;
     using Extensions;
     using Json;
-    using Networking;
-    using Storage;
-
-    // AKA: Linnode, Droplet, Instance, VM, Container ...
 
     [Dataset("Hosts")]
     public class Host : IHost
     {
+        public Host() { }
+
+        public Host(HostType type)
+        {
+            Type = type;
+        }
+
         [Member("id"), Identity]
         public long Id { get; set; }
-
-        [Member("status"), Mutable]
-        public InstanceStatus Status { get; set; }
-
-        [Member("description")]
-        [StringLength(100)]
-        public string Description { get; set; }
 
         [Member("type")] // Physical, Virtual, Container
         public HostType Type { get; set; }
@@ -36,13 +32,27 @@ namespace Carbon.Platform.Computing
         [Member("imageId")]
         public long ImageId { get; set; }
 
-        [Member("heartbeat")]
+        [Member("networkId")]
+        public long NetworkId { get; set; }
+
+        [Member("regionId")]
+        public long RegionId { get; set; }
+
+        [Member("machineTypeId")]
+        public long MachineTypeId { get; set; }
+
+        [Member("status"), Mutable]
+        public HostStatus Status { get; set; }
+
+        [Member("heartbeat"), Mutable]
         public DateTime? Heartbeat { get; set; }
+
+        // Health?
 
         // memory, processors, machineType, availabilityZone, ...
         [Member("details")]
+        [StringLength(1000)]
         public JsonObject Details { get; set; }
-
     
         #region Address Helpers
 
@@ -82,23 +92,18 @@ namespace Carbon.Platform.Computing
 
         #endregion
 
-        public IList<VolumeInfo> Volumes { get; set; }
-
-        public IList<NetworkInterfaceInfo> NetworkInterfaces { get; set; }
-
-        [Member("provider")]
-        public PlatformProviderId Provider { get; set; }
-
         // Instance Ids
         // google cloud : UInt64
         // aws          : 17-character string
         // azure         : ?
 
-        [Member("refId"), Unique]
-        [Ascii, StringLength(50)]
-        public string RefId { get; set; }
+        // e.g. amzn:instance:i-07e6001e0415497e4
 
-        [Member("modified")]
+        [Member("resourceName"), Unique]
+        [Ascii, StringLength(100)]
+        public string ResourceName { get; set; }
+
+        [Member("modified"), Timestamp]
         public DateTime Modified { get; set; }
 
         [Member("created")]
@@ -106,3 +111,13 @@ namespace Carbon.Platform.Computing
     }
 }
 
+// A host may be a physical or virtual machine -- or even a container
+
+
+/*
+{
+    id: 1,
+    networkId: 1,
+    resource: "amzn:instance/i-34523-4234"
+}
+*/

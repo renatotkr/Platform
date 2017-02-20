@@ -18,6 +18,9 @@ namespace Carbon.Platform.Apps
             if (app == null)
                 throw new ArgumentNullException(nameof(app));
 
+            if (version == SemanticVersion.Zero)
+                throw new ArgumentException("May not be 0.0.0", nameof(version));
+
             #endregion
 
             AppId = app.Id;
@@ -27,7 +30,14 @@ namespace Carbon.Platform.Apps
 
         public AppRelease(long appId, SemanticVersion version)
         {
-            AppId   = appId;
+            #region Preconditions
+
+            if (version == SemanticVersion.Zero)
+                throw new ArgumentException("May not be 0.0.0", nameof(version));
+
+            #endregion
+
+            AppId = appId;
             Version = version;
         }
 

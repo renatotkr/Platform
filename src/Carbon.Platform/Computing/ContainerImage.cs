@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 
 namespace Carbon.Platform.Computing
 {
@@ -24,4 +25,5 @@ namespace Carbon.Platform.Computing
     }
 }
 
+*/
 // DockerImages

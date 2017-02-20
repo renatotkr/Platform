@@ -4,12 +4,19 @@ namespace Carbon.Platform.Apps
 {
     using Data.Annotations;
     using Json;
+    using Protection;
     using Versioning;
 
     [Dataset("Apps")]
     public class App : IApp
     {
         public App() { }
+
+        public App(long id, SemanticVersion version)
+        {
+            Id = id;
+            Version = version;
+        }
 
         public App(string name, AppType type)
         {
@@ -44,22 +51,15 @@ namespace Carbon.Platform.Apps
         [Member("source")]
         [StringLength(100)]
         public string Source { get; set; }
-
-        [Member("created")]
-        public DateTime Created { get; set; }
+        
+        [Member("digest")]
+        public Hash Digest { get; set; }
 
         [Member("modified"), Timestamp]
         public DateTime Modified { get; set; }
 
-        #region Helpers
-
-        public AppStatus Status { get; set; } = AppStatus.Running;
-
-        // public IList<AppInstance> Instances { get; set; }
-
-        // public IList<AppRelease> Releases { get; set; }
-
-        #endregion
+        [Member("created")]
+        public DateTime Created { get; set; }
 
         // name@1.2.1
         public override string ToString() => Name + "@" + Version;

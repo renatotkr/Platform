@@ -23,7 +23,7 @@ namespace Carbon.Platform.Networking
             #region Preconditions
 
             if (port <= 0)
-                throw new ArgumentException("Must be greater than 0", paramName: nameof(port));
+                throw new ArgumentException("Must be greater than 0", nameof(port));
 
             #endregion
 
@@ -138,6 +138,5 @@ namespace Carbon.Platform.Networking
             => Host == other.Host && Port == other.Port && Protocal == other.Protocal;
 
         #endregion
-
     }
 }

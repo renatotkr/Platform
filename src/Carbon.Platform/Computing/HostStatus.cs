@@ -1,6 +1,6 @@
 ﻿namespace Carbon.Platform.Computing
 {
-    public enum InstanceStatus
+    public enum HostStatus
     {
         Pending     = 0, // provisioning
         Running     = 1,

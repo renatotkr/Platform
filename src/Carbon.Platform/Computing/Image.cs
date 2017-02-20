@@ -8,7 +8,7 @@ namespace Carbon.Platform.Computing
     // Images are immutable
 
     [Dataset("Images")]
-    public class Image
+    public class Image : ICloudResource
     {
         [Member("id"), Identity]
         public long Id { get; set; }
@@ -17,24 +17,32 @@ namespace Carbon.Platform.Computing
         [StringLength(50)] // e.g. Windows 2016 / 2016/01/01
         public string Name { get; set; }
 
-        // { platform, architecture, ... }
+        // { platform, hypervisor, architecture, ... }
         [Member("details")]
+        [StringLength(1000)]
         public JsonObject Details { get; set; }
 
-        [Member("refId"), Unique] // Provider Specific Id
-        [Ascii, StringLength(50)]
-        public string RefId { get; set; }
+        [Member("resourceName"), Unique]
+        [Ascii, StringLength(100)]
+        public string ResourceName { get; set; }
 
         [Member("created"), Timestamp]
         public DateTime Created { get; set; }
 
-        // hypervisor
-        // OS / Platform
+        #region IPlatformResource
+
+        ResourceType ICloudResource.Type => ResourceType.Image;
+
+        CloudPlatformProvider ICloudResource.Provider => CloudPlatformProvider.Parse(ResourceName.Split(':')[0]);
+
+        #endregion
     }
 
     // A platform encompass its underlying OS.
     // Platform: OS + Architecture
-    
+
+    // Windows/x86-64
+
     // AWS: ami
 
     public enum ImageStatus
@@ -45,9 +53,11 @@ namespace Carbon.Platform.Computing
     }
 
     // machine | kernel | ramdisk
+    /*
     public enum ImageType
     {
         OS = 1,
         Container
     }
+    */
 }

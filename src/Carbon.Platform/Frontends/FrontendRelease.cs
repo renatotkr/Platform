@@ -21,7 +21,8 @@ namespace Carbon.Platform.Frontends
         {
             #region Preconditions
 
-            if (frontend == null) throw new ArgumentNullException(nameof(frontend));
+            if (frontend == null)
+                throw new ArgumentNullException(nameof(frontend));
 
             #endregion
 
@@ -64,20 +65,5 @@ namespace Carbon.Platform.Frontends
         SemanticVersion IFrontend.Version => Version;
 
         #endregion
-
-
-        /*
-        #region Helpers
-
-        [IgnoreDataMember]
-        public object Creator { get; set; }
-
-        [IgnoreDataMember]
-        public string Path => FrontendId + "/" + Version.ToString();
-
-        // 1/1.0.2
-
-        #endregion
-        */
     }
 }

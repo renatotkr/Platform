@@ -3,6 +3,7 @@
 namespace Carbon.Platform.Frontends
 {
     using Data.Annotations;
+    using Protection;
     using Versioning;
 
     [Dataset("Frontends")]
@@ -32,12 +33,15 @@ namespace Carbon.Platform.Frontends
         [StringLength(50)]
         public string Name { get; set; }
 
-        [Member("source"), Mutable]  // e.g. carbonmade/lefty#commit/head
+        [Member("source"), Mutable]  // e.g. carbonmade/lefty#commit|head
         [StringLength(100)]
         public string Source { get; set; }
 
+        [Member("digest")]
+        public Hash Digest { get; set; }
+
         [Member("appId")]
-        public long AppId { get; set; }
+        public long? AppId { get; set; }
 
         [Member("modified"), Timestamp]
         public DateTime Modified { get; set; }
@@ -45,6 +49,7 @@ namespace Carbon.Platform.Frontends
         [Member("created")]
         public DateTime Created { get; set; }
 
-        public override string ToString() => Name + "@" + Version;  // lefty@1.0.2
+        public override string ToString() 
+            => Name + "@" + Version;  // lefty@1.0.2
     }
 }

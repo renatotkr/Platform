@@ -7,7 +7,7 @@ namespace Carbon.Platform.Networking
     using Json;
 
     [Dataset("Networks")]
-    public class Network
+    public class Network : ICloudResource
     {
         public Network() { }
 
@@ -18,11 +18,7 @@ namespace Carbon.Platform.Networking
 
         [Member("id"), Identity]
         public long Id { get; set; }
-
-        [Member("description")]
-        [StringLength(100)]
-        public string Description { get; set; }
-
+        
         [Member("cidr")] // 10.1.1.0/24
         [Ascii, StringLength(50)]
         public string Cidr { get; set; } 
@@ -34,14 +30,12 @@ namespace Carbon.Platform.Networking
         public int? ASN { get; set; }
 
         [Member("details")]
+        [StringLength(1000)]
         public JsonObject Details { get; set; }
 
-        [Member("provider")]
-        public PlatformProviderId Provider { get; set; }
-
-        [Member("refId"), Unique]
-        [Ascii, StringLength(50)]
-        public string RefId { get; set; }
+        [Member("resourceName"), Unique]
+        [Ascii, StringLength(100)]
+        public string ResourceName { get; set; }
 
         [Member("created"), Timestamp]
         public DateTime Created { get; set; }
@@ -51,9 +45,22 @@ namespace Carbon.Platform.Networking
 
         // Tells packets where to go leaving a network interface
         // public IList<NetworkRoute> Routes { get; set; }
-     
+
+        #region IResource
+
+        ResourceType ICloudResource.Type => ResourceType.Network;
+
+        CloudPlatformProvider ICloudResource.Provider => CloudResourceInfo.Parse(ResourceName).Provider;
+
+        #endregion
     }
+
+    // subnet
 }
+
+// A VPC may have multiple cidr blocks
+// AssociateVpcCidrBlock
+
 
 // A Network may be a VPC
 

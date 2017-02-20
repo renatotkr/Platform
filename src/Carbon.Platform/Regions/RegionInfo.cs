@@ -1,19 +1,48 @@
-﻿namespace Carbon.Platform
+﻿using System.Runtime.Serialization;
+
+namespace Carbon.Platform
 {
-    public class PlatformRegion
+    using Data.Annotations;
+
+    [Dataset("Regions")]
+    [DataIndex(IndexFlags.Unique, new[] { "provider", "name" })]
+    public class RegionInfo : ICloudResource
     {
+        public RegionInfo() { }
+
+        public RegionInfo(long id, CloudPlatformProvider provider, string name)
+        {
+            Id           = id;
+            ProviderName = provider.Code;
+            Name         = name;
+        }
+
+        [Member("id"), Identity]
         public long Id { get; set; }
 
+        // e.g. amzn
+        [Member("provider", TypeName = "varchar(4)")]
+        [MaxLength(4)]
+        public string ProviderName { get; set; }
+
+        // e.g. us-east-1
+        [Member("name")]
         public string Name { get; set; }
 
-        public string Description { get; set; }
+        [IgnoreDataMember]
+        public CloudPlatformProvider Provider => CloudPlatformProvider.Parse(ProviderName);
 
-        public PlatformProviderId Provider { get; set; }
+        #region IResource
+
+        ResourceType ICloudResource.Type => ResourceType.Region;
+
+        #endregion
     }
 }
 
 /*
-Google regions
+Google Regions  | https://cloud.google.com/compute/docs/regions-zones/regions-zones
+----------------------------------------------------------------------------------
 
 us-west1
 us-central1
@@ -21,13 +50,11 @@ us-east1
 europe-west1
 asia-east1
 
-ref:  https://cloud.google.com/compute/docs/regions-zones/regions-zones
 
+AWS Regions
 ----------------------------------------------------------------------------------
 
-AWS REGIONS
-
-US East(N.Virginia)         us-east-1	        US Standard US East(N.Virginia)
+US East(N.Virginia)         us-east-1	        US Standard US East (N.Virginia)
 US West(Oregon)             us-west-2	        Oregon US West(Oregon)
 US West(N.California)       us-west-1	        Northern California US West(N.California)
 EU(Ireland)                 eu-west-1	        Ireland EU(Ireland)

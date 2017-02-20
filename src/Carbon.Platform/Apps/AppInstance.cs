@@ -28,6 +28,7 @@ namespace Carbon.Platform.Apps
 
             AppId = app.Id;
             AppName = app.Name;
+            AppVersion = app.Version;
             HostId = host.Id;
         }
 
@@ -39,10 +40,11 @@ namespace Carbon.Platform.Apps
         public long HostId { get; set; }
 
         [Member("env")]
+        [StringLength(1000)]
         public JsonObject Env { get; }
 
         [Member("status"), Mutable]
-        public AppStatus Status { get; set; }
+        public HostStatus Status { get; set; }
 
         [Member("appName")]
         [StringLength(50)]
@@ -51,19 +53,22 @@ namespace Carbon.Platform.Apps
         [Member("appVersion"), Mutable] 
         public SemanticVersion AppVersion { get; set; }
 
-        // Started
-
-        // Health?
-
-        [Member("terminated")]
-        public DateTime? Terminated { get; set; }
-
-        [Member("heartbeat")]
+        [Member("heartbeat"), Mutable]
         public DateTime? Heartbeat { get; set; }
         
-        // requestCount ?
+        [Member("port")]
+        public int? Port { get; set; }
 
-        // Port
+        // LoadBalancerId? 
+
+        [Member("requestCount"), Mutable]
+        public long RequestCount { get; set; }
+
+        [Member("errorCount"), Mutable]
+        public long ErrorCount { get; set; }
+
+        [Member("terminated"), Mutable]
+        public DateTime? Terminated { get; set; }
 
         [Member("created")]
         public DateTime Created { get; set; }
@@ -77,7 +82,5 @@ namespace Carbon.Platform.Apps
         string IApp.Name => AppName;
 
         #endregion
-    }
-
-    
+    }    
 }

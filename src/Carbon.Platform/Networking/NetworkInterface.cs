@@ -8,45 +8,42 @@ namespace Carbon.Platform.Networking
     using Json;
 
     [Dataset("NetworkInterfaces")]
-    public class NetworkInterfaceInfo
+    public class NetworkInterfaceInfo : ICloudResource
     {
         [Member("id"), Identity]
         public long Id { get; set; }
 
-        [Member("description")]
-        [StringLength(100)]
-        public string Description { get; set; }
-
         [Member("macAddress"), Indexed] // AKA physicalAddress, format: MM:MM:MM:SS:SS:SS
         [StringLength(30)]
         public string MacAddress { get; set; }
-
-        /*
-        [Member("speed")] // in octects
-        public long Speed { get; set; }
-        */
 
         [Member("hostId"), Mutable]
         [Indexed] // Current Attachment
         public long? HostId { get; set; }
 
         [Member("details")]
+        [StringLength(1000)]
         public JsonObject Details { get; set; }
 
-        // [Member("networkId"), Indexed]
-        // public long? NetworkId { get; set; }
+        [Member("networkId")]
+        public long NetworkId { get; set; }
 
-        [Member("provider")]
-        public PlatformProviderId Provider { get; set; }
-
-        [Member("refId"), Unique]
-        [Ascii, StringLength(50)]
-        public string RefId { get; set; }
+        [Member("resourceName"), Unique]
+        [Ascii, StringLength(100)]
+        public string ResourceName { get; set; }
 
         [Member("addresses")]
         public List<IPAddress> Addresses { get; set; }
 
         [Member("created")]
         public DateTime Created { get; set; }
+
+        #region IResource
+
+        ResourceType ICloudResource.Type => ResourceType.NetworkInterface;
+
+        CloudPlatformProvider ICloudResource.Provider => CloudResourceInfo.Parse(ResourceName).Provider;
+
+        #endregion
     }
 }
