@@ -1,29 +1,28 @@
 ﻿using Xunit;
 
-namespace Carbon.Computing.Tests
+namespace Carbon.Platform.Networking.Tests
 {
     public class NetworkPortTests
     {
         [Fact]
         public void Parse1()
         {
-            Assert.Equal(80, NetworkPort.Parse("80").Start);
-            Assert.Equal(80, NetworkPort.Parse("80/tcp").Start);
+            Assert.Equal(80, Listener.Parse("80").Port);
+            Assert.Equal(80, Listener.Parse("80/tcp").Port);
 
-            Assert.Equal(NetworkProtocal.TCP,   NetworkPort.Parse("80/tcp").Protocal);
-            Assert.Equal(NetworkProtocal.HTTP,  NetworkPort.Parse("80/http").Protocal);
-            Assert.Equal(NetworkProtocal.HTTPS, NetworkPort.Parse("443/https").Protocal);
+            Assert.Equal(NetworkProtocal.TCP,   Listener.Parse("80/tcp").Protocal);
+            Assert.Equal(NetworkProtocal.HTTP,  Listener.Parse("80/http").Protocal);
+            Assert.Equal(NetworkProtocal.HTTPS, Listener.Parse("443/https").Protocal);
 
-            Assert.Equal("80", NetworkPort.Parse("80").ToString());
+            Assert.Equal("80", Listener.Parse("80").ToString());
 
-            Assert.Equal("81/http", NetworkPort.Parse("81/http").ToString());
+            Assert.Equal("81/http", Listener.Parse("81/http").ToString());
 
-            Assert.Equal("http", NetworkPort.Parse("80/http").ToString());
-            Assert.Equal("https", NetworkPort.Parse("443/https").ToString());
+            Assert.Equal("http", Listener.Parse("80/http").ToString());
+            Assert.Equal("https", Listener.Parse("443/https").ToString());
 
-            Assert.Equal(80, NetworkPort.Parse("http").Start);
-            Assert.Equal(443, NetworkPort.Parse("https").Start);
-
+            Assert.Equal(80, Listener.Parse("http").Port);
+            Assert.Equal(443, Listener.Parse("https").Port);
         }
 
         /*
