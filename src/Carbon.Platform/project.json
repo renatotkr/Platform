@@ -3,7 +3,7 @@
   "description": "Primitives for operating a multicloud service.",
   "authors": [ "iamcarbon" ],
 
-  "version": "1.2.0",
+  "version": "1.2.1",
 
   "dependencies": {
     "Carbon.Data.Annotations": "1.1.0",
@@ -14,7 +14,6 @@
 
   "frameworks": {
     "netstandard1.6": {
-      "imports": "dnxcore50",
       "dependencies": {
         "System.Runtime": "4.3.0",
         "System.Runtime.Extensions": "4.3.0",
