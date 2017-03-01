@@ -2,25 +2,29 @@
 
 namespace Carbon.Platform
 {
-    public enum ResourceType
-    {
-        App              = 1,
-        Bucket           = 2,
-        Database         = 3, // db?
-        Domain           = 4,
-        Function         = 5,
-        Image            = 6,
-        Instance         = 7,  // Host Instance          
-        // Logs          = 8, 
-        Network          = 20, // AKA VPC
-        NetworkInterface = 21, // network-interface
-        Subnet           = 22, // AKA subnetwork
-        User             = 30,
-        Volume           = 40,
-        Region           = 41,
-        Zone             = 42, // AKA AvailabilityZone -- amnz:zone:us-east-1b
+    // Can we limit to 63?
 
-        MachineType      = 50, // machinetype
+    [Flags]
+    public enum ResourceType : long
+    {
+        App              = 1L << 1,
+        Bucket           = 1L << 2,
+        Database         = 1L << 3, // db?
+        Domain           = 1L << 4,
+        DnsZone          = 1L << 5,
+        Function         = 1L << 6,
+        Image            = 1L << 7,
+        Instance         = 1L << 8,  // host-instance          
+        // Logs          = 1L << 9, 
+        MachineType      = 1L << 14, // machine-type
+        Network          = 1L << 20, // AKA VPC
+        NetworkGateway   = 1L << 21, // gateway
+        NetworkInterface = 1L << 22, // network-interface
+        Subnet           = 1L << 23, // AKA subnetwork
+        User             = 1L << 30,
+        Volume           = 1L << 40,
+        Region           = 1L << 41,
+        Zone             = 1L << 42, // AKA AvailabilityZone -- amnz:zone:us-east-1b
     }
 
     // Stream (Kineses)
