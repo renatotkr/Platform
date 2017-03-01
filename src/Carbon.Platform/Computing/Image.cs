@@ -33,7 +33,7 @@ namespace Carbon.Platform.Computing
 
         ResourceType ICloudResource.Type => ResourceType.Image;
 
-        CloudPlatformProvider ICloudResource.Provider => CloudPlatformProvider.Parse(ResourceName.Split(':')[0]);
+        CloudProvider ICloudResource.Provider => CloudProvider.Parse(ResourceName.Split(':')[0]);
 
         #endregion
     }

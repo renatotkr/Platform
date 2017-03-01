@@ -4,7 +4,7 @@ namespace Carbon.Platform
 {
     public struct CloudResourceInfo : IEquatable<CloudResourceInfo>
     {
-        public CloudResourceInfo(CloudPlatformProvider provider, ResourceType type, string id)
+        public CloudResourceInfo(CloudProvider provider, ResourceType type, string id)
         {
             #region Preconditions
 
@@ -22,7 +22,7 @@ namespace Carbon.Platform
             Name = id;
         }
 
-        public CloudPlatformProvider Provider { get; }
+        public CloudProvider Provider { get; }
 
         public string Region { get; set; }
 
@@ -31,7 +31,7 @@ namespace Carbon.Platform
         public string Name { get; }
 
         public override string ToString() =>
-            Provider.Code + ":" + Type.GetName() + "/" + Name;
+            Provider.Code.ToLower() + ":" + Type.GetName() + "/" + Name;
 
         public static implicit operator string(CloudResourceInfo resource) => 
             resource.ToString();
@@ -39,19 +39,19 @@ namespace Carbon.Platform
         #region Amazon Helpers
 
         public static CloudResourceInfo Ec2Instance(string id)
-            => new CloudResourceInfo(CloudPlatformProvider.Amazon, ResourceType.Instance, id);
+            => new CloudResourceInfo(CloudProvider.Amazon, ResourceType.Instance, id);
 
         public static CloudResourceInfo Ec2Volume(string id)
-            => new CloudResourceInfo(CloudPlatformProvider.Amazon, ResourceType.Volume, id);
+            => new CloudResourceInfo(CloudProvider.Amazon, ResourceType.Volume, id);
 
         public static CloudResourceInfo Ec2Image(string id)
-           => new CloudResourceInfo(CloudPlatformProvider.Amazon, ResourceType.Image, id);
+           => new CloudResourceInfo(CloudProvider.Amazon, ResourceType.Image, id);
 
         public static CloudResourceInfo Ec2NetworkInterface(string id)
-            => new CloudResourceInfo(CloudPlatformProvider.Amazon, ResourceType.NetworkInterface, id);
+            => new CloudResourceInfo(CloudProvider.Amazon, ResourceType.NetworkInterface, id);
 
         public static CloudResourceInfo Ec2Vpc(string id)
-            => new CloudResourceInfo(CloudPlatformProvider.Amazon, ResourceType.Network, id);
+            => new CloudResourceInfo(CloudProvider.Amazon, ResourceType.Network, id);
 
         #endregion
 
@@ -59,10 +59,10 @@ namespace Carbon.Platform
 
 
         public static CloudResourceInfo AzureVolume(string id)
-            => new CloudResourceInfo(CloudPlatformProvider.Microsoft, ResourceType.Volume, id);
+            => new CloudResourceInfo(CloudProvider.Microsoft, ResourceType.Volume, id);
 
         public static CloudResourceInfo AzureInstance(string id)
-            => new CloudResourceInfo(CloudPlatformProvider.Microsoft, ResourceType.Instance, id);
+            => new CloudResourceInfo(CloudProvider.Microsoft, ResourceType.Instance, id);
 
         #endregion
 
@@ -74,7 +74,7 @@ namespace Carbon.Platform
         {
             var parts = text.Split(splitOn);
 
-            var platform = CloudPlatformProvider.Parse(parts[0]);
+            var platform = CloudProvider.Parse(parts[0]);
             var type     = ResourceTypeHelper.Parse(parts[1]);
             var id       = parts[2];
 

@@ -38,8 +38,8 @@ namespace Carbon.Platform.Storage
 
         ResourceType ICloudResource.Type => ResourceType.Volume;
 
-        CloudPlatformProvider ICloudResource.Provider => 
-            CloudPlatformProvider.Parse(ResourceName.Split(':')[0]);
+        CloudProvider ICloudResource.Provider => 
+            CloudProvider.Parse(ResourceName.Split(':')[0]);
 
         #endregion
     }

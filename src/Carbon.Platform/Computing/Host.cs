@@ -9,6 +9,8 @@ namespace Carbon.Platform.Computing
     using Extensions;
     using Json;
 
+    // HostInfo?
+
     [Dataset("Hosts")]
     public class Host : IHost
     {
@@ -25,9 +27,6 @@ namespace Carbon.Platform.Computing
         [Member("type")] // Physical, Virtual, Container
         public HostType Type { get; set; }
 
-        [Member("addresses")]
-        public List<IPAddress> Addresses { get; set; }
-
         // Can be used to lookup platform, hypervisor, etc
         [Member("imageId")]
         public long ImageId { get; set; }
@@ -35,25 +34,45 @@ namespace Carbon.Platform.Computing
         [Member("networkId")]
         public long NetworkId { get; set; }
 
-        [Member("regionId")]
-        public long RegionId { get; set; }
+        // Provider + Region# + Zone#
+        // NOTE: Was RegionId...
+        [Member("locationId")]
+        public long LocationId { get; set; }
 
         [Member("machineTypeId")]
         public long MachineTypeId { get; set; }
 
         [Member("status"), Mutable]
         public HostStatus Status { get; set; }
-
+        
         [Member("heartbeat"), Mutable]
         public DateTime? Heartbeat { get; set; }
 
-        // Health?
-
-        // memory, processors, machineType, availabilityZone, ...
+        [Member("addresses")]
+        public List<IPAddress> Addresses { get; set; }
+        
         [Member("details")]
         [StringLength(1000)]
         public JsonObject Details { get; set; }
-    
+
+        // Instance Ids
+        // google cloud : UInt64
+        // aws          : 17-character string
+        // azure         : ?
+
+        // e.g. amzn:instance:i-07e6001e0415497e4
+
+        // TODO: Replace with Name & Provider
+        [Member("resourceName"), Unique]
+        [Ascii, StringLength(100)]
+        public string ResourceName { get; set; }
+
+        [Member("modified"), Timestamp]
+        public DateTime Modified { get; set; }
+
+        [Member("created")]
+        public DateTime Created { get; set; }
+
         #region Address Helpers
 
         [IgnoreDataMember]
@@ -61,7 +80,7 @@ namespace Carbon.Platform.Computing
         {
             get
             {
-                foreach(var address in Addresses)
+                foreach (var address in Addresses)
                 {
                     if (!address.IsInternal())
                     {
@@ -92,27 +111,12 @@ namespace Carbon.Platform.Computing
 
         #endregion
 
-        // Instance Ids
-        // google cloud : UInt64
-        // aws          : 17-character string
-        // azure         : ?
-
-        // e.g. amzn:instance:i-07e6001e0415497e4
-
-        [Member("resourceName"), Unique]
-        [Ascii, StringLength(100)]
-        public string ResourceName { get; set; }
-
-        [Member("modified"), Timestamp]
-        public DateTime Modified { get; set; }
-
-        [Member("created")]
-        public DateTime Created { get; set; }
+        public CloudProvider Provider =>
+            CloudResourceInfo.Parse(ResourceName).Provider;
     }
 }
 
 // A host may be a physical or virtual machine -- or even a container
-
 
 /*
 {

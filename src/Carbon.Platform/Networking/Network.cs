@@ -50,7 +50,7 @@ namespace Carbon.Platform.Networking
 
         ResourceType ICloudResource.Type => ResourceType.Network;
 
-        CloudPlatformProvider ICloudResource.Provider => CloudResourceInfo.Parse(ResourceName).Provider;
+        CloudProvider ICloudResource.Provider => CloudResourceInfo.Parse(ResourceName).Provider;
 
         #endregion
     }

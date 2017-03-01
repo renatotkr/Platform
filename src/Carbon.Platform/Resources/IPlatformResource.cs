@@ -4,6 +4,6 @@
     {
         ResourceType Type { get; }
 
-        CloudPlatformProvider Provider { get; }
+        CloudProvider Provider { get; }
     }
 }
