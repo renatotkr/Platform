@@ -12,14 +12,7 @@ namespace Carbon.Platform.Networking
     {
         public Cidr(IPAddress prefix, int suffix)
         {
-            #region Preconditions
-
-            if (prefix == null)
-                throw new ArgumentNullException(nameof(prefix));
-
-            #endregion
-
-            Prefix = prefix;
+            Prefix = prefix ?? throw new ArgumentNullException(nameof(prefix));
             Suffix = suffix;
         }
 
@@ -34,14 +27,14 @@ namespace Carbon.Platform.Networking
 
         public IPAddress Broadcast => null;
 
-        public IPAddress Start 
-            => new IPAddress(IP4Number(Prefix) & Netmask);  // 10.1.1.1
+        public IPAddress Start =>
+            new IPAddress(IP4Number(Prefix) & Netmask);  // 10.1.1.1
         
-        public IPAddress End 
-            => new IPAddress((IP4Number(Prefix) & Netmask) | ~Netmask);    // 10.1.1.254
+        public IPAddress End => 
+            new IPAddress((IP4Number(Prefix) & Netmask) | ~Netmask);    // 10.1.1.254
 
-        private static int IP4Number(IPAddress ip)
-            => BitConverter.ToInt32(ip.GetAddressBytes(), 0);
+        private static int IP4Number(IPAddress ip) => 
+            BitConverter.ToInt32(ip.GetAddressBytes(), 0);
 
         #endregion
 
@@ -52,7 +45,7 @@ namespace Carbon.Platform.Networking
 
         public static Cidr Parse(string text)
         {
-            var parts = text.Split(Seperator.ForwardSlash); // '/'
+            var parts = text.Split(Seperators.ForwardSlash); // '/'
 
             return new Cidr(
                 prefix: IPAddress.Parse(parts[0]),
@@ -61,7 +54,9 @@ namespace Carbon.Platform.Networking
         }
 
         public override string ToString()
-            => Prefix.ToString() + "/" + Suffix.ToString();
+        {
+            return Prefix.ToString() + "/" + Suffix.ToString();
+        }
     }
 }
 

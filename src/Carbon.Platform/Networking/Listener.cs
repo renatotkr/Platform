@@ -64,7 +64,7 @@ namespace Carbon.Platform.Networking
                 case "https" : return HTTPS;
             }
 
-            var split = text.Split(Seperator.ForwardSlash); // '/'
+            var split = text.Split(Seperators.ForwardSlash); // '/'
 
             var protocal = NetworkProtocal.Any;
 

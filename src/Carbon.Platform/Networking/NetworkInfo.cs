@@ -7,11 +7,12 @@ namespace Carbon.Platform.Networking
     using Json;
 
     [Dataset("Networks")]
-    public class Network : ICloudResource
+    [DataIndex(IndexFlags.Unique, "providerId", "name")]
+    public class NetworkInfo : ICloudResource
     {
-        public Network() { }
+        public NetworkInfo() { }
 
-        public Network(Cidr cidr)
+        public NetworkInfo(Cidr cidr)
         {
             Cidr = cidr.ToString();
         }
@@ -19,6 +20,13 @@ namespace Carbon.Platform.Networking
         [Member("id"), Identity]
         public long Id { get; set; }
         
+        [Member("providerId")]
+        public int ProviderId { get; set; }
+
+        [Member("name")]
+        [Ascii, StringLength(50)]
+        public string Name { get; set; }
+
         [Member("cidr")] // 10.1.1.0/24
         [Ascii, StringLength(50)]
         public string Cidr { get; set; } 
@@ -33,24 +41,25 @@ namespace Carbon.Platform.Networking
         [StringLength(1000)]
         public JsonObject Details { get; set; }
 
-        [Member("resourceName"), Unique]
-        [Ascii, StringLength(100)]
-        public string ResourceName { get; set; }
-
         [Member("created"), Timestamp]
         public DateTime Created { get; set; }
+
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; set; }
 
         // The rules form the firewall
         // public IList<NetworkRule> Rules { get; set; }
 
         // Tells packets where to go leaving a network interface
         // public IList<NetworkRoute> Routes { get; set; }
+        
+        // public IList<SubnetInfo> Subnets { get; set; }
 
         #region IResource
 
         ResourceType ICloudResource.Type => ResourceType.Network;
 
-        CloudProvider ICloudResource.Provider => CloudResourceInfo.Parse(ResourceName).Provider;
+        public CloudProvider Provider => CloudProvider.Get(ProviderId);
 
         #endregion
     }
