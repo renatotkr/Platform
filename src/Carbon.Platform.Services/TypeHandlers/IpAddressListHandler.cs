@@ -8,6 +8,8 @@ namespace Carbon.Platform
 
     public class IPAddressListHandler : DbTypeHandler<List<IPAddress>>
     {
+        public override DatumInfo DatumType => DatumInfo.String(255);
+
         public override List<IPAddress> Parse(object value)
         {
             var text = (string)value;
@@ -36,7 +38,5 @@ namespace Carbon.Platform
             parameter.Value = string.Join(",", value);
             parameter.DbType = DbType.AnsiString;
         }
-
-        public override DatumInfo DatumType => DatumInfo.String(255);
     }
 }
