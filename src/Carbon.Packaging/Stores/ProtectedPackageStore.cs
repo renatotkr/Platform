@@ -16,18 +16,8 @@ namespace Carbon.Packaging
 
         public ProtectedPackageStore(IBucket bucket, byte[] password, string prefix = null)
         {
-            #region Preconditions
-
-            if (bucket == null)
-                throw new ArgumentNullException(nameof(bucket));
-
-            if (password == null)
-                throw new ArgumentNullException(nameof(password));
-
-            #endregion
-
-            this.bucket = bucket;
-            this.password = password;
+            this.bucket = bucket ?? throw new ArgumentNullException(nameof(bucket));
+            this.password = password ?? throw new ArgumentNullException(nameof(password));
 
             if (prefix != null)
             {

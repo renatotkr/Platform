@@ -13,22 +13,10 @@ namespace Carbon.Packaging
 
         public ZipEntryBlob(string name, ZipArchiveEntry entry)
         {
-            #region Preconditions
+            Name = name ?? throw new ArgumentNullException(nameof(name));
 
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
-
-            if (entry == null)
-                throw new ArgumentNullException(nameof(entry));
-
-            #endregion
-
-            Name = name;
-
-            this.entry = entry;
+            this.entry = entry ?? throw new ArgumentNullException(nameof(entry));
         }
-
-        public Stream Open() => entry.Open();
 
         public string Name { get; }
 
@@ -36,7 +24,9 @@ namespace Carbon.Packaging
 
         public DateTime Modified => entry.LastWriteTime.UtcDateTime;
 
-        public IDictionary<string, string> Metadata => null;
+        public IReadOnlyDictionary<string, string> Metadata => null;
+
+        public Stream Open() => entry.Open();
 
         public void Dispose()
         {

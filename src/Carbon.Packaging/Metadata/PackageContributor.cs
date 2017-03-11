@@ -12,6 +12,15 @@ namespace Carbon.Packaging
 
         [DataMember(Name = "url")]
         public string Url { get; set; }
+
+        public string Text { get; set; }
+
+        /*
+        public static PackageContributor Parse(string text)
+        {
+
+        }
+        */
     }
 }
 

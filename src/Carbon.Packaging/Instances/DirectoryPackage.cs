@@ -12,13 +12,7 @@ namespace Carbon.Packaging
 
         public DirectoryPackage(DirectoryInfo root)
         {
-            #region Preconditions
-
-            if (root == null) throw new ArgumentNullException(nameof(root));
-
-            #endregion
-
-            this.root = root;
+            this.root = root ?? throw new ArgumentNullException(nameof(root));
         }
 
         public override IEnumerable<IBlob> Enumerate()
@@ -34,8 +28,8 @@ namespace Carbon.Packaging
         #region File Helpers
 
         //  // Strip off the root and replace \ with /
-        public string GetKey(FileInfo file)
-            => file.FullName.Replace(root.FullName, "").Replace(@"\", "/").TrimStart('/');
+        public string GetKey(FileInfo file) => 
+            file.FullName.Replace(root.FullName, "").Replace(@"\", "/").TrimStart(Seperators.ForwardSlash);
 
         internal IEnumerable<FileInfo> GetFilesRecursive(DirectoryInfo rootDirectory)
         {

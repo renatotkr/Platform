@@ -10,10 +10,10 @@ namespace Carbon.Packaging
             "css", "eot", "gif", "html", "ico", "jpeg", "jpg", "js", "png", "svg", "swf", "ttf", "webm", "webp", "woff"
         };
 
-        public static bool IsText(string format)
-            => Array.BinarySearch(txtFormats, format) > 0;
+        public static bool IsText(string format) => 
+            Array.BinarySearch(txtFormats, format) > 0;
 
-        public static bool IsStatic(string format)
-            => Array.BinarySearch(staticFormats, format) > -1;
+        public static bool IsStatic(string format) => 
+            Array.BinarySearch(staticFormats, format) > -1;
     }
 }

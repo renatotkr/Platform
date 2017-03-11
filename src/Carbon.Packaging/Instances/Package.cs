@@ -39,18 +39,15 @@ namespace Carbon.Packaging
 
         #region Helpers
 
-        public static Package FromDirectory(DirectoryInfo root) 
-            => new DirectoryPackage(root);
+        public static Package FromDirectory(DirectoryInfo root) => new DirectoryPackage(root);
 
         #endregion
 
         #region IEnumerable
 
-        IEnumerator<IBlob> IEnumerable<IBlob>.GetEnumerator()
-            => Enumerate().GetEnumerator();
+        IEnumerator<IBlob> IEnumerable<IBlob>.GetEnumerator() => Enumerate().GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-            => Enumerate().GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => Enumerate().GetEnumerator();
 
         #endregion
     }

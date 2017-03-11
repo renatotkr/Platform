@@ -20,7 +20,7 @@ namespace Carbon.Extensions
 
             // .something.jpeg
             // /.git
-         
+
             foreach (var part in blob.Name.Split(Seperators.ForwardSlash))
             {
                 if (part.Length > 0 && part[0] == '.') return true;

@@ -16,13 +16,7 @@ namespace Carbon.Packaging
 
         public ZipPackage(ZipArchive archive, bool stripFirstLevel = true)
         {
-            #region Preconditions
-
-            if (archive == null) throw new ArgumentNullException(nameof(archive));
-
-            #endregion
-
-            this.archive = archive;
+            this.archive = archive ?? throw new ArgumentNullException(nameof(archive));
             this.stripFirstLevel = stripFirstLevel;
         }
 

@@ -47,8 +47,7 @@ namespace Carbon.Packaging
             return TryGetValue(name, out item);
         }
 
-        public bool Contains(string name) 
-            => ContainsKey(name);
+        public bool Contains(string name) => ContainsKey(name);
 
         public override string ToString()
         {
@@ -107,7 +106,7 @@ namespace Carbon.Packaging
             return new PackageManifest(entries);
         }
 
-        public static PackageManifest FromPackage(Package package)
-            => new PackageManifest(package.Enumerate().Select(blob => ManifestEntry.FromBlob(blob)));
+        public static PackageManifest FromPackage(Package package) => 
+            new PackageManifest(package.Enumerate().Select(blob => ManifestEntry.FromBlob(blob)));
     }
 }

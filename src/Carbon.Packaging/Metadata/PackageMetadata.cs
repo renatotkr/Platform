@@ -30,7 +30,7 @@ namespace Carbon.Packaging
 
         public string License { get; set; }
 
-        public IList<PackageDependency> Dependencies { get; } = new List<PackageDependency>();
+        public List<PackageDependency> Dependencies { get; } = new List<PackageDependency>();
 
         [DataMember(Name = "repository")]
         public PackageRepository Repository { get; set; }
@@ -93,7 +93,16 @@ namespace Carbon.Packaging
 
             if (json.ContainsKey("author"))
             {
-                metadata.Author = json["author"].As<PackageContributor>();
+                // Your Name <you.name@example.org>
+
+                if (json["author"] is JsonString)
+                {
+                    metadata.Author = new PackageContributor { Text = json["author"] };
+                }
+                else
+                {
+                    metadata.Author = json["author"].As<PackageContributor>();
+                }
             }
 
             if (json.ContainsKey("contributors"))
@@ -108,14 +117,12 @@ namespace Carbon.Packaging
         {
             using (var reader = new StreamReader(stream))
             {
-                var text = reader.ReadToEnd();
-
-                return Parse(text);
+                return Parse(reader.ReadToEnd());
             }
         }
 
-        public static PackageMetadata FromBlob(IBlob file)
-            => Parse(file.Open());
+        public static PackageMetadata FromBlob(IBlob file) => 
+            Parse(file.Open());
     }
 }
 

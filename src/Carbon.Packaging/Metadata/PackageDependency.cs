@@ -8,15 +8,8 @@ namespace Carbon.Packaging
     {
         public PackageDependency(string name, string text)
         {
-            #region Preconditions
-
-            if (name == null) throw new ArgumentNullException(nameof(name));
-            if (text == null) throw new ArgumentNullException(nameof(text));
-
-            #endregion
-
-            Name = name;
-            Value = text;
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Value = text ?? throw new ArgumentNullException(nameof(text));
         }
 
         public string Name { get; }

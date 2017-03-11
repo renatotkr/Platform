@@ -13,13 +13,7 @@ namespace Carbon.Packaging
 
         public MutablePackage(IPackage basePackage)
         {
-            #region Preconditions
-
-            if (basePackage == null) throw new ArgumentNullException(nameof(basePackage));
-
-            #endregion
-
-            this.basePackage = basePackage;
+            this.basePackage = basePackage ?? throw new ArgumentNullException(nameof(basePackage));
         }
 
         public void Add(string name, Stream stream)

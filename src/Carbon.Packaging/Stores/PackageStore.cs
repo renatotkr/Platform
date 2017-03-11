@@ -57,7 +57,7 @@ namespace Carbon.Packaging
                 }
             }
 
-            ms.Position = 1;
+            ms.Position = 0;
 
             return ZipPackage.FromStream(ms, stripFirstLevel: false);
         }     
