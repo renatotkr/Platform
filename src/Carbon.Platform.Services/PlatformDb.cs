@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Data;
 
 namespace Carbon.Platform
 {
     using Apps;
     using Computing;
-    using Frontends;
     using Data;
     using Networking;
     using Storage;
+    using Versioning;
 
     public class PlatformDb
     {
@@ -16,57 +15,66 @@ namespace Carbon.Platform
 
         public PlatformDb(IDbContext context)
         {
-            #region Preconditions
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
 
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
+            // Ensure the db type handlers are registered
+            context.Types.TryAdd(new SemanticVersionHandler());
+            context.Types.TryAdd(new IPAddressHandler());
+            context.Types.TryAdd(new IPAddressListHandler());
+            context.Types.TryAdd(new ListenerHandler());
+            context.Types.TryAdd(new HashHandler());
+            context.Types.TryAdd(new ListenerListHandler());
+            context.Types.TryAdd(new HealthCheckHandler());
+            context.Types.TryAdd(new JsonObjectHandler());
 
-            #endregion
+            // Apps ------------------------------------------------------------------
+            Apps         = new Dataset<App,         long>(context);
+            AppInstances = new Dataset<AppInstance, (long, long)>(context);
+            AppReleases  = new Dataset<AppRelease,  (long, SemanticVersion)>(context);
+            AppEvents    = new Dataset<AppEvent,    long>(context);
+            AppErrors    = new Dataset<AppError,    long>(context);
 
-            this.context = context;
-            
-            Apps              = new Dataset<App>(context);
-            AppInstances      = new Dataset<AppInstance>(context);
-            AppReleases       = new Dataset<AppRelease>(context);
-            AppEvents         = new Dataset<AppEvent>(context);
-            AppErrors         = new Dataset<AppError>(context);
+            // Backends --------------------------------------------------------------
+            Backends     = new Dataset<Backend,     long>(context);
 
-            // Frontends
-            Frontends         = new Dataset<Frontend>(context);
-            FrontendBranches  = new Dataset<FrontendBranch>(context);
-            FrontendReleases  = new Dataset<FrontendRelease>(context);
+            // Computing & Storage ---------------------------------------------------
+            Hosts             = new Dataset<HostInfo,   long>(context);
+            Volumes           = new Dataset<VolumeInfo, long>(context);
+            Images            = new Dataset<ImageInfo,  long>(context);
 
-            // Networks
-            Networks          = new Dataset<Network>(context);
-            NetworkInterfaces = new Dataset<NetworkInterfaceInfo>(context);
-
-            Hosts             = new Dataset<Host>(context);
-            Volumes           = new Dataset<VolumeInfo>(context);
-            Images            = new Dataset<Image>(context);
+            // Networks --------------------------------------------------------------
+            Networks          = new Dataset<NetworkInfo,          long>(context);
+            NetworkAcls       = new Dataset<NetworkAcl,           long>(context);
+            NetworkInterfaces = new Dataset<NetworkInterfaceInfo, long>(context);
+            NetworkProxies    = new Dataset<NetworkProxy,         long>(context);
+            NetworkRules      = new Dataset<NetworkRule,          long>(context);
+            Subnets           = new Dataset<SubnetInfo,           long>(context);
         }
 
-        public IDbConnection GetConnection()
-            => context.GetConnection();
+        public IDbContext Context => context;
 
-        // Apps
-        public Dataset<App>                   Apps              { get; }
-        public Dataset<AppEvent>              AppEvents         { get; }
-        public Dataset<AppInstance>           AppInstances      { get; }
-        public Dataset<AppRelease>            AppReleases       { get; }
-        public Dataset<AppError>              AppErrors         { get; }
+        // Apps  -----------------------------------------------------------------
+        public Dataset<App,         long>                    Apps         { get; }
+        public Dataset<AppEvent,    long>                    AppEvents    { get; }
+        public Dataset<AppInstance, (long, long)>            AppInstances { get; }
+        public Dataset<AppRelease,  (long, SemanticVersion)> AppReleases  { get; }
+        public Dataset<AppError,    long>                    AppErrors    { get; }
 
-        // Frontends
-        public Dataset<Frontend>              Frontends         { get; }
-        public Dataset<FrontendBranch>        FrontendBranches  { get; }
-        public Dataset<FrontendRelease>       FrontendReleases  { get; }
+        // Backends --------------------------------------------------------------
+        public Dataset<Backend, long> Backends { get; }
 
-        public Dataset<Image>                 Images            { get; }
+        // Computing & Storage ---------------------------------------------------                          
+        public Dataset<HostInfo,   long> Hosts   { get; }
+        public Dataset<ImageInfo,  long> Images  { get; }
+        public Dataset<VolumeInfo, long> Volumes { get; }
 
-        public Dataset<Network>               Networks          { get; }
-        public Dataset<NetworkInterfaceInfo>  NetworkInterfaces { get; } 
-  
-        public Dataset<Host>                  Hosts             { get; }
-
-        public Dataset<VolumeInfo>            Volumes           { get; }
+        // Networks --------------------------------------------------------------
+        public Dataset<NetworkInfo,          long> Networks          { get; }
+        public Dataset<NetworkAcl,           long> NetworkAcls       { get; }
+        public Dataset<NetworkInterfaceInfo, long> NetworkInterfaces { get; }
+        public Dataset<NetworkProxy,         long> NetworkProxies    { get; }
+        public Dataset<NetworkRule,          long> NetworkRules      { get; }
+        public Dataset<SubnetInfo,           long> Subnets           { get; }
+                                                    
     }
 }
