@@ -12,15 +12,15 @@ namespace Bitbucket
     {
         private readonly BitbucketClient client;
 
-        public BitbucketRepository(Uri url, NetworkCredential credentials)
+        public BitbucketRepository(Uri url, NetworkCredential credential)
         {
             #region Preconditions
 
             if (url == null)
                 throw new ArgumentNullException(nameof(url));
 
-            if (credentials == null)
-                throw new ArgumentNullException(nameof(credentials));
+            if (credential == null)
+                throw new ArgumentNullException(nameof(credential));
 
             #endregion
 
@@ -30,32 +30,26 @@ namespace Bitbucket
             AccountName = repo.AccountName;
             RepositoryName = repo.Name;
 
-            client = new BitbucketClient(credentials);
+            client = new BitbucketClient(credential);
         }
 
         public string AccountName { get; }
 
         public string RepositoryName { get; }
 
-        public BitbucketRepository(string accountName, string repositoryName, NetworkCredential credentials)
+        public BitbucketRepository(string accountName, string repositoryName, NetworkCredential credential)
         {
             #region Preconditions
 
-            if (accountName == null)
-                throw new ArgumentNullException(nameof(accountName));
-
-            if (repositoryName == null)
-                throw new ArgumentNullException(nameof(repositoryName));
-
-            if (credentials == null)
-                throw new ArgumentNullException(nameof(credentials));
+            if (credential == null)
+                throw new ArgumentNullException(nameof(credential));
 
             #endregion
         
-            AccountName = accountName;
-            RepositoryName = repositoryName;
+            AccountName = accountName ?? throw new ArgumentNullException(nameof(accountName));
+            RepositoryName = repositoryName ?? throw new ArgumentNullException(nameof(repositoryName));
 
-            this.client = new BitbucketClient(credentials);
+            this.client = new BitbucketClient(credential);
         }
 
         public async Task<ICommit> GetCommitAsync(Revision revision)

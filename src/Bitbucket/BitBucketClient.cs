@@ -16,7 +16,7 @@ namespace Bitbucket
     {
         const string baseUri = "https://bitbucket.org/api/2.0";
 
-        private static readonly ProductInfoHeaderValue userAgent = new ProductInfoHeaderValue("Carbon", "1.0.0");
+        private static readonly ProductInfoHeaderValue userAgent = new ProductInfoHeaderValue("Carbon", "1.1.0");
 
         private readonly HttpClient httpClient = new HttpClient();
 
@@ -24,23 +24,24 @@ namespace Bitbucket
 
         public BitbucketClient(NetworkCredential credentials)
         {
+            this.credentials = credentials ?? throw new ArgumentNullException(nameof(credentials));
+        }
+
+        public async Task<BitbucketCommit> GetCommitAsync(string accountName, string repositoryName, string revision)
+        {
             #region Preconditions
 
-            if (credentials == null)
-                throw new ArgumentNullException(nameof(credentials));
+            if (accountName == null)
+                throw new ArgumentNullException(nameof(accountName));
+
+            if (repositoryName == null)
+                throw new ArgumentNullException(nameof(repositoryName));
 
             #endregion
 
-            this.credentials = credentials;
-        }
-
-        public async Task<BitbucketCommit> GetCommitAsync(string accountName, string repoName, string revision)
-        {
-            // https://bitbucket.org/api/2.0
-
             // GET /repositories/carbonmade/mason/commits/master
 
-            var path = $"/repositories/{accountName}/{repoName}/commits/{revision}";
+            var path = $"/repositories/{accountName}/{repositoryName}/commits/{revision}";
 
             var httpRequest = new HttpRequestMessage(HttpMethod.Get, baseUri + path);
 
@@ -51,6 +52,16 @@ namespace Bitbucket
 
         public async Task<MemoryStream> GetZipStreamAsync(string accountName, string repositoryName, string revision)
         {
+            #region Preconditions
+
+            if (accountName == null)
+                throw new ArgumentNullException(nameof(accountName));
+
+            if (repositoryName == null)
+                throw new ArgumentNullException(nameof(repositoryName));
+
+            #endregion
+
             var url = $"https://bitbucket.org/{accountName}/{repositoryName}/get/{revision}.zip";
 
             var httpRequest = new HttpRequestMessage(HttpMethod.Get, url);
