@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>GitHub</AssemblyName>
+    <VersionPrefix>1.1.0</VersionPrefix>
+    <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
+
+    <!-- Package Details -->
+    <Authors>iamcarbon</Authors>
+    <Copyright>© 2016 - 2017 Jason Nelson</Copyright>
+    <Description>API for GitHub.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Carbon.Repositories" Version="1.2.0" />
+    <PackageReference Include="Carbon.Json" Version="1.2.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+
+</Project>

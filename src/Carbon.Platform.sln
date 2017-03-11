@@ -1,49 +1,51 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carbon.Hosting.IIS", "Carbon.Hosting.IIS\Carbon.Hosting.IIS.csproj", "{5B83C75D-FBC9-4883-9534-CC99AE2130A3}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Carbon.Platform", "Carbon.Platform\Carbon.Platform.xproj", "{2366C4FC-2B6F-4E83-B0A5-3B165353FA80}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{99657337-0EDE-4049-B666-2D0A679E1FE2}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Carbon.Packaging.Tests", "Carbon.Packaging.Tests\Carbon.Packaging.Tests.xproj", "{622B7F30-EA1D-449F-B868-31EC3F7609DC}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Carbon.Hosting", "Carbon.Hosting\Carbon.Hosting.xproj", "{DE758587-8A23-47B8-B3E5-7852BADC3FAF}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Carbon.Platform.Services", "Carbon.Platform.Services\Carbon.Platform.Services.xproj", "{79F64862-6741-42CF-9622-238784E1C67C}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Carbon.Platform.Tests", "Carbon.Platform.Tests\Carbon.Platform.Tests.xproj", "{055D15B9-39B0-43C3-B4F0-9B7B52DD754A}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Carbon.Supervisor", "Carbon.Supervisor\Carbon.Supervisor.xproj", "{AEC83840-9DB6-40ED-B519-D4B93D9197F4}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Carbon.Building", "Carbon.Building\Carbon.Building.xproj", "{269A6B8A-FA9A-45E2-8C18-D7146204E5F3}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Carbon.Building.Web", "Carbon.Building.Web\Carbon.Building.Web.xproj", "{72B7B485-B88C-4C00-B882-CB9CFCA9FB58}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Carbon.Platform.Extensions", "Carbon.Platform.Extensions\Carbon.Platform.Extensions.xproj", "{3C4B4944-97CA-46EE-B319-798BE1D77FBB}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Carbon.Deployment", "Carbon.Deployment\Carbon.Deployment.xproj", "{0DAF4CF8-A0B3-4E7E-8EDF-739C93C49852}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "GitHub", "GitHub\GitHub.xproj", "{7ACCF84D-00F6-45F2-BF39-862B733D8D04}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Bitbucket", "Bitbucket\Bitbucket.xproj", "{535A6E9E-F824-4EDF-BD46-F3658A7EAD7C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Git", "Git", "{DAC43875-7B0B-4536-8FF7-D643C6562B7A}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Carbon.Packaging", "Carbon.Packaging\Carbon.Packaging.xproj", "{0E5732C5-7D9C-4639-8E4C-CFF9219FB1DA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carbon.Hosting.IIS", "Carbon.Hosting.IIS\Carbon.Hosting.IIS.csproj", "{5B83C75D-FBC9-4883-9534-CC99AE2130A3}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Carbon.Libraries", "Carbon.Libraries\Carbon.Libraries.xproj", "{066E94F2-4D1E-4838-9A08-403EA8CA5F0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Platform", "Carbon.Platform\Carbon.Platform.csproj", "{2366C4FC-2B6F-4E83-B0A5-3B165353FA80}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Carbon.Platform.Containers", "Carbon.Platform.Containers\Carbon.Platform.Containers.xproj", "{6B94D1A9-5783-4526-AF78-5E7710A4D813}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Packaging.Tests", "Carbon.Packaging.Tests\Carbon.Packaging.Tests.csproj", "{622B7F30-EA1D-449F-B868-31EC3F7609DC}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Carbon.Platform.Runtime", "Carbon.Platform.Runtime\Carbon.Platform.Runtime.xproj", "{D7F11D5C-576C-4F3A-9F1F-36A2D482981E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Hosting", "Carbon.Hosting\Carbon.Hosting.csproj", "{DE758587-8A23-47B8-B3E5-7852BADC3FAF}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Carbon.Platform.Client", "Carbon.Platform.Client\Carbon.Platform.Client.xproj", "{A20E4CD7-F98F-4E70-AE47-E987EC2A9ACE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Platform.Services", "Carbon.Platform.Services\Carbon.Platform.Services.csproj", "{79F64862-6741-42CF-9622-238784E1C67C}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Carbon.Libraries.Tests", "Carbon.Libraries.Tests\Carbon.Libraries.Tests.xproj", "{22F40AEB-88A3-450B-A421-2D1215208E29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Platform.Tests", "Carbon.Platform.Tests\Carbon.Platform.Tests.csproj", "{055D15B9-39B0-43C3-B4F0-9B7B52DD754A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Supervisor", "Carbon.Supervisor\Carbon.Supervisor.csproj", "{AEC83840-9DB6-40ED-B519-D4B93D9197F4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Building", "Carbon.Building\Carbon.Building.csproj", "{269A6B8A-FA9A-45E2-8C18-D7146204E5F3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Building.Web", "Carbon.Building.Web\Carbon.Building.Web.csproj", "{72B7B485-B88C-4C00-B882-CB9CFCA9FB58}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Platform.Extensions", "Carbon.Platform.Extensions\Carbon.Platform.Extensions.csproj", "{3C4B4944-97CA-46EE-B319-798BE1D77FBB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Deployment", "Carbon.Deployment\Carbon.Deployment.csproj", "{0DAF4CF8-A0B3-4E7E-8EDF-739C93C49852}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitHub", "GitHub\GitHub.csproj", "{7ACCF84D-00F6-45F2-BF39-862B733D8D04}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bitbucket", "Bitbucket\Bitbucket.csproj", "{535A6E9E-F824-4EDF-BD46-F3658A7EAD7C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Packaging", "Carbon.Packaging\Carbon.Packaging.csproj", "{0E5732C5-7D9C-4639-8E4C-CFF9219FB1DA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Libraries", "Carbon.Libraries\Carbon.Libraries.csproj", "{066E94F2-4D1E-4838-9A08-403EA8CA5F0D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Platform.Containers", "Carbon.Platform.Containers\Carbon.Platform.Containers.csproj", "{6B94D1A9-5783-4526-AF78-5E7710A4D813}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Platform.Runtime", "Carbon.Platform.Runtime\Carbon.Platform.Runtime.csproj", "{D7F11D5C-576C-4F3A-9F1F-36A2D482981E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Platform.Client", "Carbon.Platform.Client\Carbon.Platform.Client.csproj", "{A20E4CD7-F98F-4E70-AE47-E987EC2A9ACE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Libraries.Tests", "Carbon.Libraries.Tests\Carbon.Libraries.Tests.csproj", "{22F40AEB-88A3-450B-A421-2D1215208E29}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Platform.Frontends", "Carbon.Platform.Frontends\Carbon.Platform.Frontends.csproj", "{902E849A-1BD7-4641-AE9A-AB065DA08EE2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -127,6 +129,10 @@ Global
 		{22F40AEB-88A3-450B-A421-2D1215208E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22F40AEB-88A3-450B-A421-2D1215208E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22F40AEB-88A3-450B-A421-2D1215208E29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{902E849A-1BD7-4641-AE9A-AB065DA08EE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{902E849A-1BD7-4641-AE9A-AB065DA08EE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{902E849A-1BD7-4641-AE9A-AB065DA08EE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{902E849A-1BD7-4641-AE9A-AB065DA08EE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

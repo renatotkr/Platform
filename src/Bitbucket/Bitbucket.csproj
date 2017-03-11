@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Bitbucket</AssemblyName>
+    <VersionPrefix>1.1.0</VersionPrefix>    
+    <Authors>iamcarbon</Authors>
+    <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
+    <Copyright>© 2016-2017 Jason Nelson</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Carbon.Json" Version="1.2.1" />
+    <PackageReference Include="Carbon.Repositories" Version="1.2.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+</Project>
