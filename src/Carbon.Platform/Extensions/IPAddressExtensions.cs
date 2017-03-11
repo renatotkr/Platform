@@ -5,8 +5,8 @@ namespace Carbon.Extensions
 {
     public static class IPAddressExtensions
     {
-        public static int IP4Number(this IPAddress ip)
-            => BitConverter.ToInt32(ip.GetAddressBytes(), 0);
+        public static int IP4Number(this IPAddress ip) => 
+            BitConverter.ToInt32(ip.GetAddressBytes(), 0);
 
         // http://stackoverflow.com/a/39120248
         public static bool IsInternal(this IPAddress address)

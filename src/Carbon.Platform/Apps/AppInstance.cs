@@ -39,12 +39,12 @@ namespace Carbon.Platform.Apps
         [Indexed]
         public long HostId { get; set; }
 
+        [Member("status"), Mutable]
+        public HostStatus Status { get; set; }
+
         [Member("env")]
         [StringLength(1000)]
         public JsonObject Env { get; }
-
-        [Member("status"), Mutable]
-        public HostStatus Status { get; set; }
 
         [Member("appName")]
         [StringLength(50)]
@@ -56,10 +56,12 @@ namespace Carbon.Platform.Apps
         [Member("heartbeat"), Mutable]
         public DateTime? Heartbeat { get; set; }
         
+        [Member("backendId")]
+        [Indexed]
+        public long? BackendId { get; set; }
+
         [Member("port")]
         public int? Port { get; set; }
-
-        // LoadBalancerId? 
 
         [Member("requestCount"), Mutable]
         public long RequestCount { get; set; }
@@ -70,7 +72,7 @@ namespace Carbon.Platform.Apps
         [Member("terminated"), Mutable]
         public DateTime? Terminated { get; set; }
 
-        [Member("created")]
+        [Member("created"), Timestamp]
         public DateTime Created { get; set; }
 
         #region IApp

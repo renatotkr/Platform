@@ -6,20 +6,10 @@ namespace Carbon.Platform
     {
         public CloudResourceInfo(CloudProvider provider, ResourceType type, string id)
         {
-            #region Preconditions
-
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
-
-            if (id == null)
-                throw new ArgumentNullException(nameof(id));
-
-            #endregion
-
-            Provider = provider;
+            Provider = provider ?? throw new ArgumentNullException(nameof(provider));
             Type = type;
             Region = null;
-            Name = id;
+            Name = id ?? throw new ArgumentNullException(nameof(id));
         }
 
         public CloudProvider Provider { get; }
@@ -36,25 +26,6 @@ namespace Carbon.Platform
         public static implicit operator string(CloudResourceInfo resource) => 
             resource.ToString();
 
-        #region Amazon Helpers
-
-        public static CloudResourceInfo Ec2Instance(string id)
-            => new CloudResourceInfo(CloudProvider.Amazon, ResourceType.Instance, id);
-
-        public static CloudResourceInfo Ec2Volume(string id)
-            => new CloudResourceInfo(CloudProvider.Amazon, ResourceType.Volume, id);
-
-        public static CloudResourceInfo Ec2Image(string id)
-           => new CloudResourceInfo(CloudProvider.Amazon, ResourceType.Image, id);
-
-        public static CloudResourceInfo Ec2NetworkInterface(string id)
-            => new CloudResourceInfo(CloudProvider.Amazon, ResourceType.NetworkInterface, id);
-
-        public static CloudResourceInfo Ec2Vpc(string id)
-            => new CloudResourceInfo(CloudProvider.Amazon, ResourceType.Network, id);
-
-        #endregion
-
         #region Azure
 
 
@@ -62,7 +33,7 @@ namespace Carbon.Platform
             => new CloudResourceInfo(CloudProvider.Microsoft, ResourceType.Volume, id);
 
         public static CloudResourceInfo AzureInstance(string id)
-            => new CloudResourceInfo(CloudProvider.Microsoft, ResourceType.Instance, id);
+            => new CloudResourceInfo(CloudProvider.Microsoft, ResourceType.Host, id);
 
         #endregion
 

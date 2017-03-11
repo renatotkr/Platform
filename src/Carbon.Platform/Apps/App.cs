@@ -20,14 +20,7 @@ namespace Carbon.Platform.Apps
 
         public App(string name, AppType type)
         {
-            #region Preconditions
-
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
-
-            #endregion
-
-            Name = name;
+            Name = name ?? throw new ArgumentNullException(nameof(name));
             Type = type;
         }
 
@@ -54,15 +47,18 @@ namespace Carbon.Platform.Apps
         
         [Member("digest")]
         public Hash Digest { get; set; }
-
-        [Member("modified"), Timestamp]
-        public DateTime Modified { get; set; }
-
-        [Member("created")]
+        
+        [Member("created"), Timestamp]
         public DateTime Created { get; set; }
 
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; set; }
+
         // name@1.2.1
-        public override string ToString() => Name + "@" + Version;
+        public override string ToString()
+        {
+            return Name + "@" + Version;
+        }
     }
 }
 

@@ -21,6 +21,8 @@ namespace Carbon.Platform
         [FieldOffset(0)]
         public long Value;
 
+        public static implicit operator long (LocationId id) => id.Value;
+
         public static LocationId Create(CloudProvider provider, ushort regionNumber, byte zoneNumber = 0, byte flags = 0) =>
             new LocationId {
                 ProviderId   = provider.Id,

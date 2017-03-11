@@ -38,6 +38,11 @@ namespace Carbon.Platform
         [Member("name")]
         public string Name { get; set; }
 
+        // this should be the date the zone was launched...
+
+        [Member("created")]
+        public DateTime Created { get; set; }
+
         #region Flags
 
         [IgnoreDataMember]
@@ -70,11 +75,47 @@ namespace Carbon.Platform
 
         #endregion
 
+
+        public string RegionName
+        {
+            get
+            {
+                if (Type == ResourceType.Region)
+                {
+                    return Name;
+                }
+
+                return Name.Substring(0, Name.Length - 1);
+            }
+        }
+
+        public string ZoneName
+        {
+            get
+            {
+                if (Type != ResourceType.Zone)
+                {
+                    return null;
+                }
+
+                return Name.Substring(Name.Length - 1);
+            }
+        }
+
         public LocationInfo WithZone(char zoneName)
         {
+            #region Preconditions
+            
+            if (ProviderId == CloudProvider.Microsoft.Id)
+            {
+                throw new Exception("Azure does not have zones");
+            }
+
+            #endregion
+
             var id = LocationId.Create(Id);
 
-            id.ZoneNumber = ZoneHelper.GetNumber(zoneName);
+            id.ZoneNumber = LocationHelper.GetZoneNumber(zoneName);
 
             // AMAZON: us-east-1a
             // GOOGLE: us-central1-b, us-central1-c

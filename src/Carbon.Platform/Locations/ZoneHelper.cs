@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform
 {
-    public class ZoneHelper
+    public class LocationHelper
     {
         // Amazon regions currently have a maximum of 5 zones...
         // Google has an F zone in Central US
@@ -12,7 +12,15 @@ namespace Carbon.Platform
             'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
         };
 
-        public static byte GetNumber(char zone)
+        public static CloudProvider GetProvider(long id)
+        {
+            var providerId = LocationId.Create(id).ProviderId;
+
+            return CloudProvider.Get(providerId);
+        }
+
+
+        public static byte GetZoneNumber(char zone)
         {
             if (!char.IsUpper(zone))
             {

@@ -9,23 +9,18 @@ namespace Carbon.Platform
         public static readonly CloudProvider Apple     = new CloudProvider("APPL", "Apple");
         public static readonly CloudProvider Google    = new CloudProvider("GOOG", "Google");
         public static readonly CloudProvider Facebook  = new CloudProvider("FB",   "Facebook");
-        public static readonly CloudProvider Microsoft = new CloudProvider("MSFT", "Microsoft"); // Azure
+        public static readonly CloudProvider IBM       = new CloudProvider("IBM",  "IBM");
+        public static readonly CloudProvider Microsoft = new CloudProvider("MSFT", "Microsoft"); // Microsoft Azure
         public static readonly CloudProvider Oracle    = new CloudProvider("ORCL", "Oracle");
+
+        // GitHub
+        // BitBucket
+        // Dropbox
 
         private CloudProvider(string code, string name)
         {
-            #region Preconditions
-
-            if (code == null)
-                throw new ArgumentNullException(nameof(code));
-
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
-
-            #endregion
-
-            Code = code;
-            Name = name;
+            Code = code ?? throw new ArgumentNullException(nameof(code));
+            Name = name ?? throw new ArgumentNullException(nameof(name));
         }
         
         public int Id
@@ -73,8 +68,9 @@ namespace Carbon.Platform
             {
                 case "appl"      : return Apple;
                 case "amzn"      : return Amazon;
-                case "goog"      : return Google;
                 case "fb"        : return Facebook;
+                case "ibm"       : return IBM;
+                case "goog"      : return Google;
                 case "msft"      : return Microsoft;
                 case "orcl"      : return Oracle;
 
