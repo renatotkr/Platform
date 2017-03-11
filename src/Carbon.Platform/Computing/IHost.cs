@@ -4,6 +4,7 @@
     {
         long Id { get; }
 
+        
         // IPAddress Address ?
     }
 }

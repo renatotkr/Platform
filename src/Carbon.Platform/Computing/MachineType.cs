@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 
 namespace Carbon.Platform.ComputingUnique
 {
@@ -6,33 +7,77 @@ namespace Carbon.Platform.ComputingUnique
     using Json;
 
     [Dataset("MachineTypes")]
-    [DataIndex(IndexFlags.Unique, new[] { "provider", "name" })]
+    [DataIndex(IndexFlags.Unique, new[] { "providerId", "name" })]
     public class MachineType : ICloudResource
     {
-        [Member("id"), Identity]
+        [Member("id"), Key]
         public long Id { get; set; }
 
-        [Member("provider")]
-        public string ProviderName { get; set; }
+        [Member("providerId")]
+        public int ProviderId { get; set; }
 
         [Member("name")]
         public string Name { get; set; }
         
-        // cpuType, memory, etc...
-
-        [Member("details", TypeName = "varchar(1000)")]
+        [Member("details", TypeName = "varchar(1000)")] // TODO: JSON(1000)
         public JsonObject Details { get; set; }
 
-        [IgnoreDataMember]
-        public CloudPlatformProvider Provider => CloudPlatformProvider.Parse(ProviderName);
+        #region IResource
 
-        #region IPlatformResource
+        [IgnoreDataMember]
+        public CloudProvider Provider => CloudProvider.Get(ProviderId);
 
         ResourceType ICloudResource.Type => ResourceType.MachineType;
 
         #endregion
     }
+
+    // AMNZ T2 
+
+    [StructLayout(LayoutKind.Explicit, Size = 8)]
+    public struct MachineId
+    {
+        // nano = 1
+        // micro = 2
+        // small = 3
+        // medium = 4
+        // large = 5
+        // xlarge = 6
+        // 2xlarge = 7
+        // 4xlarge = 8
+        // 8xlarge = 9
+        // 16xlarge = 10 
+        // 32xlarge = 11
+
+        [FieldOffset(0)]
+        public byte MachineSize;
+
+        // 1, 2, 3, 4, 5, ...
+        [FieldOffset(1)]
+        public byte Generation;
+
+        // C, T, M, X, I
+        // C = 3
+        // C = 67? ANSI
+        
+        [FieldOffset(2)]
+        public byte ClassIdLower;
+
+        // H
+        [FieldOffset(3)]
+        public byte ClassIdUpper;
+
+        [FieldOffset(4)]
+        public int ProviderId;
+
+        [FieldOffset(0)]
+        public long Value;
+
+        public static implicit operator long(MachineId id) => id.Value;
+    }
 }
+
+// id = ? ? ?
 
 /* 
 Azure (Virtual Machine Sizes
@@ -48,7 +93,7 @@ n1-standard-4
 
 EC2 (Instance Types)
 ---------------------------------------------
-c1.medium
+c1.medium                   3 + 1 + 
 c1.xlarge
 c3.2xlarge
 c3.4xlarge

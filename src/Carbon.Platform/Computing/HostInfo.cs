@@ -9,14 +9,13 @@ namespace Carbon.Platform.Computing
     using Extensions;
     using Json;
 
-    // HostInfo?
-
     [Dataset("Hosts")]
-    public class Host : IHost
+    [DataIndex(IndexFlags.Unique, "providerId", "name")]
+    public class HostInfo : IHost
     {
-        public Host() { }
+        public HostInfo() { }
 
-        public Host(HostType type)
+        public HostInfo(HostType type)
         {
             Type = type;
         }
@@ -24,29 +23,30 @@ namespace Carbon.Platform.Computing
         [Member("id"), Identity]
         public long Id { get; set; }
 
+        [Member("providerId")]
+        public int ProviderId { get; set; }
+
+        [Member("name")]
+        public string Name { get; set; }
+
         [Member("type")] // Physical, Virtual, Container
         public HostType Type { get; set; }
 
-        // Can be used to lookup platform, hypervisor, etc
-        [Member("imageId")]
+        /// <summary>
+        /// The image used to launch the machine
+        /// </summary>
+        [Member("imageId")] 
         public long ImageId { get; set; }
 
         [Member("networkId")]
         public long NetworkId { get; set; }
 
         // Provider + Region# + Zone#
-        // NOTE: Was RegionId...
         [Member("locationId")]
         public long LocationId { get; set; }
 
         [Member("machineTypeId")]
         public long MachineTypeId { get; set; }
-
-        [Member("status"), Mutable]
-        public HostStatus Status { get; set; }
-        
-        [Member("heartbeat"), Mutable]
-        public DateTime? Heartbeat { get; set; }
 
         [Member("addresses")]
         public List<IPAddress> Addresses { get; set; }
@@ -55,23 +55,24 @@ namespace Carbon.Platform.Computing
         [StringLength(1000)]
         public JsonObject Details { get; set; }
 
-        // Instance Ids
-        // google cloud : UInt64
-        // aws          : 17-character string
-        // azure         : ?
+        #region Health
 
-        // e.g. amzn:instance:i-07e6001e0415497e4
+        [Member("status"), Mutable]
+        public HostStatus Status { get; set; }
 
-        // TODO: Replace with Name & Provider
-        [Member("resourceName"), Unique]
-        [Ascii, StringLength(100)]
-        public string ResourceName { get; set; }
+        [Member("heartbeat"), Mutable]
+        public DateTime? Heartbeat { get; set; }
 
-        [Member("modified"), Timestamp]
-        public DateTime Modified { get; set; }
+        #endregion
 
-        [Member("created")]
+        // TODO
+        // public long? ParentId { get; set; }
+
+        [Member("created"), Timestamp]
         public DateTime Created { get; set; }
+
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; set; }
 
         #region Address Helpers
 
@@ -111,12 +112,17 @@ namespace Carbon.Platform.Computing
 
         #endregion
 
-        public CloudProvider Provider =>
-            CloudResourceInfo.Parse(ResourceName).Provider;
+        public CloudProvider Provider => CloudProvider.Get(ProviderId);
     }
+
+    // e.g. amzn:instance:i-07e6001e0415497e
 }
 
-// A host may be a physical or virtual machine -- or even a container
+
+// Instance Ids
+// google cloud : UInt64
+// aws          : 17-character string
+// azure         : 
 
 /*
 {

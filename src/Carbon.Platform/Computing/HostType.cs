@@ -1,11 +1,9 @@
 ﻿namespace Carbon.Platform.Computing
 {
-    // byte?
-
-    public enum HostType
+    public enum HostType : byte
     {
-        Physical  = 1,
-        Virtual   = 2,
-        Container = 3
+        Physical  = 1, // Metal
+        Virtual   = 2, // Virtualized
+        Container = 3, // Containerized
     }
 }
