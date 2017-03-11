@@ -12,7 +12,7 @@ namespace GitHub
 {
     public class GitHubClient : IDisposable
     {
-        private static readonly ProductInfoHeaderValue userAgent = new ProductInfoHeaderValue("Carbon", "1.0.0");
+        private static readonly ProductInfoHeaderValue userAgent = new ProductInfoHeaderValue("Carbon", "1.1.0");
 
         private readonly string baseUri = "https://api.github.com";
 
@@ -22,18 +22,11 @@ namespace GitHub
 
         public static readonly int Version = 3;
 
-        private readonly OAuth2Token auth;
+        private readonly OAuth2Token authToken;
 
-        public GitHubClient(OAuth2Token credentials)
+        public GitHubClient(OAuth2Token authToken)
         {
-            #region Preconditions
-
-            if (credentials == null)
-                throw new ArgumentNullException(nameof(credentials));
-
-            #endregion
-
-            this.auth = credentials;
+            this.authToken = authToken;
         }
 
         public async Task<string> CreateAuthorization(string userName, string password, AuthorizationRequest request)
@@ -58,6 +51,13 @@ namespace GitHub
 
         public async Task<GitUser> GetUser(string userName)
         {
+            #region Preconditions
+
+            if (userName == null)
+                throw new ArgumentNullException(nameof(userName));
+
+            #endregion
+
             // GET /users/:username
             var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"{baseUri}/users/{userName}");
 
@@ -68,6 +68,19 @@ namespace GitHub
 
         public async Task<GitBranch> GetCommit(string accountName, string repoName, string sha)
         {
+            #region Preconditions
+
+            if (accountName == null)
+                throw new ArgumentNullException(nameof(accountName));
+
+            if (repoName == null)
+                throw new ArgumentNullException(nameof(repoName));
+
+            if (sha == null)
+                throw new ArgumentNullException(nameof(sha));
+
+            #endregion
+
             // GET /repos/:owner/:repo/commits/:sha
             var request = new HttpRequestMessage(HttpMethod.Get,
                 $"{baseUri}/{accountName}/{repoName}/commits/{sha}"
@@ -83,9 +96,11 @@ namespace GitHub
         {
             #region Preconditions
 
-            if (accountName == null) throw new ArgumentNullException(nameof(accountName));
+            if (accountName == null)
+                throw new ArgumentNullException(nameof(accountName));
 
-            if (repoName == null) throw new ArgumentNullException(nameof(repoName));
+            if (repoName == null)
+                throw new ArgumentNullException(nameof(repoName));
 
             #endregion
 
@@ -114,8 +129,18 @@ namespace GitHub
             return result.ToArrayOf<GitRef>();
         }
 
-        public async Task<IList<GitBranch>> GetBranches(string accountName, string repositoryName)
+        public async Task<IReadOnlyList<GitBranch>> GetBranches(string accountName, string repositoryName)
         {
+            #region Preconditions
+
+            if (accountName == null)
+                throw new ArgumentNullException(nameof(accountName));
+
+            if (repositoryName == null)
+                throw new ArgumentNullException(nameof(repositoryName));
+
+            #endregion
+
             // GET /repos/:owner/:repo/branches
             var request = new HttpRequestMessage(HttpMethod.Get,
                 $"{baseUri}/repos/{accountName}/{repositoryName}/branches"
@@ -137,7 +162,7 @@ namespace GitHub
             var requestUri = baseUri + request.ToPath();
             var httpRequest = new HttpRequestMessage(HttpMethod.Get, requestUri);
 
-            httpRequest.Headers.Authorization = auth.ToHeader();
+            httpRequest.Headers.Authorization = authToken.ToHeader();
             httpRequest.Headers.UserAgent.Add(userAgent);
 
             using (var response = await httpClient.SendAsync(httpRequest).ConfigureAwait(false))
@@ -162,7 +187,7 @@ namespace GitHub
         {
             if (authorize)
             {
-                httpRequest.Headers.Authorization = auth.ToHeader();
+                httpRequest.Headers.Authorization = authToken.ToHeader();
             }
 
             httpRequest.Headers.UserAgent.Add(userAgent);

@@ -3,24 +3,18 @@ using System.Net.Http.Headers;
 
 namespace GitHub
 {
-    public class OAuth2Token
+    public struct OAuth2Token
     {
         public OAuth2Token(string value)
         {
-            #region Preconditions
-
-            if (value == null) throw new ArgumentNullException(nameof(value));
-
-            #endregion
-
-            Value = value;
+            Value = value ?? throw new ArgumentNullException(nameof(value));
         }
 
         public string Value { get; }
 
         // "Authorization: token OAUTH-TOKEN"
 
-        public AuthenticationHeaderValue ToHeader()
-            => new AuthenticationHeaderValue("token", Value);
+        public AuthenticationHeaderValue ToHeader() => 
+            new AuthenticationHeaderValue("token", Value);
     }
 }

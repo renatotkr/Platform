@@ -8,18 +8,8 @@ namespace GitHub
     {
         public GetArchiveLinkRequest(string accountName, string repositoryName, Revision revision, ArchiveFormat format = ArchiveFormat.Zipball)
         {
-            #region Preconditions
-
-            if (accountName == null)
-                throw new ArgumentNullException(nameof(accountName));
-
-            if (repositoryName == null)
-                throw new ArgumentNullException(nameof(repositoryName));
-
-            #endregion
-
-            AccountName = accountName;
-            RepositoryName = repositoryName;
+            AccountName = accountName ?? throw new ArgumentNullException(nameof(accountName));
+            RepositoryName = repositoryName ?? throw new ArgumentNullException(nameof(repositoryName));
             Revision = revision;
             Format = format;
         }

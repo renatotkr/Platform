@@ -12,8 +12,15 @@ namespace GitHub
     {
         private readonly GitHubClient client;
 
-        public GitHubRepository(Uri url, OAuth2Token credentials)
+        public GitHubRepository(Uri url, OAuth2Token authToken)
         {
+            #region Preconditions
+
+            if (url == null)
+                throw new ArgumentNullException(nameof(url));
+
+            #endregion
+
             // https://github.com/orgName/repoName.git
 
             var info = RepositoryInfo.Parse(url.ToString());
@@ -21,20 +28,13 @@ namespace GitHub
             AccountName = info.AccountName;
             RepositoryName = info.Name;
 
-            client = new GitHubClient(credentials);
+            client = new GitHubClient(authToken);
         }
 
         public GitHubRepository(string accountName, string repositoryName, OAuth2Token credentials)
         {
-            #region Preconditions
-
-            if (accountName == null) throw new ArgumentNullException(nameof(accountName));
-            if (repositoryName == null) throw new ArgumentNullException(nameof(repositoryName));
-
-            #endregion
-
-            AccountName = accountName;
-            RepositoryName = repositoryName;
+            AccountName = accountName ?? throw new ArgumentNullException(nameof(accountName));
+            RepositoryName = repositoryName ?? throw new ArgumentNullException(nameof(repositoryName));
 
             client = new GitHubClient(credentials);
         }
