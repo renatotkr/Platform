@@ -6,6 +6,7 @@ namespace Carbon.Platform.Storage
     using Json;
 
     [Dataset("Volumes")]
+    [DataIndex(IndexFlags.Unique, "providerId", "name")]
     public class VolumeInfo : ICloudResource
     {
         [Member("id"), Identity]
@@ -14,33 +15,43 @@ namespace Carbon.Platform.Storage
         [Member("status"), Mutable]
         public VolumeStatus Status { get; set; }
 
+        // long TypeId
+
+        [Member("providerId")]
+        public int ProviderId { get; set; }
+
+        [Member("name")]
+        [Ascii, StringLength(100)]
+        public string Name { get; set; }
+
         [Member("size")]
         public long Size { get; set; } // in octets
 
+        [Member("locationId")]
+        public long LocationId { get; set; }
+
         [Member("hostId"), Mutable]
         public long? HostId { get; set; }
-
-        [Member("resourceName"), Unique]
-        [Ascii, StringLength(100)]
-        public string ResourceName { get; set; }
-
+        
         [Member("details")]
         [StringLength(1000)]
         public JsonObject Details { get; set; }
 
-        [Member("modified"), Timestamp]
+        [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; set; }
 
         [Member("created")]
         public DateTime Created { get; set; }
 
-        #region IPlatformResource
+        #region IResource
 
         ResourceType ICloudResource.Type => ResourceType.Volume;
 
-        CloudProvider ICloudResource.Provider => 
-            CloudProvider.Parse(ResourceName.Split(':')[0]);
+        public CloudProvider Provider => CloudProvider.Get(ProviderId);
 
         #endregion
     }
 }
+
+// Google Notes:
+// compute#disk

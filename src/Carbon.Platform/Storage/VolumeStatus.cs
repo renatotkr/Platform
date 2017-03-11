@@ -1,6 +1,6 @@
 ﻿namespace Carbon.Platform.Storage
 {
-    public enum VolumeStatus
+    public enum VolumeStatus : byte
     {
         Pending     = 0,
         Online      = 1,
