@@ -53,7 +53,7 @@ namespace Carbon.Platform.Frontends
         [Member("creatorId")]
         public long CreatorId { get; set; }
 
-        [Member("created")]
+        [Member("created"), Timestamp]
         public DateTime Created { get; set; }
 
         #region IFrontend

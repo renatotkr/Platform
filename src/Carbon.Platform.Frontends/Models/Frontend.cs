@@ -13,14 +13,7 @@ namespace Carbon.Platform.Frontends
 
         public Frontend(string name)
         {
-            #region Preconditions
-
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
-
-            #endregion
-
-            Name = name;
+            Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
         [Member("id"), Identity] 
@@ -33,7 +26,7 @@ namespace Carbon.Platform.Frontends
         [StringLength(50)]
         public string Name { get; set; }
 
-        [Member("source"), Mutable]  // e.g. carbonmade/lefty#commit|head
+        [Member("source"), Mutable]  // e.g. carbon/repo#commit|head
         [StringLength(100)]
         public string Source { get; set; }
 
@@ -43,13 +36,15 @@ namespace Carbon.Platform.Frontends
         [Member("appId")]
         public long? AppId { get; set; }
 
-        [Member("modified"), Timestamp]
-        public DateTime Modified { get; set; }
-
-        [Member("created")]
+        [Member("created"), Timestamp]
         public DateTime Created { get; set; }
 
-        public override string ToString() 
-            => Name + "@" + Version;  // lefty@1.0.2
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; set; }
+
+        public override string ToString()
+        {
+            return Name + "@" + Version;  // carbon@1.0.2
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace Carbon.Platform.Frontends
         [Member("name"), Key]
         public string Name { get; set; }
 
-        [Member("modified"), Timestamp]
+        [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; set; }
     }
 }
