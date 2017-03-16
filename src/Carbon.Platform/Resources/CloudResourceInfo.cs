@@ -7,9 +7,9 @@ namespace Carbon.Platform
         public CloudResourceInfo(CloudProvider provider, ResourceType type, string id)
         {
             Provider = provider ?? throw new ArgumentNullException(nameof(provider));
-            Type = type;
-            Region = null;
-            Name = id ?? throw new ArgumentNullException(nameof(id));
+            Type     = type;
+            Region   = null;
+            Name     = id ?? throw new ArgumentNullException(nameof(id));
         }
 
         public CloudProvider Provider { get; }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 
@@ -33,7 +34,7 @@ namespace Carbon.Platform.Databases
 
         [Member("completed")]
         public DateTime? Completed { get; set; }
-
+        
         [Member("created"), Timestamp]
         public DateTime Created { get; set; }
     }

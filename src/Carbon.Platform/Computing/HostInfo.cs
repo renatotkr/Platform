@@ -13,13 +13,6 @@ namespace Carbon.Platform.Computing
     [DataIndex(IndexFlags.Unique, "providerId", "name")]
     public class HostInfo : IHost
     {
-        public HostInfo() { }
-
-        public HostInfo(HostType type)
-        {
-            Type = type;
-        }
-
         [Member("id"), Identity]
         public long Id { get; set; }
 
@@ -69,12 +62,20 @@ namespace Carbon.Platform.Computing
         // public long? ParentId { get; set; }
 
         [Member("created"), Timestamp]
+        [IgnoreDataMember]
         public DateTime Created { get; set; }
 
+        [Member("terminated")]
+        [TimePrecision(TimePrecision.Second)]
+        public DateTime? Terminated { get; set; }
+        
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; set; }
+        
+        #region Helpers
 
-        #region Address Helpers
+        [IgnoreDataMember]
+        public bool IsTerminated => Terminated != null;
 
         [IgnoreDataMember]
         public IPAddress PublicIp
@@ -112,6 +113,7 @@ namespace Carbon.Platform.Computing
 
         #endregion
 
+        [IgnoreDataMember]
         public CloudProvider Provider => CloudProvider.Get(ProviderId);
     }
 
@@ -123,11 +125,3 @@ namespace Carbon.Platform.Computing
 // google cloud : UInt64
 // aws          : 17-character string
 // azure         : 
-
-/*
-{
-    id: 1,
-    networkId: 1,
-    resource: "amzn:instance/i-34523-4234"
-}
-*/

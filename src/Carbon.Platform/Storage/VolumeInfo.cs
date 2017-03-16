@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Carbon.Platform.Storage
 {
@@ -36,17 +37,29 @@ namespace Carbon.Platform.Storage
         [Member("details")]
         [StringLength(1000)]
         public JsonObject Details { get; set; }
+        
+        [Member("created")]
+        public DateTime Created { get; set; }
 
+        [Member("deleted")]
+        [TimePrecision(TimePrecision.Second)]
+        public DateTime? Deleted { get; set; }
+        
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; set; }
 
-        [Member("created")]
-        public DateTime Created { get; set; }
+        #region Helpers
+
+        [IgnoreDataMember]
+        public bool IsDeleted => Deleted != null;
+
+        #endregion
 
         #region IResource
 
         ResourceType ICloudResource.Type => ResourceType.Volume;
 
+        [IgnoreDataMember]
         public CloudProvider Provider => CloudProvider.Get(ProviderId);
 
         #endregion

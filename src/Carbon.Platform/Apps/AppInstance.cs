@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Carbon.Platform.Apps
 {
@@ -53,7 +54,7 @@ namespace Carbon.Platform.Apps
         [Member("appVersion"), Mutable] 
         public SemanticVersion AppVersion { get; set; }
 
-        [Member("heartbeat"), Mutable]
+        [Member("heartbeat")]
         public DateTime? Heartbeat { get; set; }
         
         [Member("backendId")]
@@ -63,10 +64,10 @@ namespace Carbon.Platform.Apps
         [Member("port")]
         public int? Port { get; set; }
 
-        [Member("requestCount"), Mutable]
+        [Member("requestCount")]
         public long RequestCount { get; set; }
 
-        [Member("errorCount"), Mutable]
+        [Member("errorCount")]
         public long ErrorCount { get; set; }
 
         [Member("terminated"), Mutable]
@@ -74,6 +75,13 @@ namespace Carbon.Platform.Apps
 
         [Member("created"), Timestamp]
         public DateTime Created { get; set; }
+        
+        #region Helpers
+
+        [IgnoreDataMember]
+        public bool IsTerminated => Terminated != null;
+
+        #endregion
 
         #region IApp
 

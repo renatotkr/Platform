@@ -1,4 +1,5 @@
-﻿using Carbon.Data.Annotations;
+﻿using System;
+using Carbon.Data.Annotations;
 
 namespace Carbon.Platform.Networking
 {
@@ -25,6 +26,13 @@ namespace Carbon.Platform.Networking
 
         [Member("action")]
         public string Action { get; set; }
+
+        [Member("deleted")]
+        [TimePrecision(TimePrecision.Second)]
+        public DateTime? Deleted { get; set; }
+
+        [Member("created"), Timestamp]
+        public DateTime Created { get; set; }
     }
     
     // protocal = "TPC" && port == 80 && source matches 0.0.0.0

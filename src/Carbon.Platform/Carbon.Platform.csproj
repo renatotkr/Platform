@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform</AssemblyName>
-    <VersionPrefix>1.6.0</VersionPrefix>
+    <VersionPrefix>1.7.1</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
 
     <!-- Package Info-->
@@ -10,7 +10,7 @@
     <Copyright>© Jason Nelson</Copyright>
     <Description>Primitives for operating a multicloud service.</Description>
     <Authors>iamcarbon</Authors>
-    <PackageTags>cloud;carbon</PackageTags>
+    <PackageTags>platform;carbon</PackageTags>
     <PackageLicenseUrl>https://github.com/carbon/Platform/blob/master/LICENCE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/carbon/Platform</RepositoryUrl>
     <PackageProjectUrl>https://github.com/carbon/platform</PackageProjectUrl>

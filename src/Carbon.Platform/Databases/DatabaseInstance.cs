@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 
@@ -30,8 +31,12 @@ namespace Carbon.Platform.Databases
         [Member("locationId")]
         public long LocationId { get; set; }
 
-        [Member("heatbeat"), Mutable]
-        public DateTime? Heartbeat { get; set; }
+        [Member("heatbeat")]
+        public DateTime? Heartbeat { get; }
+
+        [Member("terminated")]
+        [TimePrecision(TimePrecision.Second)]
+        public DateTime? Terminated { get; set; }
 
         [Member("created"), Timestamp]
         public DateTime Created { get; set; }
@@ -39,17 +44,22 @@ namespace Carbon.Platform.Databases
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; set; }
 
-        #region Flags
+        #region Helpers
 
+        [IgnoreDataMember]
+        public bool IsTerminated => Terminated != null;
+
+        [IgnoreDataMember]
         public bool IsPrimary => Flags.HasFlag(DatabaseFlags.Primary);
 
+        [IgnoreDataMember]
         public bool IsReadOnly => Flags.HasFlag(DatabaseFlags.ReadOnly);
 
         #endregion
 
-
         ResourceType ICloudResource.Type => ResourceType.Database;
 
+        [IgnoreDataMember]
         CloudProvider ICloudResource.Provider => LocationHelper.GetProvider(LocationId);
     }
 }

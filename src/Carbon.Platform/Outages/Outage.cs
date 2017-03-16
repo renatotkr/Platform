@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Carbon.Platform
 {
@@ -21,12 +22,13 @@ namespace Carbon.Platform
 
         [Member("created")]
         public DateTime Created { get; set; }
-
+        
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; set; }
 
         #region IResource
 
+        [IgnoreDataMember]
         public CloudProvider Provider => LocationHelper.GetProvider(LocationId);
 
         #endregion

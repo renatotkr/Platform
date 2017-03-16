@@ -1,11 +1,10 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Carbon.Platform.Computing
 {
     using Data.Annotations;
     using Json;
-
-    // Images are immutable
 
     [Dataset("Images")]
     [DataIndex(IndexFlags.Unique, "providerId", "name")]
@@ -23,7 +22,7 @@ namespace Carbon.Platform.Computing
 
         [Member("type")]
         public ImageType Type { get; set; }
-        
+
         [Member("details")]
         [StringLength(1000)] // Size?
         public JsonObject Details { get; set; }
@@ -31,13 +30,25 @@ namespace Carbon.Platform.Computing
         [Member("created"), Timestamp]
         public DateTime Created { get; set; }
 
+        [Member("deleted")]
+        [TimePrecision(TimePrecision.Second)]
+        public DateTime? Deleted { get; set; }
+
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; set; }
+
+        #region Helpers
+
+        [IgnoreDataMember]
+        public bool IsDeleted => Deleted != null;
+
+        #endregion
 
         #region IResource
 
         ResourceType ICloudResource.Type => ResourceType.Image;
 
+        [IgnoreDataMember]
         public CloudProvider Provider => CloudProvider.Get(ProviderId);
 
         #endregion

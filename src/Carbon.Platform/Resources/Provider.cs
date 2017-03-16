@@ -7,6 +7,7 @@ namespace Carbon.Platform
     {
         public static readonly CloudProvider Amazon    = new CloudProvider("AMZN", "Amazon");
         public static readonly CloudProvider Apple     = new CloudProvider("APPL", "Apple");
+        public static readonly CloudProvider Borg      = new CloudProvider("BORG", "Borg");
         public static readonly CloudProvider Google    = new CloudProvider("GOOG", "Google");
         public static readonly CloudProvider Facebook  = new CloudProvider("FB",   "Facebook");
         public static readonly CloudProvider IBM       = new CloudProvider("IBM",  "IBM");
@@ -68,6 +69,7 @@ namespace Carbon.Platform
             {
                 case "appl"      : return Apple;
                 case "amzn"      : return Amazon;
+                case "borg"      : return Borg;
                 case "fb"        : return Facebook;
                 case "ibm"       : return IBM;
                 case "goog"      : return Google;

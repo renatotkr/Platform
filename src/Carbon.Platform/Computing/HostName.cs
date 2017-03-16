@@ -7,7 +7,9 @@ namespace Carbon.Platform.Computing
     public static class Hostname
     {
         public static bool IsValid(string text)
-            => Uri.CheckHostName(text) != UriHostNameType.Unknown;
+        {
+            return Uri.CheckHostName(text) != UriHostNameType.Unknown;
+        }
 
         // ([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 
@@ -15,7 +16,7 @@ namespace Carbon.Platform.Networking
         public int ProviderId { get; set; }
 
         [Member("name")]
-        [Ascii, StringLength(50)]
+        [Ascii, StringLength(60)]
         public string Name { get; set; }
 
         [Member("description")]
@@ -25,6 +26,10 @@ namespace Carbon.Platform.Networking
         [Indexed]
         public long NetworkId { get; set; }
 
+        [Member("deleted")]
+        [TimePrecision(TimePrecision.Second)]
+        public DateTime? Deleted { get; set; }
+        
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; set; }
     }

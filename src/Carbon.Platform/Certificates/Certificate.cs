@@ -21,11 +21,18 @@ namespace Carbon.Platform.Certificates
         [Member("expires")] 
         public DateTime? Expires { get; set; }
 
+        [Member("issued")]
+        public DateTime? Issued { get; set; }
+
         [Member("revoked"), Mutable]
         public DateTime? Revoked { get; set; }
 
         [Member("created"), Timestamp]
         public DateTime Created { get; set; }
+
+        [Member("deleted")]
+        [TimePrecision(TimePrecision.Second)]
+        public DateTime? Deleted { get; set; }
 
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; set; }

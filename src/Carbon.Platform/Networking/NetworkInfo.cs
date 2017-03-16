@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using System.Net;
 
 namespace Carbon.Platform.Networking
@@ -44,21 +45,33 @@ namespace Carbon.Platform.Networking
         [Member("created"), Timestamp]
         public DateTime Created { get; set; }
 
+        [Member("deleted")]
+        [TimePrecision(TimePrecision.Second)]
+        public DateTime? Deleted { get; set; }
+
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; set; }
+
+        #region Helpers
+
+        [IgnoreDataMember]
+        public bool IsDeleted => Deleted != null;
+
+        #endregion
 
         // The rules form the firewall
         // public IList<NetworkRule> Rules { get; set; }
 
         // Tells packets where to go leaving a network interface
         // public IList<NetworkRoute> Routes { get; set; }
-        
+
         // public IList<SubnetInfo> Subnets { get; set; }
 
         #region IResource
 
         ResourceType ICloudResource.Type => ResourceType.Network;
 
+        [IgnoreDataMember]
         public CloudProvider Provider => CloudProvider.Get(ProviderId);
 
         #endregion

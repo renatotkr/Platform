@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
 using System.Runtime.Serialization;
 
 namespace Carbon.Platform.ComputingUnique
@@ -21,6 +21,9 @@ namespace Carbon.Platform.ComputingUnique
         
         [Member("details", TypeName = "varchar(1000)")] // TODO: JSON(1000)
         public JsonObject Details { get; set; }
+        
+        [Member("created"), Timestamp]
+        public DateTime Created { get; set; }
 
         #region IResource
 
@@ -30,50 +33,6 @@ namespace Carbon.Platform.ComputingUnique
         ResourceType ICloudResource.Type => ResourceType.MachineType;
 
         #endregion
-    }
-
-    // AMNZ T2 
-
-    [StructLayout(LayoutKind.Explicit, Size = 8)]
-    public struct MachineId
-    {
-        // nano = 1
-        // micro = 2
-        // small = 3
-        // medium = 4
-        // large = 5
-        // xlarge = 6
-        // 2xlarge = 7
-        // 4xlarge = 8
-        // 8xlarge = 9
-        // 16xlarge = 10 
-        // 32xlarge = 11
-
-        [FieldOffset(0)]
-        public byte MachineSize;
-
-        // 1, 2, 3, 4, 5, ...
-        [FieldOffset(1)]
-        public byte Generation;
-
-        // C, T, M, X, I
-        // C = 3
-        // C = 67? ANSI
-        
-        [FieldOffset(2)]
-        public byte ClassIdLower;
-
-        // H
-        [FieldOffset(3)]
-        public byte ClassIdUpper;
-
-        [FieldOffset(4)]
-        public int ProviderId;
-
-        [FieldOffset(0)]
-        public long Value;
-
-        public static implicit operator long(MachineId id) => id.Value;
     }
 }
 

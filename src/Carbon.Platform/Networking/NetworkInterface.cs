@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Net;
 
 namespace Carbon.Platform.Networking
@@ -45,13 +46,25 @@ namespace Carbon.Platform.Networking
         [Member("created"), Timestamp]
         public DateTime Created { get; set; }
 
+        [Member("deleted")]
+        [TimePrecision(TimePrecision.Second)]
+        public DateTime? Deleted { get; set; }
+        
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; set; }
+
+        #region Helpers
+
+        [IgnoreDataMember]
+        public bool IsDeleted => Deleted != null;
+
+        #endregion
 
         #region IResource
 
         ResourceType ICloudResource.Type => ResourceType.NetworkInterface;
 
+        [IgnoreDataMember]
         public CloudProvider Provider => CloudProvider.Get(ProviderId);
 
         #endregion

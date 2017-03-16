@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Carbon.Platform.Networking
 {
@@ -45,6 +46,7 @@ namespace Carbon.Platform.Networking
 
         ResourceType ICloudResource.Type => ResourceType.Network;
 
+        [IgnoreDataMember]
         public CloudProvider Provider => CloudProvider.Get(ProviderId);
 
         #endregion

@@ -1,4 +1,8 @@
-﻿/*
+﻿1.7.0
+- Add NetworkAddress
+- Add Terminated to Hosts, and DatabaseInstances
+- Add deleted markers to Apps, Backends, Networks, NetworkInterfaces, Images, and Volumes
+
 1.6
 - Add NetworkProxy
 - Add NetworkRule
@@ -22,5 +26,3 @@
 1.1
 - Add errorCount
 - Add regions
-
-*/

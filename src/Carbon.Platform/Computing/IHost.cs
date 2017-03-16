@@ -3,8 +3,7 @@
     public interface IHost
     {
         long Id { get; }
-
-        
-        // IPAddress Address ?
     }
+
+    // IPAddress Address ?
 }

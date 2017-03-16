@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using Carbon.Data.Annotations;
 
 namespace Carbon.Platform.Networking
@@ -25,15 +26,30 @@ namespace Carbon.Platform.Networking
 
         [Member("roles")]
         public ProxyRoles Roles { get; set; }
+        
+        [Member("locationId")]
+        public long LocationId { get; set; }
 
-        // Addresses?
-        // Rules?
+        // Google : Unicast IP Address
+        // AWS    : CNAME (name-424835706.us-west-2.elb.amazonaws.com)
+        [Member("address")]
+        public string Address { get; set; }
 
-        [Member("created")]
+        [Member("created"), Timestamp]
         public DateTime Created { get; set; }
+
+        [Member("deleted")]
+        public DateTime? Deleted { get; set; }
 
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; set; }
+
+        #region Helpers
+
+        [IgnoreDataMember]
+        public bool IsDeleted => Deleted != null;
+
+        #endregion
 
         // Listeners
 
@@ -41,11 +57,14 @@ namespace Carbon.Platform.Networking
 
         ResourceType ICloudResource.Type => ResourceType.NetworkProxy;
 
+        [IgnoreDataMember]
         public CloudProvider Provider => CloudProvider.Get(ProviderId);
 
         #endregion 
     }
 
+    // Addresses / 
+    // Rules?
 
     [Flags]
     public enum ProxyRoles
@@ -56,6 +75,8 @@ namespace Carbon.Platform.Networking
         SslTermination = 1 << 3  // Terminates Ssl traffic
     }
 }
+
+//  A NetworkProxy / LoadBalancer may span mutiple availabity zones within a region
 
 // e.g. 
 // arn:aws:elasticloadbalancing:us-west-2:123456789012:loadbalancer/app/my-load-balancer/50dc6c495c0c9188

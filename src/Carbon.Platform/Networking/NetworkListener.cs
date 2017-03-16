@@ -1,11 +1,10 @@
 ﻿using System;
-
 using Carbon.Data.Annotations;
 using Carbon.Platform.Networking;
 
 namespace Carbon.Platform
 {
-    [Dataset("ProxyListeners")]
+    [Dataset("NetworkListener")]
     public class NetworkListener
     {
         [Member("id"), Identity]
@@ -27,7 +26,7 @@ namespace Carbon.Platform
         [Member("sslCertificateId")]
         public long? SslCertificateId { get; set; }
 
-        [Member("modified"), Timestamp]
+        [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; set; }
 
         #region IResource

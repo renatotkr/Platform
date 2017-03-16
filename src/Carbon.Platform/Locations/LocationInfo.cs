@@ -38,9 +38,7 @@ namespace Carbon.Platform
         [Member("name")]
         public string Name { get; set; }
 
-        // this should be the date the zone was launched...
-
-        [Member("created")]
+        [Member("created")] // when the region was launched
         public DateTime Created { get; set; }
 
         #region Flags
@@ -75,7 +73,7 @@ namespace Carbon.Platform
 
         #endregion
 
-
+        [IgnoreDataMember]
         public string RegionName
         {
             get
@@ -89,6 +87,7 @@ namespace Carbon.Platform
             }
         }
 
+        [IgnoreDataMember]
         public string ZoneName
         {
             get
