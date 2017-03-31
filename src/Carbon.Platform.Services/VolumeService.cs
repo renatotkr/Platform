@@ -41,8 +41,7 @@ namespace Carbon.Platform.Services
                     ResourceId = ec2Volume.VolumeId,
                     LocationId = location.Id,
                     HostId     = host?.Id,
-                    Size       = (long)ec2Volume.Size * _1GB,
-                    Created    = ec2Volume.CreateTime
+                    Size       = (long)ec2Volume.Size * _1GB
                 };
 
                 await db.Volumes.InsertAsync(volume).ConfigureAwait(false);

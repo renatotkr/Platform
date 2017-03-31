@@ -22,7 +22,6 @@ namespace Carbon.Platform
             context.Types.TryAdd(new ListenerHandler());
             context.Types.TryAdd(new HashHandler());
             context.Types.TryAdd(new ListenerListHandler());
-            context.Types.TryAdd(new HealthCheckHandler());
             context.Types.TryAdd(new JsonObjectHandler());
             context.Types.TryAdd(new StringArrayHandler());
             context.Types.TryAdd(new ThresholdHandler());
@@ -30,7 +29,7 @@ namespace Carbon.Platform
             Context = context ?? throw new ArgumentNullException(nameof(context));
 
             // Apps ------------------------------------------------------------------
-            Apps = new Dataset<App, long>(context);
+            Apps = new Dataset<AppInfo, long>(context);
             AppInstances        = new Dataset<AppInstance, (long, long)>(context);
             AppReleases         = new Dataset<AppRelease, (long, SemanticVersion)>(context);
             AppEvents           = new Dataset<AppEvent, long>(context);
@@ -53,19 +52,22 @@ namespace Carbon.Platform
 
             // Networks --------------------------------------------------------------
             Networks            = new Dataset<NetworkInfo, long>(context);
-            NetworkAcls         = new Dataset<NetworkAcl, long>(context);
-            NetworkAddresses    = new Dataset<NetworkAddress, long>(context);
+            NetworkPolicies     = new Dataset<NetworkPolicy, long>(context);
+            NetworkPolicyRules  = new Dataset<NetworkPolicyRule, long>(context);
 
-            NetworkInterfaces  = new Dataset<NetworkInterfaceInfo, long>(context);
-            NetworkProxies      = new Dataset<NetworkProxy, long>(context);
-            NetworkRules        = new Dataset<NetworkAclRule, long>(context);
-            Subnets             = new Dataset<SubnetInfo, long>(context);
+            NetworkAddresses = new Dataset<NetworkAddress, long>(context);
+
+            NetworkInterfaces    = new Dataset<NetworkInterfaceInfo, long>(context);
+            NetworkProxies        = new Dataset<NetworkProxy, long>(context);
+            NetworkProxyListeners = new Dataset<NetworkProxyListener, long>(context);
+
+            Subnets = new Dataset<SubnetInfo, long>(context);
         }
 
         public IDbContext Context { get; }
 
         // Apps  -----------------------------------------------------------------
-        public Dataset<App, long>                           Apps { get; }
+        public Dataset<AppInfo, long>                           Apps { get; }
         public Dataset<AppEvent, long>                      AppEvents { get; }
         public Dataset<AppInstance, (long, long)>           AppInstances { get; }
         public Dataset<AppRelease, (long, SemanticVersion)> AppReleases { get; }
@@ -95,12 +97,13 @@ namespace Carbon.Platform
         */
 
         // Networks --------------------------------------------------------------
-        public Dataset<NetworkInfo,          long> Networks          { get; }
-        public Dataset<NetworkAddress,       long> NetworkAddresses  { get; }
-        public Dataset<NetworkAcl,           long> NetworkAcls       { get; }
-        public Dataset<NetworkInterfaceInfo, long> NetworkInterfaces { get; }
-        public Dataset<NetworkProxy,         long> NetworkProxies    { get; }
-        public Dataset<NetworkAclRule,          long> NetworkRules      { get; }
-        public Dataset<SubnetInfo,           long> Subnets           { get; }
+        public Dataset<NetworkInfo,          long> Networks              { get; }
+        public Dataset<NetworkInterfaceInfo, long> NetworkInterfaces     { get; }
+        public Dataset<NetworkAddress,       long> NetworkAddresses      { get; }
+        public Dataset<NetworkPolicy,        long> NetworkPolicies       { get; }
+        public Dataset<NetworkPolicyRule,    long> NetworkPolicyRules    { get; }
+        public Dataset<NetworkProxy,         long> NetworkProxies        { get; }
+        public Dataset<NetworkProxyListener, long> NetworkProxyListeners { get; }
+        public Dataset<SubnetInfo,           long> Subnets               { get; }
     }
 }

@@ -97,15 +97,15 @@ namespace Carbon.Platform.Services
 
         #region EC2 Helpers
 
-        private async Task<NetworkAcl> GetNetworkSecurityGroupAsync(ec2.Group group, NetworkInfo network)
+        private async Task<NetworkPolicy> GetNetworkSecurityGroupAsync(ec2.Group group, NetworkInfo network)
         {
-            var acl = await db.NetworkAcls.FindAsync(aws, group.GroupId).ConfigureAwait(false);
+            var acl = await db.NetworkPolicies.FindAsync(aws, group.GroupId).ConfigureAwait(false);
 
             if (acl == null)
             {
-                var aclId = await GetNextScopedIdAsync(db.NetworkAcls, network.Id).ConfigureAwait(false);
+                var aclId = await GetNextScopedIdAsync(db.NetworkPolicies, network.Id).ConfigureAwait(false);
 
-                acl = new NetworkAcl {
+                acl = new NetworkPolicy {
                     Id         = aclId,
                     Name       = group.GroupName,
                     ProviderId = aws.Id,
@@ -114,7 +114,7 @@ namespace Carbon.Platform.Services
 
                 try
                 {
-                    await db.NetworkAcls.InsertAsync(acl).ConfigureAwait(false);
+                    await db.NetworkPolicies.InsertAsync(acl).ConfigureAwait(false);
                 }
                 catch
                 {
@@ -137,10 +137,13 @@ namespace Carbon.Platform.Services
                 ProviderId = aws.Id,
                 ResourceId = ni.NetworkInterfaceId,
                 MacAddress = ni.MacAddress,
-                Addresses = new List<System.Net.IPAddress>(),
-                Created    = ni.Attachment?.AttachTime ?? DateTime.UtcNow
+                Addresses = new List<System.Net.IPAddress>()
             };
-            
+
+            // TODO: Create an attachment...
+
+            //  ni.Attachment?.AttachTime ?? DateTime.UtcNow
+
             // TODO: addresses
 
             if (ni.SubnetId != null)
@@ -173,7 +176,7 @@ namespace Carbon.Platform.Services
                 ProviderId = aws.Id,
                 ResourceId = id,
                 LocationId = location.Id,
-                Cidr       = s.CidrBlock
+                CidrBlock = s.CidrBlock
             };              
         }
 
@@ -189,7 +192,7 @@ namespace Carbon.Platform.Services
             return new NetworkInfo {
                 ProviderId = aws.Id,
                 ResourceId = vpc.VpcId,
-                Cidr       = vpc.CidrBlock
+                CidrBlock       = vpc.CidrBlock
             };          
         }
 

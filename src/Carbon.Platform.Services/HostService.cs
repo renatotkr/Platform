@@ -183,8 +183,7 @@ namespace Carbon.Platform.Services
             // TODO: Fetch th edetails
             return new ImageInfo {
                 ProviderId = aws.Id,
-                ResourceId = id,
-                Created    = DateTime.UtcNow
+                ResourceId = id
             };
         }
 

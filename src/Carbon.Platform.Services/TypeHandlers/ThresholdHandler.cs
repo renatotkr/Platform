@@ -3,7 +3,6 @@
 namespace Carbon.Platform
 {
     using Data;
-    using Carbon.Platform.Computing;
 
     public class ThresholdHandler : DbTypeHandler<Threshold>
     {
