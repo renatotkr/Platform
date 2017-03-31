@@ -4,67 +4,71 @@ using System.Runtime.Serialization;
 namespace Carbon.Platform.Storage
 {
     using Data.Annotations;
-    using Json;
 
     [Dataset("Volumes")]
-    [DataIndex(IndexFlags.Unique, "providerId", "name")]
-    public class VolumeInfo : ICloudResource
+    [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
+    public class VolumeInfo : IVolume, IVolumeStats, IManagedResource
     {
-        [Member("id"), Identity]
+        [Member("id"), Key]
         public long Id { get; set; }
 
         [Member("status"), Mutable]
         public VolumeStatus Status { get; set; }
 
-        // long TypeId
-
-        [Member("providerId")]
-        public int ProviderId { get; set; }
-
-        [Member("name")]
-        [Ascii, StringLength(100)]
-        public string Name { get; set; }
-
         [Member("size")]
-        public long Size { get; set; } // in octets
+        public long Size { get; set; }
 
         [Member("locationId")]
         public long LocationId { get; set; }
 
         [Member("hostId"), Mutable]
         public long? HostId { get; set; }
-        
-        [Member("details")]
-        [StringLength(1000)]
-        public JsonObject Details { get; set; }
-        
-        [Member("created")]
-        public DateTime Created { get; set; }
 
-        [Member("deleted")]
-        [TimePrecision(TimePrecision.Second)]
-        public DateTime? Deleted { get; set; }
-        
-        [Member("modified"), Timestamp(true)]
-        public DateTime Modified { get; set; }
-
-        #region Helpers
-
-        [IgnoreDataMember]
-        public bool IsDeleted => Deleted != null;
-
-        #endregion
+        // SourceImageId?
 
         #region IResource
 
-        ResourceType ICloudResource.Type => ResourceType.Volume;
+        [IgnoreDataMember]
+        [Member("providerId")]
+        public int ProviderId { get; set; }
 
         [IgnoreDataMember]
-        public CloudProvider Provider => CloudProvider.Get(ProviderId);
+        [Member("resourceId")]
+        [Ascii, StringLength(63)]
+        public string ResourceId { get; set; }
+
+        ResourceType IManagedResource.Type => ResourceType.Volume;
+      
+        #endregion
+
+        #region Stats / Health
+
+        [Member("heartbeat")]
+        public DateTime? Heartbeat { get; set; }
+
+        [Member("bytesRead")]
+        public long BytesRead { get; set; }
+
+        [Member("bytesWritten")]
+        public long BytesWritten { get; set; }
+
+        #endregion
+
+        #region Timestamps
+
+        [IgnoreDataMember]
+        [Member("created"), Timestamp]
+        public DateTime Created { get; }
+
+        [IgnoreDataMember]
+        [Member("deleted")]
+        [TimePrecision(TimePrecision.Second)]
+        public DateTime? Deleted { get; }
+
+        [IgnoreDataMember]
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; }
 
         #endregion
     }
 }
-
-// Google Notes:
-// compute#disk
