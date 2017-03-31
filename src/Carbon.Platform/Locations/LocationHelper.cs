@@ -19,7 +19,6 @@ namespace Carbon.Platform
             return ResourceProvider.Get(providerId);
         }
 
-
         public static byte GetZoneNumber(char zone)
         {
             if (!char.IsUpper(zone))

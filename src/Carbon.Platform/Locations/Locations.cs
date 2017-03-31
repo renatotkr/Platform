@@ -1,5 +1,6 @@
-﻿using Carbon.Extensions;
-using System;
+﻿using System;
+
+using Carbon.Extensions;
 
 namespace Carbon.Platform
 {
@@ -96,7 +97,7 @@ namespace Carbon.Platform
                 }
             }
 
-            throw new System.Exception("Unexpected...");
+            throw new Exception("Unexpected...");
 
         }
 

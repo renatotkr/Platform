@@ -10,7 +10,7 @@ namespace Carbon.Platform
 
     [Dataset("Locations")]
     [DataIndex(IndexFlags.Unique, new[] { "providerId", "name" })]
-    public class LocationInfo : ILocation, IEquatable<LocationInfo>, ICloudResource
+    public class LocationInfo : ILocation, IEquatable<LocationInfo>, IManagedResource
     {
         public LocationInfo() { }
 
@@ -63,7 +63,7 @@ namespace Carbon.Platform
 
         #region IResource
 
-        string ICloudResource.ResourceId => Name;
+        string IManagedResource.ResourceId => Name;
 
         [IgnoreDataMember]
         public ResourceProvider Provider => ResourceProvider.Get(ProviderId);
