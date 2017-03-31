@@ -7,80 +7,49 @@ namespace Carbon.Platform.Computing
     using Json;
 
     [Dataset("Images")]
-    [DataIndex(IndexFlags.Unique, "providerId", "name")]
-    public class ImageInfo : ICloudResource
+    [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
+    public class ImageInfo : IMachineImage, ICloudResource
     {
-        [Member("id"), Identity]
+        [Member("id"), Key]
         public long Id { get; set; }
 
-        [Member("providerId")]
-        public int ProviderId { get; set; }
-
         [Member("name")]
-        [StringLength(50)]
+        [StringLength(63)]
         public string Name { get; set; }
+
+        [Member("description")]
+        [StringLength(100)]
+        public string Description { get; set; }
 
         [Member("type")]
         public ImageType Type { get; set; }
 
-        [Member("details")]
-        [StringLength(1000)] // Size?
-        public JsonObject Details { get; set; }
-
         [Member("created"), Timestamp]
         public DateTime Created { get; set; }
 
-        [Member("deleted")]
-        [TimePrecision(TimePrecision.Second)]
-        public DateTime? Deleted { get; set; }
-
+        [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
-        public DateTime Modified { get; set; }
-
-        #region Helpers
+        public DateTime Modified { get; }
 
         [IgnoreDataMember]
-        public bool IsDeleted => Deleted != null;
-
-        #endregion
+        [Member("deleted")]
+        [TimePrecision(TimePrecision.Second)]
+        public DateTime? Deleted { get; }
 
         #region IResource
 
-        ResourceType ICloudResource.Type => ResourceType.Image;
-
         [IgnoreDataMember]
-        public CloudProvider Provider => CloudProvider.Get(ProviderId);
+        [Member("providerId")]
+        public int ProviderId { get; set; }
+
+        // Google: 6864121747226459524
+        [IgnoreDataMember]
+        [Member("resourceId")]
+        [Ascii, StringLength(100)]
+        public string ResourceId { get; set; }
+
+        ResourceType ICloudResource.Type => ResourceType.MachineImage;
 
         #endregion
-    }
-
-    // Windows/x86-64#patch?
-
-    // AWS: ami
-
-    // Details
-    // - architechure
-    // - platform               /x64/Windows/2016#patchLevel
-    // - hypervisor
-    // - repository
-
-
-
-    // e.g. sha256:77af4d6b9913e693e8d0b4b294fa62ade6054e6b2f1ffb617ac955dd63fb0182
-
-    public enum ImageType : byte
-    {
-        Kernel    = 1,
-        Machine   = 2, // ami (amazon machine image)
-        Container = 3,
-    
-        // RamDisk ?
-    }
-
-    public enum ImageStatus : byte
-    {
-        Pending   = 0,
-        Available = 1,
-        Deleted   = 3
     }
 }
