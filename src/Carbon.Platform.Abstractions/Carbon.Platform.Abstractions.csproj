@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Carbon.Platform.Abstractions</AssemblyName>
+    <VersionPrefix>0.7.0</VersionPrefix>
+    <TargetFrameworks>netstandard1.6;net451</TargetFrameworks>
+
+    <!-- Package Info-->
+    <Copyright>© Jason Nelson</Copyright>
+    <Description>Platform abstractions.</Description>
+    <Authors>iamcarbon</Authors>
+    <PackageTags>platform;carbon</PackageTags>
+    <PackageLicenseUrl>https://github.com/carbon/Platform/blob/master/LICENCE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/carbon/Platform</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/carbon/platform</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Carbon.Versioning" Version="1.2.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
+    <PackageReference Remove="NETStandard.Library" />
+    <PackageReference Include="System.Runtime" Version="4.3.0" />
+    <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
+    <PackageReference Include="System.Collections" Version="4.3.0" />
+    <PackageReference Include="System.Net.Primitives" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
+
+  </ItemGroup>
+</Project>
