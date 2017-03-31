@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Carbon.Platform
 {
-    using Networking;
+    using Net;
     using Data;
 
     public class ListenerListHandler : DbTypeHandler<List<Listener>>
@@ -11,6 +11,8 @@ namespace Carbon.Platform
         public override List<Listener> Parse(object value)
         {
             var text = (string)value;
+
+            if (text == "") return new List<Listener>();
 
             var ports = text.Split(',');
 
@@ -25,7 +27,7 @@ namespace Carbon.Platform
         }
 
         public override void SetValue(IDbDataParameter parameter, List<Listener> value)
-        {
+        {  
             parameter.Value = string.Join(",", value);
 
             parameter.DbType = DbType.AnsiString;

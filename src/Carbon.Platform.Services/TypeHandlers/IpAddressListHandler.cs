@@ -8,13 +8,17 @@ namespace Carbon.Platform
 
     public class IPAddressListHandler : DbTypeHandler<List<IPAddress>>
     {
+        private static readonly char[] comma = { ',' };
+
         public override DatumInfo DatumType => DatumInfo.String(255);
 
         public override List<IPAddress> Parse(object value)
         {
             var text = (string)value;
 
-            var ips = text.Split(',');
+            if (text == "") return new List<IPAddress>();
+
+            var ips = text.Split(comma);
 
             var list = new List<IPAddress>(ips.Length);
 

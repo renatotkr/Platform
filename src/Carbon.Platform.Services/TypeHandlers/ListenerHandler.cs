@@ -3,7 +3,7 @@
 namespace Carbon.Platform
 {
     using Data;
-    using Networking;
+    using Net;
 
     public class ListenerHandler : DbTypeHandler<Listener>
     {

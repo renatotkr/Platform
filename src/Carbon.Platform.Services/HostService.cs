@@ -3,7 +3,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net;
 
+using Carbon.Data;
+using Carbon.Data.Expressions;
+
 using ec2 = Amazon.Ec2;
+
+using Dapper;
 
 namespace Carbon.Platform.Services
 {
@@ -13,38 +18,71 @@ namespace Carbon.Platform.Services
     using Storage;
     using Networking;
 
-    using static Data.Expressions.Expression;
+    using static Expression;
 
     public class HostService
     {
         private readonly PlatformDb db;
         private readonly ec2::Ec2Client ec2;
+        private readonly VolumeService volumeService;
+        private readonly NetworkService networkService;
 
         public HostService(PlatformDb db, ec2::Ec2Client ec2)
         {
             this.db = db ?? throw new ArgumentNullException(nameof(db));
             this.ec2 = ec2;
+            this.volumeService = new VolumeService(db, ec2);
+            this.networkService = new NetworkService(db, ec2);
         }
 
-        // Update Hearbeat
-
-        public Task<HostInfo> GetAsync(long id) => db.Hosts.FindAsync(id);
-        
-        public async Task<HostInfo> GetAsync(CloudResourceInfo resource)
+        public async Task<HostInfo> GetAsync(long id)
         {
-            var host = await db.Hosts.FindAsync(resource.Provider, resource.Name).ConfigureAwait(false);
+            var host = await db.Hosts.FindAsync(id).ConfigureAwait(false);
 
-           return host ?? await GetEc2Instance(resource.Name).ConfigureAwait(false);
+            // Throw if not found
+
+            return host;
         }
 
-        public Task<IReadOnlyList<AppInstance>> GetAppInstancesAsync(long hostId) => 
-            db.AppInstances.QueryAsync(Eq("hostId", hostId));
-        
-        public Task<IReadOnlyList<NetworkInterfaceInfo>> GetNetworkInterfacesAsync(long hostId) => 
-            db.NetworkInterfaces.QueryAsync(Eq("hostId", hostId));
+        public async Task<HostInfo> GetAsync(ResourceProvider provider, string id)
+        {
+            var host = await db.Hosts.FindAsync(provider, id).ConfigureAwait(false);
 
-        public Task<IReadOnlyList<VolumeInfo>> GetVolumesAsync(long hostId) => 
-            db.Volumes.QueryAsync(Eq("hostId", hostId));
+            return host ?? await GetEc2Instance(id).ConfigureAwait(false);
+        }
+
+        public async Task<ImageInfo> GetImageAsync(ResourceProvider provider, string id)
+        {
+            var image = await db.Images.FindAsync(aws, id).ConfigureAwait(false);
+
+            if (image == null)
+            {
+                image = GetEc2Image(id);
+
+                image.Id = GetNextId<ImageInfo>();
+
+                await db.Images.InsertAsync(image).ConfigureAwait(false);
+
+            }
+
+            return image;
+        }
+
+        public Task<IReadOnlyList<AppInstance>> GetAppInstancesAsync(long hostId)
+        {
+            return db.AppInstances.QueryAsync(Eq("hostId", hostId));
+        }
+
+        public Task<IReadOnlyList<NetworkInterfaceInfo>> GetNetworkInterfacesAsync(long hostId)
+        {
+            return db.NetworkInterfaces.QueryAsync(Eq("hostId", hostId));
+        }
+
+        public Task<IReadOnlyList<VolumeInfo>> GetVolumesAsync(long hostId)
+        {
+            return db.Volumes.QueryAsync(Eq("hostId", hostId));
+        }
+
 
         #region EC2 Helpers
 
@@ -63,10 +101,10 @@ namespace Carbon.Platform.Services
             }
         }
 
+        private static readonly ResourceProvider aws = ResourceProvider.Amazon;
+
         private async Task<HostInfo> GetEc2Instance(string id)
         {
-            var provider = CloudProvider.Amazon;
-
             var instance = await ec2.DescribeInstanceAsync(id).ConfigureAwait(false);
 
             if (instance == null)
@@ -75,31 +113,42 @@ namespace Carbon.Platform.Services
             if (instance.VpcId == null)
                 throw new Exception("Ec2 instance MUST be inside a VPC");
 
-            var network = await GetNetworkAsync(provider, instance.VpcId).ConfigureAwait(false);
+            var network = await networkService.GetNetworkAsync(aws, instance.VpcId).ConfigureAwait(false);
 
             // "imageId": "ami-1647537c",
 
-            var image = instance.ImageId != null ? await GetImageAsync(provider, instance.ImageId).ConfigureAwait(false) : null;
-            var location = Locations.Get(provider, instance.Placement.AvailabilityZone);
+            var image = instance.ImageId != null ? await GetImageAsync(aws, instance.ImageId).ConfigureAwait(false) : null;
 
-            var host = new HostInfo(HostType.Virtual) {
-                Status = GetStatus(instance.InstanceState),
-                Addresses = new List<IPAddress>() {
+            var location = Locations.Get(aws, instance.Placement.AvailabilityZone);
+
+            long machineTypeId = 0;
+
+            try
+            {
+                machineTypeId = AwsInstanceType.GetId(instance.InstanceType);
+            }
+            catch
+            { }
+
+            var host = new HostInfo {
+                Id            = GetNextId<HostInfo>(),
+                Type          = HostType.Virtual,
+                Status        = GetStatus(instance.InstanceState),
+                MachineTypeId = machineTypeId,
+                Addresses     = new List<IPAddress>() {
                     IPAddress.Parse(instance.IpAddress),
                     IPAddress.Parse(instance.PrivateIpAddress)
                 },
-                Details = new JsonObject {
-                    { "instanceType", instance.InstanceType },
-                    { "hypervisor", instance.Hypervisor }
-                },
-                ProviderId   = provider.Id,
-                Name         = instance.InstanceId,
-                LocationId   = location.Id,
-                NetworkId    = network.Id,
-                ImageId      = image?.Id ?? 0,
-                Modified     = DateTime.UtcNow,
-                Created      = instance.LaunchTime
+                Details    = new JsonObject { },
+                ProviderId = aws.Id,
+                ResourceId = instance.InstanceId,
+                LocationId = location.Id,
+                NetworkId  = network.Id,
+                ImageId    = image?.Id ?? 0,
+                Created    = instance.LaunchTime
             };
+
+            // TODO: Lookup machineId
 
             await db.Hosts.InsertAsync(host).ConfigureAwait(false);
 
@@ -107,7 +156,7 @@ namespace Carbon.Platform.Services
             {
                 if (v.Ebs == null) continue;
 
-                var volume = await GetVolumeAsync(provider, v.Ebs.VolumeId).ConfigureAwait(false);
+                var volume = await volumeService.GetAsync(aws, v.Ebs.VolumeId).ConfigureAwait(false);
             }
 
             foreach (var ec2NetworkInterface in instance.NetworkInterfaces)
@@ -117,7 +166,7 @@ namespace Carbon.Platform.Services
                     throw new Exception("Host's network interface belongs to different VPC:" + ec2NetworkInterface.VpcId);
                 }
 
-                var networkInterface = NetworkInterfaceFromEc2(ec2NetworkInterface);
+                var networkInterface = await networkService.ConfigureEc2NetworkInterfaceAsync(ec2NetworkInterface).ConfigureAwait(false);
 
                 networkInterface.NetworkId = network.Id;
                 networkInterface.HostId = host.Id;
@@ -128,151 +177,36 @@ namespace Carbon.Platform.Services
             return host;
         }
 
-        public async Task<NetworkInterfaceInfo> GetNetworkInterface(CloudProvider provider, string name)
+
+        private ImageInfo GetEc2Image(string id)
         {
-            // A host may reuse an elastic network interface.... check to see if it exists first...
-            // A network interface may also be attached to a load balancer or ??
-
-            var networkInterface = await db.NetworkInterfaces.FindAsync(provider, name).ConfigureAwait(false);
-
-            if (networkInterface == null)
-            {
-                var n = await ec2.DescribeNetworkInterfaceAsync(name).ConfigureAwait(false);
-
-                var host = await db.Hosts.FindAsync(provider, n.Attachment.InstanceId);
-
-                var network = await GetNetworkAsync(provider, n.VpcId);
-
-              
-                if (n.Groups != null)
-                {
-
-                    foreach (var group in n.Groups)
-                    {
-                        var acl = await db.NetworkAcls.FindAsync(provider, group.GroupId).ConfigureAwait(false);
-
-                        if (acl == null)
-                        {
-                            acl = new NetworkAcl {
-                                ProviderId = provider.Id,
-                                Name = group.GroupId,
-                                Description = group.GroupName,
-                                NetworkId = network.Id
-                            };
-
-                            await db.NetworkAcls.InsertAsync(acl).ConfigureAwait(false);
-                        }
-
-                    }
-                }
-           
-
-                // ? IP addresses
-                // TODO: Subnet
-
-                var ni = NetworkInterfaceFromEc2(n);
-
-                ni.NetworkId = network.Id;
-                ni.HostId = host.Id;
-
-                await db.NetworkInterfaces.InsertAsync(ni);
-            }
-
-            return networkInterface;
-        }
-
-        public static NetworkInterfaceInfo NetworkInterfaceFromEc2(ec2.NetworkInterface ni)
-        {
-            var networkInterface = new NetworkInterfaceInfo  {
-                ProviderId = CloudProvider.Amazon.Id,
-                Name       = ni.NetworkInterfaceId,
-                MacAddress = ni.MacAddress,
-                Details    = new JsonObject { },
-                Created    = ni.Attachment?.AttachTime ?? DateTime.UtcNow
+            // TODO: Fetch th edetails
+            return new ImageInfo {
+                ProviderId = aws.Id,
+                ResourceId = id,
+                Created    = DateTime.UtcNow
             };
-
-            if (ni.SubnetId != null)
-            {
-                networkInterface.SubnetId = null; // TODO: Lookup
-
-                networkInterface.Details.Add("subnetId", ni.SubnetId);
-            }
-
-            return networkInterface;
         }
 
-        public async Task<ImageInfo> GetImageAsync(CloudProvider provider, string name)
+        private long GetNextId<T>()
         {
-            var image = await db.Images.FindAsync(provider, name).ConfigureAwait(false);
+            var dataset = DatasetInfo.Get<T>();
 
-            if (image == null)
+            using (var connection = db.Context.GetConnection())
             {
-                // TODO: Fetch the image details (creation date, architechure, etc)
+                var id = connection.ExecuteScalar<long>($"SELECT `id` FROM `{dataset.Name}` ORDER BY `id` DESC LIMIT 1");
 
-                image = new ImageInfo {
-                    ProviderId = provider.Id,
-                    Name = name,
-                    Details = new JsonObject {
-                        // { "architecture", instance.Architecture }
-                    },
-                    Created = DateTime.UtcNow
-                };
-
-                await db.Images.InsertAsync(image).ConfigureAwait(false);
+                return id + 1;
             }
-
-            return image;
         }
 
-        const int _1GB = 1_073_741_824;
-
-        public async Task<VolumeInfo> GetVolumeAsync(CloudProvider provider, string name, HostInfo host = null)
+        private static async Task<long> GetNextScopedIdAsync<T>(Dataset<T, long> dataset, long scopeId)
         {
-            var volume = await db.Volumes.FindAsync(provider, name).ConfigureAwait(false);
+            var range = ScopedId.GetRange(scopeId);
 
-            if (volume == null)
-            {
-                var ec2Volume = await ec2.DescribeVolumeAsync(name).ConfigureAwait(false);
+            var count = await dataset.CountAsync(Between("id", range.Start, range.End)).ConfigureAwait(false);
 
-                var location = Locations.Get(provider, ec2Volume.AvailabilityZone);
-
-                 volume = new VolumeInfo {
-                    Status      = VolumeStatus.Online,
-                    ProviderId  = provider.Id,
-                    Name        = name,
-                    LocationId  = location.Id,
-                    HostId      = host?.Id,
-                    Size        = (long)ec2Volume.Size * _1GB,
-                    Created     = ec2Volume.CreateTime
-                };
-
-                await db.Volumes.InsertAsync(volume).ConfigureAwait(false);
-            }
-
-            return volume;
-        }
-
-        public async Task<NetworkInfo> GetNetworkAsync(CloudProvider provider, string name)
-        {
-            var network = await db.Networks.FindAsync(provider, name).ConfigureAwait(false);
-            
-            if (network == null)
-            {
-                var vpc = await ec2.DescribeVpcAsync(name).ConfigureAwait(false);
-
-                if (vpc == null) throw new Exception($"VPC#{name} not found");
-            
-                network = new NetworkInfo {
-                    ProviderId = provider.Id,
-                    Name       = name,
-                    Cidr       = vpc.CidrBlock,
-                    Created    = DateTime.UtcNow
-                };
-
-                await db.Networks.InsertAsync(network).ConfigureAwait(false);
-            }
-
-            return network;
+            return ScopedId.Create(scopeId, count);
         }
     }
 
