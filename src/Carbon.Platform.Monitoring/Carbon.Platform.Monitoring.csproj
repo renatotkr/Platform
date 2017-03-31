@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Carbon.Platform.Monitoring</AssemblyName>
+    <VersionPrefix>0.5.0</VersionPrefix>
+    <TargetFramework>net461</TargetFramework>
+    <Authors>iamcarbon</Authors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Carbon.Platform.Abstractions\Carbon.Platform.Abstractions.csproj" />
+    <ProjectReference Include="..\Carbon.Platform.Runtime\Carbon.Platform.Runtime.csproj" />
+    <ProjectReference Include="..\Carbon.Platform.Statistics\Carbon.Platform.Statistics.csproj" />
+  </ItemGroup>
+</Project>
