@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Carbon.Platform.Apps
 {
@@ -18,13 +19,14 @@ namespace Carbon.Platform.Apps
             Version = version;
         }
 
-        public App(string name, AppType type)
+        public App(long id, string name, AppType type)
         {
+            Id   = id;
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Type = type;
         }
 
-        [Member("id"), Identity]
+        [Member("id"), Key]
         public long Id { get; set; }
 
         [Member("version")] // deployed version
@@ -50,9 +52,15 @@ namespace Carbon.Platform.Apps
         
         [Member("created"), Timestamp]
         public DateTime Created { get; set; }
-
+        
+        [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
-        public DateTime Modified { get; set; }
+        public DateTime Modified { get; }
+
+        [IgnoreDataMember]
+        [Member("deleted")]
+        [TimePrecision(TimePrecision.Second)]
+        public DateTime? Deleted { get; }
 
         // name@1.2.1
         public override string ToString()
@@ -66,19 +74,10 @@ namespace Carbon.Platform.Apps
  
 {
    listener: "http://*:80",
-   machineType: "t2.xlarge"
+   machineType: "t2.xlarge",
+   framework: "nodejs@10.x",
+   entryPoint: "funcName"
    ...
 }
 
  */
-
-// An backend/app exposes a program as a load balanced worker or web service
-
-// Web Role
-// - spawns one or more instances to handle user requests (autoscaling) [using containers, as needed]
-// - hosted behind a load balancer
-
-// bindings (host, protocal, port)
-
-// Worker Role
-// - Scales to queue...
