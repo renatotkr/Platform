@@ -5,8 +5,9 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Threading.Tasks;
 
-// Replace with IISAdministration PowerShell Commands & move to dotnetcore
+using System.Management.Automation;
 
+// Replace with IISAdministration PowerShell Commands & move to dotnetcore
 using Microsoft.Web.Administration;
 
 namespace Carbon.Hosting.IIS
@@ -16,34 +17,25 @@ namespace Carbon.Hosting.IIS
     using Platform.Apps;
     using Platform.Networking;
     using Json;
+    using Storage;
     using Versioning;
+    using Carbon.Net;
 
     public class IISHost : IHostService, IDisposable
     {
         private readonly HostingEnvironment env;
-        private readonly ServerManager serverManager = new ServerManager();
-
+        private readonly ServerManager manager = new ServerManager();
         private readonly ILogger log;
 
         public IISHost(HostingEnvironment env, ILogger log)
         {
-            #region Preconditions
-
-            if (env == null)
-                throw new ArgumentNullException(nameof(env));
-
-            if (log == null)
-                throw new ArgumentNullException(nameof(log));
-
-            #endregion
-
-            this.env = env;
-            this.log = log;
+            this.env = env ?? throw new ArgumentNullException(nameof(env));
+            this.log = log ?? throw new ArgumentNullException(nameof(log));
         }
 
         public IEnumerable<IApp> Scan()
         {
-            foreach (var site in serverManager.Sites)
+            foreach (var site in manager.Sites)
             {
                 if (site.Applications.Count == 0) continue;
 
@@ -62,56 +54,53 @@ namespace Carbon.Hosting.IIS
 
         public Task CreateAsync(IApp app)
         {
-            if (serverManager.ApplicationPools[app.Name] != null)
+            var poolName = GetApplicationPoolName(app);
+
+            if (manager.ApplicationPools[poolName] != null)
             {
-                log.Info($"Application pool '{app.Name}' already exists. Skipping");
+                log.Info($"Application pool '{poolName}' already exists. Skipping");
 
                 return Task.CompletedTask;
             }
 
-            // Create a new pool
-            var pool = serverManager.ApplicationPools.Add(app.Name);
-            
+            var pool = manager.ApplicationPools.Add(poolName); // Create a new pool
+
             LogInfo(app, $"Created pool for {app.Name}");
 
-            pool.ManagedRuntimeVersion = "v4.0";                    // Set the Runtime Version to 4.0
+            pool.ManagedRuntimeVersion = "v4.0";                            // Set the Runtime Version to 4.0
 
-            pool.Failure.RapidFailProtection = false;               // Disable rapid fail protection (RapidFailPolicy)
+            pool.Failure.RapidFailProtection = false;                       // Disable rapid fail protection (RapidFailPolicy)
 
-            pool.Recycling.PeriodicRestart.Requests = 0;            // Disable request recycling
-            pool.Recycling.PeriodicRestart.Memory = 0;              // Disable memory recycling
-            pool.Recycling.PeriodicRestart.Time = TimeSpan.Zero;    // Disable time recycling
+            pool.Recycling.PeriodicRestart.Requests = 0;                    // Disable request recycling
+            pool.Recycling.PeriodicRestart.Memory = 0;                      // Disable memory recycling
+            pool.Recycling.PeriodicRestart.Time = TimeSpan.Zero;            // Disable time recycling
 
-            pool.AutoStart                    = true;                       // Automatically start
-            pool.StartMode                    = StartMode.AlwaysRunning;    // Configure AutoStart to AlwaysRunning
-            pool.ProcessModel.IdleTimeout     = TimeSpan.Zero;              // Never timeout (or unload)
+            pool.AutoStart = true;                                          // Automatically start
+            pool.StartMode = StartMode.AlwaysRunning;                       // Configure AutoStart to AlwaysRunning
+            pool.ProcessModel.IdleTimeout = TimeSpan.Zero;                  // Never timeout (or unload)
 
             // "IIS AppPool\<AppPoolName>"
-            pool.ProcessModel.IdentityType    = ProcessModelIdentityType.ApplicationPoolIdentity;
+            pool.ProcessModel.IdentityType = ProcessModelIdentityType.ApplicationPoolIdentity;
             pool.ProcessModel.LoadUserProfile = true;                       // Ensure the user profile is loaded
 
             // Limit cpu under load
-            pool.Cpu.Action = ProcessorAction.ThrottleUnderLoad;    
-            pool.Cpu.Limit  = 65 * 1000; // 65%
+            pool.Cpu.Action = ProcessorAction.ThrottleUnderLoad;
+            pool.Cpu.Limit = 65 * 1000; // 65%
 
-            #region Create a Site
 
+            // Create the site ------------------------------------
             // - Set path to a placeholder root directory
             // - Setup bindings
 
-            var site = ConfigureSite(app);
-
-            serverManager.Sites.Add(site);
-
-            #endregion
+            manager.Sites.Add(GetConfigureSite(app));
 
             // Commit the changes to the server
-            serverManager.CommitChanges();
+            manager.CommitChanges();
 
             return Task.CompletedTask;
         }
 
-        public async Task DeployAsync(IApp app, Package package)
+        public async Task DeployAsync(IApp app, IPackage package)
         {
             #region Ensure the app exists
 
@@ -126,7 +115,10 @@ namespace Carbon.Hosting.IIS
 
             var directory = GetAppPath(app);
 
-            if (directory.Exists) throw new Exception($"Directory '{directory.FullName}' already exists");
+            if (directory.Exists)
+            {
+                throw new Exception($"Directory '{directory.FullName}' already exists");
+            }
 
             try
             {
@@ -189,7 +181,7 @@ namespace Carbon.Hosting.IIS
                 try
                 {
                     version = SemanticVersion.Parse(folder.Name);
-                    
+
                 }
                 catch
                 {
@@ -220,8 +212,9 @@ namespace Carbon.Hosting.IIS
                 throw new Exception($"Site #{app.Id} ({app.Name}) does not have a configured application");
             }
 
-            var pool = serverManager.ApplicationPools[application.ApplicationPoolName];
-            
+            var pool = GetApplicationPool(site);
+
+     
             // e.g. D:/apps/1/2.1.3
             var newPath = GetAppPath(app);
 
@@ -233,13 +226,13 @@ namespace Carbon.Hosting.IIS
             // Set the path (or symbolic link) to the specified version
             application.VirtualDirectories["/"].PhysicalPath = newPath.FullName;
 
-            serverManager.CommitChanges();
+            manager.CommitChanges();
 
             pool.Recycle();  // Recycle the application pool
 
             log.Info($"Recycled app pool {pool.Name}");
 
-            LogInfo(app, $"Activated v{app.Version}");
+            LogInfo(app, $"Activated {app.Name} v{app.Version}");
 
             return Task.CompletedTask;
         }
@@ -248,9 +241,7 @@ namespace Carbon.Hosting.IIS
         {
             var site = FindSite(app.Id);
 
-            var poolName = site.Applications["/"].ApplicationPoolName;
-
-            var pool = serverManager.ApplicationPools[poolName];
+            var pool = GetApplicationPool(site);
 
             pool.Recycle();
 
@@ -264,29 +255,68 @@ namespace Carbon.Hosting.IIS
             if (site == null)
                 throw new ArgumentNullException($"No site with id #{app.Id} found");
 
-            var pool = serverManager.ApplicationPools[site.Applications["/"].ApplicationPoolName];
-            
-            serverManager.Sites.Remove(site);         
-            serverManager.ApplicationPools.Remove(pool);
+            var pool = GetApplicationPool(site); 
+
+            manager.Sites.Remove(site);         
+            manager.ApplicationPools.Remove(pool);
        
-            serverManager.CommitChanges();
+            manager.CommitChanges();
+
+
+            var dir = GetAppFolder(app);
+
+            Directory.Delete(dir, true);
 
             return Task.CompletedTask;
         }
 
         public void Dispose()
         {
-            if (serverManager != null)
-            {
-                serverManager.Dispose();
-            }
+            manager.Dispose();   
         }
 
         #region Helpers
 
+
+        private void OpenFirewallPort(int port, IApp app)
+        {
+            Console.WriteLine($"Opening Firewall port {port} for {app.Name}");
+
+            var ruleName = $"App {app.Name} port {port}";
+
+            using (var shell = PowerShell.Create())
+            {
+                var importCommand = shell.Commands.AddCommand("Import-Module").AddArgument("NetSecurity");
+
+                shell.Commands.AddScript($@"Remove-NetFirewallRule -DisplayName ""{ruleName}""");
+                shell.Commands.AddScript($@"New-NetFirewallRule -DisplayName ""{ruleName}"" -Direction Inbound -LocalPort {port} -Protocol TCP -Action Allow");
+
+                var result = shell.Invoke();
+
+                foreach (PSObject outputItem in result)
+                {
+                    if (outputItem != null)
+                    {
+                        try
+                        {
+                            Console.WriteLine(outputItem.ToString());
+                        }
+                        catch { }
+
+                    }
+                }
+            }
+        }
+
+        private string GetApplicationPoolName(IApp app)
+            => app.Name;
+
+        private ApplicationPool GetApplicationPool(Site site)
+            => manager.ApplicationPools[site.Applications["/"].ApplicationPoolName];
+
         private Site FindSite(long id)
         {
-            foreach (var site in serverManager.Sites)
+            foreach (var site in manager.Sites)
             {
                 if (site.Id == id) return site;
             }
@@ -294,7 +324,7 @@ namespace Carbon.Hosting.IIS
             return null;
         }
 
-        private Site ConfigureSite(IApp app)
+        private Site GetConfigureSite(IApp app)
         {
             #region Preconditions
 
@@ -305,18 +335,18 @@ namespace Carbon.Hosting.IIS
 
             var physicalPath = GetAppPath(app);
 
-            var site = serverManager.Sites.CreateElement();
+            var site = manager.Sites.CreateElement();
 
             site.Id              = app.Id;
             site.Name            = app.Name.ToString(); // id?
 
-            site.ServerAutoStart = true;                            // Start the server automatically
-            site.LogFile.Enabled = false;                           // Disable site logging
+            site.ServerAutoStart = true;                                // Start the server automatically
+            site.LogFile.Enabled = false;                               // Disable site logging
 
-            var siteApp = site.Applications.CreateElement();        // Create a site app
+            var siteApp = site.Applications.CreateElement();            // Create a site app
 
-            siteApp.Path = "/";                                     // Site the root path
-            siteApp.ApplicationPoolName = app.Name.ToString();      // Site the pool name
+            siteApp.Path = "/";                                         // Site the root path
+            siteApp.ApplicationPoolName = GetApplicationPoolName(app);  // Site the pool name
 
             site.Applications.Add(siteApp);
 
@@ -328,10 +358,13 @@ namespace Carbon.Hosting.IIS
 
             siteApp.VirtualDirectories.Add(virtualDirectory);
 
-            // env
-            // { 
-            //   listeners: [ "80/http", "http://carbon.com:8080" ]
-            // }
+            /*
+            { 
+              listeners: [ "80/http", "http://carbon.com:8080" ],
+              host: "carbon.com",   
+              port: 8080
+            }
+            */
 
             JsonObject env = null;
 
@@ -340,17 +373,34 @@ namespace Carbon.Hosting.IIS
                 env = ((App)app).Env;
             }
 
-            if (env == null)
+            if (env != null)
             {
+                // e.g. [ "http://carbon.com/80" ]
 
-                Console.WriteLine("no env");
-            }
-
-            if (env != null && env.ContainsKey("listeners"))
-            {
-                foreach (var listener in (JsonArray)env["listeners"])
+                if (env.ContainsKey("listeners"))
                 {
-                    var b = new WebBinding(Listener.Parse(listener));
+                    foreach (var listener in (JsonArray)env["listeners"])
+                    {
+                        var b = new IISBinding(Listener.Parse(listener));
+
+                        Console.WriteLine("configured listener:" + b.ToString());
+
+                        var binding = site.Bindings.CreateElement();
+
+                        binding.Protocol = b.Protocol;
+                        binding.BindingInformation = b.ToString();
+
+                        site.Bindings.Add(binding);
+                    }
+                }
+                
+                if (env.ContainsKey("port"))
+                {
+                    var port = (int)env["port"];
+
+                    var b = new IISBinding(port: port);
+
+                    Console.WriteLine("configured port:" + b.ToString());
 
                     var binding = site.Bindings.CreateElement();
 
@@ -358,11 +408,18 @@ namespace Carbon.Hosting.IIS
                     binding.BindingInformation = b.ToString();
 
                     site.Bindings.Add(binding);
+
+                    OpenFirewallPort(port, app);
+                }
+
+                if (site.Bindings.Count == 0)
+                {
+                    Console.WriteLine("no bindings");
                 }
             }
             else
             {
-                Console.WriteLine("no listeners");
+                Console.WriteLine("no env found on app");
             }
             
             return site;
@@ -397,9 +454,9 @@ namespace Carbon.Hosting.IIS
             return new DirectoryInfo(path);
         }
 
-        public IList<Request> GetActiveRequests(IApp app, TimeSpan elapsedFilter)
+        public List<Request> GetActiveRequests(IApp app, TimeSpan elapsedFilter)
         {
-            var pool = serverManager.ApplicationPools[app.Name];
+            var pool = manager.ApplicationPools[app.Name];
 
             var requests = new List<Request>();
 
@@ -445,9 +502,3 @@ namespace Carbon.Hosting.IIS
         // Start, Stop
     }
 }
-
-
-
-
-
-
