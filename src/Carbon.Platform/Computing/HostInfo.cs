@@ -11,7 +11,7 @@ namespace Carbon.Platform.Computing
 
     [Dataset("Hosts")]
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
-    public class HostInfo : IHost, ICloudResource
+    public class HostInfo : IHost, IManagedResource
     {
         [Member("id"), Key]
         public long Id { get; set; }
@@ -62,14 +62,9 @@ namespace Carbon.Platform.Computing
         [Member("terminated")]
         [TimePrecision(TimePrecision.Second)]
         public DateTime? Terminated { get; set; }
-        
-        [IgnoreDataMember]
-        [Member("modified"), Timestamp(true)]
-        public DateTime Modified { get; }
 
         #region IResource
-
-        // aws
+        
         [IgnoreDataMember]
         [Member("providerId")]
         public int ProviderId { get; set; }
@@ -79,7 +74,15 @@ namespace Carbon.Platform.Computing
         [Ascii, StringLength(100)]
         public string ResourceId { get; set; }
 
-        ResourceType ICloudResource.Type => ResourceType.Host;
+        ResourceType IManagedResource.Type => ResourceType.Host;
+
+        #endregion
+
+        #region Timestamps
+
+        [IgnoreDataMember]
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; }
 
         #endregion
 
@@ -133,12 +136,4 @@ namespace Carbon.Platform.Computing
 
         #endregion
     }
-
-    // e.g. amzn:instance:i-07e6001e0415497e
 }
-
-
-// Instance Ids
-// google cloud : UInt64
-// aws          : 17-character string
-// azure         : 

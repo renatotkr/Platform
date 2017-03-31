@@ -8,7 +8,7 @@ namespace Carbon.Platform.Computing
 
     [Dataset("MachineTypes")]
     [DataIndex(IndexFlags.Unique, new[] { "providerId", "name" })]
-    public class MachineType : IMachineType, ICloudResource
+    public class MachineType : IMachineType, IManagedResource
     {
         [Member("id"), Key]
         public long Id { get; set; }
@@ -24,14 +24,19 @@ namespace Carbon.Platform.Computing
         [Member("providerId")]
         public int ProviderId { get; set; }
 
-        string ICloudResource.ResourceId => Name;
+        string IManagedResource.ResourceId => Name;
 
-        ResourceType ICloudResource.Type => ResourceType.MachineType;
+        ResourceType IManagedResource.Type => ResourceType.MachineType;
 
         #endregion
 
+        #region Timestamps
+
         [IgnoreDataMember]
         [Member("created"), Timestamp]
+        [TimePrecision(TimePrecision.Second)]
         public DateTime Created { get; }
+
+        #endregion
     }
 }
