@@ -53,9 +53,6 @@ namespace Carbon.Platform.Apps
         
         [Member("appVersion"), Mutable] 
         public SemanticVersion AppVersion { get; set; }
-
-        [Member("heartbeat")]
-        public DateTime? Heartbeat { get; set; }
         
         [Member("backendId")]
         [Indexed]
@@ -64,11 +61,18 @@ namespace Carbon.Platform.Apps
         [Member("port")]
         public int? Port { get; set; }
 
+        #region Health & Stats
+
+        [Member("heartbeat")]
+        public DateTime? Heartbeat { get; set; }
+
         [Member("requestCount")]
         public long RequestCount { get; set; }
 
         [Member("errorCount")]
         public long ErrorCount { get; set; }
+
+        #endregion
 
         [Member("terminated"), Mutable]
         public DateTime? Terminated { get; set; }
