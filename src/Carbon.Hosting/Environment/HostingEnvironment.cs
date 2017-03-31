@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 
+using Carbon.Json;
+
 namespace Carbon.Hosting
 {
-    using Json;
-
     public class HostingEnvironment
     {
         public HostingEnvironment()
@@ -34,12 +34,12 @@ namespace Carbon.Hosting
 
             if (AppsRoot == null)
             {
-                AppsRoot = new DirectoryInfo(driveLetter + ":/apps/");
+                AppsRoot = new DirectoryInfo(driveLetter + ":/apps");
             }
 
             if (FrontendsRoot == null)
             {
-                FrontendsRoot = new DirectoryInfo(driveLetter + ":/frontends/");
+                FrontendsRoot = new DirectoryInfo(driveLetter + ":/frontends");
             }
 
             // C:/frontends/1/1.0.0/...
@@ -50,11 +50,11 @@ namespace Carbon.Hosting
             AppsRoot = root;
         }
 
-        // C:/apps/
+        // C:/apps
         // bootstrapper, supervisor, etc 
         public DirectoryInfo AppsRoot { get; }
 
-        // C:/frontends/
+        // C:/frontends
         public DirectoryInfo FrontendsRoot { get; }
     }
 }
