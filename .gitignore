@@ -8,3 +8,4 @@ Carbon.Platform.csproj.user
 *project.lock.json
 /build
 /.DS_Store
+*.DS_Store

@@ -1,9 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.11.0</VersionPrefix>
+    <VersionPrefix>0.13.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
     <AssemblyName>Carbon.Platform.Client</AssemblyName>
+  
+    <!-- Package Details -->
+    <Copyright>© Jason Nelson</Copyright>
+    <PackageTags>carbon</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,11 +16,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Carbon.Protection" Version="1.4.0" />
+    <PackageReference Include="Carbon.Json" Version="1.3.0" />
+    <PackageReference Include="Carbon.Protection" Version="1.5.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <PackageReference Remove="NETFramework.Library" />
+    <PackageReference Remove="NETStandard.Library" />
     <PackageReference Include="System.Runtime" Version="4.3.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.0" />
   </ItemGroup>

@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Carbon.Platform.Services</AssemblyName>
+    <VersionPrefix>0.18.0</VersionPrefix>
+    <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
+
+    <!-- Package Details -->
+    <Authors>iamcarbon</Authors>
+    <Copyright>© Jason Nelson</Copyright>
+    <Description>Data access abstractions for operating a multicloud service.</Description>
+    <PackageTags>platform;carbon</PackageTags>
+    <PackageLicenseUrl>https://github.com/carbon/Platform/blob/master/LICENCE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/carbon/Platform</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Carbon.Platform\Carbon.Platform.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Amazon.Ec2" Version="0.8.2" />
+    <PackageReference Include="Carbon.Data" Version="0.13.1" />
+    <PackageReference Include="Carbon.Data.Sql" Version="0.18.0" />
+    <PackageReference Include="Carbon.Json" Version="1.3.0" />
+    <PackageReference Include="Carbon.Protection" Version="1.5.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
+    <PackageReference Remove="NETStandard.Library" />
+    <PackageReference Include="System.Runtime" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+  </ItemGroup>
+</Project>
