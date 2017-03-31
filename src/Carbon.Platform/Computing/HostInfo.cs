@@ -10,17 +10,11 @@ namespace Carbon.Platform.Computing
     using Json;
 
     [Dataset("Hosts")]
-    [DataIndex(IndexFlags.Unique, "providerId", "name")]
-    public class HostInfo : IHost
+    [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
+    public class HostInfo : IHost, ICloudResource
     {
-        [Member("id"), Identity]
+        [Member("id"), Key]
         public long Id { get; set; }
-
-        [Member("providerId")]
-        public int ProviderId { get; set; }
-
-        [Member("name")]
-        public string Name { get; set; }
 
         [Member("type")] // Physical, Virtual, Container
         public HostType Type { get; set; }
@@ -69,9 +63,26 @@ namespace Carbon.Platform.Computing
         [TimePrecision(TimePrecision.Second)]
         public DateTime? Terminated { get; set; }
         
+        [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
-        public DateTime Modified { get; set; }
-        
+        public DateTime Modified { get; }
+
+        #region IResource
+
+        // aws
+        [IgnoreDataMember]
+        [Member("providerId")]
+        public int ProviderId { get; set; }
+
+        [IgnoreDataMember]
+        [Member("resourceId")]
+        [Ascii, StringLength(100)]
+        public string ResourceId { get; set; }
+
+        ResourceType ICloudResource.Type => ResourceType.Host;
+
+        #endregion
+
         #region Helpers
 
         [IgnoreDataMember]
@@ -111,10 +122,16 @@ namespace Carbon.Platform.Computing
             }
         }
 
+        [IgnoreDataMember]
+        public ResourceProvider Provider => ResourceProvider.Get(ProviderId);
+
         #endregion
 
-        [IgnoreDataMember]
-        public CloudProvider Provider => CloudProvider.Get(ProviderId);
+        #region IHost
+
+        IPAddress IHost.Address => PrivateIp;
+
+        #endregion
     }
 
     // e.g. amzn:instance:i-07e6001e0415497e
