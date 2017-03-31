@@ -6,13 +6,13 @@ namespace Carbon.Diagnostics
 {
     public class DiagnosticList : Collection<Diagnostic>
     {
-        public IEnumerable<Diagnostic> Information
-            => this.Where(b => b.Type == DiagnosticType.Info);
+        public IEnumerable<Diagnostic> Messages => 
+            this.Where(b => b.Type == DiagnosticType.Message);
 
-        public IEnumerable<Diagnostic> Warnings
-            => this.Where(b => b.Type == DiagnosticType.Warning);
+        public IEnumerable<Diagnostic> Warnings => 
+            this.Where(b => b.Type == DiagnosticType.Warning);
 
-        public IEnumerable<Diagnostic> Errors
-            => this.Where(b => b.Type == DiagnosticType.Error);
+        public IEnumerable<Diagnostic> Errors => 
+            this.Where(b => b.Type == DiagnosticType.Error);
     }
 }

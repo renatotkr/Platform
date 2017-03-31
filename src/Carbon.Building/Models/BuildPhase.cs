@@ -1,10 +1,10 @@
 ﻿namespace Carbon.Builder
 {
-    public enum BuildPhase
+    public enum BuildPhase : byte
     {
-        Downloading,
-        Building,
-        Finalizing,
-        Completed
+        Downloading = 1,
+        Building    = 2,
+        Finalizing  = 3,
+        Completed   = 4
     }
 }
