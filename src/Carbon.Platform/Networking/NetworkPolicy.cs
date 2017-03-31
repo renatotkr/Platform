@@ -1,24 +1,24 @@
 ﻿using System;
-using System.Net;
 using System.Runtime.Serialization;
+
+using Carbon.Data.Annotations;
 
 namespace Carbon.Platform.Networking
 {
-    using Data.Annotations;
-
-    [Dataset("NetworkAddresses")]
+    [Dataset("NetworkPolicies")]
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
-    public class NetworkAddress : IManagedResource
+    public class NetworkPolicy : INetworkPolicy, IManagedResource
     {
+        // network + index
         [Member("id"), Key]
         public long Id { get; set; }
 
-        [Member("networkInterfaceId")]
-        [Indexed]
-        public long? NetworkInterfaceId { get; set; }
-
-        [Member("value")]
-        public IPAddress Value { get; set; }
+        // Pretty name
+        [Member("name")]
+        public string Name { get; set; }
+        
+        [IgnoreDataMember]
+        public long NetworkId => ScopedId.GetScope(Id);
 
         #region IResource
 
@@ -31,15 +31,11 @@ namespace Carbon.Platform.Networking
         [Ascii, StringLength(100)]
         public string ResourceId { get; set; }
 
-        ResourceType IManagedResource.Type => ResourceType.NetworkAddress;
+        ResourceType IManagedResource.Type => ResourceType.NetworkPolicy;
 
         #endregion
 
         #region Timestamps
-
-        [Member("created"), Timestamp]
-        [IgnoreDataMember]
-        public DateTime Created { get; }
 
         [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]

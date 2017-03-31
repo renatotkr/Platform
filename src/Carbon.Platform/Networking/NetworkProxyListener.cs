@@ -8,7 +8,7 @@ namespace Carbon.Platform.Networking
 
     [Dataset("NetworkProxyListener")]
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
-    public class NetworkProxyListener : INetworkProxyListener, ICloudResource
+    public class NetworkProxyListener : INetworkProxyListener, IManagedResource
     {
         // proxyId | index
         [Member("id"), Key]
@@ -26,15 +26,6 @@ namespace Carbon.Platform.Networking
 
         // TODO: SSL Policy
 
-        [IgnoreDataMember]
-        [Member("modified"), Timestamp(true)]
-        public DateTime Modified { get; }
-
-        [IgnoreDataMember]
-        [Member("deleted")]
-        [TimePrecision(TimePrecision.Second)]
-        public DateTime? Deleted { get; }
-
         public long ProxyId => ScopedId.GetScope(Id);
 
         #region IResource
@@ -49,8 +40,25 @@ namespace Carbon.Platform.Networking
 
         // arn:aws:elasticloadbalancing:us-west-2:123456789012:listener/app/my-load-balancer/50dc6c495c0c9188/f2f7dc8efc522ab2
 
-        ResourceType ICloudResource.Type => ResourceType.NetworkProxyListener;
+        ResourceType IManagedResource.Type => ResourceType.NetworkProxyListener;
 
+        #endregion
+
+        #region Timestamps
+
+        [IgnoreDataMember]
+        [Member("created"), Timestamp]
+        public DateTime Created { get; }
+
+        [IgnoreDataMember]
+        [Member("deleted")]
+        [TimePrecision(TimePrecision.Second)]
+        public DateTime? Deleted { get; }
+
+        [IgnoreDataMember]
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; }
+      
         #endregion
     }
 }

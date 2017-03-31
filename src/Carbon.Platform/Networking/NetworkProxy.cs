@@ -6,9 +6,11 @@ namespace Carbon.Platform.Networking
     using Data.Annotations;
     using Net;
 
+    // Consider renaming networkAppliance
+
     [Dataset("NetworkProxies")]
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
-    public class NetworkProxy : INetworkProxy, ICloudResource
+    public class NetworkProxy : INetworkProxy, IManagedResource
     {
         [Member("id"), Key]
         public long Id { get; set; }
@@ -30,33 +32,38 @@ namespace Carbon.Platform.Networking
         [Member("address")]
         public string Address { get; set; }
 
+        #region IResource
+        
+        [IgnoreDataMember]
+        [Member("providerId")]
+        public int ProviderId { get; set; }
+
+        [IgnoreDataMember]
+        [Member("resourceId")]
+        [Ascii, StringLength(100)]
+        public string ResourceId { get; set; }
+
+        ResourceType IManagedResource.Type => ResourceType.NetworkProxy;
+
+        #endregion
+
+        #region Timestamps
+
         [IgnoreDataMember]
         [Member("created"), Timestamp]
         public DateTime Created { get; }
 
         [IgnoreDataMember]
         [Member("deleted")]
+        [TimePrecision(TimePrecision.Second)]
         public DateTime? Deleted { get; }
 
         [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
 
-        #region IResource
-        
-        // aws
-        [IgnoreDataMember]
-        [Member("providerId")]
-        public int ProviderId { get; set; }
-
-        // arn:aws:elasticloadbalancing:us-west-2:123456789012:loadbalancer/app/my-load-balancer/50dc6c495c0c9188
-        [IgnoreDataMember]
-        [Member("resourceId")]
-        [Ascii, StringLength(100)]
-        public string ResourceId { get; set; }
-
-        ResourceType ICloudResource.Type => ResourceType.NetworkProxy;
-
         #endregion
     }
+
+    // Type = LoadBalancer | Firewall
 }

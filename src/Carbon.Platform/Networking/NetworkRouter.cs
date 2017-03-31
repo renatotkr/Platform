@@ -1,24 +1,23 @@
 ﻿using System;
-using System.Net;
 using System.Runtime.Serialization;
+
+using Carbon.Data.Annotations;
 
 namespace Carbon.Platform.Networking
 {
-    using Data.Annotations;
-
-    [Dataset("NetworkAddresses")]
-    [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
-    public class NetworkAddress : IManagedResource
+    [Dataset("NetworkRouters")]
+    public class NetworkRouter : INetworkRouter, IManagedResource
     {
         [Member("id"), Key]
         public long Id { get; set; }
 
-        [Member("networkInterfaceId")]
-        [Indexed]
-        public long? NetworkInterfaceId { get; set; }
+        [Member("locationId")]
+        public long LocationId { get; set; }
 
-        [Member("value")]
-        public IPAddress Value { get; set; }
+        // BGP (Peers / ASN)
+
+
+        public long NetworkId => ScopedId.GetScope(Id);
 
         #region IResource
 
@@ -26,29 +25,30 @@ namespace Carbon.Platform.Networking
         [Member("providerId")]
         public int ProviderId { get; set; }
 
+        // arn:aws:elasticloadbalancing:us-west-2:123456789012:loadbalancer/app/my-load-balancer/50dc6c495c0c9188
         [IgnoreDataMember]
         [Member("resourceId")]
         [Ascii, StringLength(100)]
         public string ResourceId { get; set; }
 
-        ResourceType IManagedResource.Type => ResourceType.NetworkAddress;
+        ResourceType IManagedResource.Type => ResourceType.NetworkRouter;
 
         #endregion
 
         #region Timestamps
 
+        [IgnoreDataMember]
         [Member("created"), Timestamp]
-        [IgnoreDataMember]
         public DateTime Created { get; }
-
-        [IgnoreDataMember]
-        [Member("modified"), Timestamp(true)]
-        public DateTime Modified { get; }
 
         [IgnoreDataMember]
         [Member("deleted")]
         [TimePrecision(TimePrecision.Second)]
         public DateTime? Deleted { get; }
+
+        [IgnoreDataMember]
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; }
 
         #endregion
     }

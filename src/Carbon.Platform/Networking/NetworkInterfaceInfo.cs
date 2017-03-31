@@ -9,12 +9,13 @@ namespace Carbon.Platform.Networking
 
     [Dataset("NetworkInterfaces")]
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
-    public class NetworkInterfaceInfo : INetworkInterface, ICloudResource
+    public class NetworkInterfaceInfo : INetworkInterface, IManagedResource
     {
         [Member("id"), Key]
         public long Id { get; set; }
 
-        // AKA physicalAddress, format: MM:MM:MM:SS:SS:SS
+        // AKA physicalAddress
+        // format: MM:MM:MM:SS:SS:SS
         [Member("macAddress")]
         [StringLength(30)]
         [Indexed]
@@ -68,21 +69,26 @@ namespace Carbon.Platform.Networking
         [Ascii, StringLength(100)]
         public string ResourceId { get; set; }
 
-        ResourceType ICloudResource.Type => ResourceType.NetworkInterface;
+        ResourceType IManagedResource.Type => ResourceType.NetworkInterface;
 
         #endregion
 
-        [Member("created"), Timestamp]
-        public DateTime Created { get; set; }
+        #region Timestamps
 
         [IgnoreDataMember]
-        [Member("modified"), Timestamp(true)]
-        public DateTime Modified { get; }
+        [Member("created"), Timestamp]
+        public DateTime Created { get; }
 
         [IgnoreDataMember]
         [Member("deleted")]
         [TimePrecision(TimePrecision.Second)]
         public DateTime? Deleted { get; }
+
+        [IgnoreDataMember]
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; }
+
+        #endregion
     }
 
     // May be attached to hosts or proxies (ALBS)

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Runtime.Serialization;
 
 namespace Carbon.Platform.Networking
@@ -20,7 +21,7 @@ namespace Carbon.Platform.Networking
         public Cidr DestinationRange { get; set; }
 
         [Member("gateway")] // AKA nextHop
-        public IPAddress Gateway { get; set; }
+        public IPAddress NextHop { get; set; }
         
         [Member("interface"), Optional]
         public IPAddress Interface { get; set; }
@@ -30,6 +31,23 @@ namespace Carbon.Platform.Networking
 
         [IgnoreDataMember]
         public long NetworkId => ScopedId.GetScope(Id);
+
+        #region Timestamps
+
+        [Member("created"), Timestamp]
+        [IgnoreDataMember]
+        public DateTime Created { get; }
+
+        [IgnoreDataMember]
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; }
+
+        [IgnoreDataMember]
+        [Member("deleted")]
+        [TimePrecision(TimePrecision.Second)]
+        public DateTime? Deleted { get; }
+
+        #endregion
     }
 }
 
