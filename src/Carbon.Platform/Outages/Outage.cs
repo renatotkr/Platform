@@ -6,7 +6,7 @@ namespace Carbon.Platform
     using Data.Annotations;
 
     [Dataset("Outages")]
-    public class Outage 
+    public class Outage : IOutage
     {
         [Member("id"), Key]
         public long Id { get; set; }
@@ -14,22 +14,21 @@ namespace Carbon.Platform
         [Member("locationId")]
         public long LocationId { get; set; }
 
-        [Member("scope")] // Effected services
-        public ResourceType Scope { get; set; }
+        // bucket,host
+        [Member("scope")] // bucket|host
+        public string[] Scope { get; set; }
 
         [Member("resolved")]
         public DateTime? Resolved { get; set; }
 
-        [Member("created")]
-        public DateTime Created { get; set; }
-        
-        [Member("modified"), Timestamp(true)]
-        public DateTime Modified { get; set; }
+        [IgnoreDataMember]
+        [Member("created"), Timestamp]
+        public DateTime Created { get; }
 
         #region IResource
 
         [IgnoreDataMember]
-        public CloudProvider Provider => LocationHelper.GetProvider(LocationId);
+        public ResourceProvider Provider => LocationHelper.GetProvider(LocationId);
 
         #endregion
     }

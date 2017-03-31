@@ -4,12 +4,12 @@ using System.Net;
 
 namespace Carbon.Platform.Networking
 {
+    using Net;
     using Data.Annotations;
-    using Json;
 
     [Dataset("Networks")]
-    [DataIndex(IndexFlags.Unique, "providerId", "name")]
-    public class NetworkInfo : ICloudResource
+    [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
+    public class NetworkInfo : INetwork, ICloudResource
     {
         public NetworkInfo() { }
 
@@ -18,15 +18,8 @@ namespace Carbon.Platform.Networking
             Cidr = cidr.ToString();
         }
 
-        [Member("id"), Identity]
+        [Member("id"), Key]
         public long Id { get; set; }
-        
-        [Member("providerId")]
-        public int ProviderId { get; set; }
-
-        [Member("name")]
-        [Ascii, StringLength(50)]
-        public string Name { get; set; }
 
         [Member("cidr")] // 10.1.1.0/24
         [Ascii, StringLength(50)]
@@ -34,30 +27,23 @@ namespace Carbon.Platform.Networking
 
         [Member("gateway")] // Provides WAN access
         public IPAddress Gateway { get; set; } // 10.1.1.0
-        
+
+        [DataMember(Name = "asn")]
         [Member("asn")] // Autonomous System Number, e.g. AS226
         public int? ASN { get; set; }
 
-        [Member("details")]
-        [StringLength(1000)]
-        public JsonObject Details { get; set; }
-
+        [IgnoreDataMember]
         [Member("created"), Timestamp]
-        public DateTime Created { get; set; }
-
-        [Member("deleted")]
-        [TimePrecision(TimePrecision.Second)]
-        public DateTime? Deleted { get; set; }
-
-        [Member("modified"), Timestamp(true)]
-        public DateTime Modified { get; set; }
-
-        #region Helpers
+        public DateTime Created { get; }
 
         [IgnoreDataMember]
-        public bool IsDeleted => Deleted != null;
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; }
 
-        #endregion
+        [IgnoreDataMember]
+        [Member("deleted")]
+        [TimePrecision(TimePrecision.Second)]
+        public DateTime? Deleted { get; }
 
         // The rules form the firewall
         // public IList<NetworkRule> Rules { get; set; }
@@ -67,12 +53,18 @@ namespace Carbon.Platform.Networking
 
         // public IList<SubnetInfo> Subnets { get; set; }
 
-        #region IResource
-
-        ResourceType ICloudResource.Type => ResourceType.Network;
+        #region Provider Details
 
         [IgnoreDataMember]
-        public CloudProvider Provider => CloudProvider.Get(ProviderId);
+        [Member("providerId")]
+        public int ProviderId { get; set; }
+
+        [IgnoreDataMember]
+        [Member("resourceId")]
+        [Ascii, StringLength(100)]
+        public string ResourceId { get; set; }
+
+        ResourceType ICloudResource.Type => ResourceType.Network;
 
         #endregion
     }
@@ -80,11 +72,11 @@ namespace Carbon.Platform.Networking
     // subnet
 }
 
+// Known as a VPC in AWS
 // A VPC may have multiple cidr blocks
 // AssociateVpcCidrBlock
 
 
-// A Network may be a VPC
 
 /*
 us-west1	    10.138.0.0/20	10.138.0.1

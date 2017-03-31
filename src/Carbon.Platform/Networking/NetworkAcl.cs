@@ -6,32 +6,44 @@ using Carbon.Data.Annotations;
 namespace Carbon.Platform.Networking
 {
     [Dataset("NetworkAcls")]
-    [DataIndex(IndexFlags.Unique, "providerId", "name")]
-    public class NetworkAcl
+    [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
+    public class NetworkAcl : ICloudResource
     {
-        [Member("id"), Identity]
+        // network + index
+        [Member("id"), Key]
         public long Id { get; set; }
+
+        // Pretty name of the ACL (not unique)
+        [Member("name")]
+        public string Name { get; set; }
         
+        [IgnoreDataMember]
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; }
+
+        [IgnoreDataMember]
+        [Member("deleted")]
+        [TimePrecision(TimePrecision.Second)]
+        public DateTime? Deleted { get; }
+
+        #region Provider Details
+
+        // aws
+        [IgnoreDataMember]
         [Member("providerId")]
         public int ProviderId { get; set; }
 
-        [Member("name")]
-        [Ascii, StringLength(60)]
-        public string Name { get; set; }
+        [IgnoreDataMember]
+        [Member("resourceId")]
+        [Ascii, StringLength(100)]
+        public string ResourceId { get; set; }
 
-        [Member("description")]
-        public string Description { get; set; }
+        ResourceType ICloudResource.Type => ResourceType.NetworkAcl;
 
-        [Member("networkId")]
-        [Indexed]
-        public long NetworkId { get; set; }
+        #endregion
 
-        [Member("deleted")]
-        [TimePrecision(TimePrecision.Second)]
-        public DateTime? Deleted { get; set; }
-        
-        [Member("modified"), Timestamp(true)]
-        public DateTime Modified { get; set; }
+        [IgnoreDataMember]
+        public long NetworkId => ScopedId.GetScope(Id);
     }
 }
 
