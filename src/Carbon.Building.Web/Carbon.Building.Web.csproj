@@ -2,16 +2,15 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Building.Web</AssemblyName>
-    <AssemblyTitle>Carbon Web Builder</AssemblyTitle>
-    <VersionPrefix>0.10.0</VersionPrefix>
+    <VersionPrefix>0.12.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
 
     <Authors>iamcarbon</Authors>
-    <PackageId>Carbon.Building.Web</PackageId>
-    <PackageTags>typescript;carbon</PackageTags>
+    <Description>TypeScript and CSS compiliers.</Description>
+    <Copyright>© Jason Nelson</Copyright>
+    <PackageTags>typescript;scss;carbon</PackageTags>
     <PackageLicenseUrl>https://github.com/carbon/Platform/blob/master/LICENCE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/carbon/Platform</RepositoryUrl>
-    <Copyright>© Jason Nelson</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,11 +20,11 @@
   <ItemGroup>
     <PackageReference Include="Carbon.Css" Version="0.6.0" />
     <PackageReference Include="Carbon.Logging" Version="1.0.0" />
-    <PackageReference Include="Carbon.Storage" Version="1.4.0" />
+    <PackageReference Include="Carbon.Storage" Version="1.6.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <PackageReference Remove="NETFramework.Library" />
+    <PackageReference Remove="NETStandard.Library" />
     <PackageReference Include="System.Runtime" Version="4.3.0" />
     <PackageReference Include="System.Threading.Tasks" Version="4.3.0" />
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />

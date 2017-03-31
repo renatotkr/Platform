@@ -1,38 +1,53 @@
 ﻿using System;
 using System.IO;
 
-namespace Carbon.Builder
-{
-    using Css;
-    using Storage;
+using Carbon.Css;
+using Carbon.Storage;
 
-    internal class CssResolver : ICssResolver
+namespace Carbon.Building.Web
+{
+    public class CssResolver : ICssResolver
     {
+        private static readonly char[] ForwardSlash = { '/' };
+
         private readonly IPackage package;
 
         public CssResolver(string scopedPath, IPackage package)
         {
-            #region Preconditions
-
-            if (package == null) throw new ArgumentNullException(nameof(package));
-            
-            #endregion
-
             ScopedPath = scopedPath;
 
-            this.package = package;
+            this.package = package ?? throw new ArgumentNullException(nameof(package));
         }
+
+        // Make OpenAsync...
 
         public Stream Open(string absolutePath)
         {
             if (absolutePath.StartsWith("/"))
             {
-                absolutePath = absolutePath.TrimStart('/');
+                absolutePath = absolutePath.TrimStart(ForwardSlash);
             }
 
-            return package.Find(absolutePath)?.Open();
+            return Find(package, absolutePath)?.OpenAsync().Result;
         }
 
         public string ScopedPath { get; }
+
+        #region Helpers
+
+        public static IBlob Find(IPackage package, string absolutePath)
+        {
+            foreach (var file in package)
+            {
+                if (file.Name == absolutePath)
+                {
+                    return file;
+                }
+            }
+
+            return null;
+        }
+
+        #endregion
     }
 }

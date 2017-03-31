@@ -14,10 +14,10 @@ namespace Carbon.Diagnostics
         [DataMember(Name = "message", Order = 3)]
         public string Message { get; set; }
 
-        [DataMember(Name = "fileName", Order = 4)]
+        [DataMember(Name = "fileName", Order = 4, EmitDefaultValue = false)]
         public string FileName { get; set; }
 
-        [DataMember(Name = "line", Order = 5)]
+        [DataMember(Name = "line", Order = 5, EmitDefaultValue = false)]
         public int Line { get; set; }
 
         [DataMember(Name = "column", Order = 6)]

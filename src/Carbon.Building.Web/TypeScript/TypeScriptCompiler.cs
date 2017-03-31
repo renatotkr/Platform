@@ -23,13 +23,7 @@ namespace TypeScript
 
         public TypeScriptCompiler(CompilerOptions options)
         {
-            #region Preconditions
-
-            if (options == null) throw new ArgumentNullException(nameof(options));
-
-            #endregion
-
-            this.options = options;
+            this.options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
         public async Task<BuildResult> BuildAsync(CancellationToken ct)
@@ -122,7 +116,10 @@ namespace TypeScript
                         errorWaitHandle.WaitOne(timeout))
                     {
                         // if there were errors, throw an exception
-                        if (error.Length > 0) throw new Exception(error.ToString());
+                        if (error.Length > 0)
+                        {
+                            throw new Exception(error.ToString());
+                        }
 
                         var text = output.ToString();
 

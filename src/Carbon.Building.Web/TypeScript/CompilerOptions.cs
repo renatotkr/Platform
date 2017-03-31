@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 
 namespace TypeScript
 {
     public enum JavaScriptVersion
     {
-        ES3,
-        ES5,
-        ES6
+        ES3 = 3,
+        ES5 = 5,
+        ES6 = 6
     }
 
     // https://github.com/Microsoft/TypeScript/wiki/Compiler-Options
@@ -17,14 +16,7 @@ namespace TypeScript
     {
         public CompilerOptions(string projectPath)
         {
-            #region Preconditions
-
-            if (projectPath == null)
-                throw new ArgumentNullException(nameof(projectPath));
-
-            #endregion
-
-            ProjectPath = projectPath;
+            ProjectPath = projectPath ?? throw new ArgumentNullException(nameof(projectPath));
         }
 
         public string ProjectPath { get;  }
@@ -41,39 +33,56 @@ namespace TypeScript
 
         public override string ToString()
         {
-            var d = new Dictionary<string, string>();
+            var sb = new StringBuilder();
 
             // By invoking tsc with no input files and a - project(or just - p) command line option
             // that specifies the path of a directory containing a tsconfig.json file.
 
-            d.Add("-p", ProjectPath);
+            sb.WriteOption("-p", ProjectPath);
  
             if (EmitComments == false)
             {
-                d.Add("--removeComments", null);
+                sb.Append(" --removeComments");
             }
 
             if (GenerateDeclaration)
             {
-                d.Add("-d", null);
+                sb.Append(" --declaration");
             }
 
             if (GenerateSourceMaps)
             {
-                d.Add("--sourcemap", null);
+                sb.Append(" --sourcemap");
             }
 
             if (!string.IsNullOrEmpty(OutPath))
             {
-                d.Add("--out", OutPath);
+                sb.WriteOption("--out", OutPath);
             }
 
             if (TargetVersion != null)
             {
-                d.Add("--target", TargetVersion.Value.ToString());
+                sb.WriteOption("--target", TargetVersion.Value.ToString());
             }
 
-            return string.Join(" ", d.Select(o => o.Key + " " + o.Value));
+            return sb.ToString();
+        }
+
+       
+    }
+
+    internal static class SbExtensions
+    {
+        public static void WriteOption(this StringBuilder sb, string name, string value)
+        {
+            if (sb.Length > 0)
+            {
+                sb.Append(" ");
+            }
+
+            sb.Append(name);
+            sb.Append(" ");
+            sb.Append(value);
         }
     }
 }
