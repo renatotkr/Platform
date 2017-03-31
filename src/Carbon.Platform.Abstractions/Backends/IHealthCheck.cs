@@ -25,3 +25,6 @@ namespace Carbon.Platform.Computing
         Threshold UnhealthyThreshold { get; }
     }
 }
+
+
+// google: ulong  compute#healthCheck

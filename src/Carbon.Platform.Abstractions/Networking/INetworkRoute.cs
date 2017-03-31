@@ -9,17 +9,37 @@ namespace Carbon.Platform.Networking
 
         long NetworkId { get; }
 
-        // e.g. 192.168.0.0/2
-        Cidr DestinationRange { get; }  // Network Destiation + Netmask
+        // The destination CIDR to which the route applies
+        // e.g. 10.1.0.0/16
 
-        // aka. NextHop
-        IPAddress Gateway { get; }
+        // AKA
+        // Azure = Address Prefix
+        // Google = destRange
+
+        Cidr DestinationRange { get; }
         
-        IPAddress Interface { get; }
-
-        // Metric / Cost?
+        IPAddress NextHop { get; } // Specific Address or Host, Network, Gateway
+        
+        // Metric / Cost?,
         int Priority { get; }
     }
-    
+
+    public enum NextHopType
+    {               // Azure                    Google
+        None,       // None
+        Gateway,    // VirtualNetworkGateway    Gatway
+        Host,       // VirtualAppliance         Instance
+        Network,    // VnetLocal                Network
+        Internet,   // Internet
+        Tunnel,     // ?                        nextHopVpnTunnel
+    }
+
+
+
     // The list of network routes compose a routing table / or RIB (routing information base)
 }
+
+
+/*
+Google : compute#route
+*/

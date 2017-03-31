@@ -1,6 +1,6 @@
 ﻿namespace Carbon.Platform
 {
-    public class Threshold
+    public struct Threshold
     {
         private int a;
         private int b;

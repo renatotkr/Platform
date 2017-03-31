@@ -5,23 +5,19 @@ namespace Carbon.Platform
 {
     public class ResourceProvider
     {
-        public static readonly ResourceProvider Amazon    = new ResourceProvider(1  , "aws",       "Amazon");
-        public static readonly ResourceProvider Borg      = new ResourceProvider(2  , "borg",      "Borg");
-        public static readonly ResourceProvider Google    = new ResourceProvider(3  , "google",    "Google");
-        public static readonly ResourceProvider IBM       = new ResourceProvider(4  , "ibm",       "IBM");
-        public static readonly ResourceProvider Microsoft = new ResourceProvider(5  , "azure",     "Microsoft"); // Microsoft Azure
-        public static readonly ResourceProvider Oracle    = new ResourceProvider(6  , "oracle",    "Oracle");
+        public static readonly ResourceProvider Amazon    = new ResourceProvider(1  , "aws",    "Amazon");
+        public static readonly ResourceProvider Borg      = new ResourceProvider(2  , "borg",   "Borg");
+        public static readonly ResourceProvider Google    = new ResourceProvider(3  , "google", "Google");
+        public static readonly ResourceProvider IBM       = new ResourceProvider(4  , "ibm",    "IBM");
+        public static readonly ResourceProvider Microsoft = new ResourceProvider(5  , "azure",  "Microsoft");
+        public static readonly ResourceProvider Oracle    = new ResourceProvider(6  , "oracle", "Oracle");
         
-
-
         // Email Delivery Providers
         public static readonly ResourceProvider Postmark = new ResourceProvider(60, "postmark", "Postmark");
 
         // Payment Processors
         public static readonly ResourceProvider PayPal   = new ResourceProvider(120, "paypal", "PayPal");
         public static readonly ResourceProvider Stripe   = new ResourceProvider(130, "stripe", "Stripe");
-
-      
 
         // Code Repository Providers = 1000
         // TODO: Line these ids up with Carbon.Repositories
@@ -115,15 +111,3 @@ namespace Carbon.Platform
 // aws:instance:i-07e6001e0415497e4
 // google:
 // azure:
-
-
-/*
-public static int GetId(string text)
-{
-    var bytes = Encoding.UTF8.GetBytes(text.ToUpper().PadRight(4));
-
-    Array.Reverse(bytes);
-
-    return BitConverter.ToInt32(bytes, 0);
-}
-*/

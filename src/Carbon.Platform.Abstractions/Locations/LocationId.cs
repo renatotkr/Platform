@@ -22,16 +22,21 @@ namespace Carbon.Platform
 
         public static implicit operator long (LocationId id) => id.Value;
 
-        public static LocationId Create(ResourceProvider provider, ushort regionNumber, byte zoneNumber = 0, byte flags = 0) =>
-            new LocationId {
-                ProviderId   = provider.Id,
+        public static LocationId Create(
+            ResourceProvider provider,
+            ushort regionNumber,
+            byte zoneNumber = 0,
+            byte flags = 0)
+        {
+            return new LocationId {
+                ProviderId = provider.Id,
                 RegionNumber = regionNumber,
-                ZoneNumber   = zoneNumber,
-                Flags        = flags
+                ZoneNumber = zoneNumber,
+                Flags = flags
             };
+        }
 
-        public static LocationId Create(long value) =>
-            new LocationId { Value = value };
+        public static LocationId Create(long value) => new LocationId { Value = value };
     }
 
     public enum LocationFlags : byte

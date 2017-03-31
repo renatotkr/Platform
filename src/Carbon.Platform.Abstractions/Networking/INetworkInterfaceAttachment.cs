@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Carbon.Platform
+namespace Carbon.Platform.Networking
 {
     public interface INetworkInterfaceAttachment
     {

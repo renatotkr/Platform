@@ -17,3 +17,6 @@ namespace Carbon.Platform.Certificates
         int ProviderId { get; }
     }
 }
+
+
+// Google   ulong       compute#sslCertificate

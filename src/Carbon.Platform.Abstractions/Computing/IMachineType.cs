@@ -10,6 +10,9 @@
     }
 }
 
+
+// Google = compute#machineType | ulong
+
 /* 
 Azure (Virtual Machine Sizes
 ---------------------------------------------
