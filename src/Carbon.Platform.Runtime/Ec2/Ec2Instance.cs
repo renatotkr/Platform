@@ -29,8 +29,8 @@ namespace Carbon.Computing
             Timeout = TimeSpan.FromSeconds(5)
         };
 
-        public static Task<string> GetInstanceId()
-            => httpClient.GetStringAsync(baseUri + "/latest/meta-data/instance-id");
+        public static Task<string> GetInstanceId() => 
+            httpClient.GetStringAsync(baseUri + "/latest/meta-data/instance-id");
 
         public static async Task<IPAddress> GetPublicIpAsync()
         {
@@ -41,14 +41,14 @@ namespace Carbon.Computing
             return IPAddress.Parse(result);
         }
 
-        public static Task<byte[]> GetUserData()
-            => httpClient.GetByteArrayAsync(baseUri + "/latest/user-data");
+        public static Task<byte[]> GetUserData() => 
+            httpClient.GetByteArrayAsync(baseUri + "/latest/user-data");
 
-        public static Task<string> GetUserDataString()
-            => httpClient.GetStringAsync(baseUri + "/latest/user-data");
+        public static Task<string> GetUserDataString() => 
+            httpClient.GetStringAsync(baseUri + "/latest/user-data");
 
-        public static Task<string> GetAvailabilityZone()
-            => httpClient.GetStringAsync(baseUri + "/latest/meta-data/placement/availability-zone");
+        public static Task<string> GetAvailabilityZone() =>
+            httpClient.GetStringAsync(baseUri + "/latest/meta-data/placement/availability-zone");
 
         public static async Task<Ec2Instance> GetAsync()
         {
