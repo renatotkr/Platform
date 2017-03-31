@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace Carbon.Platform.Networking.Tests
+namespace Carbon.Net.Tests
 {
     public class NetworkPortTests
     {

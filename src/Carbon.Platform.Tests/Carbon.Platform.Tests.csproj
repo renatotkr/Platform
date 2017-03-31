@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
-    <AssemblyName>Carbon.Platform.Tests</AssemblyName>
-    <PackageId>Carbon.Platform.Tests</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Carbon.Hosting\Carbon.Hosting.csproj" />
     <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj" />
+    <ProjectReference Include="..\Carbon.Platform.Statistics\Carbon.Platform.Statistics.csproj" />
+    <ProjectReference Include="..\Carbon.Platform\Carbon.Platform.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,7 +17,4 @@
     <PackageReference Include="xunit" Version="2.2.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
-  </ItemGroup>
 </Project>

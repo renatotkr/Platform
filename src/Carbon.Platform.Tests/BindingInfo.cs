@@ -1,5 +1,6 @@
 ﻿using Xunit;
 
+/*
 namespace Carbon.Hosting.Tests
 {
     public class BindingInfoTests
@@ -15,3 +16,4 @@ namespace Carbon.Hosting.Tests
         }
     }
 }
+*/

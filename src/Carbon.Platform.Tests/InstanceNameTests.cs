@@ -1,5 +1,6 @@
 ﻿using Xunit;
 
+/*
 namespace Carbon.Platform.Tests
 {
     public class InstanceNameTests
@@ -12,3 +13,4 @@ namespace Carbon.Platform.Tests
         }
     }
 }
+*/
