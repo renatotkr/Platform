@@ -10,11 +10,16 @@ namespace Carbon.Platform
 
     [Dataset("Locations")]
     [DataIndex(IndexFlags.Unique, new[] { "providerId", "name" })]
-    public class LocationInfo : IEquatable<LocationInfo>, ICloudResource
+    public class LocationInfo : ILocation, IEquatable<LocationInfo>, ICloudResource
     {
         public LocationInfo() { }
 
-        public LocationInfo(CloudProvider provider, ushort regionNumber, byte zoneNumber, string name, LocationFlags flags = 0)
+        public LocationInfo(
+            ResourceProvider provider,
+            ushort regionNumber,
+            byte zoneNumber,
+            string name,
+            LocationFlags flags = 0)
         {
             var id = new LocationId {
                 ProviderId   = provider.Id,
@@ -38,6 +43,9 @@ namespace Carbon.Platform
         [Member("name")]
         public string Name { get; set; }
 
+        [Member("status")]
+        public LocationStatus Status { get; set; }
+
         [Member("created")] // when the region was launched
         public DateTime Created { get; set; }
 
@@ -50,14 +58,16 @@ namespace Carbon.Platform
         [IgnoreDataMember]
         public bool IsMultiRegional => 
             (Flags & LocationFlags.MultiRegional) != 0;
-         
+
         #endregion
 
         #region IResource
 
-        [IgnoreDataMember]
-        public CloudProvider Provider => CloudProvider.Get(ProviderId);
+        string ICloudResource.ResourceId => Name;
 
+        [IgnoreDataMember]
+        public ResourceProvider Provider => ResourceProvider.Get(ProviderId);
+        
         [IgnoreDataMember]
         public ResourceType Type
         {
@@ -105,7 +115,7 @@ namespace Carbon.Platform
         {
             #region Preconditions
             
-            if (ProviderId == CloudProvider.Microsoft.Id)
+            if (ProviderId == ResourceProvider.Microsoft.Id)
             {
                 throw new Exception("Azure does not have zones");
             }
@@ -121,7 +131,7 @@ namespace Carbon.Platform
 
             var name = Name;
 
-            if (Provider == CloudProvider.Google)
+            if (Provider == ResourceProvider.Google)
             {
                 name += "-" + char.ToLower(zoneName);
             }
@@ -136,7 +146,6 @@ namespace Carbon.Platform
                 ProviderId = id.ProviderId
             };
         }
-
 
         public bool Equals(LocationInfo other) =>
             other.Id == Id &&

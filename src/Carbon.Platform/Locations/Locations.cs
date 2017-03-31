@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Carbon.Extensions;
+using System;
 
 namespace Carbon.Platform
 {
     public class Locations 
     {
-        public static LocationInfo Get(CloudProvider provider, string name)
+        public static LocationInfo Get(ResourceProvider provider, string name)
         {
             #region Preconditions
 
@@ -18,7 +19,7 @@ namespace Carbon.Platform
 
             // us-east-1a
 
-            var parts = name.Split('-');
+            var parts = name.Split(Seperators.Dash);
 
             if (parts.Length != 3) throw new Exception("Invalid name");
 
@@ -44,7 +45,7 @@ namespace Carbon.Platform
         {
             var lid = LocationId.Create(id);
 
-            if (lid.ProviderId == CloudProvider.Amazon.Id)
+            if (lid.ProviderId == ResourceProvider.Amazon.Id)
             {
                 switch (lid.RegionNumber)
                 {
@@ -67,12 +68,12 @@ namespace Carbon.Platform
                 }
             }
 
-            if (lid.ProviderId == CloudProvider.Microsoft.Id)
+            if (lid.ProviderId == ResourceProvider.Microsoft.Id)
             {
                 throw new Exception("Microsoft not yet supported");
             }
 
-            if (lid.ProviderId == CloudProvider.Google.Id)
+            if (lid.ProviderId == ResourceProvider.Google.Id)
             {
                 if (lid.Flags == (byte)LocationFlags.MultiRegional)
                 {
@@ -99,39 +100,39 @@ namespace Carbon.Platform
 
         }
 
-        private static LocationInfo Create(CloudProvider provider, ushort regionNumber, byte zoneNumber, string name, LocationFlags flags = 0) =>
+        private static LocationInfo Create(ResourceProvider provider, ushort regionNumber, byte zoneNumber, string name, LocationFlags flags = 0) =>
             new LocationInfo(provider, regionNumber, zoneNumber, name, flags);
 
-        private static LocationInfo Create(CloudProvider provider, ushort regionNumber, string name, LocationFlags flags = 0) =>
+        private static LocationInfo Create(ResourceProvider provider, ushort regionNumber, string name, LocationFlags flags = 0) =>
             new LocationInfo(provider, regionNumber, 0, name, flags);
 
         // Amazon | https://cloud.google.com/compute/docs/regions-zones/regions-zones
         // ------------------------------------------------------------------------------------------------------------------------------------------
-        private static readonly CloudProvider amazon = CloudProvider.Amazon;
+        private static readonly ResourceProvider aws = ResourceProvider.Amazon;
 
-        public static readonly LocationInfo Amazon_US_East1        = Create(amazon,  1, "us-east-1");       // | US    | N. Virginia   | 2006-08-25
-        public static readonly LocationInfo Amazon_EU_West1        = Create(amazon,  2, "eu-west-1");       // | EU    | Ireland       | 2008-12-10
-        public static readonly LocationInfo Amazon_US_West1        = Create(amazon,  3, "us-west-1");       // | US    | N. California | 2009-12-03
-        public static readonly LocationInfo Amazon_AP_SouthEast1   = Create(amazon,  4, "ap-southeast-1");  // | AP    | Singapore     | 2010-04-29
-        public static readonly LocationInfo Amazon_AP_NorthEast1   = Create(amazon,  5, "ap-northeast-1");  // | AP    | Tokyo         | 2011-03-02
-        public static readonly LocationInfo Amazon_US_GovWest1     = Create(amazon,  6, "us-gov-west-1");   // | US    | AWS GovCloud  | 2011-08-16
-        public static readonly LocationInfo Amazon_US_West2        = Create(amazon,  7, "us-west-2");       // | US    | Oregon        | 2011-11-09
-        public static readonly LocationInfo Amazon_SA_East1        = Create(amazon,  8, "sa-east-1");       // | SA    | São Paulo     | 2011-12-14
-        public static readonly LocationInfo Amazon_AP_SouthEast2   = Create(amazon,  9, "ap-southeast-2");  // | AP    | Sydney        | 2012-11-12
-        public static readonly LocationInfo Amazon_CN_North1       = Create(amazon, 10, "cn-north-1");      // | China | Beijing       | 2013-12-18
-        public static readonly LocationInfo Amazon_EU_Central1     = Create(amazon, 11, "eu-central-1");    // | EU    | Frankfurt     | 2014-10-23
-        public static readonly LocationInfo Amazon_AP_Northeast2   = Create(amazon, 12, "ap-northeast-2");  // | AP    | Seoul	       | 2016-01-06
-        public static readonly LocationInfo Amazon_AP_South1       = Create(amazon, 13, "ap-south-1");      // | AP    | Mumbai        | 2016-06-27
-        public static readonly LocationInfo Amazon_US_East2        = Create(amazon, 14, "us-east-2");       // | US    | Ohio          | 2016-10-17
-        public static readonly LocationInfo Amazon_CA_Central1     = Create(amazon, 15, "ca-central-1");    // | CA    | Central       | 2016-12-08
-        public static readonly LocationInfo Amazon_EU_West2        = Create(amazon, 16, "eu-west-2");       // | EU    | London        | 2016-12-13
+        public static readonly LocationInfo Amazon_US_East1        = Create(aws,  1, "us-east-1");       // | US    | N. Virginia   | 2006-08-25
+        public static readonly LocationInfo Amazon_EU_West1        = Create(aws,  2, "eu-west-1");       // | EU    | Ireland       | 2008-12-10
+        public static readonly LocationInfo Amazon_US_West1        = Create(aws,  3, "us-west-1");       // | US    | N. California | 2009-12-03
+        public static readonly LocationInfo Amazon_AP_SouthEast1   = Create(aws,  4, "ap-southeast-1");  // | AP    | Singapore     | 2010-04-29
+        public static readonly LocationInfo Amazon_AP_NorthEast1   = Create(aws,  5, "ap-northeast-1");  // | AP    | Tokyo         | 2011-03-02
+        public static readonly LocationInfo Amazon_US_GovWest1     = Create(aws,  6, "us-gov-west-1");   // | US    | AWS GovCloud  | 2011-08-16
+        public static readonly LocationInfo Amazon_US_West2        = Create(aws,  7, "us-west-2");       // | US    | Oregon        | 2011-11-09
+        public static readonly LocationInfo Amazon_SA_East1        = Create(aws,  8, "sa-east-1");       // | SA    | São Paulo     | 2011-12-14
+        public static readonly LocationInfo Amazon_AP_SouthEast2   = Create(aws,  9, "ap-southeast-2");  // | AP    | Sydney        | 2012-11-12
+        public static readonly LocationInfo Amazon_CN_North1       = Create(aws, 10, "cn-north-1");      // | China | Beijing       | 2013-12-18
+        public static readonly LocationInfo Amazon_EU_Central1     = Create(aws, 11, "eu-central-1");    // | EU    | Frankfurt     | 2014-10-23
+        public static readonly LocationInfo Amazon_AP_Northeast2   = Create(aws, 12, "ap-northeast-2");  // | AP    | Seoul	        | 2016-01-06
+        public static readonly LocationInfo Amazon_AP_South1       = Create(aws, 13, "ap-south-1");      // | AP    | Mumbai        | 2016-06-27
+        public static readonly LocationInfo Amazon_US_East2        = Create(aws, 14, "us-east-2");       // | US    | Ohio          | 2016-10-17
+        public static readonly LocationInfo Amazon_CA_Central1     = Create(aws, 15, "ca-central-1");    // | CA    | Central       | 2016-12-08
+        public static readonly LocationInfo Amazon_EU_West2        = Create(aws, 16, "eu-west-2");       // | EU    | London        | 2016-12-13
 
         // Azure (https://azure.microsoft.com/en-us/regions/) -- announced 2008, launched 2010-01
         // ------------------------------------------------------------------------------------------------------------------------------------------
         
         // Not settled on these ids yet... but close.
 
-        private static readonly CloudProvider azure = CloudProvider.Microsoft;
+        private static readonly ResourceProvider azure = ResourceProvider.Microsoft;
 
         public static readonly LocationInfo Microsoft_US_NorthCentral = Create(azure,  1, "North Central US");   // | US/IL       | ~ 2010
         public static readonly LocationInfo Microsoft_US_SouthCentral = Create(azure,  2, "South Central US");   // | US/TX       | ~ 2010
@@ -185,7 +186,7 @@ namespace Carbon.Platform
         // Google | https://cloud.google.com/compute/docs/regions-zones/regions-zones
         // ------------------------------------------------------------------------------------------------------------------------------------------
 
-        private static readonly CloudProvider google = CloudProvider.Google;
+        private static readonly ResourceProvider google = ResourceProvider.Google;
 
         // Regions                                                                                                  
         public static readonly LocationInfo Google_USCentral1     = Create(google,  1, "us-central1");     // | US    | Iowa          | ?
