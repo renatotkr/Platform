@@ -1,26 +1,31 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Carbon.Platform.Frontends
 {
     using Data.Annotations;
     using Protection;
     using Versioning;
-
+    
     [Dataset("Frontends")]
     public class Frontend : IFrontend
     {
         public Frontend() { }
 
-        public Frontend(string name)
+        public Frontend(long id, string name)
         {
+            Id   = id;
             Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
-        [Member("id"), Identity] 
+        [Member("id"), Key] 
         public long Id { get; set; }
 
-        [Member("version"), Mutable] // Active version
+        [Member("version"), Mutable] // Released version
         public SemanticVersion Version { get; set; }
+
+        // e.g. portfolio
+        // e.g. portfolio#beta (branches other than master)
 
         [Member("name"), Unique]
         [StringLength(50)]
@@ -39,12 +44,19 @@ namespace Carbon.Platform.Frontends
         [Member("created"), Timestamp]
         public DateTime Created { get; set; }
 
+        [IgnoreDataMember]
+        [Member("deleted")]
+        public DateTime? Deleted { get; }
+        
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; set; }
 
         public override string ToString()
         {
-            return Name + "@" + Version;  // carbon@1.0.2
+            // carbon@1.0.2
+            // carbon#beta@1.0.2
+
+            return Name + "@" + Version;  
         }
     }
 }

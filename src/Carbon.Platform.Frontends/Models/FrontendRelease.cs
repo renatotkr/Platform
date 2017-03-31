@@ -26,9 +26,9 @@ namespace Carbon.Platform.Frontends
 
             #endregion
 
-            FrontendId = frontend.Id;
+            FrontendId   = frontend.Id;
             FrontendName = frontend.Name;
-            Version = version;
+            Version      = version;
         }
 
         [Member("frontendId"), Key]
