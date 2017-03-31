@@ -28,8 +28,12 @@ namespace Carbon.Packaging
         #region File Helpers
 
         //  // Strip off the root and replace \ with /
-        public string GetKey(FileInfo file) => 
-            file.FullName.Replace(root.FullName, "").Replace(@"\", "/").TrimStart(Seperators.ForwardSlash);
+        public string GetKey(FileInfo file)
+        {
+            return file.FullName
+                .Replace(root.FullName, "").Replace(@"\", "/")
+                .TrimStart(Seperators.ForwardSlash);
+        }
 
         internal IEnumerable<FileInfo> GetFilesRecursive(DirectoryInfo rootDirectory)
         {

@@ -14,7 +14,7 @@ namespace Carbon.Packaging
 
         public PackageStore(IBucket bucket)
         {
-            this.bucket = bucket;
+            this.bucket = bucket ?? throw new ArgumentNullException(nameof(bucket));
         }
 
         public async Task<Hash> PutAsync(long id, SemanticVersion version, IPackage package)
@@ -33,11 +33,11 @@ namespace Carbon.Packaging
 
                 var hash = Hash.ComputeSHA256(ms, leaveOpen: true);
 
-                var blob = new Blob(ms) {
+                var blob = new Blob(key, ms, new BlobMetadata {  
                     ContentType = "application/zip"
-                };
+                });
 
-                await bucket.PutAsync(key, blob).ConfigureAwait(false);
+                await bucket.PutAsync(blob).ConfigureAwait(false);
 
                 return hash;
             }
@@ -50,11 +50,9 @@ namespace Carbon.Packaging
             var ms = new MemoryStream();
 
             using (var blob = await bucket.GetAsync(key).ConfigureAwait(false))
+            using (var blobStream = await blob.OpenAsync().ConfigureAwait(false))
             {
-                using (var channel = blob.Open())
-                {
-                    await channel.CopyToAsync(ms).ConfigureAwait(false);
-                }
+                await blobStream.CopyToAsync(ms).ConfigureAwait(false);
             }
 
             ms.Position = 0;

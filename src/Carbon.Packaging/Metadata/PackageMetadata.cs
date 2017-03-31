@@ -121,8 +121,10 @@ namespace Carbon.Packaging
             }
         }
 
-        public static PackageMetadata FromBlob(IBlob file) => 
-            Parse(file.Open());
+        public static PackageMetadata FromBlob(IBlob file)
+        {
+            return Parse(file.OpenAsync().Result);
+        }
     }
 }
 

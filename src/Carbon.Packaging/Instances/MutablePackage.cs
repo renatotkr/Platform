@@ -20,19 +20,18 @@ namespace Carbon.Packaging
         {
             #region Preconditions
 
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
-            
+            if (name == null) throw new ArgumentNullException(nameof(name));
+
             #endregion
 
-            files.Add(new Blob(stream, stream.Length) {
-                Name = name,
-                Modified = DateTime.UtcNow
-            });
+            var blob = new Blob(name, stream);
+
+            files.Add(blob);
         }
+
         public override IEnumerable<IBlob> Enumerate()
         {
-            foreach (var entry in basePackage.Enumerate())
+            foreach (var entry in basePackage)
             {
                 yield return entry;
             }

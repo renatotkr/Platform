@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
@@ -9,23 +10,47 @@ namespace Carbon.Packaging
 
     public static class IPackageExtensions
     {
-        public static async Task ExtractToDirectoryAsync(this IPackage package, DirectoryInfo target)
+        public static IBlob Find(this IPackage package, string absolutePath)
+        {
+            foreach (var file in package)
+            {
+                if (file.Name == absolutePath)
+                {
+                    return file;
+                }
+            }
+
+            return null;
+        }
+
+        public static IEnumerable<IBlob> Filter(this IPackage package, string prefix)
+        {
+            foreach (var blob in package)
+            {
+                if (blob.Name.StartsWith(prefix))
+                {
+                    yield return blob;
+                }
+            }
+        }
+
+        public static async Task ExtractToDirectoryAsync(this IPackage package, DirectoryInfo targetDirectory)
         {
             #region Preconditions
 
-            if (target == null)
-                throw new ArgumentNullException(nameof(target));
+            if (targetDirectory == null)
+                throw new ArgumentNullException(nameof(targetDirectory));
 
-            if (target.Exists)
+            if (targetDirectory.Exists)
                 throw new Exception("Target directory already exists.");
 
             #endregion
 
-            target.Create();
+            targetDirectory.Create();
 
-            foreach (var item in package.Enumerate())
+            foreach (var item in package)
             {
-                var filePath = Path.Combine(target.FullName, item.Name.Replace('/', Path.DirectorySeparatorChar));
+                var filePath = Path.Combine(targetDirectory.FullName, item.Name.Replace('/', Path.DirectorySeparatorChar));
 
                 var file = new FileInfo(filePath);
 
@@ -40,7 +65,7 @@ namespace Carbon.Packaging
 
                 using (var targetStream = file.Open(FileMode.CreateNew, FileAccess.Write, FileShare.None))
                 {
-                    using (var sourceStream = item.Open())
+                    using (var sourceStream = await item.OpenAsync().ConfigureAwait(false))
                     {
                         await sourceStream.CopyToAsync(targetStream).ConfigureAwait(false);
                     }
@@ -52,7 +77,7 @@ namespace Carbon.Packaging
         {
             using (var archive = new ZipArchive(stream, ZipArchiveMode.Create, leaveOpen: true))
             {
-                foreach (var item in package.Enumerate())
+                foreach (var item in package)
                 {
                     var format = Path.GetExtension(item.Name).Trim(Seperators.Period);
 
@@ -64,7 +89,7 @@ namespace Carbon.Packaging
 
                     using (var targetStream = entry.Open())
                     {
-                        using (var sourceStream = item.Open())
+                        using (var sourceStream = await item.OpenAsync().ConfigureAwait(false))
                         {
                             await sourceStream.CopyToAsync(targetStream).ConfigureAwait(false);
                         }

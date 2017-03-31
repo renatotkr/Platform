@@ -52,11 +52,11 @@ namespace Carbon.Packaging
                 {
                     using (var packageStream = protector.EncryptStream(ms))
                     {
-                        var blob = new Blob(packageStream) {
+                        var blob = new Blob(key, packageStream, new BlobMetadata {
                             ContentType = "application/zip"
-                        };
+                        });
 
-                        await bucket.PutAsync(key, blob).ConfigureAwait(false);
+                        await bucket.PutAsync(blob).ConfigureAwait(false);
                     }
                 }
 
@@ -71,11 +71,9 @@ namespace Carbon.Packaging
             var ms = new MemoryStream();
 
             using (var blob = await bucket.GetAsync(key))
+            using (var blobStream = await blob.OpenAsync().ConfigureAwait(false))
             {
-                using (var data = blob.Open())
-                {
-                    await data.CopyToAsync(ms).ConfigureAwait(false);
-                }
+                await blobStream.CopyToAsync(ms).ConfigureAwait(false);
             }
 
             ms.Position = 0;

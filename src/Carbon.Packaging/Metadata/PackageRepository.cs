@@ -13,8 +13,10 @@ namespace Carbon.Packaging
         [IgnoreDataMember]
         public string Text { get; set; }
 
-        public static implicit operator string(PackageRepository repository) => 
-            repository.ToString();
+        public static implicit operator string(PackageRepository repository)
+        {
+            return repository.ToString();
+        }
 
         public override string ToString() => Text ?? Url;
 

@@ -32,7 +32,7 @@ namespace Carbon.Packaging
 
         public static ManifestEntry FromBlob(IBlob blob)
         {
-            var hash = Hash.Compute(HashType.SHA256, blob.Open(), leaveOpen: false);
+            var hash = Hash.Compute(HashType.SHA256, blob.OpenAsync().Result, leaveOpen: false);
 
             return new ManifestEntry(
                 name     : blob.Name,

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Threading.Tasks;
 
 namespace Carbon.Packaging
 {
@@ -26,7 +27,7 @@ namespace Carbon.Packaging
 
         public IReadOnlyDictionary<string, string> Metadata => null;
 
-        public Stream Open() => entry.Open();
+        public ValueTask<Stream> OpenAsync() => new ValueTask<Stream>(entry.Open());
 
         public void Dispose()
         {
