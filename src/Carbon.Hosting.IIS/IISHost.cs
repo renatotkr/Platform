@@ -5,9 +5,8 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Threading.Tasks;
 
-using System.Management.Automation;
-
 // Replace with IISAdministration PowerShell Commands & move to dotnetcore
+
 using Microsoft.Web.Administration;
 
 namespace Carbon.Hosting.IIS
@@ -15,17 +14,18 @@ namespace Carbon.Hosting.IIS
     using Logging;
     using Packaging;
     using Platform.Apps;
-    using Platform.Networking;
     using Json;
     using Storage;
     using Versioning;
-    using Carbon.Net;
+    using Net;
 
     public class IISHost : IHostService, IDisposable
     {
         private readonly HostingEnvironment env;
         private readonly ServerManager manager = new ServerManager();
         private readonly ILogger log;
+
+        private static readonly Firewall firewall = new Firewall();
 
         public IISHost(HostingEnvironment env, ILogger log)
         {
@@ -172,7 +172,7 @@ namespace Carbon.Hosting.IIS
 
         public IEnumerable<SemanticVersion> GetDeployedVersions(IApp app)
         {
-            var root = GetAppFolder(app);
+            var root = GetAppRootDirectory(app);
 
             foreach (var folder in new DirectoryInfo(root).EnumerateDirectories())
             {
@@ -263,7 +263,7 @@ namespace Carbon.Hosting.IIS
             manager.CommitChanges();
 
 
-            var dir = GetAppFolder(app);
+            var dir = GetAppRootDirectory(app);
 
             Directory.Delete(dir, true);
 
@@ -276,37 +276,6 @@ namespace Carbon.Hosting.IIS
         }
 
         #region Helpers
-
-
-        private void OpenFirewallPort(int port, IApp app)
-        {
-            Console.WriteLine($"Opening Firewall port {port} for {app.Name}");
-
-            var ruleName = $"App {app.Name} port {port}";
-
-            using (var shell = PowerShell.Create())
-            {
-                var importCommand = shell.Commands.AddCommand("Import-Module").AddArgument("NetSecurity");
-
-                shell.Commands.AddScript($@"Remove-NetFirewallRule -DisplayName ""{ruleName}""");
-                shell.Commands.AddScript($@"New-NetFirewallRule -DisplayName ""{ruleName}"" -Direction Inbound -LocalPort {port} -Protocol TCP -Action Allow");
-
-                var result = shell.Invoke();
-
-                foreach (PSObject outputItem in result)
-                {
-                    if (outputItem != null)
-                    {
-                        try
-                        {
-                            Console.WriteLine(outputItem.ToString());
-                        }
-                        catch { }
-
-                    }
-                }
-            }
-        }
 
         private string GetApplicationPoolName(IApp app)
             => app.Name;
@@ -365,15 +334,8 @@ namespace Carbon.Hosting.IIS
               port: 8080
             }
             */
-
-            JsonObject env = null;
-
-            if (app is App)
-            {
-                env = ((App)app).Env;
-            }
-
-            if (env != null)
+            
+            if (app is AppInfo a && a.Env is JsonObject env)
             {
                 // e.g. [ "http://carbon.com/80" ]
 
@@ -409,7 +371,7 @@ namespace Carbon.Hosting.IIS
 
                     site.Bindings.Add(binding);
 
-                    OpenFirewallPort(port, app);
+                    firewall.OpenPort(port, app);
                 }
 
                 if (site.Bindings.Count == 0)
@@ -442,8 +404,10 @@ namespace Carbon.Hosting.IIS
             File.AppendAllLines(path, new[] { line });
         }
 
-        private string GetAppFolder(IApp app)   
-            => Path.Combine(env.AppsRoot.FullName, app.Id.ToString());
+        private string GetAppRootDirectory(IApp app)
+        {
+            return Path.Combine(env.AppsRoot.FullName, app.Id.ToString());
+        }
 
         // c:/apps/1/1.0.0
 
@@ -471,7 +435,7 @@ namespace Carbon.Hosting.IIS
             return requests;
         }
 
-        public App FromSite(Site site)
+        public AppInfo FromSite(Site site)
         {
             var application = site.Applications["/"];
             var directory = application.VirtualDirectories["/"];
@@ -490,7 +454,7 @@ namespace Carbon.Hosting.IIS
 
             // 1/1.5.0
 
-            return new App {
+            return new AppInfo {
                 Id      = site.Id,
                 Version = version,
                 Created = new DirectoryInfo(directory.PhysicalPath).CreationTimeUtc

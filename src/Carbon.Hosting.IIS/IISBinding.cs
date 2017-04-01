@@ -7,16 +7,16 @@ namespace Carbon.Hosting.IIS
     public class IISBinding
     {
         public IISBinding(Listener listener)
-        {
-            Port = listener.Port;
-            HostName = listener.Host;
-        }
+            : this(listener.Port, listener.Host) { }
 
         public IISBinding(int port, string hostName = null, string ip = null)
         {
             #region Preconditions
 
-            if (port < 80) throw new ArgumentException(paramName: nameof(port), message: "Must be 80 or greater");
+            if (port < 80)
+            {
+                throw new ArgumentException(paramName: nameof(port), message: "Must be 80 or greater");
+            }
 
             #endregion
 

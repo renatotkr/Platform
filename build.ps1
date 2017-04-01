@@ -3,12 +3,12 @@ dotnet pack ./src/Bitbucket                    -c Release -o ./../../build/Bitbu
 dotnet pack ./src/Carbon.Building              -c Release -o ./../../build/Carbon.Building
 dotnet pack ./src/Carbon.Building.Web          -c Release -o ./../../build/Carbon.Building.Web
 dotnet pack ./src/Carbon.Hosting               -c Release -o ./../../build/Carbon.Hosting
+dotnet pack ./src/Carbon.Hosting.IIS           -c Release -o ./../../build/Carbon.Hosting.IIS
 dotnet pack ./src/Carbon.Packaging             -c Release -o ./../../build/Carbon.Packaging
 dotnet pack ./src/Carbon.Platform              -c Release -o ./../../build/Carbon.Platform
 dotnet pack ./src/Carbon.Platform.Abstractions -c Release -o ./../../build/Carbon.Platform.Abstractions
 dotnet pack ./src/Carbon.Platform.Frontends    -c Release -o ./../../build/Carbon.Platform.Frontends
 dotnet pack ./src/Carbon.Platform.Services     -c Release -o ./../../build/Carbon.Platform.Services
-dotnet pack ./src/Carbon.Platform.Runtime      -c Release -o ./../../build/Carbon.Platform.Runtime
 dotnet pack ./src/Carbon.Platform.Client       -c Release -o ./../../build/Carbon.Platform.Client
 dotnet pack ./src/Carbon.Libraries             -c Release -o ./../../build/Carbon.Libraries
 dotnet pack ./src/Carbon.Platform.Statistics   -c Release -o ./../../build/Carbon.Platform.Statistics
