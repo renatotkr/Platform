@@ -22,11 +22,14 @@ namespace Carbon.Platform
         // Code Repository Providers = 1000
         // TODO: Line these ids up with Carbon.Repositories
 
-        public static readonly ResourceProvider Bitbucket = new ResourceProvider(1000, "bitbucket", "Bitbucket");
-        public static readonly ResourceProvider GitHub    = new ResourceProvider(1001, "github", "GitHub");
+        public static readonly ResourceProvider Bitbucket = new ResourceProvider(1000, "bitbucket", "Bitbucket", "bitbucket.org");
+        public static readonly ResourceProvider GitHub    = new ResourceProvider(1001, "github",    "GitHub",    "github.com");
+        public static readonly ResourceProvider GitLab    = new ResourceProvider(1002, "gitlab",    "GitLab",    "gitlab.com");
 
+        
         // Certificates
         public static readonly ResourceProvider LetEncrypt = new ResourceProvider(2000, "letsencrypt", "Let’s Encrypt");
+
 
         public static readonly Dictionary<int, ResourceProvider> map = new Dictionary<int, ResourceProvider> {
             { 1,    Amazon },
@@ -49,16 +52,19 @@ namespace Carbon.Platform
         // BitBucket
         // Dropbox
 
-        public ResourceProvider(int id, string code, string name)
+        public ResourceProvider(int id, string code, string name, string domain = null)
         {
-            Id   = id;
-            Code = code ?? throw new ArgumentNullException(nameof(code));
-            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Id     = id;
+            Code   = code ?? throw new ArgumentNullException(nameof(code));
+            Name   = name ?? throw new ArgumentNullException(nameof(name));
+            Domain = domain;
         }
 
         public int Id { get; }
 
         public string Name { get; }
+
+        public string Domain { get; }
 
         public string Code { get; }
 
