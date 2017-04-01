@@ -35,7 +35,7 @@ namespace Carbon.Platform.Services
             {
                 network = await GetEc2NetworkAsync(id).ConfigureAwait(false);
 
-                network.Id = GetNextId<NetworkInfo>();
+                network.Id = db.Context.GetNextId<NetworkInfo>();
 
                 await db.Networks.InsertAsync(network).ConfigureAwait(false);
             }
@@ -71,7 +71,7 @@ namespace Carbon.Platform.Services
                 
                 var ni = await ConfigureEc2NetworkInterfaceAsync(n).ConfigureAwait(false);
 
-                ni.Id        = GetNextId<NetworkInterfaceInfo>();
+                ni.Id        = db.Context.GetNextId<NetworkInterfaceInfo>();
                 ni.NetworkId = network.Id;
                 ni.HostId    = host?.Id;
 
@@ -103,7 +103,7 @@ namespace Carbon.Platform.Services
 
             if (acl == null)
             {
-                var aclId = await GetNextScopedIdAsync(db.NetworkPolicies, network.Id).ConfigureAwait(false);
+                var aclId = await db.NetworkPolicies.GetNextScopedIdAsync(network.Id).ConfigureAwait(false);
 
                 acl = new NetworkPolicy {
                     Id         = aclId,
@@ -169,7 +169,7 @@ namespace Carbon.Platform.Services
 
             var network = await GetNetworkAsync(aws, s.VpcId).ConfigureAwait(false);
 
-            var subnetId = await GetNextScopedIdAsync(db.Subnets, network.Id).ConfigureAwait(false);
+            var subnetId = await db.Subnets.GetNextScopedIdAsync(network.Id).ConfigureAwait(false);
 
             return new SubnetInfo {
                 Id         = subnetId, 
@@ -197,26 +197,5 @@ namespace Carbon.Platform.Services
         }
 
         #endregion
-
-        private long GetNextId<T>()
-        {
-            var dataset = DatasetInfo.Get<T>();
-
-            using (var connection = db.Context.GetConnection())
-            {
-                var id = connection.ExecuteScalar<long>($"SELECT `id` FROM `{dataset.Name}` ORDER BY `id` DESC LIMIT 1");
-
-                return id + 1;
-            }
-        }
-
-        private static async Task<long> GetNextScopedIdAsync<T>(Dataset<T, long> dataset, long scopeId)
-        {
-            var range = ScopedId.GetRange(scopeId);
-
-            var count = await dataset.CountAsync(Between("id", range.Start, range.End)).ConfigureAwait(false);
-
-            return ScopedId.Create(scopeId, count);
-        }
     }
 }

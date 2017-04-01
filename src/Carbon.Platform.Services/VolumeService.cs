@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Carbon.Data;
 
 using Amazon.Ec2;
-
-using Dapper;
 
 namespace Carbon.Platform.Services
 {
@@ -35,7 +32,7 @@ namespace Carbon.Platform.Services
                 var location = Locations.Get(provider, ec2Volume.AvailabilityZone);
 
                  volume = new VolumeInfo {
-                    Id         = GetNextId<VolumeInfo>(),
+                    Id         = db.Context.GetNextId<VolumeInfo>(),
                     Status     = VolumeStatus.Online,
                     ProviderId = provider.Id,
                     ResourceId = ec2Volume.VolumeId,
@@ -48,18 +45,6 @@ namespace Carbon.Platform.Services
             }
 
             return volume;
-        }
-        
-        private long GetNextId<T>()
-        {
-            var dataset = DatasetInfo.Get<T>();
-
-            using (var connection = db.Context.GetConnection())
-            {
-                var id = connection.ExecuteScalar<long>($"SELECT `id` FROM `{dataset.Name}` ORDER BY `id` DESC  LIMIT 1");
-
-                return id + 1;
-            }
         }
     }
 }

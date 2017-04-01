@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net;
 
-using Carbon.Data;
 using Carbon.Data.Expressions;
 
 using ec2 = Amazon.Ec2;
-
-using Dapper;
 
 namespace Carbon.Platform.Services
 {
@@ -37,11 +34,7 @@ namespace Carbon.Platform.Services
 
         public async Task<HostInfo> GetAsync(long id)
         {
-            var host = await db.Hosts.FindAsync(id).ConfigureAwait(false);
-
-            // Throw if not found
-
-            return host;
+            return await db.Hosts.FindAsync(id).ConfigureAwait(false) ?? throw new Exception($"host#{id} does not exist");
         }
 
         public async Task<HostInfo> GetAsync(ResourceProvider provider, string id)
@@ -53,16 +46,15 @@ namespace Carbon.Platform.Services
 
         public async Task<ImageInfo> GetImageAsync(ResourceProvider provider, string id)
         {
-            var image = await db.Images.FindAsync(aws, id).ConfigureAwait(false);
+            var image = await db.MachineImages.FindAsync(aws, id).ConfigureAwait(false);
 
             if (image == null)
             {
                 image = GetEc2Image(id);
 
-                image.Id = GetNextId<ImageInfo>();
+                image.Id = db.Context.GetNextId<ImageInfo>();
 
-                await db.Images.InsertAsync(image).ConfigureAwait(false);
-
+                await db.MachineImages.InsertAsync(image).ConfigureAwait(false);
             }
 
             return image;
@@ -83,23 +75,7 @@ namespace Carbon.Platform.Services
             return db.Volumes.QueryAsync(Eq("hostId", hostId));
         }
 
-
         #region EC2 Helpers
-
-        private static HostStatus GetStatus(ec2::InstanceState state)
-        {
-            switch (state.Name)
-            {
-                case "pending"       : return HostStatus.Pending;
-                case "running"       : return HostStatus.Running;
-                case "shutting-down" : return HostStatus.Terminating;
-                case "terminated"    : return HostStatus.Terminated;
-                case "stopping"      : return HostStatus.Suspending;
-                case "stopped"       : return HostStatus.Suspended;
-
-                default: throw new Exception("unexpected state:" + state.Name);
-            }
-        }
 
         private static readonly ResourceProvider aws = ResourceProvider.Amazon;
 
@@ -131,9 +107,9 @@ namespace Carbon.Platform.Services
             { }
 
             var host = new HostInfo {
-                Id            = GetNextId<HostInfo>(),
+                Id            = db.Context.GetNextId<HostInfo>(),
                 Type          = HostType.Virtual,
-                Status        = GetStatus(instance.InstanceState),
+                Status        = instance.InstanceState.ToStatus(),
                 MachineTypeId = machineTypeId,
                 Addresses     = new List<IPAddress>() {
                     IPAddress.Parse(instance.IpAddress),
@@ -147,8 +123,6 @@ namespace Carbon.Platform.Services
                 ImageId    = image?.Id ?? 0,
                 Created    = instance.LaunchTime
             };
-
-            // TODO: Lookup machineId
 
             await db.Hosts.InsertAsync(host).ConfigureAwait(false);
 
@@ -177,35 +151,14 @@ namespace Carbon.Platform.Services
             return host;
         }
 
-
         private ImageInfo GetEc2Image(string id)
         {
-            // TODO: Fetch th edetails
+            // TODO: Fetch the image details
+
             return new ImageInfo {
                 ProviderId = aws.Id,
                 ResourceId = id
             };
-        }
-
-        private long GetNextId<T>()
-        {
-            var dataset = DatasetInfo.Get<T>();
-
-            using (var connection = db.Context.GetConnection())
-            {
-                var id = connection.ExecuteScalar<long>($"SELECT `id` FROM `{dataset.Name}` ORDER BY `id` DESC LIMIT 1");
-
-                return id + 1;
-            }
-        }
-
-        private static async Task<long> GetNextScopedIdAsync<T>(Dataset<T, long> dataset, long scopeId)
-        {
-            var range = ScopedId.GetRange(scopeId);
-
-            var count = await dataset.CountAsync(Between("id", range.Start, range.End)).ConfigureAwait(false);
-
-            return ScopedId.Create(scopeId, count);
         }
     }
 
