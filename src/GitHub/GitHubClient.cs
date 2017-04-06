@@ -12,7 +12,7 @@ namespace GitHub
 {
     public class GitHubClient : IDisposable
     {
-        private static readonly ProductInfoHeaderValue userAgent = new ProductInfoHeaderValue("Carbon", "1.1.0");
+        private static readonly ProductInfoHeaderValue userAgent = new ProductInfoHeaderValue("Carbon", "1.2.0");
 
         private readonly string baseUri = "https://api.github.com";
 
@@ -129,7 +129,7 @@ namespace GitHub
             return result.ToArrayOf<GitRef>();
         }
 
-        public async Task<IReadOnlyList<GitBranch>> GetBranches(string accountName, string repositoryName)
+        public async Task<IList<GitBranch>> GetBranches(string accountName, string repositoryName)
         {
             #region Preconditions
 

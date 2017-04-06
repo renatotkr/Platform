@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Carbon.Repositories
+namespace Carbon.VersionControl
 {
     using Storage;
 
@@ -9,5 +9,11 @@ namespace Carbon.Repositories
         Task<IPackage> DownloadAsync(Revision revision);
 
         Task<ICommit> GetCommitAsync(Revision revision);
+
+        // CreateBranch
+        // GetBranch
+        // ListBranches
+        // GetBlob
+        // GetDifferences
     }
 }

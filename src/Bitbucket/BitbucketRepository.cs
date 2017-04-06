@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using System.Net;
 
 using Carbon.Packaging;
-using Carbon.Repositories;
 using Carbon.Storage;
+using Carbon.VersionControl;
 
 namespace Bitbucket
 {
@@ -26,7 +26,7 @@ namespace Bitbucket
 
             // https://bitbucket.org/carbonmade/lefty.git
 
-            var repo = RepositoryInfo.Parse(url.ToString());
+            var repo = RevisionSource.Parse(url.ToString());
             AccountName = repo.AccountName;
             RepositoryName = repo.Name;
 

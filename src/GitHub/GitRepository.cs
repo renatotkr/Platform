@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 using Carbon.Packaging;
 using Carbon.Storage;
-using Carbon.Repositories;
+using Carbon.VersionControl;
 
 namespace GitHub
 {
@@ -23,7 +23,7 @@ namespace GitHub
 
             // https://github.com/orgName/repoName.git
 
-            var info = RepositoryInfo.Parse(url.ToString());
+            var info = RevisionSource.Parse(url.ToString());
       
             AccountName = info.AccountName;
             RepositoryName = info.Name;
@@ -31,12 +31,12 @@ namespace GitHub
             client = new GitHubClient(authToken);
         }
 
-        public GitHubRepository(string accountName, string repositoryName, OAuth2Token credentials)
+        public GitHubRepository(string accountName, string repositoryName, OAuth2Token authToken)
         {
             AccountName = accountName ?? throw new ArgumentNullException(nameof(accountName));
             RepositoryName = repositoryName ?? throw new ArgumentNullException(nameof(repositoryName));
 
-            client = new GitHubClient(credentials);
+            client = new GitHubClient(authToken);
         }
 
         public string AccountName { get; }

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Text;
 
-namespace Carbon.Repositories
+namespace Carbon.VersionControl
 {
-    public class RepositoryInfo
+    public class RevisionSource
     {
-        public RepositoryInfo(
-            RepositoryProviderId provider,
+        public RevisionSource(
+            RepositoryProvider provider,
             string accountName,
             string name,
             Revision? revision)
@@ -17,7 +17,7 @@ namespace Carbon.Repositories
             Revision = revision;
         }
 
-        public RepositoryProviderId Provider { get; }
+        public RepositoryProvider Provider { get; }
 
         public string AccountName { get; }
 
@@ -29,9 +29,9 @@ namespace Carbon.Repositories
         {
             var sb = new StringBuilder();
 
-            if (Provider != RepositoryProviderId.GitHub)
+            if (Provider.Name != "github")
             {
-                sb.Append(Provider.ToString().ToLower());
+                sb.Append(Provider.Name);
                 sb.Append(":");
             }
 
@@ -48,7 +48,7 @@ namespace Carbon.Repositories
             return sb.ToString();
         }
 
-        public static RepositoryInfo Parse(string text)
+        public static RevisionSource Parse(string text)
         {
             #region Preconditions
 
@@ -64,7 +64,7 @@ namespace Carbon.Repositories
                 text = text.Substring(text.IndexOf("://") + 3);
             }
 
-            var hostType = RepositoryProviderId.GitHub;
+            var hostType = RepositoryProvider.GitHub;
             string accountName = null;
             string repositoryName = null;
             Revision? revision = null;
@@ -81,7 +81,7 @@ namespace Carbon.Repositories
                     }
                     else
                     {
-                        hostType = RepositoryProviderId.GitHub;
+                        hostType = RepositoryProvider.GitHub;
                         accountName = part;
                     }
                 }
@@ -106,13 +106,13 @@ namespace Carbon.Repositories
                     }
                     else
                     {
-                        revision = Repositories.Revision.Parse(part);
+                        revision = VersionControl.Revision.Parse(part);
                     }
                 }
 
                 if (i == 3)
                 {
-                    revision = Repositories.Revision.Parse(part);
+                    revision = VersionControl.Revision.Parse(part);
                 }
 
                 i++;
@@ -123,7 +123,7 @@ namespace Carbon.Repositories
                 repositoryName = repositoryName.Replace(".git", "");
             }
 
-            return new RepositoryInfo(hostType, accountName, repositoryName, revision);
+            return new RevisionSource(hostType, accountName, repositoryName, revision);
         }
     }
 }

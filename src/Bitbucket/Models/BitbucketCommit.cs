@@ -1,6 +1,6 @@
 ﻿using System;
 
-using Carbon.Repositories;
+using Carbon.VersionControl;
 
 namespace Bitbucket
 {

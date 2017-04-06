@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Carbon.Repositories
+namespace Carbon.VersionControl
 {
     public struct Revision
     {
@@ -8,13 +8,6 @@ namespace Carbon.Repositories
 
         public Revision(string name, RevisionType type)
         {
-            #region Preconditions
-
-            if (type == RevisionType.Unknown)
-                throw new ArgumentNullException("May not be Unknown", nameof(type));
-
-            #endregion
-
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Type = type;
         }
@@ -39,14 +32,20 @@ namespace Carbon.Repositories
 
         public override string ToString() => Path;
 
-        public static Revision Commit(string sha) =>
-            new Revision(sha, RevisionType.Commit);
+        public static Revision Commit(string sha)
+        {
+            return new Revision(sha, RevisionType.Commit);
+        }
 
-        public static Revision Tag(string name) => 
-            new Revision(name, RevisionType.Tag);
+        public static Revision Tag(string name)
+        {
+            return new Revision(name, RevisionType.Tag);
+        }
 
-        public static Revision Head(string name) => 
-            new Revision(name, RevisionType.Head);
+        public static Revision Head(string name)
+        {
+            return new Revision(name, RevisionType.Head);
+        }
 
         private static readonly char[] forwardSlash = { '/' };
 
@@ -94,14 +93,5 @@ namespace Carbon.Repositories
 
             return new Revision(name, type);
         }
-    }
-
-    // AKA reftype
-    public enum RevisionType
-    {
-        Unknown = 0,
-        Commit = 1,
-        Head = 2,
-        Tag = 3
     }
 }

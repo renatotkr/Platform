@@ -1,12 +1,16 @@
 ﻿using System;
 
-using Carbon.Repositories;
+using Carbon.VersionControl;
 
 namespace GitHub
 {
     public class GetArchiveLinkRequest
     {
-        public GetArchiveLinkRequest(string accountName, string repositoryName, Revision revision, ArchiveFormat format = ArchiveFormat.Zipball)
+        public GetArchiveLinkRequest(
+            string accountName,
+            string repositoryName,
+            Revision revision,
+            ArchiveFormat format = ArchiveFormat.Zipball)
         {
             AccountName = accountName ?? throw new ArgumentNullException(nameof(accountName));
             RepositoryName = repositoryName ?? throw new ArgumentNullException(nameof(repositoryName));

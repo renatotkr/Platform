@@ -16,15 +16,15 @@ namespace Bitbucket
     {
         const string baseUri = "https://bitbucket.org/api/2.0";
 
-        private static readonly ProductInfoHeaderValue userAgent = new ProductInfoHeaderValue("Carbon", "1.1.0");
+        private static readonly ProductInfoHeaderValue userAgent = new ProductInfoHeaderValue("Carbon", "1.2.0");
 
         private readonly HttpClient httpClient = new HttpClient();
 
-        private readonly NetworkCredential credentials;
+        private readonly NetworkCredential credential;
 
-        public BitbucketClient(NetworkCredential credentials)
+        public BitbucketClient(NetworkCredential credential)
         {
-            this.credentials = credentials ?? throw new ArgumentNullException(nameof(credentials));
+            this.credential = credential ?? throw new ArgumentNullException(nameof(credential));
         }
 
         public async Task<BitbucketCommit> GetCommitAsync(string accountName, string repositoryName, string revision)
@@ -70,7 +70,7 @@ namespace Bitbucket
 
             httpRequest.Headers.Authorization = new AuthenticationHeaderValue(
                 scheme      : "Basic",
-                parameter   : Convert.ToBase64String(Encoding.ASCII.GetBytes($"{credentials.UserName}:{credentials.Password}"))
+                parameter   : Convert.ToBase64String(Encoding.ASCII.GetBytes($"{credential.UserName}:{credential.Password}"))
             );
 
             using (var response = await httpClient.SendAsync(httpRequest).ConfigureAwait(false))
@@ -101,7 +101,7 @@ namespace Bitbucket
 
             httpRequest.Headers.Authorization = new AuthenticationHeaderValue(
                 scheme: "Basic",
-                parameter: Convert.ToBase64String(Encoding.ASCII.GetBytes($"{credentials.UserName}:{credentials.Password}"))
+                parameter: Convert.ToBase64String(Encoding.ASCII.GetBytes($"{credential.UserName}:{credential.Password}"))
             );
 
             using (var response = await httpClient.SendAsync(httpRequest).ConfigureAwait(false))

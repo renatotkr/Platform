@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-using Carbon.Repositories;
+using Carbon.VersionControl;
 
 namespace GitHub
 {
@@ -20,7 +20,10 @@ namespace GitHub
 
         public ICommit ToCommit()
         {
-            if (Type != "commit") throw new Exception("Not a commit. Was " + Type);
+            if (Type != "commit")
+            {
+                throw new Exception("Not a commit. Was " + Type);
+            }
 
             return new GitCommit {
                 Sha = Sha,

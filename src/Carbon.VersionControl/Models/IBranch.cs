@@ -1,6 +1,6 @@
-﻿namespace Carbon.Repositories
+﻿namespace Carbon.VersionControl
 {
-    public interface ITag
+    public interface IBranch
     {
         string Name { get; }
 

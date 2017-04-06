@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Bitbucket</AssemblyName>
-    <VersionPrefix>1.2.0</VersionPrefix>    
+    <VersionPrefix>1.3.0</VersionPrefix>    
     <Authors>iamcarbon</Authors>
     <Copyright>© 2016-2017 Jason Nelson</Copyright>
     <Description>Bitbucket client.</Description>
@@ -11,15 +11,20 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj" />
+    <ProjectReference Include="..\Carbon.VersionControl\Carbon.VersionControl.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Carbon.Json" Version="1.3.0" />
-    <PackageReference Include="Carbon.Repositories" Version="1.2.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
+    <PackageReference Remove="NETStandard.Library" />
+    <PackageReference Include="System.Runtime" Version="4.3.0" />
+    <PackageReference Include="System.Net.Http" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <PackageReference Remove="NETStandard.Library" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Net.Http" />
   </ItemGroup>

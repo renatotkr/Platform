@@ -1,6 +1,6 @@
-﻿using Carbon.Repositories;
-using System.Runtime.Serialization;
-using System;
+﻿using System.Runtime.Serialization;
+
+using Carbon.VersionControl;
 
 namespace GitHub
 {

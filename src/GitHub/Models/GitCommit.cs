@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-using Carbon.Repositories;
+using Carbon.VersionControl;
 
 namespace GitHub
 {
@@ -16,9 +16,11 @@ namespace GitHub
         [DataMember(Name = "url")]
         public Uri Url { get; set; }
 
-        // public GitAgent Commiter { get; set; }
+        [DataMember(Name = "author")]
+        public GitAgent Author { get; set; }
 
-        // public GitAgent Author { get; set; }
+        [DataMember(Name = "commiter")]
+        public GitAgent Commiter { get; set; }
 
         #region ICommit
 
