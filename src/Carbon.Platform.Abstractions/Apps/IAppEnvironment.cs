@@ -1,9 +1,11 @@
 ﻿namespace Carbon.Platform.Apps
 {
-    public interface IApp
+    public interface IAppEnvironment : IManagedResource
     {
         long Id { get; }
 
         string Name { get; }
+
+        // Variables
     }
 }

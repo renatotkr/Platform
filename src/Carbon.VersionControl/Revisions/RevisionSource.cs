@@ -11,10 +11,10 @@ namespace Carbon.VersionControl
             string name,
             Revision? revision)
         {
-            Provider = provider;
+            Provider    = provider;
             AccountName = accountName;
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-            Revision = revision;
+            Name        = name ?? throw new ArgumentNullException(nameof(name));
+            Revision    = revision;
         }
 
         public RepositoryProvider Provider { get; }

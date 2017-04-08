@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform</AssemblyName>
-    <VersionPrefix>1.7.1</VersionPrefix>
+    <VersionPrefix>1.19.2</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
 
     <!-- Package Info-->
@@ -18,8 +18,8 @@
 
   <ItemGroup>
     <PackageReference Include="Carbon.Data.Annotations" Version="1.2.0" />
-    <PackageReference Include="Carbon.Json" Version="1.2.1" />
-    <PackageReference Include="Carbon.Protection" Version="1.4.0" />
+    <PackageReference Include="Carbon.Json" Version="1.3.0" />
+    <PackageReference Include="Carbon.Protection" Version="1.5.0" />
     <PackageReference Include="Carbon.Versioning" Version="1.2.0" />
   </ItemGroup>
 
@@ -28,13 +28,17 @@
     <PackageReference Include="System.Runtime" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Net.Primitives" Version="4.3.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.3.0" />
+    <PackageReference Include="System.Net.Primitives" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Carbon.Platform.Abstractions\Carbon.Platform.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,23 +1,15 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
+using Carbon.Data.Annotations;
+using Carbon.Json;
+
 namespace Carbon.Platform.Apps
 {
-    using Data.Annotations;
-    using Json;
-    using Protection;
-    using Versioning;
-
     [Dataset("Apps")]
     public class AppInfo : IApp
     {
         public AppInfo() { }
-
-        public AppInfo(long id, SemanticVersion version)
-        {
-            Id = id;
-            Version = version;
-        }
 
         public AppInfo(long id, string name, AppType type)
         {
@@ -27,28 +19,30 @@ namespace Carbon.Platform.Apps
         }
 
         [Member("id"), Key]
-        public long Id { get; set; }
-
-        [Member("version")] // deployed version
-        public SemanticVersion Version { get; set; }
+        public long Id { get; }
 
         [Member("type")] // Webapp | Worker
-        public AppType Type { get; set; }
+        public AppType Type { get; }
 
         [Member("name"), Unique]
-        [StringLength(50)]
-        public string Name { get; set; }
+        [StringLength(63)]
+        public string Name { get; }
 
+        // TODO: Move this to the app enviornments variables
         [Member("env"), Mutable] // JSON encoded environment data
         [StringLength(2000)]
+        [Obsolete]
         public JsonObject Env { get; set; }
 
         [Member("source")]
         [StringLength(100)]
         public string Source { get; set; }
-        
-        [Member("digest")]
-        public Hash Digest { get; set; }
+
+        [Member("repositoryId")]
+        public long RepositoryId { get; set; }
+
+        [Member("ownerId")] // May change
+        public long OwnerId { get; set; }
 
         #region Timestamps
 
@@ -66,12 +60,6 @@ namespace Carbon.Platform.Apps
         public DateTime Modified { get; }
 
         #endregion
-
-        // name@1.2.1
-        public override string ToString()
-        {
-            return Name + "@" + Version;
-        }
     }
 }
 

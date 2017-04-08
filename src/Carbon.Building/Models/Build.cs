@@ -12,7 +12,7 @@ namespace Carbon.Building
 
         [Column("status")]
         public BuildStatus Status { get; set; }
-
+        
         [Column("source")] // RepositoryInfo (url + revision)
         public string Source { get; set; }
 

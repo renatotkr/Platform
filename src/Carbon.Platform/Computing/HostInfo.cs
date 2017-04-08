@@ -28,15 +28,11 @@ namespace Carbon.Platform.Computing
         [Member("networkId")]
         public long NetworkId { get; set; }
 
-        // Provider + Region# + Zone#
-        [Member("locationId")]
-        public long LocationId { get; set; }
-
         [Member("machineTypeId")]
         public long MachineTypeId { get; set; }
 
         [Member("addresses")]
-        public List<IPAddress> Addresses { get; set; }
+        public IPAddress[] Addresses { get; set; }
         
         [Member("details")]
         [StringLength(1000)]
@@ -52,17 +48,6 @@ namespace Carbon.Platform.Computing
 
         #endregion
 
-        // TODO
-        // public long? ParentId { get; set; }
-
-        [Member("created"), Timestamp]
-        [IgnoreDataMember]
-        public DateTime Created { get; set; }
-
-        [Member("terminated")]
-        [TimePrecision(TimePrecision.Second)]
-        public DateTime? Terminated { get; set; }
-
         #region IResource
         
         [IgnoreDataMember]
@@ -74,15 +59,27 @@ namespace Carbon.Platform.Computing
         [Ascii, StringLength(100)]
         public string ResourceId { get; set; }
 
-        ResourceType IManagedResource.Type => ResourceType.Host;
+        // Provider + Region# + Zone#
+        [Member("locationId")]
+        public long LocationId { get; set; }
+
+        ResourceType IManagedResource.ResourceType => ResourceType.Host;
 
         #endregion
 
         #region Timestamps
 
+        [Member("created"), Timestamp]
+        [IgnoreDataMember]
+        public DateTime Created { get; set; }
+
         [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
+
+        [Member("terminated")]
+        [TimePrecision(TimePrecision.Second)]
+        public DateTime? Terminated { get; set; }
 
         #endregion
 
@@ -129,11 +126,7 @@ namespace Carbon.Platform.Computing
         public ResourceProvider Provider => ResourceProvider.Get(ProviderId);
 
         #endregion
-
-        #region IHost
-
-        IPAddress IHost.Address => PrivateIp;
-
-        #endregion
     }
 }
+
+// ParentID?

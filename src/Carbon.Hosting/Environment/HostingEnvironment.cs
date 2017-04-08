@@ -24,7 +24,7 @@ namespace Carbon.Hosting
 
                 if (config.ContainsKey("frontendsRoot"))
                 {
-                    FrontendsRoot = new DirectoryInfo(config["frontendsRoot"]);
+                    WebsitesRoot = new DirectoryInfo(config["frontendsRoot"]);
                 }
             }
 
@@ -37,9 +37,9 @@ namespace Carbon.Hosting
                 AppsRoot = new DirectoryInfo(driveLetter + ":/apps");
             }
 
-            if (FrontendsRoot == null)
+            if (WebsitesRoot == null)
             {
-                FrontendsRoot = new DirectoryInfo(driveLetter + ":/frontends");
+                WebsitesRoot = new DirectoryInfo(driveLetter + ":/frontends");
             }
 
             // C:/frontends/1/1.0.0/...
@@ -55,7 +55,7 @@ namespace Carbon.Hosting
         public DirectoryInfo AppsRoot { get; }
 
         // C:/frontends
-        public DirectoryInfo FrontendsRoot { get; }
+        public DirectoryInfo WebsitesRoot { get; }
     }
 }
 

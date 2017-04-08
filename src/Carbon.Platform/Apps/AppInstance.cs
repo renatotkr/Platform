@@ -15,48 +15,53 @@ namespace Carbon.Platform.Apps
     {
         public AppInstance() { }
 
-        public AppInstance(IApp app, IHost host)
+        public AppInstance(IApp app, SemanticVersion version, IBackend backend,  IHost host)
         {
             #region Preconditions
 
             if (app == null)
                 throw new ArgumentNullException(nameof(app));
+            
+            if (backend == null)
+                throw new ArgumentNullException(nameof(backend));
 
             if (host == null)
                 throw new ArgumentNullException(nameof(host));
-
+            
             #endregion
 
-            AppId = app.Id;
-            AppName = app.Name;
-            AppVersion = app.Version;
-            HostId = host.Id;
+            AppId         = app.Id;
+            AppName       = app.Name;
+            AppVersion    = version;
+            BackendId     = backend.Id;
+            EnvironmentId = backend.EnvironmentId;
+            HostId        = host.Id;
         }
 
         [Member("appId"), Key]
-        public long AppId { get; set; }
+        public long AppId { get; }
 
         [Member("hostId"), Key]
         [Indexed]
-        public long HostId { get; set; }
+        public long HostId { get; }
 
         [Member("status"), Mutable]
         public HostStatus Status { get; set; }
 
-        [Member("env")]
-        [StringLength(1000)]
-        public JsonObject Env { get; }
-
         [Member("appName")]
         [StringLength(50)]
-        public string AppName { get; set; }
+        public string AppName { get; }
         
         [Member("appVersion"), Mutable] 
         public SemanticVersion AppVersion { get; set; }
         
         [Member("backendId")]
         [Indexed]
-        public long? BackendId { get; set; }
+        public long? BackendId { get; }
+
+        [Member("environmentId")]
+        [Indexed]
+        public long EnvironmentId { get; set; }
 
         [Member("port")]
         public int? Port { get; set; }
@@ -74,12 +79,18 @@ namespace Carbon.Platform.Apps
 
         #endregion
 
+        #region Timestamps
+
         [Member("terminated"), Mutable]
         public DateTime? Terminated { get; set; }
 
+        // Modified
+
         [Member("created"), Timestamp]
         public DateTime Created { get; set; }
-        
+
+        #endregion
+
         #region Helpers
 
         [IgnoreDataMember]
@@ -90,8 +101,6 @@ namespace Carbon.Platform.Apps
         #region IApp
 
         long IApp.Id => AppId;
-
-        SemanticVersion IApp.Version => AppVersion;
 
         string IApp.Name => AppName;
 

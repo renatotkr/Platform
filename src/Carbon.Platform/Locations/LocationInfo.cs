@@ -5,55 +5,45 @@ namespace Carbon.Platform
 {
     using Data.Annotations;
 
-    // Regions (May have multiple avaiability zones)
-    // Zones
+    // Locations may be regions or zones
 
     [Dataset("Locations")]
     [DataIndex(IndexFlags.Unique, new[] { "providerId", "name" })]
-    public class LocationInfo : ILocation, IEquatable<LocationInfo>, IManagedResource
+    public class LocationInfo : ILocation, IEquatable<LocationInfo>
     {
         public LocationInfo() { }
 
-        public LocationInfo(
-            ResourceProvider provider,
-            ushort regionNumber,
-            byte zoneNumber,
-            string name,
-            LocationFlags flags = 0)
+        public LocationInfo(long id, string name, LocationStatus status = LocationStatus.Healthy)
         {
-            var id = new LocationId {
-                ProviderId   = provider.Id,
-                RegionNumber = regionNumber,
-                ZoneNumber   = zoneNumber,
-                Flags        = (byte)flags,
-            };
-
-            Id = id.Value;
-            ProviderId = provider.Id;
-            Name = name;
+            Id          = id;
+            ProviderId  = LocationId.Create(id).ProviderId;
+            Name        = name ?? throw new ArgumentNullException(nameof(name));
+            Status      = status;
         }
 
         [Member("id"), Key]
-        public long Id { get; set; }
+        public long Id { get; }
 
         [Member("providerId")]
-        public int ProviderId { get; set; }
+        public int ProviderId { get; }
 
-        // e.g. us-east-1, us-east1a
+        // e.g. us-east-1
+        // us-east1a
         [Member("name")]
-        public string Name { get; set; }
+        [StringLength(63)]
+        public string Name { get; }
 
         [Member("status")]
-        public LocationStatus Status { get; set; }
+        public LocationStatus Status { get; }
 
-        [Member("created")] // when the region was launched
+        //  // when the region was launched
+        [Member("created"), Timestamp]
         public DateTime Created { get; set; }
 
         #region Flags
 
         [IgnoreDataMember]
-        public LocationFlags Flags =>
-            (LocationFlags)LocationId.Create(Id).Flags;
+        public LocationFlags Flags => (LocationFlags)LocationId.Create(Id).Flags;
 
         [IgnoreDataMember]
         public bool IsMultiRegional => 
@@ -69,7 +59,7 @@ namespace Carbon.Platform
         public ResourceProvider Provider => ResourceProvider.Get(ProviderId);
         
         [IgnoreDataMember]
-        public ResourceType Type
+        public ResourceType ResourceType
         {
             get
             {
@@ -81,82 +71,13 @@ namespace Carbon.Platform
             }
         }
 
+        long IManagedResource.LocationId => Id;
+
+
         #endregion
-
-        [IgnoreDataMember]
-        public string RegionName
-        {
-            get
-            {
-                if (Type == ResourceType.Region)
-                {
-                    return Name;
-                }
-
-                return Name.Substring(0, Name.Length - 1);
-            }
-        }
-
-        [IgnoreDataMember]
-        public string ZoneName
-        {
-            get
-            {
-                if (Type != ResourceType.Zone)
-                {
-                    return null;
-                }
-
-                return Name.Substring(Name.Length - 1);
-            }
-        }
-
-        public LocationInfo WithZone(char zoneName)
-        {
-            #region Preconditions
-            
-            if (ProviderId == ResourceProvider.Microsoft.Id)
-            {
-                throw new Exception("Azure does not have zones");
-            }
-
-            #endregion
-
-            var id = LocationId.Create(Id);
-
-            id.ZoneNumber = LocationHelper.GetZoneNumber(zoneName);
-
-            // AMAZON: us-east-1a
-            // GOOGLE: us-central1-b, us-central1-c
-
-            var name = Name;
-
-            if (Provider == ResourceProvider.Google)
-            {
-                name += "-" + char.ToLower(zoneName);
-            }
-            else
-            {
-                name += char.ToLower(zoneName);
-            }
-
-            return new LocationInfo {
-                Id         = id.Value,
-                Name       = name,
-                ProviderId = id.ProviderId
-            };
-        }
 
         public bool Equals(LocationInfo other) =>
             other.Id == Id &&
-            other.ProviderId == ProviderId &&
             other.Name == Name;
-
-        public static LocationInfo FromId(long id, string name) =>  
-            new LocationInfo {
-                Id         = id,
-                ProviderId = LocationId.Create(id).ProviderId,
-                Name       = name
-            };
     }
 }

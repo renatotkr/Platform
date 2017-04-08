@@ -11,7 +11,7 @@ namespace Carbon.Platform.Apps
     {
         public AppRelease() { }
 
-        public AppRelease(IApp app, SemanticVersion version)
+        public AppRelease(IApp app, SemanticVersion version, Hash digest)
         {
             #region Preconditions
 
@@ -23,45 +23,37 @@ namespace Carbon.Platform.Apps
 
             #endregion
 
-            AppId = app.Id;
+            AppId   = app.Id;
             AppName = app.Name;
             Version = version;
-        }
-
-        public AppRelease(long appId, SemanticVersion version)
-        {
-            #region Preconditions
-
-            if (version == SemanticVersion.Zero)
-                throw new ArgumentException("May not be 0.0.0", nameof(version));
-
-            #endregion
-
-            AppId = appId;
-            Version = version;
+            Digest  = digest;
         }
 
         [Member("appId"), Key]
-        public long AppId { get; set; }
+        public long AppId { get; }
 
         [Member("version"), Key]
-        public SemanticVersion Version { get; set; }
+        public SemanticVersion Version { get; }
+
+        [Member("digest")]
+        public Hash Digest { get; }
 
         [Member("appName")]
         [StringLength(50)]
-        public string AppName { get; set; }
+        public string AppName { get; }
 
         [Member("buildId")]
         public long? BuildId { get; set; }
 
         [Member("creatorId")]
         public long CreatorId { get; set; }
-
-        [Member("digest")]
-        public Hash Digest { get; set; }
+        
+        #region Timestamps
 
         [Member("created"), Timestamp]
-        public DateTime Created { get; set; }
+        public DateTime Created { get; }
+
+        #endregion
 
         #region IApp
 

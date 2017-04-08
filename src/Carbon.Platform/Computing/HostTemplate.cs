@@ -22,12 +22,37 @@ namespace Carbon.Platform.Computing
         [Member("script")]
         public string Script { get; set; }
 
-        [Member("metadata")]
+        [Member("details")]
         [StringLength(1000)]
-        public JsonObject Metadata { get; set; }
+        public JsonObject Details { get; set; }
+
+        #region IResource
+
+        [IgnoreDataMember]
+        [Member("providerId")]
+        public int ProviderId { get; set; }
+
+        [IgnoreDataMember]
+        [Member("resourceId")]
+        [Ascii, StringLength(100)]
+        public string ResourceId { get; set; }
+
+        long IManagedResource.LocationId => 0;
+
+        ResourceType IManagedResource.ResourceType => ResourceType.HostTemplate;
+
+        #endregion
+
+        #region Timestamps
 
         [IgnoreDataMember]
         [Member("created"), Timestamp]
         public DateTime Created { get; }
+
+        [IgnoreDataMember]
+        [Member("deleted"), Timestamp]
+        public DateTime? Deleted { get; }
+
+        #endregion
     }
 }
