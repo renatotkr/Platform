@@ -2,30 +2,34 @@
 using System.Net;
 using System.Runtime.Serialization;
 
+using Carbon.Data.Annotations;
+
 namespace Carbon.Platform.Networking
 {
-    using Data.Annotations;
-    using Net;
-
     [Dataset("NetworkRoutes")]
     public class NetworkRoute : INetworkRoute
     {
+        public NetworkRoute() { }
+
+        public NetworkRoute(long id)
+        {
+            Id = id;
+        }
+
         // networkId + index
         [Member("id"), Key]
-        public long Id { get; set; }
+        public long Id { get; }
 
         [Member("name")]
+        [StringLength(63)]
         public string Name { get; set; }
 
         [Member("destinationRange")]
-        public Cidr DestinationRange { get; set; }
+        public string DestinationRange { get; set; }
 
-        [Member("gateway")] // AKA nextHop
+        [Member("nextHop")]
         public IPAddress NextHop { get; set; }
         
-        [Member("interface"), Optional]
-        public IPAddress Interface { get; set; }
-
         [Member("priority")]
         public int Priority { get; set; }
 
@@ -50,15 +54,3 @@ namespace Carbon.Platform.Networking
         #endregion
     }
 }
-
-/*
-NAME                           NETWORK   DEST_RANGE    NEXT_HOP                 PRIORITY
-default-route-02a98b9a14f7edc4 default   10.128.0.0/20                          1000
-default-route-081fa300345dd52a default   0.0.0.0/0     default-internet-gateway 1000
-default-route-93a38d78c77eac66 default   10.132.0.0/20                          1000
-default-route-999664b72dd247e7 default   10.140.0.0/20                          1000
-default-route-a1f15d0858cd51e1 default   10.142.0.0/20                          1000
-*/
-
-// A subnet network divides your global network in to regional subnets, each with its own IPv4 prefix. 
-// Instead, each subnetwork has an IP range and gateway address. 

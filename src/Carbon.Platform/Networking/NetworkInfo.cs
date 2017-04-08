@@ -4,29 +4,34 @@ using System.Net;
 
 namespace Carbon.Platform.Networking
 {
-    using Net;
     using Data.Annotations;
 
     [Dataset("Networks")]
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
-    public class NetworkInfo : INetwork, IManagedResource
+    public class NetworkInfo : INetwork
     {
         public NetworkInfo() { }
 
-        public NetworkInfo(Cidr cidr)
+        public NetworkInfo(long id, string cidr, ManagedResource resource)
         {
-            CidrBlock = cidr.ToString();
+            Id         = id;
+            CidrBlock  = cidr ?? throw new ArgumentNullException(nameof(cidr));
+            ProviderId = resource.Provider.Id;
+            LocationId = resource.LocationId;
+            ResourceId = resource.Id;
         }
 
         [Member("id"), Key]
-        public long Id { get; set; }
+        public long Id { get; }
+
+        // AddressSpace?
 
         [Member("cidr")] // 10.1.1.0/24
-        [Ascii, StringLength(50)]
+        [Ascii, StringLength(100)]
         public string CidrBlock { get; set; } 
 
-        [Member("gateway")] // Provides WAN access
-        public IPAddress Gateway { get; set; } // 10.1.1.0
+        [Member("gatewayAddress")] // Provides WAN access
+        public IPAddress GatewayAddress { get; set; }
 
         [DataMember(Name = "asn")]
         [Member("asn")] // Autonomous System Number, e.g. AS226
@@ -36,14 +41,18 @@ namespace Carbon.Platform.Networking
 
         [IgnoreDataMember]
         [Member("providerId")]
-        public int ProviderId { get; set; }
+        public int ProviderId { get; }
 
         [IgnoreDataMember]
         [Member("resourceId")]
         [Ascii, StringLength(100)]
-        public string ResourceId { get; set; }
+        public string ResourceId { get; }
 
-        ResourceType IManagedResource.Type => ResourceType.Network;
+        [IgnoreDataMember]
+        [Member("locationId")]
+        public long LocationId { get; }
+
+        ResourceType IManagedResource.ResourceType => ResourceType.Network;
 
         #endregion
 

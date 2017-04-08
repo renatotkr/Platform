@@ -8,30 +8,41 @@ namespace Carbon.Platform.Networking
 
     [Dataset("NetworkAddresses")]
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
-    public class NetworkAddress : IManagedResource
+    public class NetworkAddress : INetworkAddress
     {
+        public NetworkAddress() { }
+
+        public NetworkAddress(long id, ManagedResource resource)
+        {
+            Id = id;
+            ProviderId = resource.Provider.Id;
+            ResourceId = resource.Id;
+        }
+
         [Member("id"), Key]
-        public long Id { get; set; }
+        public long Id { get; }
 
         [Member("networkInterfaceId")]
         [Indexed]
         public long? NetworkInterfaceId { get; set; }
 
-        [Member("value")]
-        public IPAddress Value { get; set; }
+        [Member("address")]
+        public IPAddress Address { get; set; }
 
         #region IResource
 
         [IgnoreDataMember]
         [Member("providerId")]
-        public int ProviderId { get; set; }
+        public int ProviderId { get; }
 
         [IgnoreDataMember]
         [Member("resourceId")]
         [Ascii, StringLength(100)]
-        public string ResourceId { get; set; }
+        public string ResourceId { get; }
 
-        ResourceType IManagedResource.Type => ResourceType.NetworkAddress;
+        long IManagedResource.LocationId => 0;
+
+        ResourceType IManagedResource.ResourceType => ResourceType.NetworkAddress;
 
         #endregion
 

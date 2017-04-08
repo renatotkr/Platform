@@ -6,16 +6,24 @@ using Carbon.Data.Annotations;
 namespace Carbon.Platform.Networking
 {
     [Dataset("NetworkRouters")]
-    public class NetworkRouter : INetworkRouter, IManagedResource
+    public class NetworkRouter : INetworkRouter
     {
+        public NetworkRouter() { }
+
+        public NetworkRouter(long id, string name, ManagedResource resource)
+        {
+            Id         = id;
+            Name       = name;
+            ProviderId = resource.Provider.Id;
+            LocationId = resource.LocationId;
+            ResourceId = resource.Id;
+        }
+
         [Member("id"), Key]
-        public long Id { get; set; }
+        public long Id { get; }
 
-        [Member("locationId")]
-        public long LocationId { get; set; }
-
-        // BGP (Peers / ASN)
-
+        [Member("name")]
+        public string Name { get; }
 
         public long NetworkId => ScopedId.GetScope(Id);
 
@@ -23,15 +31,18 @@ namespace Carbon.Platform.Networking
 
         [IgnoreDataMember]
         [Member("providerId")]
-        public int ProviderId { get; set; }
+        public int ProviderId { get; }
 
-        // arn:aws:elasticloadbalancing:us-west-2:123456789012:loadbalancer/app/my-load-balancer/50dc6c495c0c9188
         [IgnoreDataMember]
         [Member("resourceId")]
         [Ascii, StringLength(100)]
-        public string ResourceId { get; set; }
+        public string ResourceId { get; }
 
-        ResourceType IManagedResource.Type => ResourceType.NetworkRouter;
+        [IgnoreDataMember]
+        [Member("locationId")]
+        public long LocationId { get; }
+
+        ResourceType IManagedResource.ResourceType => ResourceType.NetworkRouter;
 
         #endregion
 

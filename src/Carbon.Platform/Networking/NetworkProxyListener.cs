@@ -1,32 +1,40 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
+using Carbon.Net;
+
 namespace Carbon.Platform.Networking
 {
     using Data.Annotations;
-    using Net;
 
     [Dataset("NetworkProxyListener")]
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
-    public class NetworkProxyListener : INetworkProxyListener, IManagedResource
+    public class NetworkProxyListener : INetworkProxyListener
     {
+        public NetworkProxyListener() { }
+
+        public NetworkProxyListener(long id, NetworkProtocal protocal, ushort port)
+        {
+            Id       = id;
+            Protocal = protocal;
+            Port     = port;
+        }
+
         // proxyId | index
         [Member("id"), Key]
-        public long Id { get; set; }
+        public long Id { get;  }
 
         // e.g. HTTP | HTTPS
         [Member("protocal")]
-        public NetworkProtocal Protocal { get; set; }
+        public NetworkProtocal Protocal { get; }
 
         [Member("port")]
-        public ushort Port { get; set; }
+        public ushort Port { get; }
      
-        [Member("sslCertificateId")]
+        [Member("certificateId")]
         public long? CertificateId { get; set; }
 
-        // TODO: SSL Policy
-
-        public long ProxyId => ScopedId.GetScope(Id);
+        public long NetworkProxyId => ScopedId.GetScope(Id);
 
         #region IResource
 
@@ -38,9 +46,13 @@ namespace Carbon.Platform.Networking
         [Ascii, StringLength(100)]
         public string ResourceId { get; set; }
 
+        [IgnoreDataMember]
+        [Member("locationId")]
+        public long LocationId { get; set; }
+
         // arn:aws:elasticloadbalancing:us-west-2:123456789012:listener/app/my-load-balancer/50dc6c495c0c9188/f2f7dc8efc522ab2
 
-        ResourceType IManagedResource.Type => ResourceType.NetworkProxyListener;
+        ResourceType IManagedResource.ResourceType => ResourceType.NetworkProxyListener;
 
         #endregion
 

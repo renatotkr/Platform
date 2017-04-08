@@ -1,75 +1,65 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using System.Collections.Generic;
 using System.Net;
 
 namespace Carbon.Platform.Networking
 {
+    using Carbon.Net;
     using Data.Annotations;
 
     [Dataset("NetworkInterfaces")]
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
-    public class NetworkInterfaceInfo : INetworkInterface, IManagedResource
+    public class NetworkInterfaceInfo : INetworkInterface
     {
+        public NetworkInterfaceInfo() { }
+
+        public NetworkInterfaceInfo(long id, MacAddress mac, ManagedResource resource)
+        {
+            Id = id;
+            MacAddress = mac;
+            ProviderId = resource.Provider.Id;
+            ResourceId = resource.Id;
+            LocationId = resource.LocationId;
+        }
+
         [Member("id"), Key]
-        public long Id { get; set; }
+        public long Id { get; }
 
-        // AKA physicalAddress
-        // format: MM:MM:MM:SS:SS:SS
-        [Member("macAddress")]
-        [StringLength(30)]
+        [Member("macAddress", TypeName = "binary(6)")]
         [Indexed]
-        public string MacAddress { get; set; }
+        public MacAddress MacAddress { get; }
 
+        [IgnoreDataMember]
         [Member("hostId"), Mutable]
         [Indexed] // Current Attachment
         public long? HostId { get; set; }
 
-        [Member("networkId")]
-        public long NetworkId { get; set; }
-
-        // Do all network interfaces belong to a subnet?
         [Member("subnetId")]
-        public long? SubnetId { get; set; }
+        public long SubnetId { get; set; }
 
+        [IgnoreDataMember] 
         [Member("addresses")]
-        public List<IPAddress> Addresses { get; set; }
+        public IPAddress[] Addresses { get; set; }
 
-        #region Stats & Health
-
-        [Member("heartbeat")]
-        public DateTime? Heartbeat { get; set; }
-
-        [Member("bytesReceived")]
-        public long BytesReceived { get; set; }
-
-        [Member("bytesSent")]
-        public long BytesSent { get; set; }
-
-        [Member("packetsReceived")]
-        public long PacketsReceived { get; set; }
-
-        [Member("packetsSent")]
-        public long PacketsSent { get; set; }
-
-        [Member("packetsDiscarded")]
-        public long PacketsDiscarded { get; set; }
-
-        #endregion
+        [IgnoreDataMember]
+        public long NetworkId => ScopedId.GetScope(SubnetId);
 
         #region IResource
 
-        // e.g. aws
         [IgnoreDataMember]
         [Member("providerId")]
-        public int ProviderId { get; set; }
+        public int ProviderId { get; }
 
         [IgnoreDataMember]
         [Member("resourceId")]
         [Ascii, StringLength(100)]
-        public string ResourceId { get; set; }
+        public string ResourceId { get; }
 
-        ResourceType IManagedResource.Type => ResourceType.NetworkInterface;
+        [IgnoreDataMember]
+        [Member("locationId")]
+        public long LocationId { get; }
+
+        ResourceType IManagedResource.ResourceType => ResourceType.NetworkInterface;
 
         #endregion
 
