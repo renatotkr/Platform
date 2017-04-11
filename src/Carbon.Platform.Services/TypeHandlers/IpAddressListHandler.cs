@@ -1,45 +1,44 @@
-﻿using System.Data;
-using System.Collections.Generic;
+﻿using System;
+using System.Data;
 using System.Net;
 
 namespace Carbon.Platform
 {
     using Data;
 
-    public class IPAddressListHandler : DbTypeHandler<List<IPAddress>>
+    public class IPAddressArrayHandler : DbTypeHandler<IPAddress[]>
     {
         private static readonly char[] comma = { ',' };
 
         public override DatumInfo DatumType => DatumInfo.String(255);
 
-        public override List<IPAddress> Parse(object value)
+        public override IPAddress[] Parse(object value)
         {
             var text = (string)value;
 
-            if (text == "") return new List<IPAddress>();
+            if (text == "") return Array.Empty<IPAddress>();
 
-            var ips = text.Split(comma);
+            var parts = text.Split(comma);
 
-            var list = new List<IPAddress>(ips.Length);
+            var list = new IPAddress[parts.Length];
 
-            foreach (var p in ips)
-            {
-                list.Add(IPAddress.Parse(p));
+            for(var i = 0; i < parts.Length; i++)
+            { 
+                list[i] = IPAddress.Parse(parts[i]);
             }
 
             return list;
         }
-
-        // JSON when supported by Amazon Auroa...
         
         // NOTES:
         // - May be a mix of IP4 & IP6 addresses
         
-        public override void SetValue(IDbDataParameter parameter, List<IPAddress> value)
+        public override void SetValue(IDbDataParameter parameter, IPAddress[] value)
         {
             // e.g. 192.164.8.1,56.345.345.1
+            
+            parameter.Value = value.Length == 0 ? "" : string.Join(",", (object[])value);
 
-            parameter.Value = string.Join(",", value);
             parameter.DbType = DbType.AnsiString;
         }
     }
