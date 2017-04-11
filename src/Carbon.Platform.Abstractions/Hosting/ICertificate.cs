@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Carbon.Platform.Certificates
+namespace Carbon.Platform.Hosting
 {
-    public interface ICertificate
+    public interface ICertificate : IManagedResource
     {
         long Id { get; }
 
@@ -13,8 +13,6 @@ namespace Carbon.Platform.Certificates
         DateTime Expires { get; }
 
         DateTime? Revoked { get; }
-
-        int ProviderId { get; }
     }
 }
 

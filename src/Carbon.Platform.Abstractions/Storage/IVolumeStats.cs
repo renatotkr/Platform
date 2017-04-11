@@ -2,8 +2,8 @@
 {
     public interface IVolumeStats
     {
-        long BytesRead { get; }
+        long ReadBytes { get; }
 
-        long BytesWritten { get; }
+        long WriteBytes { get; }
     }
 }

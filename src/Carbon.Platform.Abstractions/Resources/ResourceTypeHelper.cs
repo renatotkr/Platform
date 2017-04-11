@@ -19,7 +19,6 @@ namespace Carbon.Platform
                 case "machineimage"     : return MachineImage;
 
                 // Storage
-                case "blob"             : return Blob;
                 case "bucket"           : return Bucket;
                 case "database"         : return Database;
                 case "encryptionkey"    : return EncryptionKey;
@@ -38,12 +37,11 @@ namespace Carbon.Platform
                 case "subnet"           : return Subnet;
 
                 case "region"           : return Region;
-                // case "role"             : return Role;
                 case "user"             : return User;
                 case "volume"           : return Volume;
                 case "zone"             : return Zone;
 
-                default: throw new Exception("Unexpected resource type: " + text);
+                default: return (ResourceType)Enum.Parse(typeof(ResourceType), text, ignoreCase: true);
             }
         }
     }

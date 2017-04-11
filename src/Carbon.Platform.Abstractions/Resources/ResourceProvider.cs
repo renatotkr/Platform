@@ -5,30 +5,30 @@ namespace Carbon.Platform
 {
     public class ResourceProvider
     {
-        public static readonly ResourceProvider Amazon    = new ResourceProvider(1  , "aws",    "Amazon");
-        public static readonly ResourceProvider Borg      = new ResourceProvider(2  , "borg",   "Borg");
-        public static readonly ResourceProvider Google    = new ResourceProvider(3  , "google", "Google");
-        public static readonly ResourceProvider IBM       = new ResourceProvider(4  , "ibm",    "IBM");
-        public static readonly ResourceProvider Microsoft = new ResourceProvider(5  , "azure",  "Microsoft");
-        public static readonly ResourceProvider Oracle    = new ResourceProvider(6  , "oracle", "Oracle");
-        
-        // Email Delivery Providers
-        public static readonly ResourceProvider Postmark = new ResourceProvider(60, "postmark", "Postmark");
-
-        // Payment Processors
-        public static readonly ResourceProvider PayPal   = new ResourceProvider(120, "paypal", "PayPal");
-        public static readonly ResourceProvider Stripe   = new ResourceProvider(130, "stripe", "Stripe");
-
+        // Cloud Platforms (1-255)
+        public static readonly ResourceProvider Amazon       = new ResourceProvider(1  , "aws",          "Amazon");
+        public static readonly ResourceProvider Borg         = new ResourceProvider(2  , "borg",         "Borg");
+        public static readonly ResourceProvider Google       = new ResourceProvider(3  , "google",       "Google");
+        public static readonly ResourceProvider IBM          = new ResourceProvider(4  , "ibm",          "IBM");
+        public static readonly ResourceProvider Microsoft    = new ResourceProvider(5  , "azure",        "Microsoft");
+        public static readonly ResourceProvider Oracle       = new ResourceProvider(6  , "oracle",       "Oracle");
+        public static readonly ResourceProvider DigitalOcean = new ResourceProvider(20 , "digitalocean", "DigitalOcean");
+     
         // Code Repository Providers = 1000
-        // TODO: Line these ids up with Carbon.Repositories
-
-        public static readonly ResourceProvider Bitbucket = new ResourceProvider(1000, "bitbucket", "Bitbucket", "bitbucket.org");
-        public static readonly ResourceProvider GitHub    = new ResourceProvider(1001, "github",    "GitHub",    "github.com");
+        public static readonly ResourceProvider GitHub    = new ResourceProvider(1000, "github",    "GitHub",    "github.com");
+        public static readonly ResourceProvider Bitbucket = new ResourceProvider(1001, "bitbucket", "Bitbucket", "bitbucket.org");
         public static readonly ResourceProvider GitLab    = new ResourceProvider(1002, "gitlab",    "GitLab",    "gitlab.com");
 
-        
-        // Certificates
-        public static readonly ResourceProvider LetEncrypt = new ResourceProvider(2000, "letsencrypt", "Let’s Encrypt");
+        // Payment Processors = 2000
+        public static readonly ResourceProvider Braintree = new ResourceProvider(2000, "braintree", "Braintree");
+        public static readonly ResourceProvider PayPal    = new ResourceProvider(2001, "paypal",    "PayPal");
+        public static readonly ResourceProvider Stripe    = new ResourceProvider(2002, "stripe",    "Stripe");
+
+        // Certificates = 3000
+        public static readonly ResourceProvider LetEncrypt = new ResourceProvider(3000, "letsencrypt", "Let’s Encrypt");
+
+        // Email Delivery Providers = 5000
+        public static readonly ResourceProvider Postmark = new ResourceProvider(5000, "postmark", "Postmark");
 
 
         public static readonly Dictionary<int, ResourceProvider> map = new Dictionary<int, ResourceProvider> {
@@ -38,14 +38,18 @@ namespace Carbon.Platform
             { 4,    IBM },
             { 5,    Microsoft },
             { 6,    Oracle },
-           
-            { 120,  PayPal },
-            { 130,  Stripe },
+            { 20,   DigitalOcean },
 
-            { 1000, Bitbucket },
-            { 1001, GitHub },
+            { 2000,  Braintree },
+            { 2001,  PayPal },
+            { 2002,  Stripe },
 
-            { 2000,  LetEncrypt },
+            { 1000,  GitHub },
+            { 1001,  Bitbucket },
+            { 1002,  GitLab },
+
+            { 3000,  LetEncrypt },
+            { 5000,  Postmark }
         };
 
         // GitHub
@@ -70,6 +74,13 @@ namespace Carbon.Platform
 
         public override string ToString() => Code;
 
+        public static ResourceProvider FromLocationId(long locationId)
+        {
+            var providerId = LocationId.Create(locationId).ProviderId;
+
+            return Get(providerId);
+        }
+
         public static ResourceProvider Get(int id)
         {
             return map[id];
@@ -89,24 +100,25 @@ namespace Carbon.Platform
 
             switch (text.ToLower())
             {
-                case "aws"       : return Amazon;
-                case "amzn"      : return Amazon;
-                case "borg"      : return Borg;
-                case "ibm"       : return IBM;
-                case "goog"      : return Google;
-                case "msft"      : return Microsoft;
-                case "azure"     : return Microsoft;
-                case "orcl"      : return Oracle;
+                case "aws"          : return Amazon;
+                case "amzn"         : return Amazon;
+                case "borg"         : return Borg;
+                case "ibm"          : return IBM;
+                case "goog"         : return Google;
+                case "msft"         : return Microsoft;
+                case "azure"        : return Microsoft;
+                case "orcl"         : return Oracle;
 
                 // Full names
-                case "bitbucket"  : return Bitbucket;
-                case "github"     : return GitHub;
-                case "amazon"     : return Amazon;
-                case "google"     : return Google;
-                case "microsoft"  : return Microsoft;
-                case "oracle"     : return Oracle;
+                case "bitbucket"    : return Bitbucket;
+                case "github"       : return GitHub;
+                case "amazon"       : return Amazon;
+                case "google"       : return Google;
+                case "microsoft"    : return Microsoft;
+                case "oracle"       : return Oracle;
 
-                case "letsencrypt": return LetEncrypt;
+                case "postmark"     : return Postmark;
+                case "letsencrypt"  : return LetEncrypt;
 
                 default: throw new Exception("Unexpected provider: " + text);
             } 

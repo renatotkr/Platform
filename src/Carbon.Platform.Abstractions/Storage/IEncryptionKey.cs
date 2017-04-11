@@ -1,18 +1,10 @@
-﻿using System;
-
-namespace Carbon.Platform.Security
+﻿namespace Carbon.Platform.Security
 {
-    public interface IEncryptionKey
+    public interface IEncryptionKey : IManagedResource
     {
         long Id { get; }
       
         string Name { get; }
-
-        int Version { get; }
-
-        DateTime? NextRotation { get; }
-
-        long LocationId { get; }
     }
 }
 

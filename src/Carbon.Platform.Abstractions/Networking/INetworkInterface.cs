@@ -1,11 +1,15 @@
-﻿namespace Carbon.Platform.Networking
+﻿using System.Net;
+
+using Carbon.Net;
+
+namespace Carbon.Platform.Networking
 {
-    public interface INetworkInterface
+    public interface INetworkInterface : IManagedResource
     {
         long Id { get; }
 
-        string MacAddress { get; }
+        MacAddress MacAddress { get; }
 
-        int ProviderId { get; }
+        IPAddress[] Addresses { get; }
     }
 }

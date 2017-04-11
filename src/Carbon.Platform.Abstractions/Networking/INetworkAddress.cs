@@ -2,11 +2,11 @@
 
 namespace Carbon.Platform.Networking
 {
-    public interface INetworkAddress
+    public interface INetworkAddress : IManagedResource
     {
-        long Id { get; set; }
+        long Id { get; }
         
-        IPAddress Address { get; set; }
+        IPAddress Address { get; }
     }
 }
 

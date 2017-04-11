@@ -2,13 +2,13 @@
 
 namespace Carbon.Platform.Networking
 {
-    public interface INetwork
+    public interface INetwork : IManagedResource
     {
         long Id { get; }
 
         int? ASN { get; }
 
-        IPAddress Gateway { get; }
+        IPAddress GatewayAddress { get; }
 
         // e.g. 192.168.0.0/16
         string CidrBlock { get; }
@@ -16,8 +16,6 @@ namespace Carbon.Platform.Networking
         // VPC's may have seperate IPv4 & IPv6 ranges
         // ip4range
         // ip6range
-
-        int ProviderId { get; }
     }
 }
 
@@ -25,7 +23,6 @@ namespace Carbon.Platform.Networking
 
 // Amazon | VPC
 // Google | compute#network
-
 
 /*
 us-west1	    10.138.0.0/20	10.138.0.1

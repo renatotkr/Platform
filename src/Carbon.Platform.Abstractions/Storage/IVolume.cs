@@ -1,12 +1,10 @@
 ﻿namespace Carbon.Platform.Storage
 {
-    public interface IVolume
+    public interface IVolume : IManagedResource
     {
         long Id { get; }
-
+        
         long Size { get; } // in octets
-
-        long LocationId { get; }
     }
 }
 

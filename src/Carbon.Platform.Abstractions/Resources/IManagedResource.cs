@@ -2,11 +2,12 @@
 {
     public interface IManagedResource
     {
-        ResourceType Type { get; }
-
         int ProviderId { get; }
 
-        // Assigned by provider
-        string ResourceId { get; }
+        long LocationId { get; }
+
+        ResourceType ResourceType { get; }
+
+        string ResourceId { get; } // Assigned by provider
     }
 }
