@@ -1,17 +1,20 @@
-﻿using Carbon.Platform.VersionControl;
-using Carbon.Versioning;
-using System;
-
-using Carbon.Data.Expressions;
-using Dapper;
-
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+
+using Carbon.Data;
+using Carbon.Data.Expressions;
+using Carbon.Platform.CI;
+using Carbon.Platform.VersionControl;
+using Carbon.Versioning;
+
+using Dapper;
 
 namespace Carbon.Platform.Web
 {
     using static Expression;
 
-    public class WebsiteService
+    public class WebsiteService : IWebsiteService
     {
         private readonly WebDb db;
 
@@ -25,10 +28,17 @@ namespace Carbon.Platform.Web
             return db.Websites.FindAsync(id);
         }
 
-        public Task<WebsiteInfo> FindAsync(long ownerId, string name)
+        public Task<WebsiteInfo> GetAsync(long ownerId, string name)
         {
             return db.Websites.QueryFirstOrDefaultAsync(
                 And(Eq("ownerId", ownerId), Eq("name", name))
+             );
+        }
+
+        public Task<IReadOnlyList<WebsiteInfo>> ListAsync(long ownerId)
+        {
+            return db.Websites.QueryAsync(
+                And(Eq("ownerId", ownerId), IsNull("deleted"))
              );
         }
 
@@ -36,6 +46,14 @@ namespace Carbon.Platform.Web
         {
             return db.WebsiteReleases.QueryFirstOrDefaultAsync(
                 And(Eq("websiteId", websiteId), Eq("version", version))
+             );
+        }
+
+        public Task<IReadOnlyList<WebsiteRelease>> GetReleasesAsync(long websiteId)
+        {
+            return db.WebsiteReleases.QueryAsync(
+                 Eq("websiteId", websiteId),
+                 Order.Descending("version")
              );
         }
 
@@ -62,6 +80,7 @@ namespace Carbon.Platform.Web
             var release = new WebsiteRelease(website, version, sha256, commit, creatorId);
             
             await db.WebsiteReleases.InsertAsync(release).ConfigureAwait(false);
+
 
             return release;
         }
@@ -111,10 +130,8 @@ namespace Carbon.Platform.Web
 
             #endregion
 
-            // TODO: Get the next environmentDeploymentId
-
             var deployment = new WebsiteDeployment(
-                id        : await db.WebsiteDeployments.GetNextScopedIdAsync(release.WebsiteId),
+                id        : await DeploymentId.GetNextAsync(db.Context, env).ConfigureAwait(false),
                 websiteId : release.WebsiteId,
                 revision  : release.Version,
                 commitId  : release.CommitId,
@@ -128,6 +145,13 @@ namespace Carbon.Platform.Web
 
         public async Task CompleteDeploymentAsync(WebsiteDeployment deployment, bool successsful)
         {
+            #region Preconditions
+
+            if (deployment == null)
+                throw new ArgumentNullException(nameof(deployment));
+
+            #endregion
+
             using (var connection = db.Context.GetConnection())
             {
                 await connection.ExecuteAsync(

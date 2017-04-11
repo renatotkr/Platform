@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Carbon.Net;
 
 using ec2 = Amazon.Ec2;
+using System.Net;
 
 namespace Carbon.Platform.Networking
 {
@@ -127,16 +128,15 @@ namespace Carbon.Platform.Networking
             #endregion
             
             var networkInterface = new NetworkInterfaceInfo(
-                id       : db.Context.GetNextId<NetworkInterfaceInfo>(),
-                mac      : MacAddress.Parse(nic.MacAddress),
-                resource : new ManagedResource(aws, ResourceType.NetworkInterface, nic.NetworkInterfaceId)
+                id        : db.Context.GetNextId<NetworkInterfaceInfo>(),
+                mac       : MacAddress.Parse(nic.MacAddress),
+                addresses : Array.Empty<IPAddress>(), // todo
+                resource  : new ManagedResource(aws, ResourceType.NetworkInterface, nic.NetworkInterfaceId)
             );
 
             // TODO: Create an attachment...
 
             //  ni.Attachment?.AttachTime ?? DateTime.UtcNow
-
-            // TODO: addresses
 
             if (nic.SubnetId != null)
             {

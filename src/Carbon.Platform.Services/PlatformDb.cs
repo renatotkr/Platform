@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Carbon.Data;
+
 namespace Carbon.Platform
 {
     using Apps;
@@ -9,8 +11,6 @@ namespace Carbon.Platform
     using Hosting;
     using Logs;
     using Networking;
-    using Security;
-    using Storage;
     using Versioning;
 
     public class PlatformDb
@@ -40,7 +40,6 @@ namespace Carbon.Platform
 
             // Consent & Privacy-------------------------------------------------------
             Certificates          = new Dataset<CertificateInfo, long>(context);
-            EncryptionKeys        = new Dataset<EncryptionKeyInfo, long>(context);
 
             // Computing & Storage ---------------------------------------------------
             Hosts                 = new Dataset<HostInfo,           long>(context);
@@ -50,15 +49,24 @@ namespace Carbon.Platform
             MachineTypes          = new Dataset<MachineType,        long>(context);
             Volumes               = new Dataset<VolumeInfo,         long>(context);
 
+            // Databases --------------------------------------------------------------
+            Databases          = new Dataset<DatabaseInfo,     long>(context);
+            DatabaseClusters   = new Dataset<DatabaseCluster,  long>(context);
+            DatabaseInstances  = new Dataset<DatabaseInstance, long>(context);
+            DatabaseBackups    = new Dataset<DatabaseBackup,   long>(context);
+            EncryptionKeys     = new Dataset<EncryptionKeyInfo, long>(context);
+
             // Networks --------------------------------------------------------------
-            Networks              = new Dataset<NetworkInfo, long>(context);
-            NetworkAddresses      = new Dataset<NetworkAddress, long>(context);
-            NetworkInterfaces     = new Dataset<NetworkInterfaceInfo, long>(context);
-            NetworkSecurityGroups = new Dataset<NetworkSecurityGroup, long>(context);
+            Networks              = new Dataset<NetworkInfo,              long>(context);
+            NetworkAddresses      = new Dataset<NetworkAddress,           long>(context);
+            NetworkInterfaces     = new Dataset<NetworkInterfaceInfo,     long>(context);
+            NetworkSecurityGroups = new Dataset<NetworkSecurityGroup,     long>(context);
             NetworkPolicyRules    = new Dataset<NetworkSecurityGroupRule, long>(context);
-            LoadBalancers         = new Dataset<LoadBalancer, long>(context);
-            LoadBalancerListeners = new Dataset<LoadBalancerListener, long>(context);
-            Subnets               = new Dataset<SubnetInfo, long>(context);
+            LoadBalancers         = new Dataset<LoadBalancer,             long>(context);
+            LoadBalancerListeners = new Dataset<LoadBalancerListener,     long>(context);
+            LoadBalancerRules     = new Dataset<LoadBalancerRule,         long>(context);
+
+            Subnets = new Dataset<SubnetInfo, long>(context);
 
             // CI
             Deployments           = new Dataset<Deployment, long>(context);
@@ -81,25 +89,31 @@ namespace Carbon.Platform
         public Dataset<AppInfo, long>                       Apps            { get; }
         public Dataset<AppRelease, (long, SemanticVersion)> AppReleases     { get; }
 
-        // Computing & Storage ---------------------------------------------------                          
-        public Dataset<EncryptionKeyInfo,    long> EncryptionKeys        { get; }
+        // Computing & Storage ------------------------------------------------------                                                                                                
+        public Dataset<HealthCheck,          long> HealthChecks              { get; }
+        public Dataset<HostInfo,             long> Hosts                     { get; }
+        public Dataset<HostGroup,            long> HostGroups                { get; }
+        public Dataset<HostTemplate,         long> HostTemplates             { get; }
+        public Dataset<MachineImageInfo,     long> MachineImages             { get; }
+        public Dataset<MachineType,          long> MachineTypes              { get; }
+        public Dataset<VolumeInfo,           long> Volumes                   { get; }
 
-        public Dataset<HealthCheck,          long> HealthChecks          { get; }
-        public Dataset<HostInfo,             long> Hosts                 { get; }
-        public Dataset<HostGroup,            long> HostGroups             { get; }
-        public Dataset<HostTemplate,         long> HostTemplates         { get; }
-        public Dataset<MachineImageInfo,     long> MachineImages         { get; }
-        public Dataset<MachineType,          long> MachineTypes          { get; }
-        public Dataset<VolumeInfo,           long> Volumes               { get; }
+        // Data ---------------------------------------------------------------------
+        public Dataset<DatabaseInfo,         long> Databases                 { get; }
+        public Dataset<DatabaseCluster,      long> DatabaseClusters          { get; }
+        public Dataset<DatabaseInstance,     long> DatabaseInstances         { get; }
+        public Dataset<DatabaseBackup,       long> DatabaseBackups           { get; }
+        public Dataset<EncryptionKeyInfo,    long> EncryptionKeys            { get; }
 
         // Networks --------------------------------------------------------------
         public Dataset<NetworkInfo,              long> Networks              { get; }
         public Dataset<NetworkAddress,           long> NetworkAddresses      { get; }
         public Dataset<NetworkInterfaceInfo,     long> NetworkInterfaces     { get; }
-        public Dataset<NetworkSecurityGroup,     long> NetworkSecurityGroups       { get; }
+        public Dataset<NetworkSecurityGroup,     long> NetworkSecurityGroups { get; }
         public Dataset<NetworkSecurityGroupRule, long> NetworkPolicyRules    { get; }
-        public Dataset<LoadBalancer,             long> LoadBalancers        { get; }
+        public Dataset<LoadBalancer,             long> LoadBalancers         { get; }
         public Dataset<LoadBalancerListener,     long> LoadBalancerListeners { get; }
+        public Dataset<LoadBalancerRule,         long> LoadBalancerRules     { get; }
         public Dataset<SubnetInfo,               long> Subnets               { get; }
 
         // Hosting --------------------------------------------------------------
