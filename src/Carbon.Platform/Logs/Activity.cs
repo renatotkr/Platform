@@ -2,7 +2,6 @@
 
 using Carbon.Data.Annotations;
 using Carbon.Json;
-using Carbon.Platform.Apps;
 
 namespace Carbon.Platform.Logs
 {
@@ -11,17 +10,10 @@ namespace Carbon.Platform.Logs
     {
         public Activity() { }
 
-        public Activity(IApp app, ActivityType type)
+        public Activity(ActivityType type, ResourceType resourceType, long resourceId)
         {
-            #region Preconditions
-
-            if (app == null)
-                throw new ArgumentNullException(nameof(app));
-
-            #endregion
-
-            ResourceType = ResourceType.App;
-            ResourceId   = app.Id;
+            ResourceType = resourceType;
+            ResourceId   = resourceId;
             Type         = type;
         }
 
@@ -32,28 +24,21 @@ namespace Carbon.Platform.Logs
         public ActivityType Type { get; }
 
         [Member("resourceType")]
-        public ResourceType ResourceType { get; set; }
+        public ResourceType ResourceType { get; }
 
         [Member("resourceId")]
         [Indexed]
-        public long ResourceId { get; set; }
+        public long ResourceId { get; }
 
         [Member("details"), Optional]
         [StringLength(1000)]
         public JsonObject Details { get; set; }
 
+        #region Timestamps
+
         [Member("created"), Timestamp]
-        public DateTime Created { get; set; }
-    }
+        public DateTime Created { get; }
 
-    public enum ActivityType
-    {
-        Create   = 1,
-        Build    = 2,
-        Publish  = 3,  // New Version
-        Deploy   = 4,  // On instance
-
-        Add      = 7, // Instance
-        Remove   = 8, // Instance
+        #endregion
     }
 }

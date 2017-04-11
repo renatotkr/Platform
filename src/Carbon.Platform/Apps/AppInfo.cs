@@ -10,12 +10,11 @@ namespace Carbon.Platform.Apps
     {
         public AppInfo() { }
 
-        public AppInfo(long id, string name, AppType type, long ownerId)
+        public AppInfo(long id, string name, AppType type)
         {
             Id   = id;
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Type = type;
-            OwnerId = ownerId;
         }
 
         [Member("id"), Key]
@@ -27,10 +26,6 @@ namespace Carbon.Platform.Apps
         [Member("name"), Unique]
         [StringLength(63)]
         public string Name { get; }
-
-        [IgnoreDataMember]
-        [Member("ownerId")]
-        public long OwnerId { get; }
 
         #region Timestamps
 

@@ -14,6 +14,7 @@ namespace Carbon.Platform.CI
             long id,
             long appId,
             SemanticVersion revision, 
+            long commitId,
             DeploymentStatus status = DeploymentStatus.Pending)
         {
             #region Preconditions
@@ -26,6 +27,7 @@ namespace Carbon.Platform.CI
             Id       = id;
             Status   = status;
             AppId    = appId;
+            CommitId = commitId;
             Revision = revision.ToString();
         }
 
@@ -43,7 +45,7 @@ namespace Carbon.Platform.CI
         public string Revision { get; }
 
         [Member("commitId")]
-        public long CommitId { get; set; }
+        public long CommitId { get; }
 
         [Member("creatorId")]
         public long CreatorId { get; set; }

@@ -30,9 +30,6 @@ namespace Carbon.Platform
         [Member("name")]
         [StringLength(63)]
         public string Name { get; }
-        
-        // FullName (carbonmade.com/production)
-
 
         [Member("variables")]
         public JsonObject Variables { get; }

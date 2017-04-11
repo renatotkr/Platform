@@ -32,12 +32,14 @@ namespace Carbon.Platform.VersionControl
         [StringLength(100)]
         public string FullName { get; }
 
+        [IgnoreDataMember]
         [Member("ownerId")]  // May change ownership
         public long OwnerId { get; }
-       
+
         #region Stats
 
         // Max ~4M
+        [IgnoreDataMember]
         [Member("commitCount")]
         public int CommitCount { get; }
 
@@ -52,6 +54,7 @@ namespace Carbon.Platform.VersionControl
         GitLab            : 1002
         */
 
+        [IgnoreDataMember]
         [Member("providerId")]
         public int ProviderId { get; }
 
@@ -60,6 +63,7 @@ namespace Carbon.Platform.VersionControl
         string IManagedResource.ResourceId => FullName;
         
         // Used by amazon codecommit
+        [IgnoreDataMember]
         [Member("locationId")]
         public long LocationId { get; }
         

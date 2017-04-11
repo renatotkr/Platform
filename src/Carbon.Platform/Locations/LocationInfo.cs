@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
+using Carbon.Data.Annotations;
+
 namespace Carbon.Platform
 {
-    using Data.Annotations;
-
     // Locations may be regions or zones
 
     [Dataset("Locations")]
@@ -35,10 +35,6 @@ namespace Carbon.Platform
 
         [Member("status")]
         public LocationStatus Status { get; }
-
-        //  // when the region was launched
-        [Member("created"), Timestamp]
-        public DateTime Created { get; set; }
 
         #region Flags
 
@@ -75,11 +71,22 @@ namespace Carbon.Platform
 
         long IManagedResource.LocationId => Id;
 
+        #endregion
+
+        #region Timestamps
+
+        // when the region was launched
+        [Member("created"), Timestamp]
+        public DateTime Created { get; set; }
 
         #endregion
+
+        #region Equality
 
         public bool Equals(LocationInfo other) =>
             other.Id == Id &&
             other.Name == Name;
+
+        #endregion
     }
 }

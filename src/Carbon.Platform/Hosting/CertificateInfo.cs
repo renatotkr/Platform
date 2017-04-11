@@ -16,6 +16,7 @@ namespace Carbon.Platform.Hosting
             Id = id;
             ProviderId = resource.ProviderId;
             ResourceId = resource.ResourceId;
+            LocationId = resource.LocationId;
         }
 
         [Member("id"), Key]
@@ -47,16 +48,21 @@ namespace Carbon.Platform.Hosting
 
         ResourceType IManagedResource.ResourceType => ResourceType.Certificate;
 
-        long IManagedResource.LocationId => 0;
+        // aws certificates are region scoped
+        [IgnoreDataMember]
+        [Member("locationId")]
+        public long LocationId { get; }
 
         #endregion
 
         #region Timestamps
 
         [Member("issued")]
+        [TimePrecision(TimePrecision.Second)]
         public DateTime? Issued { get; set; }
 
         [Member("revoked"), Mutable]
+        [TimePrecision(TimePrecision.Second)]
         public DateTime? Revoked { get; set; }
 
         [IgnoreDataMember]

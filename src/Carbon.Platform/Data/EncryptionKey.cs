@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 
-namespace Carbon.Platform.Security
+namespace Carbon.Platform.Data
 {
     [Dataset("EncryptionKeys")]
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]

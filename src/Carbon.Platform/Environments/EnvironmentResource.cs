@@ -10,12 +10,16 @@ namespace Carbon.Platform
         public EnvironmentResource(
             long id,
             long environmentId,
-            long locationId
+            long locationId,
+            ResourceType resourceType,
+            long resourceId
         )
         {
-            Id = id;
+            Id            = id;
             EnvironmentId = environmentId;
-            LocationId = locationId;
+            LocationId    = locationId;
+            ResourceType  = resourceType;
+            ResourceId    = resourceId;
         }
 
         [Member("id"), Key]
@@ -29,9 +33,9 @@ namespace Carbon.Platform
         
         // e.g. Bucket | LoadBalancer | HostGroup ...
         [Member("resourceType")]
-        public ResourceType ResourceType { get; set; }
+        public ResourceType ResourceType { get; }
 
         [Member("resourceId")]
-        public long ResourceId { get; set; }
+        public long ResourceId { get; }
     }
 }

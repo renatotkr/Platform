@@ -1,10 +1,10 @@
 ﻿using System;
 
+using Carbon.Data.Annotations;
+using Carbon.Versioning;
+
 namespace Carbon.Platform.Apps
 {
-    using Data.Annotations;
-    using Versioning;
-
     [Dataset("AppReleases")]
     public class AppRelease : IAppRelease
     {
