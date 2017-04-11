@@ -17,6 +17,7 @@ namespace Carbon.Platform.CI
         private readonly PlatformDb db;
         private readonly ILogger log;
         private readonly EnvironmentService envService;
+        private readonly WebsiteService websiteService;
 
         public WebsiteDeployer(SecretKey key, int port, PlatformDb db, ILogger logger)
             : base(key, port)
@@ -24,52 +25,47 @@ namespace Carbon.Platform.CI
             this.db         = db     ?? throw new ArgumentNullException(nameof(db));
             this.log        = logger ?? throw new ArgumentNullException(nameof(logger));
             this.envService = new EnvironmentService(db);
+
+            this.websiteService = new WebsiteService(new WebDb(db.Context));
         }
 
-        public async Task<DeployResult> DeployAsync(IWebsite website, SemanticVersion version, IEnvironment env)
+        public async Task<DeployResult> DeployAsync(WebsiteRelease release, IEnvironment env)
         {
             #region Preconditions
 
-            if (website == null) throw new ArgumentNullException(nameof(website));
+            if (release == null) throw new ArgumentNullException(nameof(release));
 
             #endregion
+            
+            var deployment = await websiteService.StartDeployment(release, env, 0);
 
             var hosts = await envService.GetHostsAsync(env).ConfigureAwait(false);
             
-            await DeployAsync(website, version, hosts).ConfigureAwait(false);
+            await DeployAsync(release, hosts).ConfigureAwait(false);
 
-            using (var connection = db.Context.GetConnection())
-            {
-                connection.Execute(
-                    @"UPDATE Websites
-                      SET revision = @revision
-                      WHERE id = @id", new {
-                        id = env.Id,
-                        revision = version.ToString()
-                    });
-            }
-            
+            await websiteService.CompleteDeploymentAsync(deployment, true);
+
             return new DeployResult(true);
         }
 
-        private async Task DeployAsync(IWebsite website, SemanticVersion version, IHost[] hosts)
+        private async Task DeployAsync(WebsiteRelease release, IHost[] hosts)
         {
             var tasks = new Task[hosts.Length];
 
             for (var i = 0; i < hosts.Length; i++)
             {
-                tasks[i] = DeployAsync(website, version, hosts[i].Address);
+                tasks[i] = DeployAsync(release, hosts[i].Address);
             }
 
             await Task.WhenAll(tasks).ConfigureAwait(false);
         }
 
-        private async Task DeployAsync(IWebsite website, SemanticVersion version, IPAddress host)
+        private async Task DeployAsync(WebsiteRelease release, IPAddress host)
         {
             #region Preconditions
 
-            if (website == null)
-                throw new ArgumentNullException(nameof(website));
+            if (release == null)
+                throw new ArgumentNullException(nameof(release));
 
             if (host == null)
                 throw new ArgumentNullException(nameof(host));
@@ -78,7 +74,7 @@ namespace Carbon.Platform.CI
 
             log.Info($"{host} / activating");
 
-            var result = await SendAsync(host, $"/websites/{website.Id}@{version}/activate").ConfigureAwait(false);
+            var result = await SendAsync(host, $"/websites/{release.WebsiteId}@{release.Version}/activate").ConfigureAwait(false);
 
             log.Info(result);
         }

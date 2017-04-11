@@ -6,6 +6,6 @@ namespace Carbon.Platform.CI
 {
     public interface IWebsiteDeployer
     {
-        Task<DeployResult> DeployAsync(IWebsite website, SemanticVersion version, IEnvironment env);
+        Task<DeployResult> DeployAsync(WebsiteRelease release, IEnvironment env);
     }
 }

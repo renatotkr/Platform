@@ -3,13 +3,11 @@ using System.Threading.Tasks;
 
 using Carbon.Logging;
 using Carbon.Platform.Computing;
-using Carbon.Versioning;
 
 namespace Carbon.Platform.CI
 {
     using Platform;
     using Platform.Apps;
-    using Platform.Logs;
     using Protection;
 
     public class AppDeployer : ApiBase, IAppDeployer
@@ -28,12 +26,12 @@ namespace Carbon.Platform.CI
             this.backendService = new EnvironmentService(db);
         }
 
-        public async Task<DeployResult> DeployAsync(IApp app, SemanticVersion version, IEnvironment env)
+        public async Task<DeployResult> DeployAsync(AppRelease release, IEnvironment env)
         {
             #region Preconditions
 
-            if (app == null)
-                throw new ArgumentNullException(nameof(app));
+            if (release == null)
+                throw new ArgumentNullException(nameof(release));
 
             if (env == null)
                 throw new ArgumentNullException(nameof(env));
@@ -41,28 +39,28 @@ namespace Carbon.Platform.CI
             #endregion
 
             // Create a deployment record
-            var deployment = await ci.StartAsync(env, app, version).ConfigureAwait(false);
+            var deployment = await ci.StartAsync(env, release).ConfigureAwait(false);
 
             var hosts = await backendService.GetHostsAsync(env).ConfigureAwait(false);
 
-            await ActivateAsync(app, version, hosts).ConfigureAwait(false);
-
-            // Create the targets
-            await ci.CreateTargetsAsync(deployment, hosts).ConfigureAwait(false);
+            await ActivateAsync(release, hosts).ConfigureAwait(false);
 
             // Complete the deployment
             await ci.CompleteAsync(deployment, succceded: true).ConfigureAwait(false);
+
+            // Create the targets
+            await ci.CreateTargetsAsync(deployment, hosts).ConfigureAwait(false);
 
             return new DeployResult(true);
         }
 
         // Activate on a single host
-        public async Task<DeployResult> DeployAsync(IApp app, SemanticVersion version, IHost host)
+        public async Task<DeployResult> DeployAsync(AppRelease release, IHost host)
         {
             #region Preconditions
 
-            if (app == null)
-                throw new ArgumentNullException(nameof(app));
+            if (release == null)
+                throw new ArgumentNullException(nameof(release));
 
             #endregion
 
@@ -72,7 +70,7 @@ namespace Carbon.Platform.CI
 
             try
             {
-                text = await SendAsync(host.Address, $"/apps/{app.Id}@{version}/activate").ConfigureAwait(false);
+                text = await SendAsync(host.Address, $"/apps/{release.AppId}@{release.Version}/activate").ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -83,28 +81,15 @@ namespace Carbon.Platform.CI
 
             log.Info(host.Id + " - " + text);
 
-            // TODO: Change to a deploytarget
-         
-            var e = new Activity(app, ActivityType.Deploy) {
-                Details = new Json.JsonObject {
-                    { "hostId"   , host.Id },
-                    { "revision" , version.ToString() }
-                }
-            };
-
-            // Message = text
-
-            await db.Activities.InsertAsync(e).ConfigureAwait(false);
-
             return new DeployResult(true, text);
         }
 
-        private async Task<DeployResult[]> ActivateAsync(IApp app, SemanticVersion version, IHost[] hosts)
+        private async Task<DeployResult[]> ActivateAsync(AppRelease release, IHost[] hosts)
         {
             #region Preconditions
 
-            if (app == null)
-                throw new ArgumentNullException(nameof(app));
+            if (release == null)
+                throw new ArgumentNullException(nameof(release));
 
             if (hosts == null)
                 throw new ArgumentNullException(nameof(hosts));
@@ -115,7 +100,7 @@ namespace Carbon.Platform.CI
 
             for (var i = 0; i < hosts.Length; i++)
             {
-                tasks[i] = DeployAsync(app, version, hosts[i]);
+                tasks[i] = DeployAsync(release, hosts[i]);
             }
 
             var results = await Task.WhenAll(tasks).ConfigureAwait(false);
