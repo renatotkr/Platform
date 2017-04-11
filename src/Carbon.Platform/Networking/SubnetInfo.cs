@@ -1,61 +1,79 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using System.Net;
+
+using Carbon.Data.Annotations;
 
 namespace Carbon.Platform.Networking
 {
-    using Data.Annotations;
-
     [Dataset("Subnets")]
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
-    public class SubnetInfo : ISubnet, ICloudResource
+    public class SubnetInfo : ISubnet
     {
+        public SubnetInfo() { }
+
+        public SubnetInfo(long id, string cidr, ManagedResource resource)
+        {
+            Id         = id;
+            CidrBlock  = cidr ?? throw new ArgumentNullException(nameof(cidr));
+            ProviderId = resource.ProviderId;
+            LocationId = resource.LocationId;
+            ResourceId = resource.ResourceId;
+        }
+
         // networkId + index
         [Member("id"), Key]
-        public long Id { get; set; }
+        public long Id { get; }
 
-        [Member("cidr")] // 10.1.1.0/24
-        [Ascii, StringLength(50)]
-        public string Cidr { get; set; } 
+        [Member("cidrBlock")]
+        public string CidrBlock { get; } 
 
+        [Member("gatewayAddress")]
+        public IPAddress GatewayAddress { get; set; }
+
+        [IgnoreDataMember]
+        public long NetworkId => ScopedId.GetScope(Id);
+
+        // [a-z]([-a-z0-9]*[a-z0-9])?
+        // Validate alphanumeric
+
+        [Member("name")]
+        [StringLength(63)]
+        public string Name { get; set; }
+
+        #region IResource
+
+        [IgnoreDataMember]
+        [Member("providerId")]
+        public int ProviderId { get; }
+
+        [IgnoreDataMember]
+        [Member("resourceId")]
+        [Ascii, StringLength(100)]
+        public string ResourceId { get; }
+
+        [IgnoreDataMember]
         [Member("locationId")]
-        public long LocationId { get; set; }
+        public long LocationId { get; }
+
+        ResourceType IManagedResource.ResourceType => ResourceType.Subnet;
+
+        #endregion
+
+        #region Timestamps
 
         [IgnoreDataMember]
         [Member("created"), Timestamp]
         public DateTime Created { get; }
 
         [IgnoreDataMember]
-        public long NetworkId => ScopedId.GetScope(Id);
+        [Member("deleted")]
+        public DateTime? Deleted { get; }
 
-        #region IResource
-
-        // e.g. aws
         [IgnoreDataMember]
-        [Member("providerId")]
-        public int ProviderId { get; set; }
-
-        // e.g. subnet-8360a9e7
-        [IgnoreDataMember]
-        [Member("resourceId")]
-        [Ascii, StringLength(100)]
-        public string ResourceId { get; set; }
-
-        ResourceType ICloudResource.Type => ResourceType.Subnet;
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; }
 
         #endregion
     }
 }
-
-// Known as a Subnetwork in Google
-
-
-// Details
-// -gatewayAddress
-
-/*
-us-west1	    10.138.0.0/20	10.138.0.1
-us-central1	    10.128.0.0/20	10.128.0.1
-us-east1	    10.142.0.0/20	10.142.0.1
-europe-west1	10.132.0.0/20	10.132.0.1
-asia-east1	    10.140.0.0/20	10.140.0.1
-*/

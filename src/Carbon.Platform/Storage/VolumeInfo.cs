@@ -7,19 +7,24 @@ namespace Carbon.Platform.Storage
 
     [Dataset("Volumes")]
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
-    public class VolumeInfo : IVolume, IVolumeStats, IManagedResource
+    public class VolumeInfo : IVolume
     {
-        [Member("id"), Key]
-        public long Id { get; set; }
+        public VolumeInfo() { }
 
-        [Member("status"), Mutable]
-        public VolumeStatus Status { get; set; }
+        public VolumeInfo(long id, long size, ManagedResource resource)
+        {
+            Id         = id;
+            Size       = size;
+            ProviderId = resource.ProviderId;
+            LocationId = resource.LocationId;
+            ResourceId = resource.ResourceId;
+        }
+
+        [Member("id"), Key]
+        public long Id { get; }
 
         [Member("size")]
-        public long Size { get; set; }
-
-        [Member("locationId")]
-        public long LocationId { get; set; }
+        public long Size { get; }
 
         [Member("hostId"), Mutable]
         public long? HostId { get; set; }
@@ -30,28 +35,19 @@ namespace Carbon.Platform.Storage
 
         [IgnoreDataMember]
         [Member("providerId")]
-        public int ProviderId { get; set; }
+        public int ProviderId { get; }
 
         [IgnoreDataMember]
         [Member("resourceId")]
         [Ascii, StringLength(63)]
-        public string ResourceId { get; set; }
+        public string ResourceId { get; }
 
-        ResourceType IManagedResource.Type => ResourceType.Volume;
+        [IgnoreDataMember]
+        [Member("locationId")]
+        public long LocationId { get; }
+
+        ResourceType IManagedResource.ResourceType => ResourceType.Volume;
       
-        #endregion
-
-        #region Stats / Health
-
-        [Member("heartbeat")]
-        public DateTime? Heartbeat { get; set; }
-
-        [Member("bytesRead")]
-        public long BytesRead { get; set; }
-
-        [Member("bytesWritten")]
-        public long BytesWritten { get; set; }
-
         #endregion
 
         #region Timestamps
