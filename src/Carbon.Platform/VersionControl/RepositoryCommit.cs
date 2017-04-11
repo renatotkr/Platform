@@ -5,7 +5,7 @@ using Carbon.Data.Annotations;
 namespace Carbon.Platform.VersionControl
 {
     [Dataset("RepositoryCommits")]
-    public class RepositoryCommit : ICommit
+    public class RepositoryCommit : IRepositoryCommit
     {
         public RepositoryCommit() { }
 

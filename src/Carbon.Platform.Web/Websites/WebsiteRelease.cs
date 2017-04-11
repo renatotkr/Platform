@@ -11,7 +11,7 @@ namespace Carbon.Platform.Web
     {
         public WebsiteRelease() { }
 
-        public WebsiteRelease(IWebsite website, SemanticVersion version, byte[] sha256, ICommit commit, long creatorId)
+        public WebsiteRelease(IWebsite website, SemanticVersion version, byte[] sha256, IRepositoryCommit commit, long creatorId)
         {
             #region Preconditions
 
