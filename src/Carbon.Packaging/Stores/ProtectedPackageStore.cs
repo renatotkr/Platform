@@ -14,6 +14,8 @@ namespace Carbon.Packaging
         private readonly byte[] password;
         private readonly string prefix;
 
+        // TODO: Accept an explict protector
+
         public ProtectedPackageStore(IBucket bucket, byte[] password, string prefix = null)
         {
             this.bucket = bucket ?? throw new ArgumentNullException(nameof(bucket));

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
+using Carbon.Platform.Computing;
+
 namespace Carbon.Platform
 {
-    using Storage;
-
     public class VolumeDetails : IVolume
     {
         [DataMember(Name = "id", Order = 1)]

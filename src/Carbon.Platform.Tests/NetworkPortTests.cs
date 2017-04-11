@@ -8,11 +8,11 @@ namespace Carbon.Net.Tests
         public void Parse1()
         {
             Assert.Equal(80, Listener.Parse("80").Port);
-            Assert.Equal(80, Listener.Parse("80/tcp").Port);
+            // Assert.Equal(80, Listener.Parse("80/tcp").Port);
 
-            Assert.Equal(NetworkProtocal.TCP,   Listener.Parse("80/tcp").Protocal);
-            Assert.Equal(NetworkProtocal.HTTP,  Listener.Parse("80/http").Protocal);
-            Assert.Equal(NetworkProtocal.HTTPS, Listener.Parse("443/https").Protocal);
+            // Assert.Equal(ApplicationProtocal.TCP,   Listener.Parse("80/tcp").Protocal);
+            Assert.Equal(ApplicationProtocal.HTTP,  Listener.Parse("80/http").Protocal);
+            Assert.Equal(ApplicationProtocal.HTTPS, Listener.Parse("443/https").Protocal);
 
             Assert.Equal("80", Listener.Parse("80").ToString());
 

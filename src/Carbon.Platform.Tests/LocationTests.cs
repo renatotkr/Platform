@@ -22,8 +22,8 @@ namespace Carbon.Platform.Tests
             
             Assert.Equal("us-east-1", location.Name);
             Assert.Equal("us-east-1", location.RegionName);
-            Assert.Equal(ResourceProvider.Amazon, location.Provider);
-            Assert.Equal(ResourceType.Region, location.Type);
+            Assert.Equal(ResourceProvider.Amazon.Id, location.ProviderId);
+            Assert.Equal(ResourceType.Region, location.ResourceType);
         }
 
         [Fact]
@@ -34,8 +34,8 @@ namespace Carbon.Platform.Tests
             Assert.Equal("us-east-1", location.RegionName);
             Assert.Equal("us-east-1a", location.Name);
             Assert.Equal("a", location.ZoneName);
-            Assert.Equal(ResourceProvider.Amazon, location.Provider);
-            Assert.Equal(ResourceType.Zone, location.Type);
+            Assert.Equal(ResourceProvider.Amazon.Id, location.ProviderId);
+            Assert.Equal(ResourceType.Zone, location.ResourceType);
         }
 
         [Fact]
@@ -62,6 +62,7 @@ namespace Carbon.Platform.Tests
             Assert.Equal(Locations.Get(Locations.Amazon_AP_NorthEast1.Id), Locations.Amazon_AP_NorthEast1);
         }
 
+        /*
         [Fact]
         public void ZoneIds()
         {
@@ -75,14 +76,12 @@ namespace Carbon.Platform.Tests
                 Assert.Equal(i + 1, LocationHelper.GetZoneNumber(char.ToLower(letter)));
             }
         }
+        */
 
         [Fact]
         public void TestProperties()
         {
-            var region = new LocationInfo {
-                ProviderId = ResourceProvider.Amazon.Id,
-                Name = "us-east-1"
-            };
+            var region = new LocationInfo(Locations.Amazon_US_East1.Id, "us-east-1");
 
             Assert.Equal("aws",                   region.Provider.Code);
             Assert.Equal(1,                       region.Provider.Id);
@@ -104,9 +103,9 @@ namespace Carbon.Platform.Tests
         [Fact]
         public void LocationEquality()
         {
-            var a1 = new LocationInfo { Id = 1, ProviderId = 1, Name = "a" };
-            var a2 = new LocationInfo { Id = 1, ProviderId = 1, Name = "a" };
-            var b1 = new LocationInfo { Id = 1, ProviderId = 1, Name = "b" };
+            var a1 = new LocationInfo(1, "a"); 
+            var a2 = new LocationInfo(1, "a");
+            var b1 = new LocationInfo(1, "b");
 
             Assert.True(a1.Equals(a2));
             Assert.False(a1.Equals(b1));
@@ -123,11 +122,15 @@ namespace Carbon.Platform.Tests
             Assert.Equal(4295032833, ab.Value);
 
             Assert.Equal(4295032833, Locations.Amazon_US_East1.WithZone('A').Id);
+            Assert.Equal(4295032834, Locations.Amazon_US_East1.WithZone('B').Id);
+            Assert.Equal(4295032835, Locations.Amazon_US_East1.WithZone('C').Id);
+            Assert.Equal(4295032836, Locations.Amazon_US_East1.WithZone('D').Id);
+            Assert.Equal(4295032837, Locations.Amazon_US_East1.WithZone('E').Id);
 
-            var zone = LocationInfo.FromId(ab.Value, "us-east-1a");
+            var zone = new Location(ab, "us-east-1a");
 
-            Assert.Equal(ResourceProvider.Amazon, zone.Provider);
-            Assert.Equal(ResourceType.Zone, zone.Type);
+            Assert.Equal(ResourceProvider.Amazon.Id, zone.ProviderId);
+            Assert.Equal(ResourceType.Zone, zone.ResourceType);
         }
 
         [Fact]

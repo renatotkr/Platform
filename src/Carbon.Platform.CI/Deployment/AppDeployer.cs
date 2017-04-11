@@ -14,19 +14,19 @@ namespace Carbon.Platform.CI
     {
         private readonly PlatformDb db;
         private readonly ILogger log;
-        private readonly EnvironmentService backendService;
+        private readonly EnvironmentService envService;
         private readonly IDeploymentService ci;
 
         public AppDeployer(SecretKey key, int port, PlatformDb db, ILogger log)
             : base(key, port)
         {
-            this.db             = db   ?? throw new ArgumentNullException(nameof(db));
-            this.log            = log ?? throw new ArgumentNullException(nameof(log));
-            this.ci             = new DeploymentService(db);
-            this.backendService = new EnvironmentService(db);
+            this.db         = db   ?? throw new ArgumentNullException(nameof(db));
+            this.log        = log ?? throw new ArgumentNullException(nameof(log));
+            this.ci         = new DeploymentService(db);
+            this.envService = new EnvironmentService(db);
         }
 
-        public async Task<DeployResult> DeployAsync(AppRelease release, IEnvironment env)
+        public async Task<DeployResult> DeployAsync(IAppRelease release, IEnvironment env)
         {
             #region Preconditions
 
@@ -41,7 +41,7 @@ namespace Carbon.Platform.CI
             // Create a deployment record
             var deployment = await ci.StartAsync(env, release).ConfigureAwait(false);
 
-            var hosts = await backendService.GetHostsAsync(env).ConfigureAwait(false);
+            var hosts = await envService.GetHostsAsync(env).ConfigureAwait(false);
 
             await ActivateAsync(release, hosts).ConfigureAwait(false);
 
@@ -55,7 +55,7 @@ namespace Carbon.Platform.CI
         }
 
         // Activate on a single host
-        public async Task<DeployResult> DeployAsync(AppRelease release, IHost host)
+        public async Task<DeployResult> DeployAsync(IAppRelease release, IHost host)
         {
             #region Preconditions
 
@@ -84,7 +84,7 @@ namespace Carbon.Platform.CI
             return new DeployResult(true, text);
         }
 
-        private async Task<DeployResult[]> ActivateAsync(AppRelease release, IHost[] hosts)
+        private async Task<DeployResult[]> ActivateAsync(IAppRelease release, IHost[] hosts)
         {
             #region Preconditions
 

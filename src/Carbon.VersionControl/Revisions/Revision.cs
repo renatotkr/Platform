@@ -83,7 +83,7 @@ namespace Carbon.VersionControl
 
                 switch (parts[0])
                 {
-                    case "tags"     : type = RevisionType.Tag; break;
+                    case "tags"     : type = RevisionType.Tag;  break;
                     case "branches" : type = RevisionType.Head; break;
                     case "heads"    : type = RevisionType.Head; break;
 

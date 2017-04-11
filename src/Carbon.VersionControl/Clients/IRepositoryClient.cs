@@ -9,7 +9,7 @@ namespace Carbon.VersionControl
         Task<IPackage> DownloadAsync(Revision revision);
 
         Task<ICommit> GetCommitAsync(Revision revision);
-
+        
         // CreateBranch
         // GetBranch
         // ListBranches
