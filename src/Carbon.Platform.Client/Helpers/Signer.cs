@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Carbon.Platform
 {
+    using Carbon.Security;
     using Protection;
-    using Security;
 
     public static class Signer
     {
@@ -18,14 +18,15 @@ namespace Carbon.Platform
 
             #endregion
 
-            request.Headers.Date = DateTimeOffset.UtcNow;
-            request.Headers.Add("User-Agent", "Carbon/1.0");
+            var now = DateTimeOffset.UtcNow;
 
+            request.Headers.Date = now;
+            request.Headers.Add("User-Agent", "Carbon/1.1.0");
+            
             var dateHeader = request.Headers.GetValues("Date").First();
             
             var stringToSign = string.Join("\n",
-                "HMAC-SHA256",                       // Algorithm
-                dateHeader,                          // Request Date / TODO: Format as ISO
+                dateHeader,
                 request.Method.ToString().ToUpper(),
                 request.RequestUri.Authority,
                 request.RequestUri.AbsolutePath
@@ -35,10 +36,8 @@ namespace Carbon.Platform
                 key  : secret,
                 data : Encoding.UTF8.GetBytes(stringToSign)
             );
-
-            // TODO: Credential
-
-            var headerValue = $"C Algorithm=HMAC-SHA256,Signature={signature.ToHexString()}";
+            
+            var headerValue = $"TBD Signature={signature.ToHexString()}";
 
             request.Headers.TryAddWithoutValidation("Authorization", headerValue);
         }

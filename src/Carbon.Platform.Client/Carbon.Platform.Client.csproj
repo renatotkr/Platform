@@ -1,18 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.13.0</VersionPrefix>
-    <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
     <AssemblyName>Carbon.Platform.Client</AssemblyName>
+    <VersionPrefix>0.22.0</VersionPrefix>
+    <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
   
     <!-- Package Details -->
     <Copyright>© Jason Nelson</Copyright>
-    <PackageTags>carbon</PackageTags>
+    <Description>Client for accessing the platform api.</Description>
+    <PackageTags>platform;carbon</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Carbon.Platform.Frontends\Carbon.Platform.Frontends.csproj" />
-    <ProjectReference Include="..\Carbon.Platform\Carbon.Platform.csproj" />
+    <ProjectReference Include="..\Carbon.Platform.Abstractions\Carbon.Platform.Abstractions.csproj" />
+    <ProjectReference Include="..\Carbon.Platform.Web\Carbon.Platform.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>
