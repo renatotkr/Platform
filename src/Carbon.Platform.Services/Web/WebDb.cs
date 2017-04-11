@@ -1,0 +1,33 @@
+﻿using System;
+
+namespace Carbon.Platform.Web
+{
+    using Data;
+    using Versioning;
+
+    public class WebDb
+    {
+        public WebDb(IDbContext context)
+        {
+            Context = context ?? throw new ArgumentNullException(nameof(context));
+            
+            Websites           = new Dataset<WebsiteInfo, long>(context);
+            WebsiteDeployments = new Dataset<WebsiteDeployment, long>(context);
+            WebsiteReleases    = new Dataset<WebsiteRelease, (long, SemanticVersion)>(context);
+
+            WebComponents      = new Dataset<WebComponent, long>(context);
+
+            WebLibraries       = new Dataset<WebLibrary, long>(context);
+        }
+
+        public IDbContext Context { get; }
+
+        public Dataset<WebsiteInfo, long>                       Websites            { get; }
+        public Dataset<WebsiteDeployment, long>                 WebsiteDeployments { get; }
+        public Dataset<WebsiteRelease, (long, SemanticVersion)> WebsiteReleases     { get; }
+
+        public Dataset<WebComponent, long>                      WebComponents       { get; }
+
+        public Dataset<WebLibrary, long>                        WebLibraries        { get; }
+    }
+}
