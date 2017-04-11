@@ -6,27 +6,39 @@ namespace Carbon.Platform
     public class VolumeStats
     {
         [DataMember(Order = 1)]
-        public long Size { get; set; }
+        public long TotalBytes { get; set; }
 
         [DataMember(Order = 2)]
-        public long Available { get; set; }
+        public long AvailableBytes { get; set; }
 
         [DataMember(Order = 3)]
-        public long BytesRead { get; set; }
+        public long ReadBytes { get; set; }
 
         [DataMember(Order = 4)]
-        public long BytesWritten { get; set; }
+        public long WriteBytes { get; set; }
+
+        [DataMember(Order = 5, EmitDefaultValue = false)]
+        public long ReadOperations { get; set; }
+
+        [DataMember(Order = 6, EmitDefaultValue = false)]
+        public long WriteOperations { get; set; }
 
         /// <summary>
-        /// The percentage the volume was busy reading
+        /// The total number of seconds the volume was busy reading
         /// </summary>
-        [DataMember(Order = 5)]
-        public float ReadTime { get; set; }
+        [DataMember(Order = 7)]
+        public long TotalReadTime { get; set; }
 
         /// <summary>
-        /// Percentage the volume was busy writing
+        /// The total number of seconds the volume was busy writing
         /// </summary>
-        [DataMember(Order = 6)]
-        public float WriteTime { get; set; }
+        [DataMember(Order = 8)]
+        public long TotalWriteTime { get; set; }
+
+        /// <summary>
+        /// The number of seconds the volume was idle (no read or write operations)
+        /// </summary>
+        [DataMember(Order = 9, EmitDefaultValue = false)]
+        public long TotalIdleTime { get; set; }
     }
 }

@@ -7,19 +7,19 @@ namespace Carbon.Platform
     {
         public MemoryStats(long used, long total)
         {
-            BytesUsed = used;
-            BytesTotal = total;
+            UsedBytes = used;
+            TotalBytes = total;
         }
 
         public MemoryStats() { }
 
         [DataMember(Order = 1)]
-        public long BytesUsed { get; set; }
+        public long UsedBytes { get; set; }
 
         [DataMember(Order = 2)]
-        public long BytesTotal { get; set; }
+        public long TotalBytes { get; set; }
 
-        // BytesAvailable?
+        // AvailableBytes?
     }
 }
 
