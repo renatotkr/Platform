@@ -5,8 +5,6 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Threading.Tasks;
 
-// Replace with IISAdministration PowerShell Commands & move to dotnetcore
-
 using Microsoft.Web.Administration;
 
 namespace Carbon.Hosting.IIS
@@ -52,7 +50,7 @@ namespace Carbon.Hosting.IIS
             return FromSite(site);
         }
 
-        public Task CreateAsync(IApp app)
+        public Task CreateAsync(IApp app, SemanticVersion version, JsonObject env)
         {
             var poolName = GetApplicationPoolName(app);
 
@@ -87,12 +85,11 @@ namespace Carbon.Hosting.IIS
             pool.Cpu.Action = ProcessorAction.ThrottleUnderLoad;
             pool.Cpu.Limit = 65 * 1000; // 65%
 
-
             // Create the site ------------------------------------
             // - Set path to a placeholder root directory
             // - Setup bindings
 
-            manager.Sites.Add(GetConfigureSite(app));
+            manager.Sites.Add(GetConfigureSite(app, version, env));
 
             // Commit the changes to the server
             manager.CommitChanges();
@@ -100,7 +97,7 @@ namespace Carbon.Hosting.IIS
             return Task.CompletedTask;
         }
 
-        public async Task DeployAsync(IApp app, IPackage package)
+        public async Task DeployAsync(IApp app, SemanticVersion version, JsonObject env, IPackage package)
         {
             #region Ensure the app exists
 
@@ -108,12 +105,12 @@ namespace Carbon.Hosting.IIS
 
             if (instance == null)
             {
-                await CreateAsync(app).ConfigureAwait(false);
+                await CreateAsync(app, version, env).ConfigureAwait(false);
             }
 
             #endregion
 
-            var directory = GetAppPath(app);
+            var directory = GetAppPath(app, version);
 
             if (directory.Exists)
             {
@@ -167,7 +164,7 @@ namespace Carbon.Hosting.IIS
             // Ensure the rights have propogated
             await Task.Delay(TimeSpan.FromMilliseconds(30)).ConfigureAwait(false);
 
-            LogInfo(app, $"Deployed v{app.Version}");
+            LogInfo(app, $"Deployed v{version}");
         }
 
         public IEnumerable<SemanticVersion> GetDeployedVersions(IApp app)
@@ -193,10 +190,12 @@ namespace Carbon.Hosting.IIS
             }
         }
 
-        public bool IsDeployed(IApp release)
-            => GetAppPath(release).Exists;
+        public bool IsDeployed(IApp release, SemanticVersion version)
+        {
+            return GetAppPath(release, version).Exists;
+        }
 
-        public Task ActivateAsync(IApp app)
+        public Task ActivateAsync(IApp app, SemanticVersion version)
         {
             var site = FindSite(app.Id);
 
@@ -216,7 +215,7 @@ namespace Carbon.Hosting.IIS
 
      
             // e.g. D:/apps/1/2.1.3
-            var newPath = GetAppPath(app);
+            var newPath = GetAppPath(app, version);
 
             if (!newPath.Exists)
             {
@@ -232,12 +231,12 @@ namespace Carbon.Hosting.IIS
 
             log.Info($"Recycled app pool {pool.Name}");
 
-            LogInfo(app, $"Activated {app.Name} v{app.Version}");
+            LogInfo(app, $"Activated {app.Name} v{version}");
 
             return Task.CompletedTask;
         }
 
-        public Task ReloadAsync(IApp app)
+        public Task RestartAsync(IApp app)
         {
             var site = FindSite(app.Id);
 
@@ -278,10 +277,14 @@ namespace Carbon.Hosting.IIS
         #region Helpers
 
         private string GetApplicationPoolName(IApp app)
-            => app.Name;
+        {
+            return app.Name;
+        }
 
         private ApplicationPool GetApplicationPool(Site site)
-            => manager.ApplicationPools[site.Applications["/"].ApplicationPoolName];
+        {
+            return manager.ApplicationPools[site.Applications["/"].ApplicationPoolName];
+        }
 
         private Site FindSite(long id)
         {
@@ -293,7 +296,7 @@ namespace Carbon.Hosting.IIS
             return null;
         }
 
-        private Site GetConfigureSite(IApp app)
+        private Site GetConfigureSite(IApp app, SemanticVersion version, JsonObject env)
         {
             #region Preconditions
 
@@ -302,7 +305,7 @@ namespace Carbon.Hosting.IIS
 
             #endregion
 
-            var physicalPath = GetAppPath(app);
+            var physicalPath = GetAppPath(app, version);
 
             var site = manager.Sites.CreateElement();
 
@@ -329,40 +332,20 @@ namespace Carbon.Hosting.IIS
 
             /*
             { 
-              listeners: [ "80/http", "http://carbon.com:8080" ],
+              listeners: [ "http://carbon.com:8080" ],
               host: "carbon.com",   
               port: 8080
             }
             */
             
-            if (app is AppInfo a && a.Env is JsonObject env)
+           
+            if (env.ContainsKey("listeners"))
             {
-                // e.g. [ "http://carbon.com/80" ]
-
-                if (env.ContainsKey("listeners"))
+                foreach (var listener in (JsonArray)env["listeners"])
                 {
-                    foreach (var listener in (JsonArray)env["listeners"])
-                    {
-                        var b = new IISBinding(Listener.Parse(listener));
+                    var b = new IISBinding(Listener.Parse(listener));
 
-                        Console.WriteLine("configured listener:" + b.ToString());
-
-                        var binding = site.Bindings.CreateElement();
-
-                        binding.Protocol = b.Protocol;
-                        binding.BindingInformation = b.ToString();
-
-                        site.Bindings.Add(binding);
-                    }
-                }
-                
-                if (env.ContainsKey("port"))
-                {
-                    var port = (int)env["port"];
-
-                    var b = new IISBinding(port: port);
-
-                    Console.WriteLine("configured port:" + b.ToString());
+                    log.Info("configured listener:" + b.ToString());
 
                     var binding = site.Bindings.CreateElement();
 
@@ -370,18 +353,33 @@ namespace Carbon.Hosting.IIS
                     binding.BindingInformation = b.ToString();
 
                     site.Bindings.Add(binding);
-
-                    firewall.OpenPort(port, app);
-                }
-
-                if (site.Bindings.Count == 0)
-                {
-                    Console.WriteLine("no bindings");
                 }
             }
-            else
+                
+            if (env.ContainsKey("port"))
             {
-                Console.WriteLine("no env found on app");
+                var port = (int)env["port"];
+
+                var b = new IISBinding(port: port);
+
+                log.Info("configured port:" + b.ToString());
+
+                var binding = site.Bindings.CreateElement();
+
+                binding.Protocol = b.Protocol;
+                binding.BindingInformation = b.ToString();
+
+                site.Bindings.Add(binding);
+
+                log.Info("opening port:" + port);
+
+                firewall.Close("app" + app.Id);
+                firewall.Open("app" + app.Id, (ushort)port);
+            }
+
+            if (site.Bindings.Count == 0)
+            {
+                log.Info("no bindings configured for app");
             }
             
             return site;
@@ -411,9 +409,9 @@ namespace Carbon.Hosting.IIS
 
         // c:/apps/1/1.0.0
 
-        private DirectoryInfo GetAppPath(IApp app)
+        private DirectoryInfo GetAppPath(IApp app, SemanticVersion version)
         {
-            var path = Path.Combine(env.AppsRoot.FullName, app.Id.ToString(), app.Version.ToString());
+            var path = Path.Combine(env.AppsRoot.FullName, app.Id.ToString(), version.ToString());
 
             return new DirectoryInfo(path);
         }
@@ -435,7 +433,7 @@ namespace Carbon.Hosting.IIS
             return requests;
         }
 
-        public AppInfo FromSite(Site site)
+        public IISApplication FromSite(Site site)
         {
             var application = site.Applications["/"];
             var directory = application.VirtualDirectories["/"];
@@ -452,17 +450,33 @@ namespace Carbon.Hosting.IIS
                 throw new Exception($"Unexpected version text: '{versionText}' / {directory.PhysicalPath}");
             }
 
+            // TODO: Get the name...
+
             // 1/1.5.0
 
-            return new AppInfo {
-                Id      = site.Id,
-                Version = version,
-                Created = new DirectoryInfo(directory.PhysicalPath).CreationTimeUtc
-            };
+            string name = null;
+
+            try
+            {
+                name = site.Applications[0].ApplicationPoolName;
+
+            }
+            catch(Exception ex)
+            {
+                log.Error("error getting name:" + ex.Message);
+
+            }
+            return new IISApplication(
+                id      : site.Id,
+                name    : name,
+                version : version,
+                created : new DirectoryInfo(directory.PhysicalPath).CreationTimeUtc
+            );
         }
 
         #endregion
 
         // Start, Stop
     }
+
 }
