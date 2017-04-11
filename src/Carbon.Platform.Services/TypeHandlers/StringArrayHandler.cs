@@ -1,10 +1,8 @@
 ﻿using System.Data;
 
-namespace Carbon.Platform
+namespace Carbon.Data
 {
-    using Data;
-
-    public class StringArrayHandler : DbTypeHandler<string[]>
+    internal class StringArrayHandler : DbTypeHandler<string[]>
     {
         public override DatumInfo DatumType => DatumInfo.String(255);
 

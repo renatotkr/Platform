@@ -1,11 +1,10 @@
 ﻿using System.Data;
 
-namespace Carbon.Platform
+namespace Carbon.Data
 {
-    using Data;
     using Json; 
 
-    public class JsonObjectHandler : DbTypeHandler<JsonObject>
+    internal class JsonObjectHandler : DbTypeHandler<JsonObject>
     {
         public override DatumInfo DatumType => DatumInfo.String(4000);
 

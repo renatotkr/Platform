@@ -2,11 +2,9 @@
 using System.Data;
 using System.Net;
 
-namespace Carbon.Platform
+namespace Carbon.Data
 {
-    using Data;
-
-    public class IPAddressArrayHandler : DbTypeHandler<IPAddress[]>
+    internal class IPAddressArrayHandler : DbTypeHandler<IPAddress[]>
     {
         private static readonly char[] comma = { ',' };
 

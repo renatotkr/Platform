@@ -1,11 +1,10 @@
 ﻿using System.Data;
 
-namespace Carbon.Platform
+namespace Carbon.Data
 {
-    using Data;
     using Versioning;
 
-    public class SemanticVersionHandler : DbTypeHandler<SemanticVersion>
+    internal class SemanticVersionHandler : DbTypeHandler<SemanticVersion>
     {
         public override DatumInfo DatumType => DatumInfo.String(100);
 

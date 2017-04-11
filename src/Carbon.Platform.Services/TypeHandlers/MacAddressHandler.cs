@@ -2,11 +2,9 @@
 
 using Carbon.Net;
 
-namespace Carbon.Platform
+namespace Carbon.Data
 {
-    using Data;
-
-    public class MacAddressHandler : DbTypeHandler<MacAddress>
+    internal class MacAddressHandler : DbTypeHandler<MacAddress>
     {
         public override DatumInfo DatumType => DatumInfo.Binary(6, isFixedSize: true);
 

@@ -1,11 +1,10 @@
 ﻿using System.Data;
 
-namespace Carbon.Platform
+namespace Carbon.Data
 {
-    using Data;
     using Protection;
 
-    public class HashHandler : DbTypeHandler<Hash>
+    internal class HashHandler : DbTypeHandler<Hash>
     {
         public override DatumInfo DatumType => DatumInfo.Binary(65, isFixedSize: false);
 
