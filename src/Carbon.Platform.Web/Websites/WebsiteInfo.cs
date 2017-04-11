@@ -7,6 +7,7 @@ using Carbon.Data.Annotations;
 namespace Carbon.Platform.Web
 {
     [Dataset("Websites")]
+    [DataIndex(IndexFlags.Unique, "ownerId", "name")]
     public class WebsiteInfo : IWebsite
     {
         public WebsiteInfo() { }
@@ -21,17 +22,20 @@ namespace Carbon.Platform.Web
 
         [Member("id"), Key] 
         public long Id { get; }
+        
+        [IgnoreDataMember]
+        [Member("ownerId")]
+        public long OwnerId { get; }
 
-        [Member("name"), Unique]
+        [Member("name")]
         [StringLength(63)]
         public string Name { get; }
-        
-        [Member("ownerId")] 
-        public long OwnerId { get; }
 
         [Member("variables")]
         [StringLength(1000)]
         public JsonObject Variables { get; set; }
+
+        // Revision?
 
         [Member("repositoryId")]
         public long RepositoryId { get; }
@@ -58,15 +62,6 @@ namespace Carbon.Platform.Web
         
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
-
-        #endregion
-
-        #region IResource
-
-        [Member("providerId")]
-        public int ProviderId { get; set; } // Borg | Carbonmade
-
-        // Type => ResourceType.Website;
 
         #endregion
 

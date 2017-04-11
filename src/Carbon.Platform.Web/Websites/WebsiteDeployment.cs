@@ -2,7 +2,6 @@
 
 using Carbon.Data.Annotations;
 using Carbon.Platform.CI;
-using Carbon.Platform.VersionControl;
 using Carbon.Versioning;
 
 namespace Carbon.Platform.Web
@@ -10,26 +9,23 @@ namespace Carbon.Platform.Web
     [Dataset("WebsiteDeployments")]
     public class WebsiteDeployment : IDeployment
     {
-        public WebsiteDeployment(long id, IWebsite website, SemanticVersion revision, ICommit commit, long creatorId)
+        public WebsiteDeployment() { }
+
+        public WebsiteDeployment(
+            long id,
+            long websiteId, 
+            SemanticVersion revision, 
+            long commitId, 
+            long creatorId)
         {
-            #region Preconditions
-
-            if (website == null)
-                throw new ArgumentNullException(nameof(website));
-
-            if (commit == null)
-                throw new ArgumentNullException(nameof(commit));
-
-            #endregion
-
             Id            = id;
-            WebsiteId     = website.Id;
+            WebsiteId     = websiteId;
             Revision      = revision.ToString();
-            CommitId      = commit.Id;
+            CommitId      = commitId;
             CreatorId     = creatorId;
         }
 
-        // environment + sequence
+        // environmentId + sequence
         [Member("id"), Key]
         public long Id { get; }
 

@@ -30,7 +30,6 @@ namespace Carbon.Platform
             );
         }
         
-
         public static long Create(long scopeId, int sequence)
         {
             return (long)Create((ulong)scopeId, (ulong)sequence);
@@ -65,18 +64,5 @@ namespace Carbon.Platform
 
             return new ScopedId((long)accountId, (int)sequenceId);
         }
-    }
-
-    public struct Range
-    {
-        public Range(long start, long end)
-        {
-            Start = start;
-            End = end;
-        }
-
-        public long Start { get; }
-
-        public long End { get; }
     }
 }
