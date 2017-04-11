@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Carbon.Data;
 using Carbon.Data.Expressions;
 
 namespace Carbon.Platform
 {
     using Apps;
     using Computing;
-    using Data;
     using Networking;
-    using Storage;
 
     using static Expression;
 

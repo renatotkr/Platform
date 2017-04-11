@@ -7,7 +7,7 @@ namespace Carbon.Platform.CI
 {
     public interface IDeploymentService
     {
-        Task<Deployment> StartAsync(IEnvironment env, AppRelease release);
+        Task<Deployment> StartAsync(IEnvironment env, IAppRelease release);
 
         Task CompleteAsync(Deployment deployment, bool succceded);
 

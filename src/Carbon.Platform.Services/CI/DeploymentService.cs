@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 
 using Carbon.Platform.Computing;
-using Carbon.Versioning;
 using Carbon.Platform.Apps;
 
 using Dapper;
@@ -18,7 +17,7 @@ namespace Carbon.Platform.CI
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public async Task<Deployment> StartAsync(IEnvironment env, AppRelease release)
+        public async Task<Deployment> StartAsync(IEnvironment env, IAppRelease release)
         {
             #region Preconditions
 
@@ -31,7 +30,7 @@ namespace Carbon.Platform.CI
             #endregion
 
             var deployment = new Deployment(
-              id       : await db.Deployments.GetNextScopedIdAsync(env.Id).ConfigureAwait(false),
+              id       : await DeploymentId.GetNextAsync(db.Context, env).ConfigureAwait(false),
               appId    : env.AppId,
               revision : release.Version,
               commitId : release.CommitId,
@@ -41,25 +40,7 @@ namespace Carbon.Platform.CI
             await db.Deployments.InsertAsync(deployment).ConfigureAwait(false);
 
             return deployment;
-        }
-
-        /*
-        private async Task<long> GetNextIdAsync(IEnvironment env)
-        {
-            using (var connection = db.Context.GetConnection())
-            using (var ts = connection.BeginTransaction())
-            {
-                await connection.ExecuteAsync(
-                    @"SELECT `deploymentCount` FROM  `Environments` FOR UPDATE;
-                      UPDATE `Environments`
-                      SET `deploymentCount` = `deploymentCount` + 1
-                      WHERE id = @id", env, ts).ConfigureAwait(false);
-
-                return await connection.ExecuteScalarAsync<int>(
-                    "SELECT `deploymentCount` FROM `Environments` WHERE id = @id", env, ts).ConfigureAwait(false);
-            }
-        }
-        */
+        }     
 
         public async Task CompleteAsync(Deployment deployment, bool succceded)
         {
