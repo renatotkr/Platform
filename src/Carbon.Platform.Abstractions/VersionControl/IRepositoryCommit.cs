@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.VersionControl
 {
-    public interface ICommit
+    public interface IRepositoryCommit
     {
         long Id { get; }
 
@@ -14,6 +14,6 @@ namespace Carbon.Platform.VersionControl
 
         DateTime Created { get; }
     }
-
-    // FUTURE: SHA3
 }
+
+// FUTURE: SHA3
