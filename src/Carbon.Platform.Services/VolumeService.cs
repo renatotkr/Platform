@@ -6,7 +6,6 @@ using Amazon.Ec2;
 namespace Carbon.Platform.Services
 {
     using Computing;
-    using Storage;
 
     public class VolumeService
     {

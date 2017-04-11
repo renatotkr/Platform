@@ -1,35 +1,38 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
+using Carbon.Data.Annotations;
+
 namespace Carbon.Platform.Networking
 {
-    using Data.Annotations;
-
-    [Dataset("NetworkProxyRules")]
-    public class NetworkProxyRule : INetworkProxyRule
+    [Dataset("LoadBalancerRules")]
+    public class LoadBalancerRule : ILoadBalancerRule
     {
-        public NetworkProxyRule() { }
+        public LoadBalancerRule() { }
 
-        public NetworkProxyRule(long id)
+        public LoadBalancerRule(long id, string condition, string action, int priority)
         {
-            Id = id;
+            Id        = id;
+            Condition = condition ?? throw new ArgumentNullException(nameof(condition));
+            Action    = action ?? throw new ArgumentNullException(nameof(action));
+            Priority  = priority;
         }
 
-        // networkProxyId + sequenceNumber
+        // loadBalancerId + sequenceNumber
         [Member("id"), Key]
         public long Id { get; }
 
         [Member("condition")]
         [StringLength(500)]
-        public string Condition { get; set; }
+        public string Condition { get; }
 
         [Member("action")]
-        public string Action { get; set; }
+        public string Action { get; }
 
         [Member("priority")]
-        public int Priority { get; set; }
+        public int Priority { get; }
 
-        public long NetworkProxyId => ScopedId.GetScope(Id);
+        public long LoadBalancerId => ScopedId.GetScope(Id);
 
         #region Provider
 

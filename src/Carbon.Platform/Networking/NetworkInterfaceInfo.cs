@@ -2,21 +2,26 @@
 using System.Runtime.Serialization;
 using System.Net;
 
+using Carbon.Data.Annotations;
+using Carbon.Net;
+
 namespace Carbon.Platform.Networking
 {
-    using Carbon.Net;
-    using Data.Annotations;
-
     [Dataset("NetworkInterfaces")]
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
     public class NetworkInterfaceInfo : INetworkInterface
     {
         public NetworkInterfaceInfo() { }
 
-        public NetworkInterfaceInfo(long id, MacAddress mac, ManagedResource resource)
+        public NetworkInterfaceInfo(
+            long id, 
+            MacAddress mac,
+            IPAddress[] addresses,
+            ManagedResource resource)
         {
             Id = id;
             MacAddress = mac;
+            Addresses = addresses;
             ProviderId = resource.ProviderId;
             ResourceId = resource.ResourceId;
             LocationId = resource.LocationId;
@@ -39,7 +44,7 @@ namespace Carbon.Platform.Networking
 
         [IgnoreDataMember] 
         [Member("addresses")]
-        public IPAddress[] Addresses { get; set; }
+        public IPAddress[] Addresses { get; }
 
         [IgnoreDataMember]
         public long NetworkId => ScopedId.GetScope(SubnetId);

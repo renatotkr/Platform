@@ -1,10 +1,10 @@
 ﻿using System;
 
+using Carbon.Data;
+using Carbon.Versioning;
+
 namespace Carbon.Platform.Web
 {
-    using Data;
-    using Versioning;
-
     public class WebDb
     {
         public WebDb(IDbContext context)

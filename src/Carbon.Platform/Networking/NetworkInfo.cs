@@ -2,10 +2,10 @@
 using System.Runtime.Serialization;
 using System.Net;
 
+using Carbon.Data.Annotations;
+
 namespace Carbon.Platform.Networking
 {
-    using Data.Annotations;
-
     [Dataset("Networks")]
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
     public class NetworkInfo : INetwork

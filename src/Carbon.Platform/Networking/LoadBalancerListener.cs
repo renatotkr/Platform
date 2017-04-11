@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
+using Carbon.Data.Annotations;
 using Carbon.Net;
 
 namespace Carbon.Platform.Networking
 {
-    using Data.Annotations;
-
     [Dataset("LoadBalancerListener")]
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
     public class LoadBalancerListener : ILoadBalancerListener

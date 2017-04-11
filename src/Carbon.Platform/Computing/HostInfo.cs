@@ -2,9 +2,10 @@
 using System.Net;
 using System.Runtime.Serialization;
 
+using Carbon.Data.Annotations;
+
 namespace Carbon.Platform.Computing
 {
-    using Data.Annotations;
     using Extensions;
 
     [Dataset("Hosts")]

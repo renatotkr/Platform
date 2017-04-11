@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
+using Carbon.Data.Annotations;
+
 namespace Carbon.Platform.Networking
 {
-    using Data.Annotations;
-
     [Dataset("LoadBalancers")]
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
     public class LoadBalancer : ILoadBalancer

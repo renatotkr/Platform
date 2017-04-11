@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
+using Carbon.Data.Annotations;
+
 namespace Carbon.Platform.Computing
 {
-    using Data.Annotations;
-
     [Dataset("MachineImages")]
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
     public class MachineImageInfo : IMachineImage

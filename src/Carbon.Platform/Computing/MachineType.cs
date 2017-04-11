@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
+using Carbon.Data.Annotations;
+using Carbon.Json;
+
 namespace Carbon.Platform.Computing
 {
-    using Data.Annotations;
-    using Json;
-
     [Dataset("MachineTypes")]
     [DataIndex(IndexFlags.Unique, new[] { "providerId", "name" })]
     public class MachineType : IMachineType
