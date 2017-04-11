@@ -31,14 +31,12 @@ namespace Carbon.Platform.Services
 
                 var location = Locations.Get(provider, ec2Volume.AvailabilityZone);
 
-                 volume = new VolumeInfo {
-                    Id         = db.Context.GetNextId<VolumeInfo>(),
-                    Status     = VolumeStatus.Online,
-                    ProviderId = provider.Id,
-                    ResourceId = ec2Volume.VolumeId,
-                    LocationId = location.Id,
-                    HostId     = host?.Id,
-                    Size       = (long)ec2Volume.Size * _1GB
+                volume = new VolumeInfo(
+                    id       : db.Context.GetNextId<VolumeInfo>(),
+                    size     : (long)ec2Volume.Size * _1GB,
+                    resource : ManagedResource.Volume(location, ec2Volume.VolumeId)
+                ) { 
+                    HostId = host?.Id,
                 };
 
                 await db.Volumes.InsertAsync(volume).ConfigureAwait(false);

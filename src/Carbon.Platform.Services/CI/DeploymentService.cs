@@ -18,29 +18,48 @@ namespace Carbon.Platform.CI
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public async Task<Deployment> StartAsync(IEnvironment env, IApp app, SemanticVersion version)
+        public async Task<Deployment> StartAsync(IEnvironment env, AppRelease release)
         {
             #region Preconditions
 
             if (env == null)
                 throw new ArgumentNullException(nameof(env));
 
-            if (app == null)
-                throw new ArgumentNullException(nameof(app));
+            if (release == null)
+                throw new ArgumentNullException(nameof(release));
 
             #endregion
 
             var deployment = new Deployment(
-              id      : await db.Deployments.GetNextScopedIdAsync(env.Id).ConfigureAwait(false),
-              appId   : env.AppId,
-              revision : version,
-              status  : DeploymentStatus.Pending
+              id       : await db.Deployments.GetNextScopedIdAsync(env.Id).ConfigureAwait(false),
+              appId    : env.AppId,
+              revision : release.Version,
+              commitId : release.CommitId,
+              status   : DeploymentStatus.Pending
             );
 
             await db.Deployments.InsertAsync(deployment).ConfigureAwait(false);
 
             return deployment;
         }
+
+        /*
+        private async Task<long> GetNextIdAsync(IEnvironment env)
+        {
+            using (var connection = db.Context.GetConnection())
+            using (var ts = connection.BeginTransaction())
+            {
+                await connection.ExecuteAsync(
+                    @"SELECT `deploymentCount` FROM  `Environments` FOR UPDATE;
+                      UPDATE `Environments`
+                      SET `deploymentCount` = `deploymentCount` + 1
+                      WHERE id = @id", env, ts).ConfigureAwait(false);
+
+                return await connection.ExecuteScalarAsync<int>(
+                    "SELECT `deploymentCount` FROM `Environments` WHERE id = @id", env, ts).ConfigureAwait(false);
+            }
+        }
+        */
 
         public async Task CompleteAsync(Deployment deployment, bool succceded)
         {

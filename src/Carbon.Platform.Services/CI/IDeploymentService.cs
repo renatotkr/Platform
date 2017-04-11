@@ -1,14 +1,13 @@
 ﻿using System.Threading.Tasks;
 
 using Carbon.Platform.Computing;
-using Carbon.Versioning;
 using Carbon.Platform.Apps;
 
 namespace Carbon.Platform.CI
 {
     public interface IDeploymentService
     {
-        Task<Deployment> StartAsync(IEnvironment env, IApp app, SemanticVersion version);
+        Task<Deployment> StartAsync(IEnvironment env, AppRelease release);
 
         Task CompleteAsync(Deployment deployment, bool succceded);
 

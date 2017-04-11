@@ -56,7 +56,7 @@ namespace Carbon.Platform.VersionControl
             await db.Repositories.InsertAsync(repository).ConfigureAwait(false);
         }
 
-        public async Task<ICommit> CreateCommitAsync(CreateCommitRequest request)
+        public async Task<IRepositoryCommit> CreateCommitAsync(CreateCommitRequest request)
         {
             #region Preconditions
 
