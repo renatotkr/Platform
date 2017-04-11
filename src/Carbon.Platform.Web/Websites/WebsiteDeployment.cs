@@ -7,7 +7,7 @@ using Carbon.Versioning;
 namespace Carbon.Platform.Web
 {
     [Dataset("WebsiteDeployments")]
-    public class WebsiteDeployment : IDeployment
+    public class WebsiteDeployment
     {
         public WebsiteDeployment() { }
 
@@ -18,11 +18,11 @@ namespace Carbon.Platform.Web
             long commitId, 
             long creatorId)
         {
-            Id            = id;
-            WebsiteId     = websiteId;
-            Revision      = revision.ToString();
-            CommitId      = commitId;
-            CreatorId     = creatorId;
+            Id        = id;
+            WebsiteId = websiteId;
+            Revision  = revision.ToString();
+            CommitId  = commitId;
+            CreatorId = creatorId;
         }
 
         // environmentId + sequence

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
+using Carbon.Data.Annotations;
+
 namespace Carbon.Platform.Web
-{
-    using Data.Annotations;
-    
+{   
     [Dataset("WebComponents")]
     [DataIndex(IndexFlags.Unique, "namespace", "name", "version")]
     public class WebComponent : IWebComponent

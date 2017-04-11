@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Web</AssemblyName>
-    <VersionPrefix>1.6.0</VersionPrefix>
+    <VersionPrefix>1.7.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
 
     <!-- Package Info-->
     <Copyright>© Jason Nelson</Copyright>
-    <Description>Web rontend and web library implementations.</Description>
+    <Description>Website, web library, and web component models.</Description>
     <Authors>iamcarbon</Authors>
     <PackageTags>frontends;libraries;carbon</PackageTags>
   </PropertyGroup>
