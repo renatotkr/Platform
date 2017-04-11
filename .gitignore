@@ -9,3 +9,4 @@ Carbon.Platform.csproj.user
 /build
 /.DS_Store
 *.DS_Store
+src/Carbon.Platform.Extensions
