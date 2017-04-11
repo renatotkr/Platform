@@ -1,4 +1,4 @@
-﻿namespace Carbon.Platform.Security
+﻿namespace Carbon.Platform.Data
 {
     public interface IEncryptionKey : IManagedResource
     {

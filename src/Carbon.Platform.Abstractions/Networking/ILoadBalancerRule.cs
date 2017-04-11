@@ -1,10 +1,10 @@
 ﻿namespace Carbon.Platform.Networking
 {
-    public interface INetworkProxyRule
+    public interface ILoadBalancerRule
     {
         long Id { get; }
 
-        long NetworkProxyId { get; }
+        long LoadBalancerId { get; }
 
         string Condition { get; }
 

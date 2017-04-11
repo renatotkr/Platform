@@ -1,4 +1,4 @@
-﻿namespace Carbon.Platform.Storage
+﻿namespace Carbon.Platform.Computing
 {
     public interface IVolumeStats
     {
