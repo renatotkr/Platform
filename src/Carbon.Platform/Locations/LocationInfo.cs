@@ -15,10 +15,10 @@ namespace Carbon.Platform
 
         public LocationInfo(long id, string name, LocationStatus status = LocationStatus.Healthy)
         {
-            Id          = id;
-            ProviderId  = LocationId.Create(id).ProviderId;
-            Name        = name ?? throw new ArgumentNullException(nameof(name));
-            Status      = status;
+            Id = id;
+            ProviderId = LocationId.Create(id).ProviderId;
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Status = status;
         }
 
         [Member("id"), Key]
@@ -46,8 +46,10 @@ namespace Carbon.Platform
         public LocationFlags Flags => (LocationFlags)LocationId.Create(Id).Flags;
 
         [IgnoreDataMember]
-        public bool IsMultiRegional => 
-            (Flags & LocationFlags.MultiRegional) != 0;
+        public bool IsMultiRegional
+        {
+            get => (Flags & LocationFlags.MultiRegional) != 0;
+        }
 
         #endregion
 

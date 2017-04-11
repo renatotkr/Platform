@@ -1,34 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.10.0</VersionPrefix>
-    <TargetFrameworks>net461</TargetFrameworks>
+    <TargetFrameworks>netstandard1.6</TargetFrameworks>
     <AssemblyName>Carbon.Hosting.IIS</AssemblyName>
+    <Authors>iamcarbon</Authors>
     <Copyright>© Jason Nelson</Copyright>
     <Description>Implementation of the IIS host.</Description>
-    <Authors>iamcarbon</Authors>
   </PropertyGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\Carbon.Hosting\Carbon.Hosting.csproj" />
     <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj" />
-    <ProjectReference Include="..\Carbon.Platform\Carbon.Platform.csproj" />
+    <ProjectReference Include="..\Carbon.Platform.Abstractions\Carbon.Platform.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Carbon.Logging" Version="1.0.0" />
     <PackageReference Include="Carbon.Protection" Version="1.5.0" />
-    <PackageReference Include="System.Management.Automation" Version="6.1.7601.17515" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-   
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Microsoft.Web.Administration">
-      <HintPath>..\lib\Microsoft.Web.Administration.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Microsoft.Web.Administration" Version="10.0.0" />
+    <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
+    <PackageReference Include="System.IO.FileSystem.AccessControl" Version="4.3.0" />
   </ItemGroup>
 
 </Project>

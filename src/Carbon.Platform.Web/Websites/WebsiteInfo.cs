@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using Carbon.Platform.VersionControl;
+
+using Carbon.Json;
+using Carbon.Data.Annotations;
 
 namespace Carbon.Platform.Web
 {
-    using Data.Annotations;
-    
     [Dataset("Websites")]
-    public class WebsiteInfo
+    public class WebsiteInfo : IWebsite
     {
         public WebsiteInfo() { }
 
@@ -25,12 +25,26 @@ namespace Carbon.Platform.Web
         [Member("name"), Unique]
         [StringLength(63)]
         public string Name { get; }
-
+        
         [Member("ownerId")] 
         public long OwnerId { get; }
 
+        [Member("variables")]
+        [StringLength(1000)]
+        public JsonObject Variables { get; set; }
+
         [Member("repositoryId")]
         public long RepositoryId { get; }
+
+        [Member("deploymentId")]
+        public long DeploymentId { get; set; }
+
+        #region Environment
+
+        [Member("environmentId")]
+        public long EnvironmentId { get; set; }
+
+        #endregion
 
         #region Timestamps
 
@@ -60,10 +74,8 @@ namespace Carbon.Platform.Web
     }
 }
 
-
 // Notes:
 // Themes are websites too
-// Braches should have their own website
 
 // TODO: Verify repository head format
 // https://git-scm.com/docs/git-check-ref-format

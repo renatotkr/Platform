@@ -4,22 +4,18 @@ using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 
-namespace Carbon.Platform
+namespace Carbon.Platform.Monitoring
 {
-    public class Localhost
+    internal class Localhost
     {
         public Localhost(
-            string name,
             IReadOnlyList<DriveInfo> drives, 
             IReadOnlyList<NetworkInterface> networkInterfaces
         )
         {
-            Name              = name              ?? throw new ArgumentNullException(nameof(name));
             Drives            = drives            ?? throw new ArgumentNullException(nameof(drives));
             NetworkInterfaces = networkInterfaces ?? throw new ArgumentNullException(nameof(networkInterfaces));
         }
-
-        public string Name { get; }
 
         public IReadOnlyList<DriveInfo> Drives { get; }
 
@@ -50,11 +46,7 @@ namespace Carbon.Platform
                 }
                 catch { }
 
-                current = new Localhost(
-                    name              : Environment.MachineName,
-                    drives            : drives,
-                    networkInterfaces : networkInterfaces
-                );
+                current = new Localhost(drives, networkInterfaces);
 
                 return current;
             }
@@ -70,28 +62,14 @@ namespace Carbon.Platform
 
                 var physicalAddress = ni.GetPhysicalAddress().ToString();
 
-                if (ni.OperationalStatus == OperationalStatus.Up && physicalAddress.Length > 0 && physicalAddress != "00000000000000E0")
+                if (ni.OperationalStatus == OperationalStatus.Up
+                    && physicalAddress.Length > 0
+                    && physicalAddress != "00000000000000E0")
                 {
-                    yield return ni; 
-
-                    /*
-                    yield return new NetworkInterfaceInfo {
-                        Description     = ni.Description,
-                        Addresses       = GetIps(ni),
-                        // InstanceName = InstanceName.FromDescription(ni.Description),
-                        Mac = physicalAddress
-                    };
-                    */
+                    yield return ni;
                 }
             }
         }
-
-        /*
-        public static void GetProcessors()
-        {
-            // TODO
-        }
-        */
 
         public static IEnumerable<DriveInfo> GetFixedDrives()
         {

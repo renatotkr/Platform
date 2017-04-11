@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Carbon.Platform.CI</AssemblyName>
+    <VersionPrefix>0.6.0</VersionPrefix>
+    <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
+
+    <!-- Package Details-->
+    <Authors>iamcarbon</Authors>
+    <Copyright>© Jason Nelson</Copyright>
+    <Description>Services for continuous intergration.</Description>
+    <PackageTags>ci;carbon</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj" />
+    <ProjectReference Include="..\Carbon.Platform.Services\Carbon.Platform.Services.csproj" />
+    <ProjectReference Include="..\Carbon.Platform.Web\Carbon.Platform.Web.csproj" />
+    <ProjectReference Include="..\Carbon.VersionControl\Carbon.VersionControl.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Carbon.Logging" Version="1.0.0" />
+    <PackageReference Include="Carbon.Versioning" Version="1.2.0" />
+    <PackageReference Include="Carbon.Protection" Version="1.5.0" />
+  </ItemGroup>
+  
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
+    <PackageReference Remove="NETStandard.Library" />
+    <PackageReference Include="System.Runtime" Version="4.3.0" />
+    <PackageReference Include="System.Net.Http" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+
+</Project>

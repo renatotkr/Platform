@@ -6,6 +6,7 @@ namespace Carbon.Platform
 
     public static class ResourceTypeExtensions
     {
+
         public static string GetName(this ResourceType type)
         {
             switch (type)
@@ -22,9 +23,10 @@ namespace Carbon.Platform
                 case Network              : return "network";
                 case NetworkInterface     : return "networkInterface";
                 case NetworkProxyListener : return "listener";
-                case NetworkProxy         : return "proxy";
+                case LoadBalancer         : return "proxy";
                 case NetworkGateway       : return "gateway";
                 case NetworkAddress       : return "ip";
+                case Queue                : return "queue";
                 case Region               : return "region";
                 case Repository           : return "repository";
                 case Subnet               : return "subnet";
@@ -32,7 +34,7 @@ namespace Carbon.Platform
                 case Volume               : return "volume";
                 case Zone                 : return "zone";
 
-                default: throw new Exception("Unexpected type:" + type.ToString());
+                default: return type.ToString().ToLower();
             }
         }
     }

@@ -9,14 +9,36 @@ namespace Carbon.Platform.Computing
     [Dataset("HostTemplates")]
     public class HostTemplate : IHostTemplate
     {
+        public HostTemplate() { }
+        
+        public HostTemplate(
+            long id, 
+            IMachineType machineType,
+            IMachineImage machineImage)
+        {
+            #region Preconditions
+
+            if (machineType == null)
+                throw new ArgumentNullException(nameof(machineType));
+
+            if (machineImage == null)
+                throw new ArgumentNullException(nameof(machineImage));
+
+            #endregion
+
+            Id             = id;
+            MachineTypeId  = machineType.Id;
+            MachineImageId = machineImage.Id;
+        }
+
         [Member("id"), Key]
-        public long Id { get; set; }
+        public long Id { get; }
 
         [Member("machineTypeId")]
-        public long MachineTypeId { get; set; }
+        public long MachineTypeId { get; }
 
         [Member("machineImageId")]
-        public long MachineImageId { get; set; }
+        public long MachineImageId { get; }
 
         // Script at startup
         [Member("script")]
@@ -52,6 +74,9 @@ namespace Carbon.Platform.Computing
         [IgnoreDataMember]
         [Member("deleted"), Timestamp]
         public DateTime? Deleted { get; }
+
+        // Host templates are immutable
+        // A new template must be made to make changes
 
         #endregion
     }

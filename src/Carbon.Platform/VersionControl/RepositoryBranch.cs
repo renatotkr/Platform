@@ -11,10 +11,11 @@ namespace Carbon.Platform.VersionControl
     {
         public RepositoryBranch() { }
 
-        public RepositoryBranch(long repositoryId, string name)
+        public RepositoryBranch(long repositoryId, string name, long creatorId)
         {
             RepositoryId = repositoryId;
             Name         = name ?? throw new ArgumentNullException(nameof(name));
+            CreatorId    = creatorId;
         }
 
         [Member("repositoryId"), Key]
@@ -24,11 +25,12 @@ namespace Carbon.Platform.VersionControl
         [StringLength(63)]
         public string Name { get; }
 
+        // Changes after each commit
         [Member("commitId")]
         public long CommitId { get; set; }
 
         [Member("creatorId")]
-        public long CreatorId { get; set; }
+        public long CreatorId { get; }
 
         #region Timestamps
 

@@ -1,0 +1,10 @@
+﻿Report:
+- Memory usage
+- Processor activity
+- Network activity		(send/receive rates)
+- Volume activity		(e.g. used, size, readTime, writeTime, ...)
+- App activity
+- Important events		(e.g. shutting down)
+
+                        D		Y
+Each minute:			1440	525,949

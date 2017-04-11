@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform</AssemblyName>
-    <VersionPrefix>1.19.2</VersionPrefix>
+    <VersionPrefix>1.21.2</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
 
     <!-- Package Info-->
@@ -39,6 +39,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Carbon.Platform.Abstractions\Carbon.Platform.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="CI\" />
   </ItemGroup>
 
 </Project>

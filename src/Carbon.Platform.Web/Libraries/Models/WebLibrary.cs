@@ -1,34 +1,39 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
+
+using Carbon.Data.Annotations;
+
+using Carbon.Platform.VersionControl;
 
 namespace Carbon.Platform.Web
 {
     using Versioning;
 
-    [Table("WebLibraries")]
+    [Dataset("WebLibraries")]
     public class WebLibrary : ILibrary
     {
         public WebLibrary() { }
 
         public WebLibrary(string name, SemanticVersion version)
         {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-            Version = version;
+            Name     = name ?? throw new ArgumentNullException(nameof(name));
+            Version  = version;
         }
 
-        [Column("name"), Key]
+        [Member("name"), Key]
         [DataMember(Name = "name")]
-        public string Name { get; set; }
+        public string Name { get; }
 
-        [Column("version"), Key]
+        [Member("version"), Key]
         [DataMember(Name = "version")]
-        public SemanticVersion Version { get; set; }
+        public SemanticVersion Version { get; }
 
-        [Column("source")]
+        [Member("source")]
         [IgnoreDataMember]
         public string Source { get; set; }
+
+        [Member("commitId")]
+        public long CommitId { get; set; }
 
         #region Main 
 

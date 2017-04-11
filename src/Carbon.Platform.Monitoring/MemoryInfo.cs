@@ -5,10 +5,16 @@ namespace Carbon.Platform
 {
     public struct MemoryInfo
     {
-        public long Available { get; set; }
-     
-        public long Total { get; set; }
+        public MemoryInfo(long total, long available)
+        {
+            Total = total;
+            Available = available;
+        }
 
+        public long Total { get; }
+
+        public long Available { get; }
+        
         public long Used => Total - Available;
 
         public static MemoryInfo Observe()
@@ -17,13 +23,13 @@ namespace Carbon.Platform
 
             if (GlobalMemoryStatusEx(memoryStatus))
             {
-                return new MemoryInfo {
-                    Total     = (long)memoryStatus.ullTotalPhys,
-                    Available = (long)memoryStatus.ullAvailPhys
-                };
+                return new MemoryInfo(
+                    total     : (long)memoryStatus.ullTotalPhys,
+                    available : (long)memoryStatus.ullAvailPhys
+                );
             }
 
-            throw new Exception("Could not observe local memory");
+            throw new Exception("Error observing local memory");
         }
 
         #region Helpers

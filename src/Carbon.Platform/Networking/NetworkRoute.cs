@@ -11,9 +11,10 @@ namespace Carbon.Platform.Networking
     {
         public NetworkRoute() { }
 
-        public NetworkRoute(long id)
+        public NetworkRoute(long id, string name)
         {
             Id = id;
+            Name = name;
         }
 
         // networkId + index
@@ -22,7 +23,7 @@ namespace Carbon.Platform.Networking
 
         [Member("name")]
         [StringLength(63)]
-        public string Name { get; set; }
+        public string Name { get; }
 
         [Member("destinationRange")]
         public string DestinationRange { get; set; }

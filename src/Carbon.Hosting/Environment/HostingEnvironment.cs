@@ -22,9 +22,9 @@ namespace Carbon.Hosting
                     AppsRoot = new DirectoryInfo(config["appsRoot"]);
                 }
 
-                if (config.ContainsKey("frontendsRoot"))
+                if (config.ContainsKey("websitesRoot"))
                 {
-                    WebsitesRoot = new DirectoryInfo(config["frontendsRoot"]);
+                    WebsitesRoot = new DirectoryInfo(config["websitesRoot"]);
                 }
             }
 
@@ -39,7 +39,7 @@ namespace Carbon.Hosting
 
             if (WebsitesRoot == null)
             {
-                WebsitesRoot = new DirectoryInfo(driveLetter + ":/frontends");
+                WebsitesRoot = new DirectoryInfo(driveLetter + ":/websites");
             }
 
             // C:/frontends/1/1.0.0/...
@@ -50,11 +50,12 @@ namespace Carbon.Hosting
             AppsRoot = root;
         }
 
-        // C:/apps
-        // bootstrapper, supervisor, etc 
+        // windows : C:\\apps 
+        // linux   : var/apps
         public DirectoryInfo AppsRoot { get; }
 
-        // C:/frontends
+        // windows : C:\\websites
+        // linux   : var/websites
         public DirectoryInfo WebsitesRoot { get; }
     }
 }
@@ -63,7 +64,8 @@ namespace Carbon.Hosting
 /*
 config.json
 { 
-  ""appsRoot"": "Z:/apps/"
+  "appsRoot": "Z:/apps/",
+  "websitesRoot": "Z:/websites/"
 }
 */ 
  

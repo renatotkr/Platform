@@ -5,5 +5,7 @@
         long Id { get; }
 
         string Name { get; }
+
+        long RepositoryId { get; }
     }
 }

@@ -14,9 +14,9 @@ namespace Carbon.Platform.Networking
         {
             Id         = id;
             Name       = name;
-            ProviderId = resource.Provider.Id;
+            ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
-            ResourceId = resource.Id;
+            ResourceId = resource.ResourceId;
         }
 
         [Member("id"), Key]

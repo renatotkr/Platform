@@ -16,9 +16,9 @@ namespace Carbon.Platform.Networking
         {
             Id         = id;
             CidrBlock  = cidr ?? throw new ArgumentNullException(nameof(cidr));
-            ProviderId = resource.Provider.Id;
+            ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
-            ResourceId = resource.Id;
+            ResourceId = resource.ResourceId;
         }
 
         [Member("id"), Key]

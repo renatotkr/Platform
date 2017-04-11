@@ -10,17 +10,33 @@ namespace Carbon.Platform.Computing
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
     public class HealthCheck : IHealthCheck, IManagedResource
     {
+        public HealthCheck() { }
+
+        public HealthCheck(
+            long id,
+            string host,
+            string path,
+            ushort port,
+            NetworkProtocal protocal)
+        {
+            Id       = id;
+            Host     = host;
+            Path     = path;
+            Port     = port;
+            Protocal = protocal;
+        }
+
         [Member("id"), Key]
-        public long Id { get; set; }
-
-        [Member("path")]
-        public string Path { get; set; }
-
-        [Member("port")]
-        public ushort Port { get; set; }
+        public long Id { get; }
 
         [Member("host"), Optional]
-        public string Host { get; set; }
+        public string Host { get; }
+
+        [Member("path")]
+        public string Path { get; }
+
+        [Member("port")]
+        public ushort Port { get; }
 
         [Member("protocal")] // e.g. TCP, HTTP, HTTPS
         public NetworkProtocal Protocal { get; set; }

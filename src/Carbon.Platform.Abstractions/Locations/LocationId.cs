@@ -14,13 +14,25 @@ namespace Carbon.Platform
         [FieldOffset(2)] // ~65K Regions
         public ushort RegionNumber;
 
-        [FieldOffset(4)]
+        [FieldOffset(4)] // 4B providers
         public int ProviderId;
 
         [FieldOffset(0)]
         public long Value;
 
         public static implicit operator long (LocationId id) => id.Value;
+
+        public LocationId WithZoneNumber(byte value)
+        {
+            var id = new LocationId {
+                Value = value
+            };
+
+            id.Flags = 0;
+            id.ZoneNumber = value;
+
+            return id;
+        }
 
         public static LocationId Create(
             ResourceProvider provider,

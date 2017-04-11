@@ -17,8 +17,8 @@ namespace Carbon.Platform.Networking
         {
             Id = id;
             MacAddress = mac;
-            ProviderId = resource.Provider.Id;
-            ResourceId = resource.Id;
+            ProviderId = resource.ProviderId;
+            ResourceId = resource.ResourceId;
             LocationId = resource.LocationId;
         }
 

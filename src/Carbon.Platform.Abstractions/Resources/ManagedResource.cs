@@ -5,8 +5,6 @@ namespace Carbon.Platform
 {
     public struct ManagedResource : IEquatable<ManagedResource>
     {
-        private LocationId scopeId;
-
         public ManagedResource(ResourceProvider provider, ResourceType type, string id)
             : this(Platform.LocationId.Create(provider, 0, 0, 0), type, id) { }
 
@@ -15,29 +13,34 @@ namespace Carbon.Platform
 
         public ManagedResource(LocationId locationId, ResourceType type, string id)
         {
-            scopeId = locationId;
+            LocationId = locationId;
+            ProviderId = locationId.ProviderId;
             Type = type;
-            Id = id ?? throw new ArgumentNullException(nameof(id));
+            ResourceId = id ?? throw new ArgumentNullException(nameof(id));
         }
 
-        public ResourceProvider Provider => ResourceProvider.FromLocationId(scopeId);
+        public int ProviderId { get; }
 
-        public long LocationId => scopeId;
-
-        public string Id { get; }
+        public long LocationId { get; }
 
         public ResourceType Type { get; }
+
+        public string ResourceId { get; }
 
         public override string ToString()
         {
             var sb = new StringBuilder();
 
-            sb.Append(Provider.Code);
+            var lid = Platform.LocationId.Create(LocationId);
+
+            var provider = ResourceProvider.FromLocationId(LocationId);
+
+            sb.Append(provider.Code);
             sb.Append(':');
 
-            if (scopeId.RegionNumber != 0)
+            if (lid.RegionNumber != 0)
             {
-                var location = Locations.Get(scopeId);
+                var location = Locations.Get(lid);
 
                 sb.Append(location.Name);
 
@@ -46,40 +49,39 @@ namespace Carbon.Platform
 
             sb.Append(Type.GetName());
             sb.Append('/');
-            sb.Append(Id);
+            sb.Append(ResourceId);
 
             return sb.ToString();
         }
 
         #region Helpers
 
+        public static ManagedResource EncryptionKey(ILocation location, string id) =>
+            new ManagedResource(location, ResourceType.EncryptionKey, id);
+
+        public static ManagedResource LoadBalancer(ILocation location, string id) =>
+            new ManagedResource(location, ResourceType.LoadBalancer, id);
+
         public static ManagedResource Host(ILocation location, string id)
-        {
-            return new ManagedResource(location, ResourceType.Host, id);
-        }
+            => new ManagedResource(location, ResourceType.Host, id);
+
+        public static ManagedResource HostGroup(ILocation location, string id)
+            => new ManagedResource(location, ResourceType.HostGroup, id);
 
         public static ManagedResource Network(ILocation location, string id)
-        {
-            return new ManagedResource(location, ResourceType.Network, id);
-        }
+            => new ManagedResource(location, ResourceType.Network, id);
  
         public static ManagedResource NetworkInterface(ILocation location, string id)
-        {
-            return new ManagedResource(location, ResourceType.NetworkInterface, id);
-        }
-
-        public static ManagedResource NetworkProxy(ILocation location, string id)
-        {
-            return new ManagedResource(location, ResourceType.NetworkProxy, id);
-        }
+            => new ManagedResource(location, ResourceType.NetworkInterface, id);
 
         public static ManagedResource Volume(ILocation location, string id)
-        {
-            return new ManagedResource(location, ResourceType.Volume, id);
-        }
+            => new ManagedResource(location, ResourceType.Volume, id);
+
+        
+        // Repository
+        // ...
 
         #endregion
-
 
         private static readonly char[] splitOn = { ':', '/' };
 
@@ -125,9 +127,9 @@ namespace Carbon.Platform
         #region IEquatable
 
         bool IEquatable<ManagedResource>.Equals(ManagedResource other) => 
-            scopeId == other.scopeId
+            LocationId == other.LocationId
             && Type == other.Type 
-            && Id == other.Id;
+            && ResourceId == other.ResourceId;
 
         #endregion
     }

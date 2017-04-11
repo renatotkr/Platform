@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Runtime.Serialization;
 
@@ -7,37 +6,74 @@ namespace Carbon.Platform.Computing
 {
     using Data.Annotations;
     using Extensions;
-    using Json;
 
     [Dataset("Hosts")]
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
     public class HostInfo : IHost, IManagedResource
     {
+        public HostInfo() { }
+
+        public HostInfo(
+            long id, 
+            HostType type, 
+            HostStatus status, 
+            IPAddress[] addresses,
+            IEnvironment env,
+            DateTime created,
+            ManagedResource resource)
+        {
+            Id            = id;
+            Type          = type;
+            Status        = status;
+            Addresses     = addresses;
+            EnvironmentId = env.Id;
+            ProviderId    = resource.ProviderId;
+            ResourceId    = resource.ResourceId;
+            LocationId    = resource.LocationId;
+            Created       = created;
+        }
+
         [Member("id"), Key]
-        public long Id { get; set; }
+        public long Id { get; }
 
         [Member("type")] // Physical, Virtual, Container
-        public HostType Type { get; set; }
-
-        /// <summary>
-        /// The image used to launch the machine
-        /// </summary>
-        [Member("imageId")] 
-        public long ImageId { get; set; }
-
+        public HostType Type { get; }
+       
+        [Member("addresses")]
+        public IPAddress[] Addresses { get; }
+        
         [Member("networkId")]
         public long NetworkId { get; set; }
 
+        [Member("environmentId")]
+        [Indexed]
+        public long EnvironmentId { get; set; }
+        
+        #region App
+
+        [Member("appId")]
+        public long AppId { get; set; }
+
+        [Member("revision")]
+        public string Revision { get; set; }
+
+        [Member("appPort")]
+        public ushort AppPort { get; set; }
+
+        #endregion
+
+        #region Image / Template
+
         [Member("machineTypeId")]
         public long MachineTypeId { get; set; }
-
-        [Member("addresses")]
-        public IPAddress[] Addresses { get; set; }
         
-        [Member("details")]
-        [StringLength(1000)]
-        public JsonObject Details { get; set; }
+        [Member("machineImageId")]
+        public long MachineImageId { get; set; }
 
+        // HostTemplateId
+
+        #endregion
+            
         #region Health
 
         [Member("status"), Mutable]
@@ -52,16 +88,16 @@ namespace Carbon.Platform.Computing
         
         [IgnoreDataMember]
         [Member("providerId")]
-        public int ProviderId { get; set; }
+        public int ProviderId { get; }
 
         [IgnoreDataMember]
         [Member("resourceId")]
         [Ascii, StringLength(100)]
-        public string ResourceId { get; set; }
+        public string ResourceId { get; }
 
-        // Provider + Region# + Zone#
+        // Provider + Region + Zone
         [Member("locationId")]
-        public long LocationId { get; set; }
+        public long LocationId { get; }
 
         ResourceType IManagedResource.ResourceType => ResourceType.Host;
 
@@ -71,7 +107,7 @@ namespace Carbon.Platform.Computing
 
         [Member("created"), Timestamp]
         [IgnoreDataMember]
-        public DateTime Created { get; set; }
+        public DateTime Created { get; }
 
         [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
@@ -124,6 +160,14 @@ namespace Carbon.Platform.Computing
 
         [IgnoreDataMember]
         public ResourceProvider Provider => ResourceProvider.Get(ProviderId);
+
+        #endregion
+
+        #region IHost
+
+        IPAddress IHost.Address => PrivateIp;
+
+        ushort IHost.Port => AppPort;
 
         #endregion
     }

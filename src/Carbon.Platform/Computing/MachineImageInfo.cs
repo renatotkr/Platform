@@ -9,32 +9,51 @@ namespace Carbon.Platform.Computing
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
     public class MachineImageInfo : IMachineImage
     {
+        public MachineImageInfo() { }
+
+        public MachineImageInfo(
+            long id,
+            MachineImageType type,
+            string name, 
+            string description,
+            ManagedResource resource)
+        {
+            Id          = id;
+            Type        = type;
+            Name        = name ?? throw new ArgumentNullException(nameof(name));
+            Description = description;
+            ResourceId  = resource.ResourceId;
+            ProviderId  = resource.ProviderId;
+            LocationId  = resource.LocationId;
+        }
+
         [Member("id"), Key]
-        public long Id { get; set; }
+        public long Id { get; }
+        
+        [Member("type")]
+        public MachineImageType Type { get;  }
 
         [Member("name")]
         [StringLength(63)]
-        public string Name { get; set; }
+        public string Name { get; }
 
         [Member("description")]
         [StringLength(100)]
-        public string Description { get; set; }
-
-        [Member("type")]
-        public MachineImageType ImageType { get; set; }
+        public string Description { get; }
 
         #region IResource
 
         [IgnoreDataMember]
         [Member("providerId")]
-        public int ProviderId { get; set; }
+        public int ProviderId { get; }
 
         [IgnoreDataMember]
         [Member("resourceId")]
         [Ascii, StringLength(100)]
-        public string ResourceId { get; set; }
+        public string ResourceId { get; }
 
-        long IManagedResource.LocationId => 0;
+        [Member("locationId")]
+        public long LocationId { get; }
 
         ResourceType IManagedResource.ResourceType => ResourceType.MachineImage;
 
@@ -51,9 +70,8 @@ namespace Carbon.Platform.Computing
         [TimePrecision(TimePrecision.Second)]
         public DateTime? Deleted { get; }
 
-        [IgnoreDataMember]
-        [Member("modified"), Timestamp(true)]
-        public DateTime Modified { get; }
+        // Machine images are immutable 
+        // They may only be marked as deleted
 
         #endregion
     }

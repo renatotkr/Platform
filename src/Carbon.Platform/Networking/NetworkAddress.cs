@@ -15,8 +15,8 @@ namespace Carbon.Platform.Networking
         public NetworkAddress(long id, ManagedResource resource)
         {
             Id = id;
-            ProviderId = resource.Provider.Id;
-            ResourceId = resource.Id;
+            ProviderId = resource.ProviderId;
+            ResourceId = resource.ResourceId;
         }
 
         [Member("id"), Key]

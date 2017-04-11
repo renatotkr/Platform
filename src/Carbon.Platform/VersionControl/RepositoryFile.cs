@@ -11,10 +11,14 @@ namespace Carbon.Platform.VersionControl
     {
         public RepositoryFile() { }
 
-        public RepositoryFile(long repositoryId, string branch, string path, FileType type = FileType.Blob)
+        public RepositoryFile(
+            long repositoryId, 
+            string branchName, 
+            string path, 
+            FileType type = FileType.Blob)
         {
             RepositoryId = repositoryId;
-            Branch       = branch ?? throw new ArgumentNullException(nameof(branch));
+            BranchName   = branchName ?? throw new ArgumentNullException(nameof(branchName));
             Path         = path ?? throw new ArgumentNullException(nameof(path));
             Type         = type;
         }
@@ -22,25 +26,27 @@ namespace Carbon.Platform.VersionControl
         [Member("repositoryId"), Key]
         public long RepositoryId { get; }
         
-        [Member("branch"), Key]
+        [Member("branchName"), Key]
         [StringLength(63)]
-        public string Branch { get; }
+        public string BranchName { get; }
         
         [Member("path"), Key]
         [StringLength(255)] // git limit = 4096
         public string Path { get; }
 
         [Member("type")]
-        public FileType Type { get; set; }
+        public FileType Type { get; }
 
         [Member("blobId")]
-        public long BlobId { get; set; }
+        public long? BlobId { get; set; }
 
         [Member("size")]
         public long Size { get; set; }
 
         [Member("creatorId")]
         public long CreatorId { get; set; }
+
+        // LastModifiedBy
 
         #region Hashes
 

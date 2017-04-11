@@ -7,7 +7,7 @@ using Carbon.Data.Annotations;
 namespace Carbon.Platform.VersionControl
 {
     [Dataset("Repositories")]
-    [DataIndex(IndexFlags.Unique, "name", "ownerId")]
+    [DataIndex(IndexFlags.Unique, "providerId", "fullName")]
     public class RepositoryInfo : IRepository
     {
         public RepositoryInfo() { }
@@ -16,9 +16,9 @@ namespace Carbon.Platform.VersionControl
         {
             Id         = id;
             Name       = name ?? throw new ArgumentNullException(nameof(name));
+            FullName   = resource.ResourceId;
             OwnerId    = ownerId;
-            ProviderId = resource.Provider.Id;
-            ResourceId = resource.Id;
+            ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
         }
 
@@ -27,10 +27,14 @@ namespace Carbon.Platform.VersionControl
         
         [Member("name")]
         public string Name { get; }
-     
+
+        [Member("fullName")]
+        [StringLength(100)]
+        public string FullName { get; }
+
         [Member("ownerId")]  // May change ownership
         public long OwnerId { get; }
-        
+       
         #region Stats
 
         // Max ~4M
@@ -52,9 +56,8 @@ namespace Carbon.Platform.VersionControl
         public int ProviderId { get; }
 
         // e.g. carbon/cropper
-        [Member("resourceId")]
         [StringLength(100)]
-        public string ResourceId { get; }
+        string IManagedResource.ResourceId => FullName;
         
         // Used by amazon codecommit
         [Member("locationId")]
@@ -94,7 +97,7 @@ namespace Carbon.Platform.VersionControl
                 sb.Append(":");
             }
 
-            sb.Append(ResourceId);
+            sb.Append(FullName);
 
             return sb.ToString();
         }

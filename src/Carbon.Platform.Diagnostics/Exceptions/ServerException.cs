@@ -16,6 +16,7 @@ namespace Carbon.Platform.Diagnostics
         [Member("hostId")]
         public long HostId { get; set; }
 
+        // revision
         [Member("appVersion")]
         [StringLength(50)]
         public string AppVersion { get; set; }

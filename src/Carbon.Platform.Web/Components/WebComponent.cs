@@ -7,28 +7,28 @@ namespace Carbon.Platform.Web
     
     [Dataset("WebComponents")]
     [DataIndex(IndexFlags.Unique, "namespace", "name", "version")]
-    public class WebComponent
+    public class WebComponent : IWebComponent
     {
         public WebComponent() { }
 
-        public WebComponent(long id, string name)
+        public WebComponent(long id, string ns, string name)
         {
-            Id   = id;
-            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Id        = id;
+            Namespace = ns ?? throw new ArgumentNullException(nameof(ns));
+            Name      = name ?? throw new ArgumentNullException(nameof(name));
         }
 
         [Member("id"), Key] 
-        public long Id { get; set; }
-        
+        public long Id { get; }
 
         [Member("namespace")]
         [StringLength(63)]
-        public string Namespace { get; set; }
+        public string Namespace { get; }
 
         // Element Name
         [Member("name"), Unique]
         [StringLength(63)]
-        public string Name { get; set; }
+        public string Name { get; }
 
         [Member("version"), Mutable] // e.g. master, ...
         public string Version { get; set; }
@@ -59,7 +59,7 @@ namespace Carbon.Platform.Web
         public DateTime? Deleted { get; }
         
         [Member("modified"), Timestamp(true)]
-        public DateTime Modified { get; set; }
+        public DateTime Modified { get; }
 
         #endregion
 
