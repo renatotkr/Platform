@@ -4,6 +4,6 @@
     {
         Physical  = 1, // Metal             | Host
         Virtual   = 2, // Virtualized       | Instance
-        Container = 3, // Containerized     | ?
+        Container = 3, // Containerized     | ContainerInstance
     }
 }

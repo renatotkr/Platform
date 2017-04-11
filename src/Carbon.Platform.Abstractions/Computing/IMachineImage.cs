@@ -1,18 +1,16 @@
 ﻿namespace Carbon.Platform.Computing
 {
-    public interface IMachineImage
+    public interface IMachineImage : IManagedResource
     {
         long Id { get; }
 
-        ImageType Type { get; }
+        MachineImageType Type { get; }
 
-        // TODO: Platform, Size
-
-        int ProviderId { get; }
+        string Description { get; }
     }
 }
 
 //  Google: diskSizeGb
 
-
-// Google: 6864121747226459524          | compute#image
+// aws    : ami-1a2b3c4d                 | Image
+// google : 6864121747226459524          | compute#image

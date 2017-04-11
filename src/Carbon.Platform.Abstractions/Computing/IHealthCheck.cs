@@ -4,7 +4,7 @@ using Carbon.Net;
 
 namespace Carbon.Platform.Computing
 {
-    public interface IHealthCheck
+    public interface IHealthCheck : IManagedResource
     {
         long Id { get; }
 
@@ -13,18 +13,20 @@ namespace Carbon.Platform.Computing
         string Path { get; }
 
         ushort Port { get; }
-
+        
         NetworkProtocal Protocal { get; }
 
         TimeSpan Interval { get; }
 
         TimeSpan Timeout { get; }
 
-        Threshold HealthyThreshold { get; }
+        int HealthyThreshold { get; }
 
-        Threshold UnhealthyThreshold { get; }
+        int UnhealthyThreshold { get; }
     }
 }
 
 
-// google: ulong  compute#healthCheck
+// google:  ulong  compute#healthCheck
+// fastly          Healthcheck    
+// azure           Probe

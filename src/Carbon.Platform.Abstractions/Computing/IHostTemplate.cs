@@ -1,6 +1,6 @@
 ﻿namespace Carbon.Platform.Computing
 {
-    public interface IHostTemplate
+    public interface IHostTemplate : IManagedResource
     {
         long Id { get; }
 

@@ -4,13 +4,23 @@ namespace Carbon.Platform.Computing
 {
     public interface IHost
     {
-        long Id { get; }
+        long Id { get; } // BigId
         
-        HostType Type { get; }
+        // HostType Type { get; }
 
         IPAddress Address { get; }
+        
+        ushort Port { get; }
     }
 }
+
+// A host is dedicated to a single application
+// A host may be divided into containers to host mutiple applications
+
+// Identity = EnvId + Sequence...
+
+
+    // 
 
 /*
          id                    name
@@ -19,5 +29,3 @@ aws    : i-07e6001e0415497e  | instance
 azure  : ?
 ------------------------------------------------------------- 
 */
-
-// TODO: Host roles / service accounts

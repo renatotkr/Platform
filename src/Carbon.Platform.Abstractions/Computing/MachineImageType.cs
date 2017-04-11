@@ -1,6 +1,6 @@
 ﻿namespace Carbon.Platform.Computing
 {
-    public enum ImageType : byte
+    public enum MachineImageType : byte
     {
         Kernel    = 1,
         Machine   = 2, // ami (amazon machine image)
