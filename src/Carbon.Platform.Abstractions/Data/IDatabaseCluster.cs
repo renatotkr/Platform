@@ -1,4 +1,4 @@
-﻿namespace Carbon.Platform.Databases
+﻿namespace Carbon.Platform.Data
 {
     public interface IDatabaseCluster : IManagedResource
     {
