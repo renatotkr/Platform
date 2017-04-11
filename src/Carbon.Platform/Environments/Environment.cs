@@ -30,12 +30,22 @@ namespace Carbon.Platform
         [Member("name")]
         [StringLength(63)]
         public string Name { get; }
+        
+        // FullName (carbonmade.com/production)
+
 
         [Member("variables")]
         public JsonObject Variables { get; }
         
         [Member("deploymentId")]
         public long DeploymentId { get; }
+        
+        #region Stats
+
+        [Member("deploymentCount")]
+        public int DeploymentCount { get; set; } 
+
+        #endregion
 
         #region Source
 
