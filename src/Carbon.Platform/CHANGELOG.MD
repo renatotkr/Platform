@@ -1,4 +1,20 @@
-﻿1.10.0
+﻿1.23.0
+- Add Database, DatabaseBackup, DatabaseCluster, & DatabaseInstance
+
+1.21.0
+- Add Deployment & DeploymentTarget
+
+1.20.0
+- Add Environment & EnvironmentLocation
+
+1.19.0
+- Rename NetworkProxy -> LoadBalancer
+- Rename NetworkAcl -> NetworkSecurityGroup
+
+1.18.0
+- Add RepositoryInfo, RepositoryFile, & RepositoryCommit
+
+1.10.0
 - Add HealthCheck & HostTemplate
 
 1.9.0
@@ -18,7 +34,6 @@
 - Add NetworkRule
 - Add NetworkLayer
 - Add NetworkListener
-- Breakout Frontends into Carbon.Platform.Frontends
 
 1.5
 - Add Subnets
@@ -30,7 +45,6 @@
 
 1.3
 - Add Outages
-- Add Databases
 - Add MachineTypes
 
 1.1
