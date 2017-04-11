@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Carbon.Data.Expressions;
-using Carbon.Protection;
 using Carbon.Versioning;
 
 namespace Carbon.Platform.Apps
 {
+    using Carbon.Data;
+    using Carbon.Platform.Logs;
     using static Expression;
 
-    public class AppService
+    public class AppService : IAppService
     {
         private readonly PlatformDb db;
 
@@ -19,12 +20,15 @@ namespace Carbon.Platform.Apps
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public Task<AppInfo> Get(long id)
+        public async Task<AppInfo> GetAsync(long id)
         {
-            return db.Apps.FindAsync(id);
+            var app = await db.Apps.FindAsync(id);
+
+            if (app == null) throw new Exception($"app#{id} not found");
+            return app;
         }
 
-        public Task<AppInfo> Find(string name)
+        public Task<AppInfo> FindAsync(string name)
         {
             return db.Apps.QueryFirstOrDefaultAsync(Eq("name", name));
         }
@@ -42,10 +46,9 @@ namespace Carbon.Platform.Apps
             #endregion
 
             var app = new AppInfo(
-                id      : db.Context.GetNextId<AppInfo>(),
-                name    : request.Name,
-                type    : request.Type,
-                ownerId : request.OwnerId
+                id   : db.Context.GetNextId<AppInfo>(),
+                name : request.Name,
+                type : request.Type
             );
 
             await db.Apps.InsertAsync(app).ConfigureAwait(false);
@@ -76,10 +79,34 @@ namespace Carbon.Platform.Apps
 
             await db.AppReleases.InsertAsync(release).ConfigureAwait(false);
 
+            var e = new Activity(ActivityType.Publish, ResourceType.App, app.Id);
+
+            await db.Activities.InsertAsync(e);
+
             return release;
         }
 
-        public Task<IReadOnlyList<AppEnvironment>> GetEnvironments(IApp app)
+        public Task<AppRelease> GetReleaseAsync(long appId, SemanticVersion version)
+        {
+            return db.AppReleases.FindAsync((appId, version));
+        }
+
+        public Task<IReadOnlyList<AppRelease>> GetReleasesAsync(long appId)
+        {
+            return db.AppReleases.QueryAsync(
+                 Eq("appId", appId),
+                 Order.Descending("version")
+             );
+        }
+
+        public Task<AppEnvironment> GetEnvironmentAsync(long appId, string name)
+        {
+            return db.Environments.QueryFirstOrDefaultAsync(
+                And(Eq("appId", appId), Eq("name", name))
+            );
+        }
+
+        public Task<IReadOnlyList<AppEnvironment>> GetEnvironmentsAsync(IApp app)
         {
             return db.Environments.QueryAsync(Eq("appId", app.Id));
         }
@@ -91,7 +118,5 @@ namespace Carbon.Platform.Apps
         public string Name { get; set; }
 
         public AppType Type { get; set; }
-
-        public long OwnerId { get; set; }
     }
 }
