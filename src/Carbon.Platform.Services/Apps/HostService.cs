@@ -10,12 +10,11 @@ using ec2 = Amazon.Ec2;
 namespace Carbon.Platform.Services
 {
     using Computing;
-    using Storage;
     using Networking;
 
     using static Expression;
 
-    public class HostService
+    public class HostService : IHostService
     {
         private readonly PlatformDb db;
         private readonly ec2::Ec2Client ec2;
