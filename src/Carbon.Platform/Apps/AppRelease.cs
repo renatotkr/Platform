@@ -3,11 +3,10 @@
 namespace Carbon.Platform.Apps
 {
     using Data.Annotations;
-    using Protection;
     using Versioning;
 
     [Dataset("AppReleases")]
-    public class AppRelease
+    public class AppRelease : IAppRelease
     {
         public AppRelease() { }
 
@@ -23,10 +22,9 @@ namespace Carbon.Platform.Apps
 
             #endregion
 
-            AppId   = app.Id;
-            Version = version;
-            Sha256 = sha256;
-            Digest  = new Hash(HashType.SHA256, sha256);
+            AppId     = app.Id;
+            Version   = version;
+            Sha256    = sha256;
             CreatorId = creatorId;
         }
 
@@ -36,12 +34,11 @@ namespace Carbon.Platform.Apps
         [Member("version"), Key]
         public SemanticVersion Version { get; }
 
-        // Replace with SHA256
-        [Member("digest")]
-        public Hash Digest { get; }
-
         [Member("buildId")]
         public long? BuildId { get; set; }
+
+        [Member("commitId")]
+        public long CommitId { get; set; }
 
         [Member("creatorId")]
         public long CreatorId { get; }
