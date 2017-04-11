@@ -23,7 +23,7 @@ namespace Carbon.Platform.VersionControl
         {
             var repository = await db.Repositories.FindAsync(id).ConfigureAwait(false);
 
-            if (repository == null) throw new Exception($"repository#{id} does not exist");
+            if (repository == null) throw new Exception($"repository#{id} not found");
 
             return repository;
         }
@@ -132,7 +132,11 @@ namespace Carbon.Platform.VersionControl
 
         public async Task<RepositoryFile> PutFileAsync(CreateFileRequest request)
         {
-            var file = new RepositoryFile(request.RepositoryId, request.BranchName, request.Path, FileType.Blob) {
+            var file = new RepositoryFile(
+                repositoryId : request.RepositoryId, 
+                branchName   : request.BranchName,
+                path         : request.Path,
+                type         : FileType.Blob) {
                 CreatorId = request.CreatorId,
                 Size      = request.Size,
                 Sha256    = request.Sha256
@@ -141,11 +145,9 @@ namespace Carbon.Platform.VersionControl
             using (var connection = db.Context.GetConnection())
             {
                 await connection.ExecuteAsync(
-                    @"INSERT INTO `RepositoryFiles` (`repositoryId`, `branchName`, `path`, `size`, `sha256`, `creatorId`)
-                      VALUES (@repositoryId, @branchName, @path, @size, @sha256, @creatorId)
-                      ON DUPLICATE KEY UPDATE
-                        `size` = @size
-                        `sha256` = @sha256;", file
+                    @"INSERT INTO `RepositoryFiles` (`repositoryId`, `branchName`, `path`, `type`, `size`, `sha256`, `creatorId`)
+                      VALUES (@repositoryId, @branchName, @path, @type, @size, @sha256, @creatorId)
+                      ON DUPLICATE KEY UPDATE `size` = @size, `sha256` = @sha256;", file
                 ).ConfigureAwait(false);
 
             }
