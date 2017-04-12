@@ -56,6 +56,12 @@ namespace Carbon.Platform.Resources
 
         #region Helpers
 
+        public static ManagedResource DatabaseCluster(ILocation location, string id)
+            => new ManagedResource(location, ResourceType.DatabaseCluster, id);
+
+        public static ManagedResource DatabaseInstance(ILocation location, string id)
+            => new ManagedResource(location, ResourceType.DatabaseInstance, id);
+
         public static ManagedResource EncryptionKey(ILocation location, string id) =>
             new ManagedResource(location, ResourceType.EncryptionKey, id);
 
@@ -77,7 +83,6 @@ namespace Carbon.Platform.Resources
         public static ManagedResource Volume(ILocation location, string id)
             => new ManagedResource(location, ResourceType.Volume, id);
 
-        
         // Repository
         // ...
 
