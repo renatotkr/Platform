@@ -1,12 +1,10 @@
-﻿namespace Carbon.Platform
+﻿namespace Carbon.Platform.Resources
 {
-    public interface IManagedResource
+    public interface IManagedResource : IResource
     {
         int ProviderId { get; }
 
         long LocationId { get; }
-
-        ResourceType ResourceType { get; }
 
         string ResourceId { get; } // Assigned by provider
     }

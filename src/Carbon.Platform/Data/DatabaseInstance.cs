@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Data
 {
@@ -54,7 +55,7 @@ namespace Carbon.Platform.Data
         [Member("locationId")]
         public long LocationId { get; }
 
-        ResourceType IManagedResource.ResourceType => ResourceType.DatabaseInstance;
+        ResourceType IResource.ResourceType => ResourceType.DatabaseInstance;
 
         #endregion
 

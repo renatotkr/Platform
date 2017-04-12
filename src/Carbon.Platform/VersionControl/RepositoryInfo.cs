@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 using System.Text;
 
 using Carbon.Data.Annotations;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.VersionControl
 {
@@ -67,7 +68,7 @@ namespace Carbon.Platform.VersionControl
         [Member("locationId")]
         public long LocationId { get; }
         
-        ResourceType IManagedResource.ResourceType => ResourceType.Repository;
+        ResourceType IResource.ResourceType => ResourceType.Repository;
 
         #endregion
 

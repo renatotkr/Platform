@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Net;
 
 using Carbon.Data.Expressions;
+using Carbon.Platform.Resources;
 
 using ec2 = Amazon.Ec2;
 

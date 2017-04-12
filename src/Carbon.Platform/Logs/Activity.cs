@@ -2,6 +2,7 @@
 
 using Carbon.Data.Annotations;
 using Carbon.Json;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Logs
 {
@@ -10,10 +11,10 @@ namespace Carbon.Platform.Logs
     {
         public Activity() { }
 
-        public Activity(ActivityType type, ResourceType resourceType, long resourceId)
+        public Activity(ActivityType type, IResource resource)
         {
-            ResourceType = resourceType;
-            ResourceId   = resourceId;
+            ResourceType = resource.ResourceType;
+            ResourceId   = resource.Id;
             Type         = type;
         }
 

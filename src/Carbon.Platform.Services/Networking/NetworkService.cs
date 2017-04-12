@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 
 using Carbon.Net;
+using Carbon.Platform.Resources;
 
 using ec2 = Amazon.Ec2;
-using System.Net;
 
 namespace Carbon.Platform.Networking
 {

@@ -1,6 +1,6 @@
 ﻿namespace Carbon.Platform.CI
 {
-    public enum DeploymentStatus
+    public enum DeploymentStatus : byte
     {
         Pending   = 1,
         Running   = 2,

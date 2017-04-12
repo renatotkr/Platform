@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Hosting
 {
@@ -46,7 +47,7 @@ namespace Carbon.Platform.Hosting
         [Member("resourceVersion")]
         public int ResourceVersion { get; set; }
 
-        ResourceType IManagedResource.ResourceType => ResourceType.Certificate;
+        ResourceType IResource.ResourceType => ResourceType.Certificate;
 
         // aws certificates are region scoped
         [IgnoreDataMember]

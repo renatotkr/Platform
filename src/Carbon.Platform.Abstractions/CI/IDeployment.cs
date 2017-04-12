@@ -1,11 +1,10 @@
 ﻿using System;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.CI
 {
-    public interface IDeployment
-    {
-        long Id { get; }
-        
+    public interface IDeployment : IResource
+    {        
         DeploymentStatus Status { get; }
 
         long CommitId { get; }

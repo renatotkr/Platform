@@ -2,10 +2,10 @@
 
 namespace Carbon.Platform.Computing
 {
-    public interface IHost
-    {
-        long Id { get; } // BigId
-        
+    public interface IHost 
+    {        
+        long Id { get; }
+
         // HostType Type { get; }
 
         IPAddress Address { get; }
@@ -14,13 +14,10 @@ namespace Carbon.Platform.Computing
     }
 }
 
-// A host is dedicated to a single application
+// A host 'hosts' a primary application
 // A host may be divided into containers to host mutiple applications
 
 // Identity = EnvId + Sequence...
-
-
-    // 
 
 /*
          id                    name

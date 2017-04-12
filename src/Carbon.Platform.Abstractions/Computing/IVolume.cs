@@ -1,9 +1,9 @@
-﻿namespace Carbon.Platform.Computing
+﻿using Carbon.Platform.Resources;
+
+namespace Carbon.Platform.Computing
 {
     public interface IVolume : IManagedResource
-    {
-        long Id { get; }
-        
+    {        
         long Size { get; } // in octets
     }
 }

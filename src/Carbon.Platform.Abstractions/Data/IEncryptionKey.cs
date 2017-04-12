@@ -1,9 +1,9 @@
-﻿namespace Carbon.Platform.Data
+﻿using Carbon.Platform.Resources;
+
+namespace Carbon.Platform.Data
 {
     public interface IEncryptionKey : IManagedResource
-    {
-        long Id { get; }
-      
+    {      
         string Name { get; }
     }
 }

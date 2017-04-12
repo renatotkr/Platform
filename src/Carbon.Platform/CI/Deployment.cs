@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Carbon.Data.Annotations;
+using Carbon.Platform.Resources;
 using Carbon.Versioning;
 
 namespace Carbon.Platform.CI
@@ -49,6 +50,12 @@ namespace Carbon.Platform.CI
 
         [Member("creatorId")]
         public long CreatorId { get; set; }
+
+        #region IResource
+
+        ResourceType IResource.ResourceType => ResourceType.Deployment;
+
+        #endregion
 
         #region Timestamps
 

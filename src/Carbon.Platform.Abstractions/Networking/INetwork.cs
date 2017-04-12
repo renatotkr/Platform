@@ -1,18 +1,16 @@
 ﻿using System.Net;
 
+using Carbon.Platform.Resources;
+
 namespace Carbon.Platform.Networking
 {
     public interface INetwork : IManagedResource
     {
-        long Id { get; }
-
-        int? ASN { get; }
-
         IPAddress GatewayAddress { get; }
 
         // e.g. 192.168.0.0/16
         string CidrBlock { get; }
-        
+
         // VPC's may have seperate IPv4 & IPv6 ranges
         // ip4range
         // ip6range

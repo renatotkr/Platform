@@ -1,11 +1,11 @@
 ﻿using System.Net;
 
+using Carbon.Platform.Resources;
+
 namespace Carbon.Platform.Networking
 {
     public interface INetworkAddress : IManagedResource
-    {
-        long Id { get; }
-        
+    {        
         IPAddress Address { get; }
     }
 }

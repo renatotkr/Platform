@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Carbon.Data.Annotations;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.VersionControl
 {
@@ -30,6 +31,12 @@ namespace Carbon.Platform.VersionControl
         public string Message { get; }
 
         public long RepositoryId => ScopedId.GetScope(Id);
+        
+        #region IResource
+
+        ResourceType IResource.ResourceType => ResourceType.RepositoryCommit;
+
+        #endregion
 
         #region Hashes
 

@@ -1,9 +1,9 @@
-﻿namespace Carbon.Platform.Networking
+﻿using Carbon.Platform.Resources;
+
+namespace Carbon.Platform.Networking
 {
     public interface ILoadBalancer : IManagedResource
     {
-        long Id { get; }
-
         // google : Unicast IP Address
         // aws    : CNAME (name-424835706.us-west-2.elb.amazonaws.com)
         string Address { get; }

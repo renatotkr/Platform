@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 using Carbon.Json;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform
 {
@@ -36,11 +37,10 @@ namespace Carbon.Platform
         
         [Member("deploymentId")]
         public long DeploymentId { get; }
-        
-        #region Stats
 
-        [Member("deploymentCount")]
-        public int DeploymentCount { get; set; } 
+        #region IResource
+
+        ResourceType IResource.ResourceType => ResourceType.Environment;
 
         #endregion
 
@@ -53,6 +53,13 @@ namespace Carbon.Platform
 
         [Member("repositoryHead")]
         public string RepositoryHead { get; set; }
+
+        #endregion
+
+        #region Stats
+
+        [Member("deploymentCount")]
+        public int DeploymentCount { get; set; }
 
         #endregion
 

@@ -1,4 +1,7 @@
-﻿using Carbon.Data.Annotations;
+﻿using System;
+
+using Carbon.Data.Annotations;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform
 {
@@ -10,16 +13,25 @@ namespace Carbon.Platform
         public EnvironmentResource(
             long id,
             long environmentId,
-            long locationId,
-            ResourceType resourceType,
-            long resourceId
+            ILocation location,
+            IResource resource
         )
         {
+            #region Preconditions
+
+            if (location == null)
+                throw new ArgumentNullException(nameof(location));
+
+            if (resource == null)
+                throw new ArgumentNullException(nameof(resource));
+
+            #endregion
+
             Id            = id;
             EnvironmentId = environmentId;
-            LocationId    = locationId;
-            ResourceType  = resourceType;
-            ResourceId    = resourceId;
+            LocationId    = location.Id;
+            ResourceType  = resource.ResourceType;
+            ResourceId    = resource.Id;
         }
 
         [Member("id"), Key]

@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
@@ -55,7 +56,7 @@ namespace Carbon.Platform.Computing
         [Member("locationId")]
         public long LocationId { get; }
 
-        ResourceType IManagedResource.ResourceType => ResourceType.MachineImage;
+        ResourceType IResource.ResourceType => ResourceType.MachineImage;
 
         #endregion
 

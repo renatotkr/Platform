@@ -1,5 +1,7 @@
 ﻿using Xunit;
 
+using Carbon.Platform.Resources;
+
 namespace Carbon.Platform.Tests
 {
     public class CloudLocationTests

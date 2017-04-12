@@ -1,12 +1,12 @@
-﻿namespace Carbon.Platform.VersionControl
+﻿using Carbon.Platform.Resources;
+
+namespace Carbon.Platform.VersionControl
 {
     public interface IRepository : IManagedResource
     {
-        long Id { get; }
+        string Name { get; }     // platform
 
-        string Name { get; }        // platform
-
-        string FullName { get; }    // carbon/platform
+        string FullName { get; } // carbon/platform
 
         long OwnerId { get; }
     }

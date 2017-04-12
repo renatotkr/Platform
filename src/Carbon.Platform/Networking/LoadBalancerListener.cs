@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 using Carbon.Net;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Networking
 {
@@ -51,7 +52,7 @@ namespace Carbon.Platform.Networking
 
         // arn:aws:elasticloadbalancing:us-west-2:123456789012:listener/app/my-load-balancer/50dc6c495c0c9188/f2f7dc8efc522ab2
 
-        ResourceType IManagedResource.ResourceType => ResourceType.NetworkProxyListener;
+        ResourceType IResource.ResourceType => ResourceType.LoadBalancerListener;
 
         #endregion
 

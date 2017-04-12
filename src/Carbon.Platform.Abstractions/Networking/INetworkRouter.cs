@@ -1,10 +1,9 @@
-﻿namespace Carbon.Platform.Networking
+﻿using Carbon.Platform.Resources;
+
+namespace Carbon.Platform.Networking
 {
     public interface INetworkRouter : IManagedResource
     {
-        long Id { get; }
-
-        long NetworkId { get; }
     }
 }
 

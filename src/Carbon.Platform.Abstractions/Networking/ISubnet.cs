@@ -1,11 +1,11 @@
 ﻿using System.Net;
 
+using Carbon.Platform.Resources;
+
 namespace Carbon.Platform.Networking
 {
     public interface ISubnet : IManagedResource
     {
-        long Id { get; }
-
         long NetworkId { get; }
         
         string CidrBlock { get; }

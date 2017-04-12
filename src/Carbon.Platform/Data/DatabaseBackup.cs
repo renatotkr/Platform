@@ -9,25 +9,26 @@ namespace Carbon.Platform.Data
     {
         public DatabaseBackup() { }
 
-        public DatabaseBackup(long id, long clusterId)
+        public DatabaseBackup(long id, long clusterId, string name)
         {
             Id = id;
             ClusterId = clusterId;
+            Name = name;
         }
 
         // DatabaseId + Sequence
-        [Member("id")]
+        [Member("id"), Key]
         public long Id { get; }
 
         [Member("clusterId")]
         [Indexed]
         public long ClusterId { get; }
 
-        [Member("bucketId")]
-        public long BucketId { get; set; }
-
         [Member("name")]
         public string Name { get; set; }
+
+        [Member("bucketId")]
+        public long BucketId { get; set; }
         
         [Member("encryptionKeyId")]
         public long EncryptionKeyId { get; set; }

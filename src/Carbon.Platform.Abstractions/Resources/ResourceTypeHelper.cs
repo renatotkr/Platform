@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Carbon.Platform
+namespace Carbon.Platform.Resources
 {
     using static ResourceType;
 

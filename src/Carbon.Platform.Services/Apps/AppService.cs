@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Carbon.Data;
 using Carbon.Data.Expressions;
+using Carbon.Platform.Logs;
+using Carbon.Platform.Resources;
 using Carbon.Versioning;
 
 namespace Carbon.Platform.Apps
 {
-    using Carbon.Data;
-    using Carbon.Platform.Logs;
     using static Expression;
 
     public class AppService : IAppService
@@ -28,9 +29,17 @@ namespace Carbon.Platform.Apps
             return app;
         }
 
-        public Task<AppInfo> FindAsync(string name)
+        public Task<AppInfo> GetAsync(string name)
         {
             return db.Apps.QueryFirstOrDefaultAsync(Eq("name", name));
+        }
+
+        public Task<IReadOnlyList<AppInfo>> ListAsync()
+        {
+            return db.Apps.QueryAsync(
+                IsNull("deleted"),
+                Order.Ascending("name")
+             );
         }
 
         public async Task<AppInfo> CreateAsync(CreateAppRequest request)
@@ -79,7 +88,7 @@ namespace Carbon.Platform.Apps
 
             await db.AppReleases.InsertAsync(release).ConfigureAwait(false);
 
-            var e = new Activity(ActivityType.Publish, ResourceType.App, app.Id);
+            var e = new Activity(ActivityType.Publish, app as IResource);
 
             await db.Activities.InsertAsync(e);
 

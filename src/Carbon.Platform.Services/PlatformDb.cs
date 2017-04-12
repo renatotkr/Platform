@@ -32,6 +32,7 @@ namespace Carbon.Platform
             // Environment -----------------------------------------------------------
             Environments          = new Dataset<AppEnvironment, long>(context);
             EnvironmentLocations  = new Dataset<EnvironmentLocation, (long, long)>(context);
+            EnvironmentResources  = new Dataset<EnvironmentResource, long>(context);
             Locations             = new Dataset<LocationInfo, long>(context);
 
             // Apps ------------------------------------------------------------------
@@ -50,11 +51,12 @@ namespace Carbon.Platform
             Volumes               = new Dataset<VolumeInfo,         long>(context);
 
             // Databases --------------------------------------------------------------
-            Databases          = new Dataset<DatabaseInfo,     long>(context);
-            DatabaseClusters   = new Dataset<DatabaseCluster,  long>(context);
-            DatabaseInstances  = new Dataset<DatabaseInstance, long>(context);
-            DatabaseBackups    = new Dataset<DatabaseBackup,   long>(context);
-            EncryptionKeys     = new Dataset<EncryptionKeyInfo, long>(context);
+            Databases          = new Dataset<DatabaseInfo,          long>(context);
+            DatabaseBackups    = new Dataset<DatabaseBackup,        long>(context);
+            DatabaseClusters   = new Dataset<DatabaseCluster,       long>(context);
+            DatabaseEndpoints  = new Dataset<DatabaseEndpoint,      long>(context);
+            DatabaseInstances  = new Dataset<DatabaseInstance,      long>(context);
+            EncryptionKeys     = new Dataset<EncryptionKeyInfo,     long>(context);
 
             // Networks --------------------------------------------------------------
             Networks              = new Dataset<NetworkInfo,              long>(context);
@@ -100,9 +102,10 @@ namespace Carbon.Platform
 
         // Data ---------------------------------------------------------------------
         public Dataset<DatabaseInfo,         long> Databases                 { get; }
-        public Dataset<DatabaseCluster,      long> DatabaseClusters          { get; }
-        public Dataset<DatabaseInstance,     long> DatabaseInstances         { get; }
         public Dataset<DatabaseBackup,       long> DatabaseBackups           { get; }
+        public Dataset<DatabaseCluster,      long> DatabaseClusters          { get; }
+        public Dataset<DatabaseEndpoint,     long> DatabaseEndpoints         { get; }
+        public Dataset<DatabaseInstance,     long> DatabaseInstances         { get; }
         public Dataset<EncryptionKeyInfo,    long> EncryptionKeys            { get; }
 
         // Networks --------------------------------------------------------------

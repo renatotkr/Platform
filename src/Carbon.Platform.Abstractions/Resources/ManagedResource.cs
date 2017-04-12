@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Carbon.Platform
+namespace Carbon.Platform.Resources
 {
     public struct ManagedResource : IEquatable<ManagedResource>
     {

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 using Carbon.Logging;
 using Carbon.Platform.Computing;
+using Carbon.Platform.Services;
 
 namespace Carbon.Platform.CI
 {

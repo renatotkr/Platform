@@ -3,6 +3,7 @@ using System.Net;
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Networking
 {
@@ -36,6 +37,12 @@ namespace Carbon.Platform.Networking
 
         [IgnoreDataMember]
         public long NetworkId => ScopedId.GetScope(Id);
+
+        #region IResource
+
+        ResourceType IResource.ResourceType => ResourceType.NetworkRoute;
+
+        #endregion
 
         #region Timestamps
 

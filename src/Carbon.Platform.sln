@@ -23,8 +23,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Building", "Carbon.B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Building.Web", "Carbon.Building.Web\Carbon.Building.Web.csproj", "{72B7B485-B88C-4C00-B882-CB9CFCA9FB58}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Platform.Extensions", "Carbon.Platform.Extensions\Carbon.Platform.Extensions.csproj", "{3C4B4944-97CA-46EE-B319-798BE1D77FBB}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitHub", "GitHub\GitHub.csproj", "{7ACCF84D-00F6-45F2-BF39-862B733D8D04}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bitbucket", "Bitbucket\Bitbucket.csproj", "{535A6E9E-F824-4EDF-BD46-F3658A7EAD7C}"
@@ -97,10 +95,6 @@ Global
 		{72B7B485-B88C-4C00-B882-CB9CFCA9FB58}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72B7B485-B88C-4C00-B882-CB9CFCA9FB58}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72B7B485-B88C-4C00-B882-CB9CFCA9FB58}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3C4B4944-97CA-46EE-B319-798BE1D77FBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C4B4944-97CA-46EE-B319-798BE1D77FBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3C4B4944-97CA-46EE-B319-798BE1D77FBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3C4B4944-97CA-46EE-B319-798BE1D77FBB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7ACCF84D-00F6-45F2-BF39-862B733D8D04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7ACCF84D-00F6-45F2-BF39-862B733D8D04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7ACCF84D-00F6-45F2-BF39-862B733D8D04}.Release|Any CPU.ActiveCfg = Release|Any CPU

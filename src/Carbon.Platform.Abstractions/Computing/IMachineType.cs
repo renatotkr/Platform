@@ -1,9 +1,9 @@
-﻿namespace Carbon.Platform.Computing
+﻿using Carbon.Platform.Resources;
+
+namespace Carbon.Platform.Computing
 {
     public interface IMachineType : IManagedResource
     {
-        long Id { get; }
-
         string Name { get; }
     }
 }

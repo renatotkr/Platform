@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Networking
 {
@@ -52,7 +53,7 @@ namespace Carbon.Platform.Networking
         [Member("locationId")]
         public long LocationId { get; set; }
 
-        ResourceType IManagedResource.ResourceType => ResourceType.LoadBalancer;
+        ResourceType IResource.ResourceType => ResourceType.LoadBalancer;
 
         #endregion
 

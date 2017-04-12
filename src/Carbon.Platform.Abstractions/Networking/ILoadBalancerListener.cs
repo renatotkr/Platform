@@ -1,11 +1,10 @@
 ﻿using Carbon.Net;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Networking
 {
     public interface ILoadBalancerListener : IManagedResource
     {
-        long Id { get; }
-
         long LoadBalancerId { get; }
 
         ApplicationProtocal Protocal { get; }

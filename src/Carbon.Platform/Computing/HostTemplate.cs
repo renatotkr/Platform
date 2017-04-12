@@ -3,6 +3,8 @@ using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 using Carbon.Json;
+using Carbon.Platform.Resources;
+
 
 namespace Carbon.Platform.Computing
 {
@@ -61,7 +63,7 @@ namespace Carbon.Platform.Computing
 
         long IManagedResource.LocationId => 0;
 
-        ResourceType IManagedResource.ResourceType => ResourceType.HostTemplate;
+        ResourceType IResource.ResourceType => ResourceType.HostTemplate;
 
         #endregion
 

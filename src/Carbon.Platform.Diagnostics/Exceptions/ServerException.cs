@@ -48,7 +48,6 @@ namespace Carbon.Platform.Diagnostics
         [Indexed] // sparse
         public long? SessionId { get; set; }
 
-        
         #region Helpers
 
         [IgnoreDataMember]

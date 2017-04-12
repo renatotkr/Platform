@@ -2,11 +2,12 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Apps
 {
     [Dataset("Apps")]
-    public class AppInfo : IApp
+    public class AppInfo : IApp, IResource
     {
         public AppInfo() { }
 
@@ -26,6 +27,12 @@ namespace Carbon.Platform.Apps
         [Member("name"), Unique]
         [StringLength(63)]
         public string Name { get; }
+
+        #region IResource
+
+        ResourceType IResource.ResourceType => ResourceType.App;
+
+        #endregion
 
         #region Timestamps
 

@@ -3,10 +3,11 @@ using System.Threading.Tasks;
 
 using Amazon.Ec2;
 
+using Carbon.Platform.Computing;
+using Carbon.Platform.Resources;
+
 namespace Carbon.Platform.Services
 {
-    using Computing;
-
     public class VolumeService
     {
         private readonly PlatformDb db;

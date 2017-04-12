@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Carbon.Platform.Resources;
+
 namespace Carbon.Platform
 {
     // A location may be either a region or zone

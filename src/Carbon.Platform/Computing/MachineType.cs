@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 using Carbon.Json;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
@@ -36,7 +37,7 @@ namespace Carbon.Platform.Computing
 
         string IManagedResource.ResourceId => Name;
 
-        ResourceType IManagedResource.ResourceType => ResourceType.MachineType;
+        ResourceType IResource.ResourceType => ResourceType.MachineType;
 
         long IManagedResource.LocationId => 0;
 

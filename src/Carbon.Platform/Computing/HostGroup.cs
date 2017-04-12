@@ -2,12 +2,13 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
     [Dataset("HostGroups")]
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
-    public class HostGroup : IHostGroup, IManagedResource
+    public class HostGroup : IHostGroup
     {
         public HostGroup() { }
 
@@ -58,7 +59,7 @@ namespace Carbon.Platform.Computing
         [Member("locationId")]
         public long LocationId { get; set; }
 
-        ResourceType IManagedResource.ResourceType => ResourceType.HostGroup;
+        ResourceType IResource.ResourceType => ResourceType.HostGroup;
 
         #endregion
 

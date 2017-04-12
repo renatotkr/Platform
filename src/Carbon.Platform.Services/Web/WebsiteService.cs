@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Platform.CI;
+using Carbon.Platform.Resources;
 using Carbon.Platform.VersionControl;
 using Carbon.Versioning;
 
@@ -38,7 +39,8 @@ namespace Carbon.Platform.Web
         public Task<IReadOnlyList<WebsiteInfo>> ListAsync(long ownerId)
         {
             return db.Websites.QueryAsync(
-                And(Eq("ownerId", ownerId), IsNull("deleted"))
+                And(Eq("ownerId", ownerId), IsNull("deleted")),
+                Order.Ascending("name")
              );
         }
 

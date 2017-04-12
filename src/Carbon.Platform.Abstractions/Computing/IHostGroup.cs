@@ -1,12 +1,10 @@
-﻿namespace Carbon.Platform.Computing
+﻿using Carbon.Platform.Resources;
+
+namespace Carbon.Platform.Computing
 {
-    public interface IHostGroup
+    public interface IHostGroup : IManagedResource
     {
-        long Id { get; }
-
         long EnvironmentId { get; }
-
-        long LocationId { get; }
     }
 }
 

@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace Carbon.Platform
+namespace Carbon.Platform.Resources
 {
 	public class ResourceTests
 	{
@@ -82,7 +82,7 @@ namespace Carbon.Platform
         [InlineData(ResourceType.Bucket,           "bucket")]
         [InlineData(ResourceType.Database,         "database")]
         [InlineData(ResourceType.Domain,           "domain")]
-        [InlineData(ResourceType.MachineImage,     "machineimage")]
+        [InlineData(ResourceType.MachineImage,     "machineImage")]
         [InlineData(ResourceType.Host,             "host")]
         [InlineData(ResourceType.Network,          "network")]
         [InlineData(ResourceType.NetworkGateway,   "gateway")]

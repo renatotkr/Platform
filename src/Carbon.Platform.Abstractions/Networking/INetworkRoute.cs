@@ -1,11 +1,11 @@
 ﻿using System.Net;
 
+using Carbon.Platform.Resources;
+
 namespace Carbon.Platform.Networking
 {
-    public interface INetworkRoute
+    public interface INetworkRoute : IResource
     {
-        long Id { get; }
-
         long NetworkId { get; }
 
         string DestinationRange { get; }

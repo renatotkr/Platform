@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 
 using Carbon.Platform.Computing;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform
 {
@@ -20,7 +21,7 @@ namespace Carbon.Platform
 
         int IManagedResource.ProviderId => Platform.LocationId.Create(LocationId).ProviderId;
 
-        ResourceType IManagedResource.ResourceType => ResourceType.Volume;
+        ResourceType IResource.ResourceType => ResourceType.Volume;
 
         string IManagedResource.ResourceId => throw new NotImplementedException();
 

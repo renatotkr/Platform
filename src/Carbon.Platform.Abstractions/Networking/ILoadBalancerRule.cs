@@ -1,9 +1,9 @@
-﻿namespace Carbon.Platform.Networking
-{
-    public interface ILoadBalancerRule
-    {
-        long Id { get; }
+﻿using Carbon.Platform.Resources;
 
+namespace Carbon.Platform.Networking
+{
+    public interface ILoadBalancerRule : IResource
+    {
         long LoadBalancerId { get; }
 
         string Condition { get; }
@@ -14,8 +14,6 @@
     }
 }
 
-
 /*
-path matches /images/*
-host matches carbon.net
+path matches /images/* && host matches carbon.net
 */

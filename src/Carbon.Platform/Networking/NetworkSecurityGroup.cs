@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Networking
 {
@@ -44,7 +45,7 @@ namespace Carbon.Platform.Networking
         
         long IManagedResource.LocationId => 0;
 
-        ResourceType IManagedResource.ResourceType => ResourceType.NetworkSecurityGroup;
+        ResourceType IResource.ResourceType => ResourceType.NetworkSecurityGroup;
 
         #endregion
 

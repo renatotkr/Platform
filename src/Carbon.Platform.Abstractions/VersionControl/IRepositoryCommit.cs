@@ -1,11 +1,11 @@
 ﻿using System;
 
+using Carbon.Platform.Resources;
+
 namespace Carbon.Platform.VersionControl
 {
-    public interface IRepositoryCommit
+    public interface IRepositoryCommit : IResource
     {
-        long Id { get; }
-
         long RepositoryId { get; }
 
         byte[] Sha1 { get; }

@@ -1,13 +1,12 @@
 ﻿using System;
 
 using Carbon.Net;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
     public interface IHealthCheck : IManagedResource
     {
-        long Id { get; }
-
         string Host { get; }
 
         string Path { get; }

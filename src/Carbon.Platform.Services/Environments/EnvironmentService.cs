@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 using Carbon.Data.Expressions;
 using Carbon.Platform.Apps;
 using Carbon.Platform.Computing;
+using Carbon.Platform.Resources;
 
-namespace Carbon.Platform
+namespace Carbon.Platform.Services
 {
     using static Expression;
 

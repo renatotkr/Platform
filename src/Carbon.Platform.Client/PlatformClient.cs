@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 namespace Carbon.Platform
 {
     using Protection;
+    using Resources;
     using Versioning;
 
     public partial class PlatformClient

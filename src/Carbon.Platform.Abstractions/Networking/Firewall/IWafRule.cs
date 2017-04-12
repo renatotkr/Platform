@@ -1,10 +1,9 @@
 ﻿
 /*
-namespace Carbon.Platform.Abstractions.Networking
+namespace Carbon.Platform.Networking
 {
-    public interface IWafRule
+    public interface IWafRule : IResource
     {
-        long Id { get; }
     }
 }
 */

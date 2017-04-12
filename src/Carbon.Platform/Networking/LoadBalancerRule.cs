@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Networking
 {
@@ -34,18 +35,18 @@ namespace Carbon.Platform.Networking
 
         public long LoadBalancerId => ScopedId.GetScope(Id);
 
-        #region Provider
+        #region IResource
 
-        // 50dc6c495c0c9188/f2f7dc8efc522ab2/9683b2d02a6cabee
-
-        // full ARN?
-
+        [IgnoreDataMember]
         [Member("providerId")]
         public int ProviderId { get; set; }
 
+        [IgnoreDataMember]
         [Member("resourceId")]
         [Ascii, StringLength(100)]
         public string ResourceId { get; set; }
+        
+        ResourceType IResource.ResourceType => ResourceType.LoadBalancerRule;
 
         #endregion
 

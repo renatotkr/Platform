@@ -3,9 +3,10 @@
     public enum MachineImageType : byte
     {
         Kernel    = 1,
-        Machine   = 2, // ami (amazon machine image)
-        Container = 3,
-    
-        // RamDisk ?
+        Machine   = 2,
+        Container = 3
     }
+
+
+    // ami = amazon machine image
 }

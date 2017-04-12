@@ -4,6 +4,7 @@ using System.Net;
 
 using Carbon.Data.Annotations;
 using Carbon.Net;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Networking
 {
@@ -64,7 +65,7 @@ namespace Carbon.Platform.Networking
         [Member("locationId")]
         public long LocationId { get; }
 
-        ResourceType IManagedResource.ResourceType => ResourceType.NetworkInterface;
+        ResourceType IResource.ResourceType => ResourceType.NetworkInterface;
 
         #endregion
 

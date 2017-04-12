@@ -1,15 +1,14 @@
-﻿namespace Carbon.Platform
+﻿using Carbon.Platform.Resources;
+
+namespace Carbon.Platform
 {
-    public interface IEnvironment
-    {
-        long Id { get; }
-        
+    public interface IEnvironment : IResource
+    {        
         long AppId { get; }
 
         // e.g. development, production
         string Name { get; }
         
-
         // Variables
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Carbon.Platform
+﻿namespace Carbon.Platform.Resources
 {
     public enum ResourceType
     {
@@ -7,9 +7,10 @@
         Service              = 110,
         ServiceRole          = 111,
         User                 = 120,
-        UserRole             = 121,
+        UserPassword         = 121,
+        UserRole             = 122,
         
-        // Environments
+        // Environment
         Environment          = 200,
         Region               = 210,
         Zone                 = 211,
@@ -25,7 +26,8 @@
         MachineImage         = 360,
         MachineType          = 370,
 
-        // Data & Storage (200)    
+
+        // Data & Storage (400)    
         Bucket               = 400,
         BucketObject         = 401,
         Database             = 410,
@@ -36,19 +38,21 @@
         Queue                = 450,
         QueueMessage         = 451,
         Repository           = 460,
+        RepositoryCommit     = 461,
         Stream               = 470,
         StreamMessage        = 471,
         Volume               = 490,
 
         // Networking | 500
-        Network              = 500,
+        Network = 500,
         NetworkAddress       = 502, 
         NetworkGateway       = 503, 
         NetworkInterface     = 504,
         NetworkPeer          = 505,
         NetworkSecurityGroup = 510, // Rules are embeded
         LoadBalancer         = 520,
-        NetworkProxyListener = 521,
+        LoadBalancerListener = 521,
+        LoadBalancerRule     = 522,
         NetworkRouter        = 530,
         NetworkRoute         = 531,
         Subnet               = 580,
@@ -60,11 +64,14 @@
         DnsRecord            = 621,
 
         Website              = 700,
-        WebsiteEnvironment   = 701,
         WebComponent         = 710,
         WebLibrary           = 720,
-    
+
+        // CI
+        Deployment          = 800,
+
         // Metrics / Monitoring
-        Metric              = 800
+        Metric              = 900,
+
     }
 }

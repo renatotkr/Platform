@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 using Carbon.Net;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
@@ -66,7 +67,7 @@ namespace Carbon.Platform.Computing
 
         long IManagedResource.LocationId => 0;
 
-        ResourceType IManagedResource.ResourceType => ResourceType.HealthCheck;
+        ResourceType IResource.ResourceType => ResourceType.HealthCheck;
 
         #endregion
 

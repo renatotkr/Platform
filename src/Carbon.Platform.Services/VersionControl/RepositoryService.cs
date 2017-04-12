@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Carbon.Data.Expressions;
+using Carbon.Platform.Resources;
 
 using Dapper;
 

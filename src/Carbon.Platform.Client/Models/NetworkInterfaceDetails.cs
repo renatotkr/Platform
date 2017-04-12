@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 using System.Net;
 
 using Carbon.Net;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform
 {
@@ -26,7 +27,7 @@ namespace Carbon.Platform
 
         int IManagedResource.ProviderId => Platform.LocationId.Create(LocationId).ProviderId;
 
-        ResourceType IManagedResource.ResourceType => ResourceType.NetworkInterface;
+        ResourceType IResource.ResourceType => ResourceType.NetworkInterface;
 
         string IManagedResource.ResourceId => throw new NotImplementedException();
 

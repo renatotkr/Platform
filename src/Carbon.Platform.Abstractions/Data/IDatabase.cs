@@ -1,14 +1,12 @@
-﻿namespace Carbon.Platform.Data
-{
-    public interface IDatabase
-    {
-        long Id { get; }
+﻿using Carbon.Platform.Resources;
 
+namespace Carbon.Platform.Data
+{
+    public interface IDatabase : IResource
+    {
         string Name { get; }
     }
 }
-
-
 
 // A database may be spread across mutiple clusters & instances
 // Each database may have mutiple schemas

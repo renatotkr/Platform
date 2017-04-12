@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Data
 {
@@ -51,9 +52,7 @@ namespace Carbon.Platform.Data
         [Member("locationId")]
         public long LocationId { get; }
 
-        ResourceType IManagedResource.ResourceType => ResourceType.EncryptionKey;
-
-        // ResourceOwnerId { get; set; }
+        ResourceType IResource.ResourceType => ResourceType.EncryptionKey;
 
         #endregion
 

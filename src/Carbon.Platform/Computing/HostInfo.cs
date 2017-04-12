@@ -3,6 +3,7 @@ using System.Net;
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
@@ -100,7 +101,7 @@ namespace Carbon.Platform.Computing
         [Member("locationId")]
         public long LocationId { get; }
 
-        ResourceType IManagedResource.ResourceType => ResourceType.Host;
+        ResourceType IResource.ResourceType => ResourceType.Host;
 
         #endregion
 

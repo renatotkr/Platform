@@ -1,9 +1,9 @@
-﻿namespace Carbon.Platform.Networking
+﻿using Carbon.Platform.Resources;
+
+namespace Carbon.Platform.Networking
 {
     public interface INetworkSecurityGroup : IManagedResource
     {
-        long Id { get; }
-
         string Name { get; }
 
         // Rules

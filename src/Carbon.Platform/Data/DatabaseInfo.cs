@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Data
 {
@@ -21,7 +23,18 @@ namespace Carbon.Platform.Data
         [Member("name"), Unique]
         public string Name { get; }
 
+        #region Timestamps
+
+        [IgnoreDataMember]
         [Member("created"), Timestamp]
         public DateTime Created { get; }
+
+        #endregion
+
+        #region IResource
+
+        ResourceType IResource.ResourceType => ResourceType.Database;
+
+        #endregion
     }
 }
