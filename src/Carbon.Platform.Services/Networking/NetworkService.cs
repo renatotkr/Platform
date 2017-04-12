@@ -49,10 +49,7 @@ namespace Carbon.Platform.Networking
             {
                 var n = await ec2.DescribeNetworkInterfaceAsync(id).ConfigureAwait(false);
 
-                if (n == null)
-                {
-                    throw new Exception("No ec2:NetworkInterface with id:" + id);
-                }
+                if (n == null) throw new Exception("No ec2:NetworkInterface with id:" + id);
 
                 var host = await db.Hosts.FindAsync(provider, n.Attachment.InstanceId).ConfigureAwait(false);
 
@@ -67,11 +64,11 @@ namespace Carbon.Platform.Networking
                     }
                 }
                 
-                var ni = await ConfigureEc2NetworkInterfaceAsync(n).ConfigureAwait(false);
+                var nic = await ConfigureEc2NetworkInterfaceAsync(n).ConfigureAwait(false);
 
-                ni.HostId = host?.Id;
+                nic.HostId = host?.Id;
 
-                await db.NetworkInterfaces.InsertAsync(ni).ConfigureAwait(false);
+                await db.NetworkInterfaces.InsertAsync(nic).ConfigureAwait(false);
             }
 
             return record;
@@ -172,19 +169,16 @@ namespace Carbon.Platform.Networking
         {
             var vpc = await ec2.DescribeVpcAsync(id).ConfigureAwait(false);
 
-            if (vpc == null)
-            {
-                throw new Exception($"VPC#{id} not found");
-            }
-            
+            if (vpc == null) throw new Exception($"VPC#{id} not found");
+
             // TODO: Get the location
 
             var resource = new ManagedResource(aws, ResourceType.Network, vpc.VpcId);
 
             return new NetworkInfo(
-                id      : db.Context.GetNextId<NetworkInfo>(),
-                cidr    : vpc.CidrBlock,
-                resource: resource
+                id       : db.Context.GetNextId<NetworkInfo>(),
+                cidr     : vpc.CidrBlock,
+                resource : resource
             );
         }
 

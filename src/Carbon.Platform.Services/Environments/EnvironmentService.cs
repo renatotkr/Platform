@@ -22,11 +22,50 @@ namespace Carbon.Platform.Services
 
         // Cache?
 
-        public Task<AppEnvironment> GetAsync(long appId, string name)
+        public Task<AppEnvironment> GetAsync(IApp app, string name)
         {
-            return db.Environments.QueryFirstOrDefaultAsync(And(Eq("appId", appId), Eq("name", name)));
+            return db.Environments.QueryFirstOrDefaultAsync(
+                And(Eq("appId", app.Id), Eq("name", name)
+            ));
         }
-   
+
+        public Task<AppEnvironment> GetAsync(IApp app, EnvironmentType type)
+        {
+            return db.Environments.QueryFirstOrDefaultAsync(
+                And(Eq("appId", app.Id), Eq("name", type.ToString().ToLower())
+            ));
+        }
+
+        public async Task<EnvironmentResource> AddResourceAsync(IEnvironment env, ILocation location, IResource resource)
+        {
+            var id = await db.EnvironmentResources.GetNextScopedIdAsync(env.Id).ConfigureAwait(false);
+
+            var envResource = new EnvironmentResource(
+                id          : id,
+                environment : env,
+                location    : location,
+                resource    : resource
+            );
+            
+            await db.EnvironmentResources.InsertAsync(envResource).ConfigureAwait(false);
+
+            return envResource;
+        }
+
+        public Task<AppEnvironment> CreateAsync(IApp app, EnvironmentType type)
+        {
+            return CreateAsync(app, type.ToString().ToLower(), Array.Empty<ILocation>());
+        }
+
+        public Task<AppEnvironment> CreateAsync(IApp app, EnvironmentType type, ILocation[] regions)
+        {
+            // Production  = 1 
+            // Staging     = 2
+            // Development = 3
+
+            return CreateAsync(app, type.ToString().ToLower(), regions);
+        }
+       
         public async Task<AppEnvironment> CreateAsync(IApp app, string name, ILocation[] regions)
         {
             #region Preconditions

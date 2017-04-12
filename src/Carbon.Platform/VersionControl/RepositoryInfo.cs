@@ -9,6 +9,7 @@ namespace Carbon.Platform.VersionControl
 {
     [Dataset("Repositories")]
     [DataIndex(IndexFlags.Unique, "providerId", "fullName")]
+    [DataIndex(IndexFlags.Unique, "ownerId", "name")]
     public class RepositoryInfo : IRepository
     {
         public RepositoryInfo() { }
@@ -29,13 +30,13 @@ namespace Carbon.Platform.VersionControl
         [Member("name")]
         public string Name { get; }
 
-        [Member("fullName")]
-        [StringLength(100)]
-        public string FullName { get; }
-
         [IgnoreDataMember]
         [Member("ownerId")]  // May change ownership
         public long OwnerId { get; }
+
+        [Member("fullName")]
+        [StringLength(100)]
+        public string FullName { get; }
 
         #region Stats
 

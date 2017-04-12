@@ -80,12 +80,16 @@ namespace Carbon.Platform.Resources
         public static ManagedResource NetworkInterface(ILocation location, string id)
             => new ManagedResource(location, ResourceType.NetworkInterface, id);
 
+        public static ManagedResource Subnet(ILocation location, string id)
+            => new ManagedResource(location, ResourceType.Subnet, id);
+
         public static ManagedResource Volume(ILocation location, string id)
             => new ManagedResource(location, ResourceType.Volume, id);
 
-        // Repository
-        // ...
 
+        public static ManagedResource Repository(ResourceProvider provider, string accountName, string repositoryName)
+            => new ManagedResource(provider, ResourceType.Repository, $"{accountName}/{repositoryName}");
+        
         #endregion
 
         private static readonly char[] splitOn = { ':', '/' };

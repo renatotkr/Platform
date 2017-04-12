@@ -5,7 +5,6 @@ using Carbon.Data.Annotations;
 using Carbon.Json;
 using Carbon.Platform.Resources;
 
-
 namespace Carbon.Platform.Computing
 {
     [Dataset("HostTemplates")]

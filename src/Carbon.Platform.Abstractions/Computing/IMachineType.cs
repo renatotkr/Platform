@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Computing
 {
-    public interface IMachineType : IManagedResource
+    public interface IMachineType : IResource
     {
         string Name { get; }
     }

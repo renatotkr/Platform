@@ -46,16 +46,12 @@ namespace Carbon.Platform
 
         #region IResource
 
-        string IManagedResource.ResourceId => Name;
-
         public int ProviderId => id.ProviderId;
 
         public ResourceType ResourceType
         {
             get => id.ZoneNumber == 0 ? ResourceType.Region : ResourceType.Zone;
         }
-
-        long IManagedResource.LocationId => Id;
 
         #endregion
 

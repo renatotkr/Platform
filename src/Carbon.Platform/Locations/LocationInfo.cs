@@ -16,10 +16,10 @@ namespace Carbon.Platform
 
         public LocationInfo(long id, string name, LocationStatus status = LocationStatus.Healthy)
         {
-            Id = id;
+            Id         = id;
             ProviderId = LocationId.Create(id).ProviderId;
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-            Status = status;
+            Name       = name ?? throw new ArgumentNullException(nameof(name));
+            Status     = status;
         }
 
         [Member("id"), Key]
@@ -28,8 +28,6 @@ namespace Carbon.Platform
         [Member("providerId")]
         public int ProviderId { get; }
 
-        // e.g. us-east-1
-        // us-east1a
         [Member("name")]
         [StringLength(63)]
         public string Name { get; }
@@ -52,8 +50,6 @@ namespace Carbon.Platform
 
         #region IResource
 
-        string IManagedResource.ResourceId => Name;
-
         [IgnoreDataMember]
         public ResourceProvider Provider => ResourceProvider.Get(ProviderId);
         
@@ -69,8 +65,6 @@ namespace Carbon.Platform
                     : ResourceType.Region;
             }
         }
-
-        long IManagedResource.LocationId => Id;
 
         #endregion
 

@@ -35,11 +35,7 @@ namespace Carbon.Platform.Computing
         [Member("providerId")]
         public int ProviderId { get; }
 
-        string IManagedResource.ResourceId => Name;
-
         ResourceType IResource.ResourceType => ResourceType.MachineType;
-
-        long IManagedResource.LocationId => 0;
 
         #endregion
 

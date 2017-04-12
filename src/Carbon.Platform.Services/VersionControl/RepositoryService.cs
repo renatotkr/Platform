@@ -11,7 +11,7 @@ namespace Carbon.Platform.VersionControl
 {
     using static Expression;
 
-    public class RepositoryService
+    public class RepositoryService : IRepositoryService
     {
         private readonly RepositoryDb db;
 
@@ -29,16 +29,18 @@ namespace Carbon.Platform.VersionControl
             return repository;
         }
 
-        public async Task<RepositoryInfo> GetAsync(string name)
+        public async Task<RepositoryInfo> GetAsync(long ownerId, string name)
         {
-            var repository = await db.Repositories.QueryFirstOrDefaultAsync(Eq("name", name)).ConfigureAwait(false);
+            var repository = await db.Repositories.QueryFirstOrDefaultAsync(
+                And(Eq("ownerId", ownerId), Eq("name", name))
+            ).ConfigureAwait(false);
 
             if (repository == null) throw new Exception($"repository named '{name}' does not exist");
 
             return repository;
         }
 
-        public async Task CreateAsync(string name, long ownerId, ManagedResource resource)
+        public async Task<RepositoryInfo> CreateAsync(string name, long ownerId, ManagedResource resource)
         {
             #region Preconditions
 
@@ -55,6 +57,13 @@ namespace Carbon.Platform.VersionControl
             );
 
             await db.Repositories.InsertAsync(repository).ConfigureAwait(false);
+
+            // Recreate the master branch
+            var master = new RepositoryBranch(repository.Id, "master", ownerId);
+
+            await db.RepositoryBranches.InsertAsync(master).ConfigureAwait(false);
+
+            return repository;
         }
 
         public async Task<IRepositoryCommit> CreateCommitAsync(CreateCommitRequest request)
@@ -138,9 +147,9 @@ namespace Carbon.Platform.VersionControl
                 branchName   : request.BranchName,
                 path         : request.Path,
                 type         : FileType.Blob) {
-                CreatorId = request.CreatorId,
-                Size      = request.Size,
-                Sha256    = request.Sha256
+                CreatorId   = request.CreatorId,
+                Size        = request.Size,
+                Sha256      = request.Sha256
             };
 
             using (var connection = db.Context.GetConnection())

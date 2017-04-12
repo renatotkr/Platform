@@ -2,10 +2,9 @@
 
 namespace Carbon.Platform
 {
-    public interface ILocation : IManagedResource
+    public interface ILocation : IResource
     {
         // e.g. us-east-1, us-east-1a
-
         string Name { get; }
     }
 }
