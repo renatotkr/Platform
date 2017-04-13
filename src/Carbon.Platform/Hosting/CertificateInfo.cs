@@ -52,7 +52,7 @@ namespace Carbon.Platform.Hosting
         // aws certificates are region scoped
         [IgnoreDataMember]
         [Member("locationId")]
-        public long LocationId { get; }
+        public int LocationId { get; }
 
         #endregion
 

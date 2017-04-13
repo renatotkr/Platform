@@ -2,16 +2,6 @@
 
 namespace Carbon.Platform
 {
-    internal static class LocationHelper
-    {
-        public static ResourceProvider GetProvider(long id)
-        {
-            var providerId = LocationId.Create(id).ProviderId;
-
-            return ResourceProvider.Get(providerId);
-        }
-    }
-
     internal static class ZoneHelper
     {
         // Our identity model supports 255 zones

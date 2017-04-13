@@ -48,7 +48,7 @@ namespace Carbon.Platform.Networking
 
         [IgnoreDataMember]
         [Member("locationId")]
-        public long LocationId { get; set; }
+        public int LocationId { get; set; }
 
         // arn:aws:elasticloadbalancing:us-west-2:123456789012:listener/app/my-load-balancer/50dc6c495c0c9188/f2f7dc8efc522ab2
 

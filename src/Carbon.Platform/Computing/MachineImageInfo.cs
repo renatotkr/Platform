@@ -54,7 +54,7 @@ namespace Carbon.Platform.Computing
         public string ResourceId { get; }
 
         [Member("locationId")]
-        public long LocationId { get; }
+        public int LocationId { get; }
 
         ResourceType IResource.ResourceType => ResourceType.MachineImage;
 

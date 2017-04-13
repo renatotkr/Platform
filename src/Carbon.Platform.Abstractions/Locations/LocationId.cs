@@ -1,63 +1,121 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace Carbon.Platform
 {
-    [StructLayout(LayoutKind.Explicit, Size = 8)]
+    // Region = 0 (Global)
+    // ZoneA = US
+    // ZoneB = A
+
+    [StructLayout(LayoutKind.Explicit, Size = 4)]
     public struct LocationId
     {
+        public static readonly LocationId Zero = new LocationId { value = 0 };
+
         [FieldOffset(0)] // 255 zones
-        public byte ZoneNumber;
+        private byte zoneNumber;
 
-        [FieldOffset(1)]
-        public byte Flags;
+        [FieldOffset(1)] // 65K regions
+        private ushort regionNumber;
 
-        [FieldOffset(2)] // ~65K Regions
-        public ushort RegionNumber;
-
-        [FieldOffset(4)] // 4B providers
-        public int ProviderId;
+        [FieldOffset(3)] // 255 providers
+        private byte providerId;
 
         [FieldOffset(0)]
-        public long Value;
+        private int value;
 
-        public static implicit operator long (LocationId id) => id.Value;
+        public byte ProviderId => providerId;
 
-        public LocationId WithZoneNumber(byte value)
+        public ushort RegionNumber => regionNumber;
+
+        public byte ZoneNumber => zoneNumber;
+
+        public int Value => value;
+
+        #region Helpers
+
+        public LocationId WithZoneNumber(byte zoneNumber)
         {
-            var id = new LocationId {
-                Value = value
-            };
+            var id = Create(Value);
 
-            id.Flags = 0;
-            id.ZoneNumber = value;
+            id.zoneNumber = zoneNumber;
 
             return id;
         }
 
+        #endregion
+
+        #region Type
+
+        public LocationType Type
+        {
+            get
+            {
+                if (regionNumber == 0)
+                {
+                    return zoneNumber == 0
+                        ? LocationType.Global
+                        : LocationType.MultiRegion;
+                }
+
+                return zoneNumber == 0
+                    ? LocationType.Region
+                    : LocationType.Zone;
+            }
+        }
+
+        #endregion
+
+        public static implicit operator int (LocationId id) => id.Value;
+
+        public static LocationId Create(int id)
+        {
+            return new LocationId { value = id };
+        }      
+
         public static LocationId Create(
             ResourceProvider provider,
             ushort regionNumber,
-            byte zoneNumber = 0,
-            byte flags = 0)
+            byte zoneNumber = 0)
         {
+            if (provider.Id <= 0 || provider.Id >= 128)
+            {
+                throw new ArgumentOutOfRangeException("providerId", provider.Id, "Must be between 1 and 127");
+            }
+
             return new LocationId {
-                ProviderId = provider.Id,
-                RegionNumber = regionNumber,
-                ZoneNumber = zoneNumber,
-                Flags = flags
+                providerId   = (byte)provider.Id,
+                regionNumber = regionNumber,
+                zoneNumber   = zoneNumber
             };
         }
 
-        public static LocationId Create(long value) => new LocationId { Value = value };
-    }
-
-    public enum LocationFlags : byte
-    {
-        None          = 0,
-        Global        = 1 << 1,
-        MultiRegional = 1 << 2
+        public static LocationId Create(
+            int providerId,
+            int regionNumber,
+            int zoneNumber = 0
+        ) {
+            return new LocationId {
+                providerId   = (byte)providerId,
+                regionNumber = (ushort)regionNumber,
+                zoneNumber   = (byte)zoneNumber
+            };
+        }
     }
 }
+
+
+/*
+Notes:
+336 cities with over 1M people
+1,127 cities with at least 500,000 inhabits | 2.317 billion people in these cities
+4,116 cities with at least 100,000 people 
+*/
+
+
+// ProviderId     1     // 255
+// RegionNumber   2     // 65K 
+// ZoneId         1     // 255
 
 
 /*

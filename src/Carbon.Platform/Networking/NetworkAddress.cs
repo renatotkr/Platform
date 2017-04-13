@@ -41,7 +41,7 @@ namespace Carbon.Platform.Networking
         [Ascii, StringLength(100)]
         public string ResourceId { get; }
 
-        long IManagedResource.LocationId => 0;
+        int IManagedResource.LocationId => 0;
 
         ResourceType IResource.ResourceType => ResourceType.NetworkAddress;
 

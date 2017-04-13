@@ -67,7 +67,7 @@ namespace Carbon.Platform.VersionControl
         // Used by amazon codecommit
         [IgnoreDataMember]
         [Member("locationId")]
-        public long LocationId { get; }
+        public int LocationId { get; }
         
         ResourceType IResource.ResourceType => ResourceType.Repository;
 

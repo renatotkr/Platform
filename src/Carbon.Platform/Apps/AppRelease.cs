@@ -20,6 +20,12 @@ namespace Carbon.Platform.Apps
             if (version == SemanticVersion.Zero)
                 throw new ArgumentException("May not be 0.0.0", nameof(version));
 
+            if (sha256 == null)
+                throw new ArgumentNullException(nameof(sha256));
+
+            if (sha256.Length != 32)
+                throw new ArgumentException("Must be 32 bytes", nameof(sha256));
+
             #endregion
 
             AppId     = app.Id;

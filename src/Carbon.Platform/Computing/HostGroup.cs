@@ -17,11 +17,11 @@ namespace Carbon.Platform.Computing
             string name,
             ManagedResource resource)
         {
-            Id            = id;
-            Name          = name ?? throw new ArgumentNullException(nameof(name));
-            ProviderId    = resource.ProviderId;
-            LocationId    = resource.LocationId;
-            ResourceId    = resource.ResourceId;
+            Id         = id;
+            Name       = name ?? throw new ArgumentNullException(nameof(name));
+            ProviderId = resource.ProviderId;
+            LocationId = resource.LocationId;
+            ResourceId = resource.ResourceId;
         }
         
         // providerId, regionId, zoneId, sequence
@@ -49,15 +49,15 @@ namespace Carbon.Platform.Computing
 
         [IgnoreDataMember]
         [Member("providerId")]
-        public int ProviderId { get; set; }
+        public int ProviderId { get; }
 
         [IgnoreDataMember]
         [Member("resourceId")]
         [Ascii, StringLength(100)]
-        public string ResourceId { get; set; }
+        public string ResourceId { get; }
 
         [Member("locationId")]
-        public long LocationId { get; set; }
+        public int LocationId { get; }
 
         ResourceType IResource.ResourceType => ResourceType.HostGroup;
 

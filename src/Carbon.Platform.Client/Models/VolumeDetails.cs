@@ -15,7 +15,7 @@ namespace Carbon.Platform
         public long Size { get; set; }
 
         [DataMember(Name = "locationId", Order = 3)]
-        public long LocationId { get; set; }
+        public int LocationId { get; set; }
 
         #region IManagedResource
 

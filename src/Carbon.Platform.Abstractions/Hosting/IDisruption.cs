@@ -6,7 +6,7 @@ namespace Carbon.Platform.Disruptions
     {
         long Id { get; }
 
-        long LocationId { get; }
+        int LocationId { get; }
         
         // scope = buckets, ...
 

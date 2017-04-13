@@ -60,7 +60,7 @@ namespace Carbon.Platform.Computing
         [Ascii, StringLength(100)]
         public string ResourceId { get; set; }
 
-        long IManagedResource.LocationId => 0;
+        int IManagedResource.LocationId => 0;
 
         ResourceType IResource.ResourceType => ResourceType.HostTemplate;
 

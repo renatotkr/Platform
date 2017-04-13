@@ -40,7 +40,7 @@ namespace Carbon.Platform.Computing
         public ushort Port { get; }
 
         [Member("protocal")] // e.g. TCP, HTTP, HTTPS
-        public NetworkProtocal Protocal { get; set; }
+        public NetworkProtocal Protocal { get; }
         
         [Member("interval")]
         public TimeSpan Interval { get; set; } = TimeSpan.FromSeconds(30);
@@ -65,7 +65,9 @@ namespace Carbon.Platform.Computing
         [Ascii, StringLength(100)]
         public string ResourceId { get; set; }
 
-        long IManagedResource.LocationId => 0;
+        [IgnoreDataMember]
+        [Member("locationId")]
+        public int LocationId { get; set; }
 
         ResourceType IResource.ResourceType => ResourceType.HealthCheck;
 

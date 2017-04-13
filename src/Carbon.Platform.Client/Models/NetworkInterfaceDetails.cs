@@ -21,7 +21,7 @@ namespace Carbon.Platform
         public IPAddress[] Addresses { get; set; }
 
         [DataMember(Name = "locationId", Order = 4)]
-        public long LocationId { get; set; }
+        public int LocationId { get; set; }
 
         #region IManagedResource
 

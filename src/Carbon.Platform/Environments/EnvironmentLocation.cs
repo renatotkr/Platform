@@ -5,7 +5,7 @@ namespace Carbon.Platform
     [Dataset("EnvironmentLocations")]
     public class EnvironmentLocation
     {
-        public EnvironmentLocation(long environmentId, long locationId)
+        public EnvironmentLocation(long environmentId, int locationId)
         {
             EnvironmentId = environmentId;
             LocationId = locationId;
@@ -15,6 +15,6 @@ namespace Carbon.Platform
         public long EnvironmentId { get; }
         
         [Member("locationId"), Key]
-        public long LocationId { get; }
+        public int LocationId { get; }
     }
 }

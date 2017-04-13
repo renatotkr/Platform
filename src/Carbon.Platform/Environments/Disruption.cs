@@ -10,10 +10,10 @@ namespace Carbon.Platform.Disruptions
     {
         public Disruption() { }
 
-        public Disruption(long id, long locationId, string description = null)
+        public Disruption(long id, ILocation location, string description = null)
         {
             Id = id;
-            LocationId = locationId;
+            LocationId = location.Id;
             Description = description;
         }
 
@@ -21,7 +21,7 @@ namespace Carbon.Platform.Disruptions
         public long Id { get; }
 
         [Member("locationId")]
-        public long LocationId { get; }
+        public int LocationId { get; }
 
         [Member("description")]
         [StringLength(200)]

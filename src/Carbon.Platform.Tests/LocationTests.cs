@@ -25,19 +25,20 @@ namespace Carbon.Platform.Tests
             Assert.Equal("us-east-1", location.Name);
             Assert.Equal("us-east-1", location.RegionName);
             Assert.Equal(ResourceProvider.Amazon.Id, location.ProviderId);
-            Assert.Equal(ResourceType.Region, location.ResourceType);
+            Assert.Equal(LocationType.Region, location.Type);
         }
 
         [Fact]
         public void AwsRegion1WithZone()
         {
             var location = Locations.Get(ResourceProvider.Amazon, "us-east-1a");
-
+            
             Assert.Equal("us-east-1", location.RegionName);
             Assert.Equal("us-east-1a", location.Name);
             Assert.Equal("a", location.ZoneName);
-            Assert.Equal(ResourceProvider.Amazon.Id, location.ProviderId);
-            Assert.Equal(ResourceType.Zone, location.ResourceType);
+
+            // Assert.Equal(ResourceProvider.Amazon.Id, location.ProviderId);
+            Assert.Equal(LocationType.Zone, location.Type);
         }
 
         [Fact]
@@ -46,8 +47,20 @@ namespace Carbon.Platform.Tests
             var s = LocationId.Create(ResourceProvider.Amazon, 1, 000);
             var e = LocationId.Create(ResourceProvider.Amazon, 1, 255);
 
-            Assert.Equal(4295032832, s.Value);
-            Assert.Equal(4295033087, e.Value);
+            Assert.Equal(16777472, s.Value);
+            Assert.Equal(16777727, e.Value);
+        }
+
+        [Fact]
+        public void MultiRegion()
+        {
+            var eu = Locations.Google_EU;
+
+            var id = LocationId.Create(eu.Id);
+
+            Assert.Equal(3, id.ProviderId);
+            Assert.Equal(0, id.RegionNumber);
+            Assert.Equal(2, id.ZoneNumber);
         }
 
         [Fact]
@@ -89,17 +102,23 @@ namespace Carbon.Platform.Tests
             Assert.Equal(1,                       region.Provider.Id);
             Assert.Equal("us-east-1",             region.Name);
             Assert.Equal(ResourceProvider.Amazon, region.Provider);
+            // Assert.Equal(LocationType.Region,     region.Type);
+
         }
 
         [Fact]
         public void MultiRegionalTests()
         {
-            Assert.True(Locations.Google_Asia.IsMultiRegional);
-            Assert.True(Locations.Google_EU.IsMultiRegional);
-            Assert.True(Locations.Google_US.IsMultiRegional);
+            Assert.Equal(LocationType.MultiRegion, Locations.Google_Asia.Type);
+            Assert.Equal(LocationType.MultiRegion, Locations.Google_EU.Type);
+            Assert.Equal(LocationType.MultiRegion, Locations.Google_US.Type);
+        }
 
-            Assert.False(Locations.Amazon_AP_NorthEast1.IsMultiRegional);
-
+        [Fact]
+        public void TypeTests()
+        {
+            Assert.Equal(LocationType.Region, Locations.Amazon_AP_NorthEast1.Type);
+            Assert.Equal(LocationType.Zone, Locations.Amazon_AP_NorthEast1.WithZone('A').Type);
         }
 
         [Fact]
@@ -116,23 +135,23 @@ namespace Carbon.Platform.Tests
         [Fact]
         public void LocationIdTest()
         {
-            var ab = LocationId.Create(4295032833); // Amazon_USEast1_A
+            var ab = LocationId.Create(16777472); // Amazon_USEast1
 
-            Assert.Equal(1,          ab.ProviderId);    // Amazon
-            Assert.Equal(1,          ab.RegionNumber);  // 1
-            Assert.Equal(1,          ab.ZoneNumber);    // A
-            Assert.Equal(4295032833, ab.Value);
+            Assert.Equal(1,        ab.ProviderId);   // Amazon
+            Assert.Equal(1,        ab.RegionNumber); // 1
+            Assert.Equal(0,        ab.ZoneNumber);   // 0
+            Assert.Equal(16777472, ab.Value);
 
-            Assert.Equal(4295032833, Locations.Amazon_US_East1.WithZone('A').Id);
-            Assert.Equal(4295032834, Locations.Amazon_US_East1.WithZone('B').Id);
-            Assert.Equal(4295032835, Locations.Amazon_US_East1.WithZone('C').Id);
-            Assert.Equal(4295032836, Locations.Amazon_US_East1.WithZone('D').Id);
-            Assert.Equal(4295032837, Locations.Amazon_US_East1.WithZone('E').Id);
+            Assert.Equal(16777473, Locations.Amazon_US_East1.WithZone('A').Id);
+            Assert.Equal(16777474, Locations.Amazon_US_East1.WithZone('B').Id);
+            Assert.Equal(16777475, Locations.Amazon_US_East1.WithZone('C').Id);
+            Assert.Equal(16777476, Locations.Amazon_US_East1.WithZone('D').Id);
+            Assert.Equal(16777477, Locations.Amazon_US_East1.WithZone('E').Id);
 
-            var zone = new Location(ab, "us-east-1a");
+            var zone = new Location(ab, "us-east-1");
 
             Assert.Equal(ResourceProvider.Amazon.Id, zone.ProviderId);
-            Assert.Equal(ResourceType.Zone, zone.ResourceType);
+            Assert.Equal(LocationType.Region, zone.Type);
         }
 
         [Fact]
@@ -141,18 +160,19 @@ namespace Carbon.Platform.Tests
             var a = Locations.Amazon_US_East1.WithZone('A');
 
             Assert.Equal(1, a.ProviderId);
-            Assert.Equal(4295032833, a.Id);
+            Assert.Equal(16777473, a.Id);
             Assert.Equal("us-east-1a", a.Name);
 
             Assert.Equal("asia-east1-c", Locations.Google_AsiaEast1.WithZone('C').Name);
+            Assert.Equal("asia-east1-d", Locations.Google_AsiaEast1.WithZone('d').Name);
         }
 
         [Fact]
         public void Ids()
         {
-            Assert.Equal(4295032832, Locations.Amazon_US_East1.Id);
-            Assert.Equal(4295032833, Locations.Amazon_US_East1.WithZone('A').Id);
-            Assert.Equal(4295032834, Locations.Amazon_US_East1.WithZone('B').Id);
+            Assert.Equal(16777472, Locations.Amazon_US_East1.Id);
+            Assert.Equal(16777473, Locations.Amazon_US_East1.WithZone('A').Id);
+            Assert.Equal(16777474, Locations.Amazon_US_East1.WithZone('B').Id);
         }
     }
 }

@@ -45,7 +45,7 @@ namespace Carbon.Platform.Data
         public DatabaseEndpointFlags Flags { get; }
 
         [Member("locationId")]
-        public long LocationId { get; }
+        public int LocationId { get; }
 
         #region Helpers
 

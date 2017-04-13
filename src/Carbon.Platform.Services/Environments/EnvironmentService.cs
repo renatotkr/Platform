@@ -95,7 +95,7 @@ namespace Carbon.Platform.Services
                 var group = new HostGroup(
                     id       : await db.HostGroups.GetNextScopedIdAsync(env.Id).ConfigureAwait(false),
                     name     : app.Name, 
-                    resource : new ManagedResource(region, ResourceType.HostGroup, Guid.NewGuid().ToString())
+                    resource : ManagedResource.HostGroup(region, Guid.NewGuid().ToString())
                 );
 
                 await db.HostGroups.InsertAsync(group).ConfigureAwait(false);

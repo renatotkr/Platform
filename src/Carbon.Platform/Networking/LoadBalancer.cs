@@ -51,7 +51,7 @@ namespace Carbon.Platform.Networking
         public string ResourceId { get; }
 
         [Member("locationId")]
-        public long LocationId { get; set; }
+        public int LocationId { get; set; }
 
         ResourceType IResource.ResourceType => ResourceType.LoadBalancer;
 

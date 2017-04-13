@@ -53,7 +53,7 @@ namespace Carbon.Platform.Data
 
         [IgnoreDataMember]
         [Member("locationId")]
-        public long LocationId { get; }
+        public int LocationId { get; }
 
         ResourceType IResource.ResourceType => ResourceType.DatabaseInstance;
 

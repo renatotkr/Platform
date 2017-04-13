@@ -42,7 +42,7 @@ namespace Carbon.Platform
         }
 
 
-        public static Location Get(long id)
+        public static Location Get(int id)
         {
             var lid = LocationId.Create(id);
 
@@ -74,15 +74,16 @@ namespace Carbon.Platform
                 throw new Exception("Microsoft not yet supported");
             }
 
-            if (lid.ProviderId == ResourceProvider.Google.Id)
+            if (lid.ProviderId == 3) // Google
             {
-                if (lid.Flags == (byte)LocationFlags.MultiRegional)
+                if (lid.RegionNumber == 0) // Mutli regional
                 {
-                    switch (lid.RegionNumber)
+                    switch (lid.ZoneNumber)
                     {
-                        case 1 : return Google_US;
-                        case 2 : return Google_EU;
-                        case 3 : return Google_Asia; 
+                        case 1  : return Google_US;
+                        case 2  : return Google_EU;
+                        case 3  : return Google_Asia;
+                        default : throw new Exception("No multi-region:" + lid.ZoneNumber);
                     }
                 }
 
@@ -97,18 +98,24 @@ namespace Carbon.Platform
                 }
             }
 
-            throw new Exception("Unexpected...");
+            throw new Exception($"Unexpected location id: {lid.ProviderId}|{lid.RegionNumber}|{lid.ZoneNumber}");
 
         }
 
-        private static Location Create(ResourceProvider provider, ushort regionNumber, byte zoneNumber, string name, LocationFlags flags = 0) =>
-            new Location(provider, regionNumber, zoneNumber, name, flags);
+        private static Location Create(ResourceProvider provider, ushort regionNumber, byte zoneNumber, string name)
+        {
+            return new Location(LocationId.Create(provider, regionNumber, zoneNumber), name);
+        }
 
-        private static Location Create(ResourceProvider provider, ushort regionNumber, string name, LocationFlags flags = 0) =>
-            new Location(provider, regionNumber, 0, name, flags);
+        private static Location Create(ResourceProvider provider, ushort regionNumber, string name)
+        {
+            return new Location(LocationId.Create(provider, regionNumber, 0), name);
+        }
+
+        public static readonly Location Global = new Location(LocationId.Zero, "global");
 
         // Amazon | https://cloud.google.com/compute/docs/regions-zones/regions-zones
-        // ------------------------------------------------------------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------------------------------------------------------
         private static readonly ResourceProvider aws = ResourceProvider.Amazon;
 
         public static readonly Location Amazon_US_East1        = Create(aws,  1, "us-east-1");       // | US    | N. Virginia   | 2006-08-25
@@ -189,18 +196,20 @@ namespace Carbon.Platform
 
         private static readonly ResourceProvider google = ResourceProvider.Google;
 
-        // Regions                                                                                                  
-        public static readonly Location Google_USCentral1     = Create(google,  1, "us-central1");     // | US    | Iowa          | ?
-        public static readonly Location Google_EuropeWest1    = Create(google,  2, "europe-west1");    // | EU    | Belgium       | ?
-        public static readonly Location Google_AsiaEast1      = Create(google,  3, "asia-east1");      // | AP    | Taiwan        | 2014-04-07
-        public static readonly Location Google_USEast1        = Create(google,  4, "us-east1");        // | US    | South Caroli. | 2015-10-01
-        public static readonly Location Google_USWest1        = Create(google,  5, "us-west1");        // | US    | Oregon        | 2016-06-20 
-        public static readonly Location Google_AsiaNorthEast1 = Create(google,  6, "asia-northeast1"); // | AP    | Tokyo         | 2016-11-08
-
         // Multi-Regions
-        public static readonly Location Google_US             = Create(google,  1, "us",   flags: LocationFlags.MultiRegional); 
-        public static readonly Location Google_EU             = Create(google,  2, "eu",   flags: LocationFlags.MultiRegional); 
-        public static readonly Location Google_Asia           = Create(google,  3, "asia", flags: LocationFlags.MultiRegional);
+        public static readonly Location Google_US             = new Location(LocationId.Create(google, 0, 1), "us"); 
+        public static readonly Location Google_EU             = new Location(LocationId.Create(google, 0, 2), "eu"); 
+        public static readonly Location Google_Asia           = new Location(LocationId.Create(google, 0, 3), "asia");
+
+        // Regions                                                                                                  
+        public static readonly Location Google_USCentral1     = Create(google, 1, "us-central1");     // | US    | Iowa          | ?
+        public static readonly Location Google_EuropeWest1    = Create(google, 2, "europe-west1");    // | EU    | Belgium       | ?
+        public static readonly Location Google_AsiaEast1      = Create(google, 3, "asia-east1");      // | AP    | Taiwan        | 2014-04-07
+        public static readonly Location Google_USEast1        = Create(google, 4, "us-east1");        // | US    | South Caroli. | 2015-10-01
+        public static readonly Location Google_USWest1        = Create(google, 5, "us-west1");        // | US    | Oregon        | 2016-06-20 
+        public static readonly Location Google_AsiaNorthEast1 = Create(google, 6, "asia-northeast1"); // | AP    | Tokyo         | 2016-11-08
+
+    
 
         public static readonly Location[] GoogleRegions = new[] {
             Google_USCentral1,

@@ -4,19 +4,6 @@ namespace Carbon.Platform.Resources
 {
 	public class ResourceTests
 	{
-        [Theory]
-        [InlineData("aws",   1)]
-        [InlineData("borg",  2)]
-        [InlineData("goog",  3)]
-        [InlineData("ibm",   4)]
-        [InlineData("msft",  5)]
-        [InlineData("azure", 5)]
-        [InlineData("orcl",  6)]
-        public void PlatformIds(string code, int id)
-        {
-            Assert.Equal(id, ResourceProvider.Parse(code).Id);
-        }
-
         [Fact]
         public void ParseHost()
         {
@@ -66,15 +53,19 @@ namespace Carbon.Platform.Resources
         }
 
         [Theory]
-        [InlineData("aws",     "Amazon")]
-        [InlineData("borg",    "Borg")]
-        [InlineData("google",  "Google")]
-        [InlineData("ibm",     "IBM")]
-        [InlineData("azure",   "Microsoft")]
-        [InlineData("oracle",  "Oracle")]
-        public void Platforms(string code, string name)
+        [InlineData("aws",     "Amazon",    1)]
+        [InlineData("borg",    "Borg",      2)]
+        [InlineData("google",  "Google",    3)]
+        [InlineData("ibm",     "IBM",       4)]
+        [InlineData("azure",   "Microsoft", 5)]
+        [InlineData("msft",    "Microsoft", 5)]
+        [InlineData("oracle",  "Oracle",    6)]
+        public void CloudProviders(string code, string name, int id)
         {
-            Assert.Equal(name, ResourceProvider.Parse(code).Name);
+            var provider = ResourceProvider.Parse(code);
+
+            Assert.Equal(name, provider.Name);
+            Assert.Equal(id,   provider.Id);
         }
 
         [Theory]

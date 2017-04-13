@@ -44,7 +44,7 @@ namespace Carbon.Platform
         public long EnvironmentId { get; }
 
         [Member("locationId")]
-        public long LocationId { get; }
+        public int LocationId { get; }
         
         // e.g. Bucket | LoadBalancer | HostGroup ...
         [Member("resourceType")]

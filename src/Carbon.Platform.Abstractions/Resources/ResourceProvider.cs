@@ -74,7 +74,7 @@ namespace Carbon.Platform
 
         public override string ToString() => Code;
 
-        public static ResourceProvider FromLocationId(long locationId)
+        public static ResourceProvider FromLocationId(int locationId)
         {
             var providerId = LocationId.Create(locationId).ProviderId;
 
@@ -83,7 +83,7 @@ namespace Carbon.Platform
 
         public static ResourceProvider Get(int id)
         {
-            return map[id];
+            return map.TryGetValue(id, out var value) ? value : throw new Exception($"No provider#{id}");
         }
 
         public static ResourceProvider Parse(string text)

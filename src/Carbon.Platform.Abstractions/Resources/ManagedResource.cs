@@ -6,22 +6,19 @@ namespace Carbon.Platform.Resources
     public struct ManagedResource : IEquatable<ManagedResource>
     {
         public ManagedResource(ResourceProvider provider, ResourceType type, string id)
-            : this(Platform.LocationId.Create(provider, 0, 0, 0), type, id) { }
+            : this(provider, Locations.Global, type, id) { }
 
-        public ManagedResource(ILocation location, ResourceType type, string id)
-            : this(Platform.LocationId.Create(location.Id), type, id) { }
-
-        public ManagedResource(LocationId locationId, ResourceType type, string id)
+        public ManagedResource(ResourceProvider provider, ILocation location, ResourceType type, string id)
         {
-            LocationId = locationId;
-            ProviderId = locationId.ProviderId;
-            Type = type;
+            ProviderId = provider.Id;
+            LocationId = location.Id;
+            Type       = type;
             ResourceId = id ?? throw new ArgumentNullException(nameof(id));
         }
 
         public int ProviderId { get; }
 
-        public long LocationId { get; }
+        public int LocationId { get; }
 
         public ResourceType Type { get; }
 
@@ -31,16 +28,14 @@ namespace Carbon.Platform.Resources
         {
             var sb = new StringBuilder();
 
-            var lid = Platform.LocationId.Create(LocationId);
-
-            var provider = ResourceProvider.FromLocationId(LocationId);
+            var provider = ResourceProvider.Get(ProviderId);
 
             sb.Append(provider.Code);
             sb.Append(':');
 
-            if (lid.RegionNumber != 0)
+            if (LocationId != 0)
             {
-                var location = Locations.Get(lid);
+                var location = Locations.Get(LocationId);
 
                 sb.Append(location.Name);
 
@@ -56,36 +51,42 @@ namespace Carbon.Platform.Resources
 
         #region Helpers
 
-        public static ManagedResource DatabaseCluster(ILocation location, string id)
-            => new ManagedResource(location, ResourceType.DatabaseCluster, id);
+        private static ManagedResource FromLocation(ILocation location, ResourceType type, string id)
+        {
+            var provider = ResourceProvider.Get(Platform.LocationId.Create(location.Id).ProviderId);
 
-        public static ManagedResource DatabaseInstance(ILocation location, string id)
-            => new ManagedResource(location, ResourceType.DatabaseInstance, id);
+            return new ManagedResource(provider, location, type, id);
+        }
+
+        public static ManagedResource DatabaseCluster(ILocation location, string id) => 
+            FromLocation(location, ResourceType.DatabaseCluster, id);
+
+        public static ManagedResource DatabaseInstance(ILocation location, string id) => 
+            FromLocation(location, ResourceType.DatabaseInstance, id);
 
         public static ManagedResource EncryptionKey(ILocation location, string id) =>
-            new ManagedResource(location, ResourceType.EncryptionKey, id);
+            FromLocation(location, ResourceType.EncryptionKey, id);
 
         public static ManagedResource LoadBalancer(ILocation location, string id) =>
-            new ManagedResource(location, ResourceType.LoadBalancer, id);
+            FromLocation(location, ResourceType.LoadBalancer, id);
 
         public static ManagedResource Host(ILocation location, string id)
-            => new ManagedResource(location, ResourceType.Host, id);
+            => FromLocation(location, ResourceType.Host, id);
 
         public static ManagedResource HostGroup(ILocation location, string id)
-            => new ManagedResource(location, ResourceType.HostGroup, id);
+            => FromLocation(location, ResourceType.HostGroup, id);
 
         public static ManagedResource Network(ILocation location, string id)
-            => new ManagedResource(location, ResourceType.Network, id);
+            => FromLocation(location, ResourceType.Network, id);
  
         public static ManagedResource NetworkInterface(ILocation location, string id)
-            => new ManagedResource(location, ResourceType.NetworkInterface, id);
+            => FromLocation(location, ResourceType.NetworkInterface, id);
 
         public static ManagedResource Subnet(ILocation location, string id)
-            => new ManagedResource(location, ResourceType.Subnet, id);
+            => FromLocation(location, ResourceType.Subnet, id);
 
         public static ManagedResource Volume(ILocation location, string id)
-            => new ManagedResource(location, ResourceType.Volume, id);
-
+            => FromLocation(location, ResourceType.Volume, id);
 
         public static ManagedResource Repository(ResourceProvider provider, string accountName, string repositoryName)
             => new ManagedResource(provider, ResourceType.Repository, $"{accountName}/{repositoryName}");
@@ -127,7 +128,7 @@ namespace Carbon.Platform.Resources
             {
                 var location = Locations.Get(provider, regionName);
 
-                return new ManagedResource(Platform.LocationId.Create(location.Id), type, id);
+                return FromLocation(location, type, id);
             }
 
             return new ManagedResource(provider, type, id);            

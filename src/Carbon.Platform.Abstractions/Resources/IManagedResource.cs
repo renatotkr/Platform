@@ -4,7 +4,7 @@
     {
         int ProviderId { get; }
 
-        long LocationId { get; }
+        int LocationId { get; }
 
         string ResourceId { get; } // Assigned by provider
     }

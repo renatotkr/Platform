@@ -2,19 +2,16 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
-using Carbon.Platform.Resources;
 
 namespace Carbon.Platform
 {
-    // Locations may be regions or zones
-
     [Dataset("Locations")]
     [DataIndex(IndexFlags.Unique, new[] { "providerId", "name" })]
     public class LocationInfo : ILocation, IEquatable<LocationInfo>
     {
         public LocationInfo() { }
 
-        public LocationInfo(long id, string name, LocationStatus status = LocationStatus.Healthy)
+        public LocationInfo(int id, string name, LocationStatus status = LocationStatus.Healthy)
         {
             Id         = id;
             ProviderId = LocationId.Create(id).ProviderId;
@@ -23,7 +20,7 @@ namespace Carbon.Platform
         }
 
         [Member("id"), Key]
-        public long Id { get; }
+        public int Id { get; }
 
         [Member("providerId")]
         public int ProviderId { get; }
@@ -35,37 +32,13 @@ namespace Carbon.Platform
         [Member("status")]
         public LocationStatus Status { get; }
 
-        #region Flags
-
-        [IgnoreDataMember]
-        public LocationFlags Flags => (LocationFlags)LocationId.Create(Id).Flags;
-
-        [IgnoreDataMember]
-        public bool IsMultiRegional
-        {
-            get => (Flags & LocationFlags.MultiRegional) != 0;
-        }
-
-        #endregion
+        public LocationType Type => LocationId.Create(Id).Type;
 
         #region IResource
 
         [IgnoreDataMember]
         public ResourceProvider Provider => ResourceProvider.Get(ProviderId);
-        
-        [IgnoreDataMember]
-        public ResourceType ResourceType
-        {
-            get
-            {
-                var id = LocationId.Create(Id);
-
-                return (id.ZoneNumber != 0)
-                    ? ResourceType.Zone
-                    : ResourceType.Region;
-            }
-        }
-
+    
         #endregion
 
         #region Timestamps

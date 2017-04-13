@@ -97,9 +97,8 @@ namespace Carbon.Platform.Computing
         [Ascii, StringLength(100)]
         public string ResourceId { get; }
 
-        // Provider + Region + Zone
         [Member("locationId")]
-        public long LocationId { get; }
+        public int LocationId { get; }
 
         ResourceType IResource.ResourceType => ResourceType.Host;
 
