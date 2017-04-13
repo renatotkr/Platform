@@ -13,13 +13,14 @@ namespace Carbon.Platform.Networking
     {
         public NetworkInfo() { }
 
-        public NetworkInfo(long id, string cidr, ManagedResource resource)
+        public NetworkInfo(long id, string cidr, IPAddress gatewayAddress, ManagedResource resource)
         {
-            Id         = id;
-            CidrBlock  = cidr ?? throw new ArgumentNullException(nameof(cidr));
-            ProviderId = resource.ProviderId;
-            LocationId = resource.LocationId;
-            ResourceId = resource.ResourceId;
+            Id             = id;
+            Cidr           = cidr ?? throw new ArgumentNullException(nameof(cidr));
+            GatewayAddress = gatewayAddress;
+            ProviderId     = resource.ProviderId;
+            LocationId     = resource.LocationId;
+            ResourceId     = resource.ResourceId;
         }
 
         [Member("id"), Key]
@@ -29,12 +30,14 @@ namespace Carbon.Platform.Networking
 
         [Member("cidr")] // 10.1.1.0/24
         [Ascii, StringLength(100)]
-        public string CidrBlock { get; set; } 
+        public string Cidr { get; }
 
-        [Member("gatewayAddress")] // Provides WAN access
-        public IPAddress GatewayAddress { get; set; }
+        // Provides WAN access
+        [DataMember(Name = "gatewayAddress", EmitDefaultValue = false)]
+        [Member("gatewayAddress")]
+        public IPAddress GatewayAddress { get; }
 
-        [DataMember(Name = "asn")]
+        [DataMember(Name = "asn", EmitDefaultValue = false)]
         [Member("asn")] // Autonomous System Number, e.g. AS226
         public int? ASN { get; set; }
 

@@ -1,7 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
 using Carbon.Protection;
-using Carbon.Json;
 
 namespace Carbon.Platform
 {

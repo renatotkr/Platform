@@ -15,12 +15,14 @@ namespace Carbon.Platform.VersionControl
             long repositoryId, 
             string branchName, 
             string path, 
+            long creatorId = 0,
             FileType type = FileType.Blob)
         {
             RepositoryId = repositoryId;
             BranchName   = branchName ?? throw new ArgumentNullException(nameof(branchName));
-            Path         = path ?? throw new ArgumentNullException(nameof(path));
+            Path         = path       ?? throw new ArgumentNullException(nameof(path));
             Type         = type;
+            CreatorId    = creatorId;
         }
 
         [Member("repositoryId"), Key]
@@ -37,23 +39,19 @@ namespace Carbon.Platform.VersionControl
         [Member("type")]
         public FileType Type { get; }
 
-        [Member("blobId")]
+        [Member("blobId"), Mutable]
         public long? BlobId { get; set; }
 
-        [Member("size")]
+        [Member("size"), Mutable]
         public long Size { get; set; }
 
-        [Member("creatorId")]
-        public long CreatorId { get; set; }
-
-        // LastModifiedBy
-
-        #region Hashes
-
-        [Member("sha256", TypeName = "binary(32)")]
+        [Member("sha256", TypeName = "binary(32)"), Mutable]
         public byte[] Sha256 { get; set; }
 
-        #endregion
+        [Member("creatorId")]
+        public long CreatorId { get; }
+
+        // LastModifiedBy
 
         #region Timestamps
 

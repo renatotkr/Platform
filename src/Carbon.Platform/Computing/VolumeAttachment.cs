@@ -22,9 +22,11 @@ namespace Carbon.Platform.Computing
         public long HostId { get; }
 
         [Member("created")]
+        [TimePrecision(TimePrecision.Second)]
         public DateTime Created { get; }
 
         [Member("deleted")]
+        [TimePrecision(TimePrecision.Second)]
         public DateTime? Deleted { get; }
     }
 }

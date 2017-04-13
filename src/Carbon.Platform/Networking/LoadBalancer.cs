@@ -12,13 +12,18 @@ namespace Carbon.Platform.Networking
     {
         public LoadBalancer() { }
 
-        public LoadBalancer(long id, string address, IEnvironment env, ManagedResource resource)
+        public LoadBalancer(
+            long id, 
+            string name,
+            string address, 
+            IEnvironment env, 
+            ManagedResource resource)
         {
             Id            = id;
             Address       = address;
+            EnvironmentId = env.Id;
             ProviderId    = resource.ProviderId;
             LocationId    = resource.LocationId;
-            EnvironmentId = env.Id;
             ResourceId    = resource.ResourceId;
         }
 
@@ -28,7 +33,7 @@ namespace Carbon.Platform.Networking
 
         [Member("name")]
         [StringLength(63)]
-        public string Name { get; set; }
+        public string Name { get; }
 
         [Member("address")]
         public string Address { get; }
@@ -51,7 +56,7 @@ namespace Carbon.Platform.Networking
         public string ResourceId { get; }
 
         [Member("locationId")]
-        public int LocationId { get; set; }
+        public int LocationId { get; }
 
         ResourceType IResource.ResourceType => ResourceType.LoadBalancer;
 

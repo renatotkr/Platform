@@ -31,10 +31,10 @@ namespace Carbon.Platform.Computing
             EnvironmentId = env.Id;
             ProviderId    = resource.ProviderId;
             ResourceId    = resource.ResourceId;
-            LocationId    = resource.LocationId;
             Created       = created;
         }
 
+        // locationId + sequence
         [Member("id"), Key]
         public long Id { get; }
 
@@ -97,8 +97,7 @@ namespace Carbon.Platform.Computing
         [Ascii, StringLength(100)]
         public string ResourceId { get; }
 
-        [Member("locationId")]
-        public int LocationId { get; }
+        public int LocationId => HostId.Get(Id).LocationId;
 
         ResourceType IResource.ResourceType => ResourceType.Host;
 

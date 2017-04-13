@@ -33,7 +33,7 @@ namespace Carbon.Platform.Web
         public DeploymentStatus Status { get; set; }
 
         [Member("websiteId")]
-        public long WebsiteId { get; set; }
+        public long WebsiteId { get; }
 
         [Member("revision")]
         public string Revision { get; }

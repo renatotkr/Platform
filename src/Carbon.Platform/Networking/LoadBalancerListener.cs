@@ -13,11 +13,16 @@ namespace Carbon.Platform.Networking
     {
         public LoadBalancerListener() { }
 
-        public LoadBalancerListener(long id, ApplicationProtocal protocal, ushort port)
+        public LoadBalancerListener(
+            long id, 
+            ApplicationProtocal protocal,
+            ushort port,
+            long? certificateId = null)
         {
-            Id       = id;
-            Protocal = protocal;
-            Port     = port;
+            Id            = id;
+            Protocal      = protocal;
+            Port          = port;
+            CertificateId = certificateId;
         }
 
         // proxyId | index
@@ -32,7 +37,7 @@ namespace Carbon.Platform.Networking
         public ushort Port { get; }
      
         [Member("certificateId")]
-        public long? CertificateId { get; set; }
+        public long? CertificateId { get; }
 
         public long LoadBalancerId => ScopedId.GetScope(Id);
 

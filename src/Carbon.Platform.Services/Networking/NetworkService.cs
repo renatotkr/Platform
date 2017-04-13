@@ -176,9 +176,10 @@ namespace Carbon.Platform.Networking
             var resource = new ManagedResource(aws, ResourceType.Network, vpc.VpcId);
 
             return new NetworkInfo(
-                id       : db.Context.GetNextId<NetworkInfo>(),
-                cidr     : vpc.CidrBlock,
-                resource : resource
+                id             : db.Context.GetNextId<NetworkInfo>(),
+                cidr           : vpc.CidrBlock,
+                gatewayAddress : null,
+                resource       : resource
             );
         }
 

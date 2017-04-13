@@ -50,10 +50,10 @@ namespace Carbon.Platform.VersionControl
         #region IResource
 
         /*
-        Amazon CodeCommit : 1
-        GitHub            : 1000
-        BitBucket         : 1001
-        GitLab            : 1002
+        AWS CodeCommit : 1
+        GitHub         : 1000
+        BitBucket      : 1001
+        GitLab         : 1002
         */
 
         [IgnoreDataMember]

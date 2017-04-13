@@ -31,9 +31,11 @@ namespace Carbon.Platform.Computing
         public long Id { get; }
 
         [Member("host"), Optional]
+        [StringLength(100)]
         public string Host { get; }
 
         [Member("path")]
+        [StringLength(100)]
         public string Path { get; }
 
         [Member("port")]

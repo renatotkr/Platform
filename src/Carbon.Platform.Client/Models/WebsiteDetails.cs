@@ -16,6 +16,5 @@ namespace Carbon.Platform
 
         [DataMember(Name = "modified", Order = 6)]
         public DateTime Modified { get; set; }
-
     }
 }

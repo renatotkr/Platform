@@ -3,10 +3,6 @@ using System.Runtime.InteropServices;
 
 namespace Carbon.Platform
 {
-    // Region = 0 (Global)
-    // ZoneA = US
-    // ZoneB = A
-
     [StructLayout(LayoutKind.Explicit, Size = 4)]
     public struct LocationId
     {
@@ -78,27 +74,28 @@ namespace Carbon.Platform
             ushort regionNumber,
             byte zoneNumber = 0)
         {
-            if (provider.Id <= 0 || provider.Id >= 128)
-            {
-                throw new ArgumentOutOfRangeException("providerId", provider.Id, "Must be between 1 and 127");
-            }
-
-            return new LocationId {
-                providerId   = (byte)provider.Id,
-                regionNumber = regionNumber,
-                zoneNumber   = zoneNumber
-            };
+            return Create(provider.Id, regionNumber, zoneNumber);
         }
 
         public static LocationId Create(
             int providerId,
-            int regionNumber,
-            int zoneNumber = 0
-        ) {
+            ushort regionNumber,
+            byte zoneNumber = 0
+        )
+        {
+            #region Preconditions
+
+            if (providerId <= 0 || providerId >= 128)
+            {
+                throw new ArgumentOutOfRangeException("providerId", providerId, "Must be between 1 and 127");
+            }
+
+            #endregion
+
             return new LocationId {
                 providerId   = (byte)providerId,
-                regionNumber = (ushort)regionNumber,
-                zoneNumber   = (byte)zoneNumber
+                regionNumber = regionNumber,
+                zoneNumber   = zoneNumber
             };
         }
     }
@@ -112,16 +109,10 @@ Notes:
 4,116 cities with at least 100,000 people 
 */
 
-
 // ProviderId     1     // 255
 // RegionNumber   2     // 65K 
 // ZoneId         1     // 255
 
 
-/*
-Notes:
-336 cities with over 1M people
-1,127 cities with at least 500,000 inhabits | 2.317 billion people in these cities
-4,116 cities with at least 100,000 people 
-*/
-
+// Region = 0 (Global)
+// ZoneA  = US

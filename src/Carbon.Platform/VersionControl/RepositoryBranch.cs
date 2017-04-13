@@ -7,7 +7,7 @@ namespace Carbon.Platform.VersionControl
 {
     [Dataset("RepositoryBranches")]
     [DataIndex(IndexFlags.Unique, "repositoryId", "name")]
-    public class RepositoryBranch
+    public class RepositoryBranch : IRepositoryBranch
     {
         public RepositoryBranch() { }
 
@@ -25,12 +25,11 @@ namespace Carbon.Platform.VersionControl
         [StringLength(63)]
         public string Name { get; }
 
-        // Changes after each commit
-        [Member("commitId")]
-        public long CommitId { get; set; }
-
         [Member("creatorId")]
         public long CreatorId { get; }
+
+        [Member("commitId")]
+        public long CommitId { get; set; }
 
         #region Timestamps
 
@@ -43,7 +42,7 @@ namespace Carbon.Platform.VersionControl
         public DateTime? Deleted { get; }
 
         [Member("modified"), Timestamp(true)]
-        public DateTime Modified { get; set; }
+        public DateTime Modified { get; }
 
         #endregion
     }

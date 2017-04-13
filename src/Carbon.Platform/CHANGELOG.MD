@@ -1,4 +1,7 @@
-﻿1.23.0
+﻿1.25.0
+- Refactor Locations
+
+1.23.0
 - Add Database, DatabaseBackup, DatabaseCluster, & DatabaseInstance
 
 1.21.0

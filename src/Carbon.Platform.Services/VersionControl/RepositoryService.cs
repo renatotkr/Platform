@@ -146,10 +146,10 @@ namespace Carbon.Platform.VersionControl
                 repositoryId : request.RepositoryId, 
                 branchName   : request.BranchName,
                 path         : request.Path,
+                creatorId    : request.CreatorId,
                 type         : FileType.Blob) {
-                CreatorId   = request.CreatorId,
-                Size        = request.Size,
-                Sha256      = request.Sha256
+                Size         = request.Size,
+                Sha256       = request.Sha256
             };
 
             using (var connection = db.Context.GetConnection())

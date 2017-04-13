@@ -110,6 +110,8 @@ namespace Carbon.Platform.Services
                 IPAddress.Parse(instance.IpAddress)
             };
 
+            // TODO: Scope id to location
+
             var host = new HostInfo(
                 id        : db.Context.GetNextId<HostInfo>(),
                 type      : HostType.Virtual,

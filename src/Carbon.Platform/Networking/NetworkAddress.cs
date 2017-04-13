@@ -13,9 +13,10 @@ namespace Carbon.Platform.Networking
     {
         public NetworkAddress() { }
 
-        public NetworkAddress(long id, ManagedResource resource)
+        public NetworkAddress(long id, IPAddress address, ManagedResource resource)
         {
-            Id = id;
+            Id         = id;
+            Address    = address ?? throw new ArgumentNullException(nameof(address));
             ProviderId = resource.ProviderId;
             ResourceId = resource.ResourceId;
         }
@@ -23,12 +24,16 @@ namespace Carbon.Platform.Networking
         [Member("id"), Key]
         public long Id { get; }
 
+        [Member("address")]
+        public IPAddress Address { get; }
+
+        [Member("hostId")]
+        [Indexed]
+        public long? HostId { get; set; }
+
         [Member("networkInterfaceId")]
         [Indexed]
         public long? NetworkInterfaceId { get; set; }
-
-        [Member("address")]
-        public IPAddress Address { get; set; }
 
         #region IResource
 

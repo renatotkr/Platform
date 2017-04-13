@@ -2,41 +2,42 @@
 
 namespace Carbon.Platform.Computing
 {
-    // ProviderId     1     // 255
-    // RegionNumber   2     // 65K 
-    // ZoneId         1     // 255
-    // Sequence       4     // 4B
-
     [StructLayout(LayoutKind.Explicit, Size = 8)]
     public struct HostId
     {
         [FieldOffset(0)]    
-        public int Sequence;
+        private int sequence;
 
-        [FieldOffset(4)]    
-        public byte ZoneNumber;
-
-        [FieldOffset(5)]    
-        public ushort RegionNumber;
-
-        [FieldOffset(7)]   
-        public byte ProviderId;
+        [FieldOffset(4)]
+        private int locationId;
 
         [FieldOffset(0)]
-        public long Value;
+        private long value;
+
+        public int SequenceNumber => sequence;
+
+        public int LocationId => locationId;
+
+        public long Value => value;
+        
+        public static HostId Get(long value)
+        {
+            return new HostId { value = value };
+        }
 
         public static long Create(ILocation location, int sequence)
         {
-            return Create(LocationId.Create(location.Id), sequence);
+            return new HostId {
+                sequence = sequence,
+                locationId = location.Id
+            }.Value;
         }
 
         public static long Create(LocationId locationId, int sequence)
         {
             return new HostId {
-                Sequence     = sequence,
-                ZoneNumber   = locationId.ZoneNumber,
-                RegionNumber = locationId.RegionNumber,
-                ProviderId   = (byte)locationId.ProviderId
+                sequence   = sequence,
+                locationId = locationId.Value
             }.Value;
         }
     }
