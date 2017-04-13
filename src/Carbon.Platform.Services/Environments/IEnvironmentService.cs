@@ -2,6 +2,7 @@
 
 using Carbon.Platform.Apps;
 using Carbon.Platform.Computing;
+using Carbon.Platform.Data;
 
 namespace Carbon.Platform
 {

@@ -6,7 +6,7 @@ namespace Carbon.Platform.Computing
     public struct HostId
     {
         [FieldOffset(0)]    
-        private int sequence;
+        private int sequenceNumber;
 
         [FieldOffset(4)]
         private int locationId;
@@ -14,31 +14,33 @@ namespace Carbon.Platform.Computing
         [FieldOffset(0)]
         private long value;
 
-        public int SequenceNumber => sequence;
+        public int SequenceNumber => sequenceNumber;
 
         public int LocationId => locationId;
 
         public long Value => value;
         
+        public static implicit operator long(HostId id) => id.Value;
+
         public static HostId Get(long value)
         {
             return new HostId { value = value };
         }
 
-        public static long Create(ILocation location, int sequence)
+        public static HostId Create(ILocation location, int sequenceNumber)
         {
             return new HostId {
-                sequence = sequence,
+                sequenceNumber = sequenceNumber,
                 locationId = location.Id
-            }.Value;
+            };
         }
 
-        public static long Create(LocationId locationId, int sequence)
+        public static HostId Create(LocationId locationId, int sequenceNumber)
         {
             return new HostId {
-                sequence   = sequence,
+                sequenceNumber = sequenceNumber,
                 locationId = locationId.Value
-            }.Value;
+            };
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿1.25.0
+﻿1.26.0
+- Add Buckets
+
+1.25.0
 - Refactor Locations
 
 1.23.0

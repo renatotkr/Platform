@@ -9,6 +9,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Services
 {
+    using Carbon.Platform.Data;
     using static Expression;
 
     public class EnvironmentService : IEnvironmentService

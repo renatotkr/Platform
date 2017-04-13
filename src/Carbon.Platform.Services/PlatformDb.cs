@@ -50,7 +50,8 @@ namespace Carbon.Platform
             MachineTypes          = new Dataset<MachineType,        long>(context);
             Volumes               = new Dataset<VolumeInfo,         long>(context);
 
-            // Databases --------------------------------------------------------------
+            // Data / Databases  ------------------------------------------------------
+            Buckets            = new Dataset<BucketInfo,            long>(context);
             Databases          = new Dataset<DatabaseInfo,          long>(context);
             DatabaseBackups    = new Dataset<DatabaseBackup,        long>(context);
             DatabaseClusters   = new Dataset<DatabaseCluster,       long>(context);
@@ -101,6 +102,7 @@ namespace Carbon.Platform
         public Dataset<VolumeInfo,           long> Volumes                   { get; }
 
         // Data ---------------------------------------------------------------------
+        public Dataset<BucketInfo,           long> Buckets                   { get; }
         public Dataset<DatabaseInfo,         long> Databases                 { get; }
         public Dataset<DatabaseBackup,       long> DatabaseBackups           { get; }
         public Dataset<DatabaseCluster,      long> DatabaseClusters          { get; }

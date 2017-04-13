@@ -58,6 +58,9 @@ namespace Carbon.Platform.Resources
             return new ManagedResource(provider, location, type, id);
         }
 
+        public static ManagedResource Bucket(ILocation location, string id) =>
+            FromLocation(location, ResourceType.Bucket, id);
+
         public static ManagedResource DatabaseCluster(ILocation location, string id) => 
             FromLocation(location, ResourceType.DatabaseCluster, id);
 
@@ -70,27 +73,33 @@ namespace Carbon.Platform.Resources
         public static ManagedResource LoadBalancer(ILocation location, string id) =>
             FromLocation(location, ResourceType.LoadBalancer, id);
 
-        public static ManagedResource Host(ILocation location, string id)
-            => FromLocation(location, ResourceType.Host, id);
+        public static ManagedResource Host(ILocation location, string id) => 
+            FromLocation(location, ResourceType.Host, id);
 
-        public static ManagedResource HostGroup(ILocation location, string id)
-            => FromLocation(location, ResourceType.HostGroup, id);
+        public static ManagedResource HostGroup(ILocation location, string id) => 
+            FromLocation(location, ResourceType.HostGroup, id);
 
-        public static ManagedResource Network(ILocation location, string id)
-            => FromLocation(location, ResourceType.Network, id);
+        public static ManagedResource Network(ILocation location, string id) => 
+            FromLocation(location, ResourceType.Network, id);
  
-        public static ManagedResource NetworkInterface(ILocation location, string id)
-            => FromLocation(location, ResourceType.NetworkInterface, id);
+        public static ManagedResource NetworkInterface(ILocation location, string id) => 
+            FromLocation(location, ResourceType.NetworkInterface, id);
 
-        public static ManagedResource Subnet(ILocation location, string id)
-            => FromLocation(location, ResourceType.Subnet, id);
+        public static ManagedResource Subnet(ILocation location, string id) => 
+            FromLocation(location, ResourceType.Subnet, id);
 
-        public static ManagedResource Volume(ILocation location, string id)
-            => FromLocation(location, ResourceType.Volume, id);
+        public static ManagedResource Volume(ILocation location, string id) => 
+            FromLocation(location, ResourceType.Volume, id);
 
-        public static ManagedResource Repository(ResourceProvider provider, string accountName, string repositoryName)
-            => new ManagedResource(provider, ResourceType.Repository, $"{accountName}/{repositoryName}");
-        
+        public static ManagedResource Repository(ResourceProvider provider, string accountName, string repositoryName) =>
+            new ManagedResource(provider, ResourceType.Repository, $"{accountName}/{repositoryName}");
+
+        public static ManagedResource Queue(ILocation location, string id) =>
+            FromLocation(location, ResourceType.Queue, id);
+
+        public static ManagedResource Firehose(ILocation location, string id) =>
+            FromLocation(location, ResourceType.Firehose, id);
+
         #endregion
 
         private static readonly char[] splitOn = { ':', '/' };
