@@ -1,11 +1,19 @@
 ﻿using Xunit;
 
-using Carbon.Platform.Resources;
-
 namespace Carbon.Platform.Tests
 {
     public class CloudLocationTests
     {
+        [Fact]
+        public void BorgZones()
+        {
+            var one = LocationId.Create(ResourceProvider.Borg, 1);
+
+            Assert.Equal(256, LocationId.Create(ResourceProvider.Borg, 1));
+            Assert.Equal(1,   LocationId.Create(ResourceProvider.Borg, 0, 1));
+
+        }
+
         [Fact]
         public void AllZones()
         {
@@ -58,7 +66,7 @@ namespace Carbon.Platform.Tests
 
             var id = LocationId.Create(eu.Id);
 
-            Assert.Equal(3, id.ProviderId);
+            Assert.Equal(2, id.ProviderId);
             Assert.Equal(0, id.RegionNumber);
             Assert.Equal(2, id.ZoneNumber);
         }
