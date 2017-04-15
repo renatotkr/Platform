@@ -85,9 +85,9 @@ namespace Carbon.Platform
         {
             #region Preconditions
 
-            if (providerId <= 0 || providerId >= 128)
+            if (providerId < 0 || providerId >= 128)
             {
-                throw new ArgumentOutOfRangeException("providerId", providerId, "Must be between 1 and 127");
+                throw new ArgumentOutOfRangeException("providerId", providerId, "Must be between 0 and 127");
             }
 
             #endregion

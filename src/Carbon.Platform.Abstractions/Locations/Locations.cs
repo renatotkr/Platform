@@ -74,7 +74,7 @@ namespace Carbon.Platform
                 throw new Exception("Microsoft not yet supported");
             }
 
-            if (lid.ProviderId == 3) // Google
+            if (lid.ProviderId == ResourceProvider.Google.Id) // Google
             {
                 if (lid.RegionNumber == 0) // Mutli regional
                 {
@@ -99,7 +99,6 @@ namespace Carbon.Platform
             }
 
             throw new Exception($"Unexpected location id: {lid.ProviderId}|{lid.RegionNumber}|{lid.ZoneNumber}");
-
         }
 
         private static Location Create(ResourceProvider provider, ushort regionNumber, byte zoneNumber, string name)

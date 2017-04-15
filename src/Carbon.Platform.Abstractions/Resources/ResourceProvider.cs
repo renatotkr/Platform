@@ -6,12 +6,11 @@ namespace Carbon.Platform
     public class ResourceProvider
     {
         // Cloud Platforms (1-255)
+        public static readonly ResourceProvider Borg         = new ResourceProvider(0  , "borg",         "Borg");
         public static readonly ResourceProvider Amazon       = new ResourceProvider(1  , "aws",          "Amazon");
-        public static readonly ResourceProvider Borg         = new ResourceProvider(2  , "borg",         "Borg");
-        public static readonly ResourceProvider Google       = new ResourceProvider(3  , "google",       "Google");
-        public static readonly ResourceProvider IBM          = new ResourceProvider(4  , "ibm",          "IBM");
-        public static readonly ResourceProvider Microsoft    = new ResourceProvider(5  , "azure",        "Microsoft");
-        public static readonly ResourceProvider Oracle       = new ResourceProvider(6  , "oracle",       "Oracle");
+        public static readonly ResourceProvider Google       = new ResourceProvider(2  , "google",       "Google");
+        public static readonly ResourceProvider IBM          = new ResourceProvider(3  , "ibm",          "IBM");
+        public static readonly ResourceProvider Microsoft    = new ResourceProvider(4  , "azure",        "Microsoft");
         public static readonly ResourceProvider DigitalOcean = new ResourceProvider(20 , "digitalocean", "DigitalOcean");
      
         // Code Repository Providers = 1000
@@ -21,8 +20,8 @@ namespace Carbon.Platform
 
         // Payment Processors = 2000
         public static readonly ResourceProvider Braintree = new ResourceProvider(2000, "braintree", "Braintree");
-        public static readonly ResourceProvider PayPal    = new ResourceProvider(2001, "paypal",    "PayPal");
-        public static readonly ResourceProvider Stripe    = new ResourceProvider(2002, "stripe",    "Stripe");
+        public static readonly ResourceProvider PayPal    = new ResourceProvider(2001, "paypal",    "PayPal", "paypal.com");
+        public static readonly ResourceProvider Stripe    = new ResourceProvider(2002, "stripe",    "Stripe", "stripe.com");
 
         // Certificates = 3000
         public static readonly ResourceProvider LetEncrypt = new ResourceProvider(3000, "letsencrypt", "Let’s Encrypt");
@@ -31,12 +30,11 @@ namespace Carbon.Platform
         public static readonly ResourceProvider Postmark = new ResourceProvider(5000, "postmark", "Postmark");
 
         public static readonly Dictionary<int, ResourceProvider> map = new Dictionary<int, ResourceProvider> {
+            { 0,    Borg },
             { 1,    Amazon },
-            { 2,    Borg },
-            { 3,    Google },
-            { 4,    IBM },
-            { 5,    Microsoft },
-            { 6,    Oracle },
+            { 2,    Google },
+            { 3,    IBM },
+            { 4,    Microsoft },
             { 20,   DigitalOcean },
 
             { 2000,  Braintree },
@@ -106,7 +104,6 @@ namespace Carbon.Platform
                 case "goog"         : return Google;
                 case "msft"         : return Microsoft;
                 case "azure"        : return Microsoft;
-                case "orcl"         : return Oracle;
 
                 // Full names
                 case "bitbucket"    : return Bitbucket;
@@ -114,8 +111,11 @@ namespace Carbon.Platform
                 case "amazon"       : return Amazon;
                 case "google"       : return Google;
                 case "microsoft"    : return Microsoft;
-                case "oracle"       : return Oracle;
 
+                case "braintree"    : return Braintree;
+                case "paypal"       : return PayPal;
+                case "stripe"       : return Stripe;
+                
                 case "postmark"     : return Postmark;
                 case "letsencrypt"  : return LetEncrypt;
 
