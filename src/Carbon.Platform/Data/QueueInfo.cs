@@ -7,7 +7,7 @@ using Carbon.Platform.Resources;
 namespace Carbon.Platform.Data
 {
     [Dataset("Queues")]
-    public class QueueInfo : IQueue
+    public class QueueInfo : IQueueInfo
     {
         public QueueInfo() { }
 

@@ -7,7 +7,7 @@ using Carbon.Platform.Resources;
 namespace Carbon.Platform.Data
 {
     [Dataset("Databases")]
-    public class DatabaseInfo : IDatabase
+    public class DatabaseInfo : IDatabaseInfo
     {
         public DatabaseInfo() { }
 

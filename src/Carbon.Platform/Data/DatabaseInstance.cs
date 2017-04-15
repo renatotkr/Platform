@@ -12,7 +12,12 @@ namespace Carbon.Platform.Data
     {
         public DatabaseInstance() { }
 
-        public DatabaseInstance(long id, DatabaseFlags flags, long? clusterId, int priority, ManagedResource resource)
+        public DatabaseInstance(
+            long id,
+            DatabaseFlags flags, 
+            long? clusterId,
+            int priority,
+            ManagedResource resource)
         {
             Id        = id;
             Flags     = flags;

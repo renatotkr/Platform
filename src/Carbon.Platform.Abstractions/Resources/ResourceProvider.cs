@@ -23,6 +23,7 @@ namespace Carbon.Platform
         public static readonly ResourceProvider PayPal    = new ResourceProvider(2001, "paypal",    "PayPal", "paypal.com");
         public static readonly ResourceProvider Stripe    = new ResourceProvider(2002, "stripe",    "Stripe", "stripe.com");
 
+        
         // Certificates = 3000
         public static readonly ResourceProvider LetEncrypt = new ResourceProvider(3000, "letsencrypt", "Let’s Encrypt");
 

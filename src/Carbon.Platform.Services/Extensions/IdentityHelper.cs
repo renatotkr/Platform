@@ -3,6 +3,8 @@
 using Carbon.Data;
 using Carbon.Data.Expressions;
 
+using Carbon.Platform.Sequences;
+
 using Dapper;
 
 namespace Carbon.Platform

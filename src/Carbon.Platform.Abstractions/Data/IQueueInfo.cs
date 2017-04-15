@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Data
 {
-    public interface IBucket : IManagedResource
+    public interface IQueueInfo : IManagedResource
     {
         string Name { get; }
     }

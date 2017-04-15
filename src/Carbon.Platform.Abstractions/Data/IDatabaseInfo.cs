@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Data
 {
-    public interface IDatabase : IResource
+    public interface IDatabaseInfo : IResource
     {
         string Name { get; }
     }

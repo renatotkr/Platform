@@ -12,12 +12,12 @@ namespace Carbon.Platform.Data
 
         public DatabaseBackup(long id, long clusterId, string name)
         {
-            Id = id;
+            Id        = id;
             ClusterId = clusterId;
-            Name = name;
+            Name      = name;
         }
 
-        // DatabaseId + Sequence
+        // databaseId + sequenceNumber
         [Member("id"), Key]
         public long Id { get; }
 
@@ -57,13 +57,4 @@ namespace Carbon.Platform.Data
 
         public long DatabaseId => ScopedId.GetScope(Id);
     }
-
-    /*
-    public enum CompressionMethod
-    {
-        None      = 0,
-        GZip      = 1,
-        ZStandard = 2
-    }
-    */
 }

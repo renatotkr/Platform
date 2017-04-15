@@ -7,7 +7,7 @@ using Carbon.Platform.Resources;
 namespace Carbon.Platform.Data
 {
     [Dataset("Buckets")]
-    public class BucketInfo : IBucket
+    public class BucketInfo : IBucketInfo
     {
         public BucketInfo() { }
 
