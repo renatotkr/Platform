@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Carbon.Data.Annotations;
+using Carbon.Platform.Sequences;
 
 namespace Carbon.Platform.Data
 {

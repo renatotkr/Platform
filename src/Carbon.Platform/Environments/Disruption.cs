@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Platform.Sequences;
 
 namespace Carbon.Platform.Disruptions
 {

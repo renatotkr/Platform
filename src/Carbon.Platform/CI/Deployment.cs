@@ -3,6 +3,7 @@
 using Carbon.Data.Annotations;
 using Carbon.Platform.Resources;
 using Carbon.Versioning;
+using Carbon.Platform.Sequences;
 
 namespace Carbon.Platform.CI
 {

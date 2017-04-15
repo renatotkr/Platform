@@ -2,6 +2,7 @@
 
 using Carbon.Data.Annotations;
 using Carbon.Platform.CI;
+using Carbon.Platform.Sequences;
 using Carbon.Versioning;
 
 namespace Carbon.Platform.Web

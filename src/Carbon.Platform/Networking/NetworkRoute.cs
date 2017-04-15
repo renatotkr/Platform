@@ -3,6 +3,7 @@ using System.Net;
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Platform.Sequences;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Networking

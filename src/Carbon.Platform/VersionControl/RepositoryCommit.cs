@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Carbon.Data.Annotations;
+using Carbon.Platform.Sequences;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.VersionControl
