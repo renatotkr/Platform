@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Carbon.Data.Expressions;
+using Carbon.Platform.Sequences;
 using Carbon.Platform.Resources;
 
 using Dapper;
@@ -138,6 +139,20 @@ namespace Carbon.Platform.VersionControl
             return db.RepositoryFiles.QueryAsync(
                 Conjunction(Eq("repositoryId", repositoryId), Eq("branchName", branchName), IsNull("deleted"))
             );
+        }
+
+        public async Task DeleteFileAsync(DeleteFileRequest request)
+        {
+            using (var connection = db.Context.GetConnection())
+            {
+                await connection.ExecuteAsync(
+                    @"UPDATE `RepositoryFiles` 
+                      SET `deleted` = NOW()  
+                      WHERE `repositoryId` = @repositoryId
+                        AND `branchName` = @branchName
+                        AND `path` = @path;", request
+                ).ConfigureAwait(false);
+            }
         }
 
         public async Task<RepositoryFile> PutFileAsync(CreateFileRequest request)
