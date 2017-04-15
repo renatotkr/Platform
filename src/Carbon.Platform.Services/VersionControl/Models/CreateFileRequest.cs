@@ -1,6 +1,6 @@
 ﻿namespace Carbon.Platform.VersionControl
 {
-    public class CreateFileRequest
+    public class CreateFileRequest : IRepositoryFile
     {
         public long RepositoryId { get; set; }
 

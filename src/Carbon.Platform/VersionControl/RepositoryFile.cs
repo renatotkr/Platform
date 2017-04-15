@@ -7,7 +7,7 @@ namespace Carbon.Platform.VersionControl
     // 1/master/scripts/app.js
 
     [Dataset("RepositoryFiles")]
-    public class RepositoryFile
+    public class RepositoryFile : IRepositoryFile
     {
         public RepositoryFile() { }
 
