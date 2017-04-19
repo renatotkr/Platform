@@ -6,7 +6,6 @@ namespace Carbon.Packaging.Tests
 {
     public class ManifestTests
     {
-
         [Fact]
         public void A()
         {
