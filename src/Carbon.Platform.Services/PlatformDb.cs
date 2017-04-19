@@ -58,6 +58,7 @@ namespace Carbon.Platform
             DatabaseEndpoints  = new Dataset<DatabaseEndpoint,      long>(context);
             DatabaseInstances  = new Dataset<DatabaseInstance,      long>(context);
             EncryptionKeys     = new Dataset<EncryptionKeyInfo,     long>(context);
+            Topics             = new Dataset<TopicInfo,             long>(context);
             Queues             = new Dataset<QueueInfo,             long>(context);
 
             // Networks --------------------------------------------------------------
@@ -110,6 +111,7 @@ namespace Carbon.Platform
         public Dataset<DatabaseEndpoint,     long> DatabaseEndpoints         { get; }
         public Dataset<DatabaseInstance,     long> DatabaseInstances         { get; }
         public Dataset<EncryptionKeyInfo,    long> EncryptionKeys            { get; }
+        public Dataset<TopicInfo,            long> Topics                    { get; }
         public Dataset<QueueInfo,            long> Queues                    { get; }
 
         // Networks --------------------------------------------------------------
@@ -127,8 +129,8 @@ namespace Carbon.Platform
         public Dataset<CertificateInfo,          long> Certificates          { get; }
 
         // CI
-        public Dataset<Deployment, long>               Deployments { get; }
-        public Dataset<DeploymentTarget, (long, long)> DeploymentTargets { get; }
+        public Dataset<Deployment, long>               Deployments           { get; }
+        public Dataset<DeploymentTarget, (long, long)> DeploymentTargets     { get; }
 
         // Logs -----------------------------------------------------------------
         public Dataset<Activity, long>  Activities { get; }

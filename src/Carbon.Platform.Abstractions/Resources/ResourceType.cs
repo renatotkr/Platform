@@ -41,6 +41,8 @@
         RepositoryCommit     = 461,
         Stream               = 470,
         StreamMessage        = 471,
+        Topic                = 480,
+        TopicMessage         = 481,
         Volume               = 490,
 
         // Networking | 500

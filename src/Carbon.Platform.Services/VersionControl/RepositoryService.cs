@@ -172,7 +172,7 @@ namespace Carbon.Platform.VersionControl
                 await connection.ExecuteAsync(
                     @"INSERT INTO `RepositoryFiles` (`repositoryId`, `branchName`, `path`, `type`, `size`, `sha256`, `creatorId`)
                       VALUES (@repositoryId, @branchName, @path, @type, @size, @sha256, @creatorId)
-                      ON DUPLICATE KEY UPDATE `size` = @size, `sha256` = @sha256;", file
+                      ON DUPLICATE KEY UPDATE `size` = @size, `sha256` = @sha256, `deleted` = NULL;", file
                 ).ConfigureAwait(false);
 
             }
