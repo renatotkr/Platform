@@ -9,7 +9,6 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Services
 {
-    using Carbon.Platform.Data;
     using static Expression;
 
     public class EnvironmentService : IEnvironmentService
@@ -30,7 +29,7 @@ namespace Carbon.Platform.Services
             ));
         }
 
-        public Task<AppEnvironment> GetAsync(IApp app, EnvironmentType type)
+        public Task<AppEnvironment> GetAsync(IApp app, EnvironmentName type)
         {
             return db.Environments.QueryFirstOrDefaultAsync(
                 And(Eq("appId", app.Id), Eq("name", type.ToString().ToLower())
@@ -53,12 +52,12 @@ namespace Carbon.Platform.Services
             return envResource;
         }
 
-        public Task<AppEnvironment> CreateAsync(IApp app, EnvironmentType type)
+        public Task<AppEnvironment> CreateAsync(IApp app, EnvironmentName type)
         {
             return CreateAsync(app, type.ToString().ToLower(), Array.Empty<ILocation>());
         }
 
-        public Task<AppEnvironment> CreateAsync(IApp app, EnvironmentType type, ILocation[] regions)
+        public Task<AppEnvironment> CreateAsync(IApp app, EnvironmentName type, ILocation[] regions)
         {
             // Production  = 1 
             // Staging     = 2

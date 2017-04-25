@@ -8,7 +8,7 @@ namespace Carbon.Platform.Apps
     {
         Task<AppInfo> GetAsync(long id);
 
-        Task<AppInfo> GetAsync(string name);
+        Task<AppInfo> FindAsync(string name);
 
         Task<IReadOnlyList<AppInfo>> ListAsync();
 

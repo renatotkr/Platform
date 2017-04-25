@@ -9,11 +9,11 @@ namespace Carbon.Platform.Web.Libraries
 
     public class StaticLibraryRegistry : IWebLibraryRegistry
     {
-        private readonly Dictionary<string, ILibrary> items = new Dictionary<string, ILibrary>();
+        private readonly Dictionary<string, IWebLibrary> items = new Dictionary<string, IWebLibrary>();
 
         public StaticLibraryRegistry() { }
 
-        public StaticLibraryRegistry(ILibrary[] items)
+        public StaticLibraryRegistry(IWebLibrary[] items)
         {
             #region Preconditions
 
@@ -33,14 +33,14 @@ namespace Carbon.Platform.Web.Libraries
             }
         }
 
-        public void Add(ILibrary library)
+        public void Add(IWebLibrary library)
         {
             items.Add(library.Name, library);
         }
 
-        public ILibrary Find(string name, SemanticVersionRange range)
+        public IWebLibrary Find(string name, SemanticVersionRange range)
         {
-            if (items.TryGetValue(name, out ILibrary lib))
+            if (items.TryGetValue(name, out IWebLibrary lib))
             {
                 return lib;
             }
@@ -50,9 +50,9 @@ namespace Carbon.Platform.Web.Libraries
             }
         }
 
-        public ILibrary Find(string name, SemanticVersion version)
+        public IWebLibrary Find(string name, SemanticVersion version)
         {
-            if (items.TryGetValue(name, out ILibrary lib))
+            if (items.TryGetValue(name, out IWebLibrary lib))
             {
                 return lib;
             }

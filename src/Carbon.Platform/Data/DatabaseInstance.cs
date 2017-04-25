@@ -97,6 +97,5 @@ namespace Carbon.Platform.Data
         #endregion
 
         public long DatabaseId => ScopedId.GetScope(Id);
-
     }
 }

@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
-
+using Carbon.Platform.Sequences;
 using Carbon.Platform.VersionControl;
 
 namespace Carbon.Platform.Web
@@ -10,7 +10,7 @@ namespace Carbon.Platform.Web
     using Versioning;
 
     [Dataset("WebLibraries")]
-    public class WebLibrary : ILibrary
+    public class WebLibrary : IWebLibrary
     {
         public WebLibrary() { }
 
@@ -20,21 +20,41 @@ namespace Carbon.Platform.Web
             Version  = version;
         }
 
+        public WebLibrary(string name, SemanticVersion version, IRepositoryCommit commit)
+        {
+            #region Preconditions
+            
+            if (commit == null)
+                throw new ArgumentNullException(nameof(commit));
+
+            #endregion
+
+            Name     = name ?? throw new ArgumentNullException(nameof(name));
+            Version  = version;
+            CommitId = commit.Id;
+        }
+
         [Member("name"), Key]
         [DataMember(Name = "name")]
+        [StringLength(100)]
         public string Name { get; }
 
         [Member("version"), Key]
         [DataMember(Name = "version")]
+        [StringLength(20)]
         public SemanticVersion Version { get; }
 
+        // TODO: Replace with commitId
         [Member("source")]
         [IgnoreDataMember]
+        [StringLength(200)]
         public string Source { get; set; }
 
         [Member("commitId")]
-        public long CommitId { get; set; }
+        public long CommitId { get; }
 
+        public long RepositoryId => ScopedId.GetScope(CommitId);
+        
         #region Main 
 
         [IgnoreDataMember]

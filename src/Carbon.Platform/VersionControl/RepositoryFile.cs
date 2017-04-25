@@ -29,11 +29,11 @@ namespace Carbon.Platform.VersionControl
         public long RepositoryId { get; }
         
         [Member("branchName"), Key]
-        [StringLength(63)]
+        [StringLength(50)]
         public string BranchName { get; }
         
         [Member("path"), Key]
-        [StringLength(255)] // git limit = 4096
+        [StringLength(180)] // git limit = 4096
         public string Path { get; }
 
         [Member("type")]

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-using Carbon.Json;
 using Carbon.Data.Annotations;
 
 namespace Carbon.Platform.Web
@@ -12,12 +11,18 @@ namespace Carbon.Platform.Web
     {
         public WebsiteInfo() { }
 
-        public WebsiteInfo(long id, string name, long repositoryId, long ownerId)
+        public WebsiteInfo(
+            long id,
+            string name, 
+            long environmentId,
+            long repositoryId, 
+            long ownerId)
         {
-            Id           = id;
-            Name         = name ?? throw new ArgumentNullException(nameof(name));
-            RepositoryId = repositoryId;
-            OwnerId      = ownerId;
+            Id            = id;
+            Name          = name ?? throw new ArgumentNullException(nameof(name));
+            EnvironmentId = environmentId;
+            RepositoryId  = repositoryId;
+            OwnerId       = ownerId;
         }
 
         [Member("id"), Key] 
@@ -31,24 +36,14 @@ namespace Carbon.Platform.Web
         [StringLength(63)]
         public string Name { get; }
 
-        [Member("variables")]
-        [StringLength(1000)]
-        public JsonObject Variables { get; set; }
-
-        // Revision?
+        [Member("environmentId")]
+        public long EnvironmentId { get; }
 
         [Member("repositoryId")]
         public long RepositoryId { get; }
 
         [Member("deploymentId")]
-        public long DeploymentId { get; set; }
-
-        #region Environment
-
-        [Member("environmentId")]
-        public long EnvironmentId { get; set; }
-
-        #endregion
+        public long? DeploymentId { get; set; }
 
         #region Timestamps
 
@@ -68,9 +63,3 @@ namespace Carbon.Platform.Web
         public override string ToString() => Name;
     }
 }
-
-// Notes:
-// Themes are websites too
-
-// TODO: Verify repository head format
-// https://git-scm.com/docs/git-check-ref-format

@@ -214,7 +214,7 @@ namespace Carbon.Hosting.IIS
             var pool = GetApplicationPool(site);
 
      
-            // e.g. D:/apps/1/2.1.3
+            // e.g. /var/apps/1/2.1.3
             var newPath = GetAppPath(app, version);
 
             if (!newPath.Exists)

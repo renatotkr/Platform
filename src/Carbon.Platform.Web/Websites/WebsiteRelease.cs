@@ -11,12 +11,24 @@ namespace Carbon.Platform.Web
     {
         public WebsiteRelease() { }
 
-        public WebsiteRelease(IWebsite website, SemanticVersion version, byte[] sha256, IRepositoryCommit commit, long creatorId)
+        public WebsiteRelease(
+            IWebsite website,
+            SemanticVersion version, 
+            byte[] sha256,
+            IRepositoryCommit commit,
+            long creatorId)
         {
             #region Preconditions
 
             if (website == null)
                 throw new ArgumentNullException(nameof(website));
+
+            if (sha256 == null)
+                throw new ArgumentNullException(nameof(sha256));
+
+            if (sha256.Length != 32)
+                throw new ArgumentException("Must be 32", nameof(sha256));
+
 
             if (commit == null)
                 throw new ArgumentNullException(nameof(commit));

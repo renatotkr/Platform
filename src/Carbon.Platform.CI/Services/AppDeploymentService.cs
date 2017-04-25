@@ -8,11 +8,11 @@ using Dapper;
 
 namespace Carbon.Platform.CI
 {
-    public class DeploymentService : IDeploymentService
+    public class AppDeploymentService : IDeploymentService
     {
         private readonly PlatformDb db;
 
-        public DeploymentService(PlatformDb db)
+        public AppDeploymentService(PlatformDb db)
         {
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }

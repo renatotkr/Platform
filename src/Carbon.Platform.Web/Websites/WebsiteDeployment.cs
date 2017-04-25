@@ -17,12 +17,14 @@ namespace Carbon.Platform.Web
             long websiteId, 
             SemanticVersion revision, 
             long commitId, 
+            DeploymentStatus status,
             long creatorId)
         {
             Id        = id;
             WebsiteId = websiteId;
             Revision  = revision.ToString();
             CommitId  = commitId;
+            Status    = status;
             CreatorId = creatorId;
         }
 
@@ -31,7 +33,7 @@ namespace Carbon.Platform.Web
         public long Id { get; }
 
         [Member("status")]
-        public DeploymentStatus Status { get; set; }
+        public DeploymentStatus Status { get; }
 
         [Member("websiteId")]
         public long WebsiteId { get; }

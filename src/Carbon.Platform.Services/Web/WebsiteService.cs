@@ -4,12 +4,8 @@ using System.Threading.Tasks;
 
 using Carbon.Data;
 using Carbon.Data.Expressions;
-using Carbon.Platform.CI;
-using Carbon.Platform.Resources;
 using Carbon.Platform.VersionControl;
 using Carbon.Versioning;
-
-using Dapper;
 
 namespace Carbon.Platform.Web
 {
@@ -29,7 +25,7 @@ namespace Carbon.Platform.Web
             return db.Websites.FindAsync(id);
         }
 
-        public Task<WebsiteInfo> GetAsync(long ownerId, string name)
+        public Task<WebsiteInfo> FindAsync(long ownerId, string name)
         {
             return db.Websites.QueryFirstOrDefaultAsync(
                 And(Eq("ownerId", ownerId), Eq("name", name))
@@ -87,7 +83,11 @@ namespace Carbon.Platform.Web
             return release;
         }
 
-        public async Task<WebsiteInfo> CreateAsync(string name, IRepository repository, IEnvironment env, long ownerId)
+        public async Task<WebsiteInfo> CreateAsync(
+            string name, 
+            long ownerId,
+            IEnvironment env,
+            IRepository repository)
         {
             #region Preconditions
 
@@ -103,75 +103,16 @@ namespace Carbon.Platform.Web
             #endregion
 
             var website = new WebsiteInfo(
-                id: db.Context.GetNextId<WebsiteInfo>(),
-                name: name, 
-                repositoryId: repository.Id,
-                ownerId: ownerId)
-            {
-                EnvironmentId = env.Id
-            };
-
+                id            : db.Context.GetNextId<WebsiteInfo>(),
+                name          : name,
+                repositoryId  : repository.Id,
+                environmentId : env.Id,
+                ownerId       : ownerId
+            );
 
             await db.Websites.InsertAsync(website).ConfigureAwait(false);
 
             return website;
-        }
-        
-        public async Task<WebsiteDeployment> StartDeployment(
-            WebsiteRelease release, 
-            IEnvironment env,
-            long creatorId)
-        {
-            #region Preconditions
-
-            if (release == null)
-                throw new ArgumentNullException(nameof(release));
-
-            if (env == null)
-                throw new ArgumentNullException(nameof(env));
-
-            #endregion
-
-            var deployment = new WebsiteDeployment(
-                id        : await DeploymentId.GetNextAsync(db.Context, env).ConfigureAwait(false),
-                websiteId : release.WebsiteId,
-                revision  : release.Version,
-                commitId  : release.CommitId,
-                creatorId : creatorId
-            );
-
-            await db.WebsiteDeployments.InsertAsync(deployment);
-
-            return deployment;
-        }
-
-        public async Task CompleteDeploymentAsync(WebsiteDeployment deployment, bool successsful)
-        {
-            #region Preconditions
-
-            if (deployment == null)
-                throw new ArgumentNullException(nameof(deployment));
-
-            #endregion
-
-            using (var connection = db.Context.GetConnection())
-            {
-                await connection.ExecuteAsync(
-                    @"UPDATE WebsiteDeployments
-                      SET status = @status,
-                          completed = NOW()
-                      WHERE id = @id", deployment);
-
-                await connection.ExecuteAsync(
-                    @"UPDATE Websites
-                      SET deploymentId = @deploymentId
-                      WHERE id = @id", new {
-                        id = deployment.WebsiteId,
-                        deploymentId = deployment.Id
-                    });
-            }
-
-
         }
     }
 }

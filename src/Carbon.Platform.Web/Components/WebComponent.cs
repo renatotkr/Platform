@@ -29,8 +29,9 @@ namespace Carbon.Platform.Web
         [Member("name"), Unique]
         [StringLength(63)]
         public string Name { get; }
-
-        [Member("version"), Mutable] // e.g. master, ...
+        
+        [Member("version"), Mutable]
+        [StringLength(40)]
         public string Version { get; set; }
 
         [Member("style")]

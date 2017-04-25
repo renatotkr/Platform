@@ -28,6 +28,7 @@ namespace Carbon.Platform.VersionControl
         public long Id { get; }
         
         [Member("name")]
+        [StringLength(120)]
         public string Name { get; }
 
         [IgnoreDataMember]

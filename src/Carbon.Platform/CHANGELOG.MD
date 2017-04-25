@@ -1,4 +1,6 @@
-﻿1.28.0
+﻿- Ensure all keys are under 767 bytes
+
+1.28.0
 - Add Topics
 
 1.27.0

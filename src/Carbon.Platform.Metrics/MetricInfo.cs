@@ -19,7 +19,7 @@ namespace Carbon.Platform.Metrics
         // public string Namespace { get; set; }
 
         [Member("name")]
-        [StringLength(255)]
+        [StringLength(100)]
         [Unique]
         public string Name { get; }
 
@@ -29,6 +29,7 @@ namespace Carbon.Platform.Metrics
         // bytes
         // bytes/second
         [Member("unit")]
+        [StringLength(50)]
         public string Unit { get; }  
     }
 
@@ -38,7 +39,7 @@ namespace Carbon.Platform.Metrics
         public MetricDimension(long metricId, string name, string dataType)
         {
             MetricId = metricId;
-            Name = name;
+            Name     = name;
             DataType = dataType;
         }
 
@@ -50,6 +51,7 @@ namespace Carbon.Platform.Metrics
         public string Name { get; }
 
         [Member("dataType")] // Number, String
+        [StringLength(30)]
         public string DataType { get; }
     }
 

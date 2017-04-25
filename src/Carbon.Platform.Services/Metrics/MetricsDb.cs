@@ -2,7 +2,7 @@
 
 using Carbon.Data;
 
-namespace Carbon.Platform
+namespace Carbon.Platform.Metrics
 {
     using Metrics;
 

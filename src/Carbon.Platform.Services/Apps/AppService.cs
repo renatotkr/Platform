@@ -23,13 +23,10 @@ namespace Carbon.Platform.Apps
 
         public async Task<AppInfo> GetAsync(long id)
         {
-            var app = await db.Apps.FindAsync(id);
-
-            if (app == null) throw new Exception($"app#{id} not found");
-            return app;
+            return await db.Apps.FindAsync(id).ConfigureAwait(false) ?? throw new Exception($"app#{id} not found");
         }
 
-        public Task<AppInfo> GetAsync(string name)
+        public Task<AppInfo> FindAsync(string name)
         {
             return db.Apps.QueryFirstOrDefaultAsync(Eq("name", name));
         }
@@ -121,7 +118,6 @@ namespace Carbon.Platform.Apps
             return db.Environments.QueryAsync(Eq("appId", app.Id));
         }
     }
-
 
     public class CreateAppRequest
     {

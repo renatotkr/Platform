@@ -13,6 +13,8 @@ namespace Carbon.Building.Web
 
     public class WebBuilder
     {
+        public static string BaseDirectory = "D:/builds";
+
         private readonly string basePath;
         private readonly string buildId;
         private readonly IPackage package;
@@ -32,7 +34,7 @@ namespace Carbon.Building.Web
             var unique = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 16);
 
             this.buildId = DateTime.UtcNow.ToString("yyyyMMddHHmmss") + "-" + unique;
-            this.basePath = $@"D:/builds/{buildId}/";
+            this.basePath = BaseDirectory + $@"/{buildId}/";
 
             this.tsProject = new TypeScriptProject(package, basePath);
 

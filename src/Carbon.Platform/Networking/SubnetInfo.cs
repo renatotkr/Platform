@@ -28,6 +28,7 @@ namespace Carbon.Platform.Networking
         public long Id { get; }
 
         [Member("cidrBlock")]
+        [StringLength(100)]
         public string CidrBlock { get; } 
 
         [Member("gatewayAddress")]

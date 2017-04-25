@@ -4,7 +4,7 @@ namespace Carbon.Platform.Web
 {
     using Versioning;
 
-    public class StaticLibrary : ILibrary
+    public class StaticLibrary : IWebLibrary
     {
         [DataMember(Name = "name")]
         public string Name { get; set; }

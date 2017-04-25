@@ -21,6 +21,7 @@ namespace Carbon.Platform.Data
         public long Id { get; }
 
         [Member("name"), Unique]
+        [StringLength(1, 63)]
         public string Name { get; }
 
         #region Timestamps
@@ -38,3 +39,6 @@ namespace Carbon.Platform.Data
         #endregion
     }
 }
+
+// MySQL = 64
+// PostgreSQL = 63 (begin with letter or underscore)

@@ -1,19 +1,18 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
 using Carbon.Platform.VersionControl;
 using Carbon.Versioning;
-using System.Collections.Generic;
 
 namespace Carbon.Platform.Web
 {
     public interface IWebsiteService
     {
-        Task CompleteDeploymentAsync(WebsiteDeployment deployment, bool successsful);
-
         Task<WebsiteInfo> CreateAsync(
-            string name, 
-            IRepository repository,
+            string name,
+            long ownerId,
             IEnvironment env,
-            long ownerId
+            IRepository repository
         );
 
         Task<WebsiteRelease> CreateReleaseAsync(
@@ -26,14 +25,12 @@ namespace Carbon.Platform.Web
 
         Task<WebsiteInfo> GetAsync(long id);
 
-        Task<WebsiteInfo> GetAsync(long ownerId, string name);
+        Task<WebsiteInfo> FindAsync(long ownerId, string name);
 
         Task<IReadOnlyList<WebsiteInfo>> ListAsync(long ownerId);
 
         Task<WebsiteRelease> GetReleaseAsync(long websiteId, SemanticVersion version);
 
         Task<IReadOnlyList<WebsiteRelease>> GetReleasesAsync(long websiteId);
-
-        Task<WebsiteDeployment> StartDeployment(WebsiteRelease release, IEnvironment env, long creatorId);
     }
 }

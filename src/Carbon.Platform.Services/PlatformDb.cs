@@ -11,6 +11,7 @@ namespace Carbon.Platform
     using Hosting;
     using Logs;
     using Networking;
+    using Users;
     using Versioning;
 
     public class PlatformDb
@@ -62,7 +63,7 @@ namespace Carbon.Platform
             Queues             = new Dataset<QueueInfo,             long>(context);
 
             // Networks --------------------------------------------------------------
-            Networks = new Dataset<NetworkInfo,              long>(context);
+            Networks              = new Dataset<NetworkInfo,              long>(context);
             NetworkAddresses      = new Dataset<NetworkAddress,           long>(context);
             NetworkInterfaces     = new Dataset<NetworkInterfaceInfo,     long>(context);
             NetworkSecurityGroups = new Dataset<NetworkSecurityGroup,     long>(context);
@@ -70,16 +71,15 @@ namespace Carbon.Platform
             LoadBalancers         = new Dataset<LoadBalancer,             long>(context);
             LoadBalancerListeners = new Dataset<LoadBalancerListener,     long>(context);
             LoadBalancerRules     = new Dataset<LoadBalancerRule,         long>(context);
-
-            Subnets = new Dataset<SubnetInfo, long>(context);
+            Subnets               = new Dataset<SubnetInfo,               long>(context);
 
             // CI
             Deployments           = new Dataset<Deployment, long>(context);
             DeploymentTargets     = new Dataset<DeploymentTarget, (long, long)>(context);
 
             // Logging ---------------------------------------------------------------
-            Activities = new Dataset<Activity, long>(context);
-
+            Activities            = new Dataset<Activity, long>(context);
+            Users                 = new Dataset<User, long>(context);
         }
 
         public IDbContext Context { get; }
@@ -134,5 +134,6 @@ namespace Carbon.Platform
 
         // Logs -----------------------------------------------------------------
         public Dataset<Activity, long>  Activities { get; }
+        public Dataset<User, long>      Users { get; }
     }
 }

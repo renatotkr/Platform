@@ -2,7 +2,7 @@
 {
     using Versioning;
 
-    public interface ILibrary
+    public interface IWebLibrary
     {
         string Name { get; }
 

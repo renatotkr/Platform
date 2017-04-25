@@ -23,7 +23,7 @@ namespace Carbon.Platform.CI
         {
             this.db         = db   ?? throw new ArgumentNullException(nameof(db));
             this.log        = log ?? throw new ArgumentNullException(nameof(log));
-            this.ci         = new DeploymentService(db);
+            this.ci         = new AppDeploymentService(db);
             this.envService = new EnvironmentService(db);
         }
 

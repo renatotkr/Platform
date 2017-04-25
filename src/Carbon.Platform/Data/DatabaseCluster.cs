@@ -7,7 +7,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Data
 {
-    [Dataset("DatabaseCluster")]
+    [Dataset("DatabaseClusters")]
     public class DatabaseCluster : IDatabaseCluster
     {
         public DatabaseCluster() { }
@@ -22,11 +22,12 @@ namespace Carbon.Platform.Data
             ResourceId = resource.ResourceId;
         }
 
-        // DatabaseId + Sequence
+        // databaseId + Sequence
         [Member("id"), Key]
         public long Id { get; }
 
         [Member("name")]
+        [StringLength(100)]
         public string Name { get; }
 
         // TODO: Endpoints

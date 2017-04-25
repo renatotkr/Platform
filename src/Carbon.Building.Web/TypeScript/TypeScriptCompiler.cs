@@ -67,11 +67,11 @@ namespace TypeScript
             var timeout = TimeSpan.FromSeconds(15);
 
             var psi = new ProcessStartInfo(WorkingDirectory + "node", command) {
-                CreateNoWindow = true,
-                UseShellExecute = false,
-                RedirectStandardError = true,
-                RedirectStandardOutput = true,
-                WorkingDirectory = WorkingDirectory
+                CreateNoWindow          = true,
+                UseShellExecute         = false,
+                RedirectStandardError   = true,
+                RedirectStandardOutput  = true,
+                WorkingDirectory        = WorkingDirectory
             };
 
             var output = new StringBuilder();

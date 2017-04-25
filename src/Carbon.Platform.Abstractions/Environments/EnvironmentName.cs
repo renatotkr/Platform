@@ -1,6 +1,6 @@
 ﻿namespace Carbon.Platform
 {
-    public enum EnvironmentType
+    public enum EnvironmentName
     {
         Production  = 1,
         Staging     = 2,

@@ -14,9 +14,7 @@ namespace Carbon.Platform.Web
             Websites           = new Dataset<WebsiteInfo, long>(context);
             WebsiteDeployments = new Dataset<WebsiteDeployment, long>(context);
             WebsiteReleases    = new Dataset<WebsiteRelease, (long, SemanticVersion)>(context);
-
             WebComponents      = new Dataset<WebComponent, long>(context);
-
             WebLibraries       = new Dataset<WebLibrary, long>(context);
         }
 
@@ -25,9 +23,7 @@ namespace Carbon.Platform.Web
         public Dataset<WebsiteInfo, long>                       Websites            { get; }
         public Dataset<WebsiteDeployment, long>                 WebsiteDeployments { get; }
         public Dataset<WebsiteRelease, (long, SemanticVersion)> WebsiteReleases     { get; }
-
         public Dataset<WebComponent, long>                      WebComponents       { get; }
-
         public Dataset<WebLibrary, long>                        WebLibraries        { get; }
     }
 }

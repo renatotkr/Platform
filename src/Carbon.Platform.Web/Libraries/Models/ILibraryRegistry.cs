@@ -4,8 +4,8 @@
 
     public interface IWebLibraryRegistry
     {
-        ILibrary Find(string name, SemanticVersion version);
+        IWebLibrary Find(string name, SemanticVersion version);
 
-        ILibrary Find(string name, SemanticVersionRange range);
+        IWebLibrary Find(string name, SemanticVersionRange range);
     }
 }

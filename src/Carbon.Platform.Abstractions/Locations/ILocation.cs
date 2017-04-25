@@ -10,5 +10,5 @@
         LocationType Type { get; }
     }
 
-    // Locations may span the globe, mutiple regions, a single region, or a zone 
+    // Locations may be areas, regions, or zones
 }

@@ -10,10 +10,10 @@ namespace Carbon.Platform.Data
     {
         public DatabaseBackup() { }
 
-        public DatabaseBackup(long id, long clusterId, string name)
+        public DatabaseBackup(long id, long bucketId, string name)
         {
             Id        = id;
-            ClusterId = clusterId;
+            BucketId  = bucketId;
             Name      = name;
         }
 
@@ -21,15 +21,12 @@ namespace Carbon.Platform.Data
         [Member("id"), Key]
         public long Id { get; }
 
-        [Member("clusterId")]
-        [Indexed]
-        public long ClusterId { get; }
-
-        [Member("name")]
-        public string Name { get; set; }
-
         [Member("bucketId")]
         public long BucketId { get; set; }
+
+        [Member("name")]
+        [StringLength(100)]
+        public string Name { get; }
         
         [Member("encryptionKeyId")]
         public long EncryptionKeyId { get; set; }
@@ -41,6 +38,9 @@ namespace Carbon.Platform.Data
         public byte[] Sha256 { get; set; }
 
         // CompressionMethod...
+
+        [Member("locationId")]
+        public int LocationId { get; set; }
 
         #region Timestamps
 
