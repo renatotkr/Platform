@@ -11,22 +11,36 @@ namespace Carbon.Platform.Apps
     {
         public AppInfo() { }
 
-        public AppInfo(long id, string name, AppType type)
+        public AppInfo(long id, string name, long ownerId)
         {
-            Id   = id;
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-            Type = type;
+            Id      = id;
+            Name    = name ?? throw new ArgumentNullException(nameof(name));
+            OwnerId = ownerId;
         }
 
         [Member("id"), Key]
         public long Id { get; }
-
-        [Member("type")]
-        public AppType Type { get; }
         
         [Member("name"), Unique]
         [StringLength(63)]
         public string Name { get; }
+
+        [Member("ownerId")]
+        public long OwnerId { get; }
+
+        #region Stats
+
+        [Member("releaseCount")]
+        public int ReleaseCount { get; }
+
+        #endregion
+
+        #region Resource
+
+        [Member("repositoryId")]
+        public long RepositoryId { get; set; }
+
+        #endregion
 
         #region IResource
 
@@ -51,4 +65,6 @@ namespace Carbon.Platform.Apps
 
         #endregion
     }
+
+    // The application's environment determines whether an application endpoint is exposed (i.e. a web app)
 }
