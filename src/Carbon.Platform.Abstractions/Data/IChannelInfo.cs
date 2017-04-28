@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Data
 {
-    public interface ITopicInfo : IManagedResource
+    public interface IChannelInfo : IManagedResource
     {
         string Name { get; }
     }
