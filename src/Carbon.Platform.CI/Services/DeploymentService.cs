@@ -2,22 +2,23 @@
 using System.Threading.Tasks;
 
 using Carbon.Platform.Computing;
-using Carbon.Platform.Apps;
+using Carbon.Platform.Resources;
+using Carbon.Platform.Web;
 
 using Dapper;
 
 namespace Carbon.Platform.CI
 {
-    public class AppDeploymentService : IDeploymentService
+    public class DeploymentService : IDeploymentService
     {
         private readonly PlatformDb db;
 
-        public AppDeploymentService(PlatformDb db)
+        public DeploymentService(PlatformDb db)
         {
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public async Task<Deployment> StartAsync(IEnvironment env, IAppRelease release)
+        public async Task<Deployment> StartAsync(IEnvironment env, IRelease release, long creatorId)
         {
             #region Preconditions
 
@@ -29,12 +30,12 @@ namespace Carbon.Platform.CI
 
             #endregion
 
+            var type = release is WebsiteRelease ? ResourceType.Website : ResourceType.App;
+
             var deployment = new Deployment(
-              id       : await DeploymentId.GetNextAsync(db.Context, env).ConfigureAwait(false),
-              appId    : env.AppId,
-              revision : release.Version,
-              commitId : release.CommitId,
-              status   : DeploymentStatus.Pending
+              id         : await DeploymentId.GetNextAsync(db.Context, env).ConfigureAwait(false),
+              release : release,
+              creatorId  : creatorId
             );
 
             await db.Deployments.InsertAsync(deployment).ConfigureAwait(false);
@@ -63,17 +64,30 @@ namespace Carbon.Platform.CI
                           `completed` = NOW()
                       WHERE id = @id", deployment
                  ).ConfigureAwait(false);
-
+                
                 if (succceded)
                 {
-                    await connection.ExecuteAsync(
-                        @"UPDATE `Environments`
-                          SET `deploymentId` = @deploymentId
-                          WHERE `id` = @id", new {
-                            id           = deployment.EnvironmentId,
+                    if (deployment.ReleaseType == ReleaseType.Website)
+                    {
+                        await connection.ExecuteAsync(
+                        @"UPDATE Websites
+                          SET deploymentId = @deploymentId
+                          WHERE id = @id", new {
+                            id = deployment.ReleaseId,
                             deploymentId = deployment.Id
-                        }
-                    ).ConfigureAwait(false);
+                        }).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        await connection.ExecuteAsync(
+                            @"UPDATE `Environments`
+                              SET `deploymentId` = @deploymentId
+                              WHERE `id` = @id", new {
+                                id           = deployment.EnvironmentId,
+                                deploymentId = deployment.Id
+                            }
+                        ).ConfigureAwait(false);
+                    }
                 }
             }
         }

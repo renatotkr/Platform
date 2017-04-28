@@ -2,15 +2,17 @@
 
 using Carbon.Data.Annotations;
 using Carbon.Versioning;
+using Carbon.Platform.CI;
 
 namespace Carbon.Platform.Apps
 {
     [Dataset("AppReleases")]
-    public class AppRelease : IAppRelease
+    [DataIndex(IndexFlags.Unique, "appId", "version")]
+    public class AppRelease : IAppRelease, IRelease
     {
         public AppRelease() { }
 
-        public AppRelease(IApp app, SemanticVersion version, byte[] sha256, long creatorId)
+        public AppRelease(long id, IApp app, SemanticVersion version, byte[] sha256, long creatorId)
         {
             #region Preconditions
 
@@ -28,16 +30,21 @@ namespace Carbon.Platform.Apps
 
             #endregion
 
+            Id        = id;
             AppId     = app.Id;
             Version   = version;
             Sha256    = sha256;
             CreatorId = creatorId;
         }
 
-        [Member("appId"), Key]
+        // appId + sequence
+        [Member("id"), Key]
+        public long Id { get; }
+
+        [Member("appId")]
         public long AppId { get; }
 
-        [Member("version"), Key]
+        [Member("version")]
         public SemanticVersion Version { get; }
 
         [Member("buildId")]
@@ -49,10 +56,18 @@ namespace Carbon.Platform.Apps
         [Member("creatorId")]
         public long CreatorId { get; }
 
+        #region IDeployable
+
+        ReleaseType IRelease.Type => ReleaseType.Application;
+
+        long IRelease.Id => Id;
+
+        #endregion
+
         #region Hashes
 
         [Member("sha256", TypeName = "binary(32)")]
-        public byte[] Sha256 { get; set; }
+        public byte[] Sha256 { get; }
 
         #endregion
 

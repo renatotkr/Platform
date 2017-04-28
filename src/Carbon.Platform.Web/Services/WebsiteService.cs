@@ -7,6 +7,8 @@ using Carbon.Data.Expressions;
 using Carbon.Platform.VersionControl;
 using Carbon.Versioning;
 
+using Dapper;
+
 namespace Carbon.Platform.Web
 {
     using static Expression;
@@ -25,10 +27,10 @@ namespace Carbon.Platform.Web
             return db.Websites.FindAsync(id);
         }
 
-        public Task<WebsiteInfo> FindAsync(long ownerId, string name)
+        public Task<WebsiteInfo> FindAsync(string name)
         {
             return db.Websites.QueryFirstOrDefaultAsync(
-                And(Eq("ownerId", ownerId), Eq("name", name))
+                Eq("name", name)
              );
         }
 
@@ -75,12 +77,32 @@ namespace Carbon.Platform.Web
 
             #endregion
 
-            var release = new WebsiteRelease(website, version, sha256, commit, creatorId);
+            // TODO: Ensure that the version does not already exist
+
+            var releaseId  = await GetNextReleaseIdAsync(website);
+
+            var release = new WebsiteRelease(releaseId, website, version, sha256, commit, creatorId);
             
             await db.WebsiteReleases.InsertAsync(release).ConfigureAwait(false);
 
-
             return release;
+        }
+
+        private async Task<long> GetNextReleaseIdAsync(IWebsite website)
+        {
+            using (var connection = db.Context.GetConnection())
+            using (var ts = connection.BeginTransaction())
+            {
+                var result = await connection.ExecuteScalarAsync<int>(
+                    @"SELECT `releaseCount` FROM `Websites` WHERE id = @id FOR UPDATE;
+                      UPDATE `Websites`
+                      SET `releaseCount` = `releaseCount` + 1
+                      WHERE id = @id", website, ts).ConfigureAwait(false);
+
+                ts.Commit();
+
+                return result + 1;
+            }
         }
 
         public async Task<WebsiteInfo> CreateAsync(

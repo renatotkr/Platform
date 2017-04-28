@@ -15,7 +15,7 @@ namespace Carbon.Platform.CI
         private readonly PlatformDb db;
         private readonly ILogger log;
         private readonly EnvironmentService envService;
-        private readonly WebsiteDeploymentService websiteDeployments;
+        private readonly DeploymentService deployments;
 
         public WebsiteDeployer(SecretKey key, int port, PlatformDb db, ILogger logger)
             : base(key, port)
@@ -23,11 +23,11 @@ namespace Carbon.Platform.CI
             this.db  = db     ?? throw new ArgumentNullException(nameof(db));
             this.log = logger ?? throw new ArgumentNullException(nameof(logger));
 
-            this.envService         = new EnvironmentService(db);
-            this.websiteDeployments = new WebsiteDeploymentService(new WebDb(db.Context));
+            this.envService  = new EnvironmentService(db);
+            this.deployments = new DeploymentService(db);
         }
 
-        public async Task<DeployResult> DeployAsync(WebsiteRelease release, IEnvironment env, long deployerId)
+        public async Task<DeployResult> DeployAsync(WebsiteRelease release, IEnvironment env, long creatorId)
         {
             #region Preconditions
 
@@ -35,13 +35,13 @@ namespace Carbon.Platform.CI
 
             #endregion
             
-            var deployment = await websiteDeployments.StartAsync(release, env, creatorId: deployerId);
+            var deployment = await deployments.StartAsync(env, release, creatorId);
 
             var hosts = await envService.GetHostsAsync(env).ConfigureAwait(false);
             
             await DeployAsync(release, hosts).ConfigureAwait(false);
 
-            await websiteDeployments.CompleteAsync(deployment, true);
+            await deployments.CompleteAsync(deployment, true);
 
             return new DeployResult(true);
         }

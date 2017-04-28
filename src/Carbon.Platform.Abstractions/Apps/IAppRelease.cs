@@ -1,4 +1,5 @@
-﻿using Carbon.Versioning;
+﻿
+using Carbon.Versioning;
 
 namespace Carbon.Platform.Apps
 {
@@ -8,10 +9,10 @@ namespace Carbon.Platform.Apps
 
         SemanticVersion Version { get; }
 
-        long CommitId { get; set; }
+        long CommitId { get; }
 
         long CreatorId { get; }
 
-        byte[] Sha256 { get; set; }
+        byte[] Sha256 { get; }
     }
 }

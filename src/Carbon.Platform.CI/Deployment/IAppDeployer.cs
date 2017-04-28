@@ -6,9 +6,9 @@ namespace Carbon.Platform.CI
 {
     public interface IAppDeployer
     {
-        Task<DeployResult> DeployAsync(IAppRelease release, IEnvironment env);
+        Task<DeployResult> DeployAsync(AppRelease release, IEnvironment env, long creatorId);
 
-        Task<DeployResult> DeployAsync(IAppRelease release, IHost host);
+        Task<DeployResult> DeployAsync(AppRelease release, IHost host);
 
         Task RestartAsync(IApp app, IHost host);
     }

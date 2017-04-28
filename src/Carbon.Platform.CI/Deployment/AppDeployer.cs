@@ -23,11 +23,11 @@ namespace Carbon.Platform.CI
         {
             this.db         = db   ?? throw new ArgumentNullException(nameof(db));
             this.log        = log ?? throw new ArgumentNullException(nameof(log));
-            this.ci         = new AppDeploymentService(db);
+            this.ci         = new DeploymentService(db);
             this.envService = new EnvironmentService(db);
         }
 
-        public async Task<DeployResult> DeployAsync(IAppRelease release, IEnvironment env)
+        public async Task<DeployResult> DeployAsync(AppRelease release, IEnvironment env, long creatorId)
         {
             #region Preconditions
 
@@ -40,7 +40,7 @@ namespace Carbon.Platform.CI
             #endregion
 
             // Create a deployment record
-            var deployment = await ci.StartAsync(env, release).ConfigureAwait(false);
+            var deployment = await ci.StartAsync(env, release, creatorId).ConfigureAwait(false);
 
             var hosts = await envService.GetHostsAsync(env).ConfigureAwait(false);
 
@@ -56,7 +56,7 @@ namespace Carbon.Platform.CI
         }
 
         // Activate on a single host
-        public async Task<DeployResult> DeployAsync(IAppRelease release, IHost host)
+        public async Task<DeployResult> DeployAsync(AppRelease release, IHost host)
         {
             #region Preconditions
 
@@ -85,7 +85,7 @@ namespace Carbon.Platform.CI
             return new DeployResult(true, text);
         }
 
-        private async Task<DeployResult[]> ActivateAsync(IAppRelease release, IHost[] hosts)
+        private async Task<DeployResult[]> ActivateAsync(AppRelease release, IHost[] hosts)
         {
             #region Preconditions
 

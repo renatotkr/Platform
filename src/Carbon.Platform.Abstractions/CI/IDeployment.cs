@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.CI
@@ -15,7 +16,6 @@ namespace Carbon.Platform.CI
 
         DateTime? Completed { get; }
     }
-
  
     // type?
     // Website | App

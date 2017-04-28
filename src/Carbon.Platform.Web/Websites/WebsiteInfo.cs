@@ -6,7 +6,6 @@ using Carbon.Data.Annotations;
 namespace Carbon.Platform.Web
 {
     [Dataset("Websites")]
-    [DataIndex(IndexFlags.Unique, "ownerId", "name")]
     public class WebsiteInfo : IWebsite
     {
         public WebsiteInfo() { }
@@ -28,13 +27,13 @@ namespace Carbon.Platform.Web
         [Member("id"), Key] 
         public long Id { get; }
         
+        [Member("name"), Unique]
+        [StringLength(63)]
+        public string Name { get; }
+
         [IgnoreDataMember]
         [Member("ownerId")]
         public long OwnerId { get; }
-
-        [Member("name")]
-        [StringLength(63)]
-        public string Name { get; }
 
         [Member("environmentId")]
         public long EnvironmentId { get; }
@@ -44,6 +43,13 @@ namespace Carbon.Platform.Web
 
         [Member("deploymentId")]
         public long? DeploymentId { get; set; }
+        
+        #region Stats
+
+        [Member("releaseCount")]
+        public int ReleaseCount { get; }
+
+        #endregion
 
         #region Timestamps
 
