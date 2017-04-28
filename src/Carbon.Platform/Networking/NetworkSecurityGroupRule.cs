@@ -62,7 +62,7 @@ namespace Carbon.Platform.Networking
 
         [IgnoreDataMember]
         [Member("created"), Timestamp]
-        public DateTime Created { get; set; }
+        public DateTime Created { get; }
 
         [IgnoreDataMember]
         [Member("deleted")]

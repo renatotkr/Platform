@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using System.Net;
 
 using Carbon.Data.Annotations;
 using Carbon.Platform.Sequences;
@@ -30,9 +29,6 @@ namespace Carbon.Platform.Networking
         [Member("cidrBlock")]
         [StringLength(100)]
         public string CidrBlock { get; } 
-
-        [Member("gatewayAddress")]
-        public IPAddress GatewayAddress { get; set; }
 
         [IgnoreDataMember]
         public long NetworkId => ScopedId.GetScope(Id);
