@@ -8,16 +8,20 @@ using Carbon.Platform.Resources;
 namespace Carbon.Platform
 {
     [Dataset("Environments")]
-    [DataIndex(IndexFlags.Unique, "appId", "name")]
-    public class AppEnvironment : IEnvironment
+    [DataIndex(IndexFlags.Unique, "appId", "type")]
+    public class EnvironmentInfo : IEnvironment
     {
-        public AppEnvironment() { }
+        public EnvironmentInfo() { }
 
-        public AppEnvironment(long id, long appId, string name, JsonObject variables = null)
+        public EnvironmentInfo(
+            long id, 
+            long appId,
+            EnvironmentType type,
+            JsonObject variables = null)
         {
             Id        = id;
             AppId     = appId;
-            Name      = name ?? throw new ArgumentNullException(nameof(name));
+            Type      = type;
             Variables = variables;
         }
 
@@ -28,13 +32,17 @@ namespace Carbon.Platform
         [Member("appId")]
         public long AppId { get; }
 
-        [Member("name")]
-        [StringLength(63)]
-        public string Name { get; }
+        [Member("type")]
+        public EnvironmentType Type { get; }
 
         [Member("variables")]
+        [StringLength(1000)]
         public JsonObject Variables { get; }
+
+
+        // Docker configuration?
         
+        // The last successful deployment
         [Member("deploymentId")]
         public long DeploymentId { get; }
 
@@ -44,22 +52,12 @@ namespace Carbon.Platform
 
         #endregion
 
-        #region Source
-
-        [Member("repositoryId")]
-        public long RepositoryId { get; set; }
-
-        // AKA .git/HEAD -> refs/heads/master
-
-        [Member("repositoryHead")]
-        public string RepositoryHead { get; set; }
-
-        #endregion
-
         #region Stats
 
         [Member("deploymentCount")]
-        public int DeploymentCount { get; set; }
+        public int DeploymentCount { get; }
+
+        // HostCount
 
         #endregion
 

@@ -6,8 +6,7 @@ namespace Carbon.Platform
     {        
         long AppId { get; }
 
-        // e.g. development, production
-        string Name { get; }
+        EnvironmentType Type { get; }
         
         // Variables
     }
