@@ -15,7 +15,6 @@ namespace Carbon.Platform.Resources
                 case MachineType          : return "machineType";
                 case NetworkInterface     : return "networkInterface";
                 case LoadBalancerListener : return "listener";
-                case NetworkGateway       : return "gateway";
                 case NetworkAddress       : return "ip";
                 
 

@@ -2,8 +2,8 @@
 
 using Carbon.Data.Annotations;
 using Carbon.Platform.Resources;
-using Carbon.Versioning;
 using Carbon.Platform.Sequences;
+using Carbon.Versioning;
 
 namespace Carbon.Platform.CI
 {
@@ -14,25 +14,24 @@ namespace Carbon.Platform.CI
 
         public Deployment(
             long id,
-            long appId,
-            SemanticVersion revision, 
-            long commitId,
-            long creatorId = 0,
+            IRelease release,
+            long creatorId,
             DeploymentStatus status = DeploymentStatus.Pending)
         {
             #region Preconditions
 
-            if (revision == SemanticVersion.Zero)
-                throw new ArgumentException("Must not be Zero", nameof(revision));
+            if (release == null)
+                throw new ArgumentNullException(nameof(release));
 
             #endregion
 
-            Id       = id;
-            Status   = status;
-            AppId    = appId;
-            CommitId = commitId;
-            CreatorId = creatorId;
-            Revision = revision.ToString();
+            Id             = id;
+            Status         = status;
+            ReleaseType    = release.Type;
+            ReleaseId      = release.Id;
+            ReleaseVersion = release.Version; 
+            CommitId       = release.CommitId;
+            CreatorId      = creatorId; // may be different from the releaser
         }
 
         // envId + sequence
@@ -42,11 +41,15 @@ namespace Carbon.Platform.CI
         [Member("status")]
         public DeploymentStatus Status { get; set; }
        
-        [Member("appId")]
-        public long AppId { get; }
-       
-        [Member("revision")]
-        public string Revision { get; }
+        // Website | Application
+        [Member("releaseType")]
+        public ReleaseType ReleaseType { get; set; }
+
+        [Member("resourceId")]
+        public long ReleaseId { get; set; }
+
+        [Member("releaseVersion")]
+        public SemanticVersion ReleaseVersion { get; }
 
         [Member("commitId")]
         public long CommitId { get; }

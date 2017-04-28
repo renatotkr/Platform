@@ -10,10 +10,17 @@ namespace Carbon.Platform.Resources
 
         public ManagedResource(ResourceProvider provider, ILocation location, ResourceType type, string id)
         {
+            #region Preconditions
+
+            if (string.IsNullOrEmpty(id))
+                throw new ArgumentException("Must not be null or empty", nameof(id));
+
+            #endregion
+
             ProviderId = provider.Id;
             LocationId = location.Id;
             Type       = type;
-            ResourceId = id ?? throw new ArgumentNullException(nameof(id));
+            ResourceId = id;
         }
 
         public int ProviderId { get; }
@@ -97,8 +104,8 @@ namespace Carbon.Platform.Resources
         public static ManagedResource Queue(ILocation location, string id) =>
             FromLocation(location, ResourceType.Queue, id);
 
-        public static ManagedResource Firehose(ILocation location, string id) =>
-            FromLocation(location, ResourceType.Firehose, id);
+        public static ManagedResource Channel(ILocation location, string id) =>
+            FromLocation(location, ResourceType.Channel, id);
 
         #endregion
 
@@ -155,10 +162,8 @@ namespace Carbon.Platform.Resources
 
 }
 
-// 1/i-07e6001e0415497e4
-// amzn:region/us-east-1
-
 /*
+aws:location/us-east-1
 aws:instance/i-453-352-18
 aws:volume/vol-1a2b3c4d
 aws:image/ami-1a2b3c4d

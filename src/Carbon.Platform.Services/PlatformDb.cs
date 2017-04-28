@@ -30,8 +30,8 @@ namespace Carbon.Platform
 
             Context = context ?? throw new ArgumentNullException(nameof(context));
 
-            // Environment -----------------------------------------------------------
-            Environments          = new Dataset<AppEnvironment, long>(context);
+            // Environments -----------------------------------------------------------
+            Environments          = new Dataset<EnvironmentInfo, long>(context);
             EnvironmentLocations  = new Dataset<EnvironmentLocation, (long, long)>(context);
             EnvironmentResources  = new Dataset<EnvironmentResource, long>(context);
             Locations             = new Dataset<LocationInfo, long>(context);
@@ -51,18 +51,17 @@ namespace Carbon.Platform
             MachineTypes          = new Dataset<MachineType,        long>(context);
             Volumes               = new Dataset<VolumeInfo,         long>(context);
 
-            // Data / Databases  ------------------------------------------------------
-            Buckets            = new Dataset<BucketInfo,            long>(context);
-            Databases          = new Dataset<DatabaseInfo,          long>(context);
-            DatabaseBackups    = new Dataset<DatabaseBackup,        long>(context);
-            DatabaseClusters   = new Dataset<DatabaseCluster,       long>(context);
-            DatabaseEndpoints  = new Dataset<DatabaseEndpoint,      long>(context);
-            DatabaseInstances  = new Dataset<DatabaseInstance,      long>(context);
-            EncryptionKeys     = new Dataset<EncryptionKeyInfo,     long>(context);
-            Topics             = new Dataset<TopicInfo,             long>(context);
-            Queues             = new Dataset<QueueInfo,             long>(context);
+            // Data / Databases  --------------------------------------------------------
+            Buckets               = new Dataset<BucketInfo,               long>(context);
+            Channels              = new Dataset<ChannelInfo,              long>(context);
+            Databases             = new Dataset<DatabaseInfo,             long>(context);
+            DatabaseClusters      = new Dataset<DatabaseCluster,          long>(context);
+            DatabaseEndpoints     = new Dataset<DatabaseEndpoint,         long>(context);
+            DatabaseInstances     = new Dataset<DatabaseInstance,         long>(context);
+            EncryptionKeys        = new Dataset<EncryptionKeyInfo,        long>(context);
+            Queues                = new Dataset<QueueInfo,                long>(context);
 
-            // Networks --------------------------------------------------------------
+            // Networks -----------------------------------------------------------------
             Networks              = new Dataset<NetworkInfo,              long>(context);
             NetworkAddresses      = new Dataset<NetworkAddress,           long>(context);
             NetworkInterfaces     = new Dataset<NetworkInterfaceInfo,     long>(context);
@@ -85,7 +84,7 @@ namespace Carbon.Platform
         public IDbContext Context { get; }
 
         // Environment ------------------------------------------------
-        public Dataset<AppEnvironment, long>                Environments         { get; }
+        public Dataset<EnvironmentInfo, long>                Environments         { get; }
         public Dataset<EnvironmentLocation, (long, long)>   EnvironmentLocations { get; }
         public Dataset<EnvironmentResource, long>           EnvironmentResources { get; }
         public Dataset<LocationInfo, long>                  Locations            { get; }
@@ -94,27 +93,26 @@ namespace Carbon.Platform
         public Dataset<AppInfo, long>                       Apps            { get; }
         public Dataset<AppRelease, (long, SemanticVersion)> AppReleases     { get; }
 
-        // Computing & Storage ------------------------------------------------------                                                                                                
-        public Dataset<HealthCheck,          long> HealthChecks              { get; }
-        public Dataset<HostInfo,             long> Hosts                     { get; }
-        public Dataset<HostGroup,            long> HostGroups                { get; }
-        public Dataset<HostTemplate,         long> HostTemplates             { get; }
-        public Dataset<MachineImageInfo,     long> MachineImages             { get; }
-        public Dataset<MachineType,          long> MachineTypes              { get; }
-        public Dataset<VolumeInfo,           long> Volumes                   { get; }
+        // Computing ----------------------------------------------------------------
+        public Dataset<HealthCheck,              long> HealthChecks          { get; }
+        public Dataset<HostInfo,                 long> Hosts                 { get; }
+        public Dataset<HostGroup,                long> HostGroups            { get; }
+        public Dataset<HostTemplate,             long> HostTemplates         { get; }
+        public Dataset<MachineImageInfo,         long> MachineImages         { get; }
+        public Dataset<MachineType,              long> MachineTypes          { get; }
+        public Dataset<VolumeInfo,               long> Volumes               { get; }
 
         // Data ---------------------------------------------------------------------
-        public Dataset<BucketInfo,           long> Buckets                   { get; }
-        public Dataset<DatabaseInfo,         long> Databases                 { get; }
-        public Dataset<DatabaseBackup,       long> DatabaseBackups           { get; }
-        public Dataset<DatabaseCluster,      long> DatabaseClusters          { get; }
-        public Dataset<DatabaseEndpoint,     long> DatabaseEndpoints         { get; }
-        public Dataset<DatabaseInstance,     long> DatabaseInstances         { get; }
-        public Dataset<EncryptionKeyInfo,    long> EncryptionKeys            { get; }
-        public Dataset<TopicInfo,            long> Topics                    { get; }
-        public Dataset<QueueInfo,            long> Queues                    { get; }
+        public Dataset<BucketInfo,               long> Buckets               { get; }
+        public Dataset<ChannelInfo,              long> Channels              { get; }
+        public Dataset<DatabaseInfo,             long> Databases             { get; }
+        public Dataset<DatabaseCluster,          long> DatabaseClusters      { get; }
+        public Dataset<DatabaseEndpoint,         long> DatabaseEndpoints     { get; }
+        public Dataset<DatabaseInstance,         long> DatabaseInstances     { get; }
+        public Dataset<EncryptionKeyInfo,        long> EncryptionKeys        { get; }
+        public Dataset<QueueInfo,                long> Queues                { get; }
 
-        // Networks --------------------------------------------------------------
+        // Networks -----------------------------------------------------------------
         public Dataset<NetworkInfo,              long> Networks              { get; }
         public Dataset<NetworkAddress,           long> NetworkAddresses      { get; }
         public Dataset<NetworkInterfaceInfo,     long> NetworkInterfaces     { get; }
@@ -133,7 +131,7 @@ namespace Carbon.Platform
         public Dataset<DeploymentTarget, (long, long)> DeploymentTargets     { get; }
 
         // Logs -----------------------------------------------------------------
-        public Dataset<Activity, long>  Activities { get; }
-        public Dataset<User, long>      Users { get; }
+        public Dataset<Activity, long>                 Activities { get; }
+        public Dataset<User, long>                     Users { get; }
     }
 }

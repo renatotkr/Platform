@@ -2,11 +2,14 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Users
 {
+    // A user may have mutiple identies (i.e. IAM user)
+
     [Dataset("Users")]
-    public class User
+    public class User : IResource
     {
         public User() { }
 
@@ -19,11 +22,15 @@ namespace Carbon.Platform.Users
         [Member("id"), Key]
         public long Id { get; }
 
-        [Member("name"), Unique]
+        [Member("name")]
         [StringLength(100)]
         public string Name { get; }
 
-        // Unique Key...
+        #region IResource
+
+        public ResourceType ResourceType => ResourceType.User;
+
+        #endregion
 
         #region Timestamps
 
@@ -32,7 +39,7 @@ namespace Carbon.Platform.Users
         public DateTime Created { get; }
 
         [IgnoreDataMember]
-        [Member("created"), Timestamp(true)]
+        [Member("modified"), Timestamp(true)]
         public DateTime? Modified { get; }
 
         [IgnoreDataMember]

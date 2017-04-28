@@ -8,6 +8,8 @@ using Carbon.Platform.Logs;
 using Carbon.Platform.Resources;
 using Carbon.Versioning;
 
+using Dapper;
+
 namespace Carbon.Platform.Apps
 {
     using static Expression;
@@ -40,22 +42,26 @@ namespace Carbon.Platform.Apps
         }
 
         // TODO: Create the environments
-        public async Task<AppInfo> CreateAsync(CreateAppRequest request)
+        public async Task<AppInfo> CreateAsync(string name, long ownerId)
         {
             #region Preconditions
 
-            if (request.Name == null)
-                throw new ArgumentNullException(nameof(request.Name));
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
 
-            if (AppName.Validate(request.Name) == false)
-                throw new ArgumentException("invalid", nameof(request.Name));
+            if (AppName.Validate(name) == false)
+                throw new ArgumentException("invalid", nameof(name));
+            
+            if (ownerId <= 0)
+                throw new ArgumentException("Must be greater than 0", nameof(ownerId));
 
             #endregion
 
+            // Reserve 3 ids (and create environments?)
             var app = new AppInfo(
-                id   : db.Context.GetNextId<AppInfo>(),
-                name : request.Name,
-                type : request.Type
+                id      : db.Context.GetNextId<AppInfo>(),
+                name    : name,
+                ownerId : ownerId
             );
 
             await db.Apps.InsertAsync(app).ConfigureAwait(false);
@@ -82,7 +88,9 @@ namespace Carbon.Platform.Apps
 
             #endregion
 
-            var release = new AppRelease(app, version, sha256, creatorId);
+            var releaseId = await GetNextReleaseIdAsync(app);
+
+            var release = new AppRelease(releaseId, app, version, sha256, creatorId);
 
             await db.AppReleases.InsertAsync(release).ConfigureAwait(false);
 
@@ -91,6 +99,23 @@ namespace Carbon.Platform.Apps
             await db.Activities.InsertAsync(e);
 
             return release;
+        }
+
+        private async Task<long> GetNextReleaseIdAsync(IApp app)
+        {
+            using (var connection = db.Context.GetConnection())
+            using (var ts = connection.BeginTransaction())
+            {
+                var result = await connection.ExecuteScalarAsync<int>(
+                    @"SELECT `releaseCount` FROM `Apps` WHERE id = @id FOR UPDATE;
+                      UPDATE `Apps`
+                      SET `releaseCount` = `releaseCount` + 1
+                      WHERE id = @id", app, ts).ConfigureAwait(false);
+
+                ts.Commit();
+
+                return result + 1;
+            }
         }
 
         public Task<AppRelease> GetReleaseAsync(long appId, SemanticVersion version)
@@ -106,23 +131,16 @@ namespace Carbon.Platform.Apps
              );
         }
 
-        public Task<AppEnvironment> GetEnvironmentAsync(long appId, string name)
+        public Task<EnvironmentInfo> GetEnvironmentAsync(long appId, string name)
         {
             return db.Environments.QueryFirstOrDefaultAsync(
                 And(Eq("appId", appId), Eq("name", name))
             );
         }
 
-        public Task<IReadOnlyList<AppEnvironment>> GetEnvironmentsAsync(IApp app)
+        public Task<IReadOnlyList<EnvironmentInfo>> GetEnvironmentsAsync(IApp app)
         {
             return db.Environments.QueryAsync(Eq("appId", app.Id));
         }
-    }
-
-    public class CreateAppRequest
-    {
-        public string Name { get; set; }
-
-        public AppType Type { get; set; }
     }
 }

@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Net;
 
 using Carbon.Data.Expressions;
-using Carbon.Platform.Networking;
 using Carbon.Platform.Resources;
 
 using ec2 = Amazon.Ec2;
@@ -101,7 +100,7 @@ namespace Carbon.Platform.Services
             catch
             { }
 
-            var env = new AppEnvironment(0, 0, "unknown");
+            var env = new EnvironmentInfo(id: 1, appId: 1, type: EnvironmentType.Production);
 
             var resource = ManagedResource.Host(location, instance.InstanceId);
 
@@ -119,10 +118,10 @@ namespace Carbon.Platform.Services
                 addresses : addresses,
                 resource  : resource,
                 env       : env,
+                networkId : network.Id,
                 created   : instance.LaunchTime) {
-                MachineTypeId = machineTypeId,
-                NetworkId = network.Id,
-                MachineImageId   = image?.Id ?? 0
+                MachineTypeId  = machineTypeId,
+                MachineImageId = image?.Id ?? 0
             };
 
             await db.Hosts.InsertAsync(host).ConfigureAwait(false);

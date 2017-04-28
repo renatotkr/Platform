@@ -6,11 +6,9 @@ namespace Carbon.Platform.Computing
     {        
         long Id { get; }
 
-        // HostType Type { get; }
+        HostType Type { get; }
 
         IPAddress Address { get; }
-        
-        ushort Port { get; }
     }
 }
 

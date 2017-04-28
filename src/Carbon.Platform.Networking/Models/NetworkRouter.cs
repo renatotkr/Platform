@@ -3,18 +3,19 @@ using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 using Carbon.Platform.Resources;
+using Carbon.Platform.Sequences;
 
-namespace Carbon.Platform.Data
+namespace Carbon.Platform.Networking
 {
-    [Dataset("Topics")]
-    public class TopicInfo : IQueueInfo
+    [Dataset("NetworkRouters")]
+    public class NetworkRouter : INetworkRouter
     {
-        public TopicInfo() { }
+        public NetworkRouter() { }
 
-        public TopicInfo(long id, string name, ManagedResource resource)
+        public NetworkRouter(long id, string name, ManagedResource resource)
         {
-            Id = id;
-            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Id         = id;
+            Name       = name;
             ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
             ResourceId = resource.ResourceId;
@@ -26,6 +27,8 @@ namespace Carbon.Platform.Data
         [Member("name")]
         public string Name { get; }
 
+        public long NetworkId => ScopedId.GetScope(Id);
+
         #region IResource
 
         [IgnoreDataMember]
@@ -34,14 +37,14 @@ namespace Carbon.Platform.Data
 
         [IgnoreDataMember]
         [Member("resourceId")]
-        [StringLength(100)]
+        [Ascii, StringLength(100)]
         public string ResourceId { get; }
 
         [IgnoreDataMember]
         [Member("locationId")]
         public int LocationId { get; }
 
-        ResourceType IResource.ResourceType => ResourceType.Topic;
+        ResourceType IResource.ResourceType => ResourceType.NetworkRouter;
 
         #endregion
 
@@ -52,13 +55,13 @@ namespace Carbon.Platform.Data
         public DateTime Created { get; }
 
         [IgnoreDataMember]
-        [Member("modified"), Timestamp(true)]
-        public DateTime Modified { get; }
-
-        [IgnoreDataMember]
         [Member("deleted")]
         [TimePrecision(TimePrecision.Second)]
         public DateTime? Deleted { get; }
+
+        [IgnoreDataMember]
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; }
 
         #endregion
     }

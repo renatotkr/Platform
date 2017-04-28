@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-using Carbon.Platform.Resources;
+﻿using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Networking
 {
@@ -9,8 +7,6 @@ namespace Carbon.Platform.Networking
         long NetworkId { get; }
         
         string CidrBlock { get; }
-
-        IPAddress GatewayAddress { get; }
     }
 }
 

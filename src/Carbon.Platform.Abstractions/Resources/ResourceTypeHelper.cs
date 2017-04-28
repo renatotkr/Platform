@@ -11,9 +11,7 @@ namespace Carbon.Platform.Resources
             switch (text.ToLower())
             {
                 case "app"              : return App;
-                case "function"         : return Function;
 
-                // Computing
                 case "host"             : return Host;
                 case "machinetype"      : return MachineType;
                 case "machineimage"     : return MachineImage;
@@ -33,13 +31,10 @@ namespace Carbon.Platform.Resources
                 case "network"          : return Network;
                 case "ip"               : return NetworkAddress;
                 case "networkinterface" : return NetworkInterface;
-                case "gateway"          : return NetworkGateway;
                 case "subnet"           : return Subnet;
 
-                case "region"           : return Region;
                 case "user"             : return User;
                 case "volume"           : return Volume;
-                case "zone"             : return Zone;
 
                 default: return (ResourceType)Enum.Parse(typeof(ResourceType), text, ignoreCase: true);
             }

@@ -21,6 +21,7 @@ namespace Carbon.Platform.Computing
             HostStatus status, 
             IPAddress[] addresses,
             IEnvironment env,
+            long networkId,
             DateTime created,
             ManagedResource resource)
         {
@@ -31,6 +32,7 @@ namespace Carbon.Platform.Computing
             EnvironmentId = env.Id;
             ProviderId    = resource.ProviderId;
             ResourceId    = resource.ResourceId;
+            NetworkId     = networkId;
             Created       = created;
         }
 
@@ -45,24 +47,13 @@ namespace Carbon.Platform.Computing
         public IPAddress[] Addresses { get; }
         
         [Member("networkId")]
-        public long NetworkId { get; set; }
+        public long NetworkId { get; }
 
-        [Member("environmentId")]
-        [Indexed]
-        public long EnvironmentId { get; set; }
+        [Member("environmentId"), Indexed]
+        public long EnvironmentId { get; }
         
-        #region App
-
-        [Member("appId")]
-        public long AppId { get; set; }
-
-        [Member("revision")]
-        public string Revision { get; set; }
-
-        [Member("appPort")]
-        public ushort AppPort { get; set; }
-
-        #endregion
+        [Member("parentId")]
+        public long? ParentId { get; set; }
 
         #region Image / Template
 
@@ -166,8 +157,6 @@ namespace Carbon.Platform.Computing
         #region IHost
 
         IPAddress IHost.Address => PrivateIp;
-
-        ushort IHost.Port => AppPort;
 
         #endregion
     }

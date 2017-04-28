@@ -6,10 +6,12 @@ namespace Carbon.Platform.Diagnostics
     using Identity;
     using Json;
 
+    // EnvironmentException?
+
     [Dataset("ServerExceptions")]
     public class ServerException : IException
     {
-        // appEnvironmentId | timestamp | sequence
+        // environmentId | timestamp | sequence
         [Member("id"), Key]
         public BigId Id { get; set; }
 

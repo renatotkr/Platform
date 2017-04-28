@@ -30,5 +30,4 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <Reference Include="System.Net.Http" />
   </ItemGroup>
-
 </Project>

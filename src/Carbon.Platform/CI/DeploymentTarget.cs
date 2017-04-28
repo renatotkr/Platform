@@ -12,9 +12,9 @@ namespace Carbon.Platform.CI
             string message = null)
         {
             DeploymentId = deploymentId;
-            HostId = hostId;
-            Status = status;
-            Message = message;
+            HostId       = hostId;
+            Status       = status;
+            Message      = message;
         }
 
         [Member("deploymentId"), Key]

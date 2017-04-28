@@ -2,78 +2,80 @@
 {
     public enum ResourceType
     {
-        // Identity & Access
-        Account              = 100,
-        Service              = 110,
-        ServiceRole          = 111,
-        User                 = 120,
-        UserPassword         = 121,
-        UserRole             = 122,
+        Environment       = 1, // An environment actions take place within
+        Entity            = 2, // Organization, Person, or IA
+        Account           = 3,
+
+        // Identity & Access Management 
+        User              = 10, // Person or service interacting with the system 
+        UserCredential    = 11, // e.g. Password
+        UserRole          = 12,
+        Session           = 13, // An authenticated scope for a user       
+        // Client         = 14,
+
+        Location          = 20,
+
+        // COMPUTING  -------------------------------------------------------------------------------------
+        App               = 30, // AKA Program
+        Host              = 40, // includes metal, vm instances, and container instances
+        HostGroup         = 41,
+        HostTemplate      = 42,
+        MachineImage      = 50,
+        MachineType       = 51,
+
+        // Storage --------------------------------------------------------------------------------------------
         
-        // Environment
-        Environment          = 200,
-        Region               = 210,
-        Zone                 = 211,
+        Bucket               = 100,        
+        Channel              = 110, // AKA Stream / Topic           
+        Database             = 120,
+        DatabaseCluster      = 121,
+        DatabaseInstance     = 122,
+        DatabaseSchema       = 123,            
+        EncryptionKey        = 130,
+        Queue                = 140,         
+        Repository           = 150,
+        RepositoryCommit     = 151,             
+        Volume               = 160, // AKA drive
 
-        // Computing | 100
-        App                  = 300,
-        AppRelease           = 302,
-        Function             = 310, // An app with a entry point
-        HealthCheck          = 320,
-        Host                 = 330, // includes metal, vm instances, and container instances
-        HostGroup            = 340,
-        HostTemplate         = 350,
-        MachineImage         = 360,
-        MachineType          = 370,
+        // Hosting --------------------------------------------------------------------------------------------
 
+        Network              = 200,
+        Subnet               = 201,
+        NetworkAddress       = 202, 
+        NetworkInterface     = 204,
 
-        // Data & Storage (400)    
-        Bucket               = 400,
-        BucketObject         = 401,
-        Database             = 410,
-        DatabaseCluster      = 411,
-        DatabaseInstance     = 412,
-        EncryptionKey        = 420,
-        Firehose             = 430,
-        Queue                = 450,
-        QueueMessage         = 451,
-        Repository           = 460,
-        RepositoryCommit     = 461,
-        Stream               = 470,
-        StreamMessage        = 471,
-        Topic                = 480,
-        TopicMessage         = 481,
-        Volume               = 490,
+        // - Load Balancers
+        LoadBalancer         = 210,
+        LoadBalancerListener = 211,
+        LoadBalancerRule     = 212,
 
-        // Networking | 500
-        Network = 500,
-        NetworkAddress       = 502, 
-        NetworkGateway       = 503, 
-        NetworkInterface     = 504,
-        NetworkPeer          = 505,
-        NetworkSecurityGroup = 510, // Rules are embeded
-        LoadBalancer         = 520,
-        LoadBalancerListener = 521,
-        LoadBalancerRule     = 522,
-        NetworkRouter        = 530,
-        NetworkRoute         = 531,
-        Subnet               = 580,
+        // - Routing ---
+        NetworkPeer          = 221,
+        NetworkRouter        = 222,
+        NetworkRoute         = 223,
 
-        // Domains & DNS     
-        Certificate          = 600,
-        Domain               = 610,
-        DnsZone              = 620,
-        DnsRecord            = 621,
+        // - Security ---
+        NetworkSecurityGroup = 230,
 
-        Website              = 700,
-        WebComponent         = 710,
-        WebLibrary           = 720,
+        // Hosting --------------------------------------------------------------------------------------------
 
-        // CI
-        Deployment          = 800,
+        Domain               = 300,
+        Certificate          = 301,
+                             
+        // - DNS -           
+        DnsZone              = 310,
+        DnsRecord            = 311,
+                             
+        Website              = 340,
+        WebComponent         = 341,
+        WebLibrary           = 342,
+                             
+        HealthCheck          = 360,
 
-        // Metrics / Monitoring
-        Metric              = 900,
+        // CI ------------------------------------------------------------------------------------------------
+        Deployment           = 400,
 
+        // Metrics --------------------------------------------------------------------------------------------
+        Metric               = 500        
     }
 }

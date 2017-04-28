@@ -20,19 +20,10 @@ namespace Carbon.Platform.Services
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        // Cache?
-
-        public Task<AppEnvironment> GetAsync(IApp app, string name)
+        public Task<EnvironmentInfo> GetAsync(IApp app, EnvironmentType type)
         {
             return db.Environments.QueryFirstOrDefaultAsync(
-                And(Eq("appId", app.Id), Eq("name", name)
-            ));
-        }
-
-        public Task<AppEnvironment> GetAsync(IApp app, EnvironmentName type)
-        {
-            return db.Environments.QueryFirstOrDefaultAsync(
-                And(Eq("appId", app.Id), Eq("name", type.ToString().ToLower())
+                And(Eq("appId", app.Id), Eq("type", type)
             ));
         }
 
@@ -52,39 +43,27 @@ namespace Carbon.Platform.Services
             return envResource;
         }
 
-        public Task<AppEnvironment> CreateAsync(IApp app, EnvironmentName type)
+        public Task<EnvironmentInfo> CreateAsync(IApp app, EnvironmentType type)
         {
-            return CreateAsync(app, type.ToString().ToLower(), Array.Empty<ILocation>());
+            return CreateAsync(app, type, Array.Empty<ILocation>());
         }
-
-        public Task<AppEnvironment> CreateAsync(IApp app, EnvironmentName type, ILocation[] regions)
-        {
-            // Production  = 1 
-            // Staging     = 2
-            // Development = 3
-
-            return CreateAsync(app, type.ToString().ToLower(), regions);
-        }
-       
-        public async Task<AppEnvironment> CreateAsync(IApp app, string name, ILocation[] regions)
+     
+        public async Task<EnvironmentInfo> CreateAsync(IApp app, EnvironmentType type, ILocation[] regions)
         {
             #region Preconditions
 
             if (app == null)
                 throw new ArgumentNullException(nameof(app));
 
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
-
             if (regions == null)
                 throw new ArgumentNullException(nameof(regions));
 
             #endregion
 
-            var env = new AppEnvironment(
-                id    : db.Context.GetNextId<AppEnvironment>(),
+            var env = new EnvironmentInfo(
+                id    : db.Context.GetNextId<EnvironmentInfo>(),
                 appId : app.Id,
-                name  : name
+                type  : type
             );
 
             // Create the regions
@@ -109,11 +88,17 @@ namespace Carbon.Platform.Services
 
         public async Task<IHost[]> GetHostsAsync(IEnvironment env, ILocation location)
         {
-            var idStart = HostId.Create(LocationId.Create(location.Id).WithZoneNumber(0), 0);
-            var idEnd   = HostId.Create(LocationId.Create(location.Id).WithZoneNumber(byte.MaxValue), int.MaxValue);
+            var locationId = LocationId.Create(location.Id);
+
+            var idStart = HostId.Create(locationId.WithZoneNumber(0),             sequenceNumber: 0);
+            var idEnd   = HostId.Create(locationId.WithZoneNumber(byte.MaxValue), sequenceNumber: int.MaxValue);
 
             var hosts = await db.Hosts.QueryAsync(
-                And(Between("id", idStart, idEnd), Eq("environmentId", env.Id))
+                Conjunction(
+                    Between("id", idStart, idEnd),
+                    Eq("environmentId", env.Id),
+                    IsNull("terminated")
+                )
             ).ConfigureAwait(false);
 
             return hosts.ToArray();

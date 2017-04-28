@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 
 using Carbon.Data;
 
@@ -23,3 +24,4 @@ namespace Carbon.Platform.Metrics
 
     }
 }
+*/

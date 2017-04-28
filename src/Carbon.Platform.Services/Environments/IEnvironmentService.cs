@@ -2,15 +2,12 @@
 
 using Carbon.Platform.Apps;
 using Carbon.Platform.Computing;
-using Carbon.Platform.Data;
 
 namespace Carbon.Platform
 {
     public interface IEnvironmentService
     {
-        Task<AppEnvironment> GetAsync(IApp app, string name);
-
-        Task<AppEnvironment> GetAsync(IApp app, EnvironmentName type);
+        Task<EnvironmentInfo> GetAsync(IApp app, EnvironmentType type);
 
         Task<IHost[]> GetHostsAsync(IEnvironment env);
 

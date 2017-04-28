@@ -30,7 +30,5 @@ namespace Carbon.Platform
         public VolumeDetails[] Volumes { get; set; }
 
         IPAddress IHost.Address => Addresses[0];
-
-        ushort IHost.Port => 0;
     }
 }

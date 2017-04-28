@@ -13,7 +13,9 @@ namespace Carbon.Platform.Metrics.Tests
 
             var data = new MetricData(KnownMetrics.MemoryUsedBytes, new[] { new Dimension("hostId", "1") }, 1000, date);
 
-            Assert.Equal("memory/usedBytes,hostId=1 value=1000 946743332000000", data.ToString());
+
+
+            Assert.Equal("memory/usedBytes,hostId=1 value=1000 946732532000000", data.ToString());
         }
     }
 }
