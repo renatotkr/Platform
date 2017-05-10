@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Carbon.Data;
+using Carbon.Data.Sequences;
 
 namespace Carbon.Platform.Diagnostics
 {
@@ -12,11 +13,16 @@ namespace Carbon.Platform.Diagnostics
 
             context.Types.TryAdd(new BigIdHandler());
 
-            Exceptions = new Dataset<ServerException, long>(context);
+            BrowserExceptions = new Dataset<BrowserException, BigId>(context);
+
+            EnvironmentExceptions = new Dataset<EnvironmentException, BigId>(context);
         }
 
         public IDbContext Context { get; }
 
-        public Dataset<ServerException, long> Exceptions { get; }
+        public Dataset<BrowserException, BigId> BrowserExceptions { get; }
+
+        public Dataset<EnvironmentException, BigId> EnvironmentExceptions { get; }
+
     }
 }
