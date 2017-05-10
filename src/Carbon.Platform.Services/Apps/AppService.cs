@@ -6,6 +6,7 @@ using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Platform.Logs;
 using Carbon.Platform.Resources;
+using Carbon.Platform.Services;
 using Carbon.Versioning;
 
 using Dapper;
@@ -17,10 +18,12 @@ namespace Carbon.Platform.Apps
     public class AppService : IAppService
     {
         private readonly PlatformDb db;
+        private readonly EnvironmentService envService;
 
-        public AppService(PlatformDb db)
+        public AppService(PlatformDb db, IEnvironmentService envService)
         {
             this.db = db ?? throw new ArgumentNullException(nameof(db));
+            this.envService = (EnvironmentService)envService;
         }
 
         public async Task<AppInfo> GetAsync(long id)
@@ -33,10 +36,10 @@ namespace Carbon.Platform.Apps
             return db.Apps.QueryFirstOrDefaultAsync(Eq("name", name));
         }
 
-        public Task<IReadOnlyList<AppInfo>> ListAsync()
+        public Task<IReadOnlyList<AppInfo>> ListAsync(long ownerId)
         {
             return db.Apps.QueryAsync(
-                IsNull("deleted"),
+                And(Eq("ownerId", ownerId), IsNull("deleted")),
                 Order.Ascending("name")
              );
         }
@@ -57,16 +60,51 @@ namespace Carbon.Platform.Apps
 
             #endregion
 
-            // Reserve 3 ids (and create environments?)
+            // this sequence incriments by 4, reserving 4 consecutive ids
+            var id = db.Apps.IdGenerator.Next(); 
+
             var app = new AppInfo(
-                id      : db.Context.GetNextId<AppInfo>(),
+                id      : id,
                 name    : name,
                 ownerId : ownerId
             );
 
+            // Each app is given 4 environments (using the consecutive ids reserved above): 
+            // Production, Staging, Intergration, and Development
+
+            foreach (var envType in new[] {
+                EnvironmentType.Production,   // 1
+                EnvironmentType.Staging,      // 2
+                EnvironmentType.Intergration, // 3
+                EnvironmentType.Development   // 4
+            })
+            {
+                await CreateEnvironmentAsync(app, envType).ConfigureAwait(false);
+            }
+
             await db.Apps.InsertAsync(app).ConfigureAwait(false);
 
             return app;
+        }
+
+        internal async Task<EnvironmentInfo> CreateEnvironmentAsync(IApp app, EnvironmentType type)
+        {
+            // Production   = appId
+            // Staging      = appId + 1
+            // Intergration = appId + 2
+            // Development  = appId + 3
+
+            var envIdOffset = ((int)type) - 1;
+
+            var env = new EnvironmentInfo(
+                id    : app.Id + envIdOffset,
+                appId : app.Id,
+                type  : type
+            );
+
+            await db.Environments.InsertAsync(env).ConfigureAwait(false);
+
+            return env;
         }
 
         public async Task<AppRelease> CreateReleaseAsync(
@@ -104,19 +142,17 @@ namespace Carbon.Platform.Apps
         private async Task<long> GetNextReleaseIdAsync(IApp app)
         {
             using (var connection = db.Context.GetConnection())
-            using (var ts = connection.BeginTransaction())
             {
-                var result = await connection.ExecuteScalarAsync<int>(
+                return (await connection.ExecuteScalarAsync<int>(
                     @"SELECT `releaseCount` FROM `Apps` WHERE id = @id FOR UPDATE;
                       UPDATE `Apps`
                       SET `releaseCount` = `releaseCount` + 1
-                      WHERE id = @id", app, ts).ConfigureAwait(false);
-
-                ts.Commit();
-
-                return result + 1;
+                      WHERE id = @id", new { id = app.Id }).ConfigureAwait(false)) + 1;
             }
         }
+
+
+
 
         public Task<AppRelease> GetReleaseAsync(long appId, SemanticVersion version)
         {
@@ -131,16 +167,27 @@ namespace Carbon.Platform.Apps
              );
         }
 
-        public Task<EnvironmentInfo> GetEnvironmentAsync(long appId, string name)
+        public Task<EnvironmentInfo> GetEnvironmentAsync(long appId, EnvironmentType type)
         {
-            return db.Environments.QueryFirstOrDefaultAsync(
-                And(Eq("appId", appId), Eq("name", name))
-            );
+            return envService.GetAsync(new A(appId), type);
         }
 
         public Task<IReadOnlyList<EnvironmentInfo>> GetEnvironmentsAsync(IApp app)
         {
             return db.Environments.QueryAsync(Eq("appId", app.Id));
         }
+
+        class A : IApp
+        {
+            internal A(long id)
+            {
+                Id = id;
+            }
+            public long Id { get; }
+
+            public string Name => "";
+        }
     }
+
+    
 }

@@ -10,11 +10,11 @@ namespace Carbon.Platform.Apps
 
         Task<AppInfo> FindAsync(string name);
 
-        Task<IReadOnlyList<AppInfo>> ListAsync();
+        Task<IReadOnlyList<AppInfo>> ListAsync(long ownerId);
 
         Task<AppInfo> CreateAsync(string name, long ownerId);
 
-        Task<EnvironmentInfo> GetEnvironmentAsync(long appId, string name);
+        Task<EnvironmentInfo> GetEnvironmentAsync(long appId, EnvironmentType type);
 
         Task<IReadOnlyList<EnvironmentInfo>> GetEnvironmentsAsync(IApp app);
 

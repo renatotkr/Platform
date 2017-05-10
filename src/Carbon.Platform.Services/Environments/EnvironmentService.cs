@@ -32,10 +32,10 @@ namespace Carbon.Platform.Services
             var id = await db.EnvironmentResources.GetNextScopedIdAsync(env.Id).ConfigureAwait(false);
 
             var envResource = new EnvironmentResource(
-                id          : id,
-                environment : env,
-                location    : location,
-                resource    : resource
+                id       : id,
+                env      : env,
+                location : location,
+                resource : resource
             );
             
             await db.EnvironmentResources.InsertAsync(envResource).ConfigureAwait(false);
@@ -43,29 +43,9 @@ namespace Carbon.Platform.Services
             return envResource;
         }
 
-        public Task<EnvironmentInfo> CreateAsync(IApp app, EnvironmentType type)
+
+        public async Task AddLocations(IEnvironment env, ILocation[] regions)
         {
-            return CreateAsync(app, type, Array.Empty<ILocation>());
-        }
-     
-        public async Task<EnvironmentInfo> CreateAsync(IApp app, EnvironmentType type, ILocation[] regions)
-        {
-            #region Preconditions
-
-            if (app == null)
-                throw new ArgumentNullException(nameof(app));
-
-            if (regions == null)
-                throw new ArgumentNullException(nameof(regions));
-
-            #endregion
-
-            var env = new EnvironmentInfo(
-                id    : db.Context.GetNextId<EnvironmentInfo>(),
-                appId : app.Id,
-                type  : type
-            );
-
             // Create the regions
             foreach (var region in regions)
             {
@@ -73,17 +53,13 @@ namespace Carbon.Platform.Services
 
                 var group = new HostGroup(
                     id       : await db.HostGroups.GetNextScopedIdAsync(env.Id).ConfigureAwait(false),
-                    name     : app.Name, 
+                    name     : Guid.NewGuid().ToString(),
                     resource : ManagedResource.HostGroup(region, Guid.NewGuid().ToString())
                 );
 
                 await db.HostGroups.InsertAsync(group).ConfigureAwait(false);
                 await db.EnvironmentLocations.InsertAsync(envLocation).ConfigureAwait(false);
             }
-
-            await db.Environments.InsertAsync(env).ConfigureAwait(false);
-
-            return env;
         }
 
         public async Task<IHost[]> GetHostsAsync(IEnvironment env, ILocation location)
