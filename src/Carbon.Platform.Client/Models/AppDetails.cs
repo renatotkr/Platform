@@ -14,9 +14,6 @@ namespace Carbon.Platform
         [DataMember(Name = "name", Order = 1)]
         public string Name { get; set; }
 
-        [DataMember(Name = "type", Order = 3)]
-        public AppType Type { get; set; }
-
         [DataMember(Name = "digest", Order = 5)]
         public Hash Digest { get; set; }
     }

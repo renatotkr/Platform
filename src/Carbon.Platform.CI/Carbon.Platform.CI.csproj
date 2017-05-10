@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Carbon.Logging" Version="1.0.0" />
+    <PackageReference Include="Carbon.Logging" Version="1.1.0" />
     <PackageReference Include="Carbon.Versioning" Version="1.2.0" />
     <PackageReference Include="Carbon.Protection" Version="1.5.0" />
   </ItemGroup>
@@ -28,7 +28,7 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
     <PackageReference Remove="NETStandard.Library" />
     <PackageReference Include="System.Runtime" Version="4.3.0" />
-    <PackageReference Include="System.Net.Http" Version="4.3.0" />
+    <PackageReference Include="System.Net.Http" Version="4.3.2" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">

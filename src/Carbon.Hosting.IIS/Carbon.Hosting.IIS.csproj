@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Carbon.Logging" Version="1.0.0" />
+    <PackageReference Include="Carbon.Logging" Version="1.1.0" />
     <PackageReference Include="Carbon.Protection" Version="1.5.0" />
     <PackageReference Include="Microsoft.Web.Administration" Version="10.0.0" />
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
