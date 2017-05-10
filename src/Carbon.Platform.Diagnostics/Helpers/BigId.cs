@@ -1,26 +1,82 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Carbon.Platform.Diagnostics.Identity
+namespace Carbon.Data.Sequences
 {
     [StructLayout(LayoutKind.Explicit, Size = 16)]
     public struct BigId : IEquatable<BigId>
     {
         [FieldOffset(0)]
-        public long scopeId;
+        private long scopeId;
 
-        // sinces since 1970 -- gives us until 2,106
         [FieldOffset(8)]
-        public uint timestamp;
-
-        [FieldOffset(12)]
-        public uint sequence;
+        private ulong lowerHalf;
 
         public long ScopeId => scopeId;
 
-        public DateTime GetTimestamp()
+        // milliseconds since 1970
+        public long Timestamp => new ScopedId(lowerHalf).ScopeId;
+
+        // max: 4,194,303 
+        public int SequenceNumber => new ScopedId(lowerHalf).SequenceNumber;
+
+        public DateTime GetTimestamp() => DateTimeOffset.FromUnixTimeMilliseconds(Timestamp).UtcDateTime;
+
+        public static BigId Create(long scopeId, DateTime timestamp, int sequenceNumber)
         {
-            return DateTimeOffset.FromUnixTimeSeconds(timestamp).UtcDateTime;
+            return Create(
+                scopeId: scopeId,
+                timestamp: new DateTimeOffset(DateTime.SpecifyKind(timestamp, DateTimeKind.Utc)),
+                sequence: sequenceNumber
+            );
+        }
+
+        public static BigId Create(long scopeId, DateTimeOffset timestamp, int sequence)
+        {
+            #region Preconditions
+
+            if (sequence > ScopedId.MaxSequenceNumber)
+            {
+                throw new ArgumentOutOfRangeException(nameof(sequence), sequence, $"Must be between 0 & {ScopedId.MaxSequenceNumber}");
+            }
+
+            #endregion
+
+            // use a ulong before 2039
+            var lowerHalf = ScopedId.Create(timestamp.ToUnixTimeMilliseconds(), sequence);
+
+            return new BigId
+            {
+                scopeId = scopeId,
+                lowerHalf = (ulong)lowerHalf
+            };
+        }
+
+       
+        #region Serialization
+
+        // intel: little-endian
+
+        // db = big-endian
+        public static BigId Deserialize(byte[] data)
+        {
+            if (data.Length != 16)
+                throw new Exception("Must be 16 bytes");
+
+            var a = new byte[8];
+            var b = new byte[8];
+
+            Array.Copy(data, 0, a, 0, 8);
+            Array.Copy(data, 8, b, 0, 8);
+
+            Array.Reverse(a);
+            Array.Reverse(b);
+
+            return new BigId
+            {
+                scopeId = BitConverter.ToInt64(a, 0),
+                lowerHalf = BitConverter.ToUInt64(b, 0)
+            };
         }
 
         public byte[] Serialize()
@@ -28,50 +84,45 @@ namespace Carbon.Platform.Diagnostics.Identity
             byte[] data = new byte[16];
 
             var a = BitConverter.GetBytes(scopeId);
-            var b = BitConverter.GetBytes(timestamp);
-            var c = BitConverter.GetBytes(sequence);
+            var b = BitConverter.GetBytes(lowerHalf);
+
+            Array.Reverse(a);
+            Array.Reverse(b);
 
             Array.Copy(a, 0, data, 0, 8);
-            Array.Copy(b, 0, data, 8, 4);
-            Array.Copy(c, 0, data, 12, 4);
+            Array.Copy(b, 0, data, 8, 8);
 
             return data;
         }
 
-        public static BigId Parse(string text)
-        {
-            var bytes = Convert.FromBase64String(text);
+        #endregion
 
-            return Deserialize(bytes);
+        #region Equality
+
+        public static bool operator ==(BigId lhs, BigId rhs)
+        {
+            return lhs.Equals(rhs);
         }
 
-        public override string ToString()
+        public static bool operator !=(BigId lhs, BigId rhs)
         {
-            return Convert.ToBase64String(Serialize());
+            return !lhs.Equals(rhs);
         }
-
-        public static BigId Create(long scopeId, uint timestamp, uint sequence) =>
-            new BigId
-            {
-                scopeId = scopeId,
-                timestamp = timestamp,
-                sequence = sequence
-            };
-
-        public static BigId Deserialize(byte[] data) =>
-            new BigId
-            {
-                scopeId = BitConverter.ToInt64(data, 0),
-                timestamp = BitConverter.ToUInt32(data, 8),
-                sequence = BitConverter.ToUInt32(data, 12)
-            };
 
         public bool Equals(BigId other) =>
             scopeId == other.scopeId &&
-            timestamp == other.timestamp &&
-            sequence == other.sequence;
-    }
+            lowerHalf == other.lowerHalf;
 
-    // Timestamp = 48
-    // Random    = 16 
+        public override bool Equals(object obj)
+        {
+            return obj is BigId id && id.Equals(this);
+        }
+
+        public override int GetHashCode()
+        {
+            return (scopeId, lowerHalf).GetHashCode();
+        }
+
+        #endregion
+    }
 }

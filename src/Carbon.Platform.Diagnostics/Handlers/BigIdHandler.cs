@@ -1,8 +1,9 @@
 ﻿using System.Data;
 
+using Carbon.Data.Sequences;
+
 namespace Carbon.Platform
 {
-    using Diagnostics.Identity;
     using Data;
 
     public class BigIdHandler : DbTypeHandler<BigId>
