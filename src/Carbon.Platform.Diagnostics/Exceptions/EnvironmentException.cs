@@ -1,23 +1,21 @@
 ﻿using System.Runtime.Serialization;
 
+using Carbon.Data.Annotations;
+using Carbon.Data.Sequences;
+using Carbon.Json;
+
 namespace Carbon.Platform.Diagnostics
 {
-    using Data.Annotations;
-    using Identity;
-    using Json;
-
-    // EnvironmentException?
-
-    [Dataset("ServerExceptions")]
-    public class ServerException : IException
+    [Dataset("EnvironmentExceptions")]
+    public class EnvironmentException : IException
     {
-        // environmentId | timestamp | sequence
+        // environmentId | timestamp (milliseconds) | sequence
         [Member("id"), Key]
         public BigId Id { get; set; }
 
         [Member("hostId")]
         public long HostId { get; set; }
-
+        
         // revision
         [Member("appVersion")]
         [StringLength(50)]
@@ -47,8 +45,10 @@ namespace Carbon.Platform.Diagnostics
         public JsonObject Context { get; set; }
         
         [Member("sessionId"), Optional]
-        [Indexed] // sparse
         public long? SessionId { get; set; }
+
+        [Member("clientId")]
+        public long? ClientId { get; set; }
 
         #region Helpers
 

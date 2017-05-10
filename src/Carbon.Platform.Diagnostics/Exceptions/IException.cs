@@ -15,6 +15,8 @@ namespace Carbon.Platform.Diagnostics
         // RequestId
 
         long? SessionId { get; }
+
+        long? ClientId { get; }
     }
 }
 

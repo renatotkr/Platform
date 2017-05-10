@@ -1,8 +1,9 @@
 ﻿using System.Runtime.Serialization;
 
+using Carbon.Data.Sequences;
+
 namespace Carbon.Platform.Diagnostics
 {
-    using Identity;
     using Data.Annotations;
     using Json;
 
@@ -36,9 +37,11 @@ namespace Carbon.Platform.Diagnostics
         [StringLength(1000)]
         public JsonObject Context { get; set; }
         
-        [Member("sessionId"), Optional]
-        [Indexed] // sparse
+        [Member("sessionId")]
         public long? SessionId { get; set; }
+
+        [Member("clientId")]
+        public long? ClientId { get; set; }
 
         #region Helpers
 
