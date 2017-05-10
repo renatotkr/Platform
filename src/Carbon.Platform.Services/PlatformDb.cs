@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Carbon.Data;
+using Carbon.Data.Sequences;
 
 namespace Carbon.Platform
 {
@@ -37,57 +38,68 @@ namespace Carbon.Platform
             Locations             = new Dataset<LocationInfo, long>(context);
 
             // Apps ------------------------------------------------------------------
-            Apps                  = new Dataset<AppInfo, long>(context);
+            Apps                  = new Dataset<AppInfo, long>(context, GetSequence("apps"));
             AppReleases           = new Dataset<AppRelease, (long, SemanticVersion)>(context);
 
-            // Consent & Privacy-------------------------------------------------------
-            Certificates          = new Dataset<CertificateInfo, long>(context);
-
             // Computing & Storage ---------------------------------------------------
-            Hosts                 = new Dataset<HostInfo,           long>(context);
-            HostGroups            = new Dataset<HostGroup,          long>(context);
-            HostTemplates         = new Dataset<HostTemplate,       long>(context);
-            MachineImages         = new Dataset<MachineImageInfo,   long>(context);
-            MachineTypes          = new Dataset<MachineType,        long>(context);
-            Volumes               = new Dataset<VolumeInfo,         long>(context);
+            Hosts                 = new Dataset<HostInfo,                 long>(context);
+            HostGroups            = new Dataset<HostGroup,                long>(context);
+            HostTemplates         = new Dataset<HostTemplate,             long>(context);
+            MachineImages         = new Dataset<MachineImageInfo,         long>(context, GetSequence("machineImages"));
+            MachineTypes          = new Dataset<MachineType,              long>(context);
+            Volumes               = new Dataset<VolumeInfo,               long>(context, GetSequence("volumes"));
 
             // Data / Databases  --------------------------------------------------------
-            Buckets               = new Dataset<BucketInfo,               long>(context);
-            Channels              = new Dataset<ChannelInfo,              long>(context);
-            Databases             = new Dataset<DatabaseInfo,             long>(context);
+            Buckets               = new Dataset<BucketInfo,               long>(context, GetSequence("buckets"));
+            Channels              = new Dataset<ChannelInfo,              long>(context, GetSequence("channels"));
+            Databases             = new Dataset<DatabaseInfo,             long>(context, GetSequence("database"));
             DatabaseClusters      = new Dataset<DatabaseCluster,          long>(context);
             DatabaseEndpoints     = new Dataset<DatabaseEndpoint,         long>(context);
             DatabaseInstances     = new Dataset<DatabaseInstance,         long>(context);
-            EncryptionKeys        = new Dataset<EncryptionKeyInfo,        long>(context);
-            Queues                = new Dataset<QueueInfo,                long>(context);
+            DataEncryptionKeys    = new Dataset<DataEncryptionKeyInfo,    long>(context); 
+            EncryptionKeys        = new Dataset<EncryptionKeyInfo,        long>(context, GetSequence("encryptionKeys"));
+            Queues                = new Dataset<QueueInfo,                long>(context, GetSequence("queues"));
+
+            // Hosting ------------------------------------------------------------------
+            Certificates          = new Dataset<CertificateInfo,         long>(context, GetSequence("certificates"));
+            Domains               = new Dataset<DomainInfo,              long>(context, GetSequence("domains"));
 
             // Networks -----------------------------------------------------------------
-            Networks              = new Dataset<NetworkInfo,              long>(context);
-            NetworkAddresses      = new Dataset<NetworkAddress,           long>(context);
-            NetworkInterfaces     = new Dataset<NetworkInterfaceInfo,     long>(context);
-            NetworkSecurityGroups = new Dataset<NetworkSecurityGroup,     long>(context);
+            Networks              = new Dataset<NetworkInfo,              long>(context, GetSequence("networks"));
+            NetworkAddresses      = new Dataset<NetworkAddress,           long>(context, GetSequence("networkAddresses"));
+            NetworkInterfaces     = new Dataset<NetworkInterfaceInfo,     long>(context, GetSequence("networkInterfaces"));
+            NetworkSecurityGroups = new Dataset<NetworkSecurityGroup,     long>(context, GetSequence("networkSecurityGroups"));
             NetworkPolicyRules    = new Dataset<NetworkSecurityGroupRule, long>(context);
             LoadBalancers         = new Dataset<LoadBalancer,             long>(context);
             LoadBalancerListeners = new Dataset<LoadBalancerListener,     long>(context);
             LoadBalancerRules     = new Dataset<LoadBalancerRule,         long>(context);
-            Subnets               = new Dataset<SubnetInfo,               long>(context);
+            Subnets               = new Dataset<SubnetInfo,               long>(context, GetSequence("subnets"));
 
-            // CI
+            // CI -----------------------------------------------------------------------
             Deployments           = new Dataset<Deployment, long>(context);
             DeploymentTargets     = new Dataset<DeploymentTarget, (long, long)>(context);
 
             // Logging ---------------------------------------------------------------
             Activities            = new Dataset<Activity, long>(context);
-            Users                 = new Dataset<User, long>(context);
+            Users                 = new Dataset<User, long>(context, GetSequence("users"));
+        }
+
+        public DbSequence GetSequence(string name) => new DbSequence(name, Context);
+
+        public void Setup()
+        {
+            var dataset = new Dataset<SequenceInfo, long>(Context);
+            
+            dataset.InsertAsync(new SequenceInfo("apps", long.MaxValue, seed: 1, increment: 4));
         }
 
         public IDbContext Context { get; }
 
         // Environment ------------------------------------------------
-        public Dataset<EnvironmentInfo, long>                Environments         { get; }
-        public Dataset<EnvironmentLocation, (long, long)>   EnvironmentLocations { get; }
-        public Dataset<EnvironmentResource, long>           EnvironmentResources { get; }
-        public Dataset<LocationInfo, long>                  Locations            { get; }
+        public Dataset<EnvironmentInfo, long>             Environments         { get; }
+        public Dataset<EnvironmentLocation, (long, long)> EnvironmentLocations { get; }
+        public Dataset<EnvironmentResource, long>         EnvironmentResources { get; }
+        public Dataset<LocationInfo, long>                Locations            { get; }
 
         // Apps  -----------------------------------------------------------------
         public Dataset<AppInfo, long>                       Apps            { get; }
@@ -109,6 +121,7 @@ namespace Carbon.Platform
         public Dataset<DatabaseCluster,          long> DatabaseClusters      { get; }
         public Dataset<DatabaseEndpoint,         long> DatabaseEndpoints     { get; }
         public Dataset<DatabaseInstance,         long> DatabaseInstances     { get; }
+        public Dataset<DataEncryptionKeyInfo,    long> DataEncryptionKeys    { get; }
         public Dataset<EncryptionKeyInfo,        long> EncryptionKeys        { get; }
         public Dataset<QueueInfo,                long> Queues                { get; }
 
@@ -123,14 +136,15 @@ namespace Carbon.Platform
         public Dataset<LoadBalancerRule,         long> LoadBalancerRules     { get; }
         public Dataset<SubnetInfo,               long> Subnets               { get; }
 
-        // Hosting --------------------------------------------------------------
+        // Hosting ------------------------------------------------------------------
         public Dataset<CertificateInfo,          long> Certificates          { get; }
+        public Dataset<DomainInfo,               long> Domains               { get; }
 
-        // CI
+        // CI -----------------------------------------------------------------------
         public Dataset<Deployment, long>               Deployments           { get; }
         public Dataset<DeploymentTarget, (long, long)> DeploymentTargets     { get; }
 
-        // Logs -----------------------------------------------------------------
+        // Logs --------------------------------------------------------------------
         public Dataset<Activity, long>                 Activities { get; }
         public Dataset<User, long>                     Users { get; }
     }

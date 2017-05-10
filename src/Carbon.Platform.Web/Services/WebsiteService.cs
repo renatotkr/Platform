@@ -29,9 +29,7 @@ namespace Carbon.Platform.Web
 
         public Task<WebsiteInfo> FindAsync(string name)
         {
-            return db.Websites.QueryFirstOrDefaultAsync(
-                Eq("name", name)
-             );
+            return db.Websites.QueryFirstOrDefaultAsync(Eq("name", name));
         }
 
         public Task<IReadOnlyList<WebsiteInfo>> ListAsync(long ownerId)
@@ -39,7 +37,7 @@ namespace Carbon.Platform.Web
             return db.Websites.QueryAsync(
                 And(Eq("ownerId", ownerId), IsNull("deleted")),
                 Order.Ascending("name")
-             );
+            );
         }
 
         public Task<WebsiteRelease> GetReleaseAsync(long websiteId, SemanticVersion version)
@@ -104,7 +102,7 @@ namespace Carbon.Platform.Web
                 return result + 1;
             }
         }
-
+        
         public async Task<WebsiteInfo> CreateAsync(
             string name, 
             long ownerId,
@@ -125,7 +123,7 @@ namespace Carbon.Platform.Web
             #endregion
 
             var website = new WebsiteInfo(
-                id            : db.Context.GetNextId<WebsiteInfo>(),
+                id            : db.Websites.IdGenerator.Next(),
                 name          : name,
                 repositoryId  : repository.Id,
                 environmentId : env.Id,

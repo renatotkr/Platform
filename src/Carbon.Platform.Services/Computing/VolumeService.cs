@@ -32,7 +32,7 @@ namespace Carbon.Platform.Services
                 var location = Locations.Get(provider, ec2Volume.AvailabilityZone);
 
                 volume = new VolumeInfo(
-                    id       : db.Context.GetNextId<VolumeInfo>(),
+                    id       : db.Volumes.IdGenerator.Next(),
                     size     : (long)ec2Volume.Size * _1GB,
                     resource : ManagedResource.Volume(location, ec2Volume.VolumeId)
                 ) { 

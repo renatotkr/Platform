@@ -126,7 +126,7 @@ namespace Carbon.Platform.Networking
             #endregion
             
             var networkInterface = new NetworkInterfaceInfo(
-                id        : db.Context.GetNextId<NetworkInterfaceInfo>(),
+                id        : db.NetworkInterfaces.IdGenerator.Next(),
                 mac       : MacAddress.Parse(nic.MacAddress),
                 addresses : Array.Empty<IPAddress>(), // todo
                 resource  : new ManagedResource(aws, ResourceType.NetworkInterface, nic.NetworkInterfaceId)
@@ -176,7 +176,7 @@ namespace Carbon.Platform.Networking
             var resource = new ManagedResource(aws, ResourceType.Network, vpc.VpcId);
 
             return new NetworkInfo(
-                id             : db.Context.GetNextId<NetworkInfo>(),
+                id             : db.Networks.IdGenerator.Next(),
                 cidr           : vpc.CidrBlock,
                 gatewayAddress : null,
                 resource       : resource

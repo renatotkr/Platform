@@ -51,7 +51,7 @@ namespace Carbon.Platform.VersionControl
             #endregion
 
             var repository = new RepositoryInfo(
-                id       : db.Context.GetNextId<RepositoryInfo>(),
+                id       : db.Repositories.IdGenerator.Next(),
                 name     : name,
                 ownerId  : ownerId,
                 resource : resource
