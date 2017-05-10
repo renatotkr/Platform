@@ -24,8 +24,7 @@ namespace Carbon.Platform
             Type      = type;
             Variables = variables;
         }
-
-        // AppId + Sequence
+        
         [Member("id"), Key]
         public long Id { get; }
 
@@ -35,16 +34,22 @@ namespace Carbon.Platform
         [Member("type")]
         public EnvironmentType Type { get; }
 
+        [Member("name")]
+        [StringLength(100)]
+        public string Name { get; set; }
+
         [Member("variables")]
         [StringLength(1000)]
         public JsonObject Variables { get; }
 
-
         // Docker configuration?
         
-        // The last successful deployment
+        // The last deployment
         [Member("deploymentId")]
         public long DeploymentId { get; }
+
+        [Member("revision")]
+        public string Revision { get; set; }
 
         #region IResource
 
@@ -78,3 +83,5 @@ namespace Carbon.Platform
         #endregion
     }
 }
+
+// e.g. image.processor#production
