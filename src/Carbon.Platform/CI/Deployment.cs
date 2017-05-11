@@ -20,6 +20,9 @@ namespace Carbon.Platform.CI
         {
             #region Preconditions
 
+            if (id <= 0)
+                throw new ArgumentException("Invalid", nameof(id));
+
             if (release == null)
                 throw new ArgumentNullException(nameof(release));
 

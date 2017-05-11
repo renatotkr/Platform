@@ -51,7 +51,7 @@ namespace Carbon.Platform.Networking
         public long NetworkId { get; set; }
 
         #region IResource
-        
+
         [IgnoreDataMember]
         [Member("providerId")]
         public int ProviderId { get; }

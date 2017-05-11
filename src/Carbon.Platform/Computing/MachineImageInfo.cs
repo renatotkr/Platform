@@ -32,7 +32,7 @@ namespace Carbon.Platform.Computing
         public long Id { get; }
         
         [Member("type")]
-        public MachineImageType Type { get;  }
+        public MachineImageType Type { get; }
 
         [Member("name")]
         [StringLength(63)]
