@@ -18,7 +18,7 @@ namespace Carbon.Platform.Logs
             Type         = type;
         }
 
-        [Member("id"), Identity]
+        [Member("id"), Key(sequenceName: "activityId", cacheSize: 1000)]
         public long Id { get; set; }
 
         [Member("type")]
@@ -27,8 +27,7 @@ namespace Carbon.Platform.Logs
         [Member("resourceType")]
         public ResourceType ResourceType { get; }
 
-        [Member("resourceId")]
-        [Indexed]
+        [Member("resourceId"), Indexed]
         public long ResourceId { get; }
 
         [Member("details"), Optional]

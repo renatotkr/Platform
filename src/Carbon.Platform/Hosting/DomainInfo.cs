@@ -18,7 +18,7 @@ namespace Carbon.Platform.Hosting
             OwnerId = ownerId;
         }
 
-        [Member("id"), Key]
+        [Member("id"), Key(sequenceName: "domainId")]
         public long Id { get; }
 
         // max-length = 253 characters

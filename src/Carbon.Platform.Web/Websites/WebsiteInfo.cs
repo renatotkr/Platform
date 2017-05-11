@@ -34,7 +34,7 @@ namespace Carbon.Platform.Web
             OwnerId       = ownerId;
         }
 
-        [Member("id"), Key] 
+        [Member("id"), Key(sequenceName: "websiteId")] 
         public long Id { get; }
         
         [Member("name"), Unique]

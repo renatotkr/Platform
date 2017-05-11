@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
@@ -72,3 +73,4 @@ namespace Carbon.Platform.Networking
         #endregion
     }
 }
+*/

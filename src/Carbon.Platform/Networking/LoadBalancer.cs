@@ -34,7 +34,7 @@ namespace Carbon.Platform.Networking
             ResourceId    = resource.ResourceId;
         }
         
-        [Member("id"), Key]
+        [Member("id"), Key(sequenceName: "loadBalancerId")]
         public long Id { get; }
 
         [Member("name")]

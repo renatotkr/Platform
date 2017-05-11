@@ -20,7 +20,7 @@ namespace Carbon.Net
             #region Preconditions
 
             if (port == 0)
-                throw new ArgumentException("Must be greater than 0", nameof(port));
+                throw new ArgumentException("May not be 0", nameof(port));
 
             #endregion
 
@@ -53,6 +53,13 @@ namespace Carbon.Net
 
         public static Listener Parse(string text)
         {
+            #region Preconditions
+
+            if (text == null)
+                throw new ArgumentNullException(nameof(text));
+
+            #endregion
+
             if (text.StartsWith("http://"))
             {
                 var url = new Uri(text);

@@ -17,7 +17,7 @@ namespace Carbon.Platform.Data
             Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
-        [Member("id"), Key]
+        [Member("id"), Key(sequenceName: "databaseId")]
         public long Id { get; }
 
         [Member("name"), Unique]

@@ -37,6 +37,7 @@ namespace Carbon.Platform
             ResourceId    = resource.Id;
         }
 
+        // ?
         [Member("id"), Key]
         public long Id { get; }
 

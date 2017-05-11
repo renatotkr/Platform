@@ -28,7 +28,7 @@ namespace Carbon.Platform.Computing
             LocationId  = resource.LocationId;
         }
 
-        [Member("id"), Key]
+        [Member("id"), Key(sequenceName: "machineImageId")]
         public long Id { get; }
         
         [Member("type")]

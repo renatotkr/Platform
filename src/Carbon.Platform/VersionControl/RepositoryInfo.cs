@@ -24,7 +24,7 @@ namespace Carbon.Platform.VersionControl
             LocationId = resource.LocationId;
         }
 
-        [Member("id"), Key]
+        [Member("id"), Key(sequenceName: "repositoryId")]
         public long Id { get; }
         
         [Member("name")]
@@ -45,6 +45,9 @@ namespace Carbon.Platform.VersionControl
         [IgnoreDataMember]
         [Member("commitCount")]
         public int CommitCount { get; }
+
+        // BranchCount
+
 
         #endregion
 

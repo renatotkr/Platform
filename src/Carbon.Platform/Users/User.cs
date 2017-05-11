@@ -19,7 +19,8 @@ namespace Carbon.Platform.Users
             Name = name;
         }
 
-        [Member("id"), Key]
+        [Member("id")]
+        [Key(sequenceName: "userId")]
         public long Id { get; }
 
         [Member("name")]

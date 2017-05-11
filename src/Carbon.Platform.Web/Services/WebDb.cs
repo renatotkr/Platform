@@ -1,7 +1,6 @@
 ﻿using System;
 
 using Carbon.Data;
-using Carbon.Data.Sequences;
 using Carbon.Versioning;
 
 namespace Carbon.Platform.Web
@@ -12,15 +11,13 @@ namespace Carbon.Platform.Web
         {
             Context = context ?? throw new ArgumentNullException(nameof(context));
             
-            Websites           = new Dataset<WebsiteInfo, long>(context, GetSequence("websites"));
+            Websites           = new Dataset<WebsiteInfo, long>(context);
             WebsiteReleases    = new Dataset<WebsiteRelease, (long, SemanticVersion)>(context);
-            WebComponents      = new Dataset<WebComponent, long>(context, GetSequence("webComponents"));
-            WebLibraries       = new Dataset<WebLibrary, long>(context, GetSequence("webLibraries"));
+            WebComponents      = new Dataset<WebComponent, long>(context);
+            WebLibraries       = new Dataset<WebLibrary, long>(context);
         }
 
         public IDbContext Context { get; }
-
-        public DbSequence GetSequence(string name) => new DbSequence(name, Context);
 
         public Dataset<WebsiteInfo, long>                       Websites           { get; }
         public Dataset<WebsiteRelease, (long, SemanticVersion)> WebsiteReleases    { get; }

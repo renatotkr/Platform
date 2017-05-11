@@ -25,6 +25,7 @@ namespace Carbon.Platform
             Variables = variables;
         }
         
+        // Applications are responsible for creating their environments
         [Member("id"), Key]
         public long Id { get; }
 

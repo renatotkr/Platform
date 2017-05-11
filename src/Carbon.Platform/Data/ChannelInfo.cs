@@ -20,7 +20,7 @@ namespace Carbon.Platform.Data
             ResourceId = resource.ResourceId;
         }
 
-        [Member("id"), Key]
+        [Member("id"), Key(sequenceName: "channelId")]
         public long Id { get; }
 
         [Member("name")]

@@ -29,7 +29,7 @@ namespace Carbon.Platform.Networking
             LocationId = resource.LocationId;
         }
 
-        [Member("id"), Key]
+        [Member("id"), Key(sequenceName: "networkInterfaceId")]
         public long Id { get; }
 
         [Member("macAddress", TypeName = "binary(6)")]

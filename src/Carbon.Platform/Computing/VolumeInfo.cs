@@ -21,7 +21,7 @@ namespace Carbon.Platform.Computing
             ResourceId = resource.ResourceId;
         }
 
-        [Member("id"), Key]
+        [Member("id"), Key(sequenceName: "volumeId")]
         public long Id { get; }
 
         [Member("size")]

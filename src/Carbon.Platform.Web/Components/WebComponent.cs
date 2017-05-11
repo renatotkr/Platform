@@ -18,7 +18,7 @@ namespace Carbon.Platform.Web
             Name      = name ?? throw new ArgumentNullException(nameof(name));
         }
 
-        [Member("id"), Key] 
+        [Member("id"), Key(sequenceName: "webComponentId")] 
         public long Id { get; }
 
         [Member("namespace")]

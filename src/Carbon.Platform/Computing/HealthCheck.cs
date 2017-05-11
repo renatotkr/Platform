@@ -27,7 +27,7 @@ namespace Carbon.Platform.Computing
             Protocal = protocal;
         }
 
-        [Member("id"), Key]
+        [Member("id"), Key(sequenceName: "healthCheckId")]
         public long Id { get; }
 
         [Member("host"), Optional]

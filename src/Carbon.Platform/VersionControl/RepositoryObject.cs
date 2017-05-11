@@ -10,6 +10,7 @@ namespace Carbon.Platform.VersionControl
         [Member("id"), Key]
         public long Id { get; }
         
+        // This is too long
         [Member("path"), Key] // full path
         public string Path { get; set; }
         

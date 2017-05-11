@@ -20,7 +20,7 @@ namespace Carbon.Platform.Hosting
             LocationId = resource.LocationId;
         }
 
-        [Member("id"), Key]
+        [Member("id"), Key(sequenceName: "certificateId")]
         public long Id { get; }
         
         // e.g. accelerator.net, ...

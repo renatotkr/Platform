@@ -15,7 +15,8 @@ namespace Carbon.Platform.Computing
         public HostTemplate(
             long id, 
             IMachineType machineType,
-            IMachineImage machineImage)
+            IMachineImage machineImage,
+            ManagedResource resource)
         {
             #region Preconditions
 
@@ -30,9 +31,11 @@ namespace Carbon.Platform.Computing
             Id             = id;
             MachineTypeId  = machineType.Id;
             MachineImageId = machineImage.Id;
+            ProviderId     = resource.ProviderId;
+            ResourceId     = resource.ResourceId;
         }
 
-        [Member("id"), Key]
+        [Member("id"), Key(sequenceName: "hostTemplateId")]
         public long Id { get; }
 
         [Member("machineTypeId")]
@@ -43,6 +46,7 @@ namespace Carbon.Platform.Computing
 
         // Script at startup
         [Member("script")]
+        [StringLength(2000)]
         public string Script { get; set; }
 
         [Member("details")]
@@ -53,12 +57,12 @@ namespace Carbon.Platform.Computing
 
         [IgnoreDataMember]
         [Member("providerId")]
-        public int ProviderId { get; set; }
+        public int ProviderId { get; }
 
         [IgnoreDataMember]
         [Member("resourceId")]
         [Ascii, StringLength(100)]
-        public string ResourceId { get; set; }
+        public string ResourceId { get; }
 
         int IManagedResource.LocationId => 0;
 

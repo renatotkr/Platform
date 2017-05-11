@@ -21,7 +21,7 @@ namespace Carbon.Platform.Networking
             ResourceId = resource.ResourceId;
         }
 
-        [Member("id"), Key]
+        [Member("id"), Key(sequenceName: "networkAddressId")]
         public long Id { get; }
 
         [Member("address")]

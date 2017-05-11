@@ -1,4 +1,8 @@
-﻿1.32.0
+﻿- Move Disruptions to Diagnostics
+- Add Expires to DataEncryptionKey
+- Add default sequence names...
+
+1.32.0
 - Add DataEncryptionKeys
 - Add Domains
 

@@ -23,7 +23,7 @@ namespace Carbon.Platform.Networking
             ResourceId     = resource.ResourceId;
         }
 
-        [Member("id"), Key]
+        [Member("id"), Key(sequenceName: "networkId")]
         public long Id { get; }
 
         // AddressSpace?
@@ -33,12 +33,12 @@ namespace Carbon.Platform.Networking
         public string Cidr { get; }
 
         // Provides WAN access
-        [DataMember(Name = "gatewayAddress", EmitDefaultValue = false)]
         [Member("gatewayAddress")]
+        [DataMember(Name = "gatewayAddress", EmitDefaultValue = false)]
         public IPAddress GatewayAddress { get; }
 
-        [DataMember(Name = "asn", EmitDefaultValue = false)]
         [Member("asn")] // Autonomous System Number, e.g. AS226
+        [DataMember(Name = "asn", EmitDefaultValue = false)]
         public int? ASN { get; set; }
 
         #region IResource

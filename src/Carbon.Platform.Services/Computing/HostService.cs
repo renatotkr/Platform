@@ -76,7 +76,6 @@ namespace Carbon.Platform.Services
                 MachineImageId = machineImage?.Id ?? 0
             };
 
-
             await db.Hosts.InsertAsync(host).ConfigureAwait(false);
 
             return host;
