@@ -23,11 +23,10 @@ namespace Carbon.Platform.Hosting
         [Member("id"), Key]
         public long Id { get; }
         
+        // e.g. accelerator.net, ...
+
         [Member("subjects")]
         public string[] Subjects { get; }
-
-        [Member("expires")]
-        public DateTime Expires { get; set; }
 
         [Member("description")]
         public string Description { get; set; }
@@ -57,6 +56,9 @@ namespace Carbon.Platform.Hosting
         #endregion
 
         #region Timestamps
+
+        [Member("expires")]
+        public DateTime Expires { get; set; }
 
         [Member("issued")]
         [TimePrecision(TimePrecision.Second)]

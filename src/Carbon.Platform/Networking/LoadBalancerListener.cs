@@ -26,7 +26,7 @@ namespace Carbon.Platform.Networking
             CertificateId = certificateId;
         }
 
-        // proxyId | index
+        // loadBalancerId | index
         [Member("id"), Key]
         public long Id { get;  }
 

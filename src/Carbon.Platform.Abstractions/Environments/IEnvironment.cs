@@ -3,10 +3,12 @@
 namespace Carbon.Platform
 {
     public interface IEnvironment : IResource
-    {        
+    {
+        EnvironmentType Type { get; }
+
         long AppId { get; }
 
-        EnvironmentType Type { get; }
+        string Revision { get; } // e.g. master, 1.0.0
         
         // Variables
     }

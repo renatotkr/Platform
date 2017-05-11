@@ -19,15 +19,21 @@ namespace Carbon.Platform.Networking
             IEnvironment env, 
             ManagedResource resource)
         {
+            #region Preconditions
+
+            if (id <= 0)
+                throw new ArgumentException("Invalid", nameof(id));
+
+            #endregion
+
             Id            = id;
-            Address       = address;
             EnvironmentId = env.Id;
+            Address       = address;
             ProviderId    = resource.ProviderId;
             LocationId    = resource.LocationId;
             ResourceId    = resource.ResourceId;
         }
-
-        // envId + Sequence
+        
         [Member("id"), Key]
         public long Id { get; }
 
@@ -38,7 +44,7 @@ namespace Carbon.Platform.Networking
         [Member("address")]
         public string Address { get; }
 
-        [Member("environmentId")]
+        [Member("environmentId"), Indexed]
         public long EnvironmentId { get; }
 
         [Member("networkId")]

@@ -25,7 +25,7 @@ namespace Carbon.Platform.Computing
             ResourceId = resource.ResourceId;
         }
         
-        // providerId, regionId, zoneId, sequence
+        // (providerId, regionId, zoneId) sequence
         [Member("id"), Key]
         public long Id { get; }
 

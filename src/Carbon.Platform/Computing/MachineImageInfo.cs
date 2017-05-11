@@ -15,9 +15,9 @@ namespace Carbon.Platform.Computing
         public MachineImageInfo(
             long id,
             MachineImageType type,
-            string name, 
-            string description,
-            ManagedResource resource)
+            string name,
+            ManagedResource resource,
+            string description = null)
         {
             Id          = id;
             Type        = type;

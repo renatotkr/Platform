@@ -25,6 +25,13 @@ namespace Carbon.Platform.Computing
             DateTime created,
             ManagedResource resource)
         {
+            #region Preconditions
+
+            if (env == null)
+                throw new ArgumentNullException(nameof(env));
+
+            #endregion
+
             Id            = id;
             Type          = type;
             Status        = status;

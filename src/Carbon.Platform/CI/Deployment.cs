@@ -34,7 +34,7 @@ namespace Carbon.Platform.CI
             CreatorId      = creatorId; // may be different from the releaser
         }
 
-        // envId + sequence
+        // environmentId + deployCount [within enviornment]
         [Member("id"), Key]
         public long Id { get; }
 

@@ -17,7 +17,17 @@ namespace Carbon.Platform.Web
             long repositoryId, 
             long ownerId)
         {
-            Id            = id;
+            #region Preconditions
+
+            if (id <= 0)
+                throw new ArgumentException("Invalid", nameof(id));
+
+            if (environmentId <= 0)
+                throw new ArgumentException("Invalid", nameof(environmentId));
+
+            #endregion
+
+            Id = id;
             Name          = name ?? throw new ArgumentNullException(nameof(name));
             EnvironmentId = environmentId;
             RepositoryId  = repositoryId;

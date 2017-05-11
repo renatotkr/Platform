@@ -12,15 +12,15 @@ namespace Carbon.Platform
 
         public EnvironmentResource(
             long id,
-            IEnvironment environment,
+            IEnvironment env,
             ILocation location,
             IResource resource
         )
         {
             #region Preconditions
 
-            if (environment == null)
-                throw new ArgumentNullException(nameof(environment));
+            if (env == null)
+                throw new ArgumentNullException(nameof(env));
 
             if (location == null)
                 throw new ArgumentNullException(nameof(location));
@@ -31,7 +31,7 @@ namespace Carbon.Platform
             #endregion
 
             Id            = id;
-            EnvironmentId = environment.Id;
+            EnvironmentId = env.Id;
             LocationId    = location.Id;
             ResourceType  = resource.ResourceType;
             ResourceId    = resource.Id;

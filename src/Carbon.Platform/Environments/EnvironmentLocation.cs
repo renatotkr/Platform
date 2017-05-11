@@ -8,7 +8,7 @@ namespace Carbon.Platform
         public EnvironmentLocation(long environmentId, int locationId)
         {
             EnvironmentId = environmentId;
-            LocationId = locationId;
+            LocationId    = locationId;
         }
 
         [Member("environmentId"), Key]

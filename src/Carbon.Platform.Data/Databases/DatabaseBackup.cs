@@ -17,19 +17,20 @@ namespace Carbon.Platform.Data
             Name      = name;
         }
 
-        // databaseId + sequenceNumber
+        // databaseId | sequenceNumber
         [Member("id"), Key]
         public long Id { get; }
 
         [Member("bucketId")]
-        public long BucketId { get; set; }
+        public long BucketId { get; }
 
         [Member("name")]
         [StringLength(100)]
         public string Name { get; }
         
-        [Member("encryptionKeyId")]
-        public long EncryptionKeyId { get; set; }
+        // Data encryption key id
+        [Member("dekId")]
+        public long DekId { get; set; }
 
         [Member("size")]
         public long Size { get; set; }

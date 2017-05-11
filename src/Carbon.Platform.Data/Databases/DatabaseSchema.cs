@@ -17,6 +17,7 @@ namespace Carbon.Platform.Data
             Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
+        // databaseId + sequenceNumber
         [Member("id"), Key]
         public long Id { get; }
 

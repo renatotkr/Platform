@@ -1,7 +1,11 @@
-﻿- Ensure all keys are under 767 bytes
+﻿1.32.0
+- Add DataEncryptionKeys
+- Add Domains
 
-1.28.0
-- Add Topics
+- Ensure all keys are under 767 bytes
+
+1.29.0
+- Add Channels
 
 1.27.0
 - Add Queues

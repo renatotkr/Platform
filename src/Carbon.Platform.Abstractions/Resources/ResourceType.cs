@@ -7,7 +7,7 @@
         Account           = 3,
 
         // Identity & Access Management 
-        User              = 10, // Person or service interacting with the system 
+        User              = 10, // Person or service interacting with the system (note: all users have an account)
         UserCredential    = 11, // e.g. Password
         UserRole          = 12,
         Session           = 13, // An authenticated scope for a user       
@@ -30,7 +30,8 @@
         Database             = 120,
         DatabaseCluster      = 121,
         DatabaseInstance     = 122,
-        DatabaseSchema       = 123,            
+        DatabaseSchema       = 123,
+        DataEncryptionKey    = 131, // AKA dek
         EncryptionKey        = 130,
         Queue                = 140,         
         Repository           = 150,

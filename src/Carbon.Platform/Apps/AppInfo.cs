@@ -65,6 +65,7 @@ namespace Carbon.Platform.Apps
 
         #endregion
     }
-
-    // The application's environment determines whether an application endpoint is exposed (i.e. a web app)
 }
+
+// An app spans four environments: development, intergration, staging, and production
+// The app's environment is responsible for exposing itself (i.e. to the web) or staying internal

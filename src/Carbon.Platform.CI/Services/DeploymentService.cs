@@ -33,9 +33,9 @@ namespace Carbon.Platform.CI
             var type = release is WebsiteRelease ? ResourceType.Website : ResourceType.App;
 
             var deployment = new Deployment(
-              id         : await DeploymentId.GetNextAsync(db.Context, env).ConfigureAwait(false),
-              release : release,
-              creatorId  : creatorId
+              id        : await DeploymentId.NextAsync(db.Context, env).ConfigureAwait(false),
+              release   : release,
+              creatorId : creatorId
             );
 
             await db.Deployments.InsertAsync(deployment).ConfigureAwait(false);
@@ -70,8 +70,8 @@ namespace Carbon.Platform.CI
                     if (deployment.ReleaseType == ReleaseType.Website)
                     {
                         await connection.ExecuteAsync(
-                        @"UPDATE Websites
-                          SET deploymentId = @deploymentId
+                        @"UPDATE `Websites`
+                          SET `deploymentId` = @deploymentId
                           WHERE id = @id", new {
                             id = deployment.ReleaseId,
                             deploymentId = deployment.Id
@@ -81,9 +81,11 @@ namespace Carbon.Platform.CI
                     {
                         await connection.ExecuteAsync(
                             @"UPDATE `Environments`
-                              SET `deploymentId` = @deploymentId
+                              SET `deploymentId` = @deploymentId,
+                                  `revision` = @revision
                               WHERE `id` = @id", new {
                                 id           = deployment.EnvironmentId,
+                                revision     = deployment.ReleaseVersion.ToString(),
                                 deploymentId = deployment.Id
                             }
                         ).ConfigureAwait(false);

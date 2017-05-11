@@ -27,8 +27,7 @@ namespace Carbon.Platform.Disruptions
         [Member("description")]
         [StringLength(200)]
         public string Description { get; }
-
-        [Member("environmentId")]
+        
         public long EnvironmentId => ScopedId.GetScope(Id);
 
         #region Timestamps
