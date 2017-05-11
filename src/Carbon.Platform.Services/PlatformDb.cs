@@ -38,7 +38,7 @@ namespace Carbon.Platform
             Locations             = new Dataset<LocationInfo, long>(context);
 
             // Apps ------------------------------------------------------------------
-            Apps                  = new Dataset<AppInfo, long>(context, GetSequence("apps"));
+            Apps                  = new Dataset<AppInfo, long>(context, new DbSequence("apps", Context, new SequenceOptions { Increment = 4, Seed = 1 }));
             AppReleases           = new Dataset<AppRelease, (long, SemanticVersion)>(context);
 
             // Computing & Storage ---------------------------------------------------
@@ -70,7 +70,7 @@ namespace Carbon.Platform
             NetworkInterfaces     = new Dataset<NetworkInterfaceInfo,     long>(context, GetSequence("networkInterfaces"));
             NetworkSecurityGroups = new Dataset<NetworkSecurityGroup,     long>(context, GetSequence("networkSecurityGroups"));
             NetworkPolicyRules    = new Dataset<NetworkSecurityGroupRule, long>(context);
-            LoadBalancers         = new Dataset<LoadBalancer,             long>(context);
+            LoadBalancers         = new Dataset<LoadBalancer,             long>(context, GetSequence("networkSecurityGroups"));
             LoadBalancerListeners = new Dataset<LoadBalancerListener,     long>(context);
             LoadBalancerRules     = new Dataset<LoadBalancerRule,         long>(context);
             Subnets               = new Dataset<SubnetInfo,               long>(context, GetSequence("subnets"));
@@ -86,24 +86,17 @@ namespace Carbon.Platform
 
         public DbSequence GetSequence(string name) => new DbSequence(name, Context);
 
-        public void Setup()
-        {
-            var dataset = new Dataset<SequenceInfo, long>(Context);
-            
-            dataset.InsertAsync(new SequenceInfo("apps", long.MaxValue, seed: 1, increment: 4));
-        }
-
         public IDbContext Context { get; }
 
         // Environment ------------------------------------------------
-        public Dataset<EnvironmentInfo, long>             Environments         { get; }
-        public Dataset<EnvironmentLocation, (long, long)> EnvironmentLocations { get; }
-        public Dataset<EnvironmentResource, long>         EnvironmentResources { get; }
-        public Dataset<LocationInfo, long>                Locations            { get; }
+        public Dataset<EnvironmentInfo, long>               Environments         { get; }
+        public Dataset<EnvironmentLocation, (long, long)>   EnvironmentLocations { get; }
+        public Dataset<EnvironmentResource, long>           EnvironmentResources { get; }
+        public Dataset<LocationInfo, long>                  Locations            { get; }
 
-        // Apps  -----------------------------------------------------------------
-        public Dataset<AppInfo, long>                       Apps            { get; }
-        public Dataset<AppRelease, (long, SemanticVersion)> AppReleases     { get; }
+        // Apps  --------------------------------------------------------------------
+        public Dataset<AppInfo, long>                       Apps             { get; }
+        public Dataset<AppRelease, (long, SemanticVersion)> AppReleases      { get; }
 
         // Computing ----------------------------------------------------------------
         public Dataset<HealthCheck,              long> HealthChecks          { get; }
