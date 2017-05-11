@@ -36,6 +36,9 @@ namespace Carbon.Platform.Diagnostics
         [Member("context")]
         [StringLength(1000)]
         public JsonObject Context { get; set; }
+
+        [Member("issueId"), Indexed]
+        public long? IssueId { get; set; }
         
         [Member("sessionId")]
         public long? SessionId { get; set; }

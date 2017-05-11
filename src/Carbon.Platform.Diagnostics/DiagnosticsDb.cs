@@ -16,6 +16,8 @@ namespace Carbon.Platform.Diagnostics
             BrowserExceptions = new Dataset<BrowserException, BigId>(context);
 
             EnvironmentExceptions = new Dataset<EnvironmentException, BigId>(context);
+
+            Issues = new Dataset<Issue, long>(context);
         }
 
         public IDbContext Context { get; }
@@ -23,6 +25,8 @@ namespace Carbon.Platform.Diagnostics
         public Dataset<BrowserException, BigId> BrowserExceptions { get; }
 
         public Dataset<EnvironmentException, BigId> EnvironmentExceptions { get; }
+
+        public Dataset<Issue, long> Issues { get; set; }
 
     }
 }
