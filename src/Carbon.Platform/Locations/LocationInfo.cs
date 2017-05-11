@@ -34,6 +34,13 @@ namespace Carbon.Platform
 
         public LocationType Type => LocationId.Create(Id).Type;
 
+        #region Stats
+
+        [Member("hostCount")]
+        public int HostCount { get; }
+
+        #endregion
+
         #region IResource
 
         [IgnoreDataMember]
