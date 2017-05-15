@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,9 @@ using Amazon.Elb;
 using Amazon.Ssm;
 
 using Carbon.Json;
+using Carbon.Net;
 using Carbon.Platform.Computing;
+using Carbon.Platform.Networking;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Services;
 
@@ -41,7 +44,7 @@ namespace Carbon.Platform.Management
             elb = new ElbClient(AwsRegion.USEast1, credential);
 
             this.hostService   = new HostService(db);
-            this.volumeManager = new VolumeManager(db, ec2);
+            this.volumeManager = new VolumeManager(new VolumeService(db), ec2);
         }
 
         public async Task LaunchHostsAsync(IEnvironment env, ILocation location, int launchCount = 1)
@@ -103,17 +106,16 @@ namespace Carbon.Platform.Management
                     new TagSpecification("instance", tags: new[] { new Amazon.Ec2.Tag("envId", env.Id.ToString()) })
                 }
             };
-            
-
 
             if (template.StartupScript != null)
             {
-                // $UserData = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($Script))
+                // Open Question: Can we use UTF8?
 
                 request.UserData = Convert.ToBase64String(Encoding.ASCII.GetBytes(template.StartupScript));
             }
 
-            // AWS Specific Configiration Properties
+            #region AWS Specific Properties
+
             foreach (var property in template.Details)
             {
                 switch (property.Key)
@@ -165,19 +167,11 @@ namespace Carbon.Platform.Management
                 }
             }
 
+            #endregion
+
             var group = await hostService.GetGroupAsync(env, region).ConfigureAwait(false);
 
-            if (group == null)
-            {
-                throw new Exception("No group found in region");
-            }
-
-            if (!group.Details.ContainsKey(HostGroupProperties.TargetGroupArn))
-            {
-                throw new ArgumentNullException("host group does not have a targetGroupArn property");
-            }
-
-            var runResult = await ec2.RunInstancesAsync(request);
+            var runResult = await ec2.RunInstancesAsync(request).ConfigureAwait(false);
 
             var hosts = new IHost[runResult.Instances.Length];
             
@@ -185,25 +179,9 @@ namespace Carbon.Platform.Management
             {
                 var instance = runResult.Instances[i];
 
-                /*
-                if (instance.IpAddress == null || instance.InstanceId == null)
-                {
-                    throw new Exception(JsonObject.FromObject(instance).ToString());
-                }
-                */
+                var registerRequest = await GetRegisterHostRequestAsync(instance, env, machineImage, machineType, location, group);
 
-                var createRequest = new CreateHostRequest(
-                    addresses    : new[] { IPAddress.Parse(instance.PrivateIpAddress) },
-                    env          : env,
-                    groupId      : group.Id,
-                    location     : location,
-                    machineImage : machineImage,
-                    machineType  : machineType,
-                    status       : HostStatus.Pending,
-                    resource     : ManagedResource.Host(location, instance.InstanceId)                
-                );
-
-                hosts[i] = await hostService.CreateAsync(createRequest).ConfigureAwait(false);
+                hosts[i] = await hostService.RegisterAsync(registerRequest).ConfigureAwait(false);
             }
 
             return hosts;
@@ -254,17 +232,28 @@ namespace Carbon.Platform.Management
             await ec2.TerminateInstancesAsync(request).ConfigureAwait(false);
         }
 
-
-        public Task<SendCommandResponse> RunCommandAsync(IEnvironment env, string documentName, JsonObject parameters)
+        public Task<SendCommandResponse> RunCommandAsync(
+            string documentName,
+            IEnvironment env,
+            JsonObject parameters,
+            RunCommandOptions options)
         {
-            // TODO: Lookup latest hash...
+            #region Preconditions
 
-           return ssm.SendCommandAsync(new SendCommandRequest(
+            if (documentName == null)
+                throw new ArgumentNullException(nameof(documentName));
+
+            if (env == null)
+                throw new ArgumentNullException(nameof(env));
+
+            #endregion
+
+            return ssm.SendCommandAsync(new SendCommandRequest(
                documentName : documentName,
-               targets      : new[] { new CommandTarget("envId", env.Id.ToString()) }) {
-                MaxErrors      = "50%",
-                MaxConcurrency = "50%",
-                Parameters     = parameters,
+               targets      : new[] { new CommandTarget("tag:envId", env.Id.ToString()) }) {
+               MaxErrors      = options.MaxErrors,
+               MaxConcurrency = options.MaxConcurrency,
+               Parameters     = parameters
             });
         }
 
@@ -279,64 +268,132 @@ namespace Carbon.Platform.Management
 
             #endregion
 
-            var ec2Instance = await ec2.DescribeInstanceAsync(instanceId).ConfigureAwait(false) ?? throw new Exception($"Instance {instanceId} not found");
+            var ec2Instance = await ec2.DescribeInstanceAsync(instanceId).ConfigureAwait(false) 
+                ?? throw new ResourceNotFoundException(resource: $"aws:host/{instanceId}");
 
-            if (ec2Instance.VpcId == null) throw new Exception("Instancem must reside inside of a VPC");
+            var request = await GetRegisterHostRequestAsync(ec2Instance, env);
 
-            var network = await db.Networks.FindAsync(ResourceProvider.Aws, ec2Instance.VpcId).ConfigureAwait(false);
+            return await hostService.RegisterAsync(request).ConfigureAwait(false);
+        }
 
-            // "imageId": "ami-1647537c",
+        private async Task<RegisterHostRequest> GetRegisterHostRequestAsync(
+            Instance instance,
+            IEnvironment env,
+            IMachineImage machineImage = null,
+            IMachineType machineType = null,
+            ILocation location = null, 
+            IHostGroup group = null)
+        {
+            #region Preconditions
 
-            var image = ec2Instance.ImageId != null ? await hostService.GetMachineImageAsync(ResourceProvider.Aws, ec2Instance.ImageId).ConfigureAwait(false) : null;
+            if (instance == null)
+                throw new ArgumentNullException(nameof(instance));
 
-            var location = Locations.Get(ResourceProvider.Aws, ec2Instance.Placement.AvailabilityZone);
+            // Forbid classic instances by ensuring we're inside of a VPC
+            if (instance.VpcId == null)
+                throw new ArgumentException("Must belong to a VPC", nameof(instance));
 
-            long machineTypeId = AwsInstanceType.GetId(ec2Instance.InstanceType);
+            #endregion
 
-            var addresses = new[] {
-                IPAddress.Parse(ec2Instance.PrivateIpAddress),
-                IPAddress.Parse(ec2Instance.IpAddress)
-            };
+            #region Data Binding / Mappings
+
+            if (location == null)
+            {
+                location = Locations.Get(ResourceProvider.Aws, instance.Placement.AvailabilityZone);
+            }
+
+            if (machineImage == null)
+            {
+                // "imageId": "ami-1647537c",
+
+                machineImage = await new MachineImageService(db).GetAsync(ResourceProvider.Aws, instance.ImageId).ConfigureAwait(false);
+            }
+
+            if (machineType == null)
+            {
+                machineType = AwsInstanceType.Get(instance.InstanceType);
+            }
+
+            var network = await db.Networks.FindAsync(ResourceProvider.Aws, instance.VpcId).ConfigureAwait(false);
+
+            #endregion
 
             // instance.LaunchTime
 
-            var host = await hostService.CreateAsync(new CreateHostRequest {
-                Addresses       = addresses,
-                Location        = location,
-                Status          = ec2Instance.InstanceState.ToStatus(),
-                MachineTypeId   = machineTypeId,
-                EnvironmentId   = env.Id,
-                Resource        = ManagedResource.Host(location, ec2Instance.InstanceId),
-                MachineImageId  = image.Id,
-                NetworkId       = network?.Id ?? 0
-            }).ConfigureAwait(false);
-            
-          
-            foreach (var v in ec2Instance.BlockDeviceMappings)
-            {
-                if (v.Ebs == null) continue;
+            var addresses = new List<IPAddress>();
 
-                var volume = await volumeManager.GetAsync(ResourceProvider.Aws, v.Ebs.VolumeId, host).ConfigureAwait(false);
+            addresses.Add(IPAddress.Parse(instance.PrivateIpAddress));
+
+            // If the instance was assigned a public IP
+            if (instance.IpAddress != null)
+            {
+                addresses.Add(IPAddress.Parse(instance.IpAddress));
             }
+            
+            var registerRequest = new RegisterHostRequest(
+                addresses    : addresses.ToArray(),
+                env          : env,
+                groupId      : group?.Id,
+                location     : location,
+                machineImage : machineImage,
+                machineType  : machineType,
+                status       : instance.InstanceState.ToStatus(),
+                resource     : ManagedResource.Host(location, instance.InstanceId)                
+            );
 
+            #region Network Interfaces
 
-            return host;
-
-            /*
-            foreach (var ec2NetworkInterface in instance.NetworkInterfaces)
+            if (instance.NetworkInterfaces != null)
             {
-                if (ec2NetworkInterface.VpcId != instance.VpcId)
+                var nics = new RegisterNetworkInterfaceRequest[instance.BlockDeviceMappings.Length];
+
+                for (var ni = 1; ni < instance.NetworkInterfaces.Length; ni++)
                 {
-                    throw new Exception("Host's network interface belongs to different VPC:" + ec2NetworkInterface.VpcId);
+                    var ec2Nic = instance.NetworkInterfaces[ni];
+
+                    // TODO: Lookup the subnet
+
+                    nics[ni] = new RegisterNetworkInterfaceRequest(
+                        mac      : MacAddress.Parse(ec2Nic.MacAddress),
+                        subnetId : 0, // TODO
+                        resource : ManagedResource.NetworkInterface(location, ec2Nic.NetworkInterfaceId)
+                    );
                 }
 
-                var networkInterface = await networkService.ConfigureEc2NetworkInterfaceAsync(ec2NetworkInterface).ConfigureAwait(false);
-
-                networkInterface.HostId = host.Id;
-
-                await db.NetworkInterfaces.InsertAsync(networkInterface).ConfigureAwait(false);
+                registerRequest.NetworkInterfaces = nics;
             }
-            */
+
+            #endregion
+
+            #region Volumes
+
+            if (instance.BlockDeviceMappings != null)
+            {
+                var volumes = new RegisterVolumeRequest[instance.NetworkInterfaces.Length];
+
+                for (var bi = 1; bi < instance.BlockDeviceMappings.Length; bi++)
+                {
+                    var blockDevice = instance.BlockDeviceMappings[bi];
+
+                    if (blockDevice.Ebs == null) continue;
+
+                    var volumeSize = blockDevice.Ebs.VolumeSize != null
+                        ? ByteSize.GiB(blockDevice.Ebs.VolumeSize.Value)
+                        : ByteSize.Zero;
+
+                    volumes[bi] = new RegisterVolumeRequest(
+                        size: volumeSize,
+                        resource: ManagedResource.Volume(location, blockDevice.Ebs.VolumeId)
+                    );
+                }
+
+                registerRequest.Volumes = volumes;
+            }
+
+            #endregion
+
+
+            return registerRequest;
         }
     }
 }
