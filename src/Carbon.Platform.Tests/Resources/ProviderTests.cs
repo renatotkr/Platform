@@ -5,10 +5,10 @@ namespace Carbon.Platform.Resources
 	public class ProviderTests
 	{
         [Theory]
-        [InlineData("borg",    "Borg",            1)]
-        [InlineData("aws",     "AWS",             2)]
-        [InlineData("google",  "GCP",             3)]
-        [InlineData("azure",   "Microsoft Azure", 4)]
+        [InlineData("borg",  "Borg",  1)]
+        [InlineData("aws",   "AWS",   2)] // Amazon Web Services
+        [InlineData("gcp",   "GCP",   3)] // Google Cloud Platform
+        [InlineData("azure", "Azure", 4)] // Microsoft Azure
         public void CloudProviders(string code, string name, int id)
         {
             var provider = ResourceProvider.Parse(code);

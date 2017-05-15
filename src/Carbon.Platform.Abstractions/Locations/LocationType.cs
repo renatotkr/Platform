@@ -8,4 +8,3 @@
         Zone        = 4  // e.g. us-east-1-a
     }
 }
-

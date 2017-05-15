@@ -16,7 +16,7 @@ namespace Carbon.Platform.Tests
         {
             foreach (var letter in new[] { 'a', 'b', 'c', 'd', 'e' })
             {
-                var location = Locations.Get(ResourceProvider.Amazon, "us-east-1" + letter);
+                var location = Locations.Get(ResourceProvider.Aws, "us-east-1" + letter);
 
                 Assert.Equal(letter.ToString(), location.ZoneName);
             }
@@ -25,18 +25,18 @@ namespace Carbon.Platform.Tests
         [Fact]
         public void AwsRegions1()
         {
-            var location = Locations.Get(ResourceProvider.Amazon, "us-east-1");
+            var location = Locations.Get(ResourceProvider.Aws, "us-east-1");
             
             Assert.Equal("us-east-1", location.Name);
             Assert.Equal("us-east-1", location.RegionName);
-            Assert.Equal(ResourceProvider.Amazon.Id, location.ProviderId);
+            Assert.Equal(ResourceProvider.Aws.Id, location.ProviderId);
             Assert.Equal(LocationType.Region, location.Type);
         }
 
         [Fact]
         public void AwsRegion1WithZone()
         {
-            var location = Locations.Get(ResourceProvider.Amazon, "us-east-1a");
+            var location = Locations.Get(ResourceProvider.Aws, "us-east-1a");
             
             Assert.Equal("us-east-1", location.RegionName);
             Assert.Equal("us-east-1a", location.Name);
@@ -49,8 +49,8 @@ namespace Carbon.Platform.Tests
         [Fact]
         public void LocationRange()
         {
-            var s = LocationId.Create(ResourceProvider.Amazon, 1, 000);
-            var e = LocationId.Create(ResourceProvider.Amazon, 1, 255);
+            var s = LocationId.Create(ResourceProvider.Aws, 1, 000);
+            var e = LocationId.Create(ResourceProvider.Aws, 1, 255);
 
 
             Assert.Equal(33554688, s.Value);
@@ -60,7 +60,7 @@ namespace Carbon.Platform.Tests
         [Fact]
         public void MultiRegion()
         {
-            var eu = Locations.Google_EU;
+            var eu = Locations.Gcp_EU;
 
             var id = LocationId.Create(eu.Id);
 
@@ -72,15 +72,14 @@ namespace Carbon.Platform.Tests
         [Fact]
         public void GetTests()
         {
-            Assert.Equal(Locations.Get(Locations.Google_Asia.Id), Locations.Google_Asia);
-            Assert.Equal(Locations.Get(Locations.Google_EU.Id),   Locations.Google_EU);
-            Assert.Equal(Locations.Get(Locations.Google_US.Id),   Locations.Google_US);
+            Assert.Equal(Locations.Get(Locations.Gcp_Asia.Id), Locations.Gcp_Asia);
+            Assert.Equal(Locations.Get(Locations.Gcp_EU.Id),   Locations.Gcp_EU);
+            Assert.Equal(Locations.Get(Locations.Gcp_US.Id),   Locations.Gcp_US);
 
-            Assert.Equal(Locations.Get(Locations.Amazon_US_East1.Id), Locations.Amazon_US_East1);
-            Assert.Equal(Locations.Get(Locations.Amazon_US_West1.Id), Locations.Amazon_US_West1);
-            Assert.Equal(Locations.Get(Locations.Amazon_US_West2.Id), Locations.Amazon_US_West2);
-
-            Assert.Equal(Locations.Get(Locations.Amazon_AP_NorthEast1.Id), Locations.Amazon_AP_NorthEast1);
+            Assert.Equal(Locations.Get(Locations.Aws_US_East_1.Id), Locations.Aws_US_East_1);
+            Assert.Equal(Locations.Get(Locations.Aws_US_West_1.Id), Locations.Aws_US_West_1);
+            Assert.Equal(Locations.Get(Locations.Aws_US_West_2.Id), Locations.Aws_US_West_2);
+            Assert.Equal(Locations.Get(Locations.Aws_AP_NorthEast_1.Id), Locations.Aws_AP_NorthEast_1);
         }
 
         /*
@@ -102,9 +101,9 @@ namespace Carbon.Platform.Tests
         [Fact]
         public void TestProperties()
         {
-            var region = new LocationInfo(Locations.Amazon_US_East1.Id, "us-east-1");
+            var region = new LocationInfo(Locations.Aws_US_East_1.Id, "us-east-1");
 
-            Assert.Equal(ResourceProvider.Amazon, region.Provider);
+            Assert.Equal(ResourceProvider.Aws, region.Provider);
             Assert.Equal("us-east-1",             region.Name);
             Assert.Equal(LocationType.Region,     region.Type);
         }
@@ -112,16 +111,16 @@ namespace Carbon.Platform.Tests
         [Fact]
         public void MultiRegionalTests()
         {
-            Assert.Equal(LocationType.MultiRegion, Locations.Google_Asia.Type);
-            Assert.Equal(LocationType.MultiRegion, Locations.Google_EU.Type);
-            Assert.Equal(LocationType.MultiRegion, Locations.Google_US.Type);
+            Assert.Equal(LocationType.MultiRegion, Locations.Gcp_Asia.Type);
+            Assert.Equal(LocationType.MultiRegion, Locations.Gcp_EU.Type);
+            Assert.Equal(LocationType.MultiRegion, Locations.Gcp_US.Type);
         }
 
         [Fact]
         public void TypeTests()
         {
-            Assert.Equal(LocationType.Region, Locations.Amazon_AP_NorthEast1.Type);
-            Assert.Equal(LocationType.Zone, Locations.Amazon_AP_NorthEast1.WithZone('A').Type);
+            Assert.Equal(LocationType.Region, Locations.Aws_AP_NorthEast_1.Type);
+            Assert.Equal(LocationType.Zone,   Locations.Aws_AP_NorthEast_1.WithZone('A').Type);
         }
 
         [Fact]
@@ -145,38 +144,38 @@ namespace Carbon.Platform.Tests
             Assert.Equal(0,        ab.ZoneNumber);   // 0
             Assert.Equal(33554688, ab.Value);
 
-            Assert.Equal(33554689, Locations.Amazon_US_East1.WithZone('A').Id);
-            Assert.Equal(33554690, Locations.Amazon_US_East1.WithZone('B').Id);
-            Assert.Equal(33554691, Locations.Amazon_US_East1.WithZone('C').Id);
-            Assert.Equal(33554692, Locations.Amazon_US_East1.WithZone('D').Id);
-            Assert.Equal(33554693, Locations.Amazon_US_East1.WithZone('E').Id);
+            Assert.Equal(33554689, Locations.Aws_US_East_1.WithZone('A').Id);
+            Assert.Equal(33554690, Locations.Aws_US_East_1.WithZone('B').Id);
+            Assert.Equal(33554691, Locations.Aws_US_East_1.WithZone('C').Id);
+            Assert.Equal(33554692, Locations.Aws_US_East_1.WithZone('D').Id);
+            Assert.Equal(33554693, Locations.Aws_US_East_1.WithZone('E').Id);
 
             var zone = new Location(ab, "us-east-1");
 
-            Assert.Equal(ResourceProvider.Amazon.Id, zone.ProviderId);
+            Assert.Equal(ResourceProvider.Aws.Id, zone.ProviderId);
             Assert.Equal(LocationType.Region,        zone.Type);
         }
 
         [Fact]
         public void WithZoneTests()
         {
-            var a = Locations.Amazon_US_East1.WithZone('A');
+            var a = Locations.Aws_US_East_1.WithZone('A');
 
             Assert.Equal(2, a.ProviderId);
             Assert.Equal(33554689, a.Id);
             Assert.Equal("us-east-1a", a.Name);
 
-            Assert.Equal("asia-east1-c", Locations.Google_AsiaEast1.WithZone('C').Name);
-            Assert.Equal("asia-east1-d", Locations.Google_AsiaEast1.WithZone('d').Name);
+            Assert.Equal("asia-east1-c", Locations.Gcp_AsiaEast1.WithZone('C').Name);
+            Assert.Equal("asia-east1-d", Locations.Gcp_AsiaEast1.WithZone('d').Name);
         }
 
 
         [Fact]
         public void Ids()
         {
-            Assert.Equal(33554688, Locations.Amazon_US_East1.Id);
-            Assert.Equal(33554689, Locations.Amazon_US_East1.WithZone('A').Id);
-            Assert.Equal(33554690, Locations.Amazon_US_East1.WithZone('B').Id);
+            Assert.Equal(33554688, Locations.Aws_US_East_1.Id);
+            Assert.Equal(33554689, Locations.Aws_US_East_1.WithZone('A').Id);
+            Assert.Equal(33554690, Locations.Aws_US_East_1.WithZone('B').Id);
         }
     }
 }
