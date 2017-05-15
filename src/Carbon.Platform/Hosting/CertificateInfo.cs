@@ -23,13 +23,25 @@ namespace Carbon.Platform.Hosting
         [Member("id"), Key(sequenceName: "certificateId")]
         public long Id { get; }
         
-        // e.g. accelerator.net, ...
+        // e.g. carbon.net,*.accelerator.net
 
+        // primary subject is first, followed by subjectAlternate names
         [Member("subjects")]
         public string[] Subjects { get; }
 
         [Member("description")]
         public string Description { get; set; }
+        
+        // KeyAlgorithm
+        // RSA_2048 | RSA_1024 | EC_prime256v1
+
+        // Not, may be different from the resource provider managing the certificate
+        [Member("issuerId")]
+        public long IssuerId { get; set; }
+
+        // TEMP
+        [Member("revocationReason")]
+        public byte? RevocationReason { get; set; }
 
         #region IResource
 
