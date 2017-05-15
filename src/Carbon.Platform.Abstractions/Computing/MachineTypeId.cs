@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
@@ -31,8 +32,37 @@ namespace Carbon.Platform.Computing
         public static implicit operator long(MachineTypeId id) => id.Value;
     }
 
+    public class AwsMachineType : IMachineType
+    {
+        internal AwsMachineType(long id, string name)
+        {
+            Id   = id;
+            Name = name;
+        }
+
+        public string Name { get; }
+
+        public long Id { get; }
+
+        #region IResource
+
+        ResourceType IResource.ResourceType => ResourceType.MachineType;
+
+        #endregion
+    }
+
     public static class AwsInstanceType
     {
+        public static IMachineType Get(long id)
+        {
+            return new AwsMachineType(id, GetName(id));
+        }
+
+        public static IMachineType Get(string name)
+        {
+            return new AwsMachineType(GetId(name), name);
+        }
+
         public static string GetName(long id)
         {
             var a = new MachineTypeId { Value = id };
@@ -65,7 +95,6 @@ namespace Carbon.Platform.Computing
         {
             // cg1.4xlarge
             var id = new MachineTypeId();
-
 
             var parts = name.Split('.');
 
