@@ -34,6 +34,9 @@ namespace Carbon.Platform
         [StringLength(1000)]
         public JsonObject Variables { get; }
         
+        [Member("slug"), Unique]
+        public string Slug { get; set; }
+        
         // typical the primary application's version
         // e.g. 1.2.9
 
