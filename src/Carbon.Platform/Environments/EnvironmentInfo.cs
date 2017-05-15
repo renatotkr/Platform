@@ -15,10 +15,12 @@ namespace Carbon.Platform
         public EnvironmentInfo(
             long id, 
             string name,
+            string slug = null,
             JsonObject variables = null)
         {
             Id        = id;
             Name      = name;
+            Slug      = slug;
             Variables = variables;
         }
 
@@ -30,13 +32,14 @@ namespace Carbon.Platform
         [StringLength(63)]
         public string Name { get; }
 
+        [Member("slug"), Unique]
+        [StringLength(63)]
+        public string Slug { get; }
+
         [Member("variables")]
         [StringLength(1000)]
         public JsonObject Variables { get; }
-        
-        [Member("slug"), Unique]
-        public string Slug { get; set; }
-        
+  
         // typical the primary application's version
         // e.g. 1.2.9
 

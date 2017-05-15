@@ -3,6 +3,7 @@ We'll continue to make breaking API changes in minor releases until we reach 2.0
 Services & management remain < 1.0.0 and will stabalize at v1.
 
 1.36.0
+- Introduce Slugs
 - Add optional unique slug to environments 
 - Add HostGroupProperties
 - Add HostTemplateProperties
