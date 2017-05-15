@@ -49,7 +49,7 @@ namespace Carbon.Platform.Networking
         public int ProviderId { get; set; }
         
         [Member("resourceId")]
-        [Ascii, StringLength(100)]
+        [Ascii, StringLength(120)]
         public string ResourceId { get; set; }
 
         [IgnoreDataMember]

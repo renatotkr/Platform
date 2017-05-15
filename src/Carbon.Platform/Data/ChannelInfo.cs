@@ -13,8 +13,14 @@ namespace Carbon.Platform.Data
 
         public ChannelInfo(long id, string name, ManagedResource resource)
         {
-            Id = id;
-            Name = name ?? throw new ArgumentNullException(nameof(name));
+            #region Preconditions
+
+            if (id <= 0) throw new ArgumentException("Invalid", nameof(id));
+
+            #endregion
+
+            Id         = id;
+            Name       = name ?? throw new ArgumentNullException(nameof(name));
             ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
             ResourceId = resource.ResourceId;
@@ -24,6 +30,7 @@ namespace Carbon.Platform.Data
         public long Id { get; }
 
         [Member("name")]
+        [StringLength(63)]
         public string Name { get; }
         
         // A channel may be a firehose, SNS Topic, Kinesis Stream, etc

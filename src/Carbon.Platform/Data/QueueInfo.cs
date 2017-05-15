@@ -24,6 +24,7 @@ namespace Carbon.Platform.Data
         public long Id { get; }
 
         [Member("name")]
+        [StringLength(63)]
         public string Name { get; }
 
         #region IResource

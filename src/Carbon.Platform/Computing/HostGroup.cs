@@ -2,8 +2,8 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Json;
 using Carbon.Platform.Resources;
-using Carbon.Platform.Sequences;
 
 namespace Carbon.Platform.Computing
 {
@@ -16,35 +16,48 @@ namespace Carbon.Platform.Computing
         public HostGroup(
             long id,
             string name,
+            long environmentId,
             ManagedResource resource)
         {
-            Id         = id;
-            Name       = name ?? throw new ArgumentNullException(nameof(name));
-            ProviderId = resource.ProviderId;
-            LocationId = resource.LocationId;
-            ResourceId = resource.ResourceId;
+            #region Preconditions
+
+            if (id <= 0)
+                throw new ArgumentException("Must be > 0", nameof(id));
+
+            #endregion
+
+            Id            = id;
+            Name          = name ?? throw new ArgumentNullException(nameof(name));
+            EnvironmentId = environmentId;
+            ProviderId    = resource.ProviderId;
+            LocationId    = resource.LocationId;
+            ResourceId    = resource.ResourceId;
         }
         
-        // (providerId, regionId, zoneId) sequence
+        // environmentId + sequenceNumber
         [Member("id"), Key]
         public long Id { get; }
 
         [Member("name")]
-        [StringLength(63)]
+        [StringLength(100)]
         public string Name { get; }
 
-        [Member("loadBalancerId")]
-        public long? LoadBalancerId { get; set; }
-
-        // Used to check the health of the backend instances
+        [Member("environmentId"), Indexed]
+        public long EnvironmentId { get; }
+        
+        // Used to check the health of the groups's instances
         [Member("healthCheckId")]
         public long? HealthCheckId { get; set; }
 
-        // A template used to create new hosts for the backend
+        // A template used to create new hosts within the group
         [Member("hostTemplateId")]
         public long? HostTemplateId { get; set; }
 
-        public long EnvironmentId => ScopedId.GetScope(Id);
+        // Span (Zone, Region)
+
+        [Member("details")]
+        [StringLength(1000)]
+        public JsonObject Details { get; set; }
 
         #region IResource
 
@@ -52,11 +65,13 @@ namespace Carbon.Platform.Computing
         [Member("providerId")]
         public int ProviderId { get; }
 
+        // {groupName}/{groupId}
         [IgnoreDataMember]
         [Member("resourceId")]
         [Ascii, StringLength(100)]
         public string ResourceId { get; }
-
+        
+        // Region Scoped
         [Member("locationId")]
         public int LocationId { get; }
 

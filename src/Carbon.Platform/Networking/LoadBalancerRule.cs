@@ -8,16 +8,24 @@ using Carbon.Platform.Sequences;
 namespace Carbon.Platform.Networking
 {
     [Dataset("LoadBalancerRules")]
+    [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
     public class LoadBalancerRule : ILoadBalancerRule
     {
         public LoadBalancerRule() { }
 
-        public LoadBalancerRule(long id, string condition, string action, int priority)
+        public LoadBalancerRule(
+            long id, 
+            string condition,
+            string action, 
+            int priority,
+            ManagedResource resource)
         {
-            Id        = id;
-            Condition = condition ?? throw new ArgumentNullException(nameof(condition));
-            Action    = action ?? throw new ArgumentNullException(nameof(action));
-            Priority  = priority;
+            Id         = id;
+            Condition  = condition ?? throw new ArgumentNullException(nameof(condition));
+            Action     = action ?? throw new ArgumentNullException(nameof(action));
+            Priority   = priority;
+            ProviderId = resource.ProviderId;
+            ResourceId = resource.ResourceId;
         }
 
         // loadBalancerId + sequenceNumber
@@ -40,12 +48,12 @@ namespace Carbon.Platform.Networking
 
         [IgnoreDataMember]
         [Member("providerId")]
-        public int ProviderId { get; set; }
+        public int ProviderId { get; }
 
         [IgnoreDataMember]
         [Member("resourceId")]
-        [Ascii, StringLength(100)]
-        public string ResourceId { get; set; }
+        [Ascii, StringLength(120)]
+        public string ResourceId { get; }
         
         ResourceType IResource.ResourceType => ResourceType.LoadBalancerRule;
 
