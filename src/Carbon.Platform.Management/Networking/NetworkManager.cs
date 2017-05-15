@@ -41,8 +41,9 @@ namespace Carbon.Platform.Networking
                     resource      : ManagedResource.Network(region, vpc.VpcId)
                 );
 
-                // TODO: Support ipv6 blocks...
+                // TODO: Support ipv6 address blocks
 
+                // Register the network with the platform
                 network = await networkService.RegisterAsync(registerRequest).ConfigureAwait(false);
             }
 
@@ -60,15 +61,15 @@ namespace Carbon.Platform.Networking
 
                 var location = Locations.Get(Aws, awsSubnet.AvailabilityZone);
 
-                var network = await networkService.GetAsync(Aws, awsSubnet.VpcId).ConfigureAwait(false);                
-
+                var network = await networkService.GetAsync(Aws, awsSubnet.VpcId).ConfigureAwait(false);
+                
                 var createRequest = new RegisterSubnetRequest(
                     addressBlocks : new[] { awsSubnet.CidrBlock },
                     networkId     : network.Id,
                     resource      : ManagedResource.Subnet(location, awsSubnet.SubnetId)
                 );
 
-                // TODO: include Ipv6CidrBlocks, if used
+                // TODO: Support ipv6 address blocks
 
                 // Register the subnet with the platform
                 subnet = await subnetService.RegisterAsync(createRequest).ConfigureAwait(false);

@@ -43,6 +43,7 @@ namespace Carbon.Platform.VersionControl
         [Member("type")]
         public FileType Type { get; }
 
+        // TODO: Change to bigId
         [Member("blobId"), Mutable]
         public long? BlobId { get; set; }
 

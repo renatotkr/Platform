@@ -14,6 +14,6 @@ namespace Carbon.Platform.Networking
     }
 }
 
-/*
-path matches /images/* && host matches carbon.net
-*/
+// path matches /images/* && host matches carbon.net
+// forward -> hostGroup#100
+// arn:aws:elasticloadbalancing:ua-west-2:123456789012:targetgroup/my-targets/73e2d6bc24d8a067

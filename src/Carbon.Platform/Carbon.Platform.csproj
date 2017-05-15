@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform</AssemblyName>
-    <VersionPrefix>1.35.1</VersionPrefix>
+    <VersionPrefix>1.36.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
 
     <!-- Package Info-->

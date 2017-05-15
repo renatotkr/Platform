@@ -75,11 +75,5 @@ namespace Carbon.Platform.Networking
         public DateTime? Deleted { get; }
 
         #endregion
-
     }
 }
-
-// path matches '/' || path matches '/status'
-
-// forward -> backend#100
-// arn:aws:elasticloadbalancing:ua-west-2:123456789012:targetgroup/my-targets/73e2d6bc24d8a067

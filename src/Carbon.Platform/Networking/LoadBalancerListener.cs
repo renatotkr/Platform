@@ -18,15 +18,21 @@ namespace Carbon.Platform.Networking
             long id, 
             ApplicationProtocal protocal,
             ushort port,
-            long? certificateId = null)
+            ManagedResource resource,
+            long? certificateId = null
+        )
         {
             Id            = id;
             Protocal      = protocal;
             Port          = port;
             CertificateId = certificateId;
+
+            ProviderId = resource.ProviderId;
+            ResourceId = resource.ResourceId;
+            LocationId = resource.LocationId;
         }
 
-        // loadBalancerId | index
+        // loadBalancerId + sequenceNumber
         [Member("id"), Key]
         public long Id { get;  }
 
@@ -46,15 +52,15 @@ namespace Carbon.Platform.Networking
 
         // aws
         [Member("providerId")]
-        public int ProviderId { get; set; }
+        public int ProviderId { get; }
         
         [Member("resourceId")]
         [Ascii, StringLength(120)]
-        public string ResourceId { get; set; }
+        public string ResourceId { get; }
 
         [IgnoreDataMember]
         [Member("locationId")]
-        public int LocationId { get; set; }
+        public int LocationId { get; }
 
         // arn:aws:elasticloadbalancing:us-west-2:123456789012:listener/app/my-load-balancer/50dc6c495c0c9188/f2f7dc8efc522ab2
 

@@ -24,10 +24,10 @@ namespace Carbon.Platform.Hosting
 
             #endregion
 
-            Id      = id;
-            Name    = name ?? throw new ArgumentNullException(nameof(name));
+            Id            = id;
+            Name          = name ?? throw new ArgumentNullException(nameof(name));
             CertificateId = certificateId;
-            OwnerId = ownerId;
+            OwnerId       = ownerId;
         }
 
         [Member("id"), Key(sequenceName: "domainId")]
