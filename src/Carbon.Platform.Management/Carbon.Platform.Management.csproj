@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Carbon.Platform.Management</AssemblyName>
+    <VersionPrefix>0.5.5</VersionPrefix>
+    <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
+
+    <!-- Package Info-->
+    <Copyright>© Jason Nelson</Copyright>
+    <Description>Platform management services.</Description>
+    <Authors>iamcarbon</Authors>
+    <PackageTags>platform;carbon</PackageTags>
+    <PackageLicenseUrl>https://github.com/carbon/Platform/blob/master/LICENCE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/carbon/Platform</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/carbon/platform</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Amazon.Ec2" Version="0.8.7" />
+    <PackageReference Include="Amazon.Ssm" Version="0.5.6" />
+    <PackageReference Include="Amazon.Elb" Version="0.5.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Carbon.Platform.Services\Carbon.Platform.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+
+  </ItemGroup>
+  
+</Project>
+

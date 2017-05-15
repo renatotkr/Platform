@@ -14,10 +14,11 @@ using Carbon.Net;
 using Carbon.Platform.Computing;
 using Carbon.Platform.Networking;
 using Carbon.Platform.Resources;
-using Carbon.Platform.Services;
 
 namespace Carbon.Platform.Management
 {
+    using static ResourceProvider;
+
     public class HostManager
     {
         private readonly Ec2Client ec2;
@@ -25,7 +26,6 @@ namespace Carbon.Platform.Management
         private readonly ElbClient elb;
 
         private readonly HostService hostService;
-        private readonly VolumeManager volumeManager;
         private readonly PlatformDb db;
 
         public HostManager(IAwsCredential credential, PlatformDb db)
@@ -44,7 +44,6 @@ namespace Carbon.Platform.Management
             elb = new ElbClient(AwsRegion.USEast1, credential);
 
             this.hostService   = new HostService(db);
-            this.volumeManager = new VolumeManager(new VolumeService(db), ec2);
         }
 
         public async Task LaunchHostsAsync(IEnvironment env, ILocation location, int launchCount = 1)
@@ -103,7 +102,10 @@ namespace Carbon.Platform.Management
                 MaxCount     = launchCount,
                 Placement    = new Placement(availabilityZone: location.Name),
                 TagSpecifications = new[] {
-                    new TagSpecification("instance", tags: new[] { new Amazon.Ec2.Tag("envId", env.Id.ToString()) })
+                    new TagSpecification(
+                        resourceType: "instance",
+                        tags: new[] { new Amazon.Ec2.Tag("envId", env.Id.ToString())
+                    })
                 }
             };
 
@@ -175,11 +177,9 @@ namespace Carbon.Platform.Management
 
             var hosts = new IHost[runResult.Instances.Length];
             
-            for(var i = 0; i < runResult.Instances.Length; i++)
+            for (var i = 0; i < runResult.Instances.Length; i++)
             {
-                var instance = runResult.Instances[i];
-
-                var registerRequest = await GetRegisterHostRequestAsync(instance, env, machineImage, machineType, location, group);
+                var registerRequest = await GetRegisterHostRequestAsync(runResult.Instances[i], env, machineImage, machineType, location, group);
 
                 hosts[i] = await hostService.RegisterAsync(registerRequest).ConfigureAwait(false);
             }
@@ -220,7 +220,9 @@ namespace Carbon.Platform.Management
                 if (group.Details.TryGetValue("targetGroupArn", out var targetGroupArn))
                 {
                     // Register the instances with the lb's target group
-                    await elb.DeregisterTargetsAsync(new DeregisterTargetsRequest(targetGroupArn, new[] { new TargetDescription(host.ResourceId) }));
+                    await elb.DeregisterTargetsAsync(new DeregisterTargetsRequest(targetGroupArn, new[] {
+                        new TargetDescription(host.ResourceId)
+                    }));
                 }
 
                 // Cooldown to allow the connections to drain
@@ -299,14 +301,14 @@ namespace Carbon.Platform.Management
 
             if (location == null)
             {
-                location = Locations.Get(ResourceProvider.Aws, instance.Placement.AvailabilityZone);
+                location = Locations.Get(Aws, instance.Placement.AvailabilityZone);
             }
 
             if (machineImage == null)
             {
                 // "imageId": "ami-1647537c",
 
-                machineImage = await new MachineImageService(db).GetAsync(ResourceProvider.Aws, instance.ImageId).ConfigureAwait(false);
+                machineImage = await new MachineImageService(db).GetAsync(Aws, instance.ImageId).ConfigureAwait(false);
             }
 
             if (machineType == null)
@@ -314,7 +316,7 @@ namespace Carbon.Platform.Management
                 machineType = AwsInstanceType.Get(instance.InstanceType);
             }
 
-            var network = await db.Networks.FindAsync(ResourceProvider.Aws, instance.VpcId).ConfigureAwait(false);
+            var network = await db.Networks.FindAsync(Aws, instance.VpcId).ConfigureAwait(false);
 
             #endregion
 
@@ -352,6 +354,8 @@ namespace Carbon.Platform.Management
                     var ec2Nic = instance.NetworkInterfaces[ni];
 
                     // TODO: Lookup the subnet
+
+                    // ec2Nic.SubnetId;
 
                     nics[ni] = new RegisterNetworkInterfaceRequest(
                         mac      : MacAddress.Parse(ec2Nic.MacAddress),
@@ -391,7 +395,6 @@ namespace Carbon.Platform.Management
             }
 
             #endregion
-
 
             return registerRequest;
         }

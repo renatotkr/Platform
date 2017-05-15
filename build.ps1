@@ -15,3 +15,4 @@ dotnet pack ./src/Carbon.Platform.Client       -c Release -o ./../../build/Carbo
 dotnet pack ./src/Carbon.Platform.Monitoring   -c Release -o ./../../build/Carbon.Platform.Monitoring
 dotnet pack ./src/Carbon.Platform.Metrics      -c Release -o ./../../build/Carbon.Platform.Metrics
 dotnet pack ./src/Carbon.VersionControl        -c Release -o ./../../build/Carbon.VersionControl
+dotnet pack ./src/Carbon.Platform.Management   -c Release -o ./../../build/Carbon.Platform.Management
