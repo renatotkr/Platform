@@ -19,16 +19,16 @@ namespace Carbon.Hosting.IIS
 
     public class IISHost : IHostService, IDisposable
     {
-        private readonly HostingEnvironment env;
+        private readonly HostingEnvironment hostingEnvironment;
         private readonly ServerManager manager = new ServerManager();
         private readonly ILogger log;
 
         private static readonly Firewall firewall = new Firewall();
 
-        public IISHost(HostingEnvironment env, ILogger log)
+        public IISHost(HostingEnvironment hostingEnvironment, ILogger log)
         {
-            this.env = env ?? throw new ArgumentNullException(nameof(env));
-            this.log = log ?? throw new ArgumentNullException(nameof(log));
+            this.hostingEnvironment = hostingEnvironment ?? throw new ArgumentNullException(nameof(hostingEnvironment));
+            this.log                = log ?? throw new ArgumentNullException(nameof(log));
         }
 
         public IEnumerable<IApp> Scan()
@@ -296,7 +296,7 @@ namespace Carbon.Hosting.IIS
             return null;
         }
 
-        private Site GetConfigureSite(IApp app, SemanticVersion version, JsonObject env)
+        private Site GetConfigureSite(IApp app, SemanticVersion version, JsonObject variables)
         {
             #region Preconditions
 
@@ -339,9 +339,9 @@ namespace Carbon.Hosting.IIS
             */
             
            
-            if (env.ContainsKey("listeners"))
+            if (variables.ContainsKey("listeners"))
             {
-                foreach (var listener in (JsonArray)env["listeners"])
+                foreach (var listener in (JsonArray)variables["listeners"])
                 {
                     var b = new IISBinding(Listener.Parse(listener));
 
@@ -356,9 +356,9 @@ namespace Carbon.Hosting.IIS
                 }
             }
                 
-            if (env.ContainsKey("port"))
+            if (variables.ContainsKey("port"))
             {
-                var port = (int)env["port"];
+                var port = (int)variables["port"];
 
                 var b = new IISBinding(port: port);
 
@@ -387,9 +387,9 @@ namespace Carbon.Hosting.IIS
 
         private void LogInfo(IApp app, string message)
         {
-            var logsDir = Path.Combine(env.AppsRoot.FullName, app.Id.ToString(), "logs");
+            var logsDir = Path.Combine(hostingEnvironment.AppsRoot.FullName, app.Id.ToString(), "logs");
 
-            var path = Path.Combine(env.AppsRoot.FullName, app.Id.ToString(), "logs", "deploy.txt");
+            var path = Path.Combine(hostingEnvironment.AppsRoot.FullName, app.Id.ToString(), "logs", "deploy.txt");
 
             // Make sure the directory exists
             if (!Directory.Exists(logsDir))
@@ -404,14 +404,14 @@ namespace Carbon.Hosting.IIS
 
         private string GetAppRootDirectory(IApp app)
         {
-            return Path.Combine(env.AppsRoot.FullName, app.Id.ToString());
+            return Path.Combine(hostingEnvironment.AppsRoot.FullName, app.Id.ToString());
         }
 
         // c:/apps/1/1.0.0
 
         private DirectoryInfo GetAppPath(IApp app, SemanticVersion version)
         {
-            var path = Path.Combine(env.AppsRoot.FullName, app.Id.ToString(), version.ToString());
+            var path = Path.Combine(hostingEnvironment.AppsRoot.FullName, app.Id.ToString(), version.ToString());
 
             return new DirectoryInfo(path);
         }
