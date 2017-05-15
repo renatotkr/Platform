@@ -1,12 +1,39 @@
-﻿- Move Disruptions to Diagnostics
-- Add Expires to DataEncryptionKey
+﻿NOTE: we prematurally versioned Carbon.Platform and Carbon.Platform.Abstractions at 1.0.0
+We'll continue to make breaking API changes in minor releases until we reach 2.0.
+Services & management remain < 1.0.0 and will stabalize at v1.
+
+1.36.0
+- Add optional unique slug to environments 
+- Add HostGroupProperties
+- Add HostTemplateProperties
+ 
+- BREAKING ------------------------------------------------------------
+  To transition to IPV6, we need to add support for mutiple address blocks on networks & subnets
+ 
+- NetworkInfo : Change CidrBlock(string) to AddressBlocks(string[])
+- SubnetInfo  : Change Cidr(string)      to AddressBlocks(string[])
+
+1.35.0
+- Decouple Apps from their environments
+- Decouple Load Balancers from environments (they may service multiple environments)
+
+1.36.0
+- Move Disruptions to Diagnostics & rename to Issue
+
+1.37.0
 - Add default sequence names...
 
 1.32.0
+- Add Expires to DataEncryptionKey
+
+1.31.0
 - Add DataEncryptionKeys
 - Add Domains
 
 - Ensure all keys are under 767 bytes
+
+1.30.0
+- Add Users
 
 1.29.0
 - Add Channels
