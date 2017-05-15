@@ -12,17 +12,20 @@ namespace Carbon.Platform.Networking
 
     public class NetworkInterfaceManager
     {
-        private readonly NetworkService networkService;
-        private readonly NetworkInterfaceService networkInterfaces;
+        private readonly INetworkService networks;
+        private readonly INetworkInterfaceService networkInterfaces;
+        private readonly ISubnetService subnetService;
         private readonly ec2.Ec2Client ec2;
 
         public NetworkInterfaceManager(
             ec2.Ec2Client ec2, 
-            NetworkService networkService,
-            NetworkInterfaceService networkInterfaces)
+            INetworkService networkService,
+            ISubnetService subnetService,
+            INetworkInterfaceService networkInterfaces)
         {
-            this.networkService     = networkService;
+            this.networks          = networkService ?? throw new ArgumentNullException(nameof(networkService));
             this.networkInterfaces = networkInterfaces ?? throw new ArgumentNullException(nameof(networkInterfaces));
+            this.subnetService     = subnetService ?? throw new ArgumentNullException(nameof(subnetService));
             this.ec2               = ec2 ?? throw new ArgumentNullException(nameof(ec2));
         }
        
@@ -35,7 +38,7 @@ namespace Carbon.Platform.Networking
                 var nic = await ec2.DescribeNetworkInterfaceAsync(id).ConfigureAwait(false)
                     ?? throw new ResourceNotFoundException($"aws:networkInterface/{id}");
 
-                var network = await networkService.GetAsync(Aws, nic.VpcId);
+                var network = await networks.GetAsync(Aws, nic.VpcId);
 
                 /*
                 // Ensure all the security groups exist
@@ -49,12 +52,11 @@ namespace Carbon.Platform.Networking
                 */
 
                 SubnetInfo subnet = nic.SubnetId != null
-                    ? await networkService.FindSubnetAsync(Aws, nic.SubnetId).ConfigureAwait(false)
+                    ? await subnetService.FindAsync(Aws, nic.SubnetId).ConfigureAwait(false)
                     : null;
 
-                // TODO: Lookup host & create an attachment... 
-
-                //  ni.Attachment?.AttachTime ?? DateTime.UtcNow
+                // TODO: Lookup host & create an attachment (ni.Attachment?.AttachTime) ... 
+                
 
                 var registerRequest = new RegisterNetworkInterfaceRequest(
                     mac      : MacAddress.Parse(nic.MacAddress),
@@ -62,8 +64,7 @@ namespace Carbon.Platform.Networking
                     resource : new ManagedResource(Aws, ResourceType.NetworkInterface, nic.NetworkInterfaceId)
                 );
                
-
-                record = await networkInterfaces.RegisterNetworkInterfaceAsync(registerRequest).ConfigureAwait(false);
+                record = await networkInterfaces.RegisterAsync(registerRequest).ConfigureAwait(false);
             }
 
             return record;

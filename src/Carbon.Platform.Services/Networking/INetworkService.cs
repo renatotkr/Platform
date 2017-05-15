@@ -10,6 +10,8 @@ namespace Carbon.Platform.Networking
 
         Task<NetworkInfo> GetAsync(string name);
 
+        Task<NetworkInfo> GetAsync(ResourceProvider provider, string resourceId);
+
         Task<NetworkInfo> RegisterAsync(RegisterNetworkAsync request);
     }
 }

@@ -7,7 +7,7 @@ using Carbon.Platform.Services;
 
 namespace Carbon.Platform.Networking
 {
-    public class NetworkInterfaceService
+    public class NetworkInterfaceService : INetworkInterfaceService
     {
         private readonly PlatformDb db;
 
@@ -20,7 +20,6 @@ namespace Carbon.Platform.Networking
         {
             return db.NetworkInterfaces.FindAsync(id) ?? throw ResourceError.NotFound(ResourceType.NetworkInterface, id);
         }
-        
 
         public Task<NetworkInterfaceInfo> GetAsync(string name)
         {
@@ -36,8 +35,7 @@ namespace Carbon.Platform.Networking
             return await db.NetworkInterfaces.FindAsync(provider, id).ConfigureAwait(false);
         }
 
-
-        public async Task<NetworkInterfaceInfo> RegisterNetworkInterfaceAsync(RegisterNetworkInterfaceRequest request)
+        public async Task<NetworkInterfaceInfo> RegisterAsync(RegisterNetworkInterfaceRequest request)
         {
             #region Preconditions
 
