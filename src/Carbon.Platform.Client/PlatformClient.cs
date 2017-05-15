@@ -13,7 +13,7 @@ namespace Carbon.Platform
         private readonly string host;
         private readonly string baseUri;
         private readonly SecretKey secret;
-
+        
         public PlatformClient(string host, SecretKey secret)
         {
             this.host = host ?? throw new ArgumentNullException(nameof(host));

@@ -37,7 +37,7 @@ namespace Carbon.Platform.Data
         
         #region IResource
 
-        // Providers: Amazon, Azure, Google
+        // Providers: aws, azure, gcp
 
         [IgnoreDataMember]
         [Member("providerId")]

@@ -10,6 +10,4 @@
         // area | region | zone
         LocationType Type { get; }
     }
-
-    // Locations may be areas, regions, or zones
 }

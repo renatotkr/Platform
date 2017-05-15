@@ -32,7 +32,7 @@ namespace Carbon.Platform.Networking
         }
 
         // networkId + sequenceNumber
-        [Member("id")]
+        [Member("id"), Key]
         public long Id { get; }
 
         [DataMember(EmitDefaultValue = false)]

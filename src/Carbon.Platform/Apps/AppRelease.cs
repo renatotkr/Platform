@@ -12,12 +12,12 @@ namespace Carbon.Platform.Apps
     {
         public AppRelease() { }
 
-        public AppRelease(long id, IApp app, SemanticVersion version, byte[] sha256, long creatorId)
+        public AppRelease(long id, long appId, SemanticVersion version, byte[] sha256, long creatorId)
         {
             #region Preconditions
 
-            if (app == null)
-                throw new ArgumentNullException(nameof(app));
+            if (appId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(appId));
 
             if (version == SemanticVersion.Zero)
                 throw new ArgumentException("May not be 0.0.0", nameof(version));
@@ -31,7 +31,7 @@ namespace Carbon.Platform.Apps
             #endregion
 
             Id        = id;
-            AppId     = app.Id;
+            AppId     = appId;
             Version   = version;
             Sha256    = sha256;
             CreatorId = creatorId;

@@ -27,7 +27,7 @@ namespace Carbon.Platform.Web
 
             #endregion
 
-            Id = id;
+            Id            = id;
             Name          = name ?? throw new ArgumentNullException(nameof(name));
             EnvironmentId = environmentId;
             RepositoryId  = repositoryId;

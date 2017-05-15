@@ -30,8 +30,6 @@ namespace Carbon.Platform.CI
 
             #endregion
 
-            var type = release is WebsiteRelease ? ResourceType.Website : ResourceType.App;
-
             var deployment = new Deployment(
               id        : await DeploymentId.NextAsync(db.Context, env).ConfigureAwait(false),
               release   : release,
@@ -81,12 +79,10 @@ namespace Carbon.Platform.CI
                     {
                         await connection.ExecuteAsync(
                             @"UPDATE `Environments`
-                              SET `deploymentId` = @deploymentId,
-                                  `revision` = @revision
+                              SET `revision` = @revision
                               WHERE `id` = @id", new {
-                                id           = deployment.EnvironmentId,
-                                revision     = deployment.ReleaseVersion.ToString(),
-                                deploymentId = deployment.Id
+                                id       = deployment.EnvironmentId,
+                                revision = deployment.ReleaseVersion.ToString()
                             }
                         ).ConfigureAwait(false);
                     }

@@ -17,7 +17,8 @@ namespace Carbon.Platform.Networking
         {
             #region Preconditions
 
-            if (id <= 0) throw new ArgumentException("Invalid", nameof(id));
+            if (id <= 0)
+                throw new ArgumentException("Invalid", nameof(id));
 
             #endregion
 

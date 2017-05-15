@@ -76,7 +76,7 @@ namespace Carbon.Platform.VersionControl
         [StringLength(100)]
         string IManagedResource.ResourceId => FullName;
         
-        // Used by amazon codecommit
+        // Used by aws:codecommit
         [IgnoreDataMember]
         [Member("locationId")]
         public int LocationId { get; }

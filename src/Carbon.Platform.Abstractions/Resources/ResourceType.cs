@@ -2,41 +2,36 @@
 {
     public enum ResourceType
     {
-        Environment       = 1, // An environment actions take place within
-        Entity            = 2, // Organization, Person, or IA
-        Account           = 3,
+        Entity              = 1, // Organization, Person, or IA
+        Environment         = 2, // An environment actions take place within
+        Account             = 3,
+        User                = 4, // Person or service interacting with the system (note: all users have an account)
+        Session             = 5, // An authenticated scope for a user       
 
-        // Identity & Access Management 
-        User              = 10, // Person or service interacting with the system (note: all users have an account)
-        UserCredential    = 11, // e.g. Password
-        UserRole          = 12,
-        Session           = 13, // An authenticated scope for a user       
-        // Client         = 14,
-
-        Location          = 20,
+        Location            = 10,
 
         // COMPUTING  -------------------------------------------------------------------------------------
-        App               = 30, // AKA Program
-        Host              = 40, // includes metal, vm instances, and container instances
-        HostGroup         = 41,
-        HostTemplate      = 42,
-        MachineImage      = 50,
-        MachineType       = 51,
+        App                 = 30, // AKA Program
+        Host                = 40, // includes metal, vm instances, and container instances
+        HostGroup           = 41, // A group of hosts with a specific configuration
+        HostTemplate        = 42,
+        MachineImage        = 50,
+        MachineType         = 51,
 
         // Storage --------------------------------------------------------------------------------------------
         
-        Bucket               = 100,        
-        Channel              = 110, // AKA Stream / Topic           
-        Database             = 120,
-        DatabaseCluster      = 121,
-        DatabaseInstance     = 122,
-        DatabaseSchema       = 123,
-        DataEncryptionKey    = 131, // AKA dek
-        EncryptionKey        = 130,
-        Queue                = 140,         
-        Repository           = 150,
-        RepositoryCommit     = 151,             
-        Volume               = 160, // AKA drive
+        Bucket              = 100,        
+        Channel             = 110, // AKA Stream / Topic           
+        Database            = 120,
+        DatabaseCluster     = 121,
+        DatabaseInstance    = 122,
+        DatabaseSchema      = 123,
+        DataEncryptionKey   = 131, // AKA dek
+        EncryptionKey       = 130, // master encryption keys
+        Queue               = 140,         
+        Repository          = 150,
+        RepositoryCommit    = 151,             
+        Volume              = 160, // AKA drive
 
         // Hosting --------------------------------------------------------------------------------------------
 

@@ -32,6 +32,8 @@ namespace Carbon.Platform.Apps
         [StringLength(63)]
         public string Name { get; }
 
+        // Slug (unique) -- TODO
+
         [Member("ownerId")]
         public long OwnerId { get; }
 

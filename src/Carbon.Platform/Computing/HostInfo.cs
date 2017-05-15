@@ -25,7 +25,8 @@ namespace Carbon.Platform.Computing
             long machineImageId,
             long networkId,
             DateTime created,
-            ManagedResource resource)
+            ManagedResource resource,
+            long? groupId)
         {
             Id             = id;
             Type           = type;
@@ -37,6 +38,7 @@ namespace Carbon.Platform.Computing
             ProviderId     = resource.ProviderId;
             ResourceId     = resource.ResourceId;
             NetworkId      = networkId;
+            GroupId        = groupId;
             Created        = created;
         }
 
@@ -55,7 +57,7 @@ namespace Carbon.Platform.Computing
         
         // Managed Group Id
         [Member("groupId"), Indexed]
-        public long? GroupId { get; set; }
+        public long? GroupId { get; }
 
         [Member("networkId")]
         public long NetworkId { get; }

@@ -33,9 +33,9 @@ namespace Carbon.Platform.Computing
         
         [Member("type")]
         public MachineImageType Type { get; }
-
+        
         [Member("name")]
-        [StringLength(63)]
+        [StringLength(3, 128)]
         public string Name { get; }
 
         [Member("description")]
