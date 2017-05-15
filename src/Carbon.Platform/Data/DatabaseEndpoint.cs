@@ -32,7 +32,7 @@ namespace Carbon.Platform.Data
             LocationId = location.Id;
         }
 
-        // DatabaseId + Sequence
+        // databaseId + SequenceNumber
         [Member("id"), Key]
         public long Id { get; }
 

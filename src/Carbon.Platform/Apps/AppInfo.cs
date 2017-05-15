@@ -13,12 +13,19 @@ namespace Carbon.Platform.Apps
 
         public AppInfo(long id, string name, long ownerId)
         {
+            #region Preconditions
+
+            if (id <= 0)
+                throw new ArgumentException("Must be > 0", nameof(id));
+
+            #endregion
+
             Id      = id;
             Name    = name ?? throw new ArgumentNullException(nameof(name));
             OwnerId = ownerId;
         }
 
-        [Member("id"), Key]
+        [Member("id"), Key(sequenceName: "appId", increment: 4)]
         public long Id { get; }
         
         [Member("name"), Unique]
@@ -67,5 +74,5 @@ namespace Carbon.Platform.Apps
     }
 }
 
-// An app spans four environments: development, intergration, staging, and production
-// The app's environment is responsible for exposing itself (i.e. to the web) or staying internal
+// An app spans four envs: development, intergration, staging, and production
+// The app's env is responsible for exposing itself (i.e. to the web) or staying internal

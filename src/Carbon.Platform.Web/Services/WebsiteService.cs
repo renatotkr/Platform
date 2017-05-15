@@ -123,7 +123,7 @@ namespace Carbon.Platform.Web
             #endregion
 
             var website = new WebsiteInfo(
-                id            : db.Websites.IdGenerator.Next(),
+                id            : db.Websites.Sequence.Next(),
                 name          : name,
                 repositoryId  : repository.Id,
                 environmentId : env.Id,

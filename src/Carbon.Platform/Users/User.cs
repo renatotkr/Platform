@@ -6,8 +6,6 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Users
 {
-    // A user may have mutiple identies (i.e. IAM user)
-
     [Dataset("Users")]
     public class User : IResource
     {
@@ -15,16 +13,16 @@ namespace Carbon.Platform.Users
 
         public User(long id, string name)
         {
-            Id = id;
-            Name = name;
+            Id   = id;
+            Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
         [Member("id")]
-        [Key(sequenceName: "userId")]
+        [Key(sequenceName: "userId")] // TODO: Carve out a small range...
         public long Id { get; }
 
         [Member("name")]
-        [StringLength(100)]
+        [StringLength(63)]
         public string Name { get; }
 
         #region IResource
@@ -51,3 +49,8 @@ namespace Carbon.Platform.Users
         #endregion
     }
 }
+
+// A user may have mutiple identities
+// e.g. Iam, Borg, Google, ...
+
+// IAM: max name = 64 characters

@@ -13,6 +13,13 @@ namespace Carbon.Platform.Data
 
         public DatabaseInfo(long id, string name)
         {
+            #region Preconditions
+
+            if (id <= 0)
+                throw new ArgumentException("Must be > 0", nameof(id));
+
+            #endregion
+
             Id   = id;
             Name = name ?? throw new ArgumentNullException(nameof(name));
         }

@@ -29,6 +29,7 @@ namespace Carbon.Platform.Data
             ResourceId = resource.ResourceId;
         }
 
+        // databaseId + sequenceNumber
         [Member("id"), Key]
         public long Id { get; }
         

@@ -15,19 +15,19 @@ namespace Carbon.Platform.Data
         public DatabaseCluster(long id, string name, ManagedResource resource)
         {
             Id = id;
-            Name = name;
+            Name = name ?? throw new ArgumentNullException(nameof(name));
 
             ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
             ResourceId = resource.ResourceId;
         }
 
-        // databaseId + Sequence
+        // databaseId | sequenceNumber
         [Member("id"), Key]
         public long Id { get; }
 
         [Member("name")]
-        [StringLength(100)]
+        [StringLength(63)]
         public string Name { get; }
 
         // TODO: Endpoints

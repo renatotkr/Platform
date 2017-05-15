@@ -30,7 +30,7 @@ namespace Carbon.Platform.Data
             KekId      = kekId;
         }
 
-        [Member("id"), Key]
+        [Member("id"), Key(sequenceName: "dataEncryptionKeys")]
         public long Id { get; }
 
         // Key Encryption Key Id : The key used to decrypt the DEK data

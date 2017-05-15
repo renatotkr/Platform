@@ -9,7 +9,7 @@ namespace Carbon.Platform.Diagnostics
     [Dataset("EnvironmentExceptions")]
     public class EnvironmentException : IException
     {
-        // environmentId | timestamp (milliseconds) | sequence
+        // environmentId | timestamp/ms | sequenceNumber
         [Member("id"), Key]
         public BigId Id { get; set; }
 
