@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Carbon.Platform.VersionControl
 {
@@ -6,8 +6,10 @@ namespace Carbon.Platform.VersionControl
     {
         public long RepositoryId { get; set; }
 
+        [Required]
         public string BranchName { get; set; }
 
+        [Required]
         public string Path { get; set; }
 
         public long Size => 0;

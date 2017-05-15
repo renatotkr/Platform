@@ -22,9 +22,11 @@ namespace Carbon.Platform.Services
 
         public Task<EnvironmentInfo> GetAsync(IApp app, EnvironmentType type)
         {
-            return db.Environments.QueryFirstOrDefaultAsync(
-                And(Eq("appId", app.Id), Eq("type", type)
-            ));
+            // We can lookup directly by id...
+
+            var id = app.Id + (((int)type) - 1);
+
+            return db.Environments.FindAsync(id);
         }
 
         public async Task<EnvironmentResource> AddResourceAsync(IEnvironment env, ILocation location, IResource resource)
@@ -42,24 +44,17 @@ namespace Carbon.Platform.Services
 
             return envResource;
         }
-
-
+        
         public async Task AddLocations(IEnvironment env, ILocation[] regions)
         {
-            // Create the regions
-            foreach (var region in regions)
+            var records = new EnvironmentLocation[regions.Length];
+
+            for (var i = 0; i < regions.Length; i++)
             {
-                var envLocation = new EnvironmentLocation(env.Id, region.Id);
-
-                var group = new HostGroup(
-                    id       : await db.HostGroups.GetNextScopedIdAsync(env.Id).ConfigureAwait(false),
-                    name     : Guid.NewGuid().ToString(),
-                    resource : ManagedResource.HostGroup(region, Guid.NewGuid().ToString())
-                );
-
-                await db.HostGroups.InsertAsync(group).ConfigureAwait(false);
-                await db.EnvironmentLocations.InsertAsync(envLocation).ConfigureAwait(false);
+                records[i] = new EnvironmentLocation(env.Id, regions[i].Id);
             }
+
+            await db.EnvironmentLocations.InsertAsync(records).ConfigureAwait(false);
         }
 
         public async Task<IHost[]> GetHostsAsync(IEnvironment env, ILocation location)

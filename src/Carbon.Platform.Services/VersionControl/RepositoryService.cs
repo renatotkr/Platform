@@ -23,11 +23,7 @@ namespace Carbon.Platform.VersionControl
 
         public async Task<RepositoryInfo> GetAsync(long id)
         {
-            var repository = await db.Repositories.FindAsync(id).ConfigureAwait(false);
-
-            if (repository == null) throw new Exception($"repository#{id} not found");
-
-            return repository;
+            return await db.Repositories.FindAsync(id).ConfigureAwait(false) ?? throw new Exception($"repository#{id} not found");
         }
 
         public async Task<RepositoryInfo> GetAsync(long ownerId, string name)
@@ -36,7 +32,7 @@ namespace Carbon.Platform.VersionControl
                 And(Eq("ownerId", ownerId), Eq("name", name))
             ).ConfigureAwait(false);
 
-            if (repository == null) throw new Exception($"repository named '{name}' does not exist");
+            if (repository == null) throw new Exception($"repository named '{name}' not found");
 
             return repository;
         }
@@ -51,7 +47,7 @@ namespace Carbon.Platform.VersionControl
             #endregion
 
             var repository = new RepositoryInfo(
-                id       : db.Repositories.IdGenerator.Next(),
+                id       : db.Repositories.Sequence.Next(),
                 name     : name,
                 ownerId  : ownerId,
                 resource : resource
@@ -160,12 +156,12 @@ namespace Carbon.Platform.VersionControl
             var file = new RepositoryFile(
                 repositoryId : request.RepositoryId, 
                 branchName   : request.BranchName,
+                type         : FileType.Blob,
                 path         : request.Path,
-                creatorId    : request.CreatorId,
-                type         : FileType.Blob) {
-                Size         = request.Size,
-                Sha256       = request.Sha256
-            };
+                size         : request.Size,
+                sha256       : request.Sha256,
+                creatorId    : request.CreatorId
+            );
 
             using (var connection = db.Context.GetConnection())
             {
@@ -174,7 +170,6 @@ namespace Carbon.Platform.VersionControl
                       VALUES (@repositoryId, @branchName, @path, @type, @size, @sha256, @creatorId)
                       ON DUPLICATE KEY UPDATE `size` = @size, `sha256` = @sha256, `deleted` = NULL;", file
                 ).ConfigureAwait(false);
-
             }
 
             return file;

@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Carbon.Platform.Apps;
 using Carbon.Versioning;
 
-namespace Carbon.Platform.Apps
+namespace Carbon.Platform.Services
 {
     public interface IAppService
     {
@@ -12,13 +13,13 @@ namespace Carbon.Platform.Apps
 
         Task<IReadOnlyList<AppInfo>> ListAsync(long ownerId);
 
-        Task<AppInfo> CreateAsync(string name, long ownerId);
+        Task<AppInfo> CreateAsync(CreateAppRequest request);
 
         Task<EnvironmentInfo> GetEnvironmentAsync(long appId, EnvironmentType type);
 
         Task<IReadOnlyList<EnvironmentInfo>> GetEnvironmentsAsync(IApp app);
 
-        Task<AppRelease> CreateReleaseAsync(IApp app, SemanticVersion version, byte[] sha256, long creatorId);
+        Task<AppRelease> CreateReleaseAsync(CreateAppReleaseRequest request);
 
         Task<AppRelease> GetReleaseAsync(long appId, SemanticVersion version);
 
