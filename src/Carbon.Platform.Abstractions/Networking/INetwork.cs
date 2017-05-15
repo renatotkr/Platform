@@ -8,14 +8,15 @@ namespace Carbon.Platform.Networking
     {
         IPAddress GatewayAddress { get; }
 
-        // e.g. 192.168.0.0/16
-        string Cidr { get; }
+        // e.g. 192.168.0.0/16, ???
 
-        // VPC's may have seperate IPv4 & IPv6 ranges
-        // ip4range
-        // ip6range
+        string[] AddressBlocks { get; }
     }
 }
+
+// VPC's may have seperate IPv4 & IPv6 ranges
+// ip4range
+// ip6range
 
 // A network may span multiple locations
 

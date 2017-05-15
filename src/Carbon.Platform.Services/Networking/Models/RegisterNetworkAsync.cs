@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
 
 using Carbon.Platform.Resources;
 
@@ -9,18 +9,15 @@ namespace Carbon.Platform.Networking
         public RegisterNetworkAsync() { }
 
         public RegisterNetworkAsync(
-            string cidr,
+            string[] addressBlocks,
             ManagedResource resource)
         {
-           
-            Cidr     = cidr;
-            Resource = resource;
+            AddressBlocks = addressBlocks ?? throw new ArgumentNullException(nameof(addressBlocks));
+            Resource     = resource;
         }
-
-        [Required]
-        public string Cidr { get; set; }
-
-        [Required]
+        
+        public string[] AddressBlocks { get; set; }
+        
         public ManagedResource Resource { get; set; }
 
         // TODO

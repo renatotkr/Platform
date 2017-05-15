@@ -13,22 +13,28 @@ namespace Carbon.Platform.Networking
     {
         public SubnetInfo() { }
 
-        public SubnetInfo(long id, string cidr, ManagedResource resource)
+        public SubnetInfo(
+            long id,
+            string[] addressBlocks,
+            ManagedResource resource)
         {
-            Id         = id;
-            CidrBlock  = cidr ?? throw new ArgumentNullException(nameof(cidr));
-            ProviderId = resource.ProviderId;
-            LocationId = resource.LocationId;
-            ResourceId = resource.ResourceId;
+            Id            = id;
+            AddressBlocks = addressBlocks ?? throw new ArgumentNullException(nameof(addressBlocks));
+            ProviderId    = resource.ProviderId;
+            LocationId    = resource.LocationId;
+            ResourceId    = resource.ResourceId;
         }
 
         // networkId + index
         [Member("id"), Key]
         public long Id { get; }
-
-        [Member("cidrBlock")]
+        
+        /// <summary>
+        /// A list of address blocks in CIDR notation
+        /// </summary>
+        [Member("addressBlocks")]
         [StringLength(100)]
-        public string CidrBlock { get; } 
+        public string[] AddressBlocks { get; } 
 
         [IgnoreDataMember]
         public long NetworkId => ScopedId.GetScope(Id);

@@ -51,9 +51,9 @@ namespace Carbon.Platform.Networking
             // Open: Get subnetCount from network?
 
             var subnet = new SubnetInfo(
-                id       : await db.Subnets.GetNextScopedIdAsync(request.NetworkId).ConfigureAwait(false),
-                cidr     : request.Cidr,
-                resource : request.Resource
+                id            : await db.Subnets.GetNextScopedIdAsync(request.NetworkId).ConfigureAwait(false),
+                addressBlocks : request.AddressBlocks,
+                resource      : request.Resource
             );
 
             await db.Subnets.InsertAsync(subnet).ConfigureAwait(false);

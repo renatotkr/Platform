@@ -1,4 +1,5 @@
-﻿using Carbon.Platform.Resources;
+﻿using System;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Networking
 {
@@ -7,17 +8,16 @@ namespace Carbon.Platform.Networking
         public RegisterSubnetRequest() { }
 
         public RegisterSubnetRequest(
-            string cidr,
+            string[] addressBlocks,
             long networkId,
             ManagedResource resource)
         {
-
-            Cidr = cidr;
-            NetworkId = networkId;
-            Resource = resource;
+            AddressBlocks = addressBlocks ?? throw new ArgumentNullException(nameof(addressBlocks));
+            NetworkId     = networkId;
+            Resource      = resource;
         }
 
-        public string Cidr { get; set; }
+        public string[] AddressBlocks { get; set; }
 
         public long NetworkId { get; set; }
 

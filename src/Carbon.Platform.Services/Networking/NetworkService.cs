@@ -47,10 +47,9 @@ namespace Carbon.Platform.Networking
         public async Task<NetworkInfo> RegisterAsync(RegisterNetworkAsync request)
         {
             var network = new NetworkInfo(
-                id             : db.Networks.Sequence.Next(),
-                cidr           : request.Cidr,
-                gatewayAddress : null, 
-                resource       : request.Resource
+                id            : db.Networks.Sequence.Next(),
+                addressBlocks : request.AddressBlocks,
+                resource      : request.Resource
             );
             
             await db.Networks.InsertAsync(network).ConfigureAwait(false);

@@ -5,8 +5,8 @@ namespace Carbon.Platform.Networking
     public interface ISubnet : IManagedResource
     {
         long NetworkId { get; }
-        
-        string CidrBlock { get; }
+
+        string[] AddressBlocks { get; }
     }
 }
 
@@ -17,8 +17,8 @@ gcp   | ulong           | compute#subnetwork
 */
 
 
-// gcp : IpCidrRange
-// azure  : Address Prefix
+// gcp   : IpCidrRange
+// azure : Address Prefix
 
 // e.g. 
 // 10.1.1.0/24
