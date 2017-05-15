@@ -20,16 +20,25 @@ namespace Carbon.Platform.Services
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
+        public Task<EnvironmentInfo> GetAsync(long id)
+        {
+            return db.Environments.FindAsync(id)
+                ?? throw ResourceError.NotFound(ResourceType.Environment, id);
+        }
+
         public Task<EnvironmentInfo> GetAsync(IApp app, EnvironmentType type)
         {
             // We can lookup directly by id...
 
             var id = app.Id + (((int)type) - 1);
 
-            return db.Environments.FindAsync(id);
+            return GetAsync(id);
         }
 
-        public async Task<EnvironmentResource> AddResourceAsync(IEnvironment env, ILocation location, IResource resource)
+        public async Task<EnvironmentResource> AddResourceAsync(
+            IEnvironment env, 
+            ILocation location, 
+            IResource resource)
         {
             var id = await db.EnvironmentResources.GetNextScopedIdAsync(env.Id).ConfigureAwait(false);
 
@@ -45,13 +54,13 @@ namespace Carbon.Platform.Services
             return envResource;
         }
         
-        public async Task AddLocations(IEnvironment env, ILocation[] regions)
+        public async Task AddLocations(IEnvironment env, ILocation[] locations)
         {
-            var records = new EnvironmentLocation[regions.Length];
+            var records = new EnvironmentLocation[locations.Length];
 
-            for (var i = 0; i < regions.Length; i++)
+            for (var i = 0; i < locations.Length; i++)
             {
-                records[i] = new EnvironmentLocation(env.Id, regions[i].Id);
+                records[i] = new EnvironmentLocation(env.Id, locations[i].Id);
             }
 
             await db.EnvironmentLocations.InsertAsync(records).ConfigureAwait(false);
@@ -79,7 +88,8 @@ namespace Carbon.Platform.Services
         {
             #region Preconditions
 
-            if (env == null) throw new ArgumentNullException(nameof(env));
+            if (env == null)
+                throw new ArgumentNullException(nameof(env));
 
             #endregion
 

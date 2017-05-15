@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 
 using Carbon.Json;
 
-namespace Amazon.Metadata
+// TODO: Move to Amazon lib
+
+namespace Amazon.Runtime.Metadata
 {
     public class InstanceIdentity
     {

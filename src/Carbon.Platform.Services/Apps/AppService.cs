@@ -56,14 +56,10 @@ namespace Carbon.Platform.Apps
         {
             #region Preconditions
 
-            if (request.Name == null)
-                throw new ArgumentNullException(nameof(request.Name));
+            Validate.Object(request, nameof(request));
 
             if (AppName.Validate(request.Name) == false)
                 throw new ArgumentException($"Invalid name '{request.Name}", nameof(request.Name));
-            
-            if (request.OwnerId <= 0)
-                throw new ArgumentException("Must be greater than 0", nameof(request.OwnerId));
 
             #endregion
 
@@ -122,12 +118,15 @@ namespace Carbon.Platform.Apps
             #region Preconditions
 
             Validate.Object(request, nameof(request));
-            
+
             #endregion
 
+            // Fetch the app to ensure it exists...
+            var app = await GetAsync(request.AppId).ConfigureAwait(false);
+
             var release = new AppRelease(
-                id        : await GetNextReleaseIdAsync(request.App), 
-                appId     : request.App.Id,
+                id        : await GetNextReleaseIdAsync(request.AppId), 
+                appId     : request.AppId,
                 version   : request.Version, 
                 sha256    : request.Sha256,
                 creatorId : request.CreatorId
@@ -135,14 +134,18 @@ namespace Carbon.Platform.Apps
 
             await db.AppReleases.InsertAsync(release).ConfigureAwait(false);
 
-            var e = new Activity(ActivityType.Publish, request.App as IResource);
+            #region Logging
 
-            await db.Activities.InsertAsync(e);
+            var activity = new Activity(ActivityType.Publish, app);
+
+            await db.Activities.InsertAsync(activity).ConfigureAwait(false);
+
+            #endregion
 
             return release;
         }
 
-        private async Task<long> GetNextReleaseIdAsync(IApp app)
+        private async Task<long> GetNextReleaseIdAsync(long appId)
         {
             using (var connection = db.Context.GetConnection())
             {
@@ -150,7 +153,7 @@ namespace Carbon.Platform.Apps
                     @"SELECT `releaseCount` FROM `Apps` WHERE id = @id FOR UPDATE;
                       UPDATE `Apps`
                       SET `releaseCount` = `releaseCount` + 1
-                      WHERE id = @id", new { id = app.Id }).ConfigureAwait(false)) + 1;
+                      WHERE id = @id", new { id = appId }).ConfigureAwait(false)) + 1;
             }
         }
         

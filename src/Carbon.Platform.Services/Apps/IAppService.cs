@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Carbon.Platform.Apps;
 using Carbon.Versioning;
 
-namespace Carbon.Platform.Services
+namespace Carbon.Platform.Apps
 {
     public interface IAppService
     {

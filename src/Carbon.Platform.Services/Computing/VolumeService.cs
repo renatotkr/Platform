@@ -16,21 +16,18 @@ namespace Carbon.Platform.Computing
 
         public async Task<VolumeInfo> GetAsync(long id)
         {
-            return await db.Volumes.FindAsync(id).ConfigureAwait(false) ?? throw ResourceError.NotFound(ResourceType.Volume, id);
+            return await db.Volumes.FindAsync(id).ConfigureAwait(false)
+                ?? throw ResourceError.NotFound(ResourceType.Volume, id);
         }
 
         public Task<VolumeInfo> GetAsync(string name)
         {
-            if (long.TryParse(name, out var id))
-            {
-                return GetAsync(id);
-            }
-            else
-            {
-                (var provider, var resourceId) = ResourceName.Parse(name);
+            if (long.TryParse(name, out var id)) return GetAsync(id);
+            
+            (var provider, var resourceId) = ResourceName.Parse(name);
 
-                return FindAsync(provider, resourceId) ?? throw ResourceError.NotFound(provider, ResourceType.Volume, name);
-            }
+            return FindAsync(provider, resourceId) 
+                ?? throw ResourceError.NotFound(provider, ResourceType.Volume, name);
         }
 
         public Task<VolumeInfo> FindAsync(ResourceProvider provider, string id)

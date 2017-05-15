@@ -16,8 +16,8 @@ namespace Carbon.Platform
     {
         // Networking
 
-        public static Task<NetworkInfo> FindAsync(this Dataset<NetworkInfo, long> dataset, ResourceProvider provider, string id) =>
-           dataset.QueryFirstOrDefaultAsync(And(Eq("providerId", provider.Id), Eq("resourceId", id)));
+        public static Task<NetworkInfo> FindAsync(this Dataset<NetworkInfo, long> dataset, ResourceProvider provider, string resourceId) =>
+           dataset.QueryFirstOrDefaultAsync(And(Eq("providerId", provider.Id), Eq("resourceId", resourceId)));
 
         public static Task<NetworkInterfaceInfo> FindAsync(this Dataset<NetworkInterfaceInfo, long> dataset, ResourceProvider provider, string id) =>
             dataset.QueryFirstOrDefaultAsync(And(Eq("providerId", provider.Id), Eq("resourceId", id)));
@@ -35,11 +35,11 @@ namespace Carbon.Platform
 
         // Computing
 
-        public static Task<HostGroup> FindAsync(this Dataset<HostGroup, long> dataset, ResourceProvider provider, string id) =>
-            dataset.QueryFirstOrDefaultAsync(And(Eq("providerId", provider.Id), Eq("resourceId", id)));
+        public static Task<HostGroup> FindAsync(this Dataset<HostGroup, long> dataset, ResourceProvider provider, string resourceId) =>
+            dataset.QueryFirstOrDefaultAsync(And(Eq("providerId", provider.Id), Eq("resourceId", resourceId)));
 
-        public static Task<HostInfo> FindAsync(this Dataset<HostInfo, long> dataset, ResourceProvider provider, string id) =>
-            dataset.QueryFirstOrDefaultAsync(And(Eq("providerId", provider.Id), Eq("resourceId", id)));
+        public static Task<HostInfo> FindAsync(this Dataset<HostInfo, long> dataset, ResourceProvider provider, string resourceId) =>
+            dataset.QueryFirstOrDefaultAsync(And(Eq("providerId", provider.Id), Eq("resourceId", resourceId)));
 
         public static Task<MachineImageInfo> FindAsync(this Dataset<MachineImageInfo, long> dataset, ResourceProvider provider, string id) =>
           dataset.QueryFirstOrDefaultAsync(And(Eq("providerId", provider.Id), Eq("resourceId", id)));
@@ -48,9 +48,6 @@ namespace Carbon.Platform
           dataset.QueryFirstOrDefaultAsync(And(Eq("providerId", provider.Id), Eq("resourceId", id)));
 
         // ----
-
-        public static Task<IReadOnlyList<HostInfo>> FindHavingApp(this Dataset<HostInfo, long> dataset, IApp app) => 
-            dataset.QueryAsync(Eq("appId", app.Id));
 
         public static Task<IReadOnlyList<AppRelease>> FindHavingApp(this Dataset<AppRelease, long> dataset, IApp app) => 
             dataset.QueryAsync(Eq("appId", app.Id), Order.Descending("version"));

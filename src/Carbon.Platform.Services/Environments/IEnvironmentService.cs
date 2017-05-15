@@ -7,6 +7,8 @@ namespace Carbon.Platform
 {
     public interface IEnvironmentService
     {
+        Task<EnvironmentInfo> GetAsync(long id);
+
         Task<EnvironmentInfo> GetAsync(IApp app, EnvironmentType type);
 
         Task<IHost[]> GetHostsAsync(IEnvironment env);

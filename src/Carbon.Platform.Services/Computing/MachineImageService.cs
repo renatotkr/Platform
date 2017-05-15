@@ -15,7 +15,8 @@ namespace Carbon.Platform.Computing
 
         public async Task<MachineImageInfo> GetAsync(long id)
         {
-            return await db.MachineImages.FindAsync(id).ConfigureAwait(false) ?? throw ResourceError.NotFound(ResourceType.MachineImage, id);
+            return await db.MachineImages.FindAsync(id).ConfigureAwait(false) 
+                ?? throw ResourceError.NotFound(ResourceType.MachineImage, id);
         }
 
         public async Task<MachineImageInfo> GetAsync(ResourceProvider provider, string id)
@@ -41,7 +42,7 @@ namespace Carbon.Platform.Computing
         {
             var image = new MachineImageInfo(
                 id       : db.MachineImages.Sequence.Next(),
-                type     : request.MachineImageType,
+                type     : request.Type,
                 name     : request.Name,
                 resource : request.Resource
             );

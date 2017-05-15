@@ -8,7 +8,9 @@ namespace Carbon.Platform
         public static void Object(object value, string name)
         {
             if (value == null)
+            {
                 throw new ArgumentNullException(name);
+            }
 
             Validator.ValidateObject(value, new ValidationContext(value, null, null));
         }
@@ -17,7 +19,7 @@ namespace Carbon.Platform
         {
             if (value <= 0)
             {
-                throw new ArgumentException($"Invalid id '{value}'", name);
+                throw new ArgumentOutOfRangeException(name, value, "Must be > 0");
             }
         }
 

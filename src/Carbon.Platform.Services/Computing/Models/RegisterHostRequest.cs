@@ -1,6 +1,7 @@
 ﻿using System.Net;
 
 using Amazon.Runtime.Metadata;
+
 using Carbon.Platform.Networking;
 using Carbon.Platform.Resources;
 
