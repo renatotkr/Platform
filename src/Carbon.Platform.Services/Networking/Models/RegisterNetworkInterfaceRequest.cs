@@ -1,16 +1,15 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Carbon.Net;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Sequences;
 
-namespace Carbon.Platform.Services
+namespace Carbon.Platform.Networking
 {
-    public class CreateNetworkInterfaceRequest
+    public class RegisterNetworkInterfaceRequest
     {
-        public CreateNetworkInterfaceRequest() { }
+        public RegisterNetworkInterfaceRequest() { }
 
-        public CreateNetworkInterfaceRequest(
+        public RegisterNetworkInterfaceRequest(
             MacAddress mac,
             long subnetId,
             ManagedResource resource)

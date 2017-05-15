@@ -1,20 +1,18 @@
 ﻿using System.Net;
 
-using Amazon.Metadata;
-
+using Amazon.Runtime.Metadata;
+using Carbon.Platform.Networking;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.Services
+namespace Carbon.Platform.Computing
 {
-    using Computing;
-
-    public class CreateHostRequest
+    public class RegisterHostRequest
     {
-        public CreateHostRequest() { }
+        public RegisterHostRequest() { }
 
-        public CreateHostRequest(
-            IPAddress[] addresses, 
-            IEnvironment env, 
+        public RegisterHostRequest(
+            IPAddress[] addresses,
+            IEnvironment env,
             ILocation location,
             IMachineImage machineImage,
             IMachineType machineType,
@@ -23,15 +21,15 @@ namespace Carbon.Platform.Services
             long? groupId = null,
             HostStatus status = HostStatus.Pending)
         {
-            Addresses      = addresses;
-            EnvironmentId  = env.Id;
-            Location       = location;
+            Addresses = addresses;
+            EnvironmentId = env.Id;
+            Location = location;
             MachineImageId = machineImage.Id;
-            MachineTypeId  = machineType.Id;
-            NetworkId      = networkId;
-            Status         = status;
-            Resource       = resource;
-            GroupId        = groupId;
+            MachineTypeId = machineType.Id;
+            NetworkId = networkId;
+            Status = status;
+            Resource = resource;
+            GroupId = groupId;
         }
 
         // private ips first...
@@ -44,7 +42,7 @@ namespace Carbon.Platform.Services
         public HostStatus Status { get; set; } = HostStatus.Pending;
 
         public ManagedResource Resource { get; set; }
-        
+
         public long MachineTypeId { get; set; }
 
         public long MachineImageId { get; set; }
@@ -53,13 +51,16 @@ namespace Carbon.Platform.Services
 
         public long? GroupId { get; set; }
 
-        public static CreateHostRequest Create(InstanceIdentity instance, IEnvironment env)
+        public RegisterVolumeRequest[] Volumes { get; set; }
+
+        public RegisterNetworkInterfaceRequest[] NetworkInterfaces { get; set; }
+
+        public static RegisterHostRequest Create(InstanceIdentity instance, IEnvironment env)
         {
             var location = Locations.Get(ResourceProvider.Aws, instance.AvailabilityZone);
 
             // machineImage = await GetImageAsync(ResourceProvider.Amazon, instance.ImageId).ConfigureAwait(false);
-            return new CreateHostRequest
-            {
+            return new RegisterHostRequest {
                 Status = HostStatus.Running,
                 Addresses = new[] { IPAddress.Parse(instance.PrivateIp) },
                 Resource = ManagedResource.Host(location, instance.InstanceId),

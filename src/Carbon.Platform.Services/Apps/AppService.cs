@@ -28,12 +28,19 @@ namespace Carbon.Platform.Apps
 
         public async Task<AppInfo> GetAsync(long id)
         {
-            return await db.Apps.FindAsync(id).ConfigureAwait(false) ?? throw new Exception($"app#{id} not found");
+            return await db.Apps.FindAsync(id).ConfigureAwait(false) ?? throw ResourceError.NotFound(ResourceType.App, id);
         }
 
-        public Task<AppInfo> FindAsync(string name)
+        public Task<AppInfo> FindAsync(string slug)
         {
-            return db.Apps.QueryFirstOrDefaultAsync(Eq("name", name));
+            if (long.TryParse(slug, out var id))
+            {
+                return db.Apps.FindAsync(id);
+            }
+            else
+            {
+                return db.Apps.QueryFirstOrDefaultAsync(Eq("name", slug));
+            }
         }
 
         public Task<IReadOnlyList<AppInfo>> ListAsync(long ownerId)

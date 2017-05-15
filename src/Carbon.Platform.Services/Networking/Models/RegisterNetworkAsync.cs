@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
+
 using Carbon.Platform.Resources;
-using Carbon.Platform.Sequences;
 
-namespace Carbon.Platform.Services
+namespace Carbon.Platform.Networking
 {
-    public class CreateNetworkRequest
+    public class RegisterNetworkAsync
     {
-        public CreateNetworkRequest() { }
+        public RegisterNetworkAsync() { }
 
-        public CreateNetworkRequest(
+        public RegisterNetworkAsync(
             string cidr,
             ManagedResource resource)
         {
@@ -22,5 +22,8 @@ namespace Carbon.Platform.Services
 
         [Required]
         public ManagedResource Resource { get; set; }
+
+        // TODO
+        public long OwnerId { get; set; }
     }
 }

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Carbon.Data.Expressions;
-using Carbon.Platform.Computing;
+using Carbon.Platform.Services;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Networking;
 
 using Dapper;
 
-namespace Carbon.Platform.Services
+namespace Carbon.Platform.Computing
 {
     using static Expression;
 
@@ -22,42 +22,40 @@ namespace Carbon.Platform.Services
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
+        public async Task<HostInfo> GetAsync(long id)
+        {
+            return await db.Hosts.FindAsync(id).ConfigureAwait(false) ?? throw ResourceError.NotFound(ResourceType.Host, id);
+        }
+
         // e.g. 1 || aws:i-18342354, gcp:1234123123, azure:1234123
 
-        public Task<HostInfo> GetAsync(string idOrResourceId)
+        public Task<HostInfo> GetAsync(string name)
         {
-            if (long.TryParse(idOrResourceId, out var id))
+            if (long.TryParse(name, out var id))
             {
                 return GetAsync(id);
             }
             else
             {
-                var parts = idOrResourceId.Split(':');
+                (var provider, var resourceId) = ResourceName.Parse(name);
 
-                var provider = ResourceProvider.Parse(parts[0]);
-                var resourceId = parts[1];
-
-                return FindAsync(provider, resourceId) ?? throw new Exception($"{provider.Code}:host/{id} not found");
+                return FindAsync(provider, resourceId) ?? throw ResourceError.NotFound(provider, ResourceType.Host, name);
             }
-        }
-
-        public async Task<HostInfo> GetAsync(long id)
-        {
-            return await db.Hosts.FindAsync(id).ConfigureAwait(false) ?? throw new Exception($"host#{id} not found");
         }
 
         public async Task<HostInfo> FindAsync(ResourceProvider provider, string id)
         {
             return await db.Hosts.FindAsync(provider, id).ConfigureAwait(false);
         }
-
-        public async Task<HostInfo> CreateAsync(CreateHostRequest request)
+        
+        public async Task<HostInfo> RegisterAsync(RegisterHostRequest request)
         {
              var host = new HostInfo(
                 id             : await GetNextId(request.Location).ConfigureAwait(false),
                 type           : HostType.Virtual,
                 status         : request.Status,
                 addresses      : request.Addresses,
+                groupId        : request.GroupId,
                 resource       : request.Resource,
                 environmentId  : request.EnvironmentId,
                 machineTypeId  : request.MachineTypeId,
@@ -65,8 +63,6 @@ namespace Carbon.Platform.Services
                 networkId      : request.NetworkId,
                 created        : DateTime.UtcNow
             );
-
-            host.GroupId = request.GroupId;
         
             await db.Hosts.InsertAsync(host).ConfigureAwait(false);
 
@@ -108,7 +104,7 @@ namespace Carbon.Platform.Services
 
         public async Task<HostGroup> GetGroupAsync(long id)
         {
-            return await db.HostGroups.FindAsync(id) ?? throw new Exception($"hostGroup#{id} not found");
+            return await db.HostGroups.FindAsync(id) ?? throw ResourceError.NotFound(ResourceType.HostGroup, id);
         }
 
         public async Task<HostGroup> GetGroupAsync(IEnvironment env, ILocation location)
@@ -123,7 +119,7 @@ namespace Carbon.Platform.Services
 
             if (group == null)
             {
-                throw new ArgumentException($"hostGroup with env#{env.Id} and location#{location.Id} not found");
+                throw new ResourceNotFoundException($"hostGroup(env#{env.Id}, location#{location.Id})");
             }
             
             return group;
@@ -148,27 +144,6 @@ namespace Carbon.Platform.Services
         }
 
         #endregion
-
-        public async Task<MachineImageInfo> GetMachineImageAsync(ResourceProvider provider, string id)
-        {
-            var image = await db.MachineImages.FindAsync(provider, id).ConfigureAwait(false);
-
-            if (image == null)
-            {
-                // var ami = await ec2.DescribeImageAsync(amiId);
-                
-                image = new MachineImageInfo(
-                    id       : db.MachineImages.Sequence.Next(),
-                    type     : MachineImageType.Machine,
-                    name     : Guid.NewGuid().ToString(),
-                    resource : new ManagedResource(ResourceProvider.Aws, ResourceType.MachineImage, id)
-                );
-
-                await db.MachineImages.InsertAsync(image).ConfigureAwait(false);
-            }
-
-            return image;
-        }
 
         // 4B per zone per region
         private async Task<HostId> GetNextId(ILocation location)

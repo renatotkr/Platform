@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Carbon.Data.Expressions;
-using Carbon.Platform.Sequences;
 using Carbon.Platform.Resources;
+using Carbon.Platform.Sequences;
+using Carbon.Platform.Services;
 
 using Dapper;
 
@@ -23,7 +24,7 @@ namespace Carbon.Platform.VersionControl
 
         public async Task<RepositoryInfo> GetAsync(long id)
         {
-            return await db.Repositories.FindAsync(id).ConfigureAwait(false) ?? throw new Exception($"repository#{id} not found");
+            return await db.Repositories.FindAsync(id).ConfigureAwait(false) ?? throw ResourceError.NotFound(ResourceType.Repository, id);
         }
 
         public async Task<RepositoryInfo> GetAsync(long ownerId, string name)
@@ -32,8 +33,12 @@ namespace Carbon.Platform.VersionControl
                 And(Eq("ownerId", ownerId), Eq("name", name))
             ).ConfigureAwait(false);
 
-            if (repository == null) throw new Exception($"repository named '{name}' not found");
+            if (repository == null)
+            {
+                throw ResourceError.NotFound(ResourceType.Repository, ownerId, name);
+            }
 
+            
             return repository;
         }
 

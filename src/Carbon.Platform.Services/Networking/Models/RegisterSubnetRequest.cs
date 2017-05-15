@@ -1,12 +1,12 @@
 ﻿using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.Services
+namespace Carbon.Platform.Networking
 {
-    public class CreateSubnetRequest
+    public class RegisterSubnetRequest
     {
-        public CreateSubnetRequest() { }
+        public RegisterSubnetRequest() { }
 
-        public CreateSubnetRequest(
+        public RegisterSubnetRequest(
             string cidr,
             long networkId,
             ManagedResource resource)

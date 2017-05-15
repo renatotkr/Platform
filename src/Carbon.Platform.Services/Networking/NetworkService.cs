@@ -2,9 +2,10 @@
 using System.Net;
 using System.Threading.Tasks;
 
-using Carbon.Platform.Networking;
+using Carbon.Platform.Resources;
+using Carbon.Platform.Services;
 
-namespace Carbon.Platform.Services
+namespace Carbon.Platform.Networking
 {
     public class NetworkService : INetworkService
     {
@@ -15,19 +16,33 @@ namespace Carbon.Platform.Services
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        private static readonly ResourceProvider aws = ResourceProvider.Aws;
-
         public Task<NetworkInfo> GetAsync(long id)
         {
-            return db.Networks.FindAsync(id) ?? throw new Exception("Network#{id} does not exist");
+            return db.Networks.FindAsync(id) ?? throw ResourceError.NotFound(ResourceType.Network, id);
+        }
+
+        // 1 | aws:vpc1
+
+        public Task<NetworkInfo> GetAsync(string name)
+        {
+            if (long.TryParse(name, out var id))
+            {
+                return GetAsync(id);
+            }
+            else
+            {
+                (var provider, var resourceId) = ResourceName.Parse(name);
+
+                return FindAsync(provider, resourceId) ?? throw ResourceError.NotFound(provider, ResourceType.Network, name);
+            }
         }
 
         public async Task<NetworkInfo> FindAsync(ResourceProvider provider, string id)
         {
-            return await db.Networks.FindAsync(aws, id).ConfigureAwait(false);
+            return await db.Networks.FindAsync(provider, id).ConfigureAwait(false);
         }
 
-        public async Task<NetworkInfo> CreateAsync(CreateNetworkRequest request)
+        public async Task<NetworkInfo> RegisterAsync(RegisterNetworkAsync request)
         {
             var network = new NetworkInfo(
                 id             : db.Networks.Sequence.Next(),
@@ -41,7 +56,7 @@ namespace Carbon.Platform.Services
             return network;
         }
 
-        public async Task<SubnetInfo> CreateSubnetAsync(CreateSubnetRequest request)
+        public async Task<SubnetInfo> RegisterSubnetAsync(RegisterSubnetRequest request)
         {
             #region Preconditions
 
@@ -60,7 +75,7 @@ namespace Carbon.Platform.Services
             return subnet;
         }
 
-        public async Task<NetworkSecurityGroup> CreateNetworkSecurityGroupAsync(CreateNetworkSecurityGroupRequest request)
+        public async Task<NetworkSecurityGroup> RegisterNetworkSecurityGroupAsync(RegisterNetworkSecurityGroupRequest request)
         {
             #region Preconditions
 
@@ -79,7 +94,7 @@ namespace Carbon.Platform.Services
             return nsg;
         }
 
-        public async Task<NetworkInterfaceInfo> CreateNetworkInterfaceAsync(CreateNetworkInterfaceRequest request)
+        public async Task<NetworkInterfaceInfo> RegisterNetworkInterfaceAsync(RegisterNetworkInterfaceRequest request)
         {
             #region Preconditions
 

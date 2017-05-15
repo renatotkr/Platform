@@ -3,13 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.Services
+namespace Carbon.Platform.Networking
 {
-    public class CreateNetworkSecurityGroupRequest
+    public class RegisterNetworkSecurityGroupRequest
     {
-        public CreateNetworkSecurityGroupRequest() { }
+        public RegisterNetworkSecurityGroupRequest() { }
 
-        public CreateNetworkSecurityGroupRequest(
+        public RegisterNetworkSecurityGroupRequest(
             string name,
             long networkId,
             ManagedResource resource)
