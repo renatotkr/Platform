@@ -2,13 +2,11 @@
 {
     public enum HostStatus : byte
     {
-        Pending     = 0, // provisioning
+        Pending     = 0, // provisioning (include gcp's staging state)
         Running     = 1,
         Suspending  = 2, // stopping
         Suspended   = 3, // stopped
         Terminating = 4, // shutting down ?
-        Terminated  = 5 
+        Terminated  = 5
     }
-
-    // Google Cloud: Staging?
 }

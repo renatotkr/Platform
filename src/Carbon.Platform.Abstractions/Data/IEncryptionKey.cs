@@ -8,9 +8,8 @@ namespace Carbon.Platform.Data
     }
 }
 
-
 /*
-Amazon   KMS         https://aws.amazon.com/kms/
-Azure    Key Vault   https://azure.microsoft.com/en-us/services/key-vault/
-Google   KMS         https://cloud.google.com/kms/
+aws   | KMS       | https://aws.amazon.com/kms/
+azure | Key Vault | https://azure.microsoft.com/en-us/services/key-vault/
+gcp   | KMS       | https://cloud.google.com/kms/
 */

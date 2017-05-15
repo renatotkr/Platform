@@ -26,6 +26,6 @@ namespace Carbon.Platform.Computing
 }
 
 
-// google:  ulong  compute#healthCheck
-// fastly          Healthcheck    
-// azure           Probe
+// gcp    | ulong       compute#healthCheck
+// fastly |             Healthcheck    
+// azure  |             Probe

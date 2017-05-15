@@ -10,5 +10,5 @@ namespace Carbon.Platform.Networking
     }
 }
 
-// Amazon: eipalloc-5723d13e
-// Google: ulong                                  compute#address
+// aws: eipalloc-5723d13e | ?
+// gcp: ulong             | compute#address

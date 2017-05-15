@@ -7,6 +7,8 @@ namespace Carbon.Platform.Hosting
     public interface ICertificate : IManagedResource
     {
         string[] Subjects { get; }
+        
+        long IssuerId { get; }
 
         DateTime? Issued { get; }
 
@@ -16,5 +18,5 @@ namespace Carbon.Platform.Hosting
     }
 }
 
-
-// Google   ulong       compute#sslCertificate
+// aws | arn   | Certificate
+// gcp | ulong | compute#sslCertificate

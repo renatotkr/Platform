@@ -8,16 +8,18 @@ namespace Carbon.Platform.Computing
     }
 }
 
-// Google = compute#machineType | ulong
+// aws   | x1.32xlarge | Instance Type
+// gcp   | ulong       | compute#machineType
+// azure |             | Hardware Profile
 
 /* 
-Azure (Virtual Machine Sizes
+Azure - Virtual Machine Sizes
 ---------------------------------------------
 A0 - A4     | Generation 1 & 2
 D1 - D5     | Generation 2
 G3
 
-Google Cloud (Machine Types)
+GCP - Machine Types
 ---------------------------------------------
 n1-standard-1
 n1-standard-2

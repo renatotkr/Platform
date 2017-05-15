@@ -16,7 +16,4 @@ namespace Carbon.Platform.CI
 
         DateTime? Completed { get; }
     }
- 
-    // type?
-    // Website | App
 }

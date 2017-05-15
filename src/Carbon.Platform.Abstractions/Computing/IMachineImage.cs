@@ -12,5 +12,5 @@ namespace Carbon.Platform.Computing
     }
 }
 
-// aws    : ami-1a2b3c4d        | Image
-// google : 6864121747226459524 | compute#image
+// aws | ami-1a2b3c4d        | Image / Amazon Machine Image
+// gcp | 6864121747226459524 | compute#image

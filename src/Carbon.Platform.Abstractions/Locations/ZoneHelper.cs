@@ -6,8 +6,8 @@ namespace Carbon.Platform
     {
         // Our identity model supports 255 zones
 
-        // Amazon regions currently have a maximum of 5 zones...
-        // Google has an F zone in Central US
+        // aws current has 5 zones 
+        // gcp current has 6 zones (the F zone in Central US)
 
         private static readonly char[] letters = {
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',

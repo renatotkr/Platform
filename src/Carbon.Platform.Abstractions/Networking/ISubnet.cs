@@ -11,14 +11,14 @@ namespace Carbon.Platform.Networking
 }
 
 /*
-Amazon      subnet-8360a9e7     Subnet
-Azure   
-Google      ulong               compute#subnetwork
+aws   | subnet-8360a9e7 | Subnet
+azure |  
+gcp   | ulong           | compute#subnetwork
 */
 
 
-// Google : IpCidrRange
-// Azure  : Address Prefix
+// gcp : IpCidrRange
+// azure  : Address Prefix
 
 // e.g. 
 // 10.1.1.0/24

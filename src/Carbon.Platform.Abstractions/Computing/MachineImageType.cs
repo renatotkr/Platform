@@ -6,7 +6,4 @@
         Machine   = 2,
         Container = 3
     }
-
-
-    // ami = amazon machine image
 }

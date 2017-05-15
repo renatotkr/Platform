@@ -11,4 +11,4 @@ namespace Carbon.Platform.Networking
 
 // Each AWS VPC has an implict router that comes with a default route table.
 
-// Google: compute#router
+// gcp | ? | compute#router

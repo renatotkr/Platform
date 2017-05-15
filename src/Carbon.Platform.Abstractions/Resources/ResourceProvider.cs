@@ -6,11 +6,11 @@ namespace Carbon.Platform
     public class ResourceProvider
     {
         // Cloud Platforms (1-255)      
-        public static readonly ResourceProvider Borg      = new ResourceProvider(1, "borg",  "Borg",            "borg.cloud");
-        public static readonly ResourceProvider Aws       = new ResourceProvider(2, "aws",   "AWS",             "aws.amazon.com"); // Amazon Web Services 
-        public static readonly ResourceProvider Gcp       = new ResourceProvider(3, "gcp",   "GCP",             "cloud.google.com");
-        public static readonly ResourceProvider Microsoft = new ResourceProvider(4, "azure", "Microsoft Azure", "azure.microsoft.com");
-
+        public static readonly ResourceProvider Borg  = new ResourceProvider(1, "borg",  "Borg",  "borg.cloud");
+        public static readonly ResourceProvider Aws   = new ResourceProvider(2, "aws",   "AWS",   "amazonaws.com");
+        public static readonly ResourceProvider Gcp   = new ResourceProvider(3, "gcp",   "GCP",   "cloud.google.com");
+        public static readonly ResourceProvider Azure = new ResourceProvider(4, "azure", "Azure", "azure.microsoft.com");
+        
         // Code Repository Providers = 1000
         public static readonly ResourceProvider GitHub    = new ResourceProvider(1000, "github",    "GitHub",    "github.com");
         public static readonly ResourceProvider Bitbucket = new ResourceProvider(1001, "bitbucket", "Bitbucket", "bitbucket.org");
@@ -27,15 +27,14 @@ namespace Carbon.Platform
         // Email Delivery Providers = 5000
         public static readonly ResourceProvider Postmark = new ResourceProvider(5000, "postmark", "Postmark");
 
-
         // Site Builders...
-        
+
 
         public static readonly Dictionary<int, ResourceProvider> map = new Dictionary<int, ResourceProvider> {
             { 1,    Borg },
             { 2,    Aws },
             { 3,    Gcp },
-            { 4,    Microsoft },
+            { 4,    Azure },
 
             { 2000,  Braintree },
             { 2001,  PayPal },
@@ -97,24 +96,21 @@ namespace Carbon.Platform
 
             switch (name.ToLower())
             {
-                case "borg"         : return Borg;
-                case "aws"          : return Aws;
-                case "gcp"          : return Gcp;
-                case "azure"        : return Microsoft;
+                case "borg"        : return Borg;
+                case "aws"         : return Aws;
+                case "gcp"         : return Gcp;
+                case "azure"       : return Azure;
 
                 // Full names
-                case "bitbucket"    : return Bitbucket;
-                case "github"       : return GitHub;
-                case "amazon"       : return Aws;
-                case "google"       : return Gcp;
-                case "microsoft"    : return Microsoft;
+                case "bitbucket"   : return Bitbucket;
+                case "github"      : return GitHub;
 
-                case "braintree"    : return Braintree;
-                case "paypal"       : return PayPal;
-                case "stripe"       : return Stripe;
+                case "braintree"   : return Braintree;
+                case "paypal"      : return PayPal;
+                case "stripe"      : return Stripe;
                 
-                case "postmark"     : return Postmark;
-                case "letsencrypt"  : return LetEncrypt;
+                case "postmark"    : return Postmark;
+                case "letsencrypt" : return LetEncrypt;
 
                 default: throw new Exception($"Unexpected provider '{name}'");
             } 

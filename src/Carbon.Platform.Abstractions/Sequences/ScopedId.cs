@@ -20,7 +20,7 @@ namespace Carbon.Platform.Sequences
 
         public ulong Value { get; }
 
-        public long ScopeId   => (long)(Value >> SequenceBits);
+        public long ScopeId => (long)(Value >> SequenceBits);
 
         public int SequenceId => (int)(Value & SequenceMask);
 

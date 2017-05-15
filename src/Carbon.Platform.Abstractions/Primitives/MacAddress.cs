@@ -1,6 +1,5 @@
 ﻿using Carbon.Extensions;
 using System;
-using System.Text;
 
 namespace Carbon.Net
 {
@@ -10,13 +9,11 @@ namespace Carbon.Net
 
         public MacAddress(byte[] data)
         {
-            this.data = data;
+            this.data = data ?? throw new ArgumentNullException(nameof(data));
         }
 
-        // AZURE: Standard format...
-
-        // AZURE  : "macAddress": "00-0D-3A-10-F1-29",
-        // AMAZON : <macAddress>02:81:60:cb:27:37</macAddress>
+        // azure | macAddress | 00-0D-3A-10-F1-29  | standard     | uppercase, dash seperated
+        // aws   | macAddress | 02:81:60:cb:27:37  | non-standard | lowercased, colon seperated
 
         // 02:81:60:cb:27:37
         // 00-0D-3A-10-F1-29

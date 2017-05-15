@@ -17,7 +17,7 @@ namespace Carbon.Platform.Networking
     }
 
     public enum NextHopType
-    {               // Azure                    Google
+    {               // azure                    gcp
         None,       // None
         Gateway,    // VirtualNetworkGateway    Gatway
         Host,       // VirtualAppliance         Instance
@@ -31,14 +31,14 @@ namespace Carbon.Platform.Networking
 // The destination CIDR to which the route applies
 // e.g. 10.1.0.0/16
 
-// AKA
-// Azure = Address Prefix
-// Google = destRange
+// names
+// azure | Address Prefix
+// gcp   | destRange
 
 // e.g. 10.0.0.0/16
 
 /*
-Google : compute#route
+gcp | compute#route
 */
 
 /*

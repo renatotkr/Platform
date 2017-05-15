@@ -19,8 +19,8 @@ namespace Carbon.Platform.Networking
 
 // A network may span multiple locations
 
-// Amazon | VPC
-// Google | compute#network
+// aws | VPC
+// gcp | compute#network
 
 /*
 us-west1	    10.138.0.0/20	10.138.0.1

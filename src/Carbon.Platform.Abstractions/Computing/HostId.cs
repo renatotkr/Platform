@@ -22,10 +22,7 @@ namespace Carbon.Platform.Computing
         
         public static implicit operator long(HostId id) => id.Value;
 
-        public static HostId Get(long value)
-        {
-            return new HostId { value = value };
-        }
+        public static HostId Get(long value) => new HostId { value = value };
 
         public static HostId Create(ILocation location, int sequenceNumber)
         {

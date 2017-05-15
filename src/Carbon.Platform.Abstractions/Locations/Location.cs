@@ -50,7 +50,7 @@ namespace Carbon.Platform
         {
             #region Preconditions
             
-            if (this.id.ProviderId == ResourceProvider.Microsoft.Id)
+            if (this.id.ProviderId == ResourceProvider.Azure.Id)
             {
                 throw new Exception("Azure does not have zones");
             }
@@ -61,8 +61,11 @@ namespace Carbon.Platform
 
             var newId = LocationId.Create(Id).WithZoneNumber(zoneNumber);
 
-            // AMAZON: us-east-1a
-            // GOOGLE: us-central1-b, us-central1-c
+            /* FORMAT DETAILS
+            --------------------------------------
+            aws | us-east-1a
+            gcp | us-central1-b, us-central1-c
+            ----------------------------------- */
 
             var name = Name;
 

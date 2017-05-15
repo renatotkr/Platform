@@ -12,6 +12,7 @@ namespace Carbon.Platform.Resources
             {
                 case "app"              : return App;
 
+                case "instance"         : return Host;
                 case "host"             : return Host;
                 case "machinetype"      : return MachineType;
                 case "machineimage"     : return MachineImage;
@@ -19,6 +20,7 @@ namespace Carbon.Platform.Resources
                 // Storage
                 case "bucket"           : return Bucket;
                 case "database"         : return Database;
+                case "dek"              : return DataEncryptionKey;
                 case "encryptionkey"    : return EncryptionKey;
                 case "repository"       : return Repository;
 
@@ -29,7 +31,7 @@ namespace Carbon.Platform.Resources
 
                 // Networking
                 case "network"          : return Network;
-                case "ip"               : return NetworkAddress;
+                case "ipAddress"        : return NetworkAddress;
                 case "networkinterface" : return NetworkInterface;
                 case "subnet"           : return Subnet;
 

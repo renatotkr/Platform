@@ -10,10 +10,10 @@ namespace Carbon.Platform.Networking
     }
 }
 
-// AKA NSG
+// aka NSG
 
 /*
-AWS    : sg-c27500d7    | Security Group
-Azure  : ?              | Network Security Group
-Google : 
+aws   | sg-c27500d7    | Security Group
+azure | ?              | Network Security Group
+gcp   | ? 
 */

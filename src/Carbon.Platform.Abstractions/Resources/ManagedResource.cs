@@ -86,6 +86,12 @@ namespace Carbon.Platform.Resources
         public static ManagedResource HostGroup(ILocation location, string id) => 
             FromLocation(location, ResourceType.HostGroup, id);
 
+        public static ManagedResource HostTemplate(ResourceProvider provider, string id) =>
+            new ManagedResource(provider, ResourceType.HostTemplate, id);
+
+        public static ManagedResource MachineImage(ILocation location, string id) =>
+           FromLocation(location, ResourceType.MachineImage, id);
+
         public static ManagedResource Network(ILocation location, string id) => 
             FromLocation(location, ResourceType.Network, id);
  
@@ -163,11 +169,11 @@ namespace Carbon.Platform.Resources
 }
 
 /*
+aws:host/i-453-352-18
 aws:location/us-east-1
-aws:instance/i-453-352-18
 aws:volume/vol-1a2b3c4d
 aws:image/ami-1a2b3c4d
 aws:bucket:us-east-1/name
-google:instance/1234
-google:bucket/name
+gcp:host/1234
+gcp:bucket/name
 */

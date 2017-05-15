@@ -29,7 +29,6 @@ namespace Carbon.Net
                 case "ssh"   : return SSH;
                 case "mysql" : return MySQL;
                 default      : throw new Exception("Unexpected:" + text);
-
             }
         }
     }
