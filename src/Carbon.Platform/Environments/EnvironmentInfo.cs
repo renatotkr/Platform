@@ -8,50 +8,53 @@ using Carbon.Platform.Resources;
 namespace Carbon.Platform
 {
     [Dataset("Environments")]
-    [DataIndex(IndexFlags.Unique, "appId", "type")]
     public class EnvironmentInfo : IEnvironment
     {
         public EnvironmentInfo() { }
 
         public EnvironmentInfo(
             long id, 
-            long appId,
-            EnvironmentType type,
+            string name,
             JsonObject variables = null)
         {
             Id        = id;
-            AppId     = appId;
-            Type      = type;
+            Name      = name;
             Variables = variables;
         }
-        
-        // Applications are responsible for creating their environments
+
         [Member("id"), Key]
         public long Id { get; }
 
-        [Member("appId")]
-        public long AppId { get; }
-
-        [Member("type")]
-        public EnvironmentType Type { get; }
-
+        // e.g. image.processor#staging
         [Member("name")]
-        [StringLength(100)]
-        public string Name { get; set; }
+        [StringLength(63)]
+        public string Name { get; }
 
         [Member("variables")]
         [StringLength(1000)]
         public JsonObject Variables { get; }
-
-        // Docker configuration?
         
-        // The last deployment
-        [Member("deploymentId")]
-        public long DeploymentId { get; }
+        // typical the primary application's version
+        // e.g. 1.2.9
 
         [Member("revision")]
         public string Revision { get; set; }
-
+        
+        public EnvironmentType Type
+        {
+            get
+            {
+                switch (Id % 4)
+                {
+                    case 0: return EnvironmentType.Development;
+                    case 1: return EnvironmentType.Production;
+                    case 2: return EnvironmentType.Staging;
+                    case 3: return EnvironmentType.Intergration;
+                    default: throw new Exception("unknown");
+                }
+            }
+        }
+        
         #region IResource
 
         ResourceType IResource.ResourceType => ResourceType.Environment;
@@ -60,8 +63,19 @@ namespace Carbon.Platform
 
         #region Stats
 
+        // the number of deployments made to the environment
         [Member("deploymentCount")]
         public int DeploymentCount { get; }
+
+        // the number of commands issued against the environment
+        [Member("commandCount")]
+        public int CommandCount { get; }
+
+        // The number of resources added to the environment
+        // e.g. buckets, encryptionKeys, loadBalancers, etc
+
+        [Member("resourceCount")]
+        public int ResourceCount { get; }
 
         // HostCount
 
