@@ -66,7 +66,7 @@ namespace Carbon.Platform
 
             var name = Name;
 
-            if (newId.ProviderId == ResourceProvider.Google.Id)
+            if (newId.ProviderId == ResourceProvider.Gcp.Id)
             {
                 name += "-" + char.ToLower(zoneName);
             }

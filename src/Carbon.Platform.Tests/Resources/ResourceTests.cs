@@ -9,7 +9,7 @@ namespace Carbon.Platform.Resources
         {
             var resource = ManagedResource.Parse("aws:host/18");
 
-            Assert.Equal("Amazon",          ResourceProvider.Get(resource.ProviderId).Name);
+            Assert.Equal("AWS",             ResourceProvider.Get(resource.ProviderId).Name);
             Assert.Equal(ResourceType.Host, resource.Type);
             Assert.Equal("18",              resource.ResourceId);
             Assert.Equal("aws:host/18",     resource.ToString());

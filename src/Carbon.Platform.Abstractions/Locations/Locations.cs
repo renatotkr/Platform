@@ -46,7 +46,7 @@ namespace Carbon.Platform
         {
             var lid = LocationId.Create(id);
 
-            if (lid.ProviderId == ResourceProvider.Amazon.Id)
+            if (lid.ProviderId == ResourceProvider.Aws.Id)
             {
                 switch (lid.RegionNumber)
                 {
@@ -74,7 +74,7 @@ namespace Carbon.Platform
                 throw new Exception("Microsoft not yet supported");
             }
 
-            if (lid.ProviderId == ResourceProvider.Google.Id) // Google
+            if (lid.ProviderId == ResourceProvider.Gcp.Id) // Google
             {
                 if (lid.RegionNumber == 0) // Mutli regional
                 {
@@ -115,7 +115,7 @@ namespace Carbon.Platform
 
         // Amazon | https://cloud.google.com/compute/docs/regions-zones/regions-zones
         //------------------------------------------------------------------------------------------------------------------------------------------
-        private static readonly ResourceProvider aws = ResourceProvider.Amazon;
+        private static readonly ResourceProvider aws = ResourceProvider.Aws;
 
         public static readonly Location Amazon_US_East1        = Create(aws,  1, "us-east-1");       // | US    | N. Virginia   | 2006-08-25
         public static readonly Location Amazon_EU_West1        = Create(aws,  2, "eu-west-1");       // | EU    | Ireland       | 2008-12-10
@@ -193,7 +193,7 @@ namespace Carbon.Platform
         // Google | https://cloud.google.com/compute/docs/regions-zones/regions-zones
         // ------------------------------------------------------------------------------------------------------------------------------------------
 
-        private static readonly ResourceProvider google = ResourceProvider.Google;
+        private static readonly ResourceProvider google = ResourceProvider.Gcp;
 
         // Multi-Regions
         public static readonly Location Google_US             = new Location(LocationId.Create(google, 0, 1), "us"); 

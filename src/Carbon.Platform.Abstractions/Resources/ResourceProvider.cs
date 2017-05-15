@@ -5,12 +5,12 @@ namespace Carbon.Platform
 {
     public class ResourceProvider
     {
-        // Cloud Platforms (1-255)
-        public static readonly ResourceProvider Borg         = new ResourceProvider(1  , "borg",    "Borg");
-        public static readonly ResourceProvider Amazon       = new ResourceProvider(2  , "aws",     "Amazon");
-        public static readonly ResourceProvider Google       = new ResourceProvider(3  , "google",  "Google");
-        public static readonly ResourceProvider Microsoft    = new ResourceProvider(4  , "azure",   "Microsoft");
-     
+        // Cloud Platforms (1-255)      
+        public static readonly ResourceProvider Borg      = new ResourceProvider(1, "borg",  "Borg",            "borg.cloud");
+        public static readonly ResourceProvider Aws       = new ResourceProvider(2, "aws",   "AWS",             "aws.amazon.com"); // Amazon Web Services 
+        public static readonly ResourceProvider Gcp       = new ResourceProvider(3, "gcp",   "GCP",             "cloud.google.com");
+        public static readonly ResourceProvider Microsoft = new ResourceProvider(4, "azure", "Microsoft Azure", "azure.microsoft.com");
+
         // Code Repository Providers = 1000
         public static readonly ResourceProvider GitHub    = new ResourceProvider(1000, "github",    "GitHub",    "github.com");
         public static readonly ResourceProvider Bitbucket = new ResourceProvider(1001, "bitbucket", "Bitbucket", "bitbucket.org");
@@ -33,8 +33,8 @@ namespace Carbon.Platform
 
         public static readonly Dictionary<int, ResourceProvider> map = new Dictionary<int, ResourceProvider> {
             { 1,    Borg },
-            { 2,    Amazon },
-            { 3,    Google },
+            { 2,    Aws },
+            { 3,    Gcp },
             { 4,    Microsoft },
 
             { 2000,  Braintree },
@@ -83,32 +83,30 @@ namespace Carbon.Platform
             return map.TryGetValue(id, out var value) ? value : throw new Exception($"No provider#{id}");
         }
 
-        public static ResourceProvider Parse(string text)
+        public static ResourceProvider Parse(string name)
         {
             #region Preconditions
 
-            if (text == null)
-                throw new ArgumentNullException(nameof(text));
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
 
-            if (text.Length == 0)
-                throw new ArgumentException("Must not be empty", nameof(text));
+            if (name.Length == 0)
+                throw new ArgumentException("Must not be empty", nameof(name));
 
             #endregion
 
-            switch (text.ToLower())
+            switch (name.ToLower())
             {
-                case "aws"          : return Amazon;
-                case "amzn"         : return Amazon;
                 case "borg"         : return Borg;
-                case "goog"         : return Google;
-                case "msft"         : return Microsoft;
+                case "aws"          : return Aws;
+                case "gcp"          : return Gcp;
                 case "azure"        : return Microsoft;
 
                 // Full names
                 case "bitbucket"    : return Bitbucket;
                 case "github"       : return GitHub;
-                case "amazon"       : return Amazon;
-                case "google"       : return Google;
+                case "amazon"       : return Aws;
+                case "google"       : return Gcp;
                 case "microsoft"    : return Microsoft;
 
                 case "braintree"    : return Braintree;
@@ -118,12 +116,8 @@ namespace Carbon.Platform
                 case "postmark"     : return Postmark;
                 case "letsencrypt"  : return LetEncrypt;
 
-                default: throw new Exception("Unexpected provider: " + text);
+                default: throw new Exception($"Unexpected provider '{name}'");
             } 
         }
     }
 }
-
-// aws:instance:i-07e6001e0415497e4
-// google:
-// azure:
