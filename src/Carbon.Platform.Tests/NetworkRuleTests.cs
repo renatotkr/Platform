@@ -4,6 +4,7 @@ using Xunit;
 
 namespace Carbon.Platform.Networking.Tests
 {
+    /*
     public class NetworkRuleTests
     {
         [Fact]
@@ -23,6 +24,7 @@ namespace Carbon.Platform.Networking.Tests
                 Priority         = 10
             };
         }
-
+        
     }
+    */
 }
