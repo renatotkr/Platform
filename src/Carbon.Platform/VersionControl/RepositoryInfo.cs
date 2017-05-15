@@ -16,6 +16,13 @@ namespace Carbon.Platform.VersionControl
 
         public RepositoryInfo(long id, string name, long ownerId, ManagedResource resource)
         {
+            #region Preconditions
+
+            if (id <= 0)
+                throw new ArgumentException("Must be > 0", nameof(id));
+
+            #endregion
+
             Id         = id;
             Name       = name ?? throw new ArgumentNullException(nameof(name));
             FullName   = resource.ResourceId;
@@ -45,9 +52,10 @@ namespace Carbon.Platform.VersionControl
         [IgnoreDataMember]
         [Member("commitCount")]
         public int CommitCount { get; }
-
-        // BranchCount
-
+        
+        [IgnoreDataMember]
+        [Member("branchCount")]
+        public int BranchCount { get; }
 
         #endregion
 

@@ -20,30 +20,27 @@ namespace Carbon.Platform.Computing
             HostType type, 
             HostStatus status, 
             IPAddress[] addresses,
-            IEnvironment env,
+            long environmentId,
+            long machineTypeId,
+            long machineImageId,
             long networkId,
             DateTime created,
             ManagedResource resource)
         {
-            #region Preconditions
-
-            if (env == null)
-                throw new ArgumentNullException(nameof(env));
-
-            #endregion
-
-            Id            = id;
-            Type          = type;
-            Status        = status;
-            Addresses     = addresses;
-            EnvironmentId = env.Id;
-            ProviderId    = resource.ProviderId;
-            ResourceId    = resource.ResourceId;
-            NetworkId     = networkId;
-            Created       = created;
+            Id             = id;
+            Type           = type;
+            Status         = status;
+            Addresses      = addresses;
+            EnvironmentId  = environmentId;
+            MachineTypeId  = machineTypeId;
+            MachineImageId = machineImageId;
+            ProviderId     = resource.ProviderId;
+            ResourceId     = resource.ResourceId;
+            NetworkId      = networkId;
+            Created        = created;
         }
 
-        // locationId + sequence
+        // locationId + sequenceNumber
         [Member("id"), Key]
         public long Id { get; }
 
@@ -52,23 +49,27 @@ namespace Carbon.Platform.Computing
        
         [Member("addresses")]
         public IPAddress[] Addresses { get; }
-        
-        [Member("networkId")]
-        public long NetworkId { get; }
 
         [Member("environmentId"), Indexed]
         public long EnvironmentId { get; }
         
+        // Managed Group Id
+        [Member("groupId"), Indexed]
+        public long? GroupId { get; set; }
+
+        [Member("networkId")]
+        public long NetworkId { get; }
+
         [Member("parentId")]
         public long? ParentId { get; set; }
 
         #region Image / Template
 
         [Member("machineTypeId")]
-        public long MachineTypeId { get; set; }
+        public long MachineTypeId { get; }
         
         [Member("machineImageId")]
-        public long MachineImageId { get; set; }
+        public long MachineImageId { get; }
 
         // HostTemplateId
 

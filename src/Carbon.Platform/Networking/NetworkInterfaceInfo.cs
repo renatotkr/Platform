@@ -17,20 +17,27 @@ namespace Carbon.Platform.Networking
 
         public NetworkInterfaceInfo(
             long id, 
-            MacAddress mac,
             IPAddress[] addresses,
+            MacAddress mac,
+            long subnetId,
             ManagedResource resource)
         {
-            Id = id;
+            Id         = id;
+            Addresses  = addresses;
             MacAddress = mac;
-            Addresses = addresses;
+            SubnetId   = subnetId;
             ProviderId = resource.ProviderId;
             ResourceId = resource.ResourceId;
             LocationId = resource.LocationId;
         }
 
-        [Member("id"), Key(sequenceName: "networkInterfaceId")]
+        // networkId + sequenceNumber
+        [Member("id")]
         public long Id { get; }
+
+        [DataMember(EmitDefaultValue = false)]
+        [Member("addresses")]
+        public IPAddress[] Addresses { get; }
 
         [Member("macAddress", TypeName = "binary(6)")]
         [Indexed]
@@ -42,11 +49,7 @@ namespace Carbon.Platform.Networking
         public long? HostId { get; set; }
 
         [Member("subnetId")]
-        public long SubnetId { get; set; }
-
-        [IgnoreDataMember] 
-        [Member("addresses")]
-        public IPAddress[] Addresses { get; }
+        public long SubnetId { get; }
 
         [IgnoreDataMember]
         public long NetworkId => ScopedId.GetScope(SubnetId);

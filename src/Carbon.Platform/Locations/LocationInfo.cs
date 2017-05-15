@@ -11,7 +11,10 @@ namespace Carbon.Platform
     {
         public LocationInfo() { }
 
-        public LocationInfo(int id, string name, LocationStatus status = LocationStatus.Healthy)
+        public LocationInfo(
+            int id,
+            string name, 
+            LocationStatus status = LocationStatus.Healthy)
         {
             Id         = id;
             ProviderId = LocationId.Create(id).ProviderId;

@@ -11,10 +11,22 @@ namespace Carbon.Platform.Hosting
     {
         public DomainInfo() { }
 
-        public DomainInfo(long id, string name, long ownerId)
+        public DomainInfo(
+            long id,
+            string name,
+            long ownerId,
+            long? certificateId = null)
         {
+            #region Preconditions
+
+            if (id <= 0)
+                throw new ArgumentException("Must be > 0", nameof(id));
+
+            #endregion
+
             Id      = id;
             Name    = name ?? throw new ArgumentNullException(nameof(name));
+            CertificateId = certificateId;
             OwnerId = ownerId;
         }
 

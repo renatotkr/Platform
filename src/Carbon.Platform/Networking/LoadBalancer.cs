@@ -16,7 +16,7 @@ namespace Carbon.Platform.Networking
             long id, 
             string name,
             string address, 
-            IEnvironment env, 
+            long networkId,
             ManagedResource resource)
         {
             #region Preconditions
@@ -26,12 +26,12 @@ namespace Carbon.Platform.Networking
 
             #endregion
 
-            Id            = id;
-            EnvironmentId = env.Id;
-            Address       = address;
-            ProviderId    = resource.ProviderId;
-            LocationId    = resource.LocationId;
-            ResourceId    = resource.ResourceId;
+            Id         = id;
+            Address    = address ?? throw new ArgumentNullException(nameof(address));
+            NetworkId  = networkId;
+            ProviderId = resource.ProviderId;
+            LocationId = resource.LocationId;
+            ResourceId = resource.ResourceId;
         }
         
         [Member("id"), Key(sequenceName: "loadBalancerId")]
@@ -44,17 +44,16 @@ namespace Carbon.Platform.Networking
         [Member("address")]
         public string Address { get; }
 
-        [Member("environmentId"), Indexed]
-        public long EnvironmentId { get; }
-
         [Member("networkId")]
-        public long NetworkId { get; set; }
+        public long NetworkId { get; }
 
         #region IResource
 
         [IgnoreDataMember]
         [Member("providerId")]
         public int ProviderId { get; }
+
+        // app/my-load-balancer/50dc6c495c0c9188
 
         [IgnoreDataMember]
         [Member("resourceId")]

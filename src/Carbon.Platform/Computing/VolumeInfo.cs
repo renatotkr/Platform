@@ -12,13 +12,14 @@ namespace Carbon.Platform.Computing
     {
         public VolumeInfo() { }
 
-        public VolumeInfo(long id, long size, ManagedResource resource)
+        public VolumeInfo(long id, long size, ManagedResource resource, long? hostId = null)
         {
             Id         = id;
             Size       = size;
             ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
             ResourceId = resource.ResourceId;
+            HostId     = hostId;
         }
 
         [Member("id"), Key(sequenceName: "volumeId")]
@@ -27,8 +28,8 @@ namespace Carbon.Platform.Computing
         [Member("size")]
         public long Size { get; }
 
-        [Member("hostId"), Mutable]
-        public long? HostId { get; set; }
+        [Member("hostId")]
+        public long? HostId { get; }
 
         // SourceImageId?
 

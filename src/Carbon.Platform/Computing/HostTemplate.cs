@@ -14,8 +14,10 @@ namespace Carbon.Platform.Computing
         
         public HostTemplate(
             long id, 
+            string name,
             IMachineType machineType,
             IMachineImage machineImage,
+            JsonObject details,
             ManagedResource resource)
         {
             #region Preconditions
@@ -29,29 +31,34 @@ namespace Carbon.Platform.Computing
             #endregion
 
             Id             = id;
+            Name           = name;
             MachineTypeId  = machineType.Id;
             MachineImageId = machineImage.Id;
             ProviderId     = resource.ProviderId;
+            Details        = details ?? throw new ArgumentNullException(nameof(details));
             ResourceId     = resource.ResourceId;
         }
 
         [Member("id"), Key(sequenceName: "hostTemplateId")]
         public long Id { get; }
 
+        [Member("name")]
+        [StringLength(63)]
+        public string Name { get; }
+
         [Member("machineTypeId")]
         public long MachineTypeId { get; }
 
         [Member("machineImageId")]
         public long MachineImageId { get; }
-
-        // Script at startup
-        [Member("script")]
+        
+        [Member("startupScript")]
         [StringLength(2000)]
-        public string Script { get; set; }
-
+        public string StartupScript { get; set; }
+        
         [Member("details")]
-        [StringLength(1000)]
-        public JsonObject Details { get; set; }
+        [StringLength(2000)]
+        public JsonObject Details { get; }
 
         #region IResource
 
@@ -63,7 +70,7 @@ namespace Carbon.Platform.Computing
         [Member("resourceId")]
         [Ascii, StringLength(100)]
         public string ResourceId { get; }
-
+        
         int IManagedResource.LocationId => 0;
 
         ResourceType IResource.ResourceType => ResourceType.HostTemplate;
@@ -75,13 +82,14 @@ namespace Carbon.Platform.Computing
         [IgnoreDataMember]
         [Member("created"), Timestamp]
         public DateTime Created { get; }
-
+        
         [IgnoreDataMember]
         [Member("deleted"), Timestamp]
         public DateTime? Deleted { get; }
-
-        // Host templates are immutable
-        // A new template must be made to make changes
+        
+        [IgnoreDataMember]
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; }
 
         #endregion
     }

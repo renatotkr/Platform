@@ -16,6 +16,8 @@ namespace Carbon.Platform.VersionControl
             string branchName, 
             string path, 
             long creatorId = 0,
+            long size = 0,
+            byte[] sha256 = null,
             FileType type = FileType.Blob)
         {
             RepositoryId = repositoryId;
@@ -23,6 +25,8 @@ namespace Carbon.Platform.VersionControl
             Path         = path       ?? throw new ArgumentNullException(nameof(path));
             Type         = type;
             CreatorId    = creatorId;
+            Size         = size;
+            Sha256       = sha256;
         }
 
         [Member("repositoryId"), Key]
