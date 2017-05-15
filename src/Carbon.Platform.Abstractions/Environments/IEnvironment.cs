@@ -4,22 +4,21 @@ namespace Carbon.Platform
 {
     public interface IEnvironment : IResource
     {
-        EnvironmentType Type { get; }
+        string Name { get; }
 
-        long AppId { get; }
+        EnvironmentType Type { get; }
 
         string Revision { get; } // e.g. master, 1.0.0
         
-        // Variables
+        // IReadOnlyDictionary<string, string> Variables { get; }
+        
     }
 }
 
-// An environment spans one or more regions 
-// Each enviroment region contains resources (i.e. hosts, databases, websites, encryption keys, etc)
+// An environment spans one or cloud regions
+// Each enviroment region contains resources (e.g. apps, hosts, databases, websites, encryption keys, etc)
 
-
-// Enviromements service applications
-// Examples include: development, alpha, beta, production
+// Enviromements service one or more applications (apps) from development through production
 
 // All resources belong to an environment...
 
@@ -27,7 +26,6 @@ namespace Carbon.Platform
 // accelerator#beta
 
 /*
- 
     
 /*
 Environment Variables
