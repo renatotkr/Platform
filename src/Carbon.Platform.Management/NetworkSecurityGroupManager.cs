@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 
 using Carbon.Platform.Resources;
 using Carbon.Platform.Networking;
-using Carbon.Platform.Services;
 
 using ec2 = Amazon.Ec2;
 
@@ -27,18 +26,17 @@ namespace Carbon.Platform.Management
         {
             var nsg = await db.NetworkSecurityGroups.FindAsync(ResourceProvider.Aws, group.GroupId).ConfigureAwait(false);
 
-
             if (nsg == null)
             {
                 var resource = new ManagedResource(ResourceProvider.Aws, ResourceType.NetworkSecurityGroup, group.GroupId);
 
-                var createRequest = new CreateNetworkSecurityGroupRequest(
-                    name: group.GroupName,
-                    networkId: network.Id,
-                    resource: resource
+                var registerRequest = new RegisterNetworkSecurityGroupRequest(
+                    name      : group.GroupName,
+                    networkId : network.Id,
+                    resource  : resource
                 );
 
-                nsg = await networkService.CreateNetworkSecurityGroupAsync(createRequest);
+                nsg = await networkService.RegisterNetworkSecurityGroupAsync(registerRequest);
             }
 
             return nsg;

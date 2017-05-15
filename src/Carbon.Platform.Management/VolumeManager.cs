@@ -10,35 +10,36 @@ namespace Carbon.Platform.Services
 {
     public class VolumeManager
     {
-        private readonly PlatformDb db;
         private readonly Ec2Client ec2;
+        private readonly VolumeService volumes;
 
-        public VolumeManager(PlatformDb db, Ec2Client ec2)
+        public VolumeManager(VolumeService volumes, Ec2Client ec2)
         {
-            this.db = db ?? throw new ArgumentNullException(nameof(db));
-            this.ec2 = ec2;
+            this.ec2     = ec2 ?? throw new ArgumentNullException(nameof(ec2));
+            this.volumes = volumes ?? throw new ArgumentNullException(nameof(volumes));
         }
 
-        const int _1GiB = 1_073_741_824;
-
-        public async Task<VolumeInfo> GetAsync(ResourceProvider provider, string name, IHost host = null)
+        public async Task<VolumeInfo> GetAsync(
+            ResourceProvider provider, 
+            string resourceId,
+            IHost host = null)
         {
-            var volume = await db.Volumes.FindAsync(provider, name).ConfigureAwait(false);
+            var volume = await volumes.FindAsync(provider, resourceId).ConfigureAwait(false);
+            
+            // If the volume isn't register, register it now...
 
             if (volume == null)
             {
-                var ec2Volume = await ec2.DescribeVolumeAsync(name).ConfigureAwait(false);
+                var ec2Volume = await ec2.DescribeVolumeAsync(resourceId).ConfigureAwait(false);
 
                 var location = Locations.Get(provider, ec2Volume.AvailabilityZone);
 
-                volume = new VolumeInfo(
-                    id       : db.Volumes.Sequence.Next(),
-                    size     : (long)ec2Volume.Size * _1GiB,
-                    resource : ManagedResource.Volume(location, ec2Volume.VolumeId),
-                    hostId   : host.Id
-                );
+                var registerRequest = new RegisterVolumeRequest { 
+                    Size     = ByteSize.GiB(ec2Volume.Size),
+                    Resource = ManagedResource.Volume(location, ec2Volume.VolumeId)
+                };
 
-                await db.Volumes.InsertAsync(volume).ConfigureAwait(false);
+                volume = await volumes.RegisterAsync(registerRequest).ConfigureAwait(false);
             }
 
             return volume;

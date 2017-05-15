@@ -37,9 +37,15 @@ namespace Carbon.Platform.Networking
             }
         }
 
-        public async Task<NetworkInfo> FindAsync(ResourceProvider provider, string id)
+        public async Task<NetworkInfo> GetAsync(ResourceProvider provider, string resourceId)
         {
-            return await db.Networks.FindAsync(provider, id).ConfigureAwait(false);
+            return await db.Networks.FindAsync(provider, resourceId).ConfigureAwait(false)
+                ?? throw ResourceError.NotFound(provider, ResourceType.Network, resourceId);
+        }
+
+        public async Task<NetworkInfo> FindAsync(ResourceProvider provider, string resourceId)
+        {
+            return await db.Networks.FindAsync(provider, resourceId).ConfigureAwait(false);
         }
 
         public async Task<NetworkInfo> RegisterAsync(RegisterNetworkAsync request)
@@ -54,6 +60,11 @@ namespace Carbon.Platform.Networking
             await db.Networks.InsertAsync(network).ConfigureAwait(false);
 
             return network;
+        }
+
+        public async Task<SubnetInfo> FindSubnetAsync(ResourceProvider provider, string resourceId)
+        {
+            return await db.Subnets.FindAsync(provider, resourceId).ConfigureAwait(false);
         }
 
         public async Task<SubnetInfo> RegisterSubnetAsync(RegisterSubnetRequest request)
@@ -92,27 +103,6 @@ namespace Carbon.Platform.Networking
             await db.NetworkSecurityGroups.InsertAsync(nsg).ConfigureAwait(false);
 
             return nsg;
-        }
-
-        public async Task<NetworkInterfaceInfo> RegisterNetworkInterfaceAsync(RegisterNetworkInterfaceRequest request)
-        {
-            #region Preconditions
-
-            Validate.Object(request, nameof(request));
-
-            #endregion
-
-            var networkInterface = new NetworkInterfaceInfo(
-                id        : await db.NetworkInterfaces.GetNextScopedIdAsync(request.NetworkId).ConfigureAwait(false),
-                addresses : Array.Empty<IPAddress>(),
-                mac       : request.Mac,
-                subnetId  : request.SubnetId,
-                resource  : request.Resource
-            );
-
-            await db.NetworkInterfaces.InsertAsync(networkInterface).ConfigureAwait(false);
-
-            return networkInterface;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+
 using Carbon.Net;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Sequences;
@@ -26,6 +27,8 @@ namespace Carbon.Platform.Networking
 
         [Required]
         public ManagedResource Resource { get; set; }
+        
+        public long? HostId { get; set; }
 
         public long NetworkId => ScopedId.GetScope(SubnetId);
     }
