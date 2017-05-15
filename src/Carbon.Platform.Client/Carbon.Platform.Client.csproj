@@ -6,6 +6,7 @@
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
   
     <!-- Package Details -->
+    <Authors>iamcarbon</Authors>
     <Copyright>© Jason Nelson</Copyright>
     <Description>Client for accessing the platform api.</Description>
     <PackageTags>platform;carbon</PackageTags>

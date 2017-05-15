@@ -6,9 +6,9 @@
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
 
     <!-- Package Info-->
+    <Authors>iamcarbon</Authors>
     <Copyright>© Jason Nelson</Copyright>
     <Description>Metric primitives.</Description>
-    <Authors>iamcarbon</Authors>
     <PackageTags>platform;metrics;carbon</PackageTags>
     <PackageLicenseUrl>https://github.com/carbon/Platform/blob/master/LICENCE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/carbon/platform</PackageProjectUrl>

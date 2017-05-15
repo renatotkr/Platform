@@ -6,9 +6,9 @@
     <TargetFrameworks>netstandard1.6;net451</TargetFrameworks>
 
     <!-- Package Info-->
+    <Authors>iamcarbon</Authors>
     <Copyright>© Jason Nelson</Copyright>
     <Description>Platform data abstractions.</Description>
-    <Authors>iamcarbon</Authors>
     <PackageTags>platform;carbon</PackageTags>
     <PackageLicenseUrl>https://github.com/carbon/Platform/blob/master/LICENCE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/carbon/Platform</RepositoryUrl>

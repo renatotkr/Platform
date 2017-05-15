@@ -31,7 +31,7 @@ namespace Carbon.Platform
         [Member("name")]
         [StringLength(63)]
         public string Name { get; }
-
+        
         [Member("status")]
         public LocationStatus Status { get; }
 

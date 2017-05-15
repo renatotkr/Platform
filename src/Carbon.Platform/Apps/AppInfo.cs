@@ -11,7 +11,7 @@ namespace Carbon.Platform.Apps
     {
         public AppInfo() { }
 
-        public AppInfo(long id, string name, long ownerId)
+        public AppInfo(long id, string name, string slug, long ownerId)
         {
             #region Preconditions
 
@@ -22,18 +22,21 @@ namespace Carbon.Platform.Apps
 
             Id      = id;
             Name    = name ?? throw new ArgumentNullException(nameof(name));
+            Slug    = slug;
             OwnerId = ownerId;
         }
 
         [Member("id"), Key(sequenceName: "appId", increment: 4)]
         public long Id { get; }
         
-        [Member("name"), Unique]
-        [StringLength(63)]
+        [Member("name")]
         public string Name { get; }
 
-        // Slug (unique) -- TODO
-
+        // Globally unique
+        [Member("slug"), Unique]
+        [StringLength(63)]
+        public string Slug { get; }
+        
         [Member("ownerId")]
         public long OwnerId { get; }
 

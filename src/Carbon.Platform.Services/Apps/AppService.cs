@@ -18,12 +18,12 @@ namespace Carbon.Platform.Apps
     public class AppService : IAppService
     {
         private readonly PlatformDb db;
-        private readonly EnvironmentService envService;
+        private readonly IEnvironmentService envService;
 
         public AppService(PlatformDb db, IEnvironmentService envService)
         {
-            this.db = db ?? throw new ArgumentNullException(nameof(db));
-            this.envService = (EnvironmentService)envService;
+            this.db         = db ?? throw new ArgumentNullException(nameof(db));
+            this.envService = envService;
         }
 
         public async Task<AppInfo> GetAsync(long id)
@@ -39,7 +39,7 @@ namespace Carbon.Platform.Apps
             }
             else
             {
-                return db.Apps.QueryFirstOrDefaultAsync(Eq("name", slug));
+                return db.Apps.QueryFirstOrDefaultAsync(Eq("slug", slug));
             }
         }
 
@@ -69,6 +69,7 @@ namespace Carbon.Platform.Apps
             var app = new AppInfo(
                 id      : id,
                 name    : request.Name,
+                slug    : request.Slug,
                 ownerId : request.OwnerId
             );
 
@@ -88,30 +89,8 @@ namespace Carbon.Platform.Apps
 
             return app;
         }
-
-        private EnvironmentInfo GetConfiguredEnvironment(IApp app, EnvironmentType type)
-        {
-            // Production   = appId
-            // Staging      = appId + 1
-            // Intergration = appId + 2
-            // Development  = appId + 3
-
-            var envIdOffset = ((int)type) - 1;
-
-            return new EnvironmentInfo(
-                id   : app.Id + envIdOffset,
-                name : app.Name + ((type == EnvironmentType.Production) ? "" : "#" + type.ToString().ToLower())
-            );
-        }
-
-        private async Task<EnvironmentInfo> CreateEnvironmentAsync(IApp app, EnvironmentType type)
-        {
-            var env = GetConfiguredEnvironment(app, type);
-
-            await db.Environments.InsertAsync(env).ConfigureAwait(false);
-
-            return env;
-        }
+        
+        #region Releases
 
         public async Task<AppRelease> CreateReleaseAsync(CreateAppReleaseRequest request)
         {
@@ -145,29 +124,21 @@ namespace Carbon.Platform.Apps
             return release;
         }
 
-        private async Task<long> GetNextReleaseIdAsync(long appId)
-        {
-            using (var connection = db.Context.GetConnection())
-            {
-                return (await connection.ExecuteScalarAsync<int>(
-                    @"SELECT `releaseCount` FROM `Apps` WHERE id = @id FOR UPDATE;
-                      UPDATE `Apps`
-                      SET `releaseCount` = `releaseCount` + 1
-                      WHERE id = @id", new { id = appId }).ConfigureAwait(false)) + 1;
-            }
-        }
-        
         public Task<AppRelease> GetReleaseAsync(long appId, SemanticVersion version)
         {
             return db.AppReleases.QueryFirstOrDefaultAsync(
                 And(Eq("appId", appId), Eq("version", version))
-            ); 
+            );
         }
 
         public Task<IReadOnlyList<AppRelease>> GetReleasesAsync(long appId)
         {
             return db.AppReleases.QueryAsync(Eq("appId", appId), Order.Descending("version"));
         }
+
+        #endregion
+
+        #region Environments
 
         public Task<EnvironmentInfo> GetEnvironmentAsync(long appId, EnvironmentType type)
         {
@@ -185,6 +156,48 @@ namespace Carbon.Platform.Apps
 
             return db.Environments.QueryAsync(Between("id", app.Id, app.Id + 3));
         }
+
+        #endregion
+
+        #region Helpers
+
+        private async Task<EnvironmentInfo> CreateEnvironmentAsync(IApp app, EnvironmentType type)
+        {
+            var env = GetConfiguredEnvironment(app, type);
+
+            await db.Environments.InsertAsync(env).ConfigureAwait(false);
+
+            return env;
+        }
+
+        private EnvironmentInfo GetConfiguredEnvironment(IApp app, EnvironmentType type)
+        {
+            // Production   = appId
+            // Staging      = appId + 1
+            // Intergration = appId + 2
+            // Development  = appId + 3
+
+            var envIdOffset = ((int)type) - 1;
+
+            return new EnvironmentInfo(
+                id: app.Id + envIdOffset,
+                name: app.Name + ((type == EnvironmentType.Production) ? "" : "#" + type.ToString().ToLower())
+            );
+        }
+
+        private async Task<long> GetNextReleaseIdAsync(long appId)
+        {
+            using (var connection = db.Context.GetConnection())
+            {
+                return (await connection.ExecuteScalarAsync<int>(
+                    @"SELECT `releaseCount` FROM `Apps` WHERE id = @id FOR UPDATE;
+                      UPDATE `Apps`
+                      SET `releaseCount` = `releaseCount` + 1
+                      WHERE id = @id", new { id = appId }).ConfigureAwait(false)) + 1;
+            }
+        }
+
+        #endregion
 
         class A : IApp
         {

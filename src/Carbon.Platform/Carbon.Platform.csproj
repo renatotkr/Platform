@@ -6,10 +6,9 @@
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
 
     <!-- Package Info-->
-    <AssemblyTitle>Carbon Platform</AssemblyTitle>
+    <Authors>iamcarbon</Authors>
     <Copyright>© Jason Nelson</Copyright>
     <Description>Primitives for operating a multicloud service.</Description>
-    <Authors>iamcarbon</Authors>
     <PackageTags>platform;carbon</PackageTags>
     <PackageLicenseUrl>https://github.com/carbon/Platform/blob/master/LICENCE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/carbon/Platform</RepositoryUrl>

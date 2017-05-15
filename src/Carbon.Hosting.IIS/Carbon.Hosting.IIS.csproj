@@ -4,6 +4,8 @@
     <VersionPrefix>0.19.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6</TargetFrameworks>
     <AssemblyName>Carbon.Hosting.IIS</AssemblyName>
+    
+    <!-- Package Details-->
     <Authors>iamcarbon</Authors>
     <Copyright>© Jason Nelson</Copyright>
     <Description>Implementation of the IIS host.</Description>

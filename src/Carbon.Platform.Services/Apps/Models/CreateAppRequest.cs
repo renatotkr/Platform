@@ -6,6 +6,9 @@ namespace Carbon.Platform.Apps
     {
         [Required, StringLength(63)]
         public string Name { get; set; }
+
+        [StringLength(63)]
+        public string Slug { get; set; }
         
         [Range(1, 2_199_023_255_552)]
         public long OwnerId { get; set; }

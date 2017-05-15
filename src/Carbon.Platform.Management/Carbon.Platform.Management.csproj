@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Management</AssemblyName>
-    <VersionPrefix>0.5.5</VersionPrefix>
+    <VersionPrefix>0.6.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
 
     <!-- Package Info-->
+    <Authors>iamcarbon</Authors>
     <Copyright>© Jason Nelson</Copyright>
     <Description>Platform management services.</Description>
-    <Authors>iamcarbon</Authors>
     <PackageTags>platform;carbon</PackageTags>
     <PackageLicenseUrl>https://github.com/carbon/Platform/blob/master/LICENCE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/carbon/Platform</RepositoryUrl>

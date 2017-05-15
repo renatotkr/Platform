@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Diagnostics</AssemblyName>
-    <VersionPrefix>0.8.2</VersionPrefix>
+    <VersionPrefix>0.9.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
 
     <!-- Package Info-->
+    <Authors>iamcarbon</Authors>
     <Copyright>© Jason Nelson</Copyright>
     <Description>Diagnostic abstractions.</Description>
-    <Authors>iamcarbon</Authors>
     <PackageTags>platform;diagnostics;carbon</PackageTags>
   </PropertyGroup>
 
