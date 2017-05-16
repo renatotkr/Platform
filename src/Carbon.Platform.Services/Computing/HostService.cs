@@ -69,64 +69,6 @@ namespace Carbon.Platform.Computing
             return host;
         }
 
-        #region Groups
-
-        public async Task<HostGroup> CreateHostGroupAsync(IEnvironment env, ILocation region)
-        {
-            #region Preconditions
-
-            if (env == null)
-                throw new ArgumentNullException(nameof(env));
-
-            if (region == null)
-                throw new ArgumentNullException(nameof(region));
-
-            if (LocationId.Create(region.Id).ZoneNumber > 0)
-                throw new ArgumentException("Must be a region. Was a zone.", nameof(region));
-
-            // TODO: Add support for zone groups
-
-            #endregion
-            
-            // e.g. carbon/us-east-1
-
-            var group = new HostGroup(
-               id            : await db.HostGroups.GetNextScopedIdAsync(env.Id).ConfigureAwait(false),
-               name          : env.Name + "/" + region.Name,
-               environmentId : env.Id,
-               resource      : ManagedResource.HostGroup(region, Guid.NewGuid().ToString())
-            );
-
-            await db.HostGroups.InsertAsync(group).ConfigureAwait(false);
-
-            return group;
-        }
-
-        public async Task<HostGroup> GetGroupAsync(long id)
-        {
-            return await db.HostGroups.FindAsync(id) ?? throw ResourceError.NotFound(ResourceType.HostGroup, id);
-        }
-
-        public async Task<HostGroup> GetGroupAsync(IEnvironment env, ILocation location)
-        {
-            var group = await db.HostGroups.QueryFirstOrDefaultAsync(
-                Conjunction(
-                    Eq("environmentId", env.Id),
-                    Eq("locationId", location.Id),
-                    IsNull("deleted")
-                )
-            ).ConfigureAwait(false);
-
-            if (group == null)
-            {
-                throw new ResourceNotFoundException($"hostGroup(env#{env.Id}, location#{location.Id})");
-            }
-            
-            return group;
-        }
-
-        #endregion
-
         #region Network Interfaces
 
         public Task<IReadOnlyList<NetworkInterfaceInfo>> GetNetworkInterfacesAsync(long hostId)
