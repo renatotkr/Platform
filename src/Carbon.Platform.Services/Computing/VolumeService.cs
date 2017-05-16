@@ -5,7 +5,7 @@ using Carbon.Platform.Services;
 
 namespace Carbon.Platform.Computing
 {
-    public class VolumeService
+    public class VolumeService : IVolumeService
     {
         private readonly PlatformDb db;
 
