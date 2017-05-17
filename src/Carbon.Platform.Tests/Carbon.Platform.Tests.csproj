@@ -7,6 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Carbon.Hosting\Carbon.Hosting.csproj" />
     <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj" />
+    <ProjectReference Include="..\Carbon.Platform.Configuration\Carbon.Platform.Configuration.csproj" />
     <ProjectReference Include="..\Carbon.Platform\Carbon.Platform.csproj" />
     <ProjectReference Include="..\Carbon.VersionControl\Carbon.VersionControl.csproj" />
   </ItemGroup>

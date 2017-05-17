@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-using Carbon.Platform.Computing;
+using Carbon.Platform.Storage;
 using Carbon.Platform.Networking;
 
 namespace Carbon.Platform.Monitoring

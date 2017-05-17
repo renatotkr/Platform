@@ -14,6 +14,7 @@ using Carbon.Net;
 using Carbon.Platform.Computing;
 using Carbon.Platform.Networking;
 using Carbon.Platform.Resources;
+using Carbon.Platform.Storage;
 
 namespace Carbon.Platform.Management
 {
@@ -25,7 +26,9 @@ namespace Carbon.Platform.Management
         private readonly SsmClient ssm;
         private readonly ElbClient elb;
 
-        private readonly HostService hostService;
+        private readonly IHostService hostService;
+        private readonly IHostGroupService groups;
+
         private readonly PlatformDb db;
 
         public HostManager(IAwsCredential credential, PlatformDb db)
@@ -43,22 +46,24 @@ namespace Carbon.Platform.Management
             ssm = new SsmClient(AwsRegion.USEast1, credential);
             elb = new ElbClient(AwsRegion.USEast1, credential);
 
-            this.hostService   = new HostService(db);
+            this.hostService = new HostService(db);
+            this.groups = new HostGroupService(db);
         }
 
-        public async Task LaunchHostsAsync(IEnvironment env, ILocation location, int launchCount = 1)
+        public async Task<IHost[]> LaunchHostsAsync(IEnvironment env, ILocation location, int launchCount = 1)
         {
             var locationId = LocationId.Create(location.Id);
 
             var region = Locations.Get(locationId.WithZoneNumber(0));
 
-            var group = await hostService.GetGroupAsync(env, region).ConfigureAwait(false);
+            var group = await groups.GetAsync(env, region).ConfigureAwait(false);
 
+            // TODO:
             // if the location is a region, select the avaiability zone with the least hosts
 
             var template = await db.HostTemplates.FindAsync(group.HostTemplateId.Value);
 
-            await LaunchHostsAsync(env, location, template, launchCount).ConfigureAwait(false);
+            return await LaunchHostsAsync(env, location, template, launchCount).ConfigureAwait(false);
         }
 
         public async Task<IHost[]> LaunchHostsAsync(
@@ -171,7 +176,7 @@ namespace Carbon.Platform.Management
 
             #endregion
 
-            var group = await hostService.GetGroupAsync(env, region).ConfigureAwait(false);
+            var group = await groups.GetAsync(env, region).ConfigureAwait(false);
 
             var runResult = await ec2.RunInstancesAsync(request).ConfigureAwait(false);
 
@@ -193,7 +198,7 @@ namespace Carbon.Platform.Management
             {
                 if (host.GroupId != null)
                 {
-                    var group = await hostService.GetGroupAsync(host.GroupId.Value).ConfigureAwait(false);
+                    var group = await groups.GetAsync(host.GroupId.Value).ConfigureAwait(false);
 
                     await RegisterHostToGroupAsync(host, group).ConfigureAwait(false);
                 }
@@ -215,7 +220,7 @@ namespace Carbon.Platform.Management
         {
             if (host.GroupId != null)
             {
-                var group = await hostService.GetGroupAsync(host.GroupId.Value);
+                var group = await groups.GetAsync(host.GroupId.Value);
 
                 if (group.Details.TryGetValue("targetGroupArn", out var targetGroupArn))
                 {

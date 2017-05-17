@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-using Carbon.Platform.Computing;
 using Carbon.Platform.Resources;
+using Carbon.Platform.Storage;
 
 namespace Carbon.Platform
 {

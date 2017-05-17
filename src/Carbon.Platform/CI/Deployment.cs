@@ -44,7 +44,7 @@ namespace Carbon.Platform.CI
         [Member("status")]
         public DeploymentStatus Status { get; set; }
        
-        // Website | Application
+        // Website | Program
         [Member("releaseType")]
         public ReleaseType ReleaseType { get; set; }
 

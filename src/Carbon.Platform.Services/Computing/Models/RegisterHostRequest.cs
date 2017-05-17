@@ -4,6 +4,7 @@ using Amazon.Runtime.Metadata;
 
 using Carbon.Platform.Networking;
 using Carbon.Platform.Resources;
+using Carbon.Platform.Storage;
 
 namespace Carbon.Platform.Computing
 {
