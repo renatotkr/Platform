@@ -7,7 +7,7 @@ namespace Carbon.Platform
     using Data;
     using Hosting;
     using Iam;
-    using Logs;
+    using Logging;
     using Networking;
     using Storage;
 
