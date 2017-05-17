@@ -1,0 +1,17 @@
+﻿The idea of using a higher level configuration sytnax, like cloudinit, is nice,
+
+but we can recreate these commands easily in bash without the depedency.
+
+https://cloudinit.readthedocs.io/en/latest/topics/examples.html
+users:
+groups:
+write_files:
+package_update: false
+package_upgrade: true
+packages: ...
+ssh_authorized_keys:
+ssh_keys:
+ca-certs:
+resolv_conf:
+runcmd:
+power_state:

@@ -19,41 +19,41 @@ namespace Carbon.Platform.Configuration.Systemd
 
             if (Unit != null)
             {
-                sb.WriteSection("Unit", Unit);
+                WriteSection(sb, "Unit", Unit);
             }
 
             if (Service != null)
             {
-                sb.WriteSection("Service", Service);
+                WriteSection(sb, "Service", Service);
             }
 
             if (Install != null)
             {
-                sb.WriteSection("Install", Install);
+                WriteSection(sb, "Install", Install);
             }
             
-            var text = sb.ToString();
+            return sb.ToString();
+        }
+        
+        private static void WriteSection(StringBuilder sb, string name, SectionBase section)
+        {
+            if (sb.Length > 0)
+            {
+                sb.AppendLine();
+                sb.AppendLine();
+            }
 
-            return text.Substring(0, text.Length - 2);
+            sb.Append("[" + name + "]");
+
+            foreach (var directive in section.GetDirectives())
+            {
+                sb.AppendLine();
+
+                sb.Append($"{directive.Name}={directive.Value}");
+            }
         }
     }
 }
 
 // https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files
-
-/*
-[Unit]
-Description=Accelerator
-
-[Service]
-WorkingDirectory=/var/apps/accelerator
-ExecStart=/var/apps/accelerator/Accelerator
-Restart=always
-RestartSec=10 # Restart service after 10 seconds if dotnet service crashes
-SyslogIdentifier=accelerator
-User=www-data
-Environment=ASPNETCORE_ENVIRONMENT=Production 
-
-[Install]
-WantedBy=multi-user.target
-*/
+// https://www.freedesktop.org/software/systemd/man/systemd.service.html#Options

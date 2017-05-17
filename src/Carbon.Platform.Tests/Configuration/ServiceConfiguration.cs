@@ -11,23 +11,20 @@ namespace Carbon.Platform.Configuration.Tests
         {
             var config = new ServiceConfiguration
             {
-                Name = "accelerator",
+                Name             = "accelerator",
+                Description      = "Accelerator service",
                 WorkingDirectory = "/var/apps/accelerator/latest",
-                Executable = new ServiceExecutable("Accelerator", "-port 80"),
-                Description = "Accelerator service",
-                Environment = new ProgramEnvironment {
+                Executable       = new ProgramExecutable("Accelerator", "-port 80"),
+                Environment      = new ProgramEnvironment {
                     { "ASPNETCORE_ENVIRONMENT", "Production" }
                 },
-                RestartPolicy = new RestartPolicy(RestartCondition.Always, TimeSpan.FromSeconds(10)),
-                User = ServiceUser.WwwData
+                RestartPolicy = new ProgramRestartPolicy(RestartCondition.Always, TimeSpan.FromSeconds(10)),
+                User = ProgramUser.WwwData
             };
-
-
-
 
             Assert.Equal(
 @"[Unit]
-Description=accelerator Service
+Description=Accelerator service
 
 [Service]
 WorkingDirectory=/var/apps/accelerator/latest

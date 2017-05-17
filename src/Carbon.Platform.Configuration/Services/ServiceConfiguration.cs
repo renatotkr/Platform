@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 namespace Carbon.Platform.Configuration
 {
@@ -9,8 +6,21 @@ namespace Carbon.Platform.Configuration
 
     public class ServiceConfiguration
     {
+        public ServiceConfiguration() { }
+
+        public ServiceConfiguration(
+            string name, 
+            string workingDirectory,
+            ProgramUser user)
+        {
+            Name             = name;
+            WorkingDirectory = workingDirectory;
+            User             = user;
+        }
+
         // e.g. accelerator
         // used as the service name, uername, and sysLogIdentifier value
+        // [Required]
         public string Name { get; set; }
 
         public string Description { get; set; }
@@ -21,49 +31,53 @@ namespace Carbon.Platform.Configuration
 
         // e.g. Accelerator -port 5000
         // fullpath = {workingDirectory}/{name}
-        public ServiceExecutable Executable { get; set; }
+        public ProgramExecutable Executable { get; set; }
         
         public ProgramEnvironment Environment { get; set; }
 
-        public ServiceUser User { get; set; }
+        // StartOn (Boot, Manual)
 
-        public RestartPolicy RestartPolicy { get; set; }
+        public ProgramRestartPolicy RestartPolicy { get; set; }
+
+        public ProgramUser User { get; set; }
 
         public UnitConfiguration ToSystemdConfiguration()
         {
-            var unit = new UnitSection
-            {
-                Description = Name + " Service"
+            var unit = new UnitSection {
+                Description = Description ?? (Name + " Service")
             };
-
-            int? restartSec = null;
-
-            if (RestartPolicy?.Delay != null)
-            {
-                restartSec = (int)RestartPolicy.Delay.Value.TotalSeconds;
-            }
 
             string env = Environment != null
                 ? string.Join(" ", Environment.Variables.Select(pair => pair.Key + "=" + pair.Value))
                 : null;
 
-            var service = new ServiceSection
-            {
+            var service = new ServiceSection {
                 WorkingDirectory = WorkingDirectory,
                 ExecStart        = WorkingDirectory + "/" + Executable.ToString(),
-                Restart          = RestartPolicy?.Condition == RestartCondition.Always ? "always" : null,
                 Environment      = env,
-                RestartSec       = restartSec,
                 User             = User.ToString(),
                 SyslogIdentifier = Name
             };
 
-            return new UnitConfiguration
+            if (RestartPolicy != null)
             {
+                switch (RestartPolicy.Condition)
+                {
+                    case RestartCondition.Always    : service.Restart = RestartOptions.Always;     break;
+                    case RestartCondition.OnFailure : service.Restart = RestartOptions.OnFailure;  break;
+                    case RestartCondition.OnAbormal : service.Restart = RestartOptions.OnAbnormal; break;
+                }
+
+                if (RestartPolicy.Delay != null)
+                {
+                    service.RestartSec = (int)RestartPolicy.Delay.Value.TotalSeconds;
+                }
+            }
+
+            return new UnitConfiguration {
                 Unit = unit,
                 Service = service,
-                Install = new InstallSection
-                {
+                Install = new InstallSection {
                     WantedBy = "multi-user.target"
                 }
             };

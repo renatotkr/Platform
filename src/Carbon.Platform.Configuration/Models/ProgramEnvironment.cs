@@ -11,7 +11,7 @@ namespace Carbon.Platform.Configuration
             Variables = new Dictionary<string, string>();
         }
 
-        public ProgramEnvironment(IDictionary<string, string> variables)
+        public ProgramEnvironment(Dictionary<string, string> variables)
         {
             Variables = variables ?? throw new ArgumentNullException(nameof(variables));
         }
@@ -21,7 +21,7 @@ namespace Carbon.Platform.Configuration
             Variables[key] = value;
         }
 
-        public IDictionary<string, string> Variables { get; set; }
+        public Dictionary<string, string> Variables { get; set; }
 
         #region IEnumerable
 

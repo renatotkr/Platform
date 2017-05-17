@@ -2,20 +2,20 @@
 
 namespace Carbon.Platform.Configuration
 {
-    public class ServiceUser
+    public class ProgramUser
     {
-        public static readonly ServiceUser WwwData = new ServiceUser("www-data");
+        public static readonly ProgramUser WwwData = new ProgramUser("www-data");
 
-        public ServiceUser(string name)
+        public ProgramUser(string name)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
         public string Name { get; }
 
-        public static ServiceUser Parse(string name)
+        public static ProgramUser Parse(string name)
         {
-            return new ServiceUser(name);
+            return new ProgramUser(name);
         }
 
         public override string ToString() => Name;

@@ -7,18 +7,18 @@ namespace Carbon.Platform.Configuration.Tests
         [Fact]
         public void ParseWithArguments()
         {
-            var x = ServiceExecutable.Parse("Accelerator -port 5000");
+            var x = ProgramExecutable.Parse("Accelerator -port 5000");
 
-            Assert.Equal("Accelerator", x.Name);
+            Assert.Equal("Accelerator", x.FileName);
             Assert.Equal("-port 5000", x.Arguments);
         }
 
         [Fact]
         public void ParseWithoutArguments()
         {
-            var x = ServiceExecutable.Parse("Nginx");
+            var x = ProgramExecutable.Parse("Nginx");
 
-            Assert.Equal("Nginx", x.Name);
+            Assert.Equal("Nginx", x.FileName);
             Assert.Null(null);
         }
     }

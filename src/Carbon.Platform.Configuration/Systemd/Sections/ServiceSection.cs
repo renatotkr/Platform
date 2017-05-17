@@ -14,45 +14,69 @@
             set => Set("ExecStart", value, 2);
         }
 
-        // always, on-success, on-failure, on-abnormal, on-abort, on-watchdog
+        public string ExecStop
+        {
+            get => Get("ExecStop");
+            set => Set("ExecStop", value, 3);
+        }
+
+        #region Restart Options
+
         public string Restart
         {
             get => Get("Restart");
-            set => Set("Restart", value, 3);
+            set => Set("Restart", value, 4);
         }
 
+        // The time to delay before restarting the service
+        // defaults to 100ms
         public int? RestartSec
         {
             get => GetInteger("RestartSec");
-            set => SetInteger("RestartSec", value, 4);
+            set => SetInteger("RestartSec", value, 5);
         }
+
+        #endregion
 
         public string SyslogIdentifier
         {
             get => Get("SyslogIdentifier");
-            set => Set("SyslogIdentifier", value, 5);
+            set => Set("SyslogIdentifier", value, 6);
         }
 
         /// <summary>
         /// Time waited before forcefully killing
+        /// sets both timeoutstartsec and timeoutstopsec
         /// </summary>
         public int? TimeoutSec
         {
             get => GetInteger("TimeoutSec");
-            set => SetInteger("TimeoutSec", value, 4);
+            set => SetInteger("TimeoutSec", value, 7);
+        }
+
+        public int? TimeoutStartSec
+        {
+            get => GetInteger("TimeoutStartSec");
+            set => SetInteger("TimeoutStartSec", value, 8);
+        }
+
+        public int? TimeoutStopSec
+        {
+            get => GetInteger("TimeoutStopSec");
+            set => SetInteger("TimeoutStopSec", value, 9);
         }
 
         public string User
         {
             get => Get("User");
-            set => Set("User", value, 6);
+            set => Set("User", value, 10);
         }
 
         // seperated how?
         public string Environment
         {
             get => Get("Environment");
-            set => Set("Environment", value, 7);
+            set => Set("Environment", value, 11);
         }
     }
 }
