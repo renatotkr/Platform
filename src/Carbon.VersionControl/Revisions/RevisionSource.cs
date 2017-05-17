@@ -11,17 +11,17 @@ namespace Carbon.VersionControl
             string name,
             Revision? revision)
         {
-            Provider    = provider;
-            AccountName = accountName;
-            Name        = name ?? throw new ArgumentNullException(nameof(name));
-            Revision    = revision;
+            Provider       = provider;
+            AccountName    = accountName;
+            RepositoryName = name ?? throw new ArgumentNullException(nameof(name));
+            Revision       = revision;
         }
 
         public RepositoryProvider Provider { get; }
 
         public string AccountName { get; }
 
-        public string Name { get; }
+        public string RepositoryName { get; }
 
         public Revision? Revision { get; }
 
@@ -37,7 +37,7 @@ namespace Carbon.VersionControl
 
             sb.Append(AccountName);
             sb.Append("/");
-            sb.Append(Name);
+            sb.Append(RepositoryName);
 
             if (Revision != null)
             {
@@ -64,7 +64,7 @@ namespace Carbon.VersionControl
                 text = text.Substring(text.IndexOf("://") + 3);
             }
 
-            var hostType = RepositoryProvider.GitHub;
+            var provider = RepositoryProvider.GitHub;
             string accountName = null;
             string repositoryName = null;
             Revision? revision = null;
@@ -77,11 +77,11 @@ namespace Carbon.VersionControl
                 {
                     if (hasHost)
                     {
-                        hostType = RepositoryProvider.Parse(part);
+                        provider = RepositoryProvider.Parse(part);
                     }
                     else
                     {
-                        hostType = RepositoryProvider.GitHub;
+                        provider = RepositoryProvider.GitHub;
                         accountName = part;
                     }
                 }
@@ -123,7 +123,7 @@ namespace Carbon.VersionControl
                 repositoryName = repositoryName.Replace(".git", "");
             }
 
-            return new RevisionSource(hostType, accountName, repositoryName, revision);
+            return new RevisionSource(provider, accountName, repositoryName, revision);
         }
     }
 }

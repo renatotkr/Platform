@@ -26,7 +26,7 @@ namespace GitHub
             var info = RevisionSource.Parse(url.ToString());
       
             AccountName = info.AccountName;
-            RepositoryName = info.Name;
+            RepositoryName = info.RepositoryName;
 
             client = new GitHubClient(authToken);
         }
