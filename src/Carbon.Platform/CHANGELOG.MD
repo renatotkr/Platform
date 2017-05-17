@@ -2,6 +2,15 @@
 We'll continue to make breaking API changes in minor releases until we reach 2.0.
 Services & management remain < 1.0.0 and will stabalize at v1.
 
+1.37.0
+- Change ResourceType from a structure to a class 
+- Add Build
+- Simplify Activity model
+- Move User to Iam namespace and add details and suspended properties
+- Rename Apps to Programs to support Services and Tasks
+- Add OwnerId to remaining top level objects 
+- Make host addresses a string[] to to support names in the future.
+
 1.36.0
 - Introduce Slugs
 - Add optional unique slug to environments 
