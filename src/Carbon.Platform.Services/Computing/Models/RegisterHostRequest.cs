@@ -13,7 +13,7 @@ namespace Carbon.Platform.Computing
         public RegisterHostRequest() { }
 
         public RegisterHostRequest(
-            IPAddress[] addresses,
+            string[] addresses,
             IEnvironment env,
             ILocation location,
             IMachineImage machineImage,
@@ -23,19 +23,19 @@ namespace Carbon.Platform.Computing
             long? groupId = null,
             HostStatus status = HostStatus.Pending)
         {
-            Addresses = addresses;
-            EnvironmentId = env.Id;
-            Location = location;
-            MachineImageId = machineImage.Id;
-            MachineTypeId = machineType.Id;
-            NetworkId = networkId;
-            Status = status;
-            Resource = resource;
-            GroupId = groupId;
+            Addresses       = addresses;
+            EnvironmentId   = env.Id;
+            Location        = location;
+            MachineImageId  = machineImage.Id;
+            MachineTypeId   = machineType.Id;
+            NetworkId       = networkId;
+            Status          = status;
+            Resource        = resource;
+            GroupId         = groupId;
         }
 
         // private ips first...
-        public IPAddress[] Addresses { get; set; }
+        public string[] Addresses { get; set; }
 
         public long EnvironmentId { get; set; }
 
@@ -64,7 +64,7 @@ namespace Carbon.Platform.Computing
             // machineImage = await GetImageAsync(ResourceProvider.Amazon, instance.ImageId).ConfigureAwait(false);
             return new RegisterHostRequest {
                 Status = HostStatus.Running,
-                Addresses = new[] { IPAddress.Parse(instance.PrivateIp) },
+                Addresses = new[] { instance.PrivateIp },
                 Resource = ManagedResource.Host(location, instance.InstanceId),
                 EnvironmentId = env.Id,
                 Location = location,

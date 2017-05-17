@@ -19,7 +19,7 @@ namespace Carbon.Platform.Computing
             long id, 
             HostType type, 
             HostStatus status, 
-            IPAddress[] addresses,
+            string[] addresses,
             long environmentId,
             long machineTypeId,
             long machineImageId,
@@ -50,7 +50,7 @@ namespace Carbon.Platform.Computing
         public HostType Type { get; }
        
         [Member("addresses")]
-        public IPAddress[] Addresses { get; }
+        public string[] Addresses { get; }
 
         [Member("environmentId"), Indexed]
         public long EnvironmentId { get; }
@@ -128,38 +128,44 @@ namespace Carbon.Platform.Computing
         [IgnoreDataMember]
         public bool IsTerminated => Terminated != null;
 
+        private IPAddress publicIp;
+        private IPAddress privateIp;
+
         [IgnoreDataMember]
         public IPAddress PublicIp
         {
-            get
-            {
-                foreach (var address in Addresses)
-                {
-                    if (!address.IsInternal())
-                    {
-                        return address;
-                    }
-                }
-
-                return null;
-            }
+            get => publicIp ?? (publicIp = GetIpAddress(IpAddressType.Public));
         }
 
         [IgnoreDataMember]
         public IPAddress PrivateIp
         {
-            get
-            {
-                foreach (var address in Addresses)
-                {
-                    if (address.IsInternal())
-                    {
-                        return address;
-                    }
-                }
+            get => privateIp ?? (privateIp = GetIpAddress(IpAddressType.Private));
+        }
 
-                return null;
+        private enum IpAddressType
+        {
+            Public,
+            Private
+        }
+
+        private IPAddress GetIpAddress(IpAddressType type)
+        {
+            foreach (var address in Addresses)
+            {
+                var ip = IPAddress.Parse(address);
+                
+                if (ip.IsInternal() && type == IpAddressType.Private)
+                {
+                    return ip;
+                }
+                else
+                {
+                    return ip;
+                }
             }
+
+            return null;
         }
 
         [IgnoreDataMember]
