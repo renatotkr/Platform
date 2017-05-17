@@ -13,7 +13,7 @@ namespace Carbon.Platform.Computing
 {
     using static Expression;
 
-    public class ProgramReleaseService
+    public class ProgramReleaseService : IProgramReleaseService
     {
         private readonly PlatformDb db;
         private readonly IProgramService programService;
@@ -47,7 +47,7 @@ namespace Carbon.Platform.Computing
 
             #region Logging
 
-            var activity = new Activity(ActivityType.Publish, program);
+            var activity = new Activity("publish", program);
 
             await db.Activities.InsertAsync(activity).ConfigureAwait(false);
 
@@ -56,10 +56,10 @@ namespace Carbon.Platform.Computing
             return release;
         }
 
-        public Task<ProgramRelease> GetReleaseAsync(long appId, SemanticVersion version)
+        public Task<ProgramRelease> GetAsync(long programId, SemanticVersion version)
         {
             return db.ProgramReleases.QueryFirstOrDefaultAsync(
-                And(Eq("appId", appId), Eq("version", version))
+                And(Eq("programId", programId), Eq("version", version))
             );
         }
 
@@ -71,7 +71,7 @@ namespace Carbon.Platform.Computing
 
         #region Helper
 
-        private async Task<long> GetNextId(long appId)
+        private async Task<long> GetNextId(long programId)
         {
             using (var connection = db.Context.GetConnection())
             {
@@ -79,7 +79,7 @@ namespace Carbon.Platform.Computing
                     @"SELECT `releaseCount` FROM `Programs` WHERE id = @id FOR UPDATE;
                       UPDATE `Programs`
                       SET `releaseCount` = `releaseCount` + 1
-                      WHERE id = @id", new { id = appId }).ConfigureAwait(false)) + 1;
+                      WHERE id = @id", new { id = programId }).ConfigureAwait(false)) + 1;
             }
         }
 

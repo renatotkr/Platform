@@ -6,38 +6,35 @@ using Carbon.Logging;
 using Carbon.Platform.Computing;
 using Carbon.Platform.Services;
 using Carbon.Platform.Web;
-using Carbon.Protection;
 
 namespace Carbon.Platform.CI
 {
-    public class WebsiteDeployer : ApiBase, IWebsiteDeployer
+    public class WebsiteDeployer : IWebsiteDeployer
     {
-        private readonly PlatformDb db;
+        private readonly ApiClient api;
         private readonly ILogger log;
-        private readonly EnvironmentService envService;
+        private readonly EnvironmentService environments;
         private readonly DeploymentService deployments;
+        private readonly IWebsiteService websiteService;
 
-        public WebsiteDeployer(SecretKey key, int port, PlatformDb db, ILogger logger)
-            : base(key, port)
+        public WebsiteDeployer(ApiClient api, IWebsiteService websiteService, PlatformDb db, ILogger logger)
         {
-            this.db  = db     ?? throw new ArgumentNullException(nameof(db));
+            this.api = api ?? throw new ArgumentNullException(nameof(api));
             this.log = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.websiteService = websiteService;
 
-            this.envService  = new EnvironmentService(db);
-            this.deployments = new DeploymentService(db);
+            this.environments = new EnvironmentService(db);
+            this.deployments  = new DeploymentService(db);
         }
 
-        public async Task<DeployResult> DeployAsync(WebsiteRelease release, IEnvironment env, long creatorId)
+        public async Task<DeployResult> DeployAsync(DeployWebsiteRequest request)
         {
-            #region Preconditions
+            var env = await environments.GetAsync(request.EnvironmentId);
+            var release = await websiteService.GetReleaseAsync(request.WebsiteId, request.WebsiteVersion);
 
-            if (release == null) throw new ArgumentNullException(nameof(release));
+            var deployment = await deployments.StartAsync(env, release, request.CreatorId);
 
-            #endregion
-            
-            var deployment = await deployments.StartAsync(env, release, creatorId);
-
-            var hosts = await envService.GetHostsAsync(env).ConfigureAwait(false);
+            var hosts = await environments.GetHostsAsync(env).ConfigureAwait(false);
             
             await DeployAsync(release, hosts).ConfigureAwait(false);
 
@@ -72,7 +69,7 @@ namespace Carbon.Platform.CI
 
             log.Info($"{host} / activating");
 
-            var result = await SendAsync(host, $"/websites/{release.WebsiteId}@{release.Version}/activate").ConfigureAwait(false);
+            var result = await api.SendAsync(host, $"/websites/{release.WebsiteId}@{release.Version}/activate").ConfigureAwait(false);
 
             log.Info(result);
         }

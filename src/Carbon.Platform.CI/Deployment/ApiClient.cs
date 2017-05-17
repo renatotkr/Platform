@@ -9,7 +9,7 @@ using Carbon.Security;
 
 namespace Carbon.Platform.CI
 {
-    public class ApiBase : IDisposable
+    public sealed class ApiClient : IDisposable
     {
         private readonly HttpClient http = new HttpClient {
             Timeout = TimeSpan.FromSeconds(15)
@@ -18,7 +18,7 @@ namespace Carbon.Platform.CI
         private readonly SecretKey secret;
         private readonly int port;
 
-        public ApiBase(SecretKey secret, int port)
+        public ApiClient(SecretKey secret, int port)
         {
             this.secret = secret;
             this.port = port;

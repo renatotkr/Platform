@@ -87,7 +87,6 @@ namespace Carbon.Platform.Computing
             return program;
         }
        
-
         #region Environments
 
         public Task<EnvironmentInfo> GetEnvironmentAsync(long programId, EnvironmentType type)
@@ -109,7 +108,7 @@ namespace Carbon.Platform.Computing
 
         #region Helpers
 
-        private async Task<EnvironmentInfo> CreateEnvironmentAsync(IProgram program, EnvironmentType type)
+        private async Task<EnvironmentInfo> CreateEnvironmentAsync(Program program, EnvironmentType type)
         {
             var env = GetConfiguredEnvironment(program, type);
 
@@ -118,7 +117,9 @@ namespace Carbon.Platform.Computing
             return env;
         }
 
-        private EnvironmentInfo GetConfiguredEnvironment(IProgram program, EnvironmentType type)
+        private EnvironmentInfo GetConfiguredEnvironment(
+            Program program, 
+            EnvironmentType type)
         {
             // Production   = programId
             // Staging      = programId + 1
@@ -127,9 +128,16 @@ namespace Carbon.Platform.Computing
 
             var envIdOffset = ((int)type) - 1;
 
+            var name = program.Name;
+
+            if (type != EnvironmentType.Production)
+            {
+                name += "#" + type.ToString().ToLower();
+            }
             return new EnvironmentInfo(
-                id   : program.Id + envIdOffset,
-                name : program.Name + ((type == EnvironmentType.Production) ? "" : "#" + type.ToString().ToLower())
+                id      : program.Id + envIdOffset,
+                name    : name,
+                ownerId : program.OwnerId
             );
         }
 
