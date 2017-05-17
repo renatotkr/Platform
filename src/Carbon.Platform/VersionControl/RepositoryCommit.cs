@@ -31,19 +31,19 @@ namespace Carbon.Platform.VersionControl
         [Member("message")]
         public string Message { get; }
 
+        [Member("sha1", TypeName = "binary(20)")]
+        [Indexed]
+        public byte[] Sha1 { get; }
+
+        [Member("sha3", TypeName = "binary(32)")]
+        [Indexed]
+        public byte[] Sha3 { get; }
+
         public long RepositoryId => ScopedId.GetScope(Id);
         
         #region IResource
 
         ResourceType IResource.ResourceType => ResourceTypes.RepositoryCommit;
-
-        #endregion
-
-        #region Hashes
-
-        [Member("sha1", TypeName = "binary(20)")]
-        [Indexed]
-        public byte[] Sha1 { get; }
 
         #endregion
 
