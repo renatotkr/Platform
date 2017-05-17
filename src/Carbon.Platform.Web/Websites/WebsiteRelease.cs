@@ -46,7 +46,7 @@ namespace Carbon.Platform.Web
             CreatorId = creatorId;
         }
 
-        // website + releaseSequence
+        // websiteId + sequenceNumber
         [Member("id"), Key]
         public long Id { get; }
 
@@ -62,8 +62,8 @@ namespace Carbon.Platform.Web
 
         [Member("creatorId")]
         public long CreatorId { get; }
-  
-        #region IDeployable
+
+        #region IRelease
 
         ReleaseType IRelease.Type => ReleaseType.Website;
 

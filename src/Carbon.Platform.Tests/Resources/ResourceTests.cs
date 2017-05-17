@@ -27,7 +27,6 @@ namespace Carbon.Platform.Resources
             Assert.Equal("aws:us-east-1:host/18", resource.ToString());
         }
 
-
         [Fact]
         public void ParseLocation()
         {
@@ -40,18 +39,32 @@ namespace Carbon.Platform.Resources
             Assert.Equal("aws:location/us-east-1b", resource.ToString());
         }
 
+        
         [Theory]
-        [InlineData(ResourceType.App,              "app")]
+        [InlineData(ResourceType.Host,             "host")]
+        [InlineData(ResourceType.MachineImage,     "machineImage")]
+        [InlineData(ResourceType.Program,          "program")]
+        public void ComputingTypes(ResourceType type, string name)
+        {
+            Assert.Equal(name, type.GetName());
+            Assert.Equal(type, ResourceTypeHelper.Parse(name));
+        }
+        [Theory]
         [InlineData(ResourceType.Bucket,           "bucket")]
         [InlineData(ResourceType.Database,         "database")]
         [InlineData(ResourceType.Domain,           "domain")]
-        [InlineData(ResourceType.MachineImage,     "machineImage")]
-        [InlineData(ResourceType.Host,             "host")]
-        [InlineData(ResourceType.Network,          "network")]
-        [InlineData(ResourceType.NetworkInterface, "networkInterface")]
-        [InlineData(ResourceType.Subnet,           "subnet")]
         [InlineData(ResourceType.Repository,       "repository")]
         public void Types(ResourceType type, string name)
+        {
+            Assert.Equal(name, type.GetName());
+            Assert.Equal(type, ResourceTypeHelper.Parse(name));
+        }
+
+        [Theory]
+        [InlineData(ResourceType.Network,           "network")]
+        [InlineData(ResourceType.NetworkInterface,  "networkInterface")]
+        [InlineData(ResourceType.Subnet,            "subnet")]
+        public void NetworkingTypes(ResourceType type, string name)
         {
             Assert.Equal(name, type.GetName());
             Assert.Equal(type, ResourceTypeHelper.Parse(name));

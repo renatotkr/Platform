@@ -26,8 +26,7 @@ namespace Amazon.Runtime.Metadata
 
         public string PrivateIp { get; set; }
 
-        private static readonly HttpClient http = new HttpClient
-        {
+        private static readonly HttpClient http = new HttpClient {
             Timeout = TimeSpan.FromSeconds(10)
         };
 

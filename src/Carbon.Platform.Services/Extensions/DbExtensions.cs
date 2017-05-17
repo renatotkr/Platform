@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 using Carbon.Data;
 using Carbon.Data.Expressions;
 
 namespace Carbon.Platform
 {
-    using Apps;
     using Computing;
+    using Storage;
     using Networking;
 
     using static Expression;
@@ -46,10 +45,5 @@ namespace Carbon.Platform
 
         public static Task<VolumeInfo> FindAsync(this Dataset<VolumeInfo, long> dataset, ResourceProvider provider, string id) =>
           dataset.QueryFirstOrDefaultAsync(And(Eq("providerId", provider.Id), Eq("resourceId", id)));
-
-        // ----
-
-        public static Task<IReadOnlyList<AppRelease>> FindHavingApp(this Dataset<AppRelease, long> dataset, IApp app) => 
-            dataset.QueryAsync(Eq("appId", app.Id), Order.Descending("version"));
     }
 }

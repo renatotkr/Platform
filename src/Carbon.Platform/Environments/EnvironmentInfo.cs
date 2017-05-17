@@ -40,9 +40,7 @@ namespace Carbon.Platform
         [StringLength(1000)]
         public JsonObject Variables { get; }
   
-        // typical the primary application's version
         // e.g. 1.2.9
-
         [Member("revision")]
         public string Revision { get; set; }
         
