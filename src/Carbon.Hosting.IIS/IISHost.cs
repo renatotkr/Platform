@@ -418,7 +418,7 @@ namespace Carbon.Hosting.IIS
             return new DirectoryInfo(path);
         }
 
-        public List<Request> GetActiveRequests(IProgram app, TimeSpan elapsedFilter)
+        public List<Request> GetActiveRequests(IApplication app, TimeSpan elapsedFilter)
         {
             var pool = manager.ApplicationPools[app.Name];
 

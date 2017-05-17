@@ -1,8 +1,5 @@
 ﻿namespace Carbon.Platform.Computing
 {
-    public interface IApplication : IProgram
-    {
-        
-    }
+    public interface IApplication : IProgram { }
 
 }

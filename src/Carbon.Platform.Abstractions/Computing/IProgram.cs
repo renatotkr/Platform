@@ -8,10 +8,8 @@
     }
 }
 
-// There are three types of programs: Applications, Services, and Tasks
+/*
+There are three specialized types of programs: Applications, Services, and Tasks
 
-// /var/apps/accelerator
-// /var/services/accelerator
-// /var/tasks/cleanup
-
-// https://en.wikipedia.org/wiki/Computer_program
+ref: https://en.wikipedia.org/wiki/Computer_program
+*/
