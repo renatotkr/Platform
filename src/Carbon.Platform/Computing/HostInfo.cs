@@ -17,16 +17,16 @@ namespace Carbon.Platform.Computing
 
         public HostInfo(
             long id, 
-            HostType type, 
-            HostStatus status, 
             string[] addresses,
             long environmentId,
             long machineTypeId,
             long machineImageId,
-            long networkId,
             DateTime created,
             ManagedResource resource,
-            long? groupId)
+            long? groupId     = null,
+            long networkId    = 0,
+            HostType type     = HostType.Virtual,
+            HostStatus status = HostStatus.Running)
         {
             Id             = id;
             Type           = type;
@@ -159,7 +159,8 @@ namespace Carbon.Platform.Computing
                 {
                     return ip;
                 }
-                else
+
+                if (!ip.IsInternal() && type == IpAddressType.Public)
                 {
                     return ip;
                 }

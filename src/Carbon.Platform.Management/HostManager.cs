@@ -327,14 +327,14 @@ namespace Carbon.Platform.Management
 
             // instance.LaunchTime
 
-            var addresses = new List<IPAddress>();
+            var addresses = new List<string>();
 
-            addresses.Add(IPAddress.Parse(instance.PrivateIpAddress));
+            addresses.Add(instance.PrivateIpAddress);
 
             // If the instance was assigned a public IP
             if (instance.IpAddress != null)
             {
-                addresses.Add(IPAddress.Parse(instance.IpAddress));
+                addresses.Add(instance.IpAddress);
             }
             
             var registerRequest = new RegisterHostRequest(
