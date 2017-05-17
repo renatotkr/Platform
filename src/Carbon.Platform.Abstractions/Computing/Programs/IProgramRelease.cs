@@ -1,11 +1,10 @@
-﻿
-using Carbon.Versioning;
+﻿using Carbon.Versioning;
 
-namespace Carbon.Platform.Apps
+namespace Carbon.Platform.Computing
 {
-    public interface IAppRelease
+    public interface IProgramRelease
     {
-        long AppId { get; }
+        long ProgramId { get; }
 
         SemanticVersion Version { get; }
 

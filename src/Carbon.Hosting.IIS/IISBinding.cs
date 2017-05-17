@@ -43,7 +43,10 @@ namespace Carbon.Hosting.IIS
 
             var parts = text.Split(':');
 
-            if (parts.Length < 3) throw new Exception("must be at least 3 parts");
+            if (parts.Length < 3)
+            {
+                throw new Exception("must be at least 3 parts");
+            }
 
             var ip = parts[0];
             var port = int.Parse(parts[1]);

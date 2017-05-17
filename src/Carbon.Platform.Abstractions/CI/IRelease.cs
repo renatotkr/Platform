@@ -6,7 +6,7 @@ namespace Carbon.Platform.CI
     {
         long Id { get; }
 
-        // Application | Website
+        // Program | Website
         ReleaseType Type { get; }
         
         SemanticVersion Version { get;  }

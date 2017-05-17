@@ -1,11 +1,11 @@
 ﻿using System;
-using Carbon.Platform.Apps;
+using Carbon.Platform.Computing;
 
 namespace Carbon.Hosting.IIS
 {
     using Versioning;
 
-    public class IISApplication : IApp
+    public class IISApplication : IApplication
     {
         public IISApplication(long id, string name, SemanticVersion version, DateTime created)
         {
@@ -23,5 +23,4 @@ namespace Carbon.Hosting.IIS
 
         public DateTime Created { get; }
     }
-
 }

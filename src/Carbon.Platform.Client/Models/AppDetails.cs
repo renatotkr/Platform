@@ -4,9 +4,9 @@ using Carbon.Protection;
 
 namespace Carbon.Platform
 {
-    using Apps;
+    using Computing;
 
-    public class AppDetails : IApp
+    public class AppDetails : IProgram
     {
         [DataMember(Name = "id", Order = 1)]
         public long Id { get; set; }

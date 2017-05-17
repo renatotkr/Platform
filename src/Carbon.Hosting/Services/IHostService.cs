@@ -1,29 +1,30 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Carbon.Json;
+using Carbon.Platform.Computing;
+using Carbon.Versioning;
+
 namespace Carbon.Hosting
 {
-    using Carbon.Json;
-    using Carbon.Versioning;
-    using Platform.Apps;
     using Storage;
-
+    
     public interface IHostService
     {
-        IEnumerable<IApp> Scan();
+        IEnumerable<IApplication> Scan();
 
-        IApp Find(long id);
+        IApplication Find(long id);
 
-        Task DeployAsync(IApp app, SemanticVersion version, JsonObject env, IPackage package);
+        Task DeployAsync(IApplication application, SemanticVersion version, JsonObject env, IPackage package);
 
         // Start
         // Stop
 
-        Task RestartAsync(IApp app);
+        Task RestartAsync(IApplication application);
 
-        Task DeleteAsync(IApp app);
+        Task DeleteAsync(IApplication application);
 
-        bool IsDeployed(IApp app, SemanticVersion version);
+        bool IsDeployed(IApplication application, SemanticVersion version);
     }
 }
 

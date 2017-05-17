@@ -4,14 +4,14 @@ using System.Runtime.Serialization;
 using Carbon.Data.Annotations;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.Apps
+namespace Carbon.Platform.Computing
 {
-    [Dataset("Apps")]
-    public class AppInfo : IApp, IResource
+    [Dataset("Programs")]
+    public class Program : IProgram, IResource
     {
-        public AppInfo() { }
+        public Program() { }
 
-        public AppInfo(long id, string name, string slug, long ownerId)
+        public Program(long id, string name, string slug, long ownerId)
         {
             #region Preconditions
 
@@ -23,20 +23,25 @@ namespace Carbon.Platform.Apps
             Id      = id;
             Name    = name ?? throw new ArgumentNullException(nameof(name));
             Slug    = slug;
+            Type    = ProgramType.Application;
             OwnerId = ownerId;
         }
 
-        [Member("id"), Key(sequenceName: "appId", increment: 4)]
+        [Member("id"), Key(sequenceName: "programId", increment: 4)]
         public long Id { get; }
         
         [Member("name")]
         public string Name { get; }
-
-        // Globally unique
+        
+        // e.g. accelerator | ngnix
         [Member("slug"), Unique]
         [StringLength(63)]
         public string Slug { get; }
-        
+
+        // Application, Service, Task
+        [Member("type")]
+        public ProgramType Type { get; set; }
+
         [Member("ownerId")]
         public long OwnerId { get; }
 
@@ -56,7 +61,7 @@ namespace Carbon.Platform.Apps
 
         #region IResource
 
-        ResourceType IResource.ResourceType => ResourceType.App;
+        ResourceType IResource.ResourceType => ResourceType.Program;
 
         #endregion
 
@@ -79,5 +84,5 @@ namespace Carbon.Platform.Apps
     }
 }
 
-// An app spans four envs: development, intergration, staging, and production
-// The app's env is responsible for exposing itself (i.e. to the web) or staying internal
+// Each program spans four envs: development, intergration, staging, and production
+// The program's environment is responsible for exposing itself (i.e. to the web) or staying internal

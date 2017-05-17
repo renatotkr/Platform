@@ -1,6 +1,6 @@
-﻿namespace Carbon.Platform.Apps
+﻿namespace Carbon.Platform.Computing
 {
-    public interface IAppStats
+    public interface IProgramStats
     {
         long ErrorCount { get; }
 

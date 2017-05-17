@@ -2,7 +2,7 @@
 {
     public enum ReleaseType : byte
     {
-        Application = 1,
+        Program = 1,
         Website     = 2
     }
 }

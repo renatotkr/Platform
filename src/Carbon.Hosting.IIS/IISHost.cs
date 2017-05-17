@@ -5,13 +5,14 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Threading.Tasks;
 
+using Carbon.Platform.Computing;
+
 using Microsoft.Web.Administration;
 
 namespace Carbon.Hosting.IIS
 {
     using Logging;
     using Packaging;
-    using Platform.Apps;
     using Json;
     using Storage;
     using Versioning;
@@ -31,7 +32,7 @@ namespace Carbon.Hosting.IIS
             this.log                = log ?? throw new ArgumentNullException(nameof(log));
         }
 
-        public IEnumerable<IApp> Scan()
+        public IEnumerable<IApplication> Scan()
         {
             foreach (var site in manager.Sites)
             {
@@ -41,7 +42,7 @@ namespace Carbon.Hosting.IIS
             }
         }
 
-        public IApp Find(long id)
+        public IApplication Find(long id)
         {
             var site = FindSite(id);
 
@@ -50,7 +51,7 @@ namespace Carbon.Hosting.IIS
             return FromSite(site);
         }
 
-        public Task CreateAsync(IApp app, SemanticVersion version, JsonObject env)
+        public Task CreateAsync(IApplication app, SemanticVersion version, JsonObject env)
         {
             var poolName = GetApplicationPoolName(app);
 
@@ -97,7 +98,7 @@ namespace Carbon.Hosting.IIS
             return Task.CompletedTask;
         }
 
-        public async Task DeployAsync(IApp app, SemanticVersion version, JsonObject env, IPackage package)
+        public async Task DeployAsync(IApplication app, SemanticVersion version, JsonObject env, IPackage package)
         {
             #region Ensure the app exists
 
@@ -167,7 +168,7 @@ namespace Carbon.Hosting.IIS
             LogInfo(app, $"Deployed v{version}");
         }
 
-        public IEnumerable<SemanticVersion> GetDeployedVersions(IApp app)
+        public IEnumerable<SemanticVersion> GetDeployedVersions(IApplication app)
         {
             var root = GetAppRootDirectory(app);
 
@@ -190,12 +191,12 @@ namespace Carbon.Hosting.IIS
             }
         }
 
-        public bool IsDeployed(IApp release, SemanticVersion version)
+        public bool IsDeployed(IApplication app, SemanticVersion version)
         {
-            return GetAppPath(release, version).Exists;
+            return GetAppPath(app, version).Exists;
         }
 
-        public Task ActivateAsync(IApp app, SemanticVersion version)
+        public Task ActivateAsync(IApplication app, SemanticVersion version)
         {
             var site = FindSite(app.Id);
 
@@ -236,7 +237,7 @@ namespace Carbon.Hosting.IIS
             return Task.CompletedTask;
         }
 
-        public Task RestartAsync(IApp app)
+        public Task RestartAsync(IApplication app)
         {
             var site = FindSite(app.Id);
 
@@ -247,7 +248,7 @@ namespace Carbon.Hosting.IIS
             return Task.CompletedTask;
         }
 
-        public Task DeleteAsync(IApp app)
+        public Task DeleteAsync(IApplication app)
         {
             var site = FindSite(app.Id);
 
@@ -276,7 +277,7 @@ namespace Carbon.Hosting.IIS
 
         #region Helpers
 
-        private string GetApplicationPoolName(IApp app)
+        private string GetApplicationPoolName(IApplication app)
         {
             return app.Name;
         }
@@ -296,7 +297,7 @@ namespace Carbon.Hosting.IIS
             return null;
         }
 
-        private Site GetConfigureSite(IApp app, SemanticVersion version, JsonObject variables)
+        private Site GetConfigureSite(IApplication app, SemanticVersion version, JsonObject variables)
         {
             #region Preconditions
 
@@ -385,7 +386,7 @@ namespace Carbon.Hosting.IIS
             return site;
         }
 
-        private void LogInfo(IApp app, string message)
+        private void LogInfo(IApplication app, string message)
         {
             var logsDir = Path.Combine(hostingEnvironment.AppsRoot.FullName, app.Id.ToString(), "logs");
 
@@ -402,21 +403,22 @@ namespace Carbon.Hosting.IIS
             File.AppendAllLines(path, new[] { line });
         }
 
-        private string GetAppRootDirectory(IApp app)
+        private string GetAppRootDirectory(IApplication app)
         {
             return Path.Combine(hostingEnvironment.AppsRoot.FullName, app.Id.ToString());
         }
 
-        // c:/apps/1/1.0.0
+        // linux   : /var/apps/1.0.0
+        // windows : c:/apps/1/1.0.0
 
-        private DirectoryInfo GetAppPath(IApp app, SemanticVersion version)
+        private DirectoryInfo GetAppPath(IApplication app, SemanticVersion version)
         {
             var path = Path.Combine(hostingEnvironment.AppsRoot.FullName, app.Id.ToString(), version.ToString());
 
             return new DirectoryInfo(path);
         }
 
-        public List<Request> GetActiveRequests(IApp app, TimeSpan elapsedFilter)
+        public List<Request> GetActiveRequests(IProgram app, TimeSpan elapsedFilter)
         {
             var pool = manager.ApplicationPools[app.Name];
 
