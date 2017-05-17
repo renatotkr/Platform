@@ -103,31 +103,14 @@ namespace Carbon.Platform.Web
             }
         }
         
-        public async Task<WebsiteInfo> CreateAsync(
-            string name, 
-            long ownerId,
-            IEnvironment env,
-            IRepository repository)
+        public async Task<WebsiteInfo> CreateAsync(CreateWebsiteRequest request)
         {
-            #region Preconditions
-
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
-
-            if (repository == null)
-                throw new ArgumentNullException(nameof(repository));
-
-            if (env == null)
-                throw new ArgumentNullException(nameof(env));
-
-            #endregion
-
             var website = new WebsiteInfo(
                 id            : db.Websites.Sequence.Next(),
-                name          : name,
-                repositoryId  : repository.Id,
-                environmentId : env.Id,
-                ownerId       : ownerId
+                name          : request.Name,
+                repositoryId  : request.RepositoryId,
+                environmentId : request.EnvironmentId,
+                ownerId       : request.OwnerId
             );
 
             await db.Websites.InsertAsync(website).ConfigureAwait(false);

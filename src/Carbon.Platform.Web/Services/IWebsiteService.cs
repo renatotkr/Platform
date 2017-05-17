@@ -8,12 +8,7 @@ namespace Carbon.Platform.Web
 {
     public interface IWebsiteService
     {
-        Task<WebsiteInfo> CreateAsync(
-            string name,
-            long ownerId,
-            IEnvironment env,
-            IRepository repository
-        );
+        Task<WebsiteInfo> CreateAsync(CreateWebsiteRequest request);
 
         Task<WebsiteRelease> CreateReleaseAsync(
             IWebsite website, 
