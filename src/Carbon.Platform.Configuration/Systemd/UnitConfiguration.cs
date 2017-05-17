@@ -24,15 +24,17 @@ namespace Carbon.Platform.Configuration.Systemd
 
             if (Service != null)
             {
-                sb.WriteSection("Service", Unit);
+                sb.WriteSection("Service", Service);
             }
 
             if (Install != null)
             {
-                sb.WriteSection("Install", Unit);
+                sb.WriteSection("Install", Install);
             }
+            
+            var text = sb.ToString();
 
-            return sb.ToString();
+            return text.Substring(0, text.Length - 2);
         }
     }
 }
