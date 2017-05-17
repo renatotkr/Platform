@@ -17,7 +17,9 @@ namespace Carbon.Platform.Computing
             long programId,
             SemanticVersion version,
             byte[] sha256, 
-            long creatorId)
+            long creatorId,
+            long? buildId = null,
+            long commitId = 0)
         {
             #region Preconditions
 
@@ -33,13 +35,18 @@ namespace Carbon.Platform.Computing
             if (sha256.Length != 32)
                 throw new ArgumentException("Must be 32 bytes", nameof(sha256));
 
+            if (creatorId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(creatorId));
+
             #endregion
 
             Id        = id;
             ProgramId = programId;
             Version   = version;
+            CommitId  = commitId;
             Sha256    = sha256;
             CreatorId = creatorId;
+            BuildId   = buildId;
         }
 
         // programId + sequence
@@ -49,14 +56,14 @@ namespace Carbon.Platform.Computing
         [Member("programId")]
         public long ProgramId { get; }
         
-        [Member("version")] // defaults to 0.0.0
+        [Member("version")]
         public SemanticVersion Version { get; }
 
         [Member("buildId")]
-        public long? BuildId { get; set; }
+        public long? BuildId { get; }
 
         [Member("commitId")]
-        public long CommitId { get; set; }
+        public long CommitId { get; }
 
         [Member("creatorId")]
         public long CreatorId { get; }
@@ -70,7 +77,7 @@ namespace Carbon.Platform.Computing
         #endregion
 
         #region Hashes
-
+        
         [Member("sha256", TypeName = "binary(32)")]
         public byte[] Sha256 { get; }
 
@@ -83,4 +90,7 @@ namespace Carbon.Platform.Computing
 
         #endregion
     }
+
+
+    // PackageInfo { hash: "sha-256:234234324" }
 }

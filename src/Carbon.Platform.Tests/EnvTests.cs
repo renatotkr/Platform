@@ -2,22 +2,22 @@
 
 namespace Carbon.Platform.Environments.Tests
 {
+    using static EnvironmentType;
+
     public class EnvTests
     {
-        [Fact]
-        public void TypeMapsAreCorrect()
+        [Theory]
+        [InlineData(Production,   1)]
+        [InlineData(Production,   5)]
+        [InlineData(Staging,      2)]
+        [InlineData(Staging,      6)]
+        [InlineData(Intergration, 3)]
+        [InlineData(Intergration, 7)]
+        [InlineData(Development,  4)]
+        [InlineData(Development,  8)]
+        public void TypeMapsAreCorrect(EnvironmentType type, long id)
         {
-            Assert.Equal(EnvironmentType.Production, new EnvironmentInfo(1, "").Type);
-            Assert.Equal(EnvironmentType.Production, new EnvironmentInfo(5, "").Type);
-
-            Assert.Equal(EnvironmentType.Staging, new EnvironmentInfo(2, "").Type);
-            Assert.Equal(EnvironmentType.Staging, new EnvironmentInfo(6, "").Type);
-
-            Assert.Equal(EnvironmentType.Intergration, new EnvironmentInfo(3, "").Type);
-            Assert.Equal(EnvironmentType.Intergration, new EnvironmentInfo(7, "").Type);
-
-            Assert.Equal(EnvironmentType.Development, new EnvironmentInfo(4, "").Type);
-            Assert.Equal(EnvironmentType.Development, new EnvironmentInfo(8, "").Type);
+            Assert.Equal(type, new EnvironmentInfo(id, "", 1).Type);
         }
     }
 }

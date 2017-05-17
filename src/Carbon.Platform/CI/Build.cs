@@ -10,7 +10,11 @@ namespace Carbon.Platform.CI
     {
         public Build() { }
 
-        public Build(long id, long commitId, long creatorId, ManagedResource resource)
+        public Build(
+            long id, 
+            long commitId, 
+            long creatorId,
+            ManagedResource resource)
         {
             Id        = id;
             CommitId  = commitId;

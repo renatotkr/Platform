@@ -21,14 +21,17 @@ namespace Carbon.Platform.CI
             #region Preconditions
 
             if (id <= 0)
-                throw new ArgumentException("Invalid", nameof(id));
+                throw new ArgumentException("Must be > 0", nameof(id));
 
             if (release == null)
                 throw new ArgumentNullException(nameof(release));
 
+            if (creatorId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(creatorId));
+
             #endregion
 
-            Id             = id;
+            Id = id;
             Status         = status;
             ReleaseType    = release.Type;
             ReleaseId      = release.Id;
@@ -46,10 +49,10 @@ namespace Carbon.Platform.CI
        
         // Website | Program
         [Member("releaseType")]
-        public ReleaseType ReleaseType { get; set; }
+        public ReleaseType ReleaseType { get; }
 
         [Member("resourceId")]
-        public long ReleaseId { get; set; }
+        public long ReleaseId { get; }
 
         [Member("releaseVersion")]
         public SemanticVersion ReleaseVersion { get; }

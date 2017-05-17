@@ -3,6 +3,7 @@
 using Xunit;
 
 using Carbon.Json;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing.Tests
 {
@@ -16,11 +17,12 @@ namespace Carbon.Platform.Computing.Tests
                 host     : null,
                 path     : "/",
                 port     : 80,
-                protocal : Net.NetworkProtocal.TCP
+                protocal : Net.NetworkProtocal.TCP,
+                resource : default(ManagedResource)
             ) {
-                Interval = TimeSpan.FromSeconds(10),
-                Timeout = TimeSpan.FromSeconds(10),
-                HealthyThreshold = 5,
+                Interval           = TimeSpan.FromSeconds(10),
+                Timeout            = TimeSpan.FromSeconds(10),
+                HealthyThreshold   = 5,
                 UnhealthyThreshold = 10
             };
 

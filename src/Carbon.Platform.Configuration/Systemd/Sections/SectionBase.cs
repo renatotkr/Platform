@@ -7,7 +7,6 @@ namespace Carbon.Platform.Configuration.Systemd
     {
         private readonly Dictionary<string, Directive> directives = new Dictionary<string, Directive>();
 
-        
         public IEnumerable<Directive> GetDirectives()
         {
             return directives.Values.OrderBy(d => d.Order);

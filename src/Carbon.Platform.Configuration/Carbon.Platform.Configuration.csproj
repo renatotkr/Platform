@@ -10,13 +10,14 @@
     <Copyright>© Jason Nelson</Copyright>
     <Description>Platform configuration abstractions.</Description>
     <PackageTags>docker;systemd;platform;carbon</PackageTags>
-    <PackageLicenseUrl>https://github.com/carbon/Platform/blob/master/LICENCE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/carbon/Platform</RepositoryUrl>
     <PackageProjectUrl>https://github.com/carbon/platform</PackageProjectUrl>
   </PropertyGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
     <PackageReference Remove="NETStandard.Library" />
+    <PackageReference Include="System.Collections" Version="4.3.0" />
+    <PackageReference Include="System.Linq" Version="4.3.0" />
     <PackageReference Include="System.Runtime" Version="4.3.0" />
   </ItemGroup>
 </Project>

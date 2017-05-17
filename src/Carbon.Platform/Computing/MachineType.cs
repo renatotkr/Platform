@@ -13,7 +13,11 @@ namespace Carbon.Platform.Computing
     {
         public MachineType() { }
 
-        public MachineType(long id, string name, JsonObject details, ResourceProvider provider)
+        public MachineType(
+            long id, 
+            string name,
+            JsonObject details, 
+            ResourceProvider provider)
         {
             Id         = id;
             Name       = name ?? throw new ArgumentNullException(nameof(name));
@@ -28,7 +32,8 @@ namespace Carbon.Platform.Computing
         [StringLength(63)]
         public string Name { get; }
         
-        [Member("details", TypeName = "varchar(1000)")]
+        [Member("details")]
+        [StringLength(1000)]
         public JsonObject Details { get; }
 
         #region IResource
