@@ -4,7 +4,7 @@ using Carbon.Data.Annotations;
 using Carbon.Json;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.Logs
+namespace Carbon.Platform.Logging
 {
     [Dataset("Activities")]
     public class Activity
@@ -24,7 +24,7 @@ namespace Carbon.Platform.Logs
             #endregion
 
             Action   = action ?? throw new ArgumentNullException(nameof(action));
-            Resource = resource.ResourceType.ToString() + "#" + resource.Id;
+            Resource = resource.ResourceType+ "#" + resource.Id;
             Context  = context;
         }
 
@@ -38,6 +38,7 @@ namespace Carbon.Platform.Logs
         
         // e.g. host#4234524
         [Member("resource")]
+        [StringLength(100)]
         public string Resource { get; }
 
         [Member("context"), Optional]

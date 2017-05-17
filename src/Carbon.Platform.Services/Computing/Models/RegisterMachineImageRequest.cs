@@ -8,10 +8,14 @@ namespace Carbon.Platform.Computing
     {
         public RegisterMachineImageRequest() { }
 
-        public RegisterMachineImageRequest(string name, ManagedResource resource)
+        public RegisterMachineImageRequest(
+            string name,
+            ManagedResource resource,
+            MachineImageType type = MachineImageType.Machine)
         {
             Name     = name;
             Resource = resource;
+            Type     = type;
         }
         
         // [Required, StringLenth(3, 128)]

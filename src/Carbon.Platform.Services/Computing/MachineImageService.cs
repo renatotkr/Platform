@@ -29,7 +29,8 @@ namespace Carbon.Platform.Computing
 
                 var registerRequest = new RegisterMachineImageRequest(
                     name     : Guid.NewGuid().ToString().Replace("-", ""),
-                    resource : new ManagedResource(provider, ResourceTypes.MachineImage, id)
+                    resource : new ManagedResource(provider, ResourceTypes.MachineImage, id),
+                    type     : MachineImageType.Machine
                 );
 
                 machineImage = await RegisterAsync(registerRequest).ConfigureAwait(false);
@@ -40,6 +41,12 @@ namespace Carbon.Platform.Computing
 
         public async Task<MachineImageInfo> RegisterAsync(RegisterMachineImageRequest request)
         {
+            #region Preconditions
+            
+            Validate.Object(request, nameof(request));
+
+            #endregion
+
             var image = new MachineImageInfo(
                 id       : db.MachineImages.Sequence.Next(),
                 type     : request.Type,
