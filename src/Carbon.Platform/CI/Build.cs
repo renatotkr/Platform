@@ -32,8 +32,6 @@ namespace Carbon.Platform.CI
         
         // ErrorMessage
 
-        // Artifacts
-
         [Member("duration"), Mutable]
         public TimeSpan? Duration { get; set; }
         

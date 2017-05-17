@@ -28,50 +28,51 @@ namespace Carbon.Platform
 
             Context = context ?? throw new ArgumentNullException(nameof(context));
 
-            // Environments ---------------------------------------------------------------
-            Environments         = new Dataset<EnvironmentInfo,     long>(context);
+            // Environments -------------------------------------------------------------
+            Environments         = new Dataset<EnvironmentInfo,           long>(context);
             EnvironmentLocations = new Dataset<EnvironmentLocation, (long, long)>(context);
-            EnvironmentResources = new Dataset<EnvironmentResource, long>(context);
-            Locations            = new Dataset<LocationInfo,        long>(context);
+            EnvironmentResources = new Dataset<EnvironmentResource,       long>(context);
+            Locations            = new Dataset<LocationInfo,              long>(context);
 
-            // Computing -------------------------------------------------------------
-            Hosts              = new Dataset<HostInfo,                 long>(context);
-            HostGroups         = new Dataset<HostGroup,                long>(context);
-            HostTemplates      = new Dataset<HostTemplate,             long>(context);
-            MachineImages      = new Dataset<MachineImageInfo,         long>(context);
-            MachineTypes       = new Dataset<MachineType,              long>(context);
-            Programs           = new Dataset<Program,                  long>(context);
-            ProgramReleases    = new Dataset<ProgramRelease,           long>(context);
+            // Computing ----------------------------------------------------------------
+            Hosts                 = new Dataset<HostInfo,                 long>(context);
+            HostGroups            = new Dataset<HostGroup,                long>(context);
+            HostTemplates         = new Dataset<HostTemplate,             long>(context);
+            MachineImages         = new Dataset<MachineImageInfo,         long>(context);
+            MachineTypes          = new Dataset<MachineType,              long>(context);
+            Programs              = new Dataset<Program,                  long>(context);
+            ProgramReleases       = new Dataset<ProgramRelease,           long>(context);
 
-            // Storage ---------------------------------------------------------------
-            Buckets            = new Dataset<BucketInfo,               long>(context);
-            Channels           = new Dataset<ChannelInfo,              long>(context);
-            Databases          = new Dataset<DatabaseInfo,             long>(context);
-            DatabaseClusters   = new Dataset<DatabaseCluster,          long>(context);
-            DatabaseEndpoints  = new Dataset<DatabaseEndpoint,         long>(context);
-            DatabaseInstances  = new Dataset<DatabaseInstance,         long>(context);
-            DataEncryptionKeys = new Dataset<DataEncryptionKeyInfo,    long>(context); 
-            EncryptionKeys     = new Dataset<EncryptionKeyInfo,        long>(context);
-            Queues             = new Dataset<QueueInfo,                long>(context);
-            Volumes            = new Dataset<VolumeInfo,               long>(context);
+            // Storage ------------------------------------------------------------------
+            Buckets               = new Dataset<BucketInfo,               long>(context);
+            Channels              = new Dataset<ChannelInfo,              long>(context);
+            Databases             = new Dataset<DatabaseInfo,             long>(context);
+            DatabaseClusters      = new Dataset<DatabaseCluster,          long>(context);
+            DatabaseEndpoints     = new Dataset<DatabaseEndpoint,         long>(context);
+            DatabaseInstances     = new Dataset<DatabaseInstance,         long>(context);
+            DataEncryptionKeys    = new Dataset<DataEncryptionKeyInfo,    long>(context); 
+            EncryptionKeys        = new Dataset<EncryptionKeyInfo,        long>(context);
+            Queues                = new Dataset<QueueInfo,                long>(context);
+            Volumes               = new Dataset<VolumeInfo,               long>(context);
 
-            // Hosting ---------------------------------------------------------------
-            Certificates       = new Dataset<CertificateInfo,          long>(context);
-            Domains            = new Dataset<DomainInfo,               long>(context);
+            // Hosting ------------------------------------------------------------------
+            Certificates          = new Dataset<CertificateInfo,          long>(context);
+            Domains               = new Dataset<DomainInfo,               long>(context);
 
             // Networks --------------------------------------------------------------
-            Networks              = new Dataset<NetworkInfo,          long>(context);
-            NetworkAddresses      = new Dataset<NetworkAddress,       long>(context);
-            NetworkInterfaces     = new Dataset<NetworkInterfaceInfo, long>(context);
-            NetworkSecurityGroups = new Dataset<NetworkSecurityGroup, long>(context);
-            LoadBalancers         = new Dataset<LoadBalancer,         long>(context);
-            LoadBalancerListeners = new Dataset<LoadBalancerListener, long>(context);
-            LoadBalancerRules     = new Dataset<LoadBalancerRule,     long>(context);
-            Subnets               = new Dataset<SubnetInfo,           long>(context);
+            Networks              = new Dataset<NetworkInfo,              long>(context);
+            NetworkAddresses      = new Dataset<NetworkAddress,           long>(context);
+            NetworkInterfaces     = new Dataset<NetworkInterfaceInfo,     long>(context);
+            NetworkSecurityGroups = new Dataset<NetworkSecurityGroup,     long>(context);
+            LoadBalancers         = new Dataset<LoadBalancer,             long>(context);
+            LoadBalancerListeners = new Dataset<LoadBalancerListener,     long>(context);
+            LoadBalancerRules     = new Dataset<LoadBalancerRule,         long>(context);
+            Subnets               = new Dataset<SubnetInfo,               long>(context);
 
             // CI -----------------------------------------------------------------------
-            Builds                = new Dataset<Build, long>(context);
-            Deployments           = new Dataset<Deployment, long>(context);
+            Builds                = new Dataset<Build,                    long>(context);
+            BuildArtifacts        = new Dataset<BuildArtifact,            long>(context);
+            Deployments           = new Dataset<Deployment,               long>(context);
             DeploymentTargets     = new Dataset<DeploymentTarget, (long, long)>(context);
 
             // IAM ---------------------------------------------------------------------
@@ -127,13 +128,12 @@ namespace Carbon.Platform
 
         // CI ---------------------------------------------------------------------
         public Dataset<Build, long>                    Builds             { get; }
+        public Dataset<BuildArtifact, long>            BuildArtifacts     { get; }
         public Dataset<Deployment, long>               Deployments        { get; }
         public Dataset<DeploymentTarget, (long, long)> DeploymentTargets  { get; }
 
         // IAM -------------------------------------------------------------------
-        public Dataset<User, long>                     Users { get; }
-
-        // Logging----------------------------------------------------------------
-        public Dataset<Activity, long>                 Activities { get; }
+        public Dataset<Activity, long>                 Activities         { get; }
+        public Dataset<User, long>                     Users              { get; }
     }
 }
