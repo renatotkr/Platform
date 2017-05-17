@@ -38,7 +38,20 @@ namespace Carbon.Platform.VersionControl
                 throw ResourceError.NotFound(ResourceTypes.Repository, ownerId, name);
             }
 
-            
+            return repository;
+        }
+
+        public async Task<RepositoryInfo> GetAsync(ResourceProvider provider, string fullName)
+        {
+            var repository = await db.Repositories.QueryFirstOrDefaultAsync(
+                And(Eq("providerId", provider.Id), Eq("fullName", fullName))
+            ).ConfigureAwait(false);
+
+            if (repository == null)
+            {
+                throw ResourceError.NotFound(provider, ResourceTypes.Repository, fullName);
+            }
+
             return repository;
         }
 
@@ -67,6 +80,22 @@ namespace Carbon.Platform.VersionControl
 
             return repository;
         }
+
+        public async Task<IRepositoryCommit> GetCommitAsync(long repositoryId, byte[] sha)
+        {
+            var range = ScopedId.GetRange(repositoryId);
+
+            // sha is assumed to be v1 for now
+            // determine type on length once sha3 identifiers are introduced...
+
+            return await db.Commits.QueryFirstOrDefaultAsync(
+                And(
+                    Eq("sha1", sha),
+                    Between("id", range.Start, range.End)
+                )
+            ).ConfigureAwait(false);
+        }
+
 
         public async Task<IRepositoryCommit> CreateCommitAsync(CreateCommitRequest request)
         {

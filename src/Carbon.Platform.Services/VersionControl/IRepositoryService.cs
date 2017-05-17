@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using Carbon.Platform.Resources;
-
 namespace Carbon.Platform.VersionControl
 {
     public interface IRepositoryService
@@ -11,9 +9,13 @@ namespace Carbon.Platform.VersionControl
 
         Task<RepositoryInfo> GetAsync(long ownerId, string name);
 
-        Task<RepositoryInfo> CreateAsync(string name, long ownerId, ManagedResource resource);
+        Task<RepositoryInfo> GetAsync(ResourceProvider provider, string fullName);
+
+        Task<RepositoryInfo> CreateAsync(CreateRepositoryRequest request);
 
         Task CreateBranchAsync(CreateBranchRequest request);
+
+        Task<IRepositoryCommit> GetCommitAsync(long repositoryId, byte[] sha);
 
         Task<IRepositoryCommit> CreateCommitAsync(CreateCommitRequest request);
 
