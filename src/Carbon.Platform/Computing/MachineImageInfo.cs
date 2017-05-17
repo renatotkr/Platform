@@ -38,6 +38,10 @@ namespace Carbon.Platform.Computing
         [StringLength(3, 128)]
         public string Name { get; }
 
+        // e.g. Ubuntu/16.04
+        [Member("os")]
+        public string OS { get; set; }
+
         [Member("description")]
         [StringLength(100)]
         public string Description { get; }
