@@ -42,13 +42,16 @@ namespace Carbon.Platform.VersionControl
         [StringLength(120)]
         public string Name { get; }
 
+        [Member("fullName")]
+        [StringLength(100)]
+        public string FullName { get; }
+
         [IgnoreDataMember]
         [Member("ownerId")]  // May change ownership
         public long OwnerId { get; }
 
-        [Member("fullName")]
-        [StringLength(100)]
-        public string FullName { get; }
+        [Member("encryptedAccessToken", TypeName = "BLOB(1000)")]
+        public byte[] EncryptedAccessToken { get; }
 
         #region Stats
 
