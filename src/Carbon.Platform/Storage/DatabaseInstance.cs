@@ -5,7 +5,7 @@ using Carbon.Data.Annotations;
 using Carbon.Platform.Sequences;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.Data
+namespace Carbon.Platform.Storage
 {
     [Dataset("DatabaseInstances")]
     public class DatabaseInstance : IDatabaseInstance

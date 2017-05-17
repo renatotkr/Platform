@@ -4,40 +4,41 @@ using System.Runtime.Serialization;
 using Carbon.Data.Annotations;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.Data
+namespace Carbon.Platform.Storage
 {
-    [Dataset("EncryptionKeys")]
-    [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
-    public class EncryptionKeyInfo : IEncryptionKey
+    [Dataset("Channels")]
+    public class ChannelInfo : IChannelInfo
     {
-        public EncryptionKeyInfo() { }
+        public ChannelInfo() { }
 
-        public EncryptionKeyInfo(long id, string name, int version, ManagedResource resource)
+        public ChannelInfo(long id, string name, ManagedResource resource)
         {
+            #region Preconditions
+
+            if (id <= 0) throw new ArgumentException("Invalid", nameof(id));
+
+            #endregion
+
             Id         = id;
-            Name       = name;
-            Version    = version;
+            Name       = name ?? throw new ArgumentNullException(nameof(name));
             ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
             ResourceId = resource.ResourceId;
         }
 
-        [Member("id"), Key(sequenceName: "encryptionKeyId")]
+        [Member("id"), Key(sequenceName: "channelId")]
         public long Id { get; }
 
         [Member("name")]
         [StringLength(63)]
         public string Name { get; }
-
-        [Member("version")]
-        public int Version { get; }
-
-        [Member("nextRotation")]
-        public DateTime? NextRotation { get; set; }
         
-        #region IResource
+        // A channel may be a firehose, SNS Topic, Kinesis Stream, etc
+        // A channel may have one or more consumers / subscribers
+        
+        // RentitionPeriod
 
-        // Providers: aws, azure, gcp
+        #region IResource
 
         [IgnoreDataMember]
         [Member("providerId")]
@@ -45,14 +46,14 @@ namespace Carbon.Platform.Data
 
         [IgnoreDataMember]
         [Member("resourceId")]
-        [Ascii, StringLength(100)]
+        [StringLength(100)]
         public string ResourceId { get; }
 
         [IgnoreDataMember]
         [Member("locationId")]
         public int LocationId { get; }
 
-        ResourceType IResource.ResourceType => ResourceType.EncryptionKey;
+        ResourceType IResource.ResourceType => ResourceType.Channel;
 
         #endregion
 
@@ -63,13 +64,13 @@ namespace Carbon.Platform.Data
         public DateTime Created { get; }
 
         [IgnoreDataMember]
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; }
+
+        [IgnoreDataMember]
         [Member("deleted")]
         [TimePrecision(TimePrecision.Second)]
         public DateTime? Deleted { get; }
-
-        [IgnoreDataMember]
-        [Member("modified"), Timestamp(true)]
-        public DateTime Modified { get; }
 
         #endregion
     }

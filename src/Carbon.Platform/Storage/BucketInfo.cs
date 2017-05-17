@@ -2,35 +2,30 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
-using Carbon.Platform.Sequences;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.Data
+namespace Carbon.Platform.Storage
 {
-    [Dataset("DatabaseClusters")]
-    public class DatabaseCluster : IDatabaseCluster
+    [Dataset("Buckets")]
+    public class BucketInfo : IBucketInfo
     {
-        public DatabaseCluster() { }
+        public BucketInfo() { }
 
-        public DatabaseCluster(long id, string name, ManagedResource resource)
+        public BucketInfo(long id, string name, ManagedResource resource)
         {
-            Id = id;
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-
+            Id         = id;
+            Name       = name ?? throw new ArgumentNullException(nameof(name));
             ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
             ResourceId = resource.ResourceId;
         }
 
-        // databaseId | sequenceNumber
-        [Member("id"), Key]
+        [Member("id"), Key(sequenceName: "bucketId")]
         public long Id { get; }
 
         [Member("name")]
-        [StringLength(63)]
+        [StringLength(1, 63)]
         public string Name { get; }
-
-        // TODO: Endpoints
 
         #region IResource
 
@@ -47,17 +42,25 @@ namespace Carbon.Platform.Data
         [Member("locationId")]
         public int LocationId { get; }
 
-        ResourceType IResource.ResourceType => ResourceType.DatabaseCluster;
+        ResourceType IResource.ResourceType => ResourceType.Bucket;
 
         #endregion
 
         #region Timestamps
 
+        [IgnoreDataMember]
         [Member("created"), Timestamp]
         public DateTime Created { get; }
 
-        #endregion
+        [IgnoreDataMember]
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; }
 
-        public long DatabaseId => ScopedId.GetScope(Id);
+        [IgnoreDataMember]
+        [Member("deleted")]
+        [TimePrecision(TimePrecision.Second)]
+        public DateTime? Deleted { get; }
+
+        #endregion
     }
 }

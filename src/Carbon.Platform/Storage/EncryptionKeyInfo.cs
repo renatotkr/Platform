@@ -4,30 +4,40 @@ using System.Runtime.Serialization;
 using Carbon.Data.Annotations;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.Data
+namespace Carbon.Platform.Storage
 {
-    [Dataset("Queues")]
-    public class QueueInfo : IQueueInfo
+    [Dataset("EncryptionKeys")]
+    [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
+    public class EncryptionKeyInfo : IEncryptionKey
     {
-        public QueueInfo() { }
+        public EncryptionKeyInfo() { }
 
-        public QueueInfo(long id, string name, ManagedResource resource)
+        public EncryptionKeyInfo(long id, string name, int version, ManagedResource resource)
         {
             Id         = id;
-            Name       = name ?? throw new ArgumentNullException(nameof(name));
+            Name       = name;
+            Version    = version;
             ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
             ResourceId = resource.ResourceId;
         }
 
-        [Member("id"), Key(sequenceName: "queueId")]
+        [Member("id"), Key(sequenceName: "encryptionKeyId")]
         public long Id { get; }
 
         [Member("name")]
         [StringLength(63)]
         public string Name { get; }
 
+        [Member("version")]
+        public int Version { get; }
+
+        [Member("nextRotation")]
+        public DateTime? NextRotation { get; set; }
+        
         #region IResource
+
+        // Providers: aws, azure, gcp
 
         [IgnoreDataMember]
         [Member("providerId")]
@@ -35,14 +45,14 @@ namespace Carbon.Platform.Data
 
         [IgnoreDataMember]
         [Member("resourceId")]
-        [StringLength(100)]
+        [Ascii, StringLength(100)]
         public string ResourceId { get; }
 
         [IgnoreDataMember]
         [Member("locationId")]
         public int LocationId { get; }
 
-        ResourceType IResource.ResourceType => ResourceType.Queue;
+        ResourceType IResource.ResourceType => ResourceType.EncryptionKey;
 
         #endregion
 
@@ -53,13 +63,13 @@ namespace Carbon.Platform.Data
         public DateTime Created { get; }
 
         [IgnoreDataMember]
-        [Member("modified"), Timestamp(true)]
-        public DateTime Modified { get; }
-
-        [IgnoreDataMember]
         [Member("deleted")]
         [TimePrecision(TimePrecision.Second)]
         public DateTime? Deleted { get; }
+
+        [IgnoreDataMember]
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; }
 
         #endregion
     }

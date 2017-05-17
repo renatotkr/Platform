@@ -2,7 +2,7 @@
 
 using Carbon.Data.Annotations;
 
-namespace Carbon.Platform.Computing
+namespace Carbon.Platform.Storage
 {
     [Dataset("VolumeAttachments")]
     public class VolumeAttachment : IVolumeAttachment

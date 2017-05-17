@@ -4,14 +4,14 @@ using System.Runtime.Serialization;
 using Carbon.Data.Annotations;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.Data
+namespace Carbon.Platform.Storage
 {
-    [Dataset("Buckets")]
-    public class BucketInfo : IBucketInfo
+    [Dataset("Queues")]
+    public class QueueInfo : IQueueInfo
     {
-        public BucketInfo() { }
+        public QueueInfo() { }
 
-        public BucketInfo(long id, string name, ManagedResource resource)
+        public QueueInfo(long id, string name, ManagedResource resource)
         {
             Id         = id;
             Name       = name ?? throw new ArgumentNullException(nameof(name));
@@ -20,11 +20,11 @@ namespace Carbon.Platform.Data
             ResourceId = resource.ResourceId;
         }
 
-        [Member("id"), Key(sequenceName: "bucketId")]
+        [Member("id"), Key(sequenceName: "queueId")]
         public long Id { get; }
 
         [Member("name")]
-        [StringLength(1, 63)]
+        [StringLength(63)]
         public string Name { get; }
 
         #region IResource
@@ -42,7 +42,7 @@ namespace Carbon.Platform.Data
         [Member("locationId")]
         public int LocationId { get; }
 
-        ResourceType IResource.ResourceType => ResourceType.Bucket;
+        ResourceType IResource.ResourceType => ResourceType.Queue;
 
         #endregion
 

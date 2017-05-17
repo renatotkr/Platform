@@ -3,7 +3,7 @@
 using Carbon.Data.Annotations;
 using Carbon.Platform.Sequences;
 
-namespace Carbon.Platform.Data
+namespace Carbon.Platform.Storage
 {
     [Dataset("DatabaseEndpoints")]
     public class DatabaseEndpoint : IDatabaseEndpoint

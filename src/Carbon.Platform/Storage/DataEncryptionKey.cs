@@ -5,7 +5,7 @@ using Carbon.Data.Annotations;
 using Carbon.Json;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.Data
+namespace Carbon.Platform.Storage
 {
     [Dataset("DataEncryptionKeys")]
     public class DataEncryptionKeyInfo : IResource

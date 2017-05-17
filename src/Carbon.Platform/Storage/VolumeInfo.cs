@@ -4,39 +4,34 @@ using System.Runtime.Serialization;
 using Carbon.Data.Annotations;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.Data
+namespace Carbon.Platform.Storage
 {
-    [Dataset("Channels")]
-    public class ChannelInfo : IChannelInfo
+    [Dataset("Volumes")]
+    [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
+    public class VolumeInfo : IVolume
     {
-        public ChannelInfo() { }
+        public VolumeInfo() { }
 
-        public ChannelInfo(long id, string name, ManagedResource resource)
+        public VolumeInfo(long id, long size, ManagedResource resource, long? hostId = null)
         {
-            #region Preconditions
-
-            if (id <= 0) throw new ArgumentException("Invalid", nameof(id));
-
-            #endregion
-
             Id         = id;
-            Name       = name ?? throw new ArgumentNullException(nameof(name));
+            Size       = size;
             ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
             ResourceId = resource.ResourceId;
+            HostId     = hostId;
         }
 
-        [Member("id"), Key(sequenceName: "channelId")]
+        [Member("id"), Key(sequenceName: "volumeId")]
         public long Id { get; }
 
-        [Member("name")]
-        [StringLength(63)]
-        public string Name { get; }
-        
-        // A channel may be a firehose, SNS Topic, Kinesis Stream, etc
-        // A channel may have one or more consumers / subscribers
-        
-        // RentitionPeriod
+        [Member("size")]
+        public long Size { get; }
+
+        [Member("hostId")]
+        public long? HostId { get; }
+
+        // SourceImageId?
 
         #region IResource
 
@@ -46,15 +41,15 @@ namespace Carbon.Platform.Data
 
         [IgnoreDataMember]
         [Member("resourceId")]
-        [StringLength(100)]
+        [Ascii, StringLength(63)]
         public string ResourceId { get; }
 
         [IgnoreDataMember]
         [Member("locationId")]
         public int LocationId { get; }
 
-        ResourceType IResource.ResourceType => ResourceType.Channel;
-
+        ResourceType IResource.ResourceType => ResourceType.Volume;
+      
         #endregion
 
         #region Timestamps
@@ -64,13 +59,13 @@ namespace Carbon.Platform.Data
         public DateTime Created { get; }
 
         [IgnoreDataMember]
-        [Member("modified"), Timestamp(true)]
-        public DateTime Modified { get; }
-
-        [IgnoreDataMember]
         [Member("deleted")]
         [TimePrecision(TimePrecision.Second)]
         public DateTime? Deleted { get; }
+
+        [IgnoreDataMember]
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; }
 
         #endregion
     }
