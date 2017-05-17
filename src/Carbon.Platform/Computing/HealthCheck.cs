@@ -18,13 +18,18 @@ namespace Carbon.Platform.Computing
             string host,
             string path,
             ushort port,
-            NetworkProtocal protocal)
+            NetworkProtocal protocal,
+            ManagedResource resource)
         {
             Id       = id;
             Host     = host;
             Path     = path;
             Port     = port;
             Protocal = protocal;
+
+            ProviderId = resource.ProviderId;
+            ResourceId = resource.ResourceId;
+            LocationId = resource.LocationId;
         }
 
         [Member("id"), Key(sequenceName: "healthCheckId")]
@@ -60,16 +65,16 @@ namespace Carbon.Platform.Computing
 
         [IgnoreDataMember]
         [Member("providerId")]
-        public int ProviderId { get; set; }
+        public int ProviderId { get; }
 
         [IgnoreDataMember]
         [Member("resourceId")]
         [Ascii, StringLength(100)]
-        public string ResourceId { get; set; }
+        public string ResourceId { get; }
 
         [IgnoreDataMember]
         [Member("locationId")]
-        public int LocationId { get; set; }
+        public int LocationId { get; }
 
         ResourceType IResource.ResourceType => ResourceType.HealthCheck;
 

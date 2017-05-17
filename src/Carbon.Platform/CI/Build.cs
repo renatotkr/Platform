@@ -43,13 +43,13 @@ namespace Carbon.Platform.CI
         #region IResource
 
         [Member("providerId")]
-        public int ProviderId { get; set; }
+        public int ProviderId { get; }
 
         [Member("resourceId")]
-        public string ResourceId { get; set; }
+        public string ResourceId { get; }
 
         [Member("locationId")]
-        public int LocationId { get; set; }
+        public int LocationId { get; }
         
         ResourceType IResource.ResourceType => ResourceType.Build;
 

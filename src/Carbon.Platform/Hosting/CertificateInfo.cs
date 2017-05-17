@@ -12,9 +12,15 @@ namespace Carbon.Platform.Hosting
     {
         public CertificateInfo() { }
 
-        public CertificateInfo(long id, string[] subjects, ManagedResource resource)
+        public CertificateInfo(
+            long id, 
+            string[] subjects,
+            long issuerId,
+            ManagedResource resource)
         {
-            Id = id;
+            Id         = id;
+            Subjects   = subjects;
+            IssuerId   = issuerId;
             ProviderId = resource.ProviderId;
             ResourceId = resource.ResourceId;
             LocationId = resource.LocationId;
@@ -37,7 +43,7 @@ namespace Carbon.Platform.Hosting
 
         // Not, may be different from the resource provider managing the certificate
         [Member("issuerId")]
-        public long IssuerId { get; set; }
+        public long IssuerId { get; }
 
         // TEMP
         [Member("revocationReason")]
