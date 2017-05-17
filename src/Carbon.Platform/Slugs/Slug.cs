@@ -16,7 +16,7 @@ namespace Carbon.Platform
             SlugFlags flags = SlugFlags.None)
         {
             Id      = id;
-            Name    = name;
+            Name    = name ?? throw new ArgumentNullException(nameof(name));
             OwnerId = ownerId;
             Flags   = flags;
         }

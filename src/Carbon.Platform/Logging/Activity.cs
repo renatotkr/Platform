@@ -14,7 +14,7 @@ namespace Carbon.Platform.Logs
         public Activity(
             string action,
             IResource resource, 
-            JsonObject context)
+            JsonObject context = null)
         {
             #region Preconditions
 
@@ -25,7 +25,7 @@ namespace Carbon.Platform.Logs
 
             Action     = action ?? throw new ArgumentNullException(nameof(action));
             Resource   = resource.ResourceType.ToString() + "#" + resource.Id;
-            Context    = null;
+            Context    = context;
         }
 
         // change to bigId (accountId | timestamp | sequenceNumber)

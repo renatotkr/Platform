@@ -12,11 +12,14 @@ namespace Carbon.Platform.Storage
         public BucketInfo() { }
 
         public BucketInfo(
-            long id, string name,
+            long id, 
+            string name,
+            long ownerId,
             ManagedResource resource)
         {
             Id         = id;
             Name       = name ?? throw new ArgumentNullException(nameof(name));
+            OwnerId    = ownerId;
             ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
             ResourceId = resource.ResourceId;
@@ -30,7 +33,7 @@ namespace Carbon.Platform.Storage
         public string Name { get; }
 
         [Member("ownerId")]
-        public long OwnerId { get; set; }
+        public long OwnerId { get; }
 
         #region IResource
 

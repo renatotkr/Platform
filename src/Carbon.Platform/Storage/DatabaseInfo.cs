@@ -11,7 +11,10 @@ namespace Carbon.Platform.Storage
     {
         public DatabaseInfo() { }
 
-        public DatabaseInfo(long id, string name, long ownerId)
+        public DatabaseInfo(
+            long id,
+            string name, 
+            long ownerId)
         {
             #region Preconditions
 
