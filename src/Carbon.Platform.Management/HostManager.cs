@@ -155,7 +155,7 @@ namespace Carbon.Platform.Management
                         break;
 
                     case HostTemplateProperties.Volume:
-                        var volSpec = property.Value.As<VolumeSpecification>();
+                        var volSpec = property.Value.As<VolumeSpec>();
 
                         // TODO: Device Name
                         request.BlockDeviceMappings = new[] {

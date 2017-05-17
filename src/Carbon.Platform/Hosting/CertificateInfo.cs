@@ -19,7 +19,7 @@ namespace Carbon.Platform.Hosting
             ManagedResource resource)
         {
             Id         = id;
-            Subjects   = subjects;
+            Subjects   = subjects ?? throw new ArgumentNullException(nameof(subjects));
             IssuerId   = issuerId;
             ProviderId = resource.ProviderId;
             ResourceId = resource.ResourceId;
@@ -64,7 +64,7 @@ namespace Carbon.Platform.Hosting
         [Member("resourceVersion")]
         public int ResourceVersion { get; set; }
 
-        ResourceType IResource.ResourceType => ResourceType.Certificate;
+        ResourceType IResource.ResourceType => ResourceTypes.Certificate;
 
         // aws certificates are region scoped
         [IgnoreDataMember]

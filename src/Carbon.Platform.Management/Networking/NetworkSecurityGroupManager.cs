@@ -36,7 +36,7 @@ namespace Carbon.Platform.Networking
 
             if (nsg == null)
             {
-                var resource = new ManagedResource(ResourceProvider.Aws, ResourceType.NetworkSecurityGroup, group.GroupId);
+                var resource = new ManagedResource(ResourceProvider.Aws, ResourceTypes.NetworkSecurityGroup, group.GroupId);
 
                 var registerRequest = new RegisterNetworkSecurityGroupRequest(
                     name      : group.GroupName,

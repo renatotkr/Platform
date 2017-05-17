@@ -49,7 +49,7 @@ namespace Carbon.Platform.Networking
 
         int IManagedResource.LocationId => 0;
 
-        ResourceType IResource.ResourceType => ResourceType.NetworkAddress;
+        ResourceType IResource.ResourceType => ResourceTypes.NetworkAddress;
 
         #endregion
 

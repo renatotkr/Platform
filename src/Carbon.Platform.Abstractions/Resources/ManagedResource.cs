@@ -49,7 +49,7 @@ namespace Carbon.Platform.Resources
                 sb.Append(':');
             }
 
-            sb.Append(Type.GetName());
+            sb.Append(Type.Name);
             sb.Append('/');
             sb.Append(ResourceId);
 
@@ -66,52 +66,52 @@ namespace Carbon.Platform.Resources
         }
 
         public static ManagedResource Bucket(ILocation location, string id) =>
-            FromLocation(location, ResourceType.Bucket, id);
+            FromLocation(location, ResourceTypes.Bucket, id);
 
         public static ManagedResource DatabaseCluster(ILocation location, string id) => 
-            FromLocation(location, ResourceType.DatabaseCluster, id);
+            FromLocation(location, ResourceTypes.DatabaseCluster, id);
 
         public static ManagedResource DatabaseInstance(ILocation location, string id) => 
-            FromLocation(location, ResourceType.DatabaseInstance, id);
+            FromLocation(location, ResourceTypes.DatabaseInstance, id);
 
         public static ManagedResource EncryptionKey(ILocation location, string id) =>
-            FromLocation(location, ResourceType.EncryptionKey, id);
+            FromLocation(location, ResourceTypes.EncryptionKey, id);
 
         public static ManagedResource LoadBalancer(ILocation location, string id) =>
-            FromLocation(location, ResourceType.LoadBalancer, id);
+            FromLocation(location, ResourceTypes.LoadBalancer, id);
 
         public static ManagedResource Host(ILocation location, string id) => 
-            FromLocation(location, ResourceType.Host, id);
+            FromLocation(location, ResourceTypes.Host, id);
 
         public static ManagedResource HostGroup(ILocation location, string id) => 
-            FromLocation(location, ResourceType.HostGroup, id);
+            FromLocation(location, ResourceTypes.HostGroup, id);
 
         public static ManagedResource HostTemplate(ResourceProvider provider, string id) =>
-            new ManagedResource(provider, ResourceType.HostTemplate, id);
+            new ManagedResource(provider, ResourceTypes.HostTemplate, id);
 
         public static ManagedResource MachineImage(ILocation location, string id) =>
-           FromLocation(location, ResourceType.MachineImage, id);
+           FromLocation(location, ResourceTypes.MachineImage, id);
 
         public static ManagedResource Network(ILocation location, string id) => 
-            FromLocation(location, ResourceType.Network, id);
+            FromLocation(location, ResourceTypes.Network, id);
  
         public static ManagedResource NetworkInterface(ILocation location, string id) => 
-            FromLocation(location, ResourceType.NetworkInterface, id);
+            FromLocation(location, ResourceTypes.NetworkInterface, id);
 
         public static ManagedResource Subnet(ILocation location, string id) => 
-            FromLocation(location, ResourceType.Subnet, id);
+            FromLocation(location, ResourceTypes.Subnet, id);
 
         public static ManagedResource Volume(ILocation location, string id) => 
-            FromLocation(location, ResourceType.Volume, id);
+            FromLocation(location, ResourceTypes.Volume, id);
 
         public static ManagedResource Repository(ResourceProvider provider, string accountName, string repositoryName) =>
-            new ManagedResource(provider, ResourceType.Repository, $"{accountName}/{repositoryName}");
+            new ManagedResource(provider, ResourceTypes.Repository, $"{accountName}/{repositoryName}");
 
         public static ManagedResource Queue(ILocation location, string id) =>
-            FromLocation(location, ResourceType.Queue, id);
+            FromLocation(location, ResourceTypes.Queue, id);
 
         public static ManagedResource Channel(ILocation location, string id) =>
-            FromLocation(location, ResourceType.Channel, id);
+            FromLocation(location, ResourceTypes.Channel, id);
 
         #endregion
 
@@ -144,23 +144,25 @@ namespace Carbon.Platform.Resources
                 id = parts[3];
             }
 
-            var type = ResourceTypeHelper.Parse(typeName);
+            // TODO: Normalize typeName?
+
+            var resourceType = new ResourceType(typeName);
 
             if (regionName != null)
             {
                 var location = Locations.Get(provider, regionName);
 
-                return FromLocation(location, type, id);
+                return FromLocation(location, resourceType, id);
             }
 
-            return new ManagedResource(provider, type, id);            
+            return new ManagedResource(provider, resourceType, id);            
         }
 
         #region IEquatable
 
         bool IEquatable<ManagedResource>.Equals(ManagedResource other) => 
             LocationId == other.LocationId
-            && Type == other.Type 
+            && Type.Name == other.Type.Name
             && ResourceId == other.ResourceId;
 
         #endregion

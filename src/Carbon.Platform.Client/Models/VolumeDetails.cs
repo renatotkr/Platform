@@ -21,7 +21,7 @@ namespace Carbon.Platform
 
         int IManagedResource.ProviderId => Platform.LocationId.Create(LocationId).ProviderId;
 
-        ResourceType IResource.ResourceType => ResourceType.Volume;
+        ResourceType IResource.ResourceType => ResourceTypes.Volume;
 
         string IManagedResource.ResourceId => throw new NotImplementedException();
 

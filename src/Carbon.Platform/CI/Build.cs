@@ -16,10 +16,16 @@ namespace Carbon.Platform.CI
             long creatorId,
             ManagedResource resource)
         {
+            #region Preconditions
+
+            if (id <= 0)
+                throw new ArgumentException("Must be > 0", nameof(id));
+
+            #endregion
+
             Id        = id;
             CommitId  = commitId;
             CreatorId = creatorId;
-            
             ProviderId = resource.ProviderId;
             ResourceId = resource.ResourceId;
             LocationId = resource.LocationId;
@@ -34,7 +40,9 @@ namespace Carbon.Platform.CI
         [Member("commitId")]
         public long CommitId { get; }
         
-        // ErrorMessage
+        [Member("message"), Mutable]
+        [StringLength(200)]
+        public string Message { get; set; }
 
         [Member("duration"), Mutable]
         public TimeSpan? Duration { get; set; }
@@ -53,7 +61,7 @@ namespace Carbon.Platform.CI
         [Member("locationId")]
         public int LocationId { get; }
         
-        ResourceType IResource.ResourceType => ResourceType.Build;
+        ResourceType IResource.ResourceType => ResourceTypes.Build;
 
         #endregion
 

@@ -73,7 +73,7 @@ namespace Carbon.Platform.Computing
         
         int IManagedResource.LocationId => 0;
 
-        ResourceType IResource.ResourceType => ResourceType.HostTemplate;
+        ResourceType IResource.ResourceType => ResourceTypes.HostTemplate;
 
         #endregion
 

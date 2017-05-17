@@ -55,7 +55,7 @@ namespace Carbon.Platform.Networking
         [Ascii, StringLength(120)]
         public string ResourceId { get; }
         
-        ResourceType IResource.ResourceType => ResourceType.LoadBalancerRule;
+        ResourceType IResource.ResourceType => ResourceTypes.LoadBalancerRule;
 
         #endregion
 

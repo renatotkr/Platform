@@ -4,7 +4,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
-    public class MachineImageService
+    public class MachineImageService : IMachineImageService
     {
         private readonly PlatformDb db;
 
@@ -16,7 +16,7 @@ namespace Carbon.Platform.Computing
         public async Task<MachineImageInfo> GetAsync(long id)
         {
             return await db.MachineImages.FindAsync(id).ConfigureAwait(false) 
-                ?? throw ResourceError.NotFound(ResourceType.MachineImage, id);
+                ?? throw ResourceError.NotFound(ResourceTypes.MachineImage, id);
         }
 
         public async Task<MachineImageInfo> GetAsync(ResourceProvider provider, string id)
@@ -29,7 +29,7 @@ namespace Carbon.Platform.Computing
 
                 var registerRequest = new RegisterMachineImageRequest(
                     name     : Guid.NewGuid().ToString().Replace("-", ""),
-                    resource : new ManagedResource(provider, ResourceType.MachineImage, id)
+                    resource : new ManagedResource(provider, ResourceTypes.MachineImage, id)
                 );
 
                 machineImage = await RegisterAsync(registerRequest).ConfigureAwait(false);

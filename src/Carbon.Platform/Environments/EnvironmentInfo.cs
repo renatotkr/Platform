@@ -29,7 +29,7 @@ namespace Carbon.Platform
 
             #endregion
 
-            Id = id;
+            Id        = id;
             Name      = name;
             Slug      = slug;
             OwnerId   = ownerId;
@@ -39,7 +39,6 @@ namespace Carbon.Platform
         [Member("id"), Key]
         public long Id { get; }
 
-        // e.g. image.processor#staging
         [Member("name")]
         [StringLength(63)]
         public string Name { get; }
@@ -76,7 +75,7 @@ namespace Carbon.Platform
         
         #region IResource
 
-        ResourceType IResource.ResourceType => ResourceType.Environment;
+        ResourceType IResource.ResourceType => ResourceTypes.Environment;
 
         #endregion
 

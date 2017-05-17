@@ -46,7 +46,7 @@ namespace Carbon.Platform.Computing
 
         #region IResource
 
-        ResourceType IResource.ResourceType => ResourceType.MachineType;
+        ResourceType IResource.ResourceType => ResourceTypes.MachineType;
 
         #endregion
     }

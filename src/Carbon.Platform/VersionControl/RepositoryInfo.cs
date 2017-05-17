@@ -85,7 +85,7 @@ namespace Carbon.Platform.VersionControl
         [Member("locationId")]
         public int LocationId { get; }
         
-        ResourceType IResource.ResourceType => ResourceType.Repository;
+        ResourceType IResource.ResourceType => ResourceTypes.Repository;
 
         #endregion
 

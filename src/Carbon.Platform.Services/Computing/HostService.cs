@@ -25,7 +25,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<HostInfo> GetAsync(long id)
         {
-            return await db.Hosts.FindAsync(id).ConfigureAwait(false) ?? throw ResourceError.NotFound(ResourceType.Host, id);
+            return await db.Hosts.FindAsync(id).ConfigureAwait(false) ?? throw ResourceError.NotFound(ResourceTypes.Host, id);
         }
 
         // e.g. 1 || aws:i-18342354, gcp:1234123123, azure:1234123
@@ -36,12 +36,10 @@ namespace Carbon.Platform.Computing
             {
                 return GetAsync(id);
             }
-            else
-            {
-                (var provider, var resourceId) = ResourceName.Parse(name);
 
-                return FindAsync(provider, resourceId) ?? throw ResourceError.NotFound(provider, ResourceType.Host, name);
-            }
+            (var provider, var resourceId) = ResourceName.Parse(name);
+
+            return FindAsync(provider, resourceId) ?? throw ResourceError.NotFound(provider, ResourceTypes.Host, name);
         }
 
         public async Task<HostInfo> FindAsync(ResourceProvider provider, string id)

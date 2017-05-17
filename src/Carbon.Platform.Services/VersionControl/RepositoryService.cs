@@ -24,7 +24,7 @@ namespace Carbon.Platform.VersionControl
 
         public async Task<RepositoryInfo> GetAsync(long id)
         {
-            return await db.Repositories.FindAsync(id).ConfigureAwait(false) ?? throw ResourceError.NotFound(ResourceType.Repository, id);
+            return await db.Repositories.FindAsync(id).ConfigureAwait(false) ?? throw ResourceError.NotFound(ResourceTypes.Repository, id);
         }
 
         public async Task<RepositoryInfo> GetAsync(long ownerId, string name)
@@ -35,7 +35,7 @@ namespace Carbon.Platform.VersionControl
 
             if (repository == null)
             {
-                throw ResourceError.NotFound(ResourceType.Repository, ownerId, name);
+                throw ResourceError.NotFound(ResourceTypes.Repository, ownerId, name);
             }
 
             

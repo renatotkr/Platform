@@ -17,6 +17,7 @@ namespace Carbon.Platform.Computing
             long id,
             string name,
             long environmentId,
+            JsonObject details,
             ManagedResource resource)
         {
             #region Preconditions
@@ -29,6 +30,7 @@ namespace Carbon.Platform.Computing
             Id            = id;
             Name          = name ?? throw new ArgumentNullException(nameof(name));
             EnvironmentId = environmentId;
+            Details       = details;
             ProviderId    = resource.ProviderId;
             LocationId    = resource.LocationId;
             ResourceId    = resource.ResourceId;
@@ -75,7 +77,7 @@ namespace Carbon.Platform.Computing
         [Member("locationId")]
         public int LocationId { get; }
 
-        ResourceType IResource.ResourceType => ResourceType.HostGroup;
+        ResourceType IResource.ResourceType => ResourceTypes.HostGroup;
 
         #endregion
 

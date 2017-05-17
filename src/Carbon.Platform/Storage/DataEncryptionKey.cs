@@ -46,7 +46,7 @@ namespace Carbon.Platform.Storage
 
         #region IResource
 
-        public ResourceType ResourceType => ResourceType.DataEncryptionKey;
+        public ResourceType ResourceType => ResourceTypes.DataEncryptionKey;
 
         #endregion
 

@@ -49,7 +49,7 @@ namespace Carbon.Platform.Hosting
 
         #region IResource
         
-        ResourceType IResource.ResourceType => ResourceType.Domain;
+        ResourceType IResource.ResourceType => ResourceTypes.Domain;
 
         #endregion
 

@@ -36,7 +36,7 @@ namespace Carbon.Platform.Iam
 
         #region IResource
 
-        public ResourceType ResourceType => ResourceType.User;
+        public ResourceType ResourceType => ResourceTypes.User;
 
         #endregion
 

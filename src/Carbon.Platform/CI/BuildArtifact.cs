@@ -9,7 +9,10 @@ namespace Carbon.Platform.CI
     {
         public BuildArtifact() { }
 
-        public BuildArtifact(long id, string name, byte[] sha256)
+        public BuildArtifact(
+            long id,
+            string name, 
+            byte[] sha256)
         {
             #region Preconditions
 

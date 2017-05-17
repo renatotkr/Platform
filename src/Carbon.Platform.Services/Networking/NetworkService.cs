@@ -18,7 +18,7 @@ namespace Carbon.Platform.Networking
         public Task<NetworkInfo> GetAsync(long id)
         {
             return db.Networks.FindAsync(id) 
-                ?? throw ResourceError.NotFound(ResourceType.Network, id);
+                ?? throw ResourceError.NotFound(ResourceTypes.Network, id);
         }
 
         // 1 | aws:vpc1
@@ -30,13 +30,13 @@ namespace Carbon.Platform.Networking
             (var provider, var resourceId) = ResourceName.Parse(name);
 
             return FindAsync(provider, resourceId)
-                ?? throw ResourceError.NotFound(provider, ResourceType.Network, name);            
+                ?? throw ResourceError.NotFound(provider, ResourceTypes.Network, name);            
         }
 
         public async Task<NetworkInfo> GetAsync(ResourceProvider provider, string resourceId)
         {
             return await db.Networks.FindAsync(provider, resourceId).ConfigureAwait(false)
-                ?? throw ResourceError.NotFound(provider, ResourceType.Network, resourceId);
+                ?? throw ResourceError.NotFound(provider, ResourceTypes.Network, resourceId);
         }
 
         public async Task<NetworkInfo> FindAsync(ResourceProvider provider, string resourceId)

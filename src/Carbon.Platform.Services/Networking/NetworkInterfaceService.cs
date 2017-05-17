@@ -18,7 +18,7 @@ namespace Carbon.Platform.Networking
 
         public Task<NetworkInterfaceInfo> GetAsync(long id)
         {
-            return db.NetworkInterfaces.FindAsync(id) ?? throw ResourceError.NotFound(ResourceType.NetworkInterface, id);
+            return db.NetworkInterfaces.FindAsync(id) ?? throw ResourceError.NotFound(ResourceTypes.NetworkInterface, id);
         }
 
         public Task<NetworkInterfaceInfo> GetAsync(string name)
@@ -27,7 +27,7 @@ namespace Carbon.Platform.Networking
  
             (var provider, var resourceId) = ResourceName.Parse(name);
 
-            return FindAsync(provider, resourceId) ?? throw ResourceError.NotFound(provider, ResourceType.NetworkInterface, name);
+            return FindAsync(provider, resourceId) ?? throw ResourceError.NotFound(provider, ResourceTypes.NetworkInterface, name);
         }
 
         public async Task<NetworkInterfaceInfo> FindAsync(ResourceProvider provider, string id)

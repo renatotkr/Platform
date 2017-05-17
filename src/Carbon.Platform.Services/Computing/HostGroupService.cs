@@ -34,10 +34,9 @@ namespace Carbon.Platform.Computing
                id            : await db.HostGroups.GetNextScopedIdAsync(request.Environment.Id).ConfigureAwait(false),
                name          : request.Environment.Name + "/" + request.Location.Name,
                environmentId : request.Environment.Id,
+               details       : request.Details,
                resource      : ManagedResource.HostGroup(request.Location, Guid.NewGuid().ToString())
             );
-
-            group.Details = request.Details;
 
             await db.HostGroups.InsertAsync(group).ConfigureAwait(false);
 
@@ -46,7 +45,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<HostGroup> GetAsync(long id)
         {
-            return await db.HostGroups.FindAsync(id) ?? throw ResourceError.NotFound(ResourceType.HostGroup, id);
+            return await db.HostGroups.FindAsync(id) ?? throw ResourceError.NotFound(ResourceTypes.HostGroup, id);
         }
 
         public async Task<HostGroup> GetAsync(IEnvironment env, ILocation location)

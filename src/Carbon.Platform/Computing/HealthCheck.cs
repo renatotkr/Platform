@@ -76,7 +76,7 @@ namespace Carbon.Platform.Computing
         [Member("locationId")]
         public int LocationId { get; }
 
-        ResourceType IResource.ResourceType => ResourceType.HealthCheck;
+        ResourceType IResource.ResourceType => ResourceTypes.HealthCheck;
 
         #endregion
 

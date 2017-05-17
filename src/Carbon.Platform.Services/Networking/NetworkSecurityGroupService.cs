@@ -16,7 +16,7 @@ namespace Carbon.Platform.Networking
 
         public Task<NetworkSecurityGroup> GetAsync(long id)
         {
-            return db.NetworkSecurityGroups.FindAsync(id) ?? throw ResourceError.NotFound(ResourceType.NetworkSecurityGroup, id);
+            return db.NetworkSecurityGroups.FindAsync(id) ?? throw ResourceError.NotFound(ResourceTypes.NetworkSecurityGroup, id);
         }
 
         public async Task<NetworkSecurityGroup> FindAsync(ResourceProvider provider, string resourceId)

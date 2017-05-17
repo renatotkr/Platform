@@ -68,7 +68,7 @@ namespace Carbon.Platform.Computing
 
         #region IResource
 
-        ResourceType IResource.ResourceType => ResourceType.Program;
+        ResourceType IResource.ResourceType => ResourceTypes.Program;
 
         #endregion
 

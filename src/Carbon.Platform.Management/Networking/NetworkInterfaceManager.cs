@@ -23,10 +23,10 @@ namespace Carbon.Platform.Networking
             ISubnetService subnetService,
             INetworkInterfaceService networkInterfaces)
         {
-            this.networks          = networkService ?? throw new ArgumentNullException(nameof(networkService));
+            this.networks          = networkService    ?? throw new ArgumentNullException(nameof(networkService));
             this.networkInterfaces = networkInterfaces ?? throw new ArgumentNullException(nameof(networkInterfaces));
-            this.subnetService     = subnetService ?? throw new ArgumentNullException(nameof(subnetService));
-            this.ec2               = ec2 ?? throw new ArgumentNullException(nameof(ec2));
+            this.subnetService     = subnetService     ?? throw new ArgumentNullException(nameof(subnetService));
+            this.ec2               = ec2               ?? throw new ArgumentNullException(nameof(ec2));
         }
        
         public async Task<NetworkInterfaceInfo> GetAsync(ResourceProvider provider, string id)
@@ -61,7 +61,7 @@ namespace Carbon.Platform.Networking
                 var registerRequest = new RegisterNetworkInterfaceRequest(
                     mac      : MacAddress.Parse(nic.MacAddress),
                     subnetId : subnet?.Id ?? 0,
-                    resource : new ManagedResource(Aws, ResourceType.NetworkInterface, nic.NetworkInterfaceId)
+                    resource : new ManagedResource(Aws, ResourceTypes.NetworkInterface, nic.NetworkInterfaceId)
                 );
                
                 record = await networkInterfaces.RegisterAsync(registerRequest).ConfigureAwait(false);

@@ -21,7 +21,7 @@ namespace Carbon.Platform.Services
 
         public Task<EnvironmentInfo> GetAsync(long id)
         {
-            return db.Environments.FindAsync(id) ?? throw ResourceError.NotFound(ResourceType.Environment, id);
+            return db.Environments.FindAsync(id) ?? throw ResourceError.NotFound(ResourceTypes.Environment, id);
         }
 
         public Task<EnvironmentInfo> GetAsync(IProgram program, EnvironmentType type)

@@ -66,7 +66,7 @@ namespace Carbon.Platform.Networking
         [Member("locationId")]
         public int LocationId { get; }
 
-        ResourceType IResource.ResourceType => ResourceType.LoadBalancer;
+        ResourceType IResource.ResourceType => ResourceTypes.LoadBalancer;
 
         #endregion
 

@@ -52,7 +52,7 @@ namespace Carbon.Platform.Storage
         [Member("locationId")]
         public int LocationId { get; }
 
-        ResourceType IResource.ResourceType => ResourceType.EncryptionKey;
+        ResourceType IResource.ResourceType => ResourceTypes.EncryptionKey;
 
         #endregion
 

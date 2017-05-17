@@ -27,7 +27,7 @@ namespace Carbon.Platform
 
         int IManagedResource.ProviderId => Platform.LocationId.Create(LocationId).ProviderId;
 
-        ResourceType IResource.ResourceType => ResourceType.NetworkInterface;
+        ResourceType IResource.ResourceType => ResourceTypes.NetworkInterface;
 
         string IManagedResource.ResourceId => throw new NotImplementedException();
 

@@ -17,7 +17,7 @@
         public const string KeyName          = "keyName";
     }
 
-    public class VolumeSpecification
+    public class VolumeSpec
     {
         public string DeviceName { get; set; }
 

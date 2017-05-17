@@ -25,7 +25,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<Program> GetAsync(long id)
         {
-            return await db.Programs.FindAsync(id).ConfigureAwait(false) ?? throw ResourceError.NotFound(ResourceType.Program, id);
+            return await db.Programs.FindAsync(id).ConfigureAwait(false) ?? throw ResourceError.NotFound(ResourceTypes.Program, id);
         }
 
         public Task<Program> FindAsync(string slug)
@@ -130,9 +130,11 @@ namespace Carbon.Platform.Computing
 
             var name = program.Name;
 
+            // accelerator/production
+
             if (type != EnvironmentType.Production)
             {
-                name += "#" + type.ToString().ToLower();
+                name += "/" + type.ToString().ToLower();
             }
             return new EnvironmentInfo(
                 id      : program.Id + envIdOffset,

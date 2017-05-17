@@ -23,9 +23,9 @@ namespace Carbon.Platform.Logs
 
             #endregion
 
-            Action     = action ?? throw new ArgumentNullException(nameof(action));
-            Resource   = resource.ResourceType.ToString() + "#" + resource.Id;
-            Context    = context;
+            Action   = action ?? throw new ArgumentNullException(nameof(action));
+            Resource = resource.ResourceType.ToString() + "#" + resource.Id;
+            Context  = context;
         }
 
         // change to bigId (accountId | timestamp | sequenceNumber)

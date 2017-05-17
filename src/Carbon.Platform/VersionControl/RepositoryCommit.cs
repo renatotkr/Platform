@@ -35,7 +35,7 @@ namespace Carbon.Platform.VersionControl
         
         #region IResource
 
-        ResourceType IResource.ResourceType => ResourceType.RepositoryCommit;
+        ResourceType IResource.ResourceType => ResourceTypes.RepositoryCommit;
 
         #endregion
 

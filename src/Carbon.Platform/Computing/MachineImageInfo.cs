@@ -60,7 +60,7 @@ namespace Carbon.Platform.Computing
         [Member("locationId")]
         public int LocationId { get; }
 
-        ResourceType IResource.ResourceType => ResourceType.MachineImage;
+        ResourceType IResource.ResourceType => ResourceTypes.MachineImage;
 
         #endregion
 

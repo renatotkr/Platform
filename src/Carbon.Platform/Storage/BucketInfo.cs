@@ -50,7 +50,7 @@ namespace Carbon.Platform.Storage
         [Member("locationId")]
         public int LocationId { get; }
 
-        ResourceType IResource.ResourceType => ResourceType.Bucket;
+        ResourceType IResource.ResourceType => ResourceTypes.Bucket;
 
         #endregion
 

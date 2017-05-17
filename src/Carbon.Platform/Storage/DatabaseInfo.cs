@@ -48,7 +48,7 @@ namespace Carbon.Platform.Storage
 
         #region IResource
 
-        ResourceType IResource.ResourceType => ResourceType.Database;
+        ResourceType IResource.ResourceType => ResourceTypes.Database;
 
         #endregion
     }

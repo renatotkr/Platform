@@ -31,7 +31,7 @@ namespace Carbon.Platform.CI
 
             #endregion
 
-            Id = id;
+            Id             = id;
             Status         = status;
             ReleaseType    = release.Type;
             ReleaseId      = release.Id;
@@ -65,7 +65,7 @@ namespace Carbon.Platform.CI
 
         #region IResource
 
-        ResourceType IResource.ResourceType => ResourceType.Deployment;
+        ResourceType IResource.ResourceType => ResourceTypes.Deployment;
 
         #endregion
 

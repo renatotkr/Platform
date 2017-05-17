@@ -47,7 +47,7 @@ namespace Carbon.Platform.Storage
         [Member("locationId")]
         public int LocationId { get; }
 
-        ResourceType IResource.ResourceType => ResourceType.DatabaseCluster;
+        ResourceType IResource.ResourceType => ResourceTypes.DatabaseCluster;
 
         #endregion
 

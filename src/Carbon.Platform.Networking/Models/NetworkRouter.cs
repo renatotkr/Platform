@@ -44,7 +44,7 @@ namespace Carbon.Platform.Networking
         [Member("locationId")]
         public int LocationId { get; }
 
-        ResourceType IResource.ResourceType => ResourceType.NetworkRouter;
+        ResourceType IResource.ResourceType => ResourceTypes.NetworkRouter;
 
         #endregion
 

@@ -41,7 +41,7 @@ namespace Carbon.Platform.Computing
         [Member("providerId")]
         public int ProviderId { get; }
 
-        ResourceType IResource.ResourceType => ResourceType.MachineType;
+        ResourceType IResource.ResourceType => ResourceTypes.MachineType;
 
         #endregion
 

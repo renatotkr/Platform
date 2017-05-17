@@ -61,7 +61,7 @@ namespace Carbon.Platform.Storage
         [Member("locationId")]
         public int LocationId { get; }
 
-        ResourceType IResource.ResourceType => ResourceType.Channel;
+        ResourceType IResource.ResourceType => ResourceTypes.Channel;
 
         #endregion
 

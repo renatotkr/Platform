@@ -19,6 +19,9 @@ namespace Carbon.Platform
         {
             #region Preconditions
 
+            if (id <= 0)
+                throw new ArgumentException("Must be > 0", nameof(id));
+
             if (env == null)
                 throw new ArgumentNullException(nameof(env));
 
@@ -46,7 +49,9 @@ namespace Carbon.Platform
 
         [Member("locationId")]
         public int LocationId { get; }
-        
+       
+        // host#500
+
         [Member("resourceType")]
         public ResourceType ResourceType { get; }
 

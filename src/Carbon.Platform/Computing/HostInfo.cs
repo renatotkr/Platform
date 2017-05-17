@@ -103,7 +103,7 @@ namespace Carbon.Platform.Computing
 
         public int LocationId => HostId.Get(Id).LocationId;
 
-        ResourceType IResource.ResourceType => ResourceType.Host;
+        ResourceType IResource.ResourceType => ResourceTypes.Host;
 
         #endregion
 

@@ -41,7 +41,7 @@ namespace Carbon.Platform.Networking
 
         #region IResource
 
-        ResourceType IResource.ResourceType => ResourceType.NetworkRoute;
+        ResourceType IResource.ResourceType => ResourceTypes.NetworkRoute;
 
         #endregion
 
