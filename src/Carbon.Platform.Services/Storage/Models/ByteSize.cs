@@ -1,28 +1,7 @@
 ﻿using System;
-using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.Computing
+namespace Carbon.Platform.Storage
 {
-    public class RegisterVolumeRequest
-    {
-        public RegisterVolumeRequest() { }
-
-        public RegisterVolumeRequest(ByteSize size, ManagedResource resource)
-        {
-            Size = size;
-            Resource = resource;
-        }
-
-        public ByteSize Size { get; set; }
-        
-        public long? HostId { get; set; }
-
-        public ManagedResource Resource { get; set; }
-    }
-
-    // TODO: Watch to see if this lands in CoreFx
-    // https://github.com/dotnet/corefx/issues/14234
-
     public struct ByteSize
     {
         public static readonly ByteSize Zero = new ByteSize(0);
@@ -48,3 +27,6 @@ namespace Carbon.Platform.Computing
         public static ByteSize GiB(long value) => new ByteSize(value * _1GiB);
     }
 }
+
+// TODO: Watch to see if this lands in CoreFx
+// https://github.com/dotnet/corefx/issues/14234

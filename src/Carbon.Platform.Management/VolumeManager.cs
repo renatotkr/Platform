@@ -5,15 +5,16 @@ using Amazon.Ec2;
 
 using Carbon.Platform.Computing;
 using Carbon.Platform.Resources;
+using Carbon.Platform.Storage;
 
 namespace Carbon.Platform.Services
 {
     public class VolumeManager
     {
         private readonly Ec2Client ec2;
-        private readonly VolumeService volumes;
+        private readonly IVolumeService volumes;
 
-        public VolumeManager(VolumeService volumes, Ec2Client ec2)
+        public VolumeManager(IVolumeService volumes, Ec2Client ec2)
         {
             this.ec2     = ec2 ?? throw new ArgumentNullException(nameof(ec2));
             this.volumes = volumes ?? throw new ArgumentNullException(nameof(volumes));
