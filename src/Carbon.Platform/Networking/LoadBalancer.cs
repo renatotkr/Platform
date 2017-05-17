@@ -47,6 +47,9 @@ namespace Carbon.Platform.Networking
         [Member("networkId")]
         public long NetworkId { get; }
 
+        [Member("ownerId")]
+        public long OwnerId { get; set; }
+
         #region IResource
 
         [IgnoreDataMember]

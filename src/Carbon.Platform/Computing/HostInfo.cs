@@ -65,6 +65,9 @@ namespace Carbon.Platform.Computing
         [Member("parentId")]
         public long? ParentId { get; set; }
 
+        [Member("ownerId")]
+        public long OwnerId { get; set; }
+
         #region Image / Template
 
         [Member("machineTypeId")]

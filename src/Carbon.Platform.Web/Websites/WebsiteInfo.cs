@@ -20,10 +20,13 @@ namespace Carbon.Platform.Web
             #region Preconditions
 
             if (id <= 0)
-                throw new ArgumentException("Invalid", nameof(id));
+                throw new ArgumentException("Must be > 0", nameof(id));
 
             if (environmentId <= 0)
-                throw new ArgumentException("Invalid", nameof(environmentId));
+                throw new ArgumentException("Must be > 0", nameof(environmentId));
+
+            if (ownerId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(ownerId));
 
             #endregion
 

@@ -11,7 +11,7 @@ namespace Carbon.Platform.Storage
     {
         public DatabaseInfo() { }
 
-        public DatabaseInfo(long id, string name)
+        public DatabaseInfo(long id, string name, long ownerId)
         {
             #region Preconditions
 
@@ -22,6 +22,7 @@ namespace Carbon.Platform.Storage
 
             Id   = id;
             Name = name ?? throw new ArgumentNullException(nameof(name));
+            OwnerId = ownerId;
         }
 
         [Member("id"), Key(sequenceName: "databaseId")]
@@ -30,6 +31,9 @@ namespace Carbon.Platform.Storage
         [Member("name"), Unique]
         [StringLength(1, 63)]
         public string Name { get; }
+
+        [Member("ownerId")]
+        public long OwnerId { get; }
 
         #region Timestamps
 

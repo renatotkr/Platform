@@ -49,6 +49,9 @@ namespace Carbon.Platform.Networking
         [DataMember(Name = "asn", EmitDefaultValue = false)]
         public int? Asn { get; }
 
+        [Member("ownerId")]
+        public long OwnerId { get; set; }
+
         #region IResource
 
         [IgnoreDataMember]

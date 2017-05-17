@@ -31,6 +31,9 @@ namespace Carbon.Platform.Storage
         [Member("hostId")]
         public long? HostId { get; }
 
+        [Member("ownerId")]
+        public long OwnerId { get; set; }
+
         // SourceImageId?
 
         #region IResource

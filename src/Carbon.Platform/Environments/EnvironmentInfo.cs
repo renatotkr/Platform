@@ -15,12 +15,24 @@ namespace Carbon.Platform
         public EnvironmentInfo(
             long id, 
             string name,
+            long ownerId,
             string slug = null,
             JsonObject variables = null)
         {
-            Id        = id;
+            #region Preconditions
+
+            if (id <= 0)
+                throw new ArgumentException("Must be > 0", nameof(id));
+
+            if (ownerId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(ownerId));
+
+            #endregion
+
+            Id = id;
             Name      = name;
             Slug      = slug;
+            OwnerId   = ownerId;
             Variables = variables;
         }
 
@@ -43,7 +55,10 @@ namespace Carbon.Platform
         // e.g. 1.2.9
         [Member("revision")]
         public string Revision { get; set; }
-        
+
+        [Member("ownerId")]
+        public long OwnerId { get; }
+
         public EnvironmentType Type
         {
             get

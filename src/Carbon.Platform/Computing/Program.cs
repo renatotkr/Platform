@@ -11,12 +11,19 @@ namespace Carbon.Platform.Computing
     {
         public Program() { }
 
-        public Program(long id, string name, string slug, long ownerId)
+        public Program(
+            long id, 
+            string name, 
+            string slug, 
+            long ownerId)
         {
             #region Preconditions
 
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
+
+            if (ownerId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(ownerId));
 
             #endregion
 
@@ -42,7 +49,7 @@ namespace Carbon.Platform.Computing
         [Member("type")]
         public ProgramType Type { get; set; }
 
-        [Member("ownerId")]
+        [Member("ownerId"), Indexed]
         public long OwnerId { get; }
 
         #region Stats
@@ -83,6 +90,3 @@ namespace Carbon.Platform.Computing
         #endregion
     }
 }
-
-// Each program spans four envs: development, intergration, staging, and production
-// The program's environment is responsible for exposing itself (i.e. to the web) or staying internal

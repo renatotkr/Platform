@@ -59,9 +59,10 @@ namespace Carbon.Platform
 
 // Slugs are a globally unique identifier
 // Reserving a slug allows it's use across each resource type
+// Effectively a namespace
 
 // TODO: Move to graph API w/ entities
 
 // slug rules: 
 // - lowercase
-// - hostname safe
+// - hostname label (< 63 characters)

@@ -14,7 +14,11 @@ namespace Carbon.Platform.VersionControl
     {
         public RepositoryInfo() { }
 
-        public RepositoryInfo(long id, string name, long ownerId, ManagedResource resource)
+        public RepositoryInfo(
+            long id,
+            string name, 
+            long ownerId,
+            ManagedResource resource)
         {
             #region Preconditions
 

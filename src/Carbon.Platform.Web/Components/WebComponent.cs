@@ -14,7 +14,7 @@ namespace Carbon.Platform.Web
         public WebComponent(long id, string ns, string name)
         {
             Id        = id;
-            Namespace = ns ?? throw new ArgumentNullException(nameof(ns));
+            Namespace = ns   ?? throw new ArgumentNullException(nameof(ns));
             Name      = name ?? throw new ArgumentNullException(nameof(name));
         }
 

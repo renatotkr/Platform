@@ -22,6 +22,9 @@ namespace Carbon.Platform.Hosting
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
 
+            if (ownerId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(ownerId));
+
             #endregion
 
             Id            = id;

@@ -27,6 +27,9 @@ namespace Carbon.Platform.Storage
         [StringLength(63)]
         public string Name { get; }
 
+        [Member("ownerId")]
+        public long OwnerId { get; set; }
+
         #region IResource
 
         [IgnoreDataMember]

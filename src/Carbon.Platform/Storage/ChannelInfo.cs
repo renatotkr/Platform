@@ -11,7 +11,10 @@ namespace Carbon.Platform.Storage
     {
         public ChannelInfo() { }
 
-        public ChannelInfo(long id, string name, ManagedResource resource)
+        public ChannelInfo(
+            long id, 
+            string name,
+            ManagedResource resource)
         {
             #region Preconditions
 
@@ -33,6 +36,9 @@ namespace Carbon.Platform.Storage
         [StringLength(63)]
         public string Name { get; }
         
+        [Member("ownerId")]
+        public long OwnerId { get; set; }
+
         // A channel may be a firehose, SNS Topic, Kinesis Stream, etc
         // A channel may have one or more consumers / subscribers
         
