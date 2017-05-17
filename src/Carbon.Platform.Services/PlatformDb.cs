@@ -1,17 +1,15 @@
 ﻿using System;
 
-using Carbon.Data;
-
 namespace Carbon.Platform
 {
-    using Apps;
     using CI;
     using Computing;
     using Data;
     using Hosting;
+    using Iam;
     using Logs;
     using Networking;
-    using Users;
+    using Storage;
 
     public class PlatformDb
     {
@@ -36,19 +34,16 @@ namespace Carbon.Platform
             EnvironmentResources = new Dataset<EnvironmentResource, long>(context);
             Locations            = new Dataset<LocationInfo,        long>(context);
 
-            // Apps --------------------------------------------------------------------
-            Apps                 = new Dataset<AppInfo,    long>(context);
-            AppReleases          = new Dataset<AppRelease, long>(context);
-
-            // Computing & Storage ---------------------------------------------------
+            // Computing -------------------------------------------------------------
             Hosts              = new Dataset<HostInfo,                 long>(context);
             HostGroups         = new Dataset<HostGroup,                long>(context);
             HostTemplates      = new Dataset<HostTemplate,             long>(context);
             MachineImages      = new Dataset<MachineImageInfo,         long>(context);
             MachineTypes       = new Dataset<MachineType,              long>(context);
-            Volumes            = new Dataset<VolumeInfo,               long>(context);
+            Programs           = new Dataset<Program,                  long>(context);
+            ProgramReleases    = new Dataset<ProgramRelease,           long>(context);
 
-            // Data / Databases  -----------------------------------------------------
+            // Storage ---------------------------------------------------------------
             Buckets            = new Dataset<BucketInfo,               long>(context);
             Channels           = new Dataset<ChannelInfo,              long>(context);
             Databases          = new Dataset<DatabaseInfo,             long>(context);
@@ -58,6 +53,7 @@ namespace Carbon.Platform
             DataEncryptionKeys = new Dataset<DataEncryptionKeyInfo,    long>(context); 
             EncryptionKeys     = new Dataset<EncryptionKeyInfo,        long>(context);
             Queues             = new Dataset<QueueInfo,                long>(context);
+            Volumes            = new Dataset<VolumeInfo,               long>(context);
 
             // Hosting ---------------------------------------------------------------
             Certificates       = new Dataset<CertificateInfo,          long>(context);
@@ -74,12 +70,15 @@ namespace Carbon.Platform
             Subnets               = new Dataset<SubnetInfo,           long>(context);
 
             // CI -----------------------------------------------------------------------
+            Builds                = new Dataset<Build, long>(context);
             Deployments           = new Dataset<Deployment, long>(context);
             DeploymentTargets     = new Dataset<DeploymentTarget, (long, long)>(context);
 
-            // Logging ---------------------------------------------------------------
-            Activities            = new Dataset<Activity, long>(context);
-            Users                 = new Dataset<User, long>(context);
+            // IAM ---------------------------------------------------------------------
+            Users = new Dataset<User, long>(context);
+            
+            // Logging -----------------------------------------------------------------
+            Activities = new Dataset<Activity, long>(context);
         }
 
         public IDbContext Context { get; }
@@ -90,19 +89,17 @@ namespace Carbon.Platform
         public Dataset<EnvironmentResource,         long> EnvironmentResources { get; }
         public Dataset<LocationInfo,                long> Locations            { get; }
 
-        // Apps  ------------------------------------------------------------------
-        public Dataset<AppInfo,               long> Apps                  { get; }
-        public Dataset<AppRelease,            long> AppReleases           { get; }
-
         // Computing --------------------------------------------------------------
-        public Dataset<HostInfo,              long> Hosts                 { get; }
-        public Dataset<HostGroup,             long> HostGroups            { get; }
-        public Dataset<HostTemplate,          long> HostTemplates         { get; }
-        public Dataset<HealthCheck,           long> HealthChecks          { get; }
-        public Dataset<MachineImageInfo,      long> MachineImages         { get; }
-        public Dataset<MachineType,           long> MachineTypes          { get; }
-        public Dataset<VolumeInfo,            long> Volumes               { get; }
-
+        public Dataset<HostInfo,              long> Hosts                  { get; }
+        public Dataset<HostGroup,             long> HostGroups             { get; }
+        public Dataset<HostTemplate,          long> HostTemplates          { get; }
+        public Dataset<HealthCheck,           long> HealthChecks           { get; }
+        public Dataset<MachineImageInfo,      long> MachineImages          { get; }
+        public Dataset<MachineType,           long> MachineTypes           { get; }
+        public Dataset<Program,               long> Programs               { get; }
+        public Dataset<ProgramRelease,        long> ProgramReleases        { get; }
+        public Dataset<VolumeInfo,            long> Volumes                { get; }
+                                                                           
         // Data -------------------------------------------------------------------
         public Dataset<BucketInfo,            long> Buckets               { get; }
         public Dataset<ChannelInfo,           long> Channels              { get; }
@@ -129,11 +126,14 @@ namespace Carbon.Platform
         public Dataset<DomainInfo,            long> Domains               { get; }
 
         // CI ---------------------------------------------------------------------
+        public Dataset<Build, long>                    Builds             { get; }
         public Dataset<Deployment, long>               Deployments        { get; }
         public Dataset<DeploymentTarget, (long, long)> DeploymentTargets  { get; }
 
-        // Logs ------------------------------------------------------------------
-        public Dataset<Activity, long>                 Activities { get; }
+        // IAM -------------------------------------------------------------------
         public Dataset<User, long>                     Users { get; }
+
+        // Logging----------------------------------------------------------------
+        public Dataset<Activity, long>                 Activities { get; }
     }
 }
