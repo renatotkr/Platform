@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 
-using Carbon.Platform.Apps;
 using Carbon.Platform.Computing;
 
 namespace Carbon.Platform
@@ -9,7 +8,7 @@ namespace Carbon.Platform
     {
         Task<EnvironmentInfo> GetAsync(long id);
 
-        Task<EnvironmentInfo> GetAsync(IApp app, EnvironmentType type);
+        Task<EnvironmentInfo> GetAsync(IProgram program, EnvironmentType type);
 
         Task<IHost[]> GetHostsAsync(IEnvironment env);
 

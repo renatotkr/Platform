@@ -1,7 +1,6 @@
-﻿
-namespace Carbon.Platform.Apps
+﻿namespace Carbon.Platform.Computing
 {
-    public struct AppName
+    public struct ProgramName
     {
         public static bool Validate(string name)
         {

@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Carbon.Data.Expressions;
-using Carbon.Platform.Apps;
 using Carbon.Platform.Computing;
 using Carbon.Platform.Resources;
 
@@ -22,15 +21,14 @@ namespace Carbon.Platform.Services
 
         public Task<EnvironmentInfo> GetAsync(long id)
         {
-            return db.Environments.FindAsync(id)
-                ?? throw ResourceError.NotFound(ResourceType.Environment, id);
+            return db.Environments.FindAsync(id) ?? throw ResourceError.NotFound(ResourceType.Environment, id);
         }
 
-        public Task<EnvironmentInfo> GetAsync(IApp app, EnvironmentType type)
+        public Task<EnvironmentInfo> GetAsync(IProgram program, EnvironmentType type)
         {
             // We can lookup directly by id...
 
-            var id = app.Id + (((int)type) - 1);
+            var id = program.Id + (((int)type) - 1);
 
             return GetAsync(id);
         }
