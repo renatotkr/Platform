@@ -12,8 +12,7 @@ namespace Carbon.Platform.Computing
     }
 }
 
-// A host 'hosts' a primary application
-// A host may be divided into containers to host mutiple applications
+// A host may be divided into containers to host mutiple programs
 
 /*
       | id                 | name
