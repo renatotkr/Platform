@@ -1,4 +1,4 @@
-﻿namespace Carbon.Platform.Data
+﻿namespace Carbon.Platform.Storage
 {
     public enum DatabaseFlags
     {

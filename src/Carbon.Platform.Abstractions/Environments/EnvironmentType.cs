@@ -1,4 +1,6 @@
-﻿namespace Carbon.Platform
+﻿// Environments span computing & storage
+
+namespace Carbon.Platform
 {
     public enum EnvironmentType : byte
     {

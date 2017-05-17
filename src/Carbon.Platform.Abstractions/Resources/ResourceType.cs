@@ -11,12 +11,12 @@
         Location            = 10,
 
         // COMPUTING  -------------------------------------------------------------------------------------
-        App                 = 30, // AKA Program
-        Host                = 40, // includes metal, vm instances, and container instances
-        HostGroup           = 41, // A group of hosts with a specific configuration
-        HostTemplate        = 42,
-        MachineImage        = 50,
-        MachineType         = 51,
+        Host                = 20, // includes metal, vm instances, and container instances
+        HostGroup           = 21, // A group of hosts with a specific configuration
+        HostTemplate        = 22,
+        MachineImage        = 30,
+        MachineType         = 31,
+        Program             = 50,
 
         // Storage --------------------------------------------------------------------------------------------
         
@@ -69,7 +69,8 @@
         HealthCheck          = 360,
 
         // CI ------------------------------------------------------------------------------------------------
-        Deployment           = 400,
+        Build                = 400,
+        Deployment           = 410,
 
         // Metrics --------------------------------------------------------------------------------------------
         Metric               = 500        

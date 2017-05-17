@@ -16,9 +16,9 @@ namespace Carbon.Platform
 }
 
 // An environment spans one or cloud regions
-// Each enviroment region contains resources (e.g. apps, hosts, databases, websites, encryption keys, etc)
+// Each enviroment region contains resources (e.g. programs, hosts, databases, websites, encryption keys, etc)
 
-// Enviromements service one or more applications (apps) from development through production
+// Enviromements service one or more programs (apps) from development through production
 
 // All resources belong to an environment...
 

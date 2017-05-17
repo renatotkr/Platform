@@ -10,12 +10,12 @@ namespace Carbon.Platform.Resources
         {
             switch (text.ToLower())
             {
-                case "app"              : return App;
-
+                // Computing
                 case "instance"         : return Host;
                 case "host"             : return Host;
                 case "machinetype"      : return MachineType;
                 case "machineimage"     : return MachineImage;
+                case "program"          : return Program;
 
                 // Storage
                 case "bucket"           : return Bucket;
@@ -23,8 +23,9 @@ namespace Carbon.Platform.Resources
                 case "dek"              : return DataEncryptionKey;
                 case "encryptionkey"    : return EncryptionKey;
                 case "repository"       : return Repository;
+                case "volume"           : return Volume;
 
-                // Domains & DNS
+                // Hosting
                 case "domain"           : return Domain;
                 case "dnszone"          : return DnsZone;
                 case "dnsrecord"        : return DnsRecord;
@@ -35,8 +36,8 @@ namespace Carbon.Platform.Resources
                 case "networkinterface" : return NetworkInterface;
                 case "subnet"           : return Subnet;
 
+                // IAM
                 case "user"             : return User;
-                case "volume"           : return Volume;
 
                 default: return (ResourceType)Enum.Parse(typeof(ResourceType), text, ignoreCase: true);
             }
