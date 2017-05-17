@@ -1,4 +1,4 @@
-﻿namespace Carbon.Docker
+﻿namespace Carbon.Platform.Configuration.Docker
 {
     public struct RestartPolicy
     {

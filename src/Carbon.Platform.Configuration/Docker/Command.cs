@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace Carbon.Docker
+namespace Carbon.Platform.Configuration.Docker
 {
     public struct Command
     {

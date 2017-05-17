@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Carbon.Docker
+namespace Carbon.Platform.Configuration.Docker
 {
     public class Run
     {
@@ -58,7 +58,6 @@ namespace Carbon.Docker
             {
                 sb.Append(" --rm");
             }
-
 
             return sb.ToString();
         }

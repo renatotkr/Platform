@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Carbon.Docker
+namespace Carbon.Platform.Configuration.Docker
 {
     public class Dockerfile
     {
@@ -143,6 +143,7 @@ namespace Carbon.Docker
     }
 }
 
+// https://docs.docker.com/engine/reference/builder/
 // # Comment
 // INSTRUCTION arguments
 // The instruction is not case-sensitive. 
