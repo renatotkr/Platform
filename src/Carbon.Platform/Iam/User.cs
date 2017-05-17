@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 using Carbon.Data.Annotations;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.Users
+namespace Carbon.Platform.Iam
 {
     [Dataset("Users")]
     public class User : IResource
@@ -20,6 +20,8 @@ namespace Carbon.Platform.Users
         [Member("id")]
         [Key(sequenceName: "userId")] // TODO: Carve out a small range...
         public long Id { get; }
+
+        // scope name to directory?
 
         [Member("name")]
         [StringLength(63)]
@@ -49,6 +51,9 @@ namespace Carbon.Platform.Users
         #endregion
     }
 }
+
+
+// oid
 
 // A user may have mutiple identities
 // e.g. Iam, Borg, Google, ...
