@@ -62,7 +62,7 @@ namespace Bitbucket
                 ?? throw new Exception($"No ref named '{revision.Path}' exists in '{RepositoryName}'");
         }
 
-        public async Task<IPackage> DownloadAsync(Revision revision, ArchiveFormat format)
+        public async Task<IPackage> DownloadAsync(Revision revision)
         {
             var stream = await client.GetZipStreamAsync(
                 accountName     : AccountName, 

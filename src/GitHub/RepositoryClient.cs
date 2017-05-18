@@ -77,15 +77,13 @@ namespace GitHub
             return client.GetBranchesAsync(AccountName, RepositoryName);
         }
 
-        public async Task<IPackage> DownloadAsync(
-            Revision revision, 
-            ArchiveFormat format = ArchiveFormat.Zip)
+        public async Task<IPackage> DownloadAsync(Revision revision)
         {
             var request = new GetArchiveLinkRequest(
                 accountName    : AccountName, 
                 repositoryName : RepositoryName, 
                 revision       : revision, 
-                format         : format == ArchiveFormat.Tar ? GitArchiveFormat.Tarball : GitArchiveFormat.Zipball
+                format         : GitArchiveFormat.Zipball
             );
 
             var link = await client.GetArchiveLinkAsync(request).ConfigureAwait(false);
