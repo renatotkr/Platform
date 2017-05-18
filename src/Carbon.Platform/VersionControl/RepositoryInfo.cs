@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 using System.Text;
 
 using Carbon.Data.Annotations;
+using Carbon.Json;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.VersionControl
@@ -50,11 +51,17 @@ namespace Carbon.Platform.VersionControl
         [Member("ownerId")] // May change ownership
         public long OwnerId { get; }
 
+        // Master Branch Name
+
         /// <summary>
         /// An encrypted token to access the repository
         /// </summary>
         [Member("encryptedToken", TypeName = "BLOB(1000)")]
         public byte[] EncryptedToken { get; }
+
+        [Member("details")]
+        [StringLength(1000)]
+        public JsonObject Details { get; set; }
 
         #region Stats
 
@@ -129,5 +136,10 @@ namespace Carbon.Platform.VersionControl
 
             return sb.ToString();
         }
+    }
+
+    public static class RepositoryProperties
+    {
+        public static readonly string BuildProjectName = "buildProjectName";
     }
 }
