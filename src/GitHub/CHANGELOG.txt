@@ -1,0 +1,5 @@
+﻿1.5.0 ---------------------------------
+
+- Add Scopes
+- Add Authorization Model
+- Add Async suffixes

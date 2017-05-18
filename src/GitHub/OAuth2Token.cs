@@ -13,8 +13,11 @@ namespace GitHub
         public string Value { get; }
 
         // "Authorization: token OAUTH-TOKEN"
+        // NOTE: they don't use the standard Bearer name...
 
-        public AuthenticationHeaderValue ToHeader() => 
-            new AuthenticationHeaderValue("token", Value);
+        public AuthenticationHeaderValue ToHeader()
+        {
+            return new AuthenticationHeaderValue("token", Value);
+        }
     }
 }

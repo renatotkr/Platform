@@ -12,7 +12,7 @@ namespace GitHub
     {
         private readonly GitHubClient client;
 
-        public GitHubRepository(Uri url, OAuth2Token authToken)
+        public GitHubRepository(Uri url, OAuth2Token accessToken)
         {
             #region Preconditions
 
@@ -23,20 +23,20 @@ namespace GitHub
 
             // https://github.com/orgName/repoName.git
 
-            var info = RevisionSource.Parse(url.ToString());
+            var info = RevisionSource.Parse(url);
       
-            AccountName = info.AccountName;
+            AccountName    = info.AccountName;
             RepositoryName = info.RepositoryName;
 
-            client = new GitHubClient(authToken);
+            client = new GitHubClient(accessToken);
         }
 
-        public GitHubRepository(string accountName, string repositoryName, OAuth2Token authToken)
+        public GitHubRepository(string accountName, string repositoryName, OAuth2Token accessToken)
         {
-            AccountName = accountName ?? throw new ArgumentNullException(nameof(accountName));
+            AccountName    = accountName    ?? throw new ArgumentNullException(nameof(accountName));
             RepositoryName = repositoryName ?? throw new ArgumentNullException(nameof(repositoryName));
 
-            client = new GitHubClient(authToken);
+            client = new GitHubClient(accessToken);
         }
 
         public string AccountName { get; }
@@ -54,11 +54,13 @@ namespace GitHub
 
             #endregion
 
-            return client.GetRef(AccountName, RepositoryName, refName);
+            return client.GetRefAsync(AccountName, RepositoryName, refName);
         }
 
         public Task<GitRef[]> GetRefsAsync()
-            => client.GetRefs(AccountName, RepositoryName);
+        { 
+            return client.GetRefs(AccountName, RepositoryName);
+        }
 
         #endregion
 
@@ -75,13 +77,20 @@ namespace GitHub
         }
 
         public Task<IList<GitBranch>> GetBranchesAsync()
-            => client.GetBranches(AccountName, RepositoryName);
+        {
+            return client.GetBranchesAsync(AccountName, RepositoryName);
+        }
 
         public async Task<IPackage> DownloadAsync(Revision revision)
         {
-            var request = new GetArchiveLinkRequest(AccountName, RepositoryName, revision, format: ArchiveFormat.Zipball);
+            var request = new GetArchiveLinkRequest(
+                accountName    : AccountName, 
+                repositoryName : RepositoryName, 
+                revision       : revision, 
+                format         : ArchiveFormat.Zipball
+            );
 
-            var link = await client.GetArchiveLink(request).ConfigureAwait(false);
+            var link = await client.GetArchiveLinkAsync(request).ConfigureAwait(false);
 
             return await ZipPackage.FetchAsync(link, stripFirstLevel: true).ConfigureAwait(false);
         }
