@@ -23,6 +23,7 @@ namespace Carbon.Platform.Networking
         [Required]
         public string Name { get; set; }
 
+        [Range(1, 2_199_023_255_552)]
         public long NetworkId { get; set; }
 
         public ManagedResource Resource { get; set; }

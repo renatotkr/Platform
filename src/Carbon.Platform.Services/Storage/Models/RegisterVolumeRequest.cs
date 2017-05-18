@@ -1,4 +1,5 @@
-﻿using Carbon.Platform.Resources;
+﻿using System.ComponentModel.DataAnnotations;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Storage
 {
@@ -10,12 +11,14 @@ namespace Carbon.Platform.Storage
         {
             Size = size;
             Resource = resource;
+            OwnerId = ownerId;
         }
 
         public ByteSize Size { get; set; }
         
         public long? HostId { get; set; }
 
+        [Range(1, 2_199_023_255_552)]
         public long OwnerId { get; set; }
 
         public ManagedResource Resource { get; set; }

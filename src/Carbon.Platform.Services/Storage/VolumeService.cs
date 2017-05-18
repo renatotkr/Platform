@@ -37,6 +37,12 @@ namespace Carbon.Platform.Storage
 
         public async Task<VolumeInfo> RegisterAsync(RegisterVolumeRequest request)
         {
+            #region Validation
+
+            Validate.Object(request, nameof(request));
+
+            #endregion
+
             var volume = new VolumeInfo(
                 id       : db.Volumes.Sequence.Next(),
                 size     : request.Size.TotalBytes,

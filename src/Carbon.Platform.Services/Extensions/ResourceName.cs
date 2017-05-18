@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using Carbon.Platform.Resources;
-
-namespace Carbon.Platform.Services
+﻿namespace Carbon.Platform.Services
 {
     internal static class ResourceName
     {

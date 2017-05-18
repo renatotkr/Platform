@@ -15,6 +15,7 @@ namespace Carbon.Platform.Storage
             Created      = created;
         }
 
+        [Range(1, 2_199_023_255_552)]
         public long RepositoryId { get; set; }
 
         [Required]

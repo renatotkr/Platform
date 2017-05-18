@@ -1,4 +1,6 @@
-﻿using Carbon.Json;
+﻿using System;
+
+using Carbon.Json;
 
 namespace Carbon.Platform.Computing
 {
@@ -9,6 +11,14 @@ namespace Carbon.Platform.Computing
         public CreateHostGroupRequest(string name)
         {
             Name = name;
+        }
+
+        public CreateHostGroupRequest(IEnvironment environment, ILocation location, JsonObject details = null)
+        {
+            Environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            Location    = location ?? throw new ArgumentNullException(nameof(location));
+            Name        = environment.Name + "/" + location.Name;
+            Details     = details;
         }
 
         public string Name { get; set; }
