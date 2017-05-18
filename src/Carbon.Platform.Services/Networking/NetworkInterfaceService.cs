@@ -45,8 +45,8 @@ namespace Carbon.Platform.Networking
 
             var networkInterface = new NetworkInterfaceInfo(
                 id        : await db.NetworkInterfaces.GetNextScopedIdAsync(request.NetworkId).ConfigureAwait(false),
-                addresses : Array.Empty<IPAddress>(),
-                mac       : request.Mac,
+                ipAddresses : Array.Empty<IPAddress>(),
+                macAddress       : request.Mac,
                 subnetId  : request.SubnetId,
                 resource  : request.Resource
             );

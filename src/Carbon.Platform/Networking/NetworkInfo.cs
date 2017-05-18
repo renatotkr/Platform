@@ -16,6 +16,7 @@ namespace Carbon.Platform.Networking
         public NetworkInfo(
             long id, 
             string[] addressBlocks,
+            long ownerId,
             ManagedResource resource, 
             IPAddress gatewayAddress = null,
             int? asn = null)
@@ -27,6 +28,7 @@ namespace Carbon.Platform.Networking
             ProviderId     = resource.ProviderId;
             LocationId     = resource.LocationId;
             ResourceId     = resource.ResourceId;
+            OwnerId        = ownerId;
         }
         
         [Member("id"), Key(sequenceName: "networkId")]
@@ -50,7 +52,7 @@ namespace Carbon.Platform.Networking
         public int? Asn { get; }
 
         [Member("ownerId")]
-        public long OwnerId { get; set; }
+        public long OwnerId { get; }
 
         #region IResource
 

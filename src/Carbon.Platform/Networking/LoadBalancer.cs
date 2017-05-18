@@ -16,8 +16,9 @@ namespace Carbon.Platform.Networking
             long id, 
             string name,
             string address, 
-            long networkId,
-            ManagedResource resource)
+            long ownerId,
+            ManagedResource resource,
+            long networkId = 0)
         {
             #region Preconditions
 
@@ -29,6 +30,7 @@ namespace Carbon.Platform.Networking
             Id         = id;
             Address    = address ?? throw new ArgumentNullException(nameof(address));
             NetworkId  = networkId;
+            OwnerId    = ownerId;
             ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
             ResourceId = resource.ResourceId;
@@ -48,7 +50,7 @@ namespace Carbon.Platform.Networking
         public long NetworkId { get; }
 
         [Member("ownerId")]
-        public long OwnerId { get; set; }
+        public long OwnerId { get; }
 
         #region IResource
 

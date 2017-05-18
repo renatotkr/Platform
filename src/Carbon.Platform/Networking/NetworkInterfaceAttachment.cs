@@ -7,7 +7,11 @@ namespace Carbon.Platform.Networking
     [Dataset("NetworkInterfaceAttachments")]
     public class NetworkInterfaceAttachment : INetworkInterfaceAttachment
     {
-        public NetworkInterfaceAttachment(long networkInterfaceId, long hostId, DateTime created, DateTime? deleted = null)
+        public NetworkInterfaceAttachment(
+            long networkInterfaceId, 
+            long hostId, 
+            DateTime created, 
+            DateTime? deleted = null)
         {
             NetworkInterfaceId = networkInterfaceId;
             HostId = hostId;

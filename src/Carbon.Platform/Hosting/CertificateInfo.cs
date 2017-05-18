@@ -49,6 +49,12 @@ namespace Carbon.Platform.Hosting
         [Member("revocationReason")]
         public byte? RevocationReason { get; set; }
 
+        #region Helpers
+
+        public string PrimarySubject => Subjects[1];
+
+        #endregion
+
         #region IResource
 
         // e.g. Let's Encrypt, Amazon, ...
@@ -119,21 +125,3 @@ namespace Carbon.Platform.Hosting
 // SerialNumber
 // RSA_2048
 // OwnerId
-
-/*
-Certificate
-Version Number
-Serial Number
-Signature Algorithm ID
-Issuer Name
-Validity period
-Not Before
-Not After
-Subject name
-Subject Public Key Info
-Public Key Algorithm
-Subject Public Key
-Issuer Unique Identifier (optional)
-Subject Unique Identifier (optional)
-Extensions (optional)
-*/

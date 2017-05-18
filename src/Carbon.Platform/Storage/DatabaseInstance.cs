@@ -33,8 +33,6 @@ namespace Carbon.Platform.Storage
         [Member("id"), Key]
         public long Id { get; }
         
-        // MYSQL@5.5
-
         [Member("status")]
         public DatabaseStatus Status { get; set; }
 

@@ -15,7 +15,8 @@ namespace Carbon.Platform.Computing
             long id, 
             string name, 
             string slug, 
-            long ownerId)
+            long ownerId,
+            ProgramType type = ProgramType.Application)
         {
             #region Preconditions
 
@@ -30,7 +31,7 @@ namespace Carbon.Platform.Computing
             Id      = id;
             Name    = name ?? throw new ArgumentNullException(nameof(name));
             Slug    = slug;
-            Type    = ProgramType.Application;
+            Type    = type;
             OwnerId = ownerId;
         }
 
@@ -45,11 +46,11 @@ namespace Carbon.Platform.Computing
         [StringLength(63)]
         public string Slug { get; }
 
-        // Application, Service, Task
         [Member("type")]
         public ProgramType Type { get; set; }
 
-        [Member("ownerId"), Indexed]
+        [Member("ownerId")]
+        [Indexed]
         public long OwnerId { get; }
 
         #region Stats

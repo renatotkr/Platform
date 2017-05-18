@@ -35,6 +35,8 @@ namespace Carbon.Platform.Storage
         [StringLength(1, 63)]
         public string Name { get; }
 
+        // DatabaseType Type { get; set; }
+
         [Member("ownerId")]
         public long OwnerId { get; }
 

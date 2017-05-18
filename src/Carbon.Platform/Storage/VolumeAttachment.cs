@@ -7,7 +7,11 @@ namespace Carbon.Platform.Storage
     [Dataset("VolumeAttachments")]
     public class VolumeAttachment : IVolumeAttachment
     {
-        public VolumeAttachment(long volumeId, long hostId, DateTime created, DateTime? deleted = null)
+        public VolumeAttachment(
+            long volumeId,
+            long hostId, 
+            DateTime created, 
+            DateTime? deleted = null)
         {
             VolumeId = volumeId;
             HostId = hostId;

@@ -10,6 +10,7 @@ Services & management remain < 1.0.0 and will stabalize at v1.
 - Rename Apps to Programs to support Services and Tasks
 - Add OwnerId to remaining top level objects 
 - Make host addresses a string[] to to support names in the future.
+- Move Repositories to Storage layer
 
 1.36.0
 - Introduce Slugs

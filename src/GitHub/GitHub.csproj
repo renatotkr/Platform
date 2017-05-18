@@ -8,7 +8,7 @@
     <!-- Package Details -->
     <Authors>iamcarbon</Authors>
     <Copyright>© Jason Nelson</Copyright>
-    <Description>GitHub client.</Description>
+    <Description>Simple API for GitHub.</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,5 +30,4 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Net.Http" />
   </ItemGroup>
-
 </Project>

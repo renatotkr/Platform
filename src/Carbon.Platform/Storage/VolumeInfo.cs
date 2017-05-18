@@ -12,14 +12,20 @@ namespace Carbon.Platform.Storage
     {
         public VolumeInfo() { }
 
-        public VolumeInfo(long id, long size, ManagedResource resource, long? hostId = null)
+        public VolumeInfo(
+            long id, 
+            long size,
+            long ownerId,
+            ManagedResource resource,
+            long? hostId = null)
         {
             Id         = id;
             Size       = size;
+            OwnerId = ownerId;
+            HostId = hostId;
             ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
             ResourceId = resource.ResourceId;
-            HostId     = hostId;
         }
 
         [Member("id"), Key(sequenceName: "volumeId")]
@@ -32,7 +38,7 @@ namespace Carbon.Platform.Storage
         public long? HostId { get; }
 
         [Member("ownerId")]
-        public long OwnerId { get; set; }
+        public long OwnerId { get; }
 
         // SourceImageId?
 

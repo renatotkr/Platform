@@ -24,7 +24,6 @@ namespace Carbon.Platform.Networking
 
             Id   = id;
             Name = name ?? throw new ArgumentNullException(nameof(name));
-
             ProviderId = resource.ProviderId;
             ResourceId = resource.ResourceId;
         }
@@ -33,7 +32,6 @@ namespace Carbon.Platform.Networking
         [Member("id"), Key]
         public long Id { get; }
 
-        // a-z, A-Z, 0-9, spaces, and ._-:/()#,@[]+=;{}!$*
         [Member("name")]
         [StringLength(63)]
         public string Name { get; }

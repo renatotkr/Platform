@@ -52,7 +52,7 @@ namespace Carbon.Platform
         public JsonObject Variables { get; }
   
         // e.g. 1.2.9
-        [Member("revision")]
+        [Member("revision"), Mutable]
         public string Revision { get; set; }
 
         [Member("ownerId")]
@@ -64,10 +64,10 @@ namespace Carbon.Platform
             {
                 switch (Id % 4)
                 {
-                    case 0: return EnvironmentType.Development;
-                    case 1: return EnvironmentType.Production;
-                    case 2: return EnvironmentType.Staging;
-                    case 3: return EnvironmentType.Intergration;
+                    case 0  : return EnvironmentType.Development;
+                    case 1  : return EnvironmentType.Production;
+                    case 2  : return EnvironmentType.Staging;
+                    case 3  : return EnvironmentType.Intergration;
                     default: throw new Exception("unknown");
                 }
             }

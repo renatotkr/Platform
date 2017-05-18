@@ -40,6 +40,7 @@ namespace Carbon.Platform.Storage
             var volume = new VolumeInfo(
                 id       : db.Volumes.Sequence.Next(),
                 size     : request.Size.TotalBytes,
+                ownerId  : request.OwnerId,
                 resource : request.Resource,
                 hostId   : request.HostId
             );

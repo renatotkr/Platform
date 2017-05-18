@@ -17,14 +17,21 @@ namespace Carbon.Platform.Networking
 
         public NetworkInterfaceInfo(
             long id, 
-            IPAddress[] addresses,
-            MacAddress mac,
+            IPAddress[] ipAddresses,
+            MacAddress macAddress,
             long subnetId,
             ManagedResource resource)
         {
+            #region Preconditions
+            
+            if (id <= 0)
+                throw new ArgumentException("Must be > 0", nameof(id));
+
+            #endregion
+
             Id         = id;
-            Addresses  = addresses;
-            MacAddress = mac;
+            Addresses  = ipAddresses;
+            MacAddress = macAddress;
             SubnetId   = subnetId;
             ProviderId = resource.ProviderId;
             ResourceId = resource.ResourceId;

@@ -18,9 +18,13 @@ namespace Carbon.Platform.Computing
             IMachineType machineType,
             IMachineImage machineImage,
             JsonObject details,
+            long ownerId,
             ManagedResource resource)
         {
             #region Preconditions
+
+            if (id <= 0)
+                throw new ArgumentNullException("Must be > 0", nameof(id));
 
             if (machineType == null)
                 throw new ArgumentNullException(nameof(machineType));
@@ -36,6 +40,7 @@ namespace Carbon.Platform.Computing
             MachineImageId = machineImage.Id;
             ProviderId     = resource.ProviderId;
             Details        = details ?? throw new ArgumentNullException(nameof(details));
+            OwnerId        = ownerId;
             ResourceId     = resource.ResourceId;
         }
 
@@ -59,6 +64,9 @@ namespace Carbon.Platform.Computing
         [Member("details")]
         [StringLength(2000)]
         public JsonObject Details { get; }
+
+        [Member("ownerId")]
+        public long OwnerId { get; set; }
 
         #region IResource
 

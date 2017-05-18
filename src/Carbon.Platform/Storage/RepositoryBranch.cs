@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 
-namespace Carbon.Platform.VersionControl
+namespace Carbon.Platform.Storage
 {
     [Dataset("RepositoryBranches")]
     [DataIndex(IndexFlags.Unique, "repositoryId", "name")]
@@ -11,8 +11,18 @@ namespace Carbon.Platform.VersionControl
     {
         public RepositoryBranch() { }
 
-        public RepositoryBranch(long repositoryId, string name, long creatorId)
+        public RepositoryBranch(
+            long repositoryId,
+            string name, 
+            long creatorId)
         {
+            #region Preconditions
+
+            if (repositoryId == 0)
+                throw new ArgumentException("Must be > 0", nameof(repositoryId));
+
+            #endregion
+
             RepositoryId = repositoryId;
             Name         = name ?? throw new ArgumentNullException(nameof(name));
             CreatorId    = creatorId;
@@ -28,7 +38,7 @@ namespace Carbon.Platform.VersionControl
         [Member("creatorId")]
         public long CreatorId { get; }
 
-        [Member("commitId")]
+        [Member("commitId"), Mutable]
         public long CommitId { get; set; }
 
         #region Timestamps

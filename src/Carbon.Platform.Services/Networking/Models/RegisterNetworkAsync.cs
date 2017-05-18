@@ -10,17 +10,18 @@ namespace Carbon.Platform.Networking
 
         public RegisterNetworkAsync(
             string[] addressBlocks,
+            long ownerId,
             ManagedResource resource)
         {
             AddressBlocks = addressBlocks ?? throw new ArgumentNullException(nameof(addressBlocks));
-            Resource     = resource;
+            OwnerId       = ownerId; 
+            Resource      = resource;
         }
         
         public string[] AddressBlocks { get; set; }
-        
-        public ManagedResource Resource { get; set; }
 
-        // TODO
         public long OwnerId { get; set; }
+
+        public ManagedResource Resource { get; set; }
     }
 }

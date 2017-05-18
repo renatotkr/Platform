@@ -31,7 +31,7 @@ namespace Carbon.Platform.Computing
             // e.g. carbon/us-east-1
 
             var group = new HostGroup(
-               id            : await db.HostGroups.GetNextScopedIdAsync(request.Environment.Id).ConfigureAwait(false),
+               id            : db.HostGroups.Sequence.Next(),
                name          : request.Environment.Name + "/" + request.Location.Name,
                environmentId : request.Environment.Id,
                details       : request.Details,

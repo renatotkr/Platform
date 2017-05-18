@@ -14,8 +14,6 @@ namespace GitHub
     {
         private static readonly ProductInfoHeaderValue userAgent = new ProductInfoHeaderValue("Carbon", "1.3.0");
 
-        private readonly string baseUri = "https://api.github.com";
-
         private readonly HttpClient httpClient = new HttpClient(new HttpClientHandler {
             AllowAutoRedirect = false
         });
@@ -79,9 +77,9 @@ namespace GitHub
 
             // GET /users/:username
             var result = await SendAsync(
-                method     : HttpMethod.Get,
-                requestUri : $"{baseUri}/users/{userName}",
-                authorize  : false
+                method    : HttpMethod.Get,
+                path      : $"/users/{userName}",
+                authorize : false
             ).ConfigureAwait(false);
 
             return result.As<GitUser>();
@@ -106,8 +104,8 @@ namespace GitHub
 
             // GET /repos/:owner/:repo/commits/:sha
             var result = await SendAsync(
-                method     : HttpMethod.Get,
-                requestUri : $"{baseUri}/{accountName}/{repoName}/commits/{sha}"
+                method : HttpMethod.Get,
+                path   : $"/{accountName}/{repoName}/commits/{sha}"
             ).ConfigureAwait(false);
 
             return result.As<GitBranch>();
@@ -134,8 +132,8 @@ namespace GitHub
             refName = refName.Replace("refs/", "");
 
             var result = await SendAsync(
-                method     : HttpMethod.Get,
-                requestUri : $"{baseUri}/repos/{accountName}/{repoName}/git/refs/{refName}"
+                method : HttpMethod.Get,
+                path   : $"/repos/{accountName}/{repoName}/git/refs/{refName}"
             ).ConfigureAwait(false);
 
             return result.As<GitRef>();
@@ -146,11 +144,59 @@ namespace GitHub
             // GET /repos/:owner/:repo/git/refs
             
             var result = await SendAsync(
-                method      : HttpMethod.Get,
-                requestUri  : $"{baseUri}/repos/{accountName}/{repoName}/git/refs"
+                method : HttpMethod.Get,
+                path    : $"/repos/{accountName}/{repoName}/git/refs"
             ).ConfigureAwait(false);
 
             return result.ToArrayOf<GitRef>();
+        }
+
+        #endregion
+
+        #region Repositories
+
+        public async Task<GitRepository> GetRepositoryAsync(string accountName, string repositoryName)
+        {
+            #region Preconditions
+
+            if (accountName == null)
+                throw new ArgumentNullException(nameof(accountName));
+
+            if (repositoryName == null)
+                throw new ArgumentNullException(nameof(repositoryName));
+
+            #endregion
+
+            // GET /repos/:owner/:repo
+
+            var result = await SendAsync(
+                method : HttpMethod.Get,
+                path   : $"/repos/{accountName}/{repositoryName}"
+            ).ConfigureAwait(false);
+
+            return result.As<GitRepository>();
+        }
+
+        public async Task<GitCommit[]> GetRepositoryCommitsAsync(string accountName, string repositoryName)
+        {
+            #region Preconditions
+
+            if (accountName == null)
+                throw new ArgumentNullException(nameof(accountName));
+
+            if (repositoryName == null)
+                throw new ArgumentNullException(nameof(repositoryName));
+
+            #endregion
+
+            // GET /repos/:owner/:repo/commits
+
+            var result = await SendAsync(
+                method: HttpMethod.Get,
+                path: $"/repos/{accountName}/{repositoryName}/commits"
+            ).ConfigureAwait(false);
+
+            return result.ToArrayOf<GitCommit>();
         }
 
         #endregion
@@ -172,14 +218,16 @@ namespace GitHub
             // GET /repos/:owner/:repo/branches
             
             var result = await SendAsync(
-                method      : HttpMethod.Get,
-                requestUri  : $"{baseUri}/repos/{accountName}/{repositoryName}/branches"
+                method : HttpMethod.Get,
+                path   : $"/repos/{accountName}/{repositoryName}/branches"
             ).ConfigureAwait(false);
 
             return result.ToArrayOf<GitBranch>();
         }
 
         #endregion
+        
+        #region Archives
 
         /// <summary>
         /// Note: For private repositories, these links are temporary and expire quickly.
@@ -189,10 +237,8 @@ namespace GitHub
             // GET /repos/:owner/:repo/:archive_format/:ref
             // https://api.github.com/repos/user/repo/zipball/dev
 
-            var requestUri = baseUri + request.ToPath();
+            var requestUri = request.ToPath();
             var httpRequest = new HttpRequestMessage(HttpMethod.Get, requestUri);
-
-            // application/vnd.github.v3+json
 
             httpRequest.Headers.Authorization = accessToken.ToHeader();
             httpRequest.Headers.UserAgent.Add(userAgent);
@@ -213,14 +259,22 @@ namespace GitHub
             }
         }
 
+        #endregion
+
         #region Helpers
+
+        private const string baseUri = "https://api.github.com";
 
         private async Task<JsonNode> SendAsync(
             HttpMethod method, 
-            string requestUri,
+            string path,
             bool authorize = true)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
+            var request = new HttpRequestMessage(HttpMethod.Get, requestUri: baseUri + path) {
+                Headers = {
+                    { "Accept", "application/vnd.github.v3+json" }
+                }
+            };
 
             if (authorize)
             {
@@ -228,6 +282,7 @@ namespace GitHub
             }
 
             request.Headers.UserAgent.Add(userAgent);
+
 
             using (var response = await httpClient.SendAsync(request).ConfigureAwait(false))
             {
@@ -250,3 +305,5 @@ namespace GitHub
         #endregion
     }
 }
+
+// ref: https://developer.github.com/v3/

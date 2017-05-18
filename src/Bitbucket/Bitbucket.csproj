@@ -2,10 +2,12 @@
 
   <PropertyGroup>
     <AssemblyName>Bitbucket</AssemblyName>
-    <VersionPrefix>1.4.0</VersionPrefix>    
+    <VersionPrefix>1.4.0</VersionPrefix>
+
+    <!-- Package Details-->
     <Authors>iamcarbon</Authors>
     <Copyright>© 2016-2017 Jason Nelson</Copyright>
-    <Description>Bitbucket client.</Description>
+    <Description>Simple API client for Bitbucket.</Description>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
   </PropertyGroup>
 

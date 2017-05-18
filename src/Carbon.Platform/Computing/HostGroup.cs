@@ -36,16 +36,16 @@ namespace Carbon.Platform.Computing
             ResourceId    = resource.ResourceId;
         }
         
-        // environmentId + sequenceNumber
-        [Member("id"), Key]
+        [Member("id"), Key("hostGroupId")]
         public long Id { get; }
 
         [Member("name")]
         [StringLength(100)]
         public string Name { get; }
 
-        [Member("environmentId"), Indexed]
-        public long EnvironmentId { get; }
+        [Member("environmentId")]
+        [Indexed]
+        public long? EnvironmentId { get; }
         
         // Used to check the health of the groups's instances
         [Member("healthCheckId")]
@@ -55,7 +55,7 @@ namespace Carbon.Platform.Computing
         [Member("hostTemplateId")]
         public long? HostTemplateId { get; set; }
 
-        // Span (Zone, Region)
+        // Span (Global, Zone, Region)
 
         [Member("details")]
         [StringLength(1000)]

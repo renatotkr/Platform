@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -386,13 +385,14 @@ namespace Carbon.Platform.Management
 
                     if (blockDevice.Ebs == null) continue;
 
-                    var volumeSize = blockDevice.Ebs.VolumeSize != null
-                        ? ByteSize.GiB(blockDevice.Ebs.VolumeSize.Value)
+                    var volumeSize = blockDevice.Ebs.VolumeSize is int ebsSize
+                        ? ByteSize.GiB(ebsSize)
                         : ByteSize.Zero;
 
                     volumes[bi] = new RegisterVolumeRequest(
-                        size: volumeSize,
-                        resource: ManagedResource.Volume(location, blockDevice.Ebs.VolumeId)
+                        size     : volumeSize,
+                        resource : ManagedResource.Volume(location, blockDevice.Ebs.VolumeId),
+                        ownerId  : 1
                     );
                 }
 

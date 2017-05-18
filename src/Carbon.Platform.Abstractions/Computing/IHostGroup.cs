@@ -4,7 +4,6 @@ namespace Carbon.Platform.Computing
 {
     public interface IHostGroup : IManagedResource
     {
-        long EnvironmentId { get; }
     }
 }
 

@@ -38,7 +38,8 @@ namespace Carbon.Platform.Networking
 
                 var registerRequest = new RegisterNetworkAsync(
                     addressBlocks : new[] { vpc.CidrBlock },
-                    resource      : ManagedResource.Network(region, vpc.VpcId)
+                    resource      : ManagedResource.Network(region, vpc.VpcId),
+                    ownerId       : 1
                 );
 
                 // TODO: Support ipv6 address blocks

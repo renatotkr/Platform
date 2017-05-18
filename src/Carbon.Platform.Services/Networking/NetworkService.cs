@@ -49,6 +49,7 @@ namespace Carbon.Platform.Networking
             var network = new NetworkInfo(
                 id            : db.Networks.Sequence.Next(),
                 addressBlocks : request.AddressBlocks,
+                ownerId       : request.OwnerId,
                 resource      : request.Resource
             );
             

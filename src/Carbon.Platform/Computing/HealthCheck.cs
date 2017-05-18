@@ -26,7 +26,6 @@ namespace Carbon.Platform.Computing
             Path     = path;
             Port     = port;
             Protocal = protocal;
-
             ProviderId = resource.ProviderId;
             ResourceId = resource.ResourceId;
             LocationId = resource.LocationId;

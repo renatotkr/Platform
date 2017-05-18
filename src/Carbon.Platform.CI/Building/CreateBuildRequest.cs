@@ -1,20 +1,28 @@
-﻿using Carbon.VersionControl;
+﻿using System;
+
+using Carbon.Platform.Storage;
 
 namespace Carbon.Platform.CI
 {
+    // Should be startBuildRequest... but conflicts with codebuild...
+
     public class CreateBuildRequest
     {
-        public BuildSource Source { get; set; }
+        public RepositorySource Source { get; set; }
 
         public long CreatorId { get; set; }
     }
-
-    // TODO: Support named archives...
-
-    public class BuildSource
+    
+    public class RepositorySource
     {
-        public long RepositoryId { get; set; }
+        public RepositorySource(IRepositoryCommit commit)
+        {
+            Commit = commit ?? throw new ArgumentNullException(nameof(commit));
+        }
 
-        public Revision Revision { get; set; }
+        public long RepositoryId => Commit.RepositoryId;
+
+        // presolved commit
+        public IRepositoryCommit Commit { get; }
     }
 }

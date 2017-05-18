@@ -20,3 +20,20 @@ namespace Carbon.Platform.Hosting
 
 // aws | arn   | Certificate
 // gcp | ulong | compute#sslCertificate
+
+
+/*
+Certificate
+Version Number
+Serial Number
+Signature Algorithm ID
+Issuer Name
+Validity period
+Not Before
+Not After
+Subject name
+Subject Public Key Info
+Public Key Algorithm
+Subject Public Key
+Extensions (optional)
+*/

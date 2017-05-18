@@ -30,7 +30,7 @@ namespace Carbon.Platform.Storage
             KekId      = kekId;
         }
 
-        [Member("id"), Key(sequenceName: "dataEncryptionKeys")]
+        [Member("id"), Key(sequenceName: "dekId")]
         public long Id { get; }
 
         // Key Encryption Key Id : The key used to decrypt the DEK data
@@ -51,7 +51,7 @@ namespace Carbon.Platform.Storage
         #endregion
 
         #region Timestamps
-
+        
         [Member("expires")]
         [TimePrecision(TimePrecision.Second)]
         public DateTime? Expires { get; set; }
@@ -74,4 +74,4 @@ namespace Carbon.Platform.Storage
 }
 
 // DEK - Data Encryption Key - The key used to encrypt the data
-// KEK - Key Encryption Key 
+// KEK - Key Encryption Key  - The key used to decrypt the DEK
