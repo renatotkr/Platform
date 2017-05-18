@@ -14,6 +14,8 @@ namespace GitHub
         [DataMember(Name = "gravatar_id")]
         public string GravarId { get; set; }
 
+        public string Url { get; set; }
+
         public string Name { get; set; }
 
         public string Company { get; set; }
@@ -27,6 +29,9 @@ namespace GitHub
         public bool Hireable { get; set; }
 
         public string Bio { get; set; }
+
+        // e.g. User
+        public string Type { get; set; }
     }
 }
 

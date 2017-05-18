@@ -8,11 +8,11 @@ using Carbon.VersionControl;
 
 namespace GitHub
 {
-    public class GitHubRepository : IRepositoryClient
+    public class GitHubRepositoryClient : IRepositoryClient
     {
         private readonly GitHubClient client;
 
-        public GitHubRepository(Uri url, OAuth2Token accessToken)
+        public GitHubRepositoryClient(Uri url, OAuth2Token accessToken)
         {
             #region Preconditions
 
@@ -31,7 +31,7 @@ namespace GitHub
             client = new GitHubClient(accessToken);
         }
 
-        public GitHubRepository(string accountName, string repositoryName, OAuth2Token accessToken)
+        public GitHubRepositoryClient(string accountName, string repositoryName, OAuth2Token accessToken)
         {
             AccountName    = accountName    ?? throw new ArgumentNullException(nameof(accountName));
             RepositoryName = repositoryName ?? throw new ArgumentNullException(nameof(repositoryName));
@@ -59,7 +59,7 @@ namespace GitHub
 
         public Task<GitRef[]> GetRefsAsync()
         { 
-            return client.GetRefs(AccountName, RepositoryName);
+            return client.GetRefsAsync(AccountName, RepositoryName);
         }
 
         #endregion

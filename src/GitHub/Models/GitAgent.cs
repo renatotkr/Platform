@@ -12,7 +12,7 @@ namespace GitHub
         public string Email { get; set; }
 
         [DataMember(Name = "date")]
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
     }
 }
 
