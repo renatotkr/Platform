@@ -1,18 +1,19 @@
 ﻿using System;
 
 using Carbon.Data.Annotations;
-using Carbon.Platform.Sequences;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Storage
 {
     [Dataset("RepositoryCommits")]
+    [DataIndex(IndexFlags.Unique, "repositoryId", "sha1")]
     public class RepositoryCommit : IRepositoryCommit
     {
         public RepositoryCommit() { }
 
         public RepositoryCommit(
             long id, 
+            long repositoryId,
             byte[] sha1, 
             string message = null,
             long? authorId = null,
@@ -29,26 +30,21 @@ namespace Carbon.Platform.Storage
         [Member("id"), Key]
         public long Id { get; }
 
+        [Member("repositoryId")]
+        public long RepositoryId { get; }
+
+        [Member("sha1", TypeName = "binary(20)")]
+        public byte[] Sha1 { get; }
+
+        [Member("message")]
+        public string Message { get; }
+
         [Member("authorId")]
         public long AuthorId { get; }
 
         [Member("committerId")]
         public long? CommiterId { get; }
 
-        [Member("message")]
-        public string Message { get; }
-
-        [Member("sha1", TypeName = "binary(20)")]
-        [Indexed]
-        public byte[] Sha1 { get; }
-
-        // future proof when GIT moves to sha3
-        [Member("sha3", TypeName = "binary(32)")]
-        [Indexed]
-        public byte[] Sha3 { get; }
-
-        public long RepositoryId => ScopedId.GetScope(Id);
-        
         #region IResource
 
         ResourceType IResource.ResourceType => ResourceTypes.RepositoryCommit;

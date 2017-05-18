@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 
 using Carbon.Data.Expressions;
 using Carbon.Platform.Resources;
-using Carbon.Platform.Sequences;
 
 using Dapper;
 
@@ -58,8 +57,7 @@ namespace Carbon.Platform.Storage
         {
             #region Preconditions
 
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
+            Validate.Object(request, nameof(request));
 
             #endregion
 
@@ -68,73 +66,19 @@ namespace Carbon.Platform.Storage
                 name     : request.Name,
                 ownerId  : request.OwnerId,
                 resource : request.Resource
-            );
+            )
+            {
+                Details = request.Details
+            };
 
             await db.Repositories.InsertAsync(repository).ConfigureAwait(false);
 
             // Recreate the master branch
-            var master = new RepositoryBranch(repository.Id, "master", request.OwnerId);
+            var masterBranch = new RepositoryBranch(repository.Id, "master", request.OwnerId);
 
-            await db.RepositoryBranches.InsertAsync(master).ConfigureAwait(false);
+            await db.RepositoryBranches.InsertAsync(masterBranch).ConfigureAwait(false);
 
             return repository;
-        }
-
-        public async Task<IRepositoryCommit> GetCommitAsync(long repositoryId, byte[] sha)
-        {
-            var range = ScopedId.GetRange(repositoryId);
-
-            // sha is assumed to be v1 for now
-            // determine type on length once sha3 identifiers are introduced...
-
-            return await db.RepositoryCommits.QueryFirstOrDefaultAsync(
-                And(
-                    Eq("sha1", sha),
-                    Between("id", range.Start, range.End)
-                )
-            ).ConfigureAwait(false);
-        }
-
-
-        public async Task<IRepositoryCommit> CreateCommitAsync(CreateCommitRequest request)
-        {
-            #region Preconditions
-
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            #endregion
-
-            RepositoryCommit commit;
-
-            using (var connection = db.Context.GetConnection())
-            using (var ts = connection.BeginTransaction())
-            {
-                var commitCount = connection.ExecuteScalar<int>(
-                    @"SELECT `commitCount` FROM `Repositories` WHERE `id` = @id", new {
-                        id = request.RepositoryId
-                    }, ts);
-
-                commit = new RepositoryCommit(
-                    id      : ScopedId.Create(request.RepositoryId, commitCount),
-                    sha1    : request.Sha1,
-                    message : request.Message
-                );
-
-                // TODO: Do this inside the same transaction
-                await db.RepositoryCommits.InsertAsync(commit);
-
-                connection.ExecuteScalar(
-                    @"UPDATE `Repositories` 
-                      SET `commitCount` = `commitCount` + 1 
-                      WHERE `id` = @id", new {
-                    id = request.RepositoryId    
-                }, ts);
-
-                ts.Commit();
-            }
-
-            return commit;
         }
 
         public async Task CreateBranchAsync(CreateBranchRequest request)

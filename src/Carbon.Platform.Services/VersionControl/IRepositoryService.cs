@@ -15,10 +15,6 @@ namespace Carbon.Platform.Storage
 
         Task CreateBranchAsync(CreateBranchRequest request);
 
-        Task<IRepositoryCommit> GetCommitAsync(long repositoryId, byte[] sha);
-
-        Task<IRepositoryCommit> CreateCommitAsync(CreateCommitRequest request);
-
         Task<RepositoryBranch> GetBranchAsync(long repositoryId, string name);
 
         Task<IReadOnlyList<RepositoryBranch>> GetBranchesAsync(long repositoryId);
