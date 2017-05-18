@@ -6,7 +6,9 @@ using Carbon.Data.Annotations;
 using Carbon.Json;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.VersionControl
+// Repositories layer on-top of containers...
+
+namespace Carbon.Platform.Storage
 {
     [Dataset("Repositories")]
     [DataIndex(IndexFlags.Unique, "providerId", "fullName")]

@@ -4,18 +4,25 @@ using Carbon.Data.Annotations;
 using Carbon.Platform.Sequences;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.VersionControl
+namespace Carbon.Platform.Storage
 {
     [Dataset("RepositoryCommits")]
     public class RepositoryCommit : IRepositoryCommit
     {
         public RepositoryCommit() { }
 
-        public RepositoryCommit(long id, byte[] sha1, string message = null)
+        public RepositoryCommit(
+            long id, 
+            byte[] sha1, 
+            string message = null,
+            long? authorId = null,
+            long? commiterId = null)
         {
-            Id   = id;
-            Sha1 = sha1 ?? throw new ArgumentNullException(nameof(sha1));
-            Message = message;
+            Id         = id;
+            Sha1       = sha1 ?? throw new ArgumentNullException(nameof(sha1));
+            Message    = message;
+            AuthorId   = authorId ?? 0;
+            CommiterId = commiterId;
         }
 
         // repositoryId + sequence
@@ -23,10 +30,10 @@ namespace Carbon.Platform.VersionControl
         public long Id { get; }
 
         [Member("authorId")]
-        public long AuthorId { get; set; }
+        public long AuthorId { get; }
 
         [Member("committerId")]
-        public long CommiterId { get; set; }
+        public long? CommiterId { get; }
 
         [Member("message")]
         public string Message { get; }
@@ -35,6 +42,7 @@ namespace Carbon.Platform.VersionControl
         [Indexed]
         public byte[] Sha1 { get; }
 
+        // future proof when GIT moves to sha3
         [Member("sha3", TypeName = "binary(32)")]
         [Indexed]
         public byte[] Sha3 { get; }
@@ -59,17 +67,12 @@ namespace Carbon.Platform.VersionControl
     }
 }
 
-
 // Authored?
 // Commited?
-// CommitDate?
-
 
 // Parents
 // Tree
 
-
 // TODO: Migrate to SHA3 as the secondary key once GIT stablizes
 
-// Note: Linux has the most known number of commits: 387,992
-// This is well below 4M max for the sequence
+// Note: Linux has the most known number of commits: 387,992 (below the scoped sequence number limit: 4M)

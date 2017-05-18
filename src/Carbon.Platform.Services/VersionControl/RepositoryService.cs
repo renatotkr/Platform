@@ -5,11 +5,10 @@ using System.Threading.Tasks;
 using Carbon.Data.Expressions;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Sequences;
-using Carbon.Platform.Services;
 
 using Dapper;
 
-namespace Carbon.Platform.VersionControl
+namespace Carbon.Platform.Storage
 {
     using static Expression;
 
@@ -88,7 +87,7 @@ namespace Carbon.Platform.VersionControl
             // sha is assumed to be v1 for now
             // determine type on length once sha3 identifiers are introduced...
 
-            return await db.Commits.QueryFirstOrDefaultAsync(
+            return await db.RepositoryCommits.QueryFirstOrDefaultAsync(
                 And(
                     Eq("sha1", sha),
                     Between("id", range.Start, range.End)
@@ -123,7 +122,7 @@ namespace Carbon.Platform.VersionControl
                 );
 
                 // TODO: Do this inside the same transaction
-                await db.Commits.InsertAsync(commit);
+                await db.RepositoryCommits.InsertAsync(commit);
 
                 connection.ExecuteScalar(
                     @"UPDATE `Repositories` 

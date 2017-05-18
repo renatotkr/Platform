@@ -1,7 +1,7 @@
 ﻿using System;
 
 using Carbon.Data.Annotations;
-using Carbon.Platform.VersionControl;
+using Carbon.Platform.Storage;
 using Carbon.Versioning;
 using Carbon.Platform.CI;
 

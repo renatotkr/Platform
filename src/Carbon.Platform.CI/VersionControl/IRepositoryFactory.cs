@@ -1,6 +1,6 @@
 ﻿using Carbon.VersionControl;
 
-namespace Carbon.Platform.VersionControl
+namespace Carbon.Platform.Storage
 {
     public interface IRepositoryFactory
     {

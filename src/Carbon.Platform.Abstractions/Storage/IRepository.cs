@@ -1,6 +1,6 @@
 ﻿using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.VersionControl
+namespace Carbon.Platform.Storage
 {
     public interface IRepository : IManagedResource
     {

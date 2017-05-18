@@ -27,4 +27,8 @@
   <ItemGroup>
     <PackageReference Include="Carbon.Storage" Version="1.6.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Git\" />
+  </ItemGroup>
 </Project>

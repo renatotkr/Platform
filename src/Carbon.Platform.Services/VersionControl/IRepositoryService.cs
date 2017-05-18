@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Carbon.Platform.VersionControl
+namespace Carbon.Platform.Storage
 {
     public interface IRepositoryService
     {

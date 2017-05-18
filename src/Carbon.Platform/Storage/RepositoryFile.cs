@@ -2,7 +2,7 @@
 
 using Carbon.Data.Annotations;
 
-namespace Carbon.Platform.VersionControl
+namespace Carbon.Platform.Storage
 {
     // 1/master/scripts/app.js
 
@@ -50,8 +50,11 @@ namespace Carbon.Platform.VersionControl
         [Member("size"), Mutable]
         public long Size { get; set; }
 
+        // of body...
         [Member("sha256", TypeName = "binary(32)"), Mutable]
         public byte[] Sha256 { get; set; }
+        
+        // Sha3?
 
         [Member("creatorId")]
         public long CreatorId { get; }

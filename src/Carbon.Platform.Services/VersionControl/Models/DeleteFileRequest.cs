@@ -1,9 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Carbon.Platform.VersionControl
+namespace Carbon.Platform.Storage
 {
     public class DeleteFileRequest : IRepositoryFile
     {
+        public DeleteFileRequest() { }
+
+        public DeleteFileRequest(long repositoryId, string branchName, string path)
+        {
+            RepositoryId = repositoryId;
+            BranchName   = branchName;
+            Path         = path;
+        }
+
         public long RepositoryId { get; set; }
 
         [Required]

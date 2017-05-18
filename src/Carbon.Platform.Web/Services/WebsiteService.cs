@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 using Carbon.Data;
 using Carbon.Data.Expressions;
-using Carbon.Platform.VersionControl;
+using Carbon.Platform.Storage;
 using Carbon.Versioning;
 
 using Dapper;

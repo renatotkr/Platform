@@ -1,10 +1,20 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Carbon.Platform.VersionControl
+namespace Carbon.Platform.Storage
 {
     public class CreateCommitRequest
     {
+        public CreateCommitRequest() { }
+
+        public CreateCommitRequest(long repositoryId, byte[] sha1, string message, DateTime created)
+        {
+            RepositoryId = repositoryId;
+            Sha1         = sha1;
+            Message      = message;
+            Created      = created;
+        }
+
         public long RepositoryId { get; set; }
 
         [Required]
