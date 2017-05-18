@@ -55,26 +55,26 @@ namespace Carbon.Platform.VersionControl
             return repository;
         }
 
-        public async Task<RepositoryInfo> CreateAsync(string name, long ownerId, ManagedResource resource)
+        public async Task<RepositoryInfo> CreateAsync(CreateRepositoryRequest request)
         {
             #region Preconditions
 
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
 
             #endregion
 
             var repository = new RepositoryInfo(
                 id       : db.Repositories.Sequence.Next(),
-                name     : name,
-                ownerId  : ownerId,
-                resource : resource
+                name     : request.Name,
+                ownerId  : request.OwnerId,
+                resource : request.Resource
             );
 
             await db.Repositories.InsertAsync(repository).ConfigureAwait(false);
 
             // Recreate the master branch
-            var master = new RepositoryBranch(repository.Id, "master", ownerId);
+            var master = new RepositoryBranch(repository.Id, "master", request.OwnerId);
 
             await db.RepositoryBranches.InsertAsync(master).ConfigureAwait(false);
 

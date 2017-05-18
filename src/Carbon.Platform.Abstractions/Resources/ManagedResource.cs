@@ -68,6 +68,9 @@ namespace Carbon.Platform.Resources
         public static ManagedResource Bucket(ILocation location, string id) =>
             FromLocation(location, ResourceTypes.Bucket, id);
 
+        public static ManagedResource Build(ILocation location, string id) =>
+            FromLocation(location, ResourceTypes.Build, id);
+
         public static ManagedResource DatabaseCluster(ILocation location, string id) => 
             FromLocation(location, ResourceTypes.DatabaseCluster, id);
 

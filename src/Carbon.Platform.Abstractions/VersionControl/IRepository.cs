@@ -7,7 +7,7 @@ namespace Carbon.Platform.VersionControl
         string Name { get; }     // platform
 
         string FullName { get; } // carbon/platform
-
+        
         long OwnerId { get; }
     }
 }
