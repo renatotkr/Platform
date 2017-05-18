@@ -17,10 +17,10 @@ namespace Carbon.VersionControl
 
         public string Domain { get; }
 
-        public static RepositoryProvider Amazon    = new RepositoryProvider(1,    "amazon.codecommit");
-        public static RepositoryProvider GitHub    = new RepositoryProvider(1000, "github", "github.com");
-        public static RepositoryProvider Bitbucket = new RepositoryProvider(1001, "bitbucket", "bitbucket.org");
-        public static RepositoryProvider GitLab    = new RepositoryProvider(1002, "gitlab", "gitlab.com");
+        public static RepositoryProvider CodeCommit = new RepositoryProvider(1,    "aws");
+        public static RepositoryProvider GitHub     = new RepositoryProvider(1000, "github", "github.com");
+        public static RepositoryProvider Bitbucket  = new RepositoryProvider(1001, "bitbucket", "bitbucket.org");
+        public static RepositoryProvider GitLab     = new RepositoryProvider(1002, "gitlab", "gitlab.com");
 
         // Code commit urls are region scoped...
 
@@ -35,12 +35,12 @@ namespace Carbon.VersionControl
 
         public override bool Equals(object obj)
         {
-            return (obj as RepositoryProvider)?.Equals(this) == true;
+            return obj is RepositoryProvider lhs && lhs.Equals(this);
         }
 
-        public static bool operator ==(RepositoryProvider a, RepositoryProvider b)
+        public static bool operator ==(RepositoryProvider rhs, RepositoryProvider b)
         {
-            return a.Equals(b);
+            return rhs.Equals(b);
         }
 
         public static bool operator !=(RepositoryProvider a, RepositoryProvider b)
@@ -73,7 +73,7 @@ namespace Carbon.VersionControl
 
                 case "gitlab": return GitLab;
 
-                case "codecommit": return Amazon;
+                case "codecommit": return CodeCommit;
 
                 default: throw new Exception("Unsupported git provider: " + text);
             }

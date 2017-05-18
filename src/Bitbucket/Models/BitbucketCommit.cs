@@ -12,10 +12,14 @@ namespace Bitbucket
 
         public DateTime Date { get; set; }
 
-        public IActor Author => null;
+        #region ICommit
 
-        public IActor Committer => null;
+        IActor ICommit.Author => null;
+
+        IActor ICommit.Committer => null;
 
         string ICommit.Sha => Hash;
+
+        #endregion
     }
 }

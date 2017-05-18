@@ -1,4 +1,10 @@
-﻿1.5.0 ---------------------------------
+﻿We prematurely versioned at v1. 
+Breaking changes will continue to be made until stabalizing at v2.
+
+TODO:
+- remove depedency on Carbon.Packaging AND take depedency on ZipFile
+
+1.5.0 ---------------------------------
 
 - Add Scopes
 - Add Authorization Model

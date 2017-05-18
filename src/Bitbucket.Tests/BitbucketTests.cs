@@ -10,7 +10,6 @@ namespace Bitbucket.Tests
         public void Bitcommit()
         {
             var x = @"
-
 {
   ""pagelen"": 30,
   ""values"":  [
@@ -68,6 +67,5 @@ namespace Bitbucket.Tests
             Assert.Equal("1cb4e9b58be100c638fc6f3826d83720c55bf477", r.Hash);
             Assert.Equal("Intial commit\n", r.Message);
         }
-
     }
 }
