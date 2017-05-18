@@ -38,17 +38,8 @@ namespace Carbon.Platform.CI
         }
 
         public async Task<Build> CreateBuildAsync(CreateBuildRequest request)
-        {
-            var source = request.Source;
-
-            var provider = ResourceProvider.Get(source.Provider.Id);
-
-            var repository = await repositoryService.GetAsync(provider, source.AccountName + "/" + source.RepositoryName);
-
-            
-            // TODO: Decrypt the acess token...
-
-            // Resolve to a commit
+        {            
+            var repository = await repositoryService.GetAsync(request.Source.RepositoryId);
 
             // Get or create the commit...
             // - we should have recieved a PushEvent from GITHUB and already registered it...
@@ -57,11 +48,14 @@ namespace Carbon.Platform.CI
 
             var client = repositoryFactory.Get(repository);
 
-            var commitInfo = await client.GetCommitAsync(source.Revision.Value);
+
+            // Resolve to a commit
+
+            var commitInfo = await client.GetCommitAsync(request.Source.Revision);
 
             var commit = await repositoryService.GetCommitAsync(
                 repositoryId : repository.Id,
-                sha          : HexString.ToBytes(commitInfo.Id)
+                sha          : HexString.ToBytes(commitInfo.Sha)
             ).ConfigureAwait(false);
 
             // var commit = repositoryService.CreateCommitAsync(new CreateCommitRequest())

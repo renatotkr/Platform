@@ -25,7 +25,7 @@ namespace GitHub.Events
 
         public GitRepository Repository { get; set; }
         
-        public GitAgent Pusher { get; set; }
+        public GitActor Pusher { get; set; }
         
         public GitUser Sender { get; set; }
     }

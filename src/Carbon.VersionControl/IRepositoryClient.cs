@@ -6,14 +6,18 @@ namespace Carbon.VersionControl
 
     public interface IRepositoryClient
     {
-        Task<IPackage> DownloadAsync(Revision revision);
+        Task<IPackage> DownloadAsync(Revision revision, ArchiveFormat format = ArchiveFormat.Zip);
 
         Task<ICommit> GetCommitAsync(Revision revision);
         
         // CreateBranch
+ 
         // GetBranch
+        
         // ListBranches
+        
         // GetBlob
+        
         // GetDifferences
     }
 }

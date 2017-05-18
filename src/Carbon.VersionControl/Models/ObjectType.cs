@@ -1,6 +1,6 @@
 ﻿namespace Carbon.VersionControl
 { 
-    public enum ObjectType : byte
+    public enum ObjectType
     {
         Blob   = 1,
         Tree   = 2,

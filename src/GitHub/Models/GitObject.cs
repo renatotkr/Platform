@@ -18,17 +18,11 @@ namespace GitHub
 
         #region Helpers
 
-        public ICommit ToCommit()
+        public ICommit AsCommit()
         {
-            if (Type != "commit")
-            {
-                throw new Exception("Not a commit. Was " + Type);
-            }
+            if (Type != "commit") throw new Exception("Not a commit. Was " + Type);
 
-            return new GitCommit {
-                Sha = Sha,
-                Url = Url
-            };
+            return new GitCommit(Sha, Url);
         }
 
         #endregion

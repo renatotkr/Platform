@@ -2,18 +2,17 @@
 {
     public interface ICommit
     {
-        // SHA (sha1 || sha3)
-        string Id { get; } // An SHA1 for GIT
+        // (sha-1 || sha3-256)
+        string Sha { get; }
 
         string Message { get; }
         
+        IActor Author { get; }
+
+        IActor Committer { get; }
+
         // string[] ParentIds { get; }
 
         // string TreeId { get; }
-
-        // Author
-        // Committer
     }
-
-
 }

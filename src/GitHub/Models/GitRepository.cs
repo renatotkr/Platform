@@ -12,7 +12,7 @@ namespace GitHub
         [DataMember(Name = "full_name")]
         public string FullName { get; set; }
 
-        public GitAgent Owner { get; set; }
+        public GitActor Owner { get; set; }
 
         public bool Private { get; set; }
 

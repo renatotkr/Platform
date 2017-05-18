@@ -12,6 +12,8 @@ namespace Bitbucket
     {
         private readonly BitbucketClient client;
 
+        // https://bitbucket.org/{accontName}/{repositoryName}.git
+
         public BitbucketRepository(Uri url, NetworkCredential credential)
         {
             #region Preconditions
@@ -24,10 +26,9 @@ namespace Bitbucket
 
             #endregion
 
-            // https://bitbucket.org/carbonmade/lefty.git
+            var repo = RevisionSource.Parse(url);
 
-            var repo = RevisionSource.Parse(url.ToString());
-            AccountName = repo.AccountName;
+            AccountName    = repo.AccountName;
             RepositoryName = repo.RepositoryName;
 
             client = new BitbucketClient(credential);
@@ -37,7 +38,10 @@ namespace Bitbucket
 
         public string RepositoryName { get; }
 
-        public BitbucketRepository(string accountName, string repositoryName, NetworkCredential credential)
+        public BitbucketRepository(
+            string accountName, 
+            string repositoryName, 
+            NetworkCredential credential)
         {
             #region Preconditions
 
@@ -46,7 +50,7 @@ namespace Bitbucket
 
             #endregion
         
-            AccountName = accountName ?? throw new ArgumentNullException(nameof(accountName));
+            AccountName    = accountName ?? throw new ArgumentNullException(nameof(accountName));
             RepositoryName = repositoryName ?? throw new ArgumentNullException(nameof(repositoryName));
 
             this.client = new BitbucketClient(credential);
@@ -54,19 +58,17 @@ namespace Bitbucket
 
         public async Task<ICommit> GetCommitAsync(Revision revision)
         {
-            var commit = await client.GetCommitAsync(AccountName, RepositoryName, revision.Name).ConfigureAwait(false);
-
-            if (commit == null)
-            {
-                throw new Exception($"The repository '{RepositoryName}' does not have a reference named '{revision.Path}'");
-            }
-
-            return commit;
+            return await client.GetCommitAsync(AccountName, RepositoryName, revision.Name).ConfigureAwait(false)
+                ?? throw new Exception($"No ref named '{revision.Path}' exists in '{RepositoryName}'");
         }
 
-        public async Task<IPackage> DownloadAsync(Revision revision)
+        public async Task<IPackage> DownloadAsync(Revision revision, ArchiveFormat format)
         {
-            var stream = await client.GetZipStreamAsync(AccountName, RepositoryName, revision.Name).ConfigureAwait(false);
+            var stream = await client.GetZipStreamAsync(
+                accountName     : AccountName, 
+                repositoryName  : RepositoryName, 
+                revision        : revision.Name
+            ).ConfigureAwait(false);
 
             return ZipPackage.FromStream(stream, stripFirstLevel: true);
         }

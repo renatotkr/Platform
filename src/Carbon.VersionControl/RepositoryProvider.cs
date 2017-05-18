@@ -4,8 +4,6 @@ namespace Carbon.VersionControl
 {
     public class RepositoryProvider : IEquatable<RepositoryProvider>
     {
-        // servicename?
-
         public RepositoryProvider(int id, string name, string domain = null)
         {
             Id    = id;
@@ -77,7 +75,7 @@ namespace Carbon.VersionControl
 
                 case "codecommit": return Amazon;
 
-                default: throw new Exception("Unsupported provider: " + text);
+                default: throw new Exception("Unsupported git provider: " + text);
             }
         }
     }

@@ -4,7 +4,7 @@ namespace Carbon.VersionControl
 {
     public struct Revision
     {
-        public static readonly Revision Master = new Revision("master", RevisionType.Head);
+        public static readonly Revision Master = Head("master");
 
         public Revision(string name, RevisionType type)
         {
@@ -66,13 +66,14 @@ namespace Carbon.VersionControl
             {
                 name = parts[0];
 
-                // revision (40 byte, 20 character hexidecimal, SHA1 or a name that denotes a particular object)
-                // dae86e1950b1277e545cee180551750029cfe735
-
-                if (name.Length == 20)
+                // sha1 = 40 character hexstring (e.g. dae86e1950b1277e545cee180551750029cfe735)
+                if (name.Length == 40) // sha1
                 {
-                    // It's a commit ref
-                    return new Revision(name, RevisionType.Commit);
+                    return Commit(name);
+                }
+                else if (name.Length == 64) // sha3
+                {
+                    return Commit(name);
                 }
 
                 // Otherwise, it's a symbolic ref name to a specific revision

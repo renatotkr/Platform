@@ -66,14 +66,10 @@ namespace GitHub
 
         public async Task<ICommit> GetCommitAsync(Revision revision)
         {
-            var reference = await GetRefAsync(revision.Path).ConfigureAwait(false);
+            var reference = await GetRefAsync(revision.Path).ConfigureAwait(false)
+                ?? throw new Exception($"The ref '{revision.Path}' was not found in '{AccountName}/{RepositoryName}'");
 
-            if (reference == null)
-            {
-                throw new Exception($"The repository '{RepositoryName}' does not have a reference named '{revision.Path}'");
-            }
-
-            return reference.Object.ToCommit();
+            return reference.Object.AsCommit();
         }
 
         public Task<IList<GitBranch>> GetBranchesAsync()
@@ -81,13 +77,15 @@ namespace GitHub
             return client.GetBranchesAsync(AccountName, RepositoryName);
         }
 
-        public async Task<IPackage> DownloadAsync(Revision revision)
+        public async Task<IPackage> DownloadAsync(
+            Revision revision, 
+            ArchiveFormat format = ArchiveFormat.Zip)
         {
             var request = new GetArchiveLinkRequest(
                 accountName    : AccountName, 
                 repositoryName : RepositoryName, 
                 revision       : revision, 
-                format         : ArchiveFormat.Zipball
+                format         : format == ArchiveFormat.Tar ? GitArchiveFormat.Tarball : GitArchiveFormat.Zipball
             );
 
             var link = await client.GetArchiveLinkAsync(request).ConfigureAwait(false);

@@ -8,12 +8,12 @@ namespace Carbon.VersionControl
         public RevisionSource(
             RepositoryProvider provider,
             string accountName,
-            string name,
+            string repositoryName,
             Revision? revision)
         {
             Provider       = provider;
             AccountName    = accountName;
-            RepositoryName = name ?? throw new ArgumentNullException(nameof(name));
+            RepositoryName = repositoryName ?? throw new ArgumentNullException(nameof(repositoryName));
             Revision       = revision;
         }
 

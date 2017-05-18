@@ -12,6 +12,10 @@ namespace Bitbucket
 
         public DateTime Date { get; set; }
 
-        string ICommit.Id => Hash;
+        public IActor Author => null;
+
+        public IActor Committer => null;
+
+        string ICommit.Sha => Hash;
     }
 }

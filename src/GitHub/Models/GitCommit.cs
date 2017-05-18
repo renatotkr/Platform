@@ -7,6 +7,14 @@ namespace GitHub
 {
     public class GitCommit : ICommit
     {
+        public GitCommit() { }
+
+        public GitCommit(string sha, Uri url = null)
+        {
+            Sha = sha ?? throw new ArgumentNullException(nameof(sha));
+            Url = url;
+        }
+
         [DataMember(Name = "sha")]
         public string Sha { get; set; }
 
@@ -17,17 +25,19 @@ namespace GitHub
         public Uri Url { get; set; }
 
         [DataMember(Name = "author")]
-        public GitAgent Author { get; set; }
+        public GitActor Author { get; set; }
 
-        [DataMember(Name = "commiter")]
-        public GitAgent Commiter { get; set; }
+        [DataMember(Name = "committer")]
+        public GitActor Committer { get; set; }
 
-        #region ICommit
+        #region IGitCommit
 
-        [IgnoreDataMember]
-        string ICommit.Id => Sha;
+        IActor ICommit.Author => Author;
+
+        IActor ICommit.Committer => Committer;
 
         #endregion
+
     }
 }
 

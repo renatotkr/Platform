@@ -10,12 +10,12 @@ namespace GitHub
             string accountName,
             string repositoryName,
             Revision revision,
-            ArchiveFormat format = ArchiveFormat.Zipball)
+            GitArchiveFormat format = GitArchiveFormat.Zipball)
         {
-            AccountName = accountName ?? throw new ArgumentNullException(nameof(accountName));
-            RepositoryName = repositoryName ?? throw new ArgumentNullException(nameof(repositoryName));
-            Revision = revision;
-            Format = format;
+            AccountName     = accountName ?? throw new ArgumentNullException(nameof(accountName));
+            RepositoryName  = repositoryName ?? throw new ArgumentNullException(nameof(repositoryName));
+            Revision        = revision;
+            Format          = format;
         }
 
         public string AccountName { get; }
@@ -24,7 +24,7 @@ namespace GitHub
 
         public Revision Revision { get; } //   // Optional string - valid Git reference, defaults to master
 
-        public ArchiveFormat Format { get; }
+        public GitArchiveFormat Format { get; }
 
         public string ToPath()
         {
@@ -39,7 +39,7 @@ namespace GitHub
         }
     }
 
-    public enum ArchiveFormat
+    public enum GitArchiveFormat
     {
         Tarball,
         Zipball
