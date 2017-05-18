@@ -50,8 +50,11 @@ namespace Carbon.Platform.VersionControl
         [Member("ownerId")]  // May change ownership
         public long OwnerId { get; }
 
-        [Member("encryptedAccessToken", TypeName = "BLOB(1000)")]
-        public byte[] EncryptedAccessToken { get; }
+        /// <summary>
+        /// An encrypted token to access the repository
+        /// </summary>
+        [Member("encryptedToken", TypeName = "BLOB(1000)")]
+        public byte[] EncryptedToken { get; }
 
         #region Stats
 
