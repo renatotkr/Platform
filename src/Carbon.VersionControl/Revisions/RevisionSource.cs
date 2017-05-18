@@ -48,6 +48,11 @@ namespace Carbon.VersionControl
             return sb.ToString();
         }
 
+        public static RevisionSource Parse(Uri url)
+        {
+            return Parse(url.ToString());
+        }
+
         public static RevisionSource Parse(string text)
         {
             #region Preconditions
