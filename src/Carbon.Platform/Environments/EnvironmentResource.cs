@@ -36,8 +36,7 @@ namespace Carbon.Platform
             Id            = id;
             EnvironmentId = env.Id;
             LocationId    = location.Id;
-            ResourceType  = resource.ResourceType;
-            ResourceId    = resource.Id;
+            Resource      = resource.ResourceType.Name + "#" + resource.Id;
         }
 
         // environmentId + sequenceNumber
@@ -51,11 +50,7 @@ namespace Carbon.Platform
         public int LocationId { get; }
        
         // host#500
-
-        [Member("resourceType")]
-        public ResourceType ResourceType { get; }
-
-        [Member("resourceId")]
-        public long ResourceId { get; }
+        [Member("resource")]
+        public string Resource { get; }
     }
 }
