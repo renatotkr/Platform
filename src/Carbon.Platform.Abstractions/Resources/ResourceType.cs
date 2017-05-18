@@ -69,7 +69,6 @@ namespace Carbon.Platform.Resources
         public static ResourceType DataEncryptionKey   = "dek";           
         public static ResourceType EncryptionKey       = "encryptionKey";         // master encryption keys
 
-
         // Networking --------------------------------------------------------------------------------------------
 
         public static ResourceType Network              = "network";

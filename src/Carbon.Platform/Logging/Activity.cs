@@ -23,9 +23,10 @@ namespace Carbon.Platform.Logging
 
             #endregion
 
-            Action   = action ?? throw new ArgumentNullException(nameof(action));
-            Resource = resource.ResourceType+ "#" + resource.Id;
-            Context  = context;
+            Action       = action ?? throw new ArgumentNullException(nameof(action));
+            ResourceType = resource.ResourceType.Name;
+            ResourceId    = resource.Id;
+            Context       = context;
         }
 
         // change to bigId (accountId | timestamp | sequenceNumber)
@@ -36,10 +37,13 @@ namespace Carbon.Platform.Logging
         [Member("action")]
         public string Action { get; }
         
-        // e.g. host#4234524
-        [Member("resource")]
-        [StringLength(100)]
-        public string Resource { get; }
+        // e.g. host, account, etc.
+        [Member("resourceType")]
+        [StringLength(30)]
+        public string ResourceType { get; }
+
+        [Member("resourceId")]
+        public long ResourceId { get; set; }
 
         [Member("context"), Optional]
         [StringLength(1000)]
@@ -57,4 +61,4 @@ namespace Carbon.Platform.Logging
     }
 }
 
-// Bringt this up to IAM layer
+// TODO: Bring up to IAM layer
