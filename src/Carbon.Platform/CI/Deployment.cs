@@ -56,7 +56,7 @@ namespace Carbon.Platform.CI
 
         [Member("releaseVersion")]
         public SemanticVersion ReleaseVersion { get; }
-
+        
         [Member("commitId")]
         public long CommitId { get; }
 

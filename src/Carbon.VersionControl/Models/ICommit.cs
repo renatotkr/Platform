@@ -2,6 +2,7 @@
 {
     public interface ICommit
     {
+        // SHA (sha1 || sha3)
         string Id { get; } // An SHA1 for GIT
 
         string Message { get; }

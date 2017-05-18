@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Bitbucket\Bitbucket.csproj" />
+    <ProjectReference Include="..\GitHub\GitHub.csproj" />
   </ItemGroup>
 
   <ItemGroup>
