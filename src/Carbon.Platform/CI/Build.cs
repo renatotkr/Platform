@@ -37,18 +37,21 @@ namespace Carbon.Platform.CI
         [Member("status"), Mutable]
         public BuildStatus Status { get; set; }
         
+        // repositoryId + sequenceNumber
         [Member("commitId")]
         public long CommitId { get; }
         
+        // InitiatorId ?
+
+        [Member("creatorId")]
+        public long CreatorId { get; }
+
         [Member("message"), Mutable]
         [StringLength(200)]
         public string Message { get; set; }
 
         [Member("duration"), Mutable]
         public TimeSpan? Duration { get; set; }
-        
-        [Member("creatorId")]
-        public long CreatorId { get; }
 
         #region IResource
 

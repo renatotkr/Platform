@@ -1,6 +1,6 @@
 ﻿namespace Carbon.Platform.CI
 {
-    public enum BuildStatus
+    public enum BuildStatus : byte
     {
         Pending    = 1,
         Building   = 2,

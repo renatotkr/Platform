@@ -1,6 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-using Carbon.Data.Expressions;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Carbon.Platform.VersionControl
 {
@@ -12,5 +11,7 @@ namespace Carbon.Platform.VersionControl
         public byte[] Sha1 { get; set; }
 
         public string Message { get; set; }
+
+        public DateTime Created { get; set; }
     }
 }

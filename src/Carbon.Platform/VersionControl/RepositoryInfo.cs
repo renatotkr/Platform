@@ -47,7 +47,7 @@ namespace Carbon.Platform.VersionControl
         public string FullName { get; }
 
         [IgnoreDataMember]
-        [Member("ownerId")]  // May change ownership
+        [Member("ownerId")] // May change ownership
         public long OwnerId { get; }
 
         /// <summary>

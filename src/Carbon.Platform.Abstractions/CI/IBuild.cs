@@ -3,7 +3,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.CI
 { 
-    public interface IBuild : IResource
+    public interface IBuild : IManagedResource
     {
         BuildStatus Status { get; }
 

@@ -11,7 +11,7 @@ namespace Carbon.VersionControl.Tests
 
             Assert.Equal("github", x.Provider.Name);
             Assert.Equal("npm", x.AccountName);
-            Assert.Equal("npm", x.Name);
+            Assert.Equal("npm", x.RepositoryName);
 
             Assert.Equal("npm/npm", x.ToString());
         }
@@ -23,7 +23,7 @@ namespace Carbon.VersionControl.Tests
 
             Assert.Equal("github", x.Provider.Name);
             Assert.Equal("carbon", x.AccountName);
-            Assert.Equal("cropper", x.Name);
+            Assert.Equal("cropper", x.RepositoryName);
             Assert.Equal("master", x.Revision.Value.Name);
 
             Assert.Equal("carbon/cropper#master", x.ToString());
@@ -45,7 +45,7 @@ namespace Carbon.VersionControl.Tests
 
             Assert.Equal("github", x.Provider.Name);
             Assert.Equal("carbon", x.AccountName);
-            Assert.Equal("cropper", x.Name);
+            Assert.Equal("cropper", x.RepositoryName);
             Assert.Equal("branch", x.Revision.Value.Name);
 
         }
@@ -59,7 +59,7 @@ namespace Carbon.VersionControl.Tests
 
             Assert.Equal("bitbucket", x.Provider.Name);
             Assert.Equal("example", x.AccountName);
-            Assert.Equal("repo", x.Name);
+            Assert.Equal("repo", x.RepositoryName);
         }
     }
 }

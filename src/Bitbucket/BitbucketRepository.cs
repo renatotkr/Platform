@@ -28,7 +28,7 @@ namespace Bitbucket
 
             var repo = RevisionSource.Parse(url.ToString());
             AccountName = repo.AccountName;
-            RepositoryName = repo.Name;
+            RepositoryName = repo.RepositoryName;
 
             client = new BitbucketClient(credential);
         }
