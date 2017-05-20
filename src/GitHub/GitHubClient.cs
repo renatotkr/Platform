@@ -51,6 +51,8 @@ namespace GitHub
                 Content = new StringContent(postData, Encoding.UTF8, "application/json")
             };
 
+            httpRequest.Headers.UserAgent.Add(userAgent);
+
             httpRequest.Headers.Authorization = new AuthenticationHeaderValue(
                 scheme    : "Basic",
                 parameter : Convert.ToBase64String(Encoding.ASCII.GetBytes($"{userName}:{password}"))
@@ -60,7 +62,14 @@ namespace GitHub
             {
                 var responseText = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-                return JsonObject.Parse(responseText).As<Authorization>();
+                try
+                {
+                    return JsonObject.Parse(responseText).As<Authorization>();
+                }
+                catch
+                {
+                    throw new Exception(responseText);
+                }
             }
         }
 

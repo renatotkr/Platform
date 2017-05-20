@@ -37,6 +37,7 @@ namespace Carbon.Platform.Hosting
         public long Id { get; }
 
         // max-length = 253 characters
+        // puny-code?
         [Member("name"), Unique]
         [StringLength(180)]
         public string Name { get; }

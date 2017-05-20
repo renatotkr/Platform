@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Carbon.Data.Protection;
+using Carbon.Versioning;
+
 namespace Carbon.Platform
 {
-    using Protection;
     using Resources;
-    using Versioning;
 
     public partial class PlatformClient
     {
         private readonly string host;
         private readonly string baseUri;
-        private readonly SecretKey secret;
+        private readonly Secret secret;
         
-        public PlatformClient(string host, SecretKey secret)
+        public PlatformClient(string host, Secret secret)
         {
             this.host = host ?? throw new ArgumentNullException(nameof(host));
             this.secret = secret;

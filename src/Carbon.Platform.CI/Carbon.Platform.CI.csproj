@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.CI</AssemblyName>
-    <VersionPrefix>0.8.0</VersionPrefix>
+    <VersionPrefix>0.8.3</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
 
     <!-- Package Details-->
@@ -20,10 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Amazon.CodeBuild" Version="0.5.3" />
+    <PackageReference Include="Amazon.CodeBuild" Version="0.5.5" />
     <PackageReference Include="Carbon.Logging" Version="1.1.0" />
     <PackageReference Include="Carbon.Versioning" Version="1.2.0" />
-    <PackageReference Include="Carbon.Protection" Version="1.5.0" />
   </ItemGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">

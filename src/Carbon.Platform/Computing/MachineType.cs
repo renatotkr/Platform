@@ -7,7 +7,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
-    [Dataset("MachineTypes")]
+    [Dataset("MachineTypes", Schema = "Computing")]
     [DataIndex(IndexFlags.Unique, new[] { "providerId", "name" })]
     public class MachineType : IMachineType
     {

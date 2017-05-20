@@ -66,7 +66,7 @@ namespace Carbon.Platform.Computing
         public JsonObject Details { get; }
 
         [Member("ownerId")]
-        public long OwnerId { get; set; }
+        public long OwnerId { get; }
 
         #region IResource
 

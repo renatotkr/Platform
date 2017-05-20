@@ -12,10 +12,16 @@ namespace Carbon.Platform.Storage
     {
         public EncryptionKeyInfo() { }
 
-        public EncryptionKeyInfo(long id, string name, int version, ManagedResource resource)
+        public EncryptionKeyInfo(
+            long id, 
+            string name,
+            int ownerId,
+            ManagedResource resource,
+            int version = 1)
         {
             Id         = id;
             Name       = name;
+            OwnerId    = ownerId;
             Version    = version;
             ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
@@ -31,6 +37,9 @@ namespace Carbon.Platform.Storage
 
         [Member("version")]
         public int Version { get; }
+
+        [Member("ownerId")]
+        public long OwnerId { get; }
 
         [Member("nextRotation")]
         public DateTime? NextRotation { get; set; }

@@ -1,3 +1,4 @@
+dotnet pack ./src/Bash                          -c Release -o ./../../build/Bash
 dotnet pack ./src/Carbon.Platform.CI            -c Release -o ./../../build/Carbon.Platform.CI
 dotnet pack ./src/Carbon.Platform.Diagnostics   -c Release -o ./../../build/Carbon.Platform.Diagnostics
 dotnet pack ./src/GitHub                        -c Release -o ./../../build/GitHub

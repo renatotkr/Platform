@@ -33,37 +33,6 @@ namespace Carbon.Platform.Services
             return GetAsync(id);
         }
 
-        public async Task<EnvironmentResource> AddResourceAsync(
-            IEnvironment env, 
-            ILocation location, 
-            IResource resource)
-        {
-            var id = await db.EnvironmentResources.GetNextScopedIdAsync(env.Id).ConfigureAwait(false);
-
-            var envResource = new EnvironmentResource(
-                id       : id,
-                env      : env,
-                location : location,
-                resource : resource
-            );
-            
-            await db.EnvironmentResources.InsertAsync(envResource).ConfigureAwait(false);
-
-            return envResource;
-        }
-        
-        public async Task AddLocations(IEnvironment env, ILocation[] locations)
-        {
-            var records = new EnvironmentLocation[locations.Length];
-
-            for (var i = 0; i < locations.Length; i++)
-            {
-                records[i] = new EnvironmentLocation(env.Id, locations[i].Id);
-            }
-
-            await db.EnvironmentLocations.InsertAsync(records).ConfigureAwait(false);
-        }
-
         public async Task<IHost[]> GetHostsAsync(IEnvironment env, ILocation location)
         {
             var locationId = LocationId.Create(location.Id);

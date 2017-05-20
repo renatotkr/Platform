@@ -2,7 +2,6 @@
 
 using Xunit;
 
-using Carbon.Json;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing.Tests
@@ -17,6 +16,7 @@ namespace Carbon.Platform.Computing.Tests
                 host     : null,
                 path     : "/",
                 port     : 80,
+                ownerId  : 1,
                 protocal : Net.NetworkProtocal.TCP,
                 resource : default(ManagedResource)
             ) {

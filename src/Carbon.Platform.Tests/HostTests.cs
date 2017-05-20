@@ -48,6 +48,8 @@ namespace Carbon.Platform.Computing.Tests
                1,
                1,
                1,
+               1,
+               1,
                created  : default(DateTime),
                resource : default(ManagedResource)
            );

@@ -43,22 +43,23 @@ namespace Bash.Tests
                 "cd /tmp",
 
                 Wget.Download(
-                    new Uri("https://s3-us-east-1.amazonaws.com/amazon-ssm-region/latest/debian_amd64/amazon-ssm-agent.deb")
+                    new Uri("https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/amazon-ssm-agent.deb")
                 ),
 
-                "dpkg -i amazon-ssm-agent.deb",
+                "sudo dpkg -i amazon-ssm-agent.deb",
 
                 Systemctl.Enable("amazon-ssm-agent"),
 
                 // Configure Ngnix ------------------------------------------------------------------------------------------------
-                Empty, Echo("Configuring ngnix"),
+                Empty, Echo("Configuring nginx"),
 
                 Wget.Download(
-                    url: new Uri("https://unknown/ngnix.config"),
+                    url: new Uri("https://unknown/nginx.config"),
                     destination: "/etc/nginx/sites-available/default",
                     sudo: true
                 ),
 
+                
                 Nginx.Reload(),
 
                 // Setup program directories
@@ -79,8 +80,8 @@ namespace Bash.Tests
 
                 // Extract the app
                 Tar.Extract(
-                    path    : "/tmp/programs/$APP_NAME/$APP_VERSION",
-                    target  : "$APP_ROOT",
+                    file    : "/tmp/programs/$APP_NAME/$APP_VERSION",
+                    directory  : "$APP_ROOT",
                     stripFirstLevel: true
                 ),
 
@@ -124,26 +125,26 @@ namespace Bash.Tests
             Assert.Equal(@"#!/bin/bash
 # Setup environment
 INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
-if [-n $1]; then APP_NAME=$1; fi
-if [-n $2]; then APP_VERSION=$2; fi
-if [-n $3]; then APP_PACKAGE_URL=$3; else APP_PACKAGE_URL=s3://folder/$APP_NAME/$APP_VERSION.tar.gz; fi
+if [ -n ""$1"" ]; then APP_NAME=$1; fi
+if [ -n ""$2"" ]; then APP_VERSION=$2; fi
+if [ -n ""$3"" ]; then APP_PACKAGE_URL=$3; else APP_PACKAGE_URL=s3://folder/$APP_NAME/$APP_VERSION.tar.gz; fi
 APP_ROOT=/var/apps/$APP_NAME/$APP_VERSION
 
 echo ""Configuring $APP_NAME/$APP_VERSION""
-apt -y awscli nginx libunwind8 libcurl4-openssl-dev
+sudo apt install -y awscli nginx libunwind8 libcurl4-openssl-dev
 sudo aws configure set s3.signature_version s3v4
 cd /tmp
-wget -v ""https://s3-us-east-1.amazonaws.com/amazon-ssm-region/latest/debian_amd64/amazon-ssm-agent.deb""
-dpkg -i amazon-ssm-agent.deb
+wget -v ""https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/amazon-ssm-agent.deb""
+sudo dpkg -i amazon-ssm-agent.deb
 sudo systemctl enable amazon-ssm-agent
 
-echo ""Configuring ngnix""
-sudo wget -v ""https://unknown/ngnix.config""-O /etc/nginx/sites-available/default
-ngnix -s reload
+echo ""Configuring nginx""
+sudo wget -v ""https://unknown/nginx.config"" -O /etc/nginx/sites-available/default
+sudo nginx -s reload
 mkdir -p $APP_ROOT
 mkdir -r /tmp/programs/$APP_NAME/$APP_VERSION
 sudo aws s3 cp --quiet $APP_PACKAGE_URL /tmp/programs/$APP_NAME/$APP_VERSION
-tar -x --strip 1 -C $APP_ROOT
+tar -xf /tmp/programs/$APP_NAME/$APP_VERSION --strip 1 -C $APP_ROOT
 sudo ln -sfn $APP_ROOT /var/apps/$APP_NAME/latest
 sudo chown -R www-data /var/apps
 

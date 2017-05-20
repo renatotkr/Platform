@@ -12,3 +12,5 @@ namespace Carbon.Platform.Networking
         IPAddress[] Addresses { get; }
     }
 }
+
+// Network interfaces may be attached to hosts, load balancers, db instances, etc.

@@ -9,10 +9,7 @@ namespace Carbon.Platform.CI
     {
         public BuildArtifact() { }
 
-        public BuildArtifact(
-            long id,
-            string name, 
-            byte[] sha256)
+        public BuildArtifact(long id, string name)
         {
             #region Preconditions
 
@@ -23,7 +20,6 @@ namespace Carbon.Platform.CI
 
             Id     = id;
             Name   = name ?? throw new ArgumentNullException(nameof(name));
-            Sha256 = sha256;
         }
 
         // buildId + sequenceNumber
@@ -33,7 +29,7 @@ namespace Carbon.Platform.CI
         [Member("name")]
         public string Name { get; }
 
-        [Member("sha256", TypeName = "binary(32)")]
-        public byte[] Sha256 { get; }
+        // TODO: Choose a hash
+        // Leaning toward SHA3, depending on GIT choice
     }
 }

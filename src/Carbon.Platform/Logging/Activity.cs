@@ -43,7 +43,7 @@ namespace Carbon.Platform.Logging
         public string ResourceType { get; }
 
         [Member("resourceId")]
-        public long ResourceId { get; set; }
+        public long ResourceId { get; }
 
         [Member("context"), Optional]
         [StringLength(1000)]

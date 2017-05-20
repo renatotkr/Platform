@@ -34,13 +34,13 @@ namespace Carbon.Platform
 
         // Computing
 
-        public static Task<HostGroup> FindAsync(this Dataset<HostGroup, long> dataset, ResourceProvider provider, string resourceId) =>
+        public static Task<Cluster> FindAsync(this Dataset<Cluster, long> dataset, ResourceProvider provider, string resourceId) =>
             dataset.QueryFirstOrDefaultAsync(And(Eq("providerId", provider.Id), Eq("resourceId", resourceId)));
 
         public static Task<HostInfo> FindAsync(this Dataset<HostInfo, long> dataset, ResourceProvider provider, string resourceId) =>
             dataset.QueryFirstOrDefaultAsync(And(Eq("providerId", provider.Id), Eq("resourceId", resourceId)));
 
-        public static Task<MachineImageInfo> FindAsync(this Dataset<MachineImageInfo, long> dataset, ResourceProvider provider, string id) =>
+        public static Task<MachineImage> FindAsync(this Dataset<MachineImage, long> dataset, ResourceProvider provider, string id) =>
           dataset.QueryFirstOrDefaultAsync(And(Eq("providerId", provider.Id), Eq("resourceId", id)));
 
         public static Task<VolumeInfo> FindAsync(this Dataset<VolumeInfo, long> dataset, ResourceProvider provider, string id) =>

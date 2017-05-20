@@ -11,7 +11,7 @@ namespace Carbon.Platform.Computing
 
         string Path { get; }
 
-        ushort Port { get; }
+        int Port { get; }
         
         NetworkProtocal Protocal { get; }
 
