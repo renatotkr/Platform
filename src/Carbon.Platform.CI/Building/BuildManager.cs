@@ -15,54 +15,81 @@ namespace Carbon.Platform.CI
     {
         private readonly CodeBuildClient builder;
         private readonly PlatformDb db;
-        private readonly IRepositoryService repositoryService;
 
         public BuildManager(
             CodeBuildClient builder, 
-            PlatformDb db,
-            IRepositoryService repositoryService)
+            PlatformDb db)
         {
             this.db      = db      ?? throw new ArgumentNullException(nameof(db));
             this.builder = builder ?? throw new ArgumentNullException(nameof(builder));
-            this.repositoryService = repositoryService;
         }
 
-        public async Task CheckStatusAsync(IBuild build)
+
+        public Task<Build> GetAsync(long id)
+        {
+            return db.Builds.FindAsync(id);
+        }
+
+        public async Task<Amazon.CodeBuild.Build> CheckStatusAsync(IBuild build)
         {
             var result = await builder.BatchGetBuildsAsync(new BatchGetBuildsRequest(build.ResourceId));
 
-            var cloudBuild = result.Builds[0];
+            var b = result.Builds[0];
+          
+            return b;
+        }
+
+        private static BuildStatus GetStatus(Amazon.CodeBuild.Build build)
+        {
+
+            switch (build.BuildStatus)
+            {
+                case "FAILED"      : return BuildStatus.Failed;
+                case "FAULT"       : return BuildStatus.Failed;
+                case "IN_PROGRESS" : return BuildStatus.Building;
+                case "STOPPED"     : return BuildStatus.Pending;
+                case "SUCCEEDED"   : return BuildStatus.Completed;
+                case "TIMED_OUT"   : return BuildStatus.Failed;
+            }
+
+            throw new Exception("unexpected status:" + build.BuildStatus);
         }
 
         public async Task<Build> StartAsync(CreateBuildRequest request)
-        {            
-            var repository = await repositoryService.GetAsync(request.Source.RepositoryId);
+        {
+            var repository = request.Source.Repository;
 
             var commit = request.Source.Commit;
 
-            var buildId = db.Builds.Sequence.Next();
-
             if (!repository.Details.TryGetValue(RepositoryProperties.BuildProjectName, out var buildProjectName))
             {
-                throw new Exception($"repository#{repository.Id} does not have an associated buildProjectName");
+                throw new Exception($"repository#{repository.Id} does not have a {RepositoryProperties.BuildProjectName}");
             }
 
-            // var commit = repositoryService.CreateCommitAsync(new CreateCommitRequest())
             var id = db.Builds.Sequence.Next();
 
             // code build also injects
             // CODEBUILD_BUILD_ID
 
-            var remoteBuild = (await builder.StartBuildAsync(new StartBuildRequest {
-                ProjectName = repository.Details[RepositoryProperties.BuildProjectName],
-
-                EnviromentVariablesOverride = new[] {
-                    new EnvironmentVariable("BUILD_ID", buildId.ToString())
+            var startBuildRequest = new StartBuildRequest(buildProjectName) { 
+                EnvironmentVariablesOverride = new[] {
+                    new EnvironmentVariable("BUILD_ID", id.ToString())
                 },
-
                 SourceVersion = HexString.FromBytes(commit.Sha1)
-            })).Build;
+            };
 
+            if (request.Output != null)
+            {
+                startBuildRequest.ArtifactsOverride = new ProjectArtifacts {
+                    Type      = "S3",
+                    Location  = request.Output.BucketName,
+                    Path      = request.Output.Path,
+                    Name      = request.Output.Name ?? id.ToString(),
+                    Packaging = "NONE", // otherwise ZIP
+                };
+            }
+
+            var remoteBuild = (await builder.StartBuildAsync(startBuildRequest).ConfigureAwait(false)).Build;
             
             // arn:aws:codebuild:region-ID:account-ID:build
 
@@ -90,12 +117,9 @@ namespace Carbon.Platform.CI
                           `status` = @status,
                           `message` = @message,
                           `duration` = @duration
-                       WHERE `id` = @id", build).ConfigureAwait(false);
+                      WHERE `id` = @id", build
+                ).ConfigureAwait(false);
             }
         }
-
-        // CompleteBuild
-
-        // CheckStatus
     }
 }
