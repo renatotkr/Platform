@@ -1,9 +1,14 @@
 ﻿NOTE: we prematurally versioned Carbon.Platform and Carbon.Platform.Abstractions at 1.0.0
 We'll continue to make breaking API changes in minor releases until we reach 2.0.
-Services & management remain < 1.0.0 and will stabalize at v1.
+Services & management libraries will stabalize at v1.
 
 1.38.0
 - Add SecurityGroupIds to NetworkInterface
+- Rename MachineImageInfo -> Image
+- Add Details to: Build, Deployment, Program, ProgramRelease, Image, LoadBalancer, Volume, Channel, and Queue
+- Add OwnerId to Image & HealthCheck
+- Add InitiatorId to Build & Deployment
+- Introduce Cluster and consolidate Environment Locations, Host Groups, and DatabaseClusters
 
 1.37.0
 - Change ResourceType from a structure to a class 
