@@ -2,27 +2,26 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Json;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
-    [Dataset("MachineImages")]
+    [Dataset("MachineImages", Schema = "Computing")]
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
-    public class MachineImageInfo : IMachineImage
+    public class MachineImage : IMachineImage
     {
-        public MachineImageInfo() { }
+        public MachineImage() { }
 
-        public MachineImageInfo(
+        public MachineImage(
             long id,
             MachineImageType type,
             string name,
-            ManagedResource resource,
-            string description = null)
+            ManagedResource resource)
         {
             Id          = id;
             Type        = type;
             Name        = name ?? throw new ArgumentNullException(nameof(name));
-            Description = description;
             ResourceId  = resource.ResourceId;
             ProviderId  = resource.ProviderId;
             LocationId  = resource.LocationId;
@@ -38,13 +37,12 @@ namespace Carbon.Platform.Computing
         [StringLength(3, 128)]
         public string Name { get; }
 
-        // e.g. Ubuntu/16.04
-        [Member("os")]
-        public string OS { get; set; }
+        [Member("ownerId")]
+        public long OwnerId { get; set; }
 
-        [Member("description")]
-        [StringLength(100)]
-        public string Description { get; }
+        [Member("details")]
+        [StringLength(1000)]
+        public JsonObject Details { get; set; }
 
         #region IResource
 

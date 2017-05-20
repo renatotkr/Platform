@@ -4,10 +4,10 @@ namespace Carbon.Platform.Computing
 {
     public interface IMachineImageService
     {
-        Task<MachineImageInfo> GetAsync(long id);
+        Task<MachineImage> GetAsync(long id);
 
-        Task<MachineImageInfo> GetAsync(ResourceProvider provider, string id); // bool autoRegister = true
+        Task<MachineImage> GetAsync(ResourceProvider provider, string id); // bool autoRegister = true
 
-        Task<MachineImageInfo> RegisterAsync(RegisterMachineImageRequest request);
+        Task<MachineImage> RegisterAsync(RegisterMachineImageRequest request);
     }
 }

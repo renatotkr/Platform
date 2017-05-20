@@ -6,9 +6,7 @@ namespace Carbon.Platform.Computing
     {
         MachineImageType Type { get; }
 
-        // Size?
-
-        string Description { get; }
+        string Name { get; }
     }
 }
 

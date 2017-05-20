@@ -13,13 +13,13 @@ namespace Carbon.Platform.Computing
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public async Task<MachineImageInfo> GetAsync(long id)
+        public async Task<MachineImage> GetAsync(long id)
         {
             return await db.MachineImages.FindAsync(id).ConfigureAwait(false) 
                 ?? throw ResourceError.NotFound(ResourceTypes.MachineImage, id);
         }
 
-        public async Task<MachineImageInfo> GetAsync(ResourceProvider provider, string resourceId)
+        public async Task<MachineImage> GetAsync(ResourceProvider provider, string resourceId)
         {
             var machineImage = await db.MachineImages.FindAsync(provider, resourceId).ConfigureAwait(false);
 
@@ -39,7 +39,7 @@ namespace Carbon.Platform.Computing
             return machineImage;
         }
 
-        public async Task<MachineImageInfo> RegisterAsync(RegisterMachineImageRequest request)
+        public async Task<MachineImage> RegisterAsync(RegisterMachineImageRequest request)
         {
             #region Preconditions
             
@@ -47,7 +47,7 @@ namespace Carbon.Platform.Computing
 
             #endregion
 
-            var image = new MachineImageInfo(
+            var image = new MachineImage(
                 id       : db.MachineImages.Sequence.Next(),
                 type     : request.Type,
                 name     : request.Name,
