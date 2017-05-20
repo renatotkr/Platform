@@ -42,8 +42,8 @@ namespace Carbon.Platform.Resources
         public static ResourceType Location      = "location";
 
         // Computing  -----------------------------------------------------------------------------------------
-        public static ResourceType Host                 = "host";            // includes metal, vm instances, and container instances
-        public static ResourceType HostGroup            = "hostGroup";       // A group of hosts with a specific configuration
+        public static ResourceType Cluster              = "cluster";      
+        public static ResourceType Host                 = "host";          // includes metal, vm instances, and container instances
         public static ResourceType HostTemplate         = "hostTemplate";
         public static ResourceType MachineImage         = "machineImage";
         public static ResourceType MachineType          = "machineType";

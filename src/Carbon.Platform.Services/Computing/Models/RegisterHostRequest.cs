@@ -1,8 +1,4 @@
-﻿using System.Net;
-
-using Amazon.Runtime.Metadata;
-
-using Carbon.Platform.Networking;
+﻿using Carbon.Platform.Networking;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Storage;
 
@@ -14,34 +10,35 @@ namespace Carbon.Platform.Computing
 
         public RegisterHostRequest(
             string[] addresses,
-            IEnvironment env,
+            Cluster cluster,
             ILocation location,
             IMachineImage machineImage,
             IMachineType machineType,
+            long ownerId,
             ManagedResource resource,
             long networkId = 0,
-            long? groupId = null,
             HostStatus status = HostStatus.Pending)
         {
-            Addresses       = addresses;
-            EnvironmentId   = env.Id;
-            Location        = location;
-            MachineImageId  = machineImage.Id;
-            MachineTypeId   = machineType.Id;
-            NetworkId       = networkId;
-            Status          = status;
-            Resource        = resource;
-            GroupId         = groupId;
+            Addresses      = addresses;
+            EnvironmentId  = cluster.EnvironmentId.Value;
+            Location       = location;
+            MachineImageId = machineImage.Id;
+            MachineTypeId  = machineType.Id;
+            NetworkId      = networkId;
+            Status         = status;
+            Resource       = resource;
+            ClusterId      = cluster.Id;
+            OwnerId        = ownerId;
         }
 
-        // private ips first...
+        // private ip first...
         public string[] Addresses { get; set; }
 
         public long EnvironmentId { get; set; }
 
         public ILocation Location { get; set; }
 
-        public HostStatus Status { get; set; } = HostStatus.Pending;
+        public HostStatus Status { get; set; }
 
         public ManagedResource Resource { get; set; }
 
@@ -51,28 +48,12 @@ namespace Carbon.Platform.Computing
 
         public long NetworkId { get; set; }
 
-        public long? GroupId { get; set; }
+        public long ClusterId { get; set; }
+
+        public long OwnerId { get; set; }
 
         public RegisterVolumeRequest[] Volumes { get; set; }
 
         public RegisterNetworkInterfaceRequest[] NetworkInterfaces { get; set; }
-
-        public static RegisterHostRequest Create(InstanceIdentity instance, IEnvironment env)
-        {
-            var location = Locations.Get(ResourceProvider.Aws, instance.AvailabilityZone);
-
-            // machineImage = await GetImageAsync(ResourceProvider.Amazon, instance.ImageId).ConfigureAwait(false);
-            return new RegisterHostRequest {
-                Status = HostStatus.Running,
-                Addresses = new[] { instance.PrivateIp },
-                Resource = ManagedResource.Host(location, instance.InstanceId),
-                EnvironmentId = env.Id,
-                Location = location,
-                MachineImageId = 0, // TODO
-                MachineTypeId = AwsInstanceType.GetId(instance.InstanceType),
-                NetworkId = 0
-            };
-
-        }
     }
 }

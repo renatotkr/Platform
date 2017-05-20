@@ -30,15 +30,14 @@ namespace Carbon.Platform
 
             // Environments -------------------------------------------------------------
             Environments         = new Dataset<EnvironmentInfo,           long>(context);
-            EnvironmentLocations = new Dataset<EnvironmentLocation, (long, long)>(context);
-            EnvironmentResources = new Dataset<EnvironmentResource,       long>(context);
             Locations            = new Dataset<LocationInfo,              long>(context);
 
             // Computing ----------------------------------------------------------------
             Hosts                 = new Dataset<HostInfo,                 long>(context);
-            HostGroups            = new Dataset<HostGroup,                long>(context);
+            Clusters              = new Dataset<Cluster,                  long>(context);
+            ClusterResources      = new Dataset<ClusterResource,          long>(context);
             HostTemplates         = new Dataset<HostTemplate,             long>(context);
-            MachineImages         = new Dataset<MachineImageInfo,         long>(context);
+            MachineImages         = new Dataset<MachineImage,             long>(context);
             MachineTypes          = new Dataset<MachineType,              long>(context);
             Programs              = new Dataset<Program,                  long>(context);
             ProgramReleases       = new Dataset<ProgramRelease,           long>(context);
@@ -47,7 +46,6 @@ namespace Carbon.Platform
             Buckets               = new Dataset<BucketInfo,               long>(context);
             Channels              = new Dataset<ChannelInfo,              long>(context);
             Databases             = new Dataset<DatabaseInfo,             long>(context);
-            DatabaseClusters      = new Dataset<DatabaseCluster,          long>(context);
             DatabaseEndpoints     = new Dataset<DatabaseEndpoint,         long>(context);
             DatabaseInstances     = new Dataset<DatabaseInstance,         long>(context);
             DataEncryptionKeys    = new Dataset<DataEncryptionKeyInfo,    long>(context); 
@@ -84,28 +82,26 @@ namespace Carbon.Platform
 
         public IDbContext Context { get; }
 
-        // Environment ----------------------------------------------------------------
-        public Dataset<EnvironmentInfo,             long> Environments         { get; }
-        public Dataset<EnvironmentLocation, (long, long)> EnvironmentLocations { get; }
-        public Dataset<EnvironmentResource,         long> EnvironmentResources { get; }
-        public Dataset<LocationInfo,                long> Locations            { get; }
+        // Environment -----------------------------------------------------------
+        public Dataset<EnvironmentInfo,             long> Environments    { get; }
+        public Dataset<LocationInfo,                long> Locations       { get; }
 
-        // Computing --------------------------------------------------------------
-        public Dataset<HostInfo,              long> Hosts                  { get; }
-        public Dataset<HostGroup,             long> HostGroups             { get; }
-        public Dataset<HostTemplate,          long> HostTemplates          { get; }
-        public Dataset<HealthCheck,           long> HealthChecks           { get; }
-        public Dataset<MachineImageInfo,      long> MachineImages          { get; }
-        public Dataset<MachineType,           long> MachineTypes           { get; }
-        public Dataset<Program,               long> Programs               { get; }
-        public Dataset<ProgramRelease,        long> ProgramReleases        { get; }
-        public Dataset<VolumeInfo,            long> Volumes                { get; }
+        // Computing -------------------------------------------------------------
+        public Dataset<HostInfo,              long> Hosts                 { get; }
+        public Dataset<Cluster,               long> Clusters              { get; }
+        public Dataset<ClusterResource,       long> ClusterResources      { get; }
+        public Dataset<HostTemplate,          long> HostTemplates         { get; }
+        public Dataset<HealthCheck,           long> HealthChecks          { get; }
+        public Dataset<MachineImage,          long> MachineImages         { get; }
+        public Dataset<MachineType,           long> MachineTypes          { get; }
+        public Dataset<Program,               long> Programs              { get; }
+        public Dataset<ProgramRelease,        long> ProgramReleases       { get; }
+        public Dataset<VolumeInfo,            long> Volumes               { get; }
                                                                            
-        // Data -------------------------------------------------------------------
+        // Data ------------------------------------------------------------------
         public Dataset<BucketInfo,            long> Buckets               { get; }
         public Dataset<ChannelInfo,           long> Channels              { get; }
         public Dataset<DatabaseInfo,          long> Databases             { get; }
-        public Dataset<DatabaseCluster,       long> DatabaseClusters      { get; }
         public Dataset<DatabaseEndpoint,      long> DatabaseEndpoints     { get; }
         public Dataset<DatabaseInstance,      long> DatabaseInstances     { get; }
         public Dataset<DataEncryptionKeyInfo, long> DataEncryptionKeys    { get; }

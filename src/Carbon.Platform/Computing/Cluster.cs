@@ -7,13 +7,13 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
-    [Dataset("HostGroups")]
+    [Dataset("Clusters", Schema = "Computing")]
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
-    public class HostGroup : IHostGroup
+    public class Cluster : ICluster
     {
-        public HostGroup() { }
+        public Cluster() { }
 
-        public HostGroup(
+        public Cluster(
             long id,
             string name,
             long environmentId,
@@ -30,36 +30,38 @@ namespace Carbon.Platform.Computing
             Id            = id;
             Name          = name ?? throw new ArgumentNullException(nameof(name));
             EnvironmentId = environmentId;
-            Details       = details;
+            Details       = details ?? throw new ArgumentNullException(nameof(details));
             ProviderId    = resource.ProviderId;
             LocationId    = resource.LocationId;
             ResourceId    = resource.ResourceId;
         }
         
-        [Member("id"), Key("hostGroupId")]
+        [Member("id"), Key("clusterId")]
         public long Id { get; }
 
         [Member("name")]
         [StringLength(100)]
         public string Name { get; }
 
+        // Type (Hosts, Database Instances)
+
         [Member("environmentId")]
         [Indexed]
         public long? EnvironmentId { get; }
-        
-        // Used to check the health of the groups's instances
-        [Member("healthCheckId")]
-        public long? HealthCheckId { get; set; }
-
-        // A template used to create new hosts within the group
-        [Member("hostTemplateId")]
-        public long? HostTemplateId { get; set; }
-
-        // Span (Global, Zone, Region)
 
         [Member("details")]
         [StringLength(1000)]
         public JsonObject Details { get; set; }
+
+        #region Stats
+
+        // The number of resources added to the cluster
+        // e.g. buckets, encryptionKeys, loadBalancers, etc
+
+        [Member("resourceCount")]
+        public int ResourceCount { get; }
+
+        #endregion
 
         #region IResource
 
@@ -67,17 +69,17 @@ namespace Carbon.Platform.Computing
         [Member("providerId")]
         public int ProviderId { get; }
 
-        // {groupName}/{groupId}
+        //{groupName}/{groupId}
         [IgnoreDataMember]
         [Member("resourceId")]
         [Ascii, StringLength(100)]
         public string ResourceId { get; }
         
-        // Region Scoped
+        // global, regional, or zonal
         [Member("locationId")]
         public int LocationId { get; }
 
-        ResourceType IResource.ResourceType => ResourceTypes.HostGroup;
+        ResourceType IResource.ResourceType => ResourceTypes.Cluster;
 
         #endregion
 
@@ -97,5 +99,15 @@ namespace Carbon.Platform.Computing
         public DateTime Modified { get; }
 
         #endregion
+    }
+
+    public static class ClusterProperties
+    {
+        // When used with an application load balancer target group
+        public const string TargetGroupArn = "targetGroupArn";
+
+        public const string HealthCheckId = "healthCheckId";
+
+        public const string HostTemplateId = "hostTemplateId";
     }
 }

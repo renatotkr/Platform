@@ -54,12 +54,13 @@ namespace Carbon.Platform.Computing
                 type           : HostType.Virtual,
                 status         : request.Status,
                 addresses      : request.Addresses,
-                groupId        : request.GroupId,
+                clusterId        : request.ClusterId,
                 resource       : request.Resource,
                 environmentId  : request.EnvironmentId,
                 machineTypeId  : request.MachineTypeId,
                 machineImageId : request.MachineImageId,
                 networkId      : request.NetworkId,
+                ownerId        : request.OwnerId,
                 created        : DateTime.UtcNow
             );
         

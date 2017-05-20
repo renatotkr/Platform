@@ -89,14 +89,6 @@ namespace Carbon.Platform
         [Member("commandCount")]
         public int CommandCount { get; }
 
-        // The number of resources added to the environment
-        // e.g. buckets, encryptionKeys, loadBalancers, etc
-
-        [Member("resourceCount")]
-        public int ResourceCount { get; }
-
-        // HostCount
-
         #endregion
 
         #region Timestamps

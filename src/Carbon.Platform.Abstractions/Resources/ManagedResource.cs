@@ -86,8 +86,8 @@ namespace Carbon.Platform.Resources
         public static ManagedResource Host(ILocation location, string id) => 
             FromLocation(location, ResourceTypes.Host, id);
 
-        public static ManagedResource HostGroup(ILocation location, string id) => 
-            FromLocation(location, ResourceTypes.HostGroup, id);
+        public static ManagedResource Cluster(ILocation location, string id) => 
+            FromLocation(location, ResourceTypes.Cluster, id);
 
         public static ManagedResource HostTemplate(ResourceProvider provider, string id) =>
             new ManagedResource(provider, ResourceTypes.HostTemplate, id);

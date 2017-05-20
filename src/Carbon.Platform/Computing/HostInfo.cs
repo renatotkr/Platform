@@ -9,7 +9,7 @@ namespace Carbon.Platform.Computing
 {
     using Extensions;
 
-    [Dataset("Hosts")]
+    [Dataset("Hosts", Schema = "Computing")]
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
     public class HostInfo : IHost, IManagedResource
     {
@@ -18,12 +18,13 @@ namespace Carbon.Platform.Computing
         public HostInfo(
             long id, 
             string[] addresses,
+            long clusterId,
             long environmentId,
             long machineTypeId,
             long machineImageId,
+            long ownerId,
             DateTime created,
             ManagedResource resource,
-            long? groupId     = null,
             long networkId    = 0,
             HostType type     = HostType.Virtual,
             HostStatus status = HostStatus.Running)
@@ -32,13 +33,14 @@ namespace Carbon.Platform.Computing
             Type           = type;
             Status         = status;
             Addresses      = addresses;
+            ClusterId      = clusterId;
             EnvironmentId  = environmentId;
             MachineTypeId  = machineTypeId;
             MachineImageId = machineImageId;
             ProviderId     = resource.ProviderId;
             ResourceId     = resource.ResourceId;
             NetworkId      = networkId;
-            GroupId        = groupId;
+            OwnerId        = ownerId;
             Created        = created;
         }
 
@@ -52,13 +54,12 @@ namespace Carbon.Platform.Computing
         [Member("addresses")]
         public string[] Addresses { get; }
 
+        [Member("clusterId"), Indexed]
+        public long ClusterId { get; }
+
         [Member("environmentId"), Indexed]
         public long EnvironmentId { get; }
         
-        // Managed Group Id
-        [Member("groupId"), Indexed]
-        public long? GroupId { get; }
-
         [Member("networkId")]
         public long NetworkId { get; }
 
@@ -66,7 +67,7 @@ namespace Carbon.Platform.Computing
         public long? ParentId { get; set; }
 
         [Member("ownerId")]
-        public long OwnerId { get; set; }
+        public long OwnerId { get; }
 
         #region Image / Template
 
