@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Carbon.Data.Annotations;
+using Carbon.Json;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Sequences;
 using Carbon.Versioning;
@@ -15,7 +16,7 @@ namespace Carbon.Platform.CI
         public Deployment(
             long id,
             IRelease release,
-            long creatorId,
+            long initiatorId,
             DeploymentStatus status = DeploymentStatus.Pending)
         {
             #region Preconditions
@@ -26,8 +27,8 @@ namespace Carbon.Platform.CI
             if (release == null)
                 throw new ArgumentNullException(nameof(release));
 
-            if (creatorId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(creatorId));
+            if (initiatorId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(initiatorId));
 
             #endregion
 
@@ -37,7 +38,7 @@ namespace Carbon.Platform.CI
             ReleaseId      = release.Id;
             ReleaseVersion = release.Version; 
             CommitId       = release.CommitId;
-            CreatorId      = creatorId; // may be different from the releaser
+            InitiatorId     = initiatorId;
         }
 
         // environmentId + deployCount [within enviornment]
@@ -60,8 +61,12 @@ namespace Carbon.Platform.CI
         [Member("commitId")]
         public long CommitId { get; }
 
-        [Member("creatorId")]
-        public long CreatorId { get; }
+        [Member("initiatorId")]
+        public long InitiatorId { get; }
+
+        [Member("details")]
+        [StringLength(1000)]
+        public JsonObject Details { get; set; }
 
         #region IResource
 

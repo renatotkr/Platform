@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Carbon.Data.Annotations;
+using Carbon.Json;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.CI
@@ -13,7 +14,7 @@ namespace Carbon.Platform.CI
         public Build(
             long id, 
             long commitId, 
-            long creatorId,
+            long initiatorId,
             ManagedResource resource)
         {
             #region Preconditions
@@ -23,12 +24,12 @@ namespace Carbon.Platform.CI
 
             #endregion
 
-            Id        = id;
-            CommitId  = commitId;
-            CreatorId = creatorId;
-            ProviderId = resource.ProviderId;
-            ResourceId = resource.ResourceId;
-            LocationId = resource.LocationId;
+            Id          = id;
+            CommitId    = commitId;
+            InitiatorId = initiatorId;
+            ProviderId  = resource.ProviderId;
+            ResourceId  = resource.ResourceId;
+            LocationId  = resource.LocationId;
         }
 
         [Member("id"), Key(sequenceName: "buildId")]
@@ -37,14 +38,11 @@ namespace Carbon.Platform.CI
         [Member("status"), Mutable]
         public BuildStatus Status { get; set; }
         
-        // repositoryId + sequenceNumber
-        [Member("commitId")]
+        [Member("commitId")] // scopeId w/ repositoryId
         public long CommitId { get; }
-        
-        // InitiatorId ?
 
-        [Member("creatorId")]
-        public long CreatorId { get; }
+        [Member("initiatorId")]
+        public long InitiatorId { get; }
 
         [Member("message"), Mutable]
         [StringLength(200)]
@@ -52,6 +50,10 @@ namespace Carbon.Platform.CI
 
         [Member("duration"), Mutable]
         public TimeSpan? Duration { get; set; }
+
+        [Member("details")]
+        [StringLength(1000)]
+        public JsonObject Details { get; set; }
 
         #region IResource
 
@@ -83,5 +85,12 @@ namespace Carbon.Platform.CI
         public DateTime? Completed { get; set; }
 
         #endregion
+    }
+
+    public static class BuildProperties
+    {
+        // e.g. builds/1  | carbon/1
+
+        public const string OutputPath = "outputPath";
     }
 }

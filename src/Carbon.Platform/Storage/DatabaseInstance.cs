@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 using Carbon.Data.Annotations;
 using Carbon.Platform.Sequences;
 using Carbon.Platform.Resources;
+using Carbon.Json;
 
 namespace Carbon.Platform.Storage
 {
@@ -44,6 +45,10 @@ namespace Carbon.Platform.Storage
 
         [Member("priority")]
         public int Priority { get; }
+
+        [Member("details")]
+        [StringLength(1000)]
+        public JsonObject Details { get; set; }
 
         #region IResource
 

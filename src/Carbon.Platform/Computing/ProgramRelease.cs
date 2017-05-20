@@ -3,10 +3,11 @@
 using Carbon.Data.Annotations;
 using Carbon.Versioning;
 using Carbon.Platform.CI;
+using Carbon.Json;
 
 namespace Carbon.Platform.Computing
 {
-    [Dataset("ProgramReleases")]
+    [Dataset("ProgramReleases", Schema = "Computing")]
     [DataIndex(IndexFlags.Unique, "programId", "version")]
     public class ProgramRelease : IProgramRelease, IRelease
     {
@@ -68,6 +69,10 @@ namespace Carbon.Platform.Computing
         [Member("creatorId")]
         public long CreatorId { get; }
 
+        [Member("details")]
+        [StringLength(1000)]
+        public JsonObject Details { get; set; }
+
         #region IDeployable
 
         ReleaseType IRelease.Type => ReleaseType.Program;
@@ -90,7 +95,6 @@ namespace Carbon.Platform.Computing
 
         #endregion
     }
-
 
     // PackageInfo { hash: "sha-256:234234324" }
 }

@@ -2,11 +2,13 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Json;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
-    [Dataset("Programs")]
+    [Dataset("Programs", Schema = "Computing")]
+    [DataIndex(IndexFlags.Unique, "ownerId", "name")]
     public class Program : IProgram, IResource
     {
         public Program() { }
@@ -37,7 +39,14 @@ namespace Carbon.Platform.Computing
 
         [Member("id"), Key(sequenceName: "programId", increment: 4)]
         public long Id { get; }
-        
+
+        [Member("type")]
+        public ProgramType Type { get; }
+
+        [Member("ownerId")]
+        [Indexed]
+        public long OwnerId { get; }
+
         [Member("name")]
         public string Name { get; }
         
@@ -46,12 +55,9 @@ namespace Carbon.Platform.Computing
         [StringLength(63)]
         public string Slug { get; }
 
-        [Member("type")]
-        public ProgramType Type { get; set; }
-
-        [Member("ownerId")]
-        [Indexed]
-        public long OwnerId { get; }
+        [Member("details")]
+        [StringLength(1000)]
+        public JsonObject Details { get; set; }
 
         #region Stats
 
