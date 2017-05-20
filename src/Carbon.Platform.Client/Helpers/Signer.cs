@@ -3,14 +3,13 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 
+using Carbon.Data.Protection;
+
 namespace Carbon.Platform
 {
-    using Carbon.Security;
-    using Protection;
-
     public static class Signer
     {
-        public static void SignRequest(SecretKey secret, HttpRequestMessage request)
+        public static void SignRequest(Secret secret, HttpRequestMessage request)
         {
             #region Preconditions
 

@@ -1,8 +1,9 @@
 ﻿using System;
 
+using Carbon.Data.Protection;
+
 namespace Carbon.Packaging
 {
-    using Protection;
     using Storage;
 
     public class ManifestEntry : IManifestEntry

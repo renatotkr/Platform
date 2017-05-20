@@ -2,9 +2,10 @@
 using System.IO;
 using System.Threading.Tasks;
 
+using Carbon.Data.Protection;
+
 namespace Carbon.Packaging
 {
-    using Protection;
     using Storage;
     using Versioning;
 
@@ -48,9 +49,9 @@ namespace Carbon.Packaging
 
                 var hash = Hash.ComputeSHA256(ms, leaveOpen: true);
 
-                var secret = SecretKey.Derive(password, hash.Data);
+                var secret = Secret.Derive(password, hash.Data);
 
-                using (var protector = new AesProtector(secret))
+                using (var protector = new AesDataProtector(secret))
                 {
                     using (var packageStream = protector.EncryptStream(ms))
                     {
@@ -80,9 +81,9 @@ namespace Carbon.Packaging
 
             ms.Position = 0;
             
-            var secret = SecretKey.Derive(password, hash.Data);
+            var secret = Secret.Derive(password, hash.Data);
 
-            var protector = new AesProtector(secret); // dispose?
+            var protector = new AesDataProtector(secret); // dispose?
 
             var stream = protector.DecryptStream(ms);
 

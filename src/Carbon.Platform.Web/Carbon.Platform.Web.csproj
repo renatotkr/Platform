@@ -16,7 +16,6 @@
     <PackageReference Include="Carbon.Data.Annotations" Version="1.3.1" />
     <PackageReference Include="Carbon.Data.Sql" Version="0.21.0" />
     <PackageReference Include="Carbon.Json" Version="1.4.0" />
-    <PackageReference Include="Carbon.Protection" Version="1.5.0" />
     <PackageReference Include="Carbon.Versioning" Version="1.2.0" />
   </ItemGroup>
 

@@ -1,6 +1,6 @@
-﻿using Carbon.Protection;
+﻿using System;
 
-using System;
+using Carbon.Data.Protection;
 
 namespace Carbon.Packaging
 {

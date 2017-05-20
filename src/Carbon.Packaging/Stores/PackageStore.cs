@@ -2,12 +2,12 @@
 using System.IO;
 using System.Threading.Tasks;
 
+using Carbon.Data.Protection;
+using Carbon.Storage;
+using Carbon.Versioning;
+
 namespace Carbon.Packaging
 {
-    using Protection;
-    using Storage;
-    using Versioning;
-
     public class PackageStore : IPackageStore
     {
         private readonly IBucket bucket;

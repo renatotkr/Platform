@@ -1,6 +1,7 @@
-﻿using Carbon.Protection;
-using System;
+﻿using System;
 using Xunit;
+
+using Carbon.Data.Protection;
 
 namespace Carbon.Packaging.Tests
 {
@@ -13,7 +14,6 @@ namespace Carbon.Packaging.Tests
                 new ManifestEntry("base.mtpl", GetHash("bas"), new DateTime(2015, 01, 01)),
                 new ManifestEntry("templates/a.tpl", GetHash("a"), new DateTime(2015, 01, 01))
             });
-
 
             var b = new Manifest(new[] {
                 new ManifestEntry("templates/a.tpl", GetHash("a"), new DateTime(2015, 01, 01)),
@@ -33,7 +33,6 @@ namespace Carbon.Packaging.Tests
 
             Assert.Equal("templates/b.tpl", diff.Added[0].Path);
             Assert.Equal("templates/c.tpl", diff.Added[1].Path);
-
         }
 
         [Fact]
@@ -42,7 +41,6 @@ namespace Carbon.Packaging.Tests
             var a = new Manifest(new[] {
                 new ManifestEntry("templates/a.tpl", GetHash("a"), new DateTime(2015, 01, 01))
             });
-
 
             var b = new Manifest(new[] {
                 new ManifestEntry("templates/a.tpl", GetHash("a1"), new DateTime(2015, 01, 01)),
@@ -55,9 +53,7 @@ namespace Carbon.Packaging.Tests
             Assert.Equal(0, diff.Removed.Count);
             Assert.Equal(1, diff.Modified.Count);
 
-
             Assert.Equal("templates/a.tpl", diff.Modified[0].Path);
-
         }
 
         public Hash GetHash(string text)

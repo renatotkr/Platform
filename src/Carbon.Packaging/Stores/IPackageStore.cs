@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 
+using Carbon.Data.Protection;
+
 namespace Carbon.Packaging
 {
-    using Protection;
     using Storage;
     using Versioning;
 

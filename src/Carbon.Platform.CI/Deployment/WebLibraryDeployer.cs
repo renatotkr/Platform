@@ -4,9 +4,9 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
+using Carbon.Data.Protection;
 using Carbon.Packaging;
 using Carbon.Platform.Web;
-using Carbon.Protection;
 using Carbon.Storage;
 using Carbon.VersionControl;
 

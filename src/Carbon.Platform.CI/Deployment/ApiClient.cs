@@ -4,8 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-using Carbon.Protection;
-using Carbon.Security;
+using Carbon.Data.Protection;
 
 namespace Carbon.Platform.CI
 {
@@ -15,10 +14,10 @@ namespace Carbon.Platform.CI
             Timeout = TimeSpan.FromSeconds(15)
         };
         
-        private readonly SecretKey secret;
+        private readonly Secret secret;
         private readonly int port;
 
-        public ApiClient(SecretKey secret, int port)
+        public ApiClient(Secret secret, int port)
         {
             this.secret = secret;
             this.port = port;
@@ -81,8 +80,7 @@ namespace Carbon.Platform.CI
             message.Headers.Add("User-Agent", "Carbon/1.2.0");
             message.Headers.Add("X-Date", dateHeader);
             message.Headers.Add("X-Signature", signature.ToBase64String());
-        }
-        
+        }        
 
         public void Dispose()
         {
@@ -90,4 +88,3 @@ namespace Carbon.Platform.CI
         }
     }
 }
- 
