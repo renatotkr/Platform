@@ -26,7 +26,7 @@ namespace Carbon.Platform.Management
 
         private readonly IHostService hostService;
         private readonly IClusterService clusterService;
-        private readonly IMachineImageService machineImages;
+        private readonly IImageService machineImages;
 
         private readonly PlatformDb db;
 
@@ -47,7 +47,7 @@ namespace Carbon.Platform.Management
 
             this.hostService    = new HostService(db);
             this.clusterService = new ClusterService(db);
-            this.machineImages  = new MachineImageService(db);
+            this.machineImages  = new ImageService(db);
         }
 
         public async Task<IHost[]> LaunchHostsAsync(
@@ -296,7 +296,7 @@ namespace Carbon.Platform.Management
         private async Task<RegisterHostRequest> GetRegisterHostRequestAsync(
             Instance instance,
             Cluster cluster,
-            IMachineImage machineImage = null,
+            IImage machineImage = null,
             IMachineType machineType   = null,
             ILocation location         = null)
         {

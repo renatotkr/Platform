@@ -12,7 +12,7 @@ namespace Carbon.Platform.Computing
             string[] addresses,
             Cluster cluster,
             ILocation location,
-            IMachineImage machineImage,
+            IImage machineImage,
             IMachineType machineType,
             long ownerId,
             ManagedResource resource,

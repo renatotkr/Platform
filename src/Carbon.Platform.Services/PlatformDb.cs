@@ -37,7 +37,7 @@ namespace Carbon.Platform
             Clusters              = new Dataset<Cluster,                  long>(context);
             ClusterResources      = new Dataset<ClusterResource,          long>(context);
             HostTemplates         = new Dataset<HostTemplate,             long>(context);
-            MachineImages         = new Dataset<MachineImage,             long>(context);
+            Images         = new Dataset<Image,             long>(context);
             MachineTypes          = new Dataset<MachineType,              long>(context);
             Programs              = new Dataset<Program,                  long>(context);
             ProgramReleases       = new Dataset<ProgramRelease,           long>(context);
@@ -92,7 +92,7 @@ namespace Carbon.Platform
         public Dataset<ClusterResource,       long> ClusterResources      { get; }
         public Dataset<HostTemplate,          long> HostTemplates         { get; }
         public Dataset<HealthCheck,           long> HealthChecks          { get; }
-        public Dataset<MachineImage,          long> MachineImages         { get; }
+        public Dataset<Image,          long> Images         { get; }
         public Dataset<MachineType,           long> MachineTypes          { get; }
         public Dataset<Program,               long> Programs              { get; }
         public Dataset<ProgramRelease,        long> ProgramReleases       { get; }

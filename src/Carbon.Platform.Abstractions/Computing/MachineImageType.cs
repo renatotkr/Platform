@@ -1,6 +1,6 @@
 ﻿namespace Carbon.Platform.Computing
 {
-    public enum MachineImageType : byte
+    public enum ImageType : byte
     {
         Kernel    = 1,
         Machine   = 2,

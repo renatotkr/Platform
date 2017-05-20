@@ -2,9 +2,9 @@
 
 namespace Carbon.Platform.Computing
 {
-    public interface IMachineImage : IManagedResource
+    public interface IImage : IManagedResource
     {
-        MachineImageType Type { get; }
+        ImageType Type { get; }
 
         string Name { get; }
     }

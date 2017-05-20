@@ -42,13 +42,12 @@ namespace Carbon.Platform.Resources
         public static ResourceType Location      = "location";
 
         // Computing  -----------------------------------------------------------------------------------------
-        public static ResourceType Cluster              = "cluster";      
+        public static ResourceType Cluster              = "cluster";
         public static ResourceType Host                 = "host";          // includes metal, vm instances, and container instances
         public static ResourceType HostTemplate         = "hostTemplate";
-        public static ResourceType MachineImage         = "machineImage";
+        public static ResourceType Image                = "image";
         public static ResourceType MachineType          = "machineType";
         public static ResourceType Program              = "program";
-
         public static ResourceType LoadBalancer         = "loadBalancer";
         public static ResourceType LoadBalancerListener = "loadBalancerListener";
         public static ResourceType LoadBalancerRule     = "loadBalancerRule";

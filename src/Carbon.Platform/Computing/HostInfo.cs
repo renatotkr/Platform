@@ -20,8 +20,8 @@ namespace Carbon.Platform.Computing
             string[] addresses,
             long clusterId,
             long environmentId,
+            long imageId,
             long machineTypeId,
-            long machineImageId,
             long ownerId,
             DateTime created,
             ManagedResource resource,
@@ -35,8 +35,8 @@ namespace Carbon.Platform.Computing
             Addresses      = addresses;
             ClusterId      = clusterId;
             EnvironmentId  = environmentId;
+            ImageId        = imageId;
             MachineTypeId  = machineTypeId;
-            MachineImageId = machineImageId;
             ProviderId     = resource.ProviderId;
             ResourceId     = resource.ResourceId;
             NetworkId      = networkId;
@@ -71,13 +71,11 @@ namespace Carbon.Platform.Computing
 
         #region Image / Template
 
+        [Member("imageId")]
+        public long ImageId { get; }
+
         [Member("machineTypeId")]
         public long MachineTypeId { get; }
-        
-        [Member("machineImageId")]
-        public long MachineImageId { get; }
-
-        // HostTemplateId
 
         #endregion
             

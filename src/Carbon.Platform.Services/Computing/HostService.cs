@@ -58,7 +58,7 @@ namespace Carbon.Platform.Computing
                 resource       : request.Resource,
                 environmentId  : request.EnvironmentId,
                 machineTypeId  : request.MachineTypeId,
-                machineImageId : request.MachineImageId,
+                imageId : request.MachineImageId,
                 networkId      : request.NetworkId,
                 ownerId        : request.OwnerId,
                 created        : DateTime.UtcNow

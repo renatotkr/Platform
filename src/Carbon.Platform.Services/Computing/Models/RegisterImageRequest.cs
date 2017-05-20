@@ -4,14 +4,14 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
-    public class RegisterMachineImageRequest
+    public class RegisterImageRequest
     {
-        public RegisterMachineImageRequest() { }
+        public RegisterImageRequest() { }
 
-        public RegisterMachineImageRequest(
+        public RegisterImageRequest(
             string name,
             ManagedResource resource,
-            MachineImageType type = MachineImageType.Machine)
+            ImageType type = ImageType.Machine)
         {
             Name     = name;
             Resource = resource;
@@ -21,7 +21,9 @@ namespace Carbon.Platform.Computing
         // [Required, StringLenth(3, 128)]
         public string Name { get; set; }
 
-        public MachineImageType Type { get; set; } = MachineImageType.Machine;
+        public long OwnerId { get; set; }
+
+        public ImageType Type { get; set; } = ImageType.Machine;
 
         public ManagedResource Resource { get; set; }
     }    

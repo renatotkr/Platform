@@ -40,7 +40,7 @@ namespace Carbon.Platform
         public static Task<HostInfo> FindAsync(this Dataset<HostInfo, long> dataset, ResourceProvider provider, string resourceId) =>
             dataset.QueryFirstOrDefaultAsync(And(Eq("providerId", provider.Id), Eq("resourceId", resourceId)));
 
-        public static Task<MachineImage> FindAsync(this Dataset<MachineImage, long> dataset, ResourceProvider provider, string id) =>
+        public static Task<Image> FindAsync(this Dataset<Image, long> dataset, ResourceProvider provider, string id) =>
           dataset.QueryFirstOrDefaultAsync(And(Eq("providerId", provider.Id), Eq("resourceId", id)));
 
         public static Task<VolumeInfo> FindAsync(this Dataset<VolumeInfo, long> dataset, ResourceProvider provider, string id) =>

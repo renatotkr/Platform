@@ -16,7 +16,7 @@ namespace Carbon.Platform.Computing
             long id, 
             string name,
             IMachineType machineType,
-            IMachineImage machineImage,
+            IImage machineImage,
             JsonObject details,
             long ownerId,
             ManagedResource resource)

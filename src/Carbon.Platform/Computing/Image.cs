@@ -7,38 +7,40 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
-    [Dataset("MachineImages", Schema = "Computing")]
+    [Dataset("Images", Schema = "Computing")]
     [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
-    public class MachineImage : IMachineImage
+    public class Image : IImage
     {
-        public MachineImage() { }
+        public Image() { }
 
-        public MachineImage(
+        public Image(
             long id,
-            MachineImageType type,
+            ImageType type,
             string name,
+            long ownerId,
             ManagedResource resource)
         {
             Id          = id;
             Type        = type;
             Name        = name ?? throw new ArgumentNullException(nameof(name));
+            OwnerId     = ownerId;
             ResourceId  = resource.ResourceId;
             ProviderId  = resource.ProviderId;
             LocationId  = resource.LocationId;
         }
 
-        [Member("id"), Key(sequenceName: "machineImageId")]
+        [Member("id"), Key(sequenceName: "imageId")]
         public long Id { get; }
         
         [Member("type")]
-        public MachineImageType Type { get; }
+        public ImageType Type { get; }
         
         [Member("name")]
         [StringLength(3, 128)]
         public string Name { get; }
 
         [Member("ownerId")]
-        public long OwnerId { get; set; }
+        public long OwnerId { get; }
 
         [Member("details")]
         [StringLength(1000)]
@@ -58,7 +60,7 @@ namespace Carbon.Platform.Computing
         [Member("locationId")]
         public int LocationId { get; }
 
-        ResourceType IResource.ResourceType => ResourceTypes.MachineImage;
+        ResourceType IResource.ResourceType => ResourceTypes.Image;
 
         #endregion
 
