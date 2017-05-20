@@ -44,24 +44,26 @@ namespace Carbon.Platform.Resources
         // Computing  -----------------------------------------------------------------------------------------
         public static ResourceType Cluster              = "cluster";
         public static ResourceType Host                 = "host";          // includes metal, vm instances, and container instances
-        public static ResourceType HostTemplate         = "hostTemplate";
-        public static ResourceType Image                = "image";
+        public static ResourceType HostTemplate         = "host:template";
+        public static ResourceType Image                = "host:image";
         public static ResourceType MachineType          = "machineType";
         public static ResourceType Program              = "program";
         public static ResourceType LoadBalancer         = "loadBalancer";
-        public static ResourceType LoadBalancerListener = "loadBalancerListener";
-        public static ResourceType LoadBalancerRule     = "loadBalancerRule";
+        public static ResourceType LoadBalancerListener = "loadBalancer:listener";
+        public static ResourceType LoadBalancerRule     = "loadBalancer:rule";
 
         // Storage --------------------------------------------------------------------------------------------
         public static ResourceType Bucket              = "bucket";        
         public static ResourceType Channel             = "channel";               // AKA Stream / Topic           
         public static ResourceType Database            = "database";
-        public static ResourceType DatabaseCluster     = "databaseCluster";
-        public static ResourceType DatabaseInstance    = "databaseInstance";
-        public static ResourceType DatabaseSchema      = "databaseSchema";
+        public static ResourceType DatabaseCluster     = "database:cluster";
+        public static ResourceType DatabaseInstance    = "database:instance";
+        public static ResourceType DatabaseSchema      = "database:schema";
         public static ResourceType Queue               = "queue";         
         public static ResourceType Repository          = "repository";
-        public static ResourceType RepositoryCommit    = "commit";             
+        public static ResourceType RepositoryBranch    = "repository:branch";
+        public static ResourceType RepositoryCommit    = "repository:commit"; 
+        public static ResourceType RepositoryTag       = "repository:tag";
         public static ResourceType Volume              = "volume";                // AKA drive
 
         // KMS --------------------------------------------------------------------------------------------------
@@ -71,36 +73,35 @@ namespace Carbon.Platform.Resources
         // Networking --------------------------------------------------------------------------------------------
 
         public static ResourceType Network              = "network";
+        public static ResourceType NetworkAddress       = "network:address";
+        public static ResourceType NetworkInterface     = "network:nterface";
+        public static ResourceType NetworkPeer          = "network:peer";
+        public static ResourceType NetworkRouter        = "network:router";
+        public static ResourceType NetworkRoute         = "network:route";
+        public static ResourceType NetworkSecurityGroup = "network:securityGroup";
         public static ResourceType Subnet               = "subnet";
-        public static ResourceType NetworkAddress       = "networkAddress";
-        public static ResourceType NetworkInterface     = "networkInterface";
-        public static ResourceType NetworkPeer          = "networkPeer";
-        public static ResourceType NetworkRouter        = "networkRouter";
-        public static ResourceType NetworkRoute         = "networkRoute";
 
-        // - Security ---
-        public static ResourceType NetworkSecurityGroup = "networkSecurityGroup"; // nsg?
-
-        // - DNS -           
-        public static ResourceType DnsZone            = "dnsZone";
-        public static ResourceType DnsRecord          = "dnsRecord";
-
-        // Hosting --------------------------------------------------------------------------------------------
+        
+        // Web --------------------------------------------------------------------------------------------
 
         public static ResourceType Domain        = "domain";
-        public static ResourceType Certificate   = "certificate";
+        public static ResourceType Certificate   = "certificate"; // web: ?
                             
-        public static ResourceType Website       = "website";
-        public static ResourceType WebComponent  = "webComponent";
-        public static ResourceType WebLibrary    = "webLibrary";
+        public static ResourceType Website       = "web:site";
+        public static ResourceType WebComponent  = "web:component";
+        public static ResourceType WebLibrary    = "web:library";
 
         public static ResourceType HealthCheck   = "healthCheck";
 
+        public static ResourceType DnsZone       = "dns:zone";
+        public static ResourceType DnsRecord     = "dns:record";
+
         // CI ------------------------------------------------------------------------------------------------
-        public static ResourceType Build         = "build";
-        public static ResourceType Deployment    = "deployment";
+        public static ResourceType Build         = "ci:build";
+        public static ResourceType BuildProject  = "ci:project";
+        public static ResourceType Deployment    = "ci:deployment";
 
         // Metrics --------------------------------------------------------------------------------------------
-        public static ResourceType Metric = "metric";
+        public static ResourceType Metric        = "metric";
     }
 }
