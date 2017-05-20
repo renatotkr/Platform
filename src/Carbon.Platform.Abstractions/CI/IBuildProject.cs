@@ -2,8 +2,10 @@
 
 namespace Carbon.Platform.CI
 { 
-    public interface IBuildProject : IManagedResource
+    public interface IBuildProject : IResource
     {
         string Name { get; }
+
+        long RepositoryId { get; }
     }
 }

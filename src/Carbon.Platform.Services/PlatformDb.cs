@@ -37,7 +37,7 @@ namespace Carbon.Platform
             Clusters              = new Dataset<Cluster,                  long>(context);
             ClusterResources      = new Dataset<ClusterResource,          long>(context);
             HostTemplates         = new Dataset<HostTemplate,             long>(context);
-            Images         = new Dataset<Image,             long>(context);
+            Images                = new Dataset<Image,                    long>(context);
             MachineTypes          = new Dataset<MachineType,              long>(context);
             Programs              = new Dataset<Program,                  long>(context);
             ProgramReleases       = new Dataset<ProgramRelease,           long>(context);
@@ -70,6 +70,8 @@ namespace Carbon.Platform
             // CI -----------------------------------------------------------------------
             Builds                = new Dataset<Build,                    long>(context);
             BuildArtifacts        = new Dataset<BuildArtifact,            long>(context);
+            BuildProjects         = new Dataset<BuildProject,             long>(context);
+
             Deployments           = new Dataset<Deployment,               long>(context);
             DeploymentTargets     = new Dataset<DeploymentTarget, (long, long)>(context);
 
@@ -125,6 +127,7 @@ namespace Carbon.Platform
         // CI ---------------------------------------------------------------------
         public Dataset<Build, long>                    Builds             { get; }
         public Dataset<BuildArtifact, long>            BuildArtifacts     { get; }
+        public Dataset<BuildProject, long>             BuildProjects      { get; }
         public Dataset<Deployment, long>               Deployments        { get; }
         public Dataset<DeploymentTarget, (long, long)> DeploymentTargets  { get; }
 

@@ -14,6 +14,8 @@ namespace Carbon.Platform.CI
         public BuildProject(
             long id, 
             string name,
+            long repositoryId,
+            long ownerId,
             ManagedResource resource)
         {
             #region Preconditions
@@ -21,13 +23,21 @@ namespace Carbon.Platform.CI
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
 
+            if (repositoryId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(repositoryId));
+
+            if (ownerId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(ownerId));
+
             #endregion
 
-            Id          = id;
-            Name        = name;
-            ProviderId  = resource.ProviderId;
-            ResourceId  = resource.ResourceId;
-            LocationId  = resource.LocationId;
+            Id           = id;
+            Name         = name ?? throw new ArgumentNullException(nameof(name));
+            RepositoryId = repositoryId;
+            OwnerId      = ownerId;
+            ProviderId   = resource.ProviderId;
+            ResourceId   = resource.ResourceId;
+            LocationId   = resource.LocationId;
         }
 
         [Member("id"), Key(sequenceName: "buildProjectId")]
@@ -36,15 +46,24 @@ namespace Carbon.Platform.CI
         [Member("name")]
         public string Name { get; set; }
 
+        [Member("repositoryId")]
+        public long RepositoryId { get; }
+        
         [Member("details")]
         [StringLength(1000)]
         public JsonObject Details { get; set; }
-
+        
+        // ImageId
+        
         [Member("ownerId")]
-        public long OwnerId { get; set; }
+        public long OwnerId { get; }
 
-        // Source
-        // ...
+        #region Stats
+
+        [Member("buildCount")]
+        public int BuildCount { get; }
+
+        #endregion
 
         #region IResource
 
@@ -68,12 +87,6 @@ namespace Carbon.Platform.CI
 
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
-
-        [Member("started"), Mutable]
-        public DateTime? Started { get; set; }
-
-        [Member("completed"), Mutable]
-        public DateTime? Completed { get; set; }
 
         #endregion
     }

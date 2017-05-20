@@ -6,7 +6,7 @@ namespace Carbon.Platform.Services
     {
         public static (ResourceProvider provider, string resourceId) Parse(string name)
         {
-            var parts = name.Split(Seperators.Colon); // :
+            var parts = name.Split(':');
 
             return (provider: ResourceProvider.Parse(parts[0]), resourceId: parts[1]);
         }

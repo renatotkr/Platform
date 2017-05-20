@@ -32,8 +32,12 @@ namespace Carbon.Platform.CI
             LocationId  = resource.LocationId;
         }
 
-        [Member("id"), Key(sequenceName: "buildId")]
+        // buildProjectId | #
+        [Member("id"), Key]
         public long Id { get; }
+        
+        [Member("projectId")]
+        public long ProjectId { get; set; }
 
         [Member("status"), Mutable]
         public BuildStatus Status { get; set; }

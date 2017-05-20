@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.ComponentModel.DataAnnotations;
 using Carbon.Platform.Storage;
 
 namespace Carbon.Platform.CI
@@ -11,15 +11,18 @@ namespace Carbon.Platform.CI
         public CreateBuildRequest() { }
 
         public CreateBuildRequest(
-            RepositoryInfo repository,
+            IBuildProject project,
             IRepositoryCommit commit,
             long initiatorId)
         {
-            Source    = new RepositorySource(repository, commit);
+            Project     = project ?? throw new ArgumentNullException(nameof(project));
+            Commit      = commit;
             InitiatorId = initiatorId;
         }
         
-        public RepositorySource Source { get; set; }
+        public IBuildProject Project { get; set; }
+
+        public IRepositoryCommit Commit { get; set; }
 
         public BuildOutput Output { get; set; }
 
@@ -44,19 +47,5 @@ namespace Carbon.Platform.CI
         public string Name { get; set; }
 
         // Encoding
-    }
-
-    public class RepositorySource
-    {
-        public RepositorySource(RepositoryInfo repository, IRepositoryCommit commit)
-        {
-            Repository = repository ?? throw new ArgumentNullException(nameof(repository));
-            Commit     = commit ?? throw new ArgumentNullException(nameof(commit));
-        }
-
-        public RepositoryInfo Repository { get; }
-
-        // presolved commit
-        public IRepositoryCommit Commit { get; }
     }
 }

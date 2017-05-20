@@ -9,6 +9,7 @@ Services & management libraries will stabalize at v1.
 - Add OwnerId to Image & HealthCheck
 - Add InitiatorId to Build & Deployment
 - Introduce Cluster and consolidate Environment Locations, Host Groups, and DatabaseClusters
+- Add BuildProject
 
 1.37.0
 - Change ResourceType from a structure to a class 

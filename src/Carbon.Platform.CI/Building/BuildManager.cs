@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Amazon.CodeBuild;
 using Amazon.Helpers;
-
+using Carbon.Data;
+using Carbon.Data.Expressions;
 using Carbon.Platform.Resources;
-using Carbon.Platform.Storage;
+using Carbon.Platform.Sequences;
 
 using Dapper;
 
@@ -24,10 +26,33 @@ namespace Carbon.Platform.CI
             this.builder = builder ?? throw new ArgumentNullException(nameof(builder));
         }
 
-
         public Task<Build> GetAsync(long id)
         {
             return db.Builds.FindAsync(id);
+        }
+
+        public async Task<Build> GetLatestAsync(long projectId)
+        {
+            var range = ScopedId.GetRange(projectId);
+
+            var builds = await db.Builds.QueryAsync(
+                expression: Expression.Between("id", range.Start, range.End),
+                order: Order.Descending("id"),
+                take: 1
+            );
+
+            return builds[0];
+        }
+
+        public Task<IReadOnlyList<Build>> ListAsync(long projectId, int take = 1000)
+        {
+            var range = ScopedId.GetRange(projectId);
+
+            return db.Builds.QueryAsync(
+                expression  : Expression.Between("id", range.Start, range.End),
+                order       : Order.Descending("id"),
+                take        : take
+            );
         }
 
         public async Task<Amazon.CodeBuild.Build> CheckStatusAsync(IBuild build)
@@ -39,39 +64,17 @@ namespace Carbon.Platform.CI
             return b;
         }
 
-        private static BuildStatus GetStatus(Amazon.CodeBuild.Build build)
-        {
-
-            switch (build.BuildStatus)
-            {
-                case "FAILED"      : return BuildStatus.Failed;
-                case "FAULT"       : return BuildStatus.Failed;
-                case "IN_PROGRESS" : return BuildStatus.Building;
-                case "STOPPED"     : return BuildStatus.Pending;
-                case "SUCCEEDED"   : return BuildStatus.Completed;
-                case "TIMED_OUT"   : return BuildStatus.Failed;
-            }
-
-            throw new Exception("unexpected status:" + build.BuildStatus);
-        }
-
         public async Task<Build> StartAsync(CreateBuildRequest request)
         {
-            var repository = request.Source.Repository;
+            var project = request.Project;
+            var commit  = request.Commit;
 
-            var commit = request.Source.Commit;
-
-            if (!repository.Details.TryGetValue(RepositoryProperties.BuildProjectName, out var buildProjectName))
-            {
-                throw new Exception($"repository#{repository.Id} does not have a {RepositoryProperties.BuildProjectName}");
-            }
-
-            var id = db.Builds.Sequence.Next();
+            var id = await BuildId.NextAsync(db.Context, project.Id).ConfigureAwait(false);
 
             // code build also injects
             // CODEBUILD_BUILD_ID
 
-            var startBuildRequest = new StartBuildRequest(buildProjectName) { 
+            var startBuildRequest = new StartBuildRequest(project.Name) { 
                 EnvironmentVariablesOverride = new[] {
                     new EnvironmentVariable("BUILD_ID", id.ToString())
                 },
@@ -89,17 +92,15 @@ namespace Carbon.Platform.CI
                 };
             }
 
-            var remoteBuild = (await builder.StartBuildAsync(startBuildRequest).ConfigureAwait(false)).Build;
-            
-            // arn:aws:codebuild:region-ID:account-ID:build
-
+            var externalBuild = (await builder.StartBuildAsync(startBuildRequest).ConfigureAwait(false)).Build;
+           
             var build = new Build(
-                id        : id,
+                id          : id,
                 initiatorId : request.InitiatorId,
-                commitId  : commit.Id,
-                resource  : ManagedResource.Build(Locations.Aws_US_East_1, remoteBuild.Id)
+                commitId    : commit.Id,
+                resource    : ManagedResource.Build(Locations.Aws_US_East_1, externalBuild.Id)
             );
-
+            
             await db.Builds.InsertAsync(build).ConfigureAwait(false);
 
             return build;
@@ -122,4 +123,26 @@ namespace Carbon.Platform.CI
             }
         }
     }
+
+    internal static class BuildId
+    {
+        public static async Task<long> NextAsync(
+            IDbContext context,
+            long projectId)
+        {
+            using (var connection = context.GetConnection())
+            {
+                var currentCommitCount = await connection.ExecuteScalarAsync<int>(
+                  @"SELECT `buildCount` FROM `BuildProjects` WHERE id = @id FOR UPDATE;
+                      UPDATE `BuildProjects`
+                      SET `buildCount` = `buildCount` + 1
+                      WHERE id = @id", new { id = projectId }).ConfigureAwait(false);
+
+                return ScopedId.Create(projectId, currentCommitCount + 1);
+            }
+        }
+    }
 }
+
+
+// arn:aws:codebuild:region-ID:account-ID:build

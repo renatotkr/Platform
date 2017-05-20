@@ -61,10 +61,6 @@ namespace Carbon.Platform.Storage
         [Member("encryptedToken", TypeName = "BLOB(1000)")]
         public byte[] EncryptedToken { get; }
 
-        [Member("details")]
-        [StringLength(1000)]
-        public JsonObject Details { get; set; }
-
         #region Stats
 
         // Max ~4M
@@ -138,10 +134,5 @@ namespace Carbon.Platform.Storage
 
             return sb.ToString();
         }
-    }
-
-    public static class RepositoryProperties
-    {
-        public static readonly string BuildProjectName = "buildProjectName";
     }
 }
