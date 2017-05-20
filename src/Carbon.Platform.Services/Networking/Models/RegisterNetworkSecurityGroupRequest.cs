@@ -14,7 +14,6 @@ namespace Carbon.Platform.Networking
             long networkId,
             ManagedResource resource)
         {
-
             Name      = name ?? throw new ArgumentNullException(nameof(name));
             NetworkId = networkId;
             Resource  = resource;

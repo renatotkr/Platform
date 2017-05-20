@@ -19,6 +19,7 @@ namespace Carbon.Platform.Networking
             long id, 
             IPAddress[] ipAddresses,
             MacAddress macAddress,
+            long[] securityGroupIds,
             long subnetId,
             ManagedResource resource)
         {
@@ -32,6 +33,7 @@ namespace Carbon.Platform.Networking
             Id         = id;
             Addresses  = ipAddresses;
             MacAddress = macAddress;
+            SecurityGroupIds = securityGroupIds;
             SubnetId   = subnetId;
             ProviderId = resource.ProviderId;
             ResourceId = resource.ResourceId;
@@ -50,13 +52,16 @@ namespace Carbon.Platform.Networking
         [Indexed]
         public MacAddress MacAddress { get; }
 
+        [Member("securityGroupIds")]
+        public long[] SecurityGroupIds { get; }
+
+        [Member("subnetId")]
+        public long SubnetId { get; }
+
         [IgnoreDataMember]
         [Member("hostId"), Mutable]
         [Indexed] // Current Attachment
         public long? HostId { get; set; }
-
-        [Member("subnetId")]
-        public long SubnetId { get; }
 
         [IgnoreDataMember]
         public long NetworkId => ScopedId.GetScope(SubnetId);
@@ -97,6 +102,4 @@ namespace Carbon.Platform.Networking
 
         #endregion
     }
-
-    // May be attached to hosts or proxies (ALBS)
 }

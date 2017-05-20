@@ -16,7 +16,8 @@ namespace Carbon.Platform.Networking
 
         public Task<NetworkSecurityGroup> GetAsync(long id)
         {
-            return db.NetworkSecurityGroups.FindAsync(id) ?? throw ResourceError.NotFound(ResourceTypes.NetworkSecurityGroup, id);
+            return db.NetworkSecurityGroups.FindAsync(id) 
+                ?? throw ResourceError.NotFound(ResourceTypes.NetworkSecurityGroup, id);
         }
 
         public async Task<NetworkSecurityGroup> FindAsync(ResourceProvider provider, string resourceId)
@@ -32,8 +33,10 @@ namespace Carbon.Platform.Networking
 
             #endregion
 
+            var id = await db.NetworkSecurityGroups.GetNextScopedIdAsync(request.NetworkId).ConfigureAwait(false);
+
             var nsg = new NetworkSecurityGroup(
-                id       : await db.NetworkSecurityGroups.GetNextScopedIdAsync(request.NetworkId).ConfigureAwait(false),
+                id       : id,
                 name     : request.Name,
                 resource : request.Resource
             );

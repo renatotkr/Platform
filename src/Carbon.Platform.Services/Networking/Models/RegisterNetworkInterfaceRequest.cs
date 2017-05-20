@@ -13,17 +13,21 @@ namespace Carbon.Platform.Networking
         public RegisterNetworkInterfaceRequest(
             MacAddress mac,
             long subnetId,
+            long[] securityGroupIds,
             ManagedResource resource)
         {
-            Mac      = mac;
-            SubnetId = subnetId;
-            Resource = resource;
+            Mac              = mac;
+            SubnetId         = subnetId;
+            SecurityGroupIds = securityGroupIds;
+            Resource         = resource;
         }
 
         [Required]
         public MacAddress Mac { get; set; }
 
         public long SubnetId { get; set; }
+        
+        public long[] SecurityGroupIds { get; set; }
 
         [Required]
         public ManagedResource Resource { get; set; }

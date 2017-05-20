@@ -43,17 +43,18 @@ namespace Carbon.Platform.Networking
 
             #endregion
 
-            var networkInterface = new NetworkInterfaceInfo(
-                id        : await db.NetworkInterfaces.GetNextScopedIdAsync(request.NetworkId).ConfigureAwait(false),
-                ipAddresses : Array.Empty<IPAddress>(),
+            var nic = new NetworkInterfaceInfo(
+                id               : await db.NetworkInterfaces.GetNextScopedIdAsync(request.NetworkId).ConfigureAwait(false),
+                ipAddresses      : Array.Empty<IPAddress>(),
                 macAddress       : request.Mac,
-                subnetId  : request.SubnetId,
-                resource  : request.Resource
+                subnetId         : request.SubnetId,
+                securityGroupIds : request.SecurityGroupIds,
+                resource         : request.Resource
             );
 
-            await db.NetworkInterfaces.InsertAsync(networkInterface).ConfigureAwait(false);
+            await db.NetworkInterfaces.InsertAsync(nic).ConfigureAwait(false);
 
-            return networkInterface;
+            return nic;
         }
     }
 }
