@@ -10,7 +10,7 @@ namespace Carbon.Platform.CI
 
         long CommitId { get; }
 
-        long CreatorId { get; }
+        long InitiatorId { get; }
 
         DateTime Created { get; }
 

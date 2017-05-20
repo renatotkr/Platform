@@ -12,22 +12,31 @@ namespace Carbon.Platform.CI
 
         public CreateBuildRequest(
             RepositoryInfo repository,
-            IRepositoryCommit commit, 
-            long creatorId)
+            IRepositoryCommit commit,
+            long initiatorId)
         {
             Source    = new RepositorySource(repository, commit);
-            CreatorId = creatorId;
+            InitiatorId = initiatorId;
         }
         
         public RepositorySource Source { get; set; }
 
         public BuildOutput Output { get; set; }
 
-        public long CreatorId { get; set; }
+        public long InitiatorId { get; set; }
     }
 
     public class BuildOutput
     {
+        public BuildOutput() { }
+
+        public BuildOutput(string bucketName, string path, string name = null)
+        {
+            BucketName = bucketName;
+            Path       = path;
+            Name       = name;
+        }
+
         public string BucketName { get; set; }
 
         public string Path { get; set; }

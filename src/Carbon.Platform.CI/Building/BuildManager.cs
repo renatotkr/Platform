@@ -95,7 +95,7 @@ namespace Carbon.Platform.CI
 
             var build = new Build(
                 id        : id,
-                creatorId : request.CreatorId,
+                initiatorId : request.InitiatorId,
                 commitId  : commit.Id,
                 resource  : ManagedResource.Build(Locations.Aws_US_East_1, remoteBuild.Id)
             );

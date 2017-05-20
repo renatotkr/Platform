@@ -32,7 +32,7 @@ namespace Carbon.Platform.CI
             var env = await environments.GetAsync(request.EnvironmentId);
             var release = await websiteService.GetReleaseAsync(request.WebsiteId, request.WebsiteVersion);
 
-            var deployment = await deployments.StartAsync(env, release, request.CreatorId);
+            var deployment = await deployments.StartAsync(env, release, request.InitiatorId);
 
             var hosts = await environments.GetHostsAsync(env).ConfigureAwait(false);
             

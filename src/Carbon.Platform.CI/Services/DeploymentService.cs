@@ -33,7 +33,7 @@ namespace Carbon.Platform.CI
             var deployment = new Deployment(
               id        : await DeploymentId.NextAsync(db.Context, env).ConfigureAwait(false),
               release   : release,
-              creatorId : creatorId
+              initiatorId : creatorId
             );
 
             await db.Deployments.InsertAsync(deployment).ConfigureAwait(false);

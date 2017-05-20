@@ -10,6 +10,6 @@ namespace Carbon.Platform.CI
 
         public long EnvironmentId { get; set; }
 
-        public long CreatorId { get; set; }
+        public long InitiatorId { get; set; }
     }
 }
