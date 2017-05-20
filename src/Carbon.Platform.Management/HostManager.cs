@@ -26,7 +26,7 @@ namespace Carbon.Platform.Management
 
         private readonly IHostService hostService;
         private readonly IClusterService clusterService;
-        private readonly IImageService machineImages;
+        private readonly IImageService images;
 
         private readonly PlatformDb db;
 
@@ -47,7 +47,7 @@ namespace Carbon.Platform.Management
 
             this.hostService    = new HostService(db);
             this.clusterService = new ClusterService(db);
-            this.machineImages  = new ImageService(db);
+            this.images  = new ImageService(db);
         }
 
         public async Task<IHost[]> LaunchHostsAsync(
@@ -102,14 +102,14 @@ namespace Carbon.Platform.Management
 
             var region = Locations.Get(zoneId.WithZoneNumber(0));
 
-            var machineImage = await machineImages.GetAsync(template.MachineImageId).ConfigureAwait(false);
+            var image = await images.GetAsync(template.ImageId).ConfigureAwait(false);
 
             var machineType = AwsInstanceType.Get(template.MachineTypeId);
 
             var request = new RunInstancesRequest {
                 ClientToken  = Guid.NewGuid().ToString(),
                 InstanceType = machineType.Name,
-                ImageId      = machineImage.ResourceId,
+                ImageId      = image.ResourceId,
                 MinCount     = launchCount,
                 MaxCount     = launchCount,
                 Placement    = new Placement(availabilityZone: zone.Name),
@@ -192,7 +192,7 @@ namespace Carbon.Platform.Management
                 var registerRequest = await GetRegisterHostRequestAsync(
                     instance     : runResult.Instances[i],
                     cluster      : cluster,
-                    machineImage : machineImage, 
+                    image : image, 
                     machineType  : machineType, 
                     location     : zone);
 
@@ -296,9 +296,9 @@ namespace Carbon.Platform.Management
         private async Task<RegisterHostRequest> GetRegisterHostRequestAsync(
             Instance instance,
             Cluster cluster,
-            IImage machineImage = null,
-            IMachineType machineType   = null,
-            ILocation location         = null)
+            IImage image = null,
+            ILocation location = null,
+            IMachineType machineType = null)
         {
             #region Preconditions
 
@@ -318,11 +318,11 @@ namespace Carbon.Platform.Management
                 location = Locations.Get(Aws, instance.Placement.AvailabilityZone);
             }
 
-            if (machineImage == null)
+            if (image == null)
             {
                 // "imageId": "ami-1647537c",
                 
-                machineImage = await machineImages.GetAsync(Aws, instance.ImageId).ConfigureAwait(false);
+                image = await images.GetAsync(Aws, instance.ImageId).ConfigureAwait(false);
             }
 
             if (machineType == null)
@@ -354,7 +354,7 @@ namespace Carbon.Platform.Management
                 addresses    : addresses,
                 cluster      : cluster,
                 location     : location,
-                machineImage : machineImage,
+                image : image,
                 machineType  : machineType,
                 status       : instance.InstanceState.ToStatus(),
                 ownerId      : 1,

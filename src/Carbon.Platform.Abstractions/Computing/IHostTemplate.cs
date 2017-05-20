@@ -6,7 +6,7 @@ namespace Carbon.Platform.Computing
     {
         string Name { get; }
 
-        long MachineImageId { get; }
+        long ImageId { get; }
 
         long MachineTypeId { get; }
 

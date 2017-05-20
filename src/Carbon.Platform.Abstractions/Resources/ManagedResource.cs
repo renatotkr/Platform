@@ -92,7 +92,7 @@ namespace Carbon.Platform.Resources
         public static ManagedResource HostTemplate(ResourceProvider provider, string id) =>
             new ManagedResource(provider, ResourceTypes.HostTemplate, id);
 
-        public static ManagedResource MachineImage(ILocation location, string id) =>
+        public static ManagedResource Image(ILocation location, string id) =>
            FromLocation(location, ResourceTypes.Image, id);
 
         public static ManagedResource Volume(ILocation location, string id) => 

@@ -11,8 +11,8 @@ namespace Carbon.Platform.Computing
         public RegisterHostRequest(
             string[] addresses,
             Cluster cluster,
+            IImage image,
             ILocation location,
-            IImage machineImage,
             IMachineType machineType,
             long ownerId,
             ManagedResource resource,
@@ -21,9 +21,9 @@ namespace Carbon.Platform.Computing
         {
             Addresses      = addresses;
             EnvironmentId  = cluster.EnvironmentId.Value;
-            Location       = location;
-            MachineImageId = machineImage.Id;
-            MachineTypeId  = machineType.Id;
+            ImageId        = image.Id;
+            Location        = location;
+            MachineTypeId = machineType.Id;
             NetworkId      = networkId;
             Status         = status;
             Resource       = resource;
@@ -44,7 +44,7 @@ namespace Carbon.Platform.Computing
 
         public long MachineTypeId { get; set; }
 
-        public long MachineImageId { get; set; }
+        public long ImageId { get; set; }
 
         public long NetworkId { get; set; }
 

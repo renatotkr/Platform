@@ -16,7 +16,7 @@ namespace Carbon.Platform.Computing
             long id, 
             string name,
             IMachineType machineType,
-            IImage machineImage,
+            IImage image,
             JsonObject details,
             long ownerId,
             ManagedResource resource)
@@ -29,19 +29,19 @@ namespace Carbon.Platform.Computing
             if (machineType == null)
                 throw new ArgumentNullException(nameof(machineType));
 
-            if (machineImage == null)
-                throw new ArgumentNullException(nameof(machineImage));
+            if (image == null)
+                throw new ArgumentNullException(nameof(image));
 
             #endregion
 
-            Id             = id;
-            Name           = name;
-            MachineTypeId  = machineType.Id;
-            MachineImageId = machineImage.Id;
-            ProviderId     = resource.ProviderId;
-            Details        = details ?? throw new ArgumentNullException(nameof(details));
-            OwnerId        = ownerId;
-            ResourceId     = resource.ResourceId;
+            Id            = id;
+            Name          = name;
+            MachineTypeId = machineType.Id;
+            ImageId       = image.Id;
+            ProviderId    = resource.ProviderId;
+            Details       = details ?? throw new ArgumentNullException(nameof(details));
+            OwnerId       = ownerId;
+            ResourceId    = resource.ResourceId;
         }
 
         [Member("id"), Key(sequenceName: "hostTemplateId")]
@@ -51,12 +51,12 @@ namespace Carbon.Platform.Computing
         [StringLength(63)]
         public string Name { get; }
 
+        [Member("imageId")]
+        public long ImageId { get; }
+
         [Member("machineTypeId")]
         public long MachineTypeId { get; }
 
-        [Member("machineImageId")]
-        public long MachineImageId { get; }
-        
         [Member("startupScript")]
         [StringLength(2000)]
         public string StartupScript { get; set; }
