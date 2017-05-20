@@ -10,17 +10,13 @@ namespace Carbon.Platform.Networking
     public class NetworkSecurityGroupManager
     {
         private readonly INetworkSecurityGroupService nsgService;
-        private readonly Ec2Client ec2;
 
-        public NetworkSecurityGroupManager(
-            INetworkSecurityGroupService nsgService,
-            Ec2Client ec2)
+        public NetworkSecurityGroupManager(INetworkSecurityGroupService nsgService)
         {
             this.nsgService = nsgService ?? throw new ArgumentNullException(nameof(nsgService));
-            this.ec2        = ec2        ?? throw new ArgumentNullException(nameof(ec2));
         }
 
-        private async Task<NetworkSecurityGroup> GetAsync(NetworkInfo network, NetworkInterfaceSecurityGroup group)
+        public async Task<NetworkSecurityGroup> GetAsync(NetworkInfo network, NetworkInterfaceSecurityGroup group)
         {
             #region Preconditions
 
@@ -32,19 +28,19 @@ namespace Carbon.Platform.Networking
 
             #endregion
 
+            var region = Locations.Get(network.LocationId);
+
             var nsg = await nsgService.FindAsync(ResourceProvider.Aws, group.GroupId).ConfigureAwait(false);
 
             if (nsg == null)
             {
-                var resource = new ManagedResource(ResourceProvider.Aws, ResourceTypes.NetworkSecurityGroup, group.GroupId);
-
                 var registerRequest = new RegisterNetworkSecurityGroupRequest(
                     name      : group.GroupName,
                     networkId : network.Id,
-                    resource  : resource
+                    resource  : ManagedResource.NetworkSecurityGroup(region, group.GroupId)
                 );
 
-                nsg = await nsgService.RegisterAsync(registerRequest);
+                nsg = await nsgService.RegisterAsync(registerRequest).ConfigureAwait(false);
             }
 
             return nsg;

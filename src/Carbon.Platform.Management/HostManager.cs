@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,7 +25,8 @@ namespace Carbon.Platform.Management
         private readonly ElbClient elb;
 
         private readonly IHostService hostService;
-        private readonly IHostGroupService groups;
+        private readonly IHostGroupService groupService;
+        private readonly IMachineImageService machineImages;
 
         private readonly PlatformDb db;
 
@@ -45,8 +45,9 @@ namespace Carbon.Platform.Management
             ssm = new SsmClient(AwsRegion.USEast1, credential);
             elb = new ElbClient(AwsRegion.USEast1, credential);
 
-            this.hostService = new HostService(db);
-            this.groups = new HostGroupService(db);
+            this.hostService   = new HostService(db);
+            this.groupService  = new HostGroupService(db);
+            this.machineImages = new MachineImageService(db);
         }
 
         public async Task<IHost[]> LaunchHostsAsync(IEnvironment env, ILocation location, int launchCount = 1)
@@ -55,7 +56,7 @@ namespace Carbon.Platform.Management
 
             var region = Locations.Get(locationId.WithZoneNumber(0));
 
-            var group = await groups.GetAsync(env, region).ConfigureAwait(false);
+            var group = await groupService.GetAsync(env, region).ConfigureAwait(false);
 
             // TODO:
             // if the location is a region, select the avaiability zone with the least hosts
@@ -93,8 +94,7 @@ namespace Carbon.Platform.Management
 
             var region = Locations.Get(locationId.WithZoneNumber(0));
 
-            var machineImage = await db.MachineImages.FindAsync(template.MachineImageId) 
-                ?? throw new Exception($"machineImage#{template.MachineImageId} not found");
+            var machineImage = await machineImages.GetAsync(template.MachineImageId).ConfigureAwait(false);
 
             var machineType = AwsInstanceType.Get(template.MachineTypeId);
 
@@ -175,7 +175,7 @@ namespace Carbon.Platform.Management
 
             #endregion
 
-            var group = await groups.GetAsync(env, region).ConfigureAwait(false);
+            var group = await groupService.GetAsync(env, region).ConfigureAwait(false);
 
             var runResult = await ec2.RunInstancesAsync(request).ConfigureAwait(false);
 
@@ -197,7 +197,7 @@ namespace Carbon.Platform.Management
             {
                 if (host.GroupId != null)
                 {
-                    var group = await groups.GetAsync(host.GroupId.Value).ConfigureAwait(false);
+                    var group = await groupService.GetAsync(host.GroupId.Value).ConfigureAwait(false);
 
                     await RegisterHostToGroupAsync(host, group).ConfigureAwait(false);
                 }
@@ -219,14 +219,17 @@ namespace Carbon.Platform.Management
         {
             if (host.GroupId != null)
             {
-                var group = await groups.GetAsync(host.GroupId.Value);
+                var group = await groupService.GetAsync(host.GroupId.Value);
 
                 if (group.Details.TryGetValue("targetGroupArn", out var targetGroupArn))
                 {
                     // Register the instances with the lb's target group
-                    await elb.DeregisterTargetsAsync(new DeregisterTargetsRequest(targetGroupArn, new[] {
-                        new TargetDescription(host.ResourceId)
-                    }));
+                    await elb.DeregisterTargetsAsync(new DeregisterTargetsRequest(
+                        targetGroupArn: targetGroupArn, 
+                        targets: new[] {
+                            new TargetDescription(host.ResourceId)
+                        }
+                    ));
                 }
 
                 // Cooldown to allow the connections to drain
@@ -287,7 +290,7 @@ namespace Carbon.Platform.Management
             IEnvironment env,
             IMachineImage machineImage = null,
             IMachineType machineType = null,
-            ILocation location = null, 
+            ILocation location = null,
             IHostGroup group = null)
         {
             #region Preconditions
@@ -311,8 +314,8 @@ namespace Carbon.Platform.Management
             if (machineImage == null)
             {
                 // "imageId": "ami-1647537c",
-
-                machineImage = await new MachineImageService(db).GetAsync(Aws, instance.ImageId).ConfigureAwait(false);
+                
+                machineImage = await machineImages.GetAsync(Aws, instance.ImageId).ConfigureAwait(false);
             }
 
             if (machineType == null)
@@ -326,18 +329,22 @@ namespace Carbon.Platform.Management
 
             // instance.LaunchTime
 
-            var addresses = new List<string>();
+            int addressCount = 1;
 
-            addresses.Add(instance.PrivateIpAddress);
+            if (instance.IpAddress != null) addressCount++;
 
-            // If the instance was assigned a public IP
+            var addresses = new string[addressCount];
+
+            addresses[0] = instance.PrivateIpAddress;
+            
             if (instance.IpAddress != null)
             {
-                addresses.Add(instance.IpAddress);
+                // the instance was assigned a public IP
+                addresses[1] = instance.IpAddress;
             }
             
             var registerRequest = new RegisterHostRequest(
-                addresses    : addresses.ToArray(),
+                addresses    : addresses,
                 env          : env,
                 groupId      : group?.Id,
                 location     : location,
@@ -349,55 +356,46 @@ namespace Carbon.Platform.Management
 
             #region Network Interfaces
 
-            if (instance.NetworkInterfaces != null)
+            var nics = new RegisterNetworkInterfaceRequest[instance.BlockDeviceMappings.Length];
+
+            for (var ni = 0; ni < instance.NetworkInterfaces.Length; ni++)
             {
-                var nics = new RegisterNetworkInterfaceRequest[instance.BlockDeviceMappings.Length];
-
-                for (var ni = 1; ni < instance.NetworkInterfaces.Length; ni++)
-                {
-                    var ec2Nic = instance.NetworkInterfaces[ni];
-
-                    // TODO: Lookup the subnet
-
-                    // ec2Nic.SubnetId;
-
-                    nics[ni] = new RegisterNetworkInterfaceRequest(
-                        mac      : MacAddress.Parse(ec2Nic.MacAddress),
-                        subnetId : 0, // TODO
-                        resource : ManagedResource.NetworkInterface(location, ec2Nic.NetworkInterfaceId)
-                    );
-                }
-
-                registerRequest.NetworkInterfaces = nics;
+                var ec2Nic = instance.NetworkInterfaces[ni];
+                
+                nics[ni] = new RegisterNetworkInterfaceRequest(
+                    mac              : MacAddress.Parse(ec2Nic.MacAddress),
+                    subnetId         : 0,                   // TODO: lookup subnet
+                    securityGroupIds : Array.Empty<long>(), // TODO: lookup security groupds
+                    resource         : ManagedResource.NetworkInterface(location, ec2Nic.NetworkInterfaceId)
+                );
             }
+
+            registerRequest.NetworkInterfaces = nics;
 
             #endregion
 
             #region Volumes
 
-            if (instance.BlockDeviceMappings != null)
+            var volumes = new RegisterVolumeRequest[instance.NetworkInterfaces.Length];
+
+            for (var bi = 0; bi < instance.BlockDeviceMappings.Length; bi++)
             {
-                var volumes = new RegisterVolumeRequest[instance.NetworkInterfaces.Length];
+                var device = instance.BlockDeviceMappings[bi];
 
-                for (var bi = 1; bi < instance.BlockDeviceMappings.Length; bi++)
-                {
-                    var blockDevice = instance.BlockDeviceMappings[bi];
+                if (device.Ebs == null) continue;
 
-                    if (blockDevice.Ebs == null) continue;
+                var volumeSize = device.Ebs.VolumeSize is int ebsSize
+                    ? ByteSize.GiB(ebsSize)
+                    : ByteSize.Zero;
 
-                    var volumeSize = blockDevice.Ebs.VolumeSize is int ebsSize
-                        ? ByteSize.GiB(ebsSize)
-                        : ByteSize.Zero;
-
-                    volumes[bi] = new RegisterVolumeRequest(
-                        size     : volumeSize,
-                        resource : ManagedResource.Volume(location, blockDevice.Ebs.VolumeId),
-                        ownerId  : 1
-                    );
-                }
-
-                registerRequest.Volumes = volumes;
+                volumes[bi] = new RegisterVolumeRequest(
+                    size     : volumeSize,
+                    resource : ManagedResource.Volume(location, device.Ebs.VolumeId),
+                    ownerId  : 1
+                );
             }
+
+            registerRequest.Volumes = volumes;
 
             #endregion
 

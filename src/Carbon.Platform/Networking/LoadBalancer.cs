@@ -28,6 +28,7 @@ namespace Carbon.Platform.Networking
             #endregion
 
             Id         = id;
+            Name       = name;
             Address    = address ?? throw new ArgumentNullException(nameof(address));
             NetworkId  = networkId;
             OwnerId    = ownerId;
