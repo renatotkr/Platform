@@ -22,7 +22,6 @@ namespace Carbon.Platform.Configuration.Docker
 
         // Entry point
 
-
         // EXPOSE <port> [<port>...]
         // -P         : Publish all exposed ports to the host interfaces
         // -p=[]      : Publish a container᾿s port or a range of ports to the host

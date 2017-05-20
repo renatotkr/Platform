@@ -30,14 +30,14 @@ namespace Carbon.Platform.Networking
 
             #endregion
 
-            Id         = id;
-            Addresses  = ipAddresses;
-            MacAddress = macAddress;
+            Id               = id;
+            Addresses        = ipAddresses;
+            MacAddress       = macAddress;
             SecurityGroupIds = securityGroupIds;
-            SubnetId   = subnetId;
-            ProviderId = resource.ProviderId;
-            ResourceId = resource.ResourceId;
-            LocationId = resource.LocationId;
+            SubnetId         = subnetId;
+            ProviderId       = resource.ProviderId;
+            ResourceId       = resource.ResourceId;
+            LocationId       = resource.LocationId;
         }
 
         // networkId + sequenceNumber

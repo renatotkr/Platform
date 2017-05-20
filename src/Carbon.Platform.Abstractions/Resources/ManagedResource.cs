@@ -95,19 +95,13 @@ namespace Carbon.Platform.Resources
         public static ManagedResource MachineImage(ILocation location, string id) =>
            FromLocation(location, ResourceTypes.MachineImage, id);
 
-        public static ManagedResource Network(ILocation location, string id) => 
-            FromLocation(location, ResourceTypes.Network, id);
- 
-        public static ManagedResource NetworkInterface(ILocation location, string id) => 
-            FromLocation(location, ResourceTypes.NetworkInterface, id);
-
-        public static ManagedResource Subnet(ILocation location, string id) => 
-            FromLocation(location, ResourceTypes.Subnet, id);
-
         public static ManagedResource Volume(ILocation location, string id) => 
             FromLocation(location, ResourceTypes.Volume, id);
 
-        public static ManagedResource Repository(ResourceProvider provider, string accountName, string repositoryName) =>
+        public static ManagedResource Repository(
+            ResourceProvider provider,
+            string accountName, 
+            string repositoryName) =>
             new ManagedResource(provider, ResourceTypes.Repository, $"{accountName}/{repositoryName}");
 
         public static ManagedResource Queue(ILocation location, string id) =>
@@ -115,6 +109,22 @@ namespace Carbon.Platform.Resources
 
         public static ManagedResource Channel(ILocation location, string id) =>
             FromLocation(location, ResourceTypes.Channel, id);
+
+        #endregion
+        
+        #region Networking
+
+        public static ManagedResource Network(ILocation location, string id) =>
+            FromLocation(location, ResourceTypes.Network, id);
+
+        public static ManagedResource NetworkInterface(ILocation location, string id) =>
+            FromLocation(location, ResourceTypes.NetworkInterface, id);
+
+        public static ManagedResource NetworkSecurityGroup(ILocation location, string id) =>
+            FromLocation(location, ResourceTypes.NetworkSecurityGroup, id);
+
+        public static ManagedResource Subnet(ILocation location, string id) =>
+            FromLocation(location, ResourceTypes.Subnet, id);
 
         #endregion
 

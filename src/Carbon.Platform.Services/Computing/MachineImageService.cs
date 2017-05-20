@@ -19,9 +19,9 @@ namespace Carbon.Platform.Computing
                 ?? throw ResourceError.NotFound(ResourceTypes.MachineImage, id);
         }
 
-        public async Task<MachineImageInfo> GetAsync(ResourceProvider provider, string id)
+        public async Task<MachineImageInfo> GetAsync(ResourceProvider provider, string resourceId)
         {
-            var machineImage = await db.MachineImages.FindAsync(provider, id).ConfigureAwait(false);
+            var machineImage = await db.MachineImages.FindAsync(provider, resourceId).ConfigureAwait(false);
 
             if (machineImage == null)
             {
@@ -29,7 +29,7 @@ namespace Carbon.Platform.Computing
 
                 var registerRequest = new RegisterMachineImageRequest(
                     name     : Guid.NewGuid().ToString().Replace("-", ""),
-                    resource : new ManagedResource(provider, ResourceTypes.MachineImage, id),
+                    resource : new ManagedResource(provider, ResourceTypes.MachineImage, resourceId),
                     type     : MachineImageType.Machine
                 );
 

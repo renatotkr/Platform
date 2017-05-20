@@ -80,7 +80,7 @@ namespace Carbon.Platform.Resources
         public static ResourceType NetworkRoute         = "networkRoute";
 
         // - Security ---
-        public static ResourceType NetworkSecurityGroup = "networkSecurityGroup";
+        public static ResourceType NetworkSecurityGroup = "networkSecurityGroup"; // nsg?
 
         // - DNS -           
         public static ResourceType DnsZone            = "dnsZone";

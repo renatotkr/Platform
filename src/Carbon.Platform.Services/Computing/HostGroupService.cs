@@ -36,7 +36,11 @@ namespace Carbon.Platform.Computing
                environmentId : request.Environment.Id,
                details       : request.Details,
                resource      : ManagedResource.HostGroup(request.Location, Guid.NewGuid().ToString())
-            );
+            )
+            {
+                HostTemplateId = request.HostTemplateId,
+                HealthCheckId = request.HealthCheckId
+            };
 
             await db.HostGroups.InsertAsync(group).ConfigureAwait(false);
 

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 using Carbon.Json;
 
-// TODO: Move to Amazon lib
+// TODO: Use version from JSON lib...
 
 namespace Amazon.Runtime.Metadata
 {

@@ -19,11 +19,12 @@ namespace Carbon.Platform.Storage
             long? authorId = null,
             long? commiterId = null)
         {
-            Id         = id;
-            Sha1       = sha1 ?? throw new ArgumentNullException(nameof(sha1));
-            Message    = message;
-            AuthorId   = authorId ?? 0;
-            CommiterId = commiterId;
+            Id           = id;
+            RepositoryId = repositoryId;
+            Sha1         = sha1 ?? throw new ArgumentNullException(nameof(sha1));
+            Message      = message;
+            AuthorId     = authorId ?? 0;
+            CommiterId   = commiterId;
         }
 
         // repositoryId + sequence

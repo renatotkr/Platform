@@ -21,8 +21,8 @@ namespace Carbon.Platform.Storage
         {
             Id         = id;
             Size       = size;
-            OwnerId = ownerId;
-            HostId = hostId;
+            OwnerId    = ownerId;
+            HostId     = hostId;
             ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
             ResourceId = resource.ResourceId;
@@ -31,7 +31,7 @@ namespace Carbon.Platform.Storage
         [Member("id"), Key(sequenceName: "volumeId")]
         public long Id { get; }
 
-        [Member("size")]
+        [Member("size")] // in bytes
         public long Size { get; }
 
         [Member("hostId")]

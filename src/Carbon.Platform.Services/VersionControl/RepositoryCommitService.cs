@@ -44,7 +44,7 @@ namespace Carbon.Platform.Storage
 
             var commit = await FindAsync(request.RepositoryId, request.Sha1).ConfigureAwait(false);
 
-            if(commit == null)
+            if (commit == null)
             { 
                 commit = new RepositoryCommit(
                     id           : await CommitId.NextAsync(db.Context, request.RepositoryId).ConfigureAwait(false),
@@ -52,9 +52,9 @@ namespace Carbon.Platform.Storage
                     sha1         : request.Sha1,
                     message      : request.Message
                 );
-            }
 
-            await db.RepositoryCommits.InsertAsync(commit).ConfigureAwait(false);
+                await db.RepositoryCommits.InsertAsync(commit).ConfigureAwait(false);
+            }
 
             return commit;
         }

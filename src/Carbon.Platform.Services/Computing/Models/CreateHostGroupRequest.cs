@@ -28,5 +28,9 @@ namespace Carbon.Platform.Computing
         public ILocation Location { get; set; }
 
         public JsonObject Details { get; set; }
+
+        public long? HostTemplateId { get; set; }
+
+        public long? HealthCheckId { get; set; }
     }
 }
