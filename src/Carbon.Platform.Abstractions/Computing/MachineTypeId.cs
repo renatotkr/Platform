@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+
+using Carbon.Extensions;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
@@ -96,7 +98,7 @@ namespace Carbon.Platform.Computing
             // cg1.4xlarge
             var id = new MachineTypeId();
 
-            var parts = name.Split('.');
+            var parts = name.Split(Seperators.Period);
 
             var a = parts[0];
             var b = parts[1];

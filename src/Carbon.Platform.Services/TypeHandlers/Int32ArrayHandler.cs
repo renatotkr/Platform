@@ -1,5 +1,7 @@
 ﻿using System.Data;
 
+using Carbon.Extensions;
+
 namespace Carbon.Data
 {
     internal class Int32ArrayHandler : DbTypeHandler<int[]>
@@ -10,7 +12,7 @@ namespace Carbon.Data
         {
             var text = (string)value;
 
-            var parts = text.Split(',');
+            var parts = text.Split(Seperators.Comma);
 
             var result = new int[parts.Length];
 

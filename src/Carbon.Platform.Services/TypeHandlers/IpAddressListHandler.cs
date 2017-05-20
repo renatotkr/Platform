@@ -2,12 +2,12 @@
 using System.Data;
 using System.Net;
 
+using Carbon.Extensions;
+
 namespace Carbon.Data
 {
     internal class IPAddressArrayHandler : DbTypeHandler<IPAddress[]>
     {
-        private static readonly char[] comma = { ',' };
-
         public override DatumInfo DatumType => DatumInfo.String(255);
 
         public override IPAddress[] Parse(object value)
@@ -16,7 +16,7 @@ namespace Carbon.Data
 
             if (text == "") return Array.Empty<IPAddress>();
 
-            var parts = text.Split(comma);
+            var parts = text.Split(Seperators.Comma);
 
             var list = new IPAddress[parts.Length];
 

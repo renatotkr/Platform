@@ -1,5 +1,7 @@
 ﻿using System.Data;
 
+using Carbon.Extensions;
+
 namespace Carbon.Data
 {
     internal class StringArrayHandler : DbTypeHandler<string[]>
@@ -10,7 +12,7 @@ namespace Carbon.Data
         {
             var text = (string)value;
 
-            return text.Split(',');
+            return text.Split(Seperators.Comma);
         }
 
         // JSON when supported by Amazon Auroa...
