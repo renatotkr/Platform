@@ -32,7 +32,7 @@ namespace Carbon.Platform.Networking
             if (network == null)
             {
                 var vpc = await ec2Client.DescribeVpcAsync(vpcId).ConfigureAwait(false)
-                    ?? throw new Exception($"aws:network/{vpcId} not found");
+                    ?? throw ResourceError.NotFound(Aws, ResourceTypes.Network, vpcId);
 
                 var region = Locations.Get(Aws, ec2Client.Region.Name);
 
@@ -58,7 +58,7 @@ namespace Carbon.Platform.Networking
             if (subnet == null)
             {
                 var awsSubnet = await ec2Client.DescribeSubnetAsync(subnetId).ConfigureAwait(false)
-                    ?? throw new Exception($"aws:subnet/{subnetId} not found");
+                    ?? throw ResourceError.NotFound(Aws, ResourceTypes.Subnet, subnetId);
 
                 var location = Locations.Get(Aws, awsSubnet.AvailabilityZone);
 
@@ -70,7 +70,7 @@ namespace Carbon.Platform.Networking
                     resource      : ManagedResource.Subnet(location, awsSubnet.SubnetId)
                 );
 
-                // TODO: Support ipv6 address blocks
+                // TODO: Include the ipv6 address blocks
 
                 // Register the subnet with the platform
                 subnet = await subnetService.RegisterAsync(createRequest).ConfigureAwait(false);

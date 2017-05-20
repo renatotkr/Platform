@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Carbon.Extensions;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform
 {
@@ -38,9 +39,8 @@ namespace Carbon.Platform
                 if (region.Name == name) return region;
             }
 
-            throw new Exception($"aws:location/{name} not found");
+            throw ResourceError.NotFound(provider, ResourceTypes.Location, name);
         }
-
 
         public static Location Get(int id)
         {

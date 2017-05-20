@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Resources
 {
-    internal static class ResourceError
+    public static class ResourceError
     {
         public static ResourceNotFoundException NotFound(ResourceType type, long id)
         {
@@ -14,16 +14,19 @@ namespace Carbon.Platform.Resources
 
         public static ResourceNotFoundException NotFound(ResourceType type, long ownerId, string name)
         {
-            // host#1
-            string resource = $"{type}:{ownerId}#{name}";
+            // host:1:#1
+            string resource = $"{type}:{ownerId}/{name}";
 
             return new ResourceNotFoundException(resource);
         }
 
-        public static ResourceNotFoundException NotFound(ResourceProvider provider, ResourceType type, string resourceName)
+        public static ResourceNotFoundException NotFound(
+            ResourceProvider provider,
+            ResourceType type, 
+            string resourceName)
         {
             // aws:host/i-13vasds
-            string resource = $"{provider.Code}:{type}/{resourceName}";
+            var resource = $"{provider.Code}:{type}/{resourceName}";
 
             return new ResourceNotFoundException(resource);
         }
