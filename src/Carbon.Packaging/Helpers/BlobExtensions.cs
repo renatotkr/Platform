@@ -7,9 +7,9 @@ namespace Carbon.Extensions
 
     public static class BlobExtensions
     {
-        public static bool IsStatic(this IBlob file)
+        public static bool IsStatic(this IBlob blob)
         {
-            var format = Path.GetExtension(file.Name).TrimStart(Seperators.Period);
+            var format = Path.GetExtension(blob.Name).TrimStart(Seperators.Period);
 
             return FileFormat.IsStatic(format);
         }

@@ -4,10 +4,11 @@ using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
 
+using Carbon.Extensions;
+using Carbon.Storage;
+
 namespace Carbon.Packaging
 {
-    using Storage;
-
     public static class IPackageExtensions
     {
         public static IBlob Find(this IPackage package, string absolutePath)

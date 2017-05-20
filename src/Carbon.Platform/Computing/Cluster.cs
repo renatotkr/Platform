@@ -43,8 +43,6 @@ namespace Carbon.Platform.Computing
         [StringLength(100)]
         public string Name { get; }
 
-        // Type (Hosts, Database Instances)
-
         [Member("environmentId")]
         [Indexed]
         public long? EnvironmentId { get; }
@@ -69,7 +67,6 @@ namespace Carbon.Platform.Computing
         [Member("providerId")]
         public int ProviderId { get; }
 
-        //{groupName}/{groupId}
         [IgnoreDataMember]
         [Member("resourceId")]
         [Ascii, StringLength(100)]
@@ -106,7 +103,7 @@ namespace Carbon.Platform.Computing
         // When used with an application load balancer target group
         public const string TargetGroupArn = "targetGroupArn";
 
-        public const string HealthCheckId = "healthCheckId";
+        public const string HealthCheckId  = "healthCheckId";
 
         public const string HostTemplateId = "hostTemplateId";
     }

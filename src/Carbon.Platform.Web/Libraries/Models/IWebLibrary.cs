@@ -4,6 +4,8 @@
 
     public interface IWebLibrary
     {
+        // TODO: id
+
         string Name { get; }
 
         SemanticVersion Version { get; }

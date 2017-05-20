@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 
+using Carbon.Extensions;
+using Carbon.Storage;
+
 namespace Carbon.Packaging
 {
-    using Storage;
-
     internal class DirectoryPackage : Package
     {
         private readonly DirectoryInfo root;

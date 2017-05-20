@@ -5,6 +5,8 @@ using System.IO.Compression;
 using System.Net.Http;
 using System.Threading.Tasks;
 
+using Carbon.Extensions;
+
 namespace Carbon.Packaging
 {
     using Storage;

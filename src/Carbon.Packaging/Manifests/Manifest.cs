@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Carbon.Extensions;
+using Carbon.Storage;
+
 namespace Carbon.Packaging
 {
-    using Storage;
-
     public class Manifest : Dictionary<string, IManifestEntry>
     {
         public Manifest(IEnumerable<IBlob> blobs)

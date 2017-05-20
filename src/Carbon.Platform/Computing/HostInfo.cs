@@ -29,19 +29,19 @@ namespace Carbon.Platform.Computing
             HostType type     = HostType.Virtual,
             HostStatus status = HostStatus.Running)
         {
-            Id             = id;
-            Type           = type;
-            Status         = status;
-            Addresses      = addresses;
-            ClusterId      = clusterId;
-            EnvironmentId  = environmentId;
-            ImageId        = imageId;
-            MachineTypeId  = machineTypeId;
-            ProviderId     = resource.ProviderId;
-            ResourceId     = resource.ResourceId;
-            NetworkId      = networkId;
-            OwnerId        = ownerId;
-            Created        = created;
+            Id            = id;
+            Type          = type;
+            Status        = status;
+            Addresses     = addresses;
+            ClusterId     = clusterId;
+            EnvironmentId = environmentId;
+            ImageId       = imageId;
+            MachineTypeId = machineTypeId;
+            ProviderId    = resource.ProviderId;
+            ResourceId    = resource.ResourceId;
+            NetworkId     = networkId;
+            OwnerId       = ownerId;
+            Created       = created;
         }
 
         // locationId + sequenceNumber
