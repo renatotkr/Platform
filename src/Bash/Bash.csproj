@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Bash</AssemblyName>
-    <VersionPrefix>0.1.0</VersionPrefix>
+    <VersionPrefix>0.1.4</VersionPrefix>
     <TargetFrameworks>netstandard1.1;net451</TargetFrameworks>
 
     <!-- Package Details -->

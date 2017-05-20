@@ -19,16 +19,15 @@ namespace Bash
         public string Text { get; }
 
         public BracketOption Brackets { get; }
-
+        
         public static BashExpression IsDefined(string text)
         {
             // -n = non-null || zero length
 
-            return new BashExpression($"-n {text}");
+            return new BashExpression($"-n \"{text}\"");
         }
 
         // -z STRING
- 
 
         public static BashExpression IsNullOrUnset(string text)
         {
@@ -90,14 +89,9 @@ namespace Bash
 
         public override string ToString()
         {
-            if (Brackets == BracketOption.Double)
-            {
-                return "[[" + Text + "]]";
-            }
-            else
-            {
-                return "[" + Text + "]";
-            }
+            return (Brackets == BracketOption.Double)
+                ? "[[ " + Text + " ]]"
+                : "[ " + Text + " ]";
         }
     }
 

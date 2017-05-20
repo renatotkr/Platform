@@ -6,6 +6,15 @@ namespace Bash.Commands
     public static class Wget
     {
         public static Command Download(
+          string url,
+          string destination = null,
+          WgetOptions options = WgetOptions.None,
+          bool sudo = false)
+        {
+            return Download(new Uri(url), destination, options, sudo);
+        }
+
+        public static Command Download(
             Uri url, 
             string destination = null, 
             WgetOptions options = WgetOptions.None,
@@ -24,7 +33,7 @@ namespace Bash.Commands
 
             if (destination != null)
             {
-                sb.Append("-O ");
+                sb.Append(" -O ");
                 sb.Append(destination);
             }
 

@@ -20,19 +20,24 @@ namespace Bash.Commands
         {
             // apt install -y awscli nginx libunwind8 libcurl4-openssl-dev
 
-            return Command($"install", string.Join(" ", packageNames), AptOptions.Yes);
+            return Command($"install", string.Join(" ", packageNames), options: AptOptions.Yes);
         }
 
         public static Command Remove(string packageName)
         {
-            return Command($"remove", packageName, AptOptions.Yes);
+            return Command($"remove", packageName, options: AptOptions.Yes);
         }
 
         #region Helpers
 
-        private static Command Command(string name, string args = null, AptOptions options = AptOptions.None)
+        private static Command Command(
+            string commandName, 
+            string args = null, 
+            bool sudo = true, AptOptions options = AptOptions.None)
         {
-            var sb = new StringBuilder("apt");
+            var sb = new StringBuilder("apt ");
+
+            sb.Append(commandName);
 
             if (options.HasFlag(AptOptions.Yes))
             {
@@ -45,7 +50,7 @@ namespace Bash.Commands
                 sb.Append(args);
             }
 
-            return new Command(sb.ToString());
+            return new Command(sb.ToString(), sudo);
         }
 
         #endregion

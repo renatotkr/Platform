@@ -6,7 +6,7 @@
 
         public static Command Reload()
         {
-            return new Command("ngnix -s reload");
+            return new Command("nginx -s reload", sudo: true);
         }
     }
 }
