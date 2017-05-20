@@ -31,10 +31,10 @@ namespace Carbon.Platform.Resources
     public static class ResourceTypes
     {
         // IAM --------------------------------------------------------------------------------------------
-        public static ResourceType Account = "account";
-        public static ResourceType Entity  = "entity";   // Organization, Person, or IA
-        public static ResourceType User    = "user";      
-        public static ResourceType Session = "session";
+        public static ResourceType Account       = "account";
+        public static ResourceType Entity        = "entity";   // Organization, Person, or IA
+        public static ResourceType User          = "user";      
+        public static ResourceType Session       = "user:session";
 
         // Environments-------------------------------------------------------------------------------------
 
@@ -67,8 +67,8 @@ namespace Carbon.Platform.Resources
         public static ResourceType Volume              = "volume";                // AKA drive
 
         // KMS --------------------------------------------------------------------------------------------------
-        public static ResourceType DataEncryptionKey   = "dek";           
-        public static ResourceType EncryptionKey       = "encryptionKey";         // master encryption keys
+        public static ResourceType DataEncryptionKey   = "kms:dek";           
+        public static ResourceType EncryptionKey       = "kms:key";
 
         // Networking --------------------------------------------------------------------------------------------
 
