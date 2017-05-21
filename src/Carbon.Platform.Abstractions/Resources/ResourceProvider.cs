@@ -30,6 +30,13 @@ namespace Carbon.Platform
         // Site Builders...
 
 
+        // Linux Vendors (1000)
+
+        // provider of Ubuntu images
+
+        public static readonly ResourceProvider Canonical = new ResourceProvider(10_000, "canonical", "Canonical");
+
+
         public static readonly Dictionary<int, ResourceProvider> map = new Dictionary<int, ResourceProvider> {
             { 1,    Borg },
             { 2,    Aws },
