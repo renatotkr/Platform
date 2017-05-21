@@ -8,7 +8,7 @@ using Carbon.Platform.Sequences;
 namespace Carbon.Platform.Networking
 {
     [Dataset("LoadBalancerRules")]
-    [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
+    [UniqueIndex("providerId", "resourceId")]
     public class LoadBalancerRule : ILoadBalancerRule
     {
         public LoadBalancerRule() { }

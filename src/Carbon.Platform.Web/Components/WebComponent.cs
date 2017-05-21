@@ -6,7 +6,7 @@ using Carbon.Data.Annotations;
 namespace Carbon.Platform.Web
 {   
     [Dataset("WebComponents")]
-    [DataIndex(IndexFlags.Unique, "namespace", "name", "version")]
+    [UniqueIndex("namespace", "name", "version")]
     public class WebComponent : IWebComponent
     {
         public WebComponent() { }

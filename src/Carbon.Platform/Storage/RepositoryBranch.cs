@@ -6,7 +6,7 @@ using Carbon.Data.Annotations;
 namespace Carbon.Platform.Storage
 {
     [Dataset("RepositoryBranches")]
-    [DataIndex(IndexFlags.Unique, "repositoryId", "name")]
+    [UniqueIndex("repositoryId", "name")]
     public class RepositoryBranch : IRepositoryBranch
     {
         public RepositoryBranch() { }

@@ -8,7 +8,7 @@ using Carbon.Platform.CI;
 namespace Carbon.Platform.Web
 {
     [Dataset("WebsiteReleases")]
-    [DataIndex(IndexFlags.Unique, "websiteId", "version")]
+    [UniqueIndex("websiteId", "version")]
     public class WebsiteRelease : IRelease
     {
         public WebsiteRelease() { }

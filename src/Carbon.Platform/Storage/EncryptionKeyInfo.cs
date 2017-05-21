@@ -7,7 +7,7 @@ using Carbon.Platform.Resources;
 namespace Carbon.Platform.Storage
 {
     [Dataset("EncryptionKeys")]
-    [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
+    [UniqueIndex("providerId", "resourceId")]
     public class EncryptionKeyInfo : IEncryptionKey
     {
         public EncryptionKeyInfo() { }

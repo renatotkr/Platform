@@ -7,7 +7,7 @@ using Carbon.Platform.Resources;
 namespace Carbon.Platform.Hosting
 {
     [Dataset("Certificates")]
-    [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
+    [UniqueIndex("providerId", "resourceId")]
     public class CertificateInfo : ICertificate
     {
         public CertificateInfo() { }

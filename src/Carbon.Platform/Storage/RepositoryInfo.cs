@@ -11,8 +11,8 @@ using Carbon.Platform.Resources;
 namespace Carbon.Platform.Storage
 {
     [Dataset("Repositories")]
-    [DataIndex(IndexFlags.Unique, "providerId", "fullName")]
-    [DataIndex(IndexFlags.Unique, "ownerId", "name")]
+    [UniqueIndex("providerId", "fullName")]
+    [UniqueIndex("ownerId", "name")]
     public class RepositoryInfo : IRepository
     {
         public RepositoryInfo() { }

@@ -8,7 +8,7 @@ using Carbon.Platform.Resources;
 namespace Carbon.Platform.Storage
 {
     [Dataset("Volumes")]
-    [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
+    [UniqueIndex("providerId", "resourceId")]
     public class VolumeInfo : IVolume
     {
         public VolumeInfo() { }

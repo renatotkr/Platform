@@ -6,7 +6,7 @@ using Carbon.Platform.Resources;
 namespace Carbon.Platform.Storage
 {
     [Dataset("RepositoryCommits")]
-    [DataIndex(IndexFlags.Unique, "repositoryId", "sha1")]
+    [UniqueIndex("repositoryId", "sha1")]
     public class RepositoryCommit : IRepositoryCommit
     {
         public RepositoryCommit() { }

@@ -8,7 +8,7 @@ using Carbon.Platform.Resources;
 namespace Carbon.Platform.Computing
 {
     [Dataset("Programs", Schema = "Computing")]
-    [DataIndex(IndexFlags.Unique, "ownerId", "name")]
+    [UniqueIndex("ownerId", "name")]
     public class Program : IProgram, IResource
     {
         public Program() { }
@@ -48,6 +48,7 @@ namespace Carbon.Platform.Computing
         public long OwnerId { get; }
 
         [Member("name")]
+        [StringLength(63)]
         public string Name { get; }
         
         // e.g. accelerator | ngnix

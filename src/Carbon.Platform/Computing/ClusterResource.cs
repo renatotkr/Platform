@@ -6,7 +6,7 @@ using Carbon.Platform.Resources;
 namespace Carbon.Platform.Computing
 {
     [Dataset("ClusterResources")]
-    [DataIndex(IndexFlags.Unique, "clusterId", "resourceType", "resourceId")]
+    [UniqueIndex("clusterId", "resourceType", "resourceId")]
     public class ClusterResource
     {
         public ClusterResource() { }

@@ -8,7 +8,7 @@ using Carbon.Platform.Sequences;
 namespace Carbon.Platform.Networking
 {
     [Dataset("NetworkSecurityGroups")]
-    [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
+    [UniqueIndex("providerId", "resourceId")]
     public class NetworkSecurityGroup : INetworkSecurityGroup
     {
         public NetworkSecurityGroup() { }

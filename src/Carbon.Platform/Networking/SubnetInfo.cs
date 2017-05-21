@@ -8,7 +8,7 @@ using Carbon.Platform.Resources;
 namespace Carbon.Platform.Networking
 {
     [Dataset("Subnets")]
-    [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
+    [UniqueIndex("providerId", "resourceId")]
     public class SubnetInfo : ISubnet
     {
         public SubnetInfo() { }

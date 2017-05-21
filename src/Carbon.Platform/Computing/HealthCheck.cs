@@ -8,7 +8,7 @@ using Carbon.Platform.Resources;
 namespace Carbon.Platform.Computing
 {
     [Dataset("HealthChecks", Schema = "Computing")]
-    [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
+    [UniqueIndex("providerId", "resourceId")]
     public class HealthCheck : IHealthCheck, IManagedResource
     {
         public HealthCheck() { }

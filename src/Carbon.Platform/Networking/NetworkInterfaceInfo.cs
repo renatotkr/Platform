@@ -10,7 +10,7 @@ using Carbon.Platform.Resources;
 namespace Carbon.Platform.Networking
 {
     [Dataset("NetworkInterfaces")]
-    [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
+    [UniqueIndex("providerId", "resourceId")]
     public class NetworkInterfaceInfo : INetworkInterface
     {
         public NetworkInterfaceInfo() { }

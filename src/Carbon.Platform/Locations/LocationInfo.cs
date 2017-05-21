@@ -6,7 +6,7 @@ using Carbon.Data.Annotations;
 namespace Carbon.Platform
 {
     [Dataset("Locations")]
-    [DataIndex(IndexFlags.Unique, new[] { "providerId", "name" })]
+    [UniqueIndex("providerId", "name")]
     public class LocationInfo : ILocation, IEquatable<LocationInfo>
     {
         public LocationInfo() { }

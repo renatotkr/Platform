@@ -8,7 +8,7 @@ using Carbon.Json;
 namespace Carbon.Platform.Computing
 {
     [Dataset("ProgramReleases", Schema = "Computing")]
-    [DataIndex(IndexFlags.Unique, "programId", "version")]
+    [UniqueIndex("programId", "version")]
     public class ProgramRelease : IProgramRelease, IRelease
     {
         public ProgramRelease() { }

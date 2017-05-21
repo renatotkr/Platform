@@ -10,7 +10,7 @@ namespace Carbon.Platform.Computing
     using Extensions;
 
     [Dataset("Hosts", Schema = "Computing")]
-    [DataIndex(IndexFlags.Unique, "providerId", "resourceId")]
+    [UniqueIndex("providerId", "resourceId")]
     public class HostInfo : IHost, IManagedResource
     {
         public HostInfo() { }

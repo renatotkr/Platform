@@ -6,7 +6,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.CI
 {
-    [Dataset("BuildProject")]
+    [Dataset("BuildProjects")]
     public class BuildProject : IBuildProject
     {
         public BuildProject() { }
