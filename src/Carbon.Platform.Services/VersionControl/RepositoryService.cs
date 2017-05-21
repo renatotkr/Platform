@@ -66,10 +66,7 @@ namespace Carbon.Platform.Storage
                 name     : request.Name,
                 ownerId  : request.OwnerId,
                 resource : request.Resource
-            )
-            {
-                Details = request.Details
-            };
+            );
 
             await db.Repositories.InsertAsync(repository).ConfigureAwait(false);
 
