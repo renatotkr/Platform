@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="Carbon.Data.Protection" Version="0.5.0" />
-    <PackageReference Include="Carbon.Json" Version="1.4.0" />
+    <PackageReference Include="Carbon.Json" Version="1.4.1" />
     <PackageReference Include="Carbon.Storage" Version="1.6.0" />
     <PackageReference Include="Carbon.Versioning" Version="1.2.0" />
   </ItemGroup>

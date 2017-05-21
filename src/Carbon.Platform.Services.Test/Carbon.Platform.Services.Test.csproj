@@ -7,10 +7,12 @@
   <ItemGroup>
     <ProjectReference Include="..\Carbon.Hosting\Carbon.Hosting.csproj" />
     <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj" />
+    <ProjectReference Include="..\Carbon.Platform.Services\Carbon.Platform.Services.csproj" />
     <ProjectReference Include="..\Carbon.Platform\Carbon.Platform.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Carbon.Data.Sql" Version="0.21.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0-preview-20170517-02" />
     <PackageReference Include="System.Net.NetworkInformation" Version="4.3.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.0-beta2-build1317" />
