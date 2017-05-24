@@ -15,17 +15,15 @@ namespace Carbon.Hosting
 
         IApplication Find(long id);
 
-        Task DeployAsync(IApplication application, SemanticVersion version, JsonObject env, IPackage package);
+        Task DeployAsync(IApplication app, SemanticVersion version, JsonObject env, IPackage package);
 
         // Start
         // Stop
 
-        Task RestartAsync(IApplication application);
+        Task RestartAsync(IApplication app);
 
-        Task DeleteAsync(IApplication application);
+        Task DeleteAsync(IApplication app);
 
-        bool IsDeployed(IApplication application, SemanticVersion version);
+        bool IsDeployed(IApplication app, SemanticVersion version);
     }
 }
-
-// e.g. IIS, Upstart

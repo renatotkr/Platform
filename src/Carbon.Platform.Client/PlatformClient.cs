@@ -31,13 +31,13 @@ namespace Carbon.Platform
 
         public AppsClient Apps { get; }
 
-        public class AppsClient : Dao<AppDetails>
+        public class AppsClient : Dao<ProgramDetails>
         {
             public AppsClient(PlatformClient platform)
                 : base("apps", platform) { }
 
-            public Task<AppDetails> GetReleaseAsync(long appId, SemanticVersion version)
-                => platform.GetAsync<AppDetails>($"/apps/{appId}@{version}");
+            public Task<ProgramDetails> GetReleaseAsync(long appId, SemanticVersion version)
+                => platform.GetAsync<ProgramDetails>($"/apps/{appId}@{version}");
 
             // Create
             // Delete
@@ -64,9 +64,9 @@ namespace Carbon.Platform
                 return platform.GetAsync<HostDetails>($"/hosts/{resource.ResourceId}");
             }
 
-            public Task<List<AppDetails>> GetAppsAsync(long id)
+            public Task<List<ProgramDetails>> GetAppsAsync(long id)
             {
-                return platform.GetAsync<List<AppDetails>>($"/hosts/{id}/apps");
+                return platform.GetAsync<List<ProgramDetails>>($"/hosts/{id}/apps");
             }
         }
 

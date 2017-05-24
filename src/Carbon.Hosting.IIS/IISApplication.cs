@@ -7,12 +7,11 @@ namespace Carbon.Hosting.IIS
 
     public class IISApplication : IApplication
     {
-        public IISApplication(long id, string name, SemanticVersion version, DateTime created)
+        public IISApplication(long id, string name, SemanticVersion version)
         {
             Id      = id;
-            Name    = name;
+            Name    = name ?? throw new ArgumentNullException(nameof(name));
             Version = version;
-            Created = created;
         }
 
         public long Id { get; }
@@ -20,7 +19,5 @@ namespace Carbon.Hosting.IIS
         public string Name { get; }
          
         public SemanticVersion Version { get; }
-
-        public DateTime Created { get; }
     }
 }

@@ -5,19 +5,18 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Threading.Tasks;
 
+using Carbon.Json;
+using Carbon.Logging;
+using Carbon.Net;
+using Carbon.Packaging;
 using Carbon.Platform.Computing;
+using Carbon.Storage;
+using Carbon.Versioning;
 
 using Microsoft.Web.Administration;
 
 namespace Carbon.Hosting.IIS
 {
-    using Logging;
-    using Packaging;
-    using Json;
-    using Storage;
-    using Versioning;
-    using Net;
-
     public class IISHost : IHostService, IDisposable
     {
         private readonly HostingEnvironment hostingEnvironment;
@@ -98,7 +97,11 @@ namespace Carbon.Hosting.IIS
             return Task.CompletedTask;
         }
 
-        public async Task DeployAsync(IApplication app, SemanticVersion version, JsonObject env, IPackage package)
+        public async Task DeployAsync(
+            IApplication app, 
+            SemanticVersion version, 
+            JsonObject env, 
+            IPackage package)
         {
             #region Ensure the app exists
 
@@ -214,7 +217,6 @@ namespace Carbon.Hosting.IIS
 
             var pool = GetApplicationPool(site);
 
-     
             // e.g. /var/apps/1/2.1.3
             var newPath = GetAppPath(app, version);
 
@@ -250,10 +252,7 @@ namespace Carbon.Hosting.IIS
 
         public Task DeleteAsync(IApplication app)
         {
-            var site = FindSite(app.Id);
-
-            if (site == null)
-                throw new ArgumentNullException($"No site with id #{app.Id} found");
+            var site = FindSite(app.Id) ?? throw new ArgumentNullException($"No site with id #{app.Id} found");
 
             var pool = GetApplicationPool(site); 
 
@@ -261,7 +260,6 @@ namespace Carbon.Hosting.IIS
             manager.ApplicationPools.Remove(pool);
        
             manager.CommitChanges();
-
 
             var dir = GetAppRootDirectory(app);
 
@@ -338,11 +336,10 @@ namespace Carbon.Hosting.IIS
               port: 8080
             }
             */
-            
-           
-            if (variables.ContainsKey("listeners"))
+
+            if (variables.TryGetValue("listeners", out var listeners))
             {
-                foreach (var listener in (JsonArray)variables["listeners"])
+                foreach (var listener in (JsonArray)listeners)
                 {
                     var b = new IISBinding(Listener.Parse(listener));
 
@@ -357,11 +354,9 @@ namespace Carbon.Hosting.IIS
                 }
             }
                 
-            if (variables.ContainsKey("port"))
+            if (variables.TryGetValue("port", out var port))
             {
-                var port = (int)variables["port"];
-
-                var b = new IISBinding(port: port);
+                var b = new IISBinding(port: (int)port);
 
                 log.Info("configured port:" + b.ToString());
 
@@ -466,13 +461,12 @@ namespace Carbon.Hosting.IIS
             catch(Exception ex)
             {
                 log.Error("error getting name:" + ex.Message);
-
             }
+
             return new IISApplication(
                 id      : site.Id,
                 name    : name,
-                version : version,
-                created : new DirectoryInfo(directory.PhysicalPath).CreationTimeUtc
+                version : version
             );
         }
 

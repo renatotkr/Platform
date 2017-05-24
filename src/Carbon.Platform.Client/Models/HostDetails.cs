@@ -15,7 +15,7 @@ namespace Carbon.Platform
         public HostType Type { get; set; }
 
         [DataMember(Name = "addresses", Order = 3)]
-        public IPAddress[] Addresses { get; set; }
+        public string[] Addresses { get; set; }
 
         [DataMember(Name = "heartbeat", EmitDefaultValue = false, Order = 4)]
         public DateTime? Heartbeat { get; set; }
@@ -29,6 +29,6 @@ namespace Carbon.Platform
         [DataMember(Name = "volumes", Order = 7)]
         public VolumeDetails[] Volumes { get; set; }
 
-        IPAddress IHost.Address => Addresses[0];
+        IPAddress IHost.Address => IPAddress.Parse(Addresses[0]);
     }
 }

@@ -32,6 +32,5 @@ namespace Carbon.Platform
         string IManagedResource.ResourceId => throw new NotImplementedException();
 
         #endregion
-
     }
 }

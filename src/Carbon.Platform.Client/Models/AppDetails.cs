@@ -2,11 +2,9 @@
 
 using Carbon.Data.Protection;
 
-namespace Carbon.Platform
+namespace Carbon.Platform.Computing
 {
-    using Computing;
-
-    public class AppDetails : IProgram
+    public class ProgramDetails : IProgram
     {
         [DataMember(Name = "id", Order = 1)]
         public long Id { get; set; }

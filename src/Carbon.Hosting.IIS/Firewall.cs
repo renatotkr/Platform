@@ -50,11 +50,7 @@ namespace Carbon.Hosting.IIS
                 process.Kill();
             }
 
-            // Console.WriteLine("ok");
-
             process.Dispose();
         }
-
-        // var process = Process.Start("netsh", "exec " + script);
     }
 }
