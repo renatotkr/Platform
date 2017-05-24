@@ -39,7 +39,17 @@ namespace Carbon.Platform.Configuration.Systemd
             return null;
         }
 
-        protected void SetInteger(string name, int? value, int order = 100)
+        protected bool? GetBoolean(string name)
+        {
+            if (directives.TryGetValue(name, out var directive))
+            {
+                return bool.Parse(directive.Value);
+            }
+
+            return null;
+        }
+
+        protected void Set(string name, int? value, int order = 100)
         {
             if (value == null)
             {
@@ -48,6 +58,19 @@ namespace Carbon.Platform.Configuration.Systemd
             else
             {
                 directives[name] = new Directive(name, value.ToString(), order);
+            }
+        }
+
+
+        protected void Set(string name, bool? value, int order = 100)
+        {
+            if (value == null)
+            {
+                directives.Remove(name);
+            }
+            else
+            {
+                directives[name] = new Directive(name, value.ToString().ToLower(), order);
             }
         }
     }

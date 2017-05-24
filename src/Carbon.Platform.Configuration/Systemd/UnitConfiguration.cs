@@ -55,5 +55,4 @@ namespace Carbon.Platform.Configuration.Systemd
     }
 }
 
-// https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files
-// https://www.freedesktop.org/software/systemd/man/systemd.service.html#Options
+// ref: https://www.freedesktop.org/software/systemd/man/systemd.exec.html
