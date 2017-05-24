@@ -4,11 +4,32 @@ namespace Carbon.Platform.Storage
 {
     public class CreateFileRequest : IRepositoryFile
     {
-        [Range(1, 2_199_023_255_552)]
-        public long RepositoryId { get; set; }
+        public CreateFileRequest() { }
+
+        public CreateFileRequest(
+            long branchId,
+            string path,
+            long size,
+            byte[] sha256,
+            long creatorId)
+        {
+            #region Preconditions
+
+            Validate.NotNullOrEmpty(path, nameof(path));
+
+            Validate.Id(creatorId, nameof(creatorId));
+
+            #endregion
+
+            BranchId  = branchId;
+            Path      = path;
+            Size      = size;
+            Sha256    = sha256;
+            CreatorId = creatorId;
+        }
 
         [Required]
-        public string BranchName { get; set; }
+        public long BranchId { get; set; }
 
         [Required]
         public string Path { get; set; }

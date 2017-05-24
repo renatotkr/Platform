@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Carbon.Platform.Storage
 {
@@ -9,8 +8,18 @@ namespace Carbon.Platform.Storage
 
         public CreateBranchRequest(long repositoryId, string name, long creatorId)
         {
+            #region Preconditions
+
+            Validate.Id(repositoryId);
+
+            Validate.NotNullOrEmpty(name, nameof(name));
+
+            Validate.Id(creatorId);
+
+            #endregion
+
             RepositoryId = repositoryId;
-            Name         = name ?? throw new ArgumentNullException(nameof(name));
+            Name         = name;
             CreatorId    = creatorId;
         }
 

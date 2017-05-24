@@ -13,12 +13,14 @@ namespace Carbon.Platform.Storage
 
         Task<RepositoryInfo> CreateAsync(CreateRepositoryRequest request);
 
-        Task CreateBranchAsync(CreateBranchRequest request);
+        Task<IReadOnlyList<RepositoryInfo>> ListAsync(long ownerId);
+
+        Task<RepositoryBranch> CreateBranchAsync(CreateBranchRequest request);
+
+        Task<RepositoryBranch> GetBranchAsync(long id);
 
         Task<RepositoryBranch> GetBranchAsync(long repositoryId, string name);
 
-        Task<IReadOnlyList<RepositoryBranch>> GetBranchesAsync(long repositoryId);
-
-        Task<IReadOnlyList<RepositoryFile>> GetFilesAsync(long repositoryId, string branchName);
+        Task<IReadOnlyList<RepositoryBranch>> ListBranchesAsync(long repositoryId);
     }
 }

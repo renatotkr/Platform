@@ -1,6 +1,5 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using Carbon.Json;
+﻿using System.ComponentModel.DataAnnotations;
+
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Storage
@@ -14,7 +13,15 @@ namespace Carbon.Platform.Storage
             long ownerId,
             ManagedResource resource)
         {
-            Name     = name ?? throw new ArgumentNullException(nameof(name));
+            #region Preconditions
+
+            Validate.NotNullOrEmpty(name, nameof(name));
+
+            Validate.Id(ownerId, nameof(ownerId));
+
+            #endregion
+
+            Name     = name;
             OwnerId  = ownerId;
             Resource = resource;
         }

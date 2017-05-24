@@ -9,6 +9,14 @@ namespace Carbon.Platform.Storage
 
         public CreateCommitRequest(long repositoryId, byte[] sha1, string message, DateTime created)
         {
+            #region Preconditions
+
+            Validate.Id(repositoryId, nameof(repositoryId));
+
+            Validate.NotNull(sha1, nameof(sha1));
+
+            #endregion
+
             RepositoryId = repositoryId;
             Sha1         = sha1;
             Message      = message;

@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Platform.Resources;
-
-using Dapper;
 
 namespace Carbon.Platform.Storage
 {
@@ -20,9 +19,19 @@ namespace Carbon.Platform.Storage
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
+        public Task<IReadOnlyList<RepositoryInfo>> ListAsync(long ownerId)
+        {
+            return db.Repositories.QueryAsync(
+                expression : And(Eq("ownerId", ownerId), IsNull("deleted")),
+                order      : Order.Ascending("name"),
+                take       : 1000
+            );
+        }
+
         public async Task<RepositoryInfo> GetAsync(long id)
         {
-            return await db.Repositories.FindAsync(id).ConfigureAwait(false) ?? throw ResourceError.NotFound(ResourceTypes.Repository, id);
+            return await db.Repositories.FindAsync(id).ConfigureAwait(false) 
+                ?? throw ResourceError.NotFound(ResourceTypes.Repository, id);
         }
 
         public async Task<RepositoryInfo> GetAsync(long ownerId, string name)
@@ -71,14 +80,13 @@ namespace Carbon.Platform.Storage
             await db.Repositories.InsertAsync(repository).ConfigureAwait(false);
 
             // Recreate the master branch
-            var masterBranch = new RepositoryBranch(repository.Id, "master", request.OwnerId);
 
-            await db.RepositoryBranches.InsertAsync(masterBranch).ConfigureAwait(false);
+            await CreateBranchAsync(new CreateBranchRequest(repository.Id, "master", request.OwnerId));
 
             return repository;
         }
 
-        public async Task CreateBranchAsync(CreateBranchRequest request)
+        public async Task<RepositoryBranch> CreateBranchAsync(CreateBranchRequest request)
         {
             #region Preconditions
 
@@ -87,66 +95,37 @@ namespace Carbon.Platform.Storage
 
             #endregion
 
-            var branch = new RepositoryBranch(request.RepositoryId, request.Name, request.CreatorId);
+            var branchId = await db.RepositoryBranches.GetNextScopedIdAsync(request.RepositoryId);
+
+            var branch = new RepositoryBranch(
+                id           : branchId,
+                repositoryId : request.RepositoryId, 
+                name         : request.Name, 
+                creatorId    : request.CreatorId
+            );
 
             await db.RepositoryBranches.InsertAsync(branch).ConfigureAwait(false);
+
+            return branch;
         }
 
-        public async Task<IReadOnlyList<RepositoryBranch>> GetBranchesAsync(long repositoryId)
+        public async Task<IReadOnlyList<RepositoryBranch>> ListBranchesAsync(long repositoryId)
         {
             var result = await db.RepositoryBranches.QueryAsync(Eq("repositoryId", repositoryId)).ConfigureAwait(false);
 
             return result;
         }
 
-        public Task<RepositoryBranch> GetBranchAsync(long repositoryId, string name)
+        public async Task<RepositoryBranch> GetBranchAsync(long id)
         {
-            return db.RepositoryBranches.FindAsync((repositoryId, name));
+            return await db.RepositoryBranches.FindAsync(id) ?? throw ResourceError.NotFound(ResourceTypes.RepositoryBranch, id);
         }
 
-        public Task<IReadOnlyList<RepositoryFile>> GetFilesAsync(long repositoryId, string branchName)
+        public async Task<RepositoryBranch> GetBranchAsync(long repositoryId, string name)
         {
-            return db.RepositoryFiles.QueryAsync(
-                Conjunction(Eq("repositoryId", repositoryId), Eq("branchName", branchName), IsNull("deleted"))
-            );
-        }
-
-        public async Task DeleteFileAsync(DeleteFileRequest request)
-        {
-            using (var connection = db.Context.GetConnection())
-            {
-                await connection.ExecuteAsync(
-                    @"UPDATE `RepositoryFiles` 
-                      SET `deleted` = NOW()  
-                      WHERE `repositoryId` = @repositoryId
-                        AND `branchName` = @branchName
-                        AND `path` = @path;", request
-                ).ConfigureAwait(false);
-            }
-        }
-
-        public async Task<RepositoryFile> PutFileAsync(CreateFileRequest request)
-        {
-            var file = new RepositoryFile(
-                repositoryId : request.RepositoryId, 
-                branchName   : request.BranchName,
-                type         : FileType.Blob,
-                path         : request.Path,
-                size         : request.Size,
-                sha256       : request.Sha256,
-                creatorId    : request.CreatorId
-            );
-
-            using (var connection = db.Context.GetConnection())
-            {
-                await connection.ExecuteAsync(
-                    @"INSERT INTO `RepositoryFiles` (`repositoryId`, `branchName`, `path`, `type`, `size`, `sha256`, `creatorId`)
-                      VALUES (@repositoryId, @branchName, @path, @type, @size, @sha256, @creatorId)
-                      ON DUPLICATE KEY UPDATE `size` = @size, `sha256` = @sha256, `deleted` = NULL;", file
-                ).ConfigureAwait(false);
-            }
-
-            return file;
+            return await db.RepositoryBranches.QueryFirstOrDefaultAsync(
+                And(Eq("repositoryId", repositoryId), Eq("name", name))
+            ).ConfigureAwait(false) ?? throw new ResourceNotFoundException($"repository:branch#{repositoryId}/{name}");
         }
     }
 }

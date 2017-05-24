@@ -6,19 +6,25 @@ namespace Carbon.Platform.Storage
     {
         public DeleteFileRequest() { }
 
-        public DeleteFileRequest(long repositoryId, string branchName, string path)
+        public DeleteFileRequest(long branchId, string path)
         {
-            RepositoryId = repositoryId;
-            BranchName   = branchName;
-            Path         = path;
+            #region Preconditions
+
+            Validate.Id(branchId, nameof(branchId));
+
+            Validate.NotNullOrEmpty(path, nameof(path));
+
+            #endregion
+
+            BranchId = branchId;
+            Path     = path;
         }
 
-        public long RepositoryId { get; set; }
-
         [Required]
-        public string BranchName { get; set; }
-
+        public long BranchId { get; set; }
+       
         [Required]
+        [StringLength(255)]
         public string Path { get; set; }
 
         public long Size => 0;
