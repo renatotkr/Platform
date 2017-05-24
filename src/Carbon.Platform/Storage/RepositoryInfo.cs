@@ -3,7 +3,6 @@ using System.Runtime.Serialization;
 using System.Text;
 
 using Carbon.Data.Annotations;
-using Carbon.Json;
 using Carbon.Platform.Resources;
 
 // Repositories layer on-top of containers...
@@ -49,11 +48,14 @@ namespace Carbon.Platform.Storage
         [StringLength(100)]
         public string FullName { get; }
 
+        // Note: may change ownership
         [IgnoreDataMember]
-        [Member("ownerId")] // May change ownership
+        [Member("ownerId")] 
+        [Indexed]
         public long OwnerId { get; }
 
-        // Master Branch Name
+        
+        // public long MasterBranchId { get; set; }
 
         /// <summary>
         /// An encrypted token to access the repository
@@ -67,10 +69,6 @@ namespace Carbon.Platform.Storage
         [IgnoreDataMember]
         [Member("commitCount")]
         public int CommitCount { get; }
-        
-        [IgnoreDataMember]
-        [Member("branchCount")]
-        public int BranchCount { get; }
 
         #endregion
 

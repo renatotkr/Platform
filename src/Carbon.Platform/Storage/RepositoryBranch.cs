@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Storage
 {
@@ -12,34 +13,47 @@ namespace Carbon.Platform.Storage
         public RepositoryBranch() { }
 
         public RepositoryBranch(
+            long id,
             long repositoryId,
             string name, 
             long creatorId)
         {
             #region Preconditions
 
-            if (repositoryId == 0)
+            if (id <= 0)
+                throw new ArgumentException("Must be > 0", nameof(id));
+
+            if (repositoryId <= 0)
                 throw new ArgumentException("Must be > 0", nameof(repositoryId));
+
+            if (creatorId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(creatorId));
 
             #endregion
 
+            Id           = id;
             RepositoryId = repositoryId;
             Name         = name ?? throw new ArgumentNullException(nameof(name));
             CreatorId    = creatorId;
         }
 
-        [Member("repositoryId"), Key]
+        // repositoryId | #
+        [Member("id"), Key]
+        public long Id { get; }
+
+        [Member("repositoryId")]
         public long RepositoryId { get; }
 
-        [Member("name"), Key]
-        [StringLength(63)]
+        // github limit = 255 bytes
+        [Member("name")]
+        [StringLength(180)]
         public string Name { get; }
+
+        [Member("commitId"), Mutable] // latestCommitId
+        public long CommitId { get; set; }
 
         [Member("creatorId")]
         public long CreatorId { get; }
-
-        [Member("commitId"), Mutable]
-        public long CommitId { get; set; }
 
         #region Timestamps
 
@@ -55,7 +69,11 @@ namespace Carbon.Platform.Storage
         public DateTime Modified { get; }
 
         #endregion
+
+        #region IResource
+
+        ResourceType IResource.ResourceType => ResourceTypes.RepositoryBranch;
+        
+        #endregion
     }
 }
-
-// e.g. d921970aadf03b3cf0e71becdaab3147ba71cdef

@@ -4,7 +4,7 @@ using Carbon.Data.Annotations;
 
 namespace Carbon.Platform.Storage
 {
-    // 1/master/scripts/app.js
+    // {branchId}/scripts/app.js
 
     [Dataset("RepositoryFiles")]
     public class RepositoryFile : IRepositoryFile
@@ -12,33 +12,39 @@ namespace Carbon.Platform.Storage
         public RepositoryFile() { }
 
         public RepositoryFile(
-            long repositoryId, 
-            string branchName, 
+            long branchId, 
             string path, 
             long creatorId = 0,
             long size = 0,
             byte[] sha256 = null,
+            int version = 1,
             FileType type = FileType.Blob)
         {
-            RepositoryId = repositoryId;
-            BranchName   = branchName ?? throw new ArgumentNullException(nameof(branchName));
-            Path         = path       ?? throw new ArgumentNullException(nameof(path));
-            Type         = type;
-            CreatorId    = creatorId;
-            Size         = size;
-            Sha256       = sha256;
-        }
+            #region Preconditions
 
-        [Member("repositoryId"), Key]
-        public long RepositoryId { get; }
+            if (branchId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(branchId));
+
+            #endregion
+
+            BranchId  = branchId;
+            Path      = path ?? throw new ArgumentNullException(nameof(path));
+            Version   = version;
+            Type      = type;
+            CreatorId = creatorId;
+            Size      = size;
+            Sha256    = sha256;
+        }
         
-        [Member("branchName"), Key]
-        [StringLength(50)]
-        public string BranchName { get; }
+        [Member("branchId"), Key]
+        public long BranchId { get; }
         
         [Member("path"), Key]
-        [StringLength(180)] // git limit = 4096
+        [StringLength(185)] // git limit = 4096
         public string Path { get; }
+
+        [Member("version"), Mutable]
+        public int Version { get; set; }
 
         [Member("type")]
         public FileType Type { get; }
@@ -55,6 +61,8 @@ namespace Carbon.Platform.Storage
         public byte[] Sha256 { get; set; }
         
         // Sha3?
+
+        // lastModifiedBy (lsb?)
 
         [Member("creatorId")]
         public long CreatorId { get; }
@@ -75,6 +83,8 @@ namespace Carbon.Platform.Storage
 
         #endregion
     }
+
+    // ObjectType...
 
     public enum FileType : byte
     {
