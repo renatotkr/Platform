@@ -44,7 +44,7 @@ namespace Carbon.Platform.Computing
             Created       = created;
         }
 
-        // locationId + sequenceNumber
+        // locationId | #
         [Member("id"), Key]
         public long Id { get; }
 

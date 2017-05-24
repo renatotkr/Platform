@@ -40,7 +40,7 @@ namespace Carbon.Platform.Computing
             LocationId    = location?.Id;
         }
 
-        // clusterId + sequenceNumber
+        // clusterId | #
         [Member("id"), Key]
         public long Id { get; }
 

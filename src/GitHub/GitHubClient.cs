@@ -246,8 +246,10 @@ namespace GitHub
             // GET /repos/:owner/:repo/:archive_format/:ref
             // https://api.github.com/repos/user/repo/zipball/dev
 
-            var requestUri = request.ToPath();
-            var httpRequest = new HttpRequestMessage(HttpMethod.Get, requestUri);
+            var httpRequest = new HttpRequestMessage(
+                method     : HttpMethod.Get,
+                requestUri : baseUri + request.ToPath()
+            );
 
             httpRequest.Headers.Authorization = accessToken.ToHeader();
             httpRequest.Headers.UserAgent.Add(userAgent);
@@ -258,7 +260,7 @@ namespace GitHub
                 {
                     var responseText = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-                    throw new Exception(requestUri + " : " + responseText);
+                    throw new Exception(httpRequest.RequestUri + " : " + responseText);
                 }
 
                 // Returns a 302 redirect

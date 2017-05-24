@@ -100,7 +100,9 @@ namespace Carbon.Platform.CI
                 commitId    : commit.Id,
                 resource    : ManagedResource.Build(Locations.Aws_US_East_1, externalBuild.Id)
             );
-            
+
+            build.ProjectId = project.Id;
+
             await db.Builds.InsertAsync(build).ConfigureAwait(false);
 
             return build;

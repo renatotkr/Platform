@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Configuration</AssemblyName>
     <TargetFrameworks>netstandard1.3;net451</TargetFrameworks>
-    <VersionPrefix>0.5.0</VersionPrefix>
+    <VersionPrefix>0.5.1</VersionPrefix>
 
     <!-- Package Info-->
     <Authors>iamcarbon</Authors>

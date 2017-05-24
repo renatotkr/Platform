@@ -30,7 +30,7 @@ namespace Carbon.Platform.Storage
             ResourceId = resource.ResourceId;
         }
 
-        // databaseId + sequenceNumber
+        // databaseId | #
         [Member("id"), Key]
         public long Id { get; }
         

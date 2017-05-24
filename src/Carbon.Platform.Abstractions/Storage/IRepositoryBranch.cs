@@ -1,6 +1,8 @@
-﻿namespace Carbon.Platform.Storage
+﻿using Carbon.Platform.Resources;
+
+namespace Carbon.Platform.Storage
 {
-    public interface IRepositoryBranch
+    public interface IRepositoryBranch : IResource
     {
         long RepositoryId { get; }
 

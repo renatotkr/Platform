@@ -25,7 +25,8 @@ namespace Carbon.Platform.Computing
 
         public async Task<HostInfo> GetAsync(long id)
         {
-            return await db.Hosts.FindAsync(id).ConfigureAwait(false) ?? throw ResourceError.NotFound(ResourceTypes.Host, id);
+            return await db.Hosts.FindAsync(id).ConfigureAwait(false)
+                ?? throw ResourceError.NotFound(ResourceTypes.Host, id);
         }
 
         // e.g. 1 || aws:i-18342354, gcp:1234123123, azure:1234123
@@ -50,18 +51,18 @@ namespace Carbon.Platform.Computing
         public async Task<HostInfo> RegisterAsync(RegisterHostRequest request)
         {
              var host = new HostInfo(
-                id             : await GetNextId(request.Location).ConfigureAwait(false),
-                type           : HostType.Virtual,
-                status         : request.Status,
-                addresses      : request.Addresses,
-                clusterId        : request.ClusterId,
-                resource       : request.Resource,
-                environmentId  : request.EnvironmentId,
-                machineTypeId  : request.MachineTypeId,
-                imageId : request.ImageId,
-                networkId      : request.NetworkId,
-                ownerId        : request.OwnerId,
-                created        : DateTime.UtcNow
+                id            : await GetNextId(request.Location).ConfigureAwait(false),
+                type          : HostType.Virtual,
+                status        : request.Status,
+                addresses     : request.Addresses,
+                clusterId     : request.ClusterId,
+                resource      : request.Resource,
+                environmentId : request.EnvironmentId,
+                machineTypeId : request.MachineTypeId,
+                imageId       : request.ImageId,
+                networkId     : request.NetworkId,
+                ownerId       : request.OwnerId,
+                created       : DateTime.UtcNow
             );
         
             await db.Hosts.InsertAsync(host).ConfigureAwait(false);

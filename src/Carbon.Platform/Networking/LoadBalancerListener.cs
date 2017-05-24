@@ -32,7 +32,7 @@ namespace Carbon.Platform.Networking
             LocationId = resource.LocationId;
         }
 
-        // loadBalancerId + sequenceNumber
+        // loadBalancerId | #
         [Member("id"), Key]
         public long Id { get;  }
 

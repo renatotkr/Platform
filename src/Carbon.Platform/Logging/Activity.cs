@@ -29,7 +29,7 @@ namespace Carbon.Platform.Logging
             Context       = context;
         }
 
-        // change to bigId (accountId | timestamp | sequenceNumber)
+        // change to bigId (accountId | timestamp | #)
         [Member("id"), Key(sequenceName: "activityId", cacheSize: 1000)]
         public long Id { get; set; }
 

@@ -21,11 +21,11 @@ namespace Carbon.Platform.CI
             IProgramReleaseService programReleases,
             ILogger log)
         {
-            this.api             = api ?? throw new ArgumentNullException(nameof(api));
-            this.log             = log ?? throw new ArgumentNullException(nameof(log));
+            this.api             = api             ?? throw new ArgumentNullException(nameof(api));
+            this.log             = log             ?? throw new ArgumentNullException(nameof(log));
             this.programReleases = programReleases ?? throw new ArgumentNullException(nameof(programReleases));
-            this.deployments     = deployments ?? throw new ArgumentNullException(nameof(deployments));
-            this.environments    = environments ?? throw new ArgumentNullException(nameof(environments));
+            this.deployments     = deployments     ?? throw new ArgumentNullException(nameof(deployments));
+            this.environments    = environments    ?? throw new ArgumentNullException(nameof(environments));
         }
 
         public async Task<DeployResult> DeployAsync(DeployApplicationRequest request)

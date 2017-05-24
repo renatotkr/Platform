@@ -2,9 +2,7 @@
 {
     public interface IRepositoryFile
     {
-        long RepositoryId { get; }
-
-        string BranchName { get; }
+        long BranchId { get; }
 
         string Path { get; }
 

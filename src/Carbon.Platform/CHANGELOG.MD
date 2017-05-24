@@ -2,6 +2,11 @@
 We'll continue to make breaking API changes in minor releases until we reach 2.0.
 Services & management libraries will stabalize at v1.
 
+1.39.0
+- Add Id to RepositoryBranch
+- Remove BranchCount from Repository
+- Change RepositoryFile key to (branchId, path)
+
 1.38.0
 - Add SecurityGroupIds to NetworkInterface
 - Rename MachineImageInfo -> Image

@@ -28,7 +28,7 @@ namespace Carbon.Platform.Networking
             ResourceId = resource.ResourceId;
         }
 
-        // loadBalancerId + sequenceNumber
+        // loadBalancerId | #
         [Member("id"), Key]
         public long Id { get; }
 

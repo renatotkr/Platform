@@ -12,7 +12,7 @@ namespace GitHub
             Revision revision,
             GitArchiveFormat format = GitArchiveFormat.Zipball)
         {
-            AccountName     = accountName ?? throw new ArgumentNullException(nameof(accountName));
+            AccountName     = accountName    ?? throw new ArgumentNullException(nameof(accountName));
             RepositoryName  = repositoryName ?? throw new ArgumentNullException(nameof(repositoryName));
             Revision        = revision;
             Format          = format;

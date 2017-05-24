@@ -14,6 +14,8 @@ using Carbon.Platform.Networking;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Storage;
 
+using Dapper;
+
 namespace Carbon.Platform.Management
 {
     using static ResourceProvider;
@@ -52,10 +54,20 @@ namespace Carbon.Platform.Management
 
         public async Task<IHost[]> LaunchHostsAsync(
             IEnvironment env,
-            ILocation location,
+            ILocation zone,
             int launchCount = 1)
         {
-            var locationId = LocationId.Create(location.Id);
+            #region Preconditions
+
+            if (env == null)
+                throw new ArgumentNullException(nameof(env));
+
+            if (zone == null)
+                throw new ArgumentNullException(nameof(zone));
+
+            #endregion
+
+            var locationId = LocationId.Create(zone.Id);
 
             var region = Locations.Get(locationId.WithZoneNumber(0));
 
@@ -71,7 +83,7 @@ namespace Carbon.Platform.Management
 
             var template = await db.HostTemplates.FindAsync((long)hostTemplateId);
 
-            return await LaunchHostsAsync(cluster, location, template, launchCount).ConfigureAwait(false);
+            return await LaunchHostsAsync(cluster, zone, template, launchCount).ConfigureAwait(false);
         }
 
         public async Task<IHost[]> LaunchHostsAsync(
@@ -183,16 +195,16 @@ namespace Carbon.Platform.Management
 
             #endregion
 
-            var runResult = await ec2.RunInstancesAsync(request).ConfigureAwait(false);
+            var runInstancesResponse = await ec2.RunInstancesAsync(request).ConfigureAwait(false);
 
-            var hosts = new IHost[runResult.Instances.Length];
+            var hosts = new IHost[runInstancesResponse.Instances.Length];
             
-            for (var i = 0; i < runResult.Instances.Length; i++)
+            for (var i = 0; i < hosts.Length; i++)
             {
                 var registerRequest = await GetRegisterHostRequestAsync(
-                    instance     : runResult.Instances[i],
+                    instance     : runInstancesResponse.Instances[i],
                     cluster      : cluster,
-                    image : image, 
+                    image        : image, 
                     machineType  : machineType, 
                     location     : zone);
 
@@ -202,20 +214,29 @@ namespace Carbon.Platform.Management
             return hosts;
         }
 
-        public async Task TransitionStateAsync(HostInfo host, HostStatus status)
+        public async Task TransitionStateAsync(HostInfo host, HostStatus newStatus)
         {
-            if (host.Status == HostStatus.Pending && status == HostStatus.Running)
+            if (host.Status == HostStatus.Pending && newStatus == HostStatus.Running)
             {
                 var cluster = await clusterService.GetAsync(host.ClusterId).ConfigureAwait(false);
 
                 if (cluster.Details.ContainsKey(ClusterProperties.TargetGroupArn))
                 {
-                    await RegisterWithTargetGroup(host, cluster).ConfigureAwait(false);
+                    await RegisterWithTargetGroupAsync(host, cluster).ConfigureAwait(false);
+                }
+
+                using (var connection = db.Context.GetConnection())
+                {
+                    await connection.ExecuteAsync(
+                        @"UPDATE `Hosts`
+                          SET `status` = @status
+                          WHERE `id` = @id", host
+                    ).ConfigureAwait(false);
                 }
             }
         }
 
-        public async Task RegisterWithTargetGroup(HostInfo host, Cluster group)
+        public async Task RegisterWithTargetGroupAsync(HostInfo host, Cluster group)
         {
             var targetRegistration = new RegisterTargetsRequest(
                 targetGroupArn : group.Details[ClusterProperties.TargetGroupArn],
@@ -338,7 +359,10 @@ namespace Carbon.Platform.Management
 
             int addressCount = 1;
 
-            if (instance.IpAddress != null) addressCount++;
+            if (instance.IpAddress != null)
+            {
+                addressCount++;
+            }
 
             var addresses = new string[addressCount];
 
@@ -363,46 +387,54 @@ namespace Carbon.Platform.Management
 
             #region Network Interfaces
 
-            var nics = new RegisterNetworkInterfaceRequest[instance.BlockDeviceMappings.Length];
-
-            for (var ni = 0; ni < instance.NetworkInterfaces.Length; ni++)
+            try
             {
-                var ec2Nic = instance.NetworkInterfaces[ni];
-                
-                nics[ni] = new RegisterNetworkInterfaceRequest(
-                    mac              : MacAddress.Parse(ec2Nic.MacAddress),
-                    subnetId         : 0,                   // TODO: lookup subnet
-                    securityGroupIds : Array.Empty<long>(), // TODO: lookup security groupds
-                    resource         : ManagedResource.NetworkInterface(location, ec2Nic.NetworkInterfaceId)
-                );
-            }
+                var nics = new RegisterNetworkInterfaceRequest[instance.NetworkInterfaces.Length];
 
-            registerRequest.NetworkInterfaces = nics;
+                for (var nicIndex = 0; nicIndex < nics.Length; nicIndex++)
+                {
+                    var ec2Nic = instance.NetworkInterfaces[nicIndex];
+
+                    nics[nicIndex] = new RegisterNetworkInterfaceRequest(
+                        mac: MacAddress.Parse(ec2Nic.MacAddress),
+                        subnetId: 0,                   // TODO: lookup subnet
+                        securityGroupIds: Array.Empty<long>(), // TODO: lookup security groupds
+                        resource: ManagedResource.NetworkInterface(location, ec2Nic.NetworkInterfaceId)
+                    );
+                }
+
+                registerRequest.NetworkInterfaces = nics;
+            }
+            catch { }
 
             #endregion
 
             #region Volumes
 
-            var volumes = new RegisterVolumeRequest[instance.NetworkInterfaces.Length];
-
-            for (var bi = 0; bi < instance.BlockDeviceMappings.Length; bi++)
+            try
             {
-                var device = instance.BlockDeviceMappings[bi];
+                var volumes = new RegisterVolumeRequest[instance.BlockDeviceMappings.Length];
 
-                if (device.Ebs == null) continue;
+                for (var volumeIndex = 0; volumeIndex < volumes.Length; volumeIndex++)
+                {
+                    var device = instance.BlockDeviceMappings[volumeIndex];
 
-                var volumeSize = device.Ebs.VolumeSize is int ebsSize
-                    ? ByteSize.GiB(ebsSize)
-                    : ByteSize.Zero;
+                    if (device.Ebs == null) continue;
 
-                volumes[bi] = new RegisterVolumeRequest(
-                    size     : volumeSize,
-                    resource : ManagedResource.Volume(location, device.Ebs.VolumeId),
-                    ownerId  : 1
-                );
+                    var volumeSize = device.Ebs.VolumeSize is int ebsSize
+                        ? ByteSize.GiB(ebsSize)
+                        : ByteSize.Zero;
+
+                    volumes[volumeIndex] = new RegisterVolumeRequest(
+                        size: volumeSize,
+                        resource: ManagedResource.Volume(location, device.Ebs.VolumeId),
+                        ownerId: 1
+                    );
+                }
+
+                registerRequest.Volumes = volumes;
             }
-
-            registerRequest.Volumes = volumes;
+            catch { }
 
             #endregion
 

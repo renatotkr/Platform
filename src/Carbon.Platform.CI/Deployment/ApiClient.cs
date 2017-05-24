@@ -42,7 +42,7 @@ namespace Carbon.Platform.CI
 
             var url = $"http://{host}:{port}/" + path;
 
-            // Updat to POST after Bootstrapper v2 migration is completed
+            // Update to POST after Bootstrapper v2 migration is completed
 
             var request = new HttpRequestMessage(HttpMethod.Get, url);
 

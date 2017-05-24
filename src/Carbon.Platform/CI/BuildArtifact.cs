@@ -22,7 +22,7 @@ namespace Carbon.Platform.CI
             Name   = name ?? throw new ArgumentNullException(nameof(name));
         }
 
-        // buildId + sequenceNumber
+        // buildId | #
         [Member("id"), Key]
         public long Id { get; }
         
