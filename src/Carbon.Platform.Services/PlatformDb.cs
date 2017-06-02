@@ -48,8 +48,6 @@ namespace Carbon.Platform
             Databases             = new Dataset<DatabaseInfo,             long>(context);
             DatabaseEndpoints     = new Dataset<DatabaseEndpoint,         long>(context);
             DatabaseInstances     = new Dataset<DatabaseInstance,         long>(context);
-            DataEncryptionKeys    = new Dataset<DataEncryptionKeyInfo,    long>(context); 
-            EncryptionKeys        = new Dataset<EncryptionKeyInfo,        long>(context);
             Queues                = new Dataset<QueueInfo,                long>(context);
             Volumes               = new Dataset<VolumeInfo,               long>(context);
 
@@ -84,55 +82,53 @@ namespace Carbon.Platform
 
         public IDbContext Context { get; }
 
-        // Environment -----------------------------------------------------------
-        public Dataset<EnvironmentInfo,             long> Environments    { get; }
-        public Dataset<LocationInfo,                long> Locations       { get; }
+        // Environment ----------------------------------------------------------
+        public Dataset<EnvironmentInfo,      long> Environments          { get; }
+        public Dataset<LocationInfo,         long> Locations             { get; }
 
-        // Computing -------------------------------------------------------------
-        public Dataset<HostInfo,              long> Hosts                 { get; }
-        public Dataset<Cluster,               long> Clusters              { get; }
-        public Dataset<ClusterResource,       long> ClusterResources      { get; }
-        public Dataset<HostTemplate,          long> HostTemplates         { get; }
-        public Dataset<HealthCheck,           long> HealthChecks          { get; }
-        public Dataset<Image,          long> Images         { get; }
-        public Dataset<MachineType,           long> MachineTypes          { get; }
-        public Dataset<Program,               long> Programs              { get; }
-        public Dataset<ProgramRelease,        long> ProgramReleases       { get; }
-        public Dataset<VolumeInfo,            long> Volumes               { get; }
+        // Computing ------------------------------------------------------------
+        public Dataset<HostInfo,             long> Hosts                 { get; }
+        public Dataset<Cluster,              long> Clusters              { get; }
+        public Dataset<ClusterResource,      long> ClusterResources      { get; }
+        public Dataset<HostTemplate,         long> HostTemplates         { get; }
+        public Dataset<HealthCheck,          long> HealthChecks          { get; }
+        public Dataset<Image,                long> Images                { get; }
+        public Dataset<MachineType,          long> MachineTypes          { get; }
+        public Dataset<Program,              long> Programs              { get; }
+        public Dataset<ProgramRelease,       long> ProgramReleases       { get; }
+        public Dataset<VolumeInfo,           long> Volumes               { get; }
                                                                            
-        // Data ------------------------------------------------------------------
-        public Dataset<BucketInfo,            long> Buckets               { get; }
-        public Dataset<ChannelInfo,           long> Channels              { get; }
-        public Dataset<DatabaseInfo,          long> Databases             { get; }
-        public Dataset<DatabaseEndpoint,      long> DatabaseEndpoints     { get; }
-        public Dataset<DatabaseInstance,      long> DatabaseInstances     { get; }
-        public Dataset<DataEncryptionKeyInfo, long> DataEncryptionKeys    { get; }
-        public Dataset<EncryptionKeyInfo,     long> EncryptionKeys        { get; }
-        public Dataset<QueueInfo,             long> Queues                { get; }
+        // Data -----------------------------------------------------------------
+        public Dataset<BucketInfo,           long> Buckets               { get; }
+        public Dataset<ChannelInfo,          long> Channels              { get; }
+        public Dataset<DatabaseInfo,         long> Databases             { get; }
+        public Dataset<DatabaseEndpoint,     long> DatabaseEndpoints     { get; }
+        public Dataset<DatabaseInstance,     long> DatabaseInstances     { get; }
+        public Dataset<QueueInfo,            long> Queues                { get; }
 
-        // Networks ---------------------------------------------------------------
-        public Dataset<NetworkInfo,           long> Networks              { get; }
-        public Dataset<NetworkAddress,        long> NetworkAddresses      { get; }
-        public Dataset<NetworkInterfaceInfo,  long> NetworkInterfaces     { get; }
-        public Dataset<NetworkSecurityGroup,  long> NetworkSecurityGroups { get; }
-        public Dataset<LoadBalancer,          long> LoadBalancers         { get; }
-        public Dataset<LoadBalancerListener,  long> LoadBalancerListeners { get; }
-        public Dataset<LoadBalancerRule,      long> LoadBalancerRules     { get; }
-        public Dataset<SubnetInfo,            long> Subnets               { get; }
+        // Networks -------------------------------------------------------------
+        public Dataset<NetworkInfo,          long> Networks              { get; }
+        public Dataset<NetworkAddress,       long> NetworkAddresses      { get; }
+        public Dataset<NetworkInterfaceInfo, long> NetworkInterfaces     { get; }
+        public Dataset<NetworkSecurityGroup, long> NetworkSecurityGroups { get; }
+        public Dataset<LoadBalancer,         long> LoadBalancers         { get; }
+        public Dataset<LoadBalancerListener, long> LoadBalancerListeners { get; }
+        public Dataset<LoadBalancerRule,     long> LoadBalancerRules     { get; }
+        public Dataset<SubnetInfo,           long> Subnets               { get; }
 
-        // Hosting ----------------------------------------------------------------
-        public Dataset<CertificateInfo,       long> Certificates          { get; }
-        public Dataset<DomainInfo,            long> Domains               { get; }
+        // Hosting --------------------------------------------------------------
+        public Dataset<CertificateInfo,      long> Certificates          { get; }
+        public Dataset<DomainInfo,           long> Domains               { get; }
 
-        // CI ---------------------------------------------------------------------
-        public Dataset<Build, long>                    Builds             { get; }
-        public Dataset<BuildArtifact, long>            BuildArtifacts     { get; }
-        public Dataset<BuildProject, long>             BuildProjects      { get; }
-        public Dataset<Deployment, long>               Deployments        { get; }
-        public Dataset<DeploymentTarget, (long, long)> DeploymentTargets  { get; }
+        // CI -------------------------------------------------------------------
+        public Dataset<Build, long>                    Builds            { get; }
+        public Dataset<BuildArtifact, long>            BuildArtifacts    { get; }
+        public Dataset<BuildProject, long>             BuildProjects     { get; }
+        public Dataset<Deployment, long>               Deployments       { get; }
+        public Dataset<DeploymentTarget, (long, long)> DeploymentTargets { get; }
 
-        // IAM -------------------------------------------------------------------
-        public Dataset<Activity, long>                 Activities         { get; }
-        public Dataset<User, long>                     Users              { get; }
+        // IAM ------------------------------------------------------------------
+        public Dataset<Activity, long>                 Activities        { get; }
+        public Dataset<User, long>                     Users             { get; }
     }
 }
