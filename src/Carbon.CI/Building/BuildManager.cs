@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using Amazon.CodeBuild;
 using Amazon.Helpers;
 
 using Carbon.Data;
@@ -11,14 +10,17 @@ using Carbon.Platform;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Sequences;
 
+using codebuild = Amazon.CodeBuild;
+
+
 namespace Carbon.CI
 {
-    public class BuildManager
+    public class BuildManager : IBuildManager
     {
-        private readonly CodeBuildClient codebuild;
+        private readonly codebuild::CodeBuildClient codebuild;
         private readonly CiadDb db;
 
-        public BuildManager(CodeBuildClient codebuild, CiadDb db)
+        public BuildManager(codebuild::CodeBuildClient codebuild, CiadDb db)
         {
             this.db        = db        ?? throw new ArgumentNullException(nameof(db));
             this.codebuild = codebuild ?? throw new ArgumentNullException(nameof(codebuild));
@@ -56,16 +58,38 @@ namespace Carbon.CI
             );
         }
 
-        public async Task<Amazon.CodeBuild.Build> CheckStatusAsync(IBuild build)
+        public async Task<Build> CheckStatusAsync(Build build)
         {
-            var result = await codebuild.BatchGetBuildsAsync(new BatchGetBuildsRequest(build.ResourceId));
+            if (build.Status != BuildStatus.Pending)
+            {
+                return build;
+            }
 
-            var b = result.Builds[0];
-          
-            return b;
+            var result = await codebuild.BatchGetBuildsAsync(
+                new codebuild::BatchGetBuildsRequest(build.ResourceId)
+            );
+
+            var external = result.Builds[0];
+            
+            build.Started = external.StartTime;
+            build.Status  = external.GetStatus();
+            build.Phase   = external.CurrentPhase;
+
+            if (external.BuildComplete)
+            {
+                try
+                {
+                    build.Completed = external.Phases[external.Phases.Length].EndTime.Value;
+                }
+                catch { }
+            }
+
+            await UpdateAsync(build);
+
+            return build;
         }
 
-        public async Task<Build> StartAsync(CreateBuildRequest request)
+        public async Task<Build> StartAsync(StartBuildRequest request)
         {
             #region Preconditions
 
@@ -82,16 +106,16 @@ namespace Carbon.CI
             // code build also injects
             // CODEBUILD_BUILD_ID
 
-            var startBuildRequest = new StartBuildRequest(project.Name) { 
+            var startBuildRequest = new codebuild::StartBuildRequest(project.Name) { 
                 EnvironmentVariablesOverride = new[] {
-                    new EnvironmentVariable("BUILD_ID", id.ToString())
+                    new codebuild::EnvironmentVariable("BUILD_ID", id.ToString())
                 },
                 SourceVersion = HexString.FromBytes(commit.Sha1)
             };
 
             if (request.Output != null)
             {
-                startBuildRequest.ArtifactsOverride = new ProjectArtifacts {
+                startBuildRequest.ArtifactsOverride = new codebuild::ProjectArtifacts {
                     Type      = "S3",
                     Location  = request.Output.BucketName,
                     Path      = request.Output.Path,
@@ -103,13 +127,16 @@ namespace Carbon.CI
             var codeBuildRegion = Locations.Get(ResourceProvider.Aws, codebuild.Region.Name);
 
             var externalBuild = await codebuild.StartBuildAsync(startBuildRequest).ConfigureAwait(false);
-           
+
             var build = new Build(
                 id          : id,
                 initiatorId : request.InitiatorId,
                 commitId    : commit.Id,
                 resource    : ManagedResource.Build(codeBuildRegion, externalBuild.Build.Id)
-            );
+            )
+            {
+                Status = BuildStatus.Pending
+            };
 
             await db.Builds.InsertAsync(build).ConfigureAwait(false);
 

@@ -59,7 +59,7 @@ namespace Carbon.Platform.Storage
         /// </summary>
         [Member("encryptedToken")]
         [MaxLength(1000)]
-        public byte[] EncryptedToken { get; }
+        public byte[] EncryptedToken { get; set; }
 
         #region Statistics
 

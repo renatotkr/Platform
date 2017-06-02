@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Services</AssemblyName>
-    <VersionPrefix>0.49.0</VersionPrefix>
+    <VersionPrefix>0.49.1</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
 
     <!-- Package Details -->
@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <PackageReference Include="Carbon.Data" Version="0.15.3" />
-    <PackageReference Include="Carbon.Data.Protection" Version="0.8.1" />
     <PackageReference Include="Carbon.Data.Sql" Version="0.21.2" />
     <PackageReference Include="Carbon.Json" Version="1.4.1" />
     <PackageReference Include="System.ValueTuple" Version="4.3.1" />

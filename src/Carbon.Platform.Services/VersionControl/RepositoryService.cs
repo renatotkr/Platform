@@ -75,7 +75,10 @@ namespace Carbon.Platform.Storage
                 name     : request.Name,
                 ownerId  : request.OwnerId,
                 resource : request.Resource
-            );
+            )
+            {
+                EncryptedToken = request.EncryptedToken
+            };
 
             await db.Repositories.InsertAsync(repository).ConfigureAwait(false);
 

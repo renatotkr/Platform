@@ -5,9 +5,9 @@ namespace Carbon.CI
 {
     // Should be startBuildRequest, but avoiding conflict with codebuild...
 
-    public class CreateBuildRequest
+    public class StartBuildRequest
     {
-        public CreateBuildRequest(
+        public StartBuildRequest(
             IProject project,
             IRepositoryCommit commit,
             long initiatorId)
