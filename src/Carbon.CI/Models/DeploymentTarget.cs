@@ -3,7 +3,7 @@ using Carbon.Data.Annotations;
 
 namespace Carbon.CI
 {
-    [Dataset("DeploymentTargets")]
+    [Dataset("DeploymentTargets", Schema = "CI")]
     public class DeploymentTarget : IDeploymentTarget
     {
         public DeploymentTarget() { }
@@ -16,12 +16,10 @@ namespace Carbon.CI
         {
             #region Preconditions
 
-            if (deploymentId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(deploymentId));
+            Validate.Id(deploymentId, nameof(deploymentId));
 
-            if (hostId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(hostId));
-
+            Validate.Id(hostId, nameof(hostId));
+            
             #endregion
 
             DeploymentId = deploymentId;

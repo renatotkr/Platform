@@ -5,7 +5,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.CI
 {
-    [Dataset("Builds")]
+    [Dataset("Builds", Schema = "CI")]
     public class Build : IBuild, IManagedResource
     {
         public Build() { }
@@ -18,8 +18,7 @@ namespace Carbon.CI
         {
             #region Preconditions
 
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
+            Validate.Id(id);
 
             #endregion
 
@@ -37,7 +36,7 @@ namespace Carbon.CI
         
         [Member("status"), Mutable]
         public BuildStatus Status { get; set; }
-        
+
         [Member("commitId")]
         public long CommitId { get; }
         

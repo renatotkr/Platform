@@ -54,6 +54,14 @@ namespace Carbon.CI
 
         private async Task DeployAsync(WebsiteRelease release, IHost[] hosts)
         {
+            #region Preconditions
+
+            Validate.NotNull(release, nameof(release));
+
+            Validate.NotNull(hosts, nameof(hosts));
+
+            #endregion
+
             var tasks = new Task[hosts.Length];
 
             for (var i = 0; i < hosts.Length; i++)
@@ -68,11 +76,9 @@ namespace Carbon.CI
         {
             #region Preconditions
 
-            if (release == null)
-                throw new ArgumentNullException(nameof(release));
+            Validate.NotNull(release, nameof(release));
 
-            if (host == null)
-                throw new ArgumentNullException(nameof(host));
+            Validate.NotNull(host, nameof(host));
 
             #endregion
 

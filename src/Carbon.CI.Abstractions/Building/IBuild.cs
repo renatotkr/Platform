@@ -1,14 +1,17 @@
 ﻿using System;
-using Carbon.Platform.Resources;
 
 namespace Carbon.CI
 { 
-    public interface IBuild : IManagedResource
+    public interface IBuild 
     {
+        long Id { get; }
+
         BuildStatus Status { get; }
 
         DateTime? Started { get; }
 
         DateTime? Completed { get; }
+
+        string ResourceId { get; }
     }
 }

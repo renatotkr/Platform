@@ -1,0 +1,29 @@
+﻿using System;
+
+using Carbon.Data;
+
+namespace Carbon.CI
+{
+    public class CIDb
+    {
+        public CIDb(IDbContext context)
+        {
+            Context = context ?? throw new ArgumentNullException(nameof(context));
+
+            Builds                = new Dataset<Build, long>(context);
+            BuildArtifacts        = new Dataset<BuildArtifact, long>(context);
+            BuildProjects         = new Dataset<BuildProject, long>(context);
+
+            Deployments           = new Dataset<Deployment, long>(context);
+            DeploymentTargets     = new Dataset<DeploymentTarget, (long, long)>(context);
+        }
+
+        public IDbContext Context { get; }
+
+        public Dataset<Build, long>                    Builds            { get; }
+        public Dataset<BuildArtifact, long>            BuildArtifacts    { get; }
+        public Dataset<BuildProject, long>             BuildProjects     { get; }
+        public Dataset<Deployment, long>               Deployments       { get; }
+        public Dataset<DeploymentTarget, (long, long)> DeploymentTargets { get; }
+    }
+}

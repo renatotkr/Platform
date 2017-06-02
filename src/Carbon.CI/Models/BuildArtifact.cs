@@ -4,7 +4,7 @@ using Carbon.Data.Annotations;
 
 namespace Carbon.CI
 {
-    [Dataset("BuildArtifacts")]
+    [Dataset("BuildArtifacts", Schema = "CI")]
     public class BuildArtifact
     {
         public BuildArtifact() { }
@@ -13,13 +13,14 @@ namespace Carbon.CI
         {
             #region Preconditions
 
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
+            Validate.Id(id);
+
+            Validate.NotNullOrEmpty(name);
 
             #endregion
 
-            Id     = id;
-            Name   = name ?? throw new ArgumentNullException(nameof(name));
+            Id   = id;
+            Name = name;
         }
 
         // buildId | #

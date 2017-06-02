@@ -11,18 +11,14 @@ using Carbon.Platform;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Sequences;
 
-using Dapper;
-
 namespace Carbon.CI
 {
     public class BuildManager
     {
         private readonly CodeBuildClient codebuild;
-        private readonly PlatformDb db;
+        private readonly CIDb db;
 
-        public BuildManager(
-            CodeBuildClient codebuild, 
-            PlatformDb db)
+        public BuildManager(CodeBuildClient codebuild, CIDb db)
         {
             this.db        = db        ?? throw new ArgumentNullException(nameof(db));
             this.codebuild = codebuild ?? throw new ArgumentNullException(nameof(codebuild));
@@ -71,6 +67,13 @@ namespace Carbon.CI
 
         public async Task<Build> StartAsync(CreateBuildRequest request)
         {
+            #region Preconditions
+
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
+            #endregion
+
             var project = request.Project;
             var commit  = request.Commit;
 
@@ -97,13 +100,15 @@ namespace Carbon.CI
                 };
             }
 
-            var externalBuild = (await codebuild.StartBuildAsync(startBuildRequest).ConfigureAwait(false)).Build;
+            var codeBuildRegion = Locations.Get(ResourceProvider.Aws, codebuild.Region.Name);
+
+            var externalBuild = await codebuild.StartBuildAsync(startBuildRequest).ConfigureAwait(false);
            
             var build = new Build(
                 id          : id,
                 initiatorId : request.InitiatorId,
                 commitId    : commit.Id,
-                resource    : ManagedResource.Build(Locations.Aws_USEast1, externalBuild.Id)
+                resource    : ManagedResource.Build(codeBuildRegion, externalBuild.Build.Id)
             );
 
             await db.Builds.InsertAsync(build).ConfigureAwait(false);

@@ -8,7 +8,7 @@ namespace Carbon.CI
     public class CreateBuildRequest
     {
         public CreateBuildRequest(
-            IBuildProject project,
+            IProject project,
             IRepositoryCommit commit,
             long initiatorId)
         {
@@ -17,7 +17,7 @@ namespace Carbon.CI
             InitiatorId = initiatorId;
         }
         
-        public IBuildProject Project { get; }
+        public IProject Project { get; }
 
         public IRepositoryCommit Commit { get; }
 

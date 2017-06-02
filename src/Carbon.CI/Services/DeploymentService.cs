@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using Carbon.Platform;
 using Carbon.Platform.Computing;
 
 using Dapper;
@@ -9,9 +10,9 @@ namespace Carbon.CI
 {
     public class DeploymentService : IDeploymentService
     {
-        private readonly PlatformDb db;
+        private readonly CIDb db;
 
-        public DeploymentService(PlatformDb db)
+        public DeploymentService(CIDb db)
         {
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
@@ -23,15 +24,12 @@ namespace Carbon.CI
         {
             #region Preconditions
 
-            if (environment == null)
-                throw new ArgumentNullException(nameof(environment));
+            Validate.NotNull(environment, nameof(environment));
 
-            if (release == null)
-                throw new ArgumentNullException(nameof(release));
-
-            if (creatorId <= 0)
-                throw new ArgumentOutOfRangeException(nameof(creatorId), creatorId, "Must be > 0");
-
+            Validate.NotNull(release, nameof(release));
+            
+            Validate.Id(creatorId, nameof(creatorId));
+            
             #endregion
 
             var deployment = new Deployment(
@@ -49,8 +47,7 @@ namespace Carbon.CI
         {
             #region Preconditions
 
-            if (deployment == null)
-                throw new ArgumentNullException(nameof(deployment));
+            Validate.NotNull(nameof(deployment), nameof(deployment));
 
             #endregion
 
@@ -75,11 +72,9 @@ namespace Carbon.CI
         {
             #region Preconditions
 
-            if (deployment == null)
-                throw new ArgumentNullException(nameof(deployment));
+            Validate.NotNull(deployment, nameof(deployment));
 
-            if (hosts == null)
-                throw new ArgumentNullException(nameof(hosts));
+            Validate.NotNull(hosts, nameof(hosts));
 
             #endregion
 

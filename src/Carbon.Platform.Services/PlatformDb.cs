@@ -2,7 +2,6 @@
 
 namespace Carbon.Platform
 {
-    using CI;
     using Computing;
     using Data;
     using Hosting;
@@ -65,14 +64,6 @@ namespace Carbon.Platform
             LoadBalancerRules     = new Dataset<LoadBalancerRule,         long>(context);
             Subnets               = new Dataset<SubnetInfo,               long>(context);
 
-            // CI -----------------------------------------------------------------------
-            Builds                = new Dataset<Build,                    long>(context);
-            BuildArtifacts        = new Dataset<BuildArtifact,            long>(context);
-            BuildProjects         = new Dataset<BuildProject,             long>(context);
-
-            Deployments           = new Dataset<Deployment,               long>(context);
-            DeploymentTargets     = new Dataset<DeploymentTarget, (long, long)>(context);
-
             // IAM ---------------------------------------------------------------------
             Users = new Dataset<User, long>(context);
             
@@ -120,12 +111,7 @@ namespace Carbon.Platform
         public Dataset<CertificateInfo,      long> Certificates          { get; }
         public Dataset<DomainInfo,           long> Domains               { get; }
 
-        // CI -------------------------------------------------------------------
-        public Dataset<Build, long>                    Builds            { get; }
-        public Dataset<BuildArtifact, long>            BuildArtifacts    { get; }
-        public Dataset<BuildProject, long>             BuildProjects     { get; }
-        public Dataset<Deployment, long>               Deployments       { get; }
-        public Dataset<DeploymentTarget, (long, long)> DeploymentTargets { get; }
+       
 
         // IAM ------------------------------------------------------------------
         public Dataset<Activity, long>                 Activities        { get; }

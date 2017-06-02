@@ -5,8 +5,8 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.CI
 {
-    [Dataset("BuildProjects")]
-    public class BuildProject : IBuildProject
+    [Dataset("BuildProjects", Schema = "CI")]
+    public class BuildProject : IManagedResource, IProject
     {
         public BuildProject() { }
 
@@ -19,19 +19,18 @@ namespace Carbon.CI
         {
             #region Preconditions
 
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
+            Validate.Id(id);
 
-            if (repositoryId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(repositoryId));
+            Validate.Id(repositoryId, nameof(repositoryId));
 
-            if (ownerId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(ownerId));
+            Validate.Id(ownerId, nameof(ownerId));
+
+            Validate.NotNullOrEmpty(name, nameof(name));
 
             #endregion
 
             Id           = id;
-            Name         = name ?? throw new ArgumentNullException(nameof(name));
+            Name         = name;
             RepositoryId = repositoryId;
             OwnerId      = ownerId;
             ProviderId   = resource.ProviderId;

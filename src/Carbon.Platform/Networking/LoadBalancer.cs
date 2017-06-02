@@ -2,7 +2,6 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
-using Carbon.Json;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Networking

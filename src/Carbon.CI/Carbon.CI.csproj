@@ -13,6 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Carbon.CI.Abstractions\Carbon.CI.Abstractions.csproj" />
     <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj" />
     <ProjectReference Include="..\Carbon.Platform.Services\Carbon.Platform.Services.csproj" />
     <ProjectReference Include="..\Carbon.Platform.Web\Carbon.Platform.Web.csproj" />
@@ -33,6 +34,12 @@
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Benchmarking\" />
+    <Folder Include="Testing\" />
   </ItemGroup>
 
 </Project>

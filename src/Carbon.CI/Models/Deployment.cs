@@ -6,8 +6,8 @@ using Carbon.Platform.Sequences;
 
 namespace Carbon.CI
 {
-    [Dataset("Deployments")]
-    public class Deployment : IDeployment
+    [Dataset("Deployments", Schema = "CI")]
+    public class Deployment : IDeployment, IResource
     {
         public Deployment() { }
 
@@ -19,14 +19,11 @@ namespace Carbon.CI
         {
             #region Preconditions
 
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
+            Validate.Id(id);
 
-            if (release == null)
-                throw new ArgumentNullException(nameof(release));
+            Validate.NotNull(release, nameof(release));
 
-            if (initiatorId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(initiatorId));
+            Validate.Id(initiatorId, nameof(initiatorId));
 
             #endregion
 
@@ -44,6 +41,7 @@ namespace Carbon.CI
         [Member("status")]
         public DeploymentStatus Status { get; set; }
        
+        
         // Website | Program
         [Member("releaseType")]
         public ReleaseType ReleaseType { get; }
