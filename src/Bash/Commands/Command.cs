@@ -54,7 +54,11 @@ namespace Bash.Commands
         // chown [OPTION]... [OWNER][:[GROUP]] FILE...
         
 
-        public static Command CreateSymbolicLink(string target, string link, SymbolicLinkOptions options, bool sudo)
+        public static Command CreateSymbolicLink(
+            string target, 
+            string link,
+            SymbolicLinkOptions options, 
+            bool sudo = false)
         {
             var sb = new StringBuilder("ln -s");
 

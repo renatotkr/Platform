@@ -6,7 +6,11 @@ namespace Carbon.Platform.Computing
     {
         public CreateProgramRequest() { }
 
-        public CreateProgramRequest(string name, long ownerId)
+        public CreateProgramRequest(
+            string name, 
+            long ownerId, 
+            string runtime = null,
+            string[] urls = null)
         {
             #region Preconditions
 
@@ -16,10 +20,17 @@ namespace Carbon.Platform.Computing
 
             Name    = name;
             OwnerId = ownerId;
+            Runtime = runtime;
+            Urls    = urls;
         }
 
         [Required, StringLength(63)]
         public string Name { get; set; }
+        
+        [StringLength(50)]
+        public string Runtime { get; set; }
+
+        public string[] Urls { get; set; }
 
         [StringLength(63)]
         public string Slug { get; set; }

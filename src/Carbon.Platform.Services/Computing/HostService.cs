@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Carbon.Data.Expressions;
@@ -47,7 +48,39 @@ namespace Carbon.Platform.Computing
         {
             return await db.Hosts.FindAsync(provider, id).ConfigureAwait(false);
         }
-        
+
+        public async Task<HostInfo[]> ListAsync(ICluster cluster)
+        {
+            #region Preconditions
+
+            if (cluster == null)
+                throw new ArgumentNullException(nameof(cluster));
+
+            #endregion
+
+            var result = await db.Hosts.QueryAsync(
+                And(Eq("clusterId", cluster.Id), IsNull("terminated"))
+            ).ConfigureAwait(false);
+
+            return result.ToArray();
+        }
+
+        public async Task<HostInfo[]> ListAsync(IEnvironment environment)
+        {
+            #region Preconditions
+
+            if (environment == null)
+                throw new ArgumentNullException(nameof(environment));
+
+            #endregion
+
+            var result = await db.Hosts.QueryAsync(
+                And(Eq("environmentId", environment.Id), IsNull("terminated"))
+            ).ConfigureAwait(false);
+
+            return result.ToArray();
+        }
+
         public async Task<HostInfo> RegisterAsync(RegisterHostRequest request)
         {
              var host = new HostInfo(
@@ -61,8 +94,7 @@ namespace Carbon.Platform.Computing
                 machineTypeId : request.MachineTypeId,
                 imageId       : request.ImageId,
                 networkId     : request.NetworkId,
-                ownerId       : request.OwnerId,
-                created       : DateTime.UtcNow
+                ownerId       : request.OwnerId
             );
         
             await db.Hosts.InsertAsync(host).ConfigureAwait(false);

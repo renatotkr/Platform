@@ -9,5 +9,10 @@ namespace Carbon.Platform.Computing
         Task<HostInfo> GetAsync(string name);
 
         Task<HostInfo> RegisterAsync(RegisterHostRequest request);
+        
+        Task<HostInfo[]> ListAsync(ICluster cluster);
+
+        Task<HostInfo[]> ListAsync(IEnvironment environment);
+
     }
 }

@@ -29,6 +29,10 @@ namespace Carbon.Platform
         [DataMember(Name = "volumes", Order = 7)]
         public VolumeDetails[] Volumes { get; set; }
 
+        #region IHost
+
         IPAddress IHost.Address => IPAddress.Parse(Addresses[0]);
+
+        #endregion
     }
 }

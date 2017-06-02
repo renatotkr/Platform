@@ -87,7 +87,7 @@ namespace Bash.Tests
 
                 // Create a symbolic link
                 CreateSymbolicLink(
-                    "$APP_ROOT", 
+                    target  : "$APP_ROOT", 
                     link    : "/var/apps/$APP_NAME/latest", 
                     options : SymbolicLinkOptions.Symbolic | SymbolicLinkOptions.Force, // update if it already exists
                     sudo:    true

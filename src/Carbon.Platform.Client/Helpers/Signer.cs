@@ -20,7 +20,7 @@ namespace Carbon.Platform
             var now = DateTimeOffset.UtcNow;
 
             request.Headers.Date = now;
-            request.Headers.Add("User-Agent", "Carbon/1.1.0");
+            request.Headers.Add("User-Agent", "Carbon/1.2.0");
             
             var dateHeader = request.Headers.GetValues("Date").First();
             

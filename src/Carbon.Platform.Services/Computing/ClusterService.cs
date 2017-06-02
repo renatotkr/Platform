@@ -35,11 +35,13 @@ namespace Carbon.Platform.Computing
             // e.g. carbon/us-east-1
 
             var group = new Cluster(
-               id            : db.Clusters.Sequence.Next(),
-               name          : request.Environment.Name + "/" + request.Location.Name,
-               environmentId : request.Environment.Id,
-               details       : request.Details,
-               resource      : ManagedResource.Cluster(request.Location, Guid.NewGuid().ToString())
+               id             : db.Clusters.Sequence.Next(),
+               name           : request.Environment.Name + "/" + request.Location.Name,
+               environmentId  : request.Environment.Id,
+               details        : request.Details,
+               healthCheckId  : request.HealthCheckId,
+               hostTemplateId : request.HostTemplateId,
+               resource       : ManagedResource.Cluster(request.Location, Guid.NewGuid().ToString())
             );
 
             await db.Clusters.InsertAsync(group).ConfigureAwait(false);
@@ -92,17 +94,17 @@ namespace Carbon.Platform.Computing
 
     internal static class ClusterResourceId
     {
+        static readonly string sql = SqlHelper.GetCurrentValueAndIncrement<Cluster>("resourceCount");
+
         public static async Task<long> NextAsync(
             IDbContext context,
             long clusterId)
         {
             using (var connection = context.GetConnection())
             {
-                var currentResourceCount = await connection.ExecuteScalarAsync<int>(
-                  @"SELECT `resourceCount` FROM `Clusters` WHERE id = @id FOR UPDATE;
-                      UPDATE `Clusters`
-                      SET `resourceCount` = `resourceCount` + 1
-                      WHERE id = @id", new { id = clusterId }).ConfigureAwait(false);
+                var currentResourceCount = await connection.ExecuteScalarAsync<int>(sql, 
+                    new { id = clusterId }
+                ).ConfigureAwait(false);
 
                 return ScopedId.Create(clusterId, currentResourceCount + 1);
             }

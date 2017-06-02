@@ -8,6 +8,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
+    using Carbon.Json;
     using static Expression;
 
     // Programs can be Applications, Services, or Tasks
@@ -68,7 +69,16 @@ namespace Carbon.Platform.Computing
                 name    : request.Name,
                 slug    : request.Slug,
                 ownerId : request.OwnerId
-            );
+            )
+            { 
+                Runtime = request.Runtime,
+                Details = new JsonObject()
+            };
+
+            if (request.Urls != null)
+            {
+                program.Details.Add("urls", request.Urls);
+            }
 
             // Each app is given 4 environments (using the consecutive ids reserved above): 
             // Production, Staging, Intergration, and Development
@@ -91,7 +101,7 @@ namespace Carbon.Platform.Computing
 
         public Task<EnvironmentInfo> GetEnvironmentAsync(long programId, EnvironmentType type)
         {
-            return envService.GetAsync(new A(programId), type);
+            return envService.GetAsync(programId, type);
         }
 
         public Task<IReadOnlyList<EnvironmentInfo>> GetEnvironmentsAsync(IProgram program)
@@ -144,19 +154,5 @@ namespace Carbon.Platform.Computing
         }
 
         #endregion
-        
-        class A : IProgram
-        {
-            internal A(long id)
-            {
-                Id = id;
-            }
-
-            public long Id { get; }
-
-            public string Name => "";
-        }
-
     }
 }
-

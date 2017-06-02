@@ -5,6 +5,7 @@ using System.Reflection;
 using Carbon.Data;
 using Carbon.Data.Sql;
 using Carbon.Data.Sql.Adapters;
+using Carbon.Kms;
 using Carbon.Platform.Storage;
 using Carbon.Platform.Web;
 
@@ -14,6 +15,15 @@ namespace Carbon.Platform.Services.Test
 {
     public class KeyLengthsAreUnderXBytes
     {
+        [Fact]
+        public void KmsDbIsOk()
+        {
+            var database = new KmsDb(new MySqlDataContext());
+
+            KeysAndIndexesAreUnder767Bytes(database);
+        }
+
+
         [Fact]
         public void PlatformDbKeysAndIndexesAreUnder767Bytes()
         {
@@ -94,7 +104,7 @@ namespace Carbon.Platform.Services.Test
                     return member.Size.Value * 4;
                 }
 
-               return member.Size.Value;
+                return member.Size.Value;
             }
 
             else if (member.Type == typeof(int))
@@ -106,7 +116,7 @@ namespace Carbon.Platform.Services.Test
                 return 8;
             }
 
-            throw new Exception("unknown type:" + member.Type.Name);
+            throw new Exception("unknown type:" + member.Name + "/" + member.Type.Name);
         }
 
 

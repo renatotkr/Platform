@@ -2,6 +2,15 @@
 We'll continue to make breaking API changes in minor releases until we reach 2.0.
 Services & management libraries will stabalize at v1.
 
+1.42.0
+- Breakout EncryptionKeys and DataEncryptionKey into KMS
+
+1.40.0
+- Add package details to Programs & Website releases.
+- Add Urls & Runtime to Programs & ProgramReleases
+- Simplify Deployment Record
+- Add Version to IProgram contract
+
 1.39.0
 - Add Id to RepositoryBranch
 - Remove BranchCount from Repository
@@ -86,7 +95,7 @@ Services & management libraries will stabalize at v1.
 - Rename NetworkAcl -> NetworkSecurityGroup
 
 1.18.0
-- Add RepositoryInfo, RepositoryFile, & RepositoryCommit
+- Add Grant, RepositoryFile, & RepositoryCommit
 
 1.10.0
 - Add HealthCheck & HostTemplate

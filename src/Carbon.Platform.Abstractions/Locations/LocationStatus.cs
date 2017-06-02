@@ -1,6 +1,6 @@
 ﻿namespace Carbon.Platform
 {
-    public enum LocationStatus
+    public enum LocationStatus : byte
     {
         Unknown   = 0,
         Healthy   = 1,

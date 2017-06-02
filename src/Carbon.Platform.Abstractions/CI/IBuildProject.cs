@@ -1,6 +1,6 @@
 ﻿using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.CI
+namespace Carbon.CI
 { 
     public interface IBuildProject : IResource
     {

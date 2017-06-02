@@ -17,7 +17,11 @@ namespace Carbon.Hosting.IIS
         public long Id { get; }
 
         public string Name { get; }
-         
+
         public SemanticVersion Version { get; }
+
+        public string Runtime => "net461";
+        
+        public string[] Urls => Array.Empty<string>();
     }
 }

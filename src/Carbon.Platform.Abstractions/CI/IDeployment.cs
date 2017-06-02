@@ -2,13 +2,15 @@
 
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.CI
+namespace Carbon.CI
 {
     public interface IDeployment : IResource
     {        
         DeploymentStatus Status { get; }
 
-        long CommitId { get; }
+        ReleaseType ReleaseType { get; }
+
+        long ReleaseId { get; }
 
         long InitiatorId { get; }
 

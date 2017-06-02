@@ -1,8 +1,8 @@
-﻿namespace Carbon.Platform.CI
+﻿namespace Carbon.CI
 {
     public enum ReleaseType : byte
     {
         Program = 1,
-        Website     = 2
+        Website = 2
     }
 }

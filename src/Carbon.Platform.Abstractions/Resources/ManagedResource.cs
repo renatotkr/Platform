@@ -8,7 +8,11 @@ namespace Carbon.Platform.Resources
         public ManagedResource(ResourceProvider provider, ResourceType type, string id)
             : this(provider, Locations.Global, type, id) { }
 
-        public ManagedResource(ResourceProvider provider, ILocation location, ResourceType type, string id)
+        public ManagedResource(
+            ResourceProvider provider,
+            ILocation location, 
+            ResourceType type, 
+            string id)
         {
             #region Preconditions
 
@@ -78,7 +82,7 @@ namespace Carbon.Platform.Resources
             FromLocation(location, ResourceTypes.DatabaseInstance, id);
 
         public static ManagedResource EncryptionKey(ILocation location, string id) =>
-            FromLocation(location, ResourceTypes.EncryptionKey, id);
+            FromLocation(location, ResourceTypes.KeyGrant, id);
 
         public static ManagedResource LoadBalancer(ILocation location, string id) =>
             FromLocation(location, ResourceTypes.LoadBalancer, id);

@@ -76,12 +76,12 @@ namespace Carbon.Platform.Management
             // TODO:
             // if the location is a region, select the avaiability zone with the least hosts
 
-            if (!cluster.Details.TryGetValue(ClusterProperties.HostTemplateId, out var hostTemplateId))
+            if (cluster.HostTemplateId == null)
             {
                 throw new Exception("The cluster does not have a host template");
             }
 
-            var template = await db.HostTemplates.FindAsync((long)hostTemplateId);
+            var template = await db.HostTemplates.FindAsync(cluster.HostTemplateId.Value);
 
             return await LaunchHostsAsync(cluster, zone, template, launchCount).ConfigureAwait(false);
         }
@@ -128,8 +128,8 @@ namespace Carbon.Platform.Management
                 TagSpecifications = new[] {
                     new TagSpecification(
                         resourceType: "instance",
-                        tags: new[] { new Amazon.Ec2.Tag("envId", cluster.EnvironmentId.Value.ToString())
-                    })
+                        tags: new[] { new Amazon.Ec2.Tag("envId", cluster.EnvironmentId.Value.ToString()) }
+                    )
                 }
             };
 
@@ -163,7 +163,7 @@ namespace Carbon.Platform.Management
 
                         break;
 
-                    case HostTemplateProperties.EBSOptimized:
+                    case HostTemplateProperties.EbsOptimized:
                         request.EbsOptimized = (bool)property.Value;
 
                         break;

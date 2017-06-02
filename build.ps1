@@ -1,5 +1,5 @@
 dotnet pack ./src/Bash                          -c Release -o ./../../build/Bash
-dotnet pack ./src/Carbon.Platform.CI            -c Release -o ./../../build/Carbon.Platform.CI
+dotnet pack ./src/Carbon.CI                     -c Release -o ./../../build/Carbon.CI
 dotnet pack ./src/Carbon.Platform.Diagnostics   -c Release -o ./../../build/Carbon.Platform.Diagnostics
 dotnet pack ./src/GitHub                        -c Release -o ./../../build/GitHub
 dotnet pack ./src/Bitbucket                     -c Release -o ./../../build/Bitbucket
@@ -18,3 +18,5 @@ dotnet pack ./src/Carbon.Platform.Metrics       -c Release -o ./../../build/Carb
 dotnet pack ./src/Carbon.VersionControl         -c Release -o ./../../build/Carbon.VersionControl
 dotnet pack ./src/Carbon.Platform.Management    -c Release -o ./../../build/Carbon.Platform.Management
 dotnet pack ./src/Carbon.Platform.Configuration -c Release -o ./../../build/Carbon.Platform.Configuration
+dotnet pack ./src/Carbon.Kms                    -c Release -o ./../../build/Carbon.Kms
+dotnet pack ./src/Carbon.Kms.Abstractions       -c Release -o ./../../build/Carbon.Kms.Abstractions

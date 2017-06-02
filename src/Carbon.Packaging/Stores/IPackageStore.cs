@@ -1,16 +1,13 @@
 ﻿using System.Threading.Tasks;
 
-using Carbon.Data.Protection;
+using Carbon.Storage;
 
 namespace Carbon.Packaging
 {
-    using Storage;
-    using Versioning;
-
     public interface IPackageStore
     {
-        Task<IPackage> GetAsync(long id, SemanticVersion version);
+        Task<IPackage> GetAsync(string name);
 
-        Task<Hash> PutAsync(long id, SemanticVersion version, IPackage package);
+        Task<PutPackageResult> PutAsync(string name, IPackage package);
     }
 }

@@ -7,10 +7,10 @@ namespace Carbon.Platform.Diagnostics
     using Data.Annotations;
     using Json;
 
-    [Dataset("BrowserExceptions")]
+    [Dataset("BrowserExceptions", Schema = "Diagnostics")]
     public class BrowserException : IException
     {
-        // appId + timestamp + sequence
+        // environmentId + timestamp + sequence
         [Member("id"), Key]
         public BigId Id { get; set; }
 

@@ -1,13 +1,13 @@
-﻿namespace Carbon.Platform.Web
+﻿using Carbon.Versioning;
+
+namespace Carbon.Platform.Web
 {
     public interface IWebsite
     {
         long Id { get; }
 
-        long OwnerId { get; }
-
         string Name { get; }
 
-        long RepositoryId { get; }
+        SemanticVersion Version { get; }
     }
 }

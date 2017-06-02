@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Carbon.Data.Protection;
+using Carbon.Platform.Computing;
+using Carbon.Platform.Web;
 using Carbon.Versioning;
 
 namespace Carbon.Platform
@@ -22,28 +24,22 @@ namespace Carbon.Platform
 
             this.baseUri = "https://" + host;
 
-            Apps      = new AppsClient(this);
-            Hosts     = new HostsClient(this);
-            Websites  = new WebsitesClient(this);
+            Apps     = new AppClient(this);
+            Hosts    = new HostsClient(this);
+            Websites = new WebsitesClient(this);
         }
 
         #region Apps
 
-        public AppsClient Apps { get; }
+        public AppClient Apps { get; }
 
-        public class AppsClient : Dao<ProgramDetails>
+        public class AppClient : Dao<AppDetails>
         {
-            public AppsClient(PlatformClient platform)
+            public AppClient(PlatformClient platform)
                 : base("apps", platform) { }
 
-            public Task<ProgramDetails> GetReleaseAsync(long appId, SemanticVersion version)
-                => platform.GetAsync<ProgramDetails>($"/apps/{appId}@{version}");
-
-            // Create
-            // Delete
-            // RegisterInstance
-            // DeregisterInstance
-            // CreateRelease
+            public Task<AppDetails> GetReleaseAsync(long appId, SemanticVersion version)
+                => platform.GetAsync<AppDetails>($"/apps/{appId}@{version}");           
         }
 
         #endregion
@@ -58,15 +54,17 @@ namespace Carbon.Platform
                 : base("hosts", platform) { }
 
             // hosts/aws:i-0234123
-
+            
             public Task<HostDetails> GetAsync(ManagedResource resource)
             {
-                return platform.GetAsync<HostDetails>($"/hosts/{resource.ResourceId}");
+                var provider = ResourceProvider.Get(resource.ProviderId);
+
+                return platform.GetAsync<HostDetails>($"/hosts/{provider.Code}:{resource.ResourceId}");
             }
 
-            public Task<List<ProgramDetails>> GetAppsAsync(long id)
+            public Task<List<AppDetails>> ListProgramsAsync(long id)
             {
-                return platform.GetAsync<List<ProgramDetails>>($"/hosts/{id}/apps");
+                return platform.GetAsync<List<AppDetails>>($"/hosts/{id}/programs");
             }
         }
 
@@ -80,9 +78,6 @@ namespace Carbon.Platform
         {
             public WebsitesClient(PlatformClient platform)
                 : base("websites", platform) { }
-
-            public Task<WebsiteDetails> GetBranchAsync(long websiteId, string name) => 
-                platform.GetAsync<WebsiteDetails>($"/websites/{websiteId}@{name}");
 
             public Task<WebsiteDetails> GetReleaseAsync(long websiteId, SemanticVersion version) =>
                 platform.GetAsync<WebsiteDetails>($"/websites/{websiteId}@{version}");

@@ -29,10 +29,13 @@ namespace Carbon.Platform.Configuration
 
         public string WorkingDirectory { get; set; }
 
+        // Install
+        // Stop
+
         // e.g. Accelerator -port 5000
         // fullpath = {workingDirectory}/{name}
-        public ProgramExecutable Executable { get; set; }
-        
+        public ProgramExecutable Start { get; set; }
+
         public ProgramEnvironment Environment { get; set; }
 
         // StartOn (Boot, Manual)
@@ -51,9 +54,13 @@ namespace Carbon.Platform.Configuration
                 ? string.Join(" ", Environment.Variables.Select(pair => pair.Key + "=" + pair.Value))
                 : null;
 
+            string execStart = Start.FileName.StartsWith("/")
+                ? Start.ToString()
+                : WorkingDirectory + "/" + Start.ToString();
+
             var service = new ServiceSection {
                 WorkingDirectory = WorkingDirectory,
-                ExecStart        = WorkingDirectory + "/" + Executable.ToString(),
+                ExecStart        = execStart,
                 Environment      = env,
                 User             = User.ToString(),
                 SyslogIdentifier = Name

@@ -50,22 +50,22 @@ namespace Carbon.Platform
             {
                 switch (lid.RegionNumber)
                 {
-                    case 1  : return Aws_US_East_1;
-                    case 2  : return Aws_EU_West_1;
-                    case 3  : return Aws_US_West_1;
-                    case 4  : return Aws_AP_SouthEast_1;
-                    case 5  : return Aws_AP_NorthEast_1;
-                    case 6  : return Aws_US_GovWest_1;
-                    case 7  : return Aws_US_West_2;
-                    case 8  : return Aws_SA_East_1;
-                    case 9  : return Aws_AP_SouthEast_2;
-                    case 10 : return Aws_CN_North_1;
-                    case 11 : return Aws_EU_Central_1;
-                    case 12 : return Aws_AP_Northeast_2;
-                    case 13 : return Aws_AP_South_1;
-                    case 14 : return Aws_US_East_2;
-                    case 15 : return Aws_CA_Central_1;
-                    case 16 : return Aws_EU_West_2;
+                    case 1  : return Aws_USEast1;
+                    case 2  : return Aws_EUWest1;
+                    case 3  : return Aws_USWest1;
+                    case 4  : return Aws_APSouthEast1;
+                    case 5  : return Aws_APNorthEast1;
+                    case 6  : return Aws_USGovWest1;
+                    case 7  : return Aws_USWest2;
+                    case 8  : return Aws_SAEast1;
+                    case 9  : return Aws_APSouthEast2;
+                    case 10 : return Aws_CNNorth1;
+                    case 11 : return Aws_EUCentral1;
+                    case 12 : return Aws_APNortheast2;
+                    case 13 : return Aws_APSouth1;
+                    case 14 : return Aws_USEast2;
+                    case 15 : return Aws_CACentral1;
+                    case 16 : return Aws_EUWest2;
                 }
             }
 
@@ -117,22 +117,22 @@ namespace Carbon.Platform
         //------------------------------------------------------------------------------------------------------------------------------------------
         private static readonly ResourceProvider aws = ResourceProvider.Aws;
 
-        public static readonly Location Aws_US_East_1        = Create(aws,  1, "us-east-1");       // | US    | N. Virginia   | 2006-08-25
-        public static readonly Location Aws_EU_West_1        = Create(aws,  2, "eu-west-1");       // | EU    | Ireland       | 2008-12-10
-        public static readonly Location Aws_US_West_1        = Create(aws,  3, "us-west-1");       // | US    | N. California | 2009-12-03
-        public static readonly Location Aws_AP_SouthEast_1   = Create(aws,  4, "ap-southeast-1");  // | AP    | Singapore     | 2010-04-29
-        public static readonly Location Aws_AP_NorthEast_1   = Create(aws,  5, "ap-northeast-1");  // | AP    | Tokyo         | 2011-03-02
-        public static readonly Location Aws_US_GovWest_1     = Create(aws,  6, "us-gov-west-1");   // | US    | AWS GovCloud  | 2011-08-16
-        public static readonly Location Aws_US_West_2        = Create(aws,  7, "us-west-2");       // | US    | Oregon        | 2011-11-09
-        public static readonly Location Aws_SA_East_1        = Create(aws,  8, "sa-east-1");       // | SA    | São Paulo     | 2011-12-14
-        public static readonly Location Aws_AP_SouthEast_2   = Create(aws,  9, "ap-southeast-2");  // | AP    | Sydney        | 2012-11-12
-        public static readonly Location Aws_CN_North_1       = Create(aws, 10, "cn-north-1");      // | China | Beijing       | 2013-12-18
-        public static readonly Location Aws_EU_Central_1     = Create(aws, 11, "eu-central-1");    // | EU    | Frankfurt     | 2014-10-23
-        public static readonly Location Aws_AP_Northeast_2   = Create(aws, 12, "ap-northeast-2");  // | AP    | Seoul	        | 2016-01-06
-        public static readonly Location Aws_AP_South_1       = Create(aws, 13, "ap-south-1");      // | AP    | Mumbai        | 2016-06-27
-        public static readonly Location Aws_US_East_2        = Create(aws, 14, "us-east-2");       // | US    | Ohio          | 2016-10-17
-        public static readonly Location Aws_CA_Central_1     = Create(aws, 15, "ca-central-1");    // | CA    | Central       | 2016-12-08
-        public static readonly Location Aws_EU_West_2        = Create(aws, 16, "eu-west-2");       // | EU    | London        | 2016-12-13
+        public static readonly Location Aws_USEast1      = Create(aws,  1, "us-east-1");       // | US    | N. Virginia   | 2006-08-25
+        public static readonly Location Aws_EUWest1      = Create(aws,  2, "eu-west-1");       // | EU    | Ireland       | 2008-12-10
+        public static readonly Location Aws_USWest1      = Create(aws,  3, "us-west-1");       // | US    | N. California | 2009-12-03
+        public static readonly Location Aws_APSouthEast1 = Create(aws,  4, "ap-southeast-1");  // | AP    | Singapore     | 2010-04-29
+        public static readonly Location Aws_APNorthEast1 = Create(aws,  5, "ap-northeast-1");  // | AP    | Tokyo         | 2011-03-02
+        public static readonly Location Aws_USGovWest1   = Create(aws,  6, "us-gov-west-1");   // | US    | AWS GovCloud  | 2011-08-16
+        public static readonly Location Aws_USWest2      = Create(aws,  7, "us-west-2");       // | US    | Oregon        | 2011-11-09
+        public static readonly Location Aws_SAEast1      = Create(aws,  8, "sa-east-1");       // | SA    | São Paulo     | 2011-12-14
+        public static readonly Location Aws_APSouthEast2 = Create(aws,  9, "ap-southeast-2");  // | AP    | Sydney        | 2012-11-12
+        public static readonly Location Aws_CNNorth1     = Create(aws, 10, "cn-north-1");      // | China | Beijing       | 2013-12-18
+        public static readonly Location Aws_EUCentral1   = Create(aws, 11, "eu-central-1");    // | EU    | Frankfurt     | 2014-10-23
+        public static readonly Location Aws_APNortheast2 = Create(aws, 12, "ap-northeast-2");  // | AP    | Seoul	        | 2016-01-06
+        public static readonly Location Aws_APSouth1     = Create(aws, 13, "ap-south-1");      // | AP    | Mumbai        | 2016-06-27
+        public static readonly Location Aws_USEast2      = Create(aws, 14, "us-east-2");       // | US    | Ohio          | 2016-10-17
+        public static readonly Location Aws_CACentral1   = Create(aws, 15, "ca-central-1");    // | CA    | Central       | 2016-12-08
+        public static readonly Location Aws_EUWest2      = Create(aws, 16, "eu-west-2");       // | EU    | London        | 2016-12-13
 
         /*
         Paris
@@ -218,22 +218,22 @@ namespace Carbon.Platform
 
 
         public static readonly Location[] AwsRegions = new[] {
-            Aws_US_East_1,
-            Aws_EU_West_1,
-            Aws_US_West_1,
-            Aws_AP_SouthEast_1,
-            Aws_AP_NorthEast_1,
-            Aws_US_GovWest_1,
-            Aws_US_West_2,
-            Aws_SA_East_1,
-            Aws_AP_SouthEast_2,
-            Aws_CN_North_1,
-            Aws_EU_Central_1,
-            Aws_AP_Northeast_2,
-            Aws_AP_South_1,
-            Aws_US_East_2,
-            Aws_CA_Central_1,
-            Aws_EU_West_2
+            Aws_USEast1,
+            Aws_EUWest1,
+            Aws_USWest1,
+            Aws_APSouthEast1,
+            Aws_APNorthEast1,
+            Aws_USGovWest1,
+            Aws_USWest2,
+            Aws_SAEast1,
+            Aws_APSouthEast2,
+            Aws_CNNorth1,
+            Aws_EUCentral1,
+            Aws_APNortheast2,
+            Aws_APSouth1,
+            Aws_USEast2,
+            Aws_CACentral1,
+            Aws_EUWest2
         };
 
         public static readonly Location[] GcpRegions = new[] {

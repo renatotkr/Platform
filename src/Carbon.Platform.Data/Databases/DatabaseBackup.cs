@@ -35,7 +35,7 @@ namespace Carbon.Platform.Storage
         [Member("size")]
         public long Size { get; set; }
 
-        [Member("sha256", TypeName = "binary(32)")]
+        [Member("sha256"), FixedSize(32)]
         public byte[] Sha256 { get; set; }
 
         // CompressionMethod...

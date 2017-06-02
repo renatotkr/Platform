@@ -14,7 +14,7 @@ namespace Carbon.Platform.Configuration.Tests
                 Name             = "accelerator",
                 Description      = "Accelerator service",
                 WorkingDirectory = "/var/apps/accelerator/latest",
-                Executable       = new ProgramExecutable("Accelerator", "-port 80"),
+                Start       = new ProgramExecutable("Accelerator", "-port 80"),
                 Environment      = new ProgramEnvironment {
                     { "ASPNETCORE_ENVIRONMENT", "Production" }
                 },

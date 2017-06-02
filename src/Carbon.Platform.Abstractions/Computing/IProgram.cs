@@ -1,10 +1,16 @@
-﻿namespace Carbon.Platform.Computing
+﻿using Carbon.Versioning;
+
+namespace Carbon.Platform.Computing
 {
     public interface IProgram
     {
         long Id { get; }
 
         string Name { get; }
+
+        string Runtime { get; }
+
+        SemanticVersion Version { get; }
     }
 }
 

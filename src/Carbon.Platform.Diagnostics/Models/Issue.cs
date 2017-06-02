@@ -6,18 +6,27 @@ using Carbon.Json;
 
 namespace Carbon.Platform.Diagnostics
 {
-    [Dataset("Issues")]
+    [Dataset("Issues", Schema = "Diagnostics")]
     public class Issue : IIssue
     {
         public Issue() { }
 
-        public Issue(long id, string description = null)
+        public Issue(
+            long id, 
+            IssueType type = IssueType.Unknown, 
+            string description = null)
         {
-            Id = id;
+            #region Preconditions
+
+            if (id <= 0)
+                throw new ArgumentException("Must be > 0", nameof(id));
+
+            #endregion
+
+            Id          = id;
+            Type        = type;
             Description = description;
         }
-
-        // too small...
 
         // environmentId + sequence
         [Member("id"), Key]
@@ -36,6 +45,12 @@ namespace Carbon.Platform.Diagnostics
         [Member("details")]
         [StringLength(1000)]
         public JsonObject Details { get; set; }
+
+        // i.e. GitHub issue...
+
+        [Member("externalId")]
+        [StringLength(50)]
+        public string ExternalId { get; set; }
 
         #region Timestamps
 

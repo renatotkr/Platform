@@ -1,4 +1,5 @@
-﻿using Carbon.Versioning;
+﻿using Carbon.CI;
+using Carbon.Versioning;
 
 namespace Carbon.Platform.Computing
 {
@@ -12,6 +13,6 @@ namespace Carbon.Platform.Computing
 
         long CreatorId { get; }
 
-        byte[] Sha256 { get; }
+        IPackageInfo Package { get; }
     }
 }

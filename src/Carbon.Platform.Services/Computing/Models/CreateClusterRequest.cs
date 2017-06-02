@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.ComponentModel.DataAnnotations;
 using Carbon.Json;
 
 namespace Carbon.Platform.Computing
@@ -14,10 +14,13 @@ namespace Carbon.Platform.Computing
             Location = location;
         }
 
-        public CreateClusterRequest(IEnvironment environment, ILocation location, JsonObject details = null)
+        public CreateClusterRequest(
+            IEnvironment environment, 
+            ILocation location,
+            JsonObject details = null)
         {
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
-            Location    = location ?? throw new ArgumentNullException(nameof(location));
+            Location    = location    ?? throw new ArgumentNullException(nameof(location));
             Name        = environment.Name + "/" + location.Name;
             Details     = details;
         }
@@ -26,7 +29,12 @@ namespace Carbon.Platform.Computing
 
         public IEnvironment Environment { get; set; }
 
+        [Required]
         public ILocation Location { get; set; }
+
+        public long? HostTemplateId { get; set; }
+
+        public long? HealthCheckId { get; set; }
 
         public JsonObject Details { get; set; }
     }

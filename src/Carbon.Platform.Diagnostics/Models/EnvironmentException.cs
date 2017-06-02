@@ -6,7 +6,7 @@ using Carbon.Json;
 
 namespace Carbon.Platform.Diagnostics
 {
-    [Dataset("EnvironmentExceptions")]
+    [Dataset("Exceptions", Schema = "Diagnostics")]
     public class EnvironmentException : IException
     {
         // environmentId | timestamp/ms | sequenceNumber
@@ -15,11 +15,6 @@ namespace Carbon.Platform.Diagnostics
 
         [Member("hostId")]
         public long HostId { get; set; }
-        
-        // revision
-        [Member("appVersion")]
-        [StringLength(50)]
-        public string AppVersion { get; set; }
 
         [Member("type")]
         [MaxLength(1000)]
@@ -35,6 +30,7 @@ namespace Carbon.Platform.Diagnostics
         [StringLength(2000)]
         public string StackTrace { get; set; }
         
+        // appVersion, ...
         [Member("details")]
         [StringLength(1000)]
         public JsonObject Details { get; set; }
@@ -43,7 +39,11 @@ namespace Carbon.Platform.Diagnostics
         [Member("context")]
         [StringLength(1000)]
         public JsonObject Context { get; set; }
-        
+
+        [Member("issueId")]
+        [Indexed]
+        public long? IssueId { get; set; }
+
         [Member("sessionId"), Optional]
         public long? SessionId { get; set; }
 

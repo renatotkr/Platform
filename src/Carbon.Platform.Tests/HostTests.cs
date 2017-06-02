@@ -1,6 +1,7 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
+
 using Carbon.Platform.Resources;
+
 using Xunit;
 
 namespace Carbon.Platform.Computing.Tests
@@ -50,7 +51,6 @@ namespace Carbon.Platform.Computing.Tests
                1,
                1,
                1,
-               created  : default(DateTime),
                resource : default(ManagedResource)
            );
         }

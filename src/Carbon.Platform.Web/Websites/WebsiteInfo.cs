@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Versioning;
 
 namespace Carbon.Platform.Web
 {
@@ -44,6 +45,9 @@ namespace Carbon.Platform.Web
         [StringLength(63)]
         public string Name { get; }
 
+        [Member("version")]
+        public SemanticVersion Version { get; }
+
         [IgnoreDataMember]
         [Member("ownerId")]
         public long OwnerId { get; }
@@ -53,9 +57,6 @@ namespace Carbon.Platform.Web
 
         [Member("repositoryId")]
         public long RepositoryId { get; }
-
-        [Member("deploymentId")]
-        public long? DeploymentId { get; set; }
         
         #region Stats
 

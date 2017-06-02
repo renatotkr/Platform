@@ -8,8 +8,6 @@ namespace Carbon.Platform.Diagnostics
 
         int? LocationId { get; }
         
-        // scope = buckets, ...
-
         DateTime? Resolved { get; }
     }
 }

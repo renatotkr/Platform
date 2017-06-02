@@ -62,17 +62,16 @@ namespace Carbon.Platform.Storage
 
     internal static class CommitId
     {
+        static readonly string sql = SqlHelper.GetCurrentValueAndIncrement<RepositoryInfo>("commitCount");
+
         public static async Task<long> NextAsync(
             IDbContext context,
             long repositoryId)
         {
             using (var connection = context.GetConnection())
             {
-                var currentCommitCount = await connection.ExecuteScalarAsync<int>(
-                  @"SELECT `commitCount` FROM `Repositories` WHERE id = @id FOR UPDATE;
-                      UPDATE `Repositories`
-                      SET `commitCount` = `commitCount` + 1
-                      WHERE id = @id", new { id = repositoryId }).ConfigureAwait(false);
+                var currentCommitCount = await connection.ExecuteScalarAsync<int>(sql, 
+                    new { id = repositoryId }).ConfigureAwait(false);
 
                 return ScopedId.Create(repositoryId, currentCommitCount + 1);
             }

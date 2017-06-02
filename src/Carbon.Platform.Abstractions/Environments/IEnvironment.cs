@@ -6,12 +6,7 @@ namespace Carbon.Platform
     {
         string Name { get; }
 
-        EnvironmentType Type { get; }
-
-        string Revision { get; } // e.g. master, 1.0.0
-        
-        // IReadOnlyDictionary<string, string> Variables { get; }
-        
+        EnvironmentType Type { get; }        
     }
 }
 

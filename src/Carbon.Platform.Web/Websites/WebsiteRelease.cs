@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 using Carbon.Platform.Storage;
 using Carbon.Versioning;
-using Carbon.Platform.CI;
+using Carbon.CI;
 
 namespace Carbon.Platform.Web
 {
     [Dataset("WebsiteReleases")]
     [UniqueIndex("websiteId", "version")]
-    public class WebsiteRelease : IRelease
+    public class WebsiteRelease : IRelease, IWebsite
     {
         public WebsiteRelease() { }
 
@@ -17,7 +18,7 @@ namespace Carbon.Platform.Web
             long id,
             IWebsite website,
             SemanticVersion version, 
-            byte[] sha256,
+            IPackageInfo package,
             IRepositoryCommit commit,
             long creatorId)
         {
@@ -26,11 +27,11 @@ namespace Carbon.Platform.Web
             if (website == null)
                 throw new ArgumentNullException(nameof(website));
 
-            if (sha256 == null)
-                throw new ArgumentNullException(nameof(sha256));
+            if (package == null)
+                throw new ArgumentNullException(nameof(package));
 
-            if (sha256.Length != 32)
-                throw new ArgumentException("Must be 32", nameof(sha256));
+            if (package.Sha256.Length != 32)
+                throw new ArgumentException("Must be 32", nameof(package.Sha256));
 
 
             if (commit == null)
@@ -41,9 +42,12 @@ namespace Carbon.Platform.Web
             Id        = id;
             WebsiteId = website.Id;
             Version   = version;
-            Sha256    = sha256 ?? throw new ArgumentNullException(nameof(sha256));
             CommitId  = commit.Id;
             CreatorId = creatorId;
+            PackageName = package.Name;
+            PackageDekId = package.DekId;
+            PackageIV = package.IV;
+            PackageSha256 = package.Sha256;
         }
 
         // websiteId + sequenceNumber
@@ -53,10 +57,12 @@ namespace Carbon.Platform.Web
         [Member("websiteId")]
         public long WebsiteId { get; }
 
+        [Member("websiteName")]
+        public string WebsiteName { get; }
+
         [Member("version")]
         public SemanticVersion Version { get; }
 
-        // repositoryId + sequence
         [Member("commitId")] 
         public long CommitId { get; }
 
@@ -67,14 +73,34 @@ namespace Carbon.Platform.Web
 
         ReleaseType IRelease.Type => ReleaseType.Website;
 
-        long IRelease.Id => Id;
+        #endregion
+
+        #region Package
+        
+        [Member("packageName")]
+        [StringLength(100)]
+        public string PackageName { get; set; }
+
+        [Member("packageDekId")]
+        public long? PackageDekId { get; set; }
+
+        [Member("packageIV")]
+        [FixedSize(16)]
+        public byte[] PackageIV { get; set; }
+
+        [Member("packageSha256")]
+        [FixedSize(32)]
+        public byte[] PackageSha256 { get; set; }
+
+        [IgnoreDataMember]
+        public IPackageInfo Package =>
+            new WebsitePackage(PackageName, PackageDekId, PackageIV, PackageSha256);
 
         #endregion
 
-        #region Hashes
+        #region IWebsite
 
-        [Member("sha256", TypeName = "binary(32)")]
-        public byte[] Sha256 { get; }
+        string IWebsite.Name => WebsiteName;
 
         #endregion
 
@@ -84,5 +110,28 @@ namespace Carbon.Platform.Web
         public DateTime Created { get; }
 
         #endregion
+    }
+
+    internal class WebsitePackage : IPackageInfo
+    {
+        public WebsitePackage(
+            string name,
+            long? dekId,
+            byte[] iv,
+            byte[] sha256)
+        {
+            Name   = name;
+            DekId  = dekId;
+            IV     = iv;
+            Sha256 = sha256;
+        }
+
+        public string Name { get; }
+
+        public long? DekId { get; }
+
+        public byte[] IV { get; }
+
+        public byte[] Sha256 { get; }
     }
 }

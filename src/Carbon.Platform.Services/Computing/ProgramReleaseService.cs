@@ -32,24 +32,37 @@ namespace Carbon.Platform.Computing
 
             #endregion
 
-            // Fetch the program to ensure it exists...
-            var program = await programService.GetAsync(request.ProgramId).ConfigureAwait(false);
+            var program = request.Program;
 
             var release = new ProgramRelease(
-                id        : await GetNextId(request.ProgramId), 
-                programId : request.ProgramId,
-                version   : request.Version, 
-                sha256    : request.Sha256,
+                id        : await GetNextId(program.Id),
+                program   : request.Program,
+                version   : request.Version,
+                runtime   : program.Runtime,
+                package   : request.Package,
                 creatorId : request.CreatorId
-            );
+            )
+            {
+                Details = program.Details
+            };
 
             await db.ProgramReleases.InsertAsync(release).ConfigureAwait(false);
 
+            if (request.Version > program.Version)
+            {
+                using (var connection = db.Context.GetConnection())
+                {
+                    await connection.ExecuteAsync(
+                        @"UPDATE `Programs`
+                          SET `version` = @version
+                          WHERE `id` = @programId", release
+                    ).ConfigureAwait(false);
+                }
+            }
+
             #region Logging
 
-            var activity = new Activity("publish", program);
-
-            await db.Activities.InsertAsync(activity).ConfigureAwait(false);
+            await db.Activities.InsertAsync(new Activity("publish", program)).ConfigureAwait(false);
 
             #endregion
 
@@ -67,7 +80,6 @@ namespace Carbon.Platform.Computing
         {
             return db.ProgramReleases.QueryAsync(Eq("programId", appId), Order.Descending("version"));
         }
-
 
         #region Helper
 

@@ -64,11 +64,12 @@ namespace Carbon.Platform.Resources
         public static ResourceType RepositoryBranch    = "repository:branch";
         public static ResourceType RepositoryCommit    = "repository:commit"; 
         public static ResourceType RepositoryTag       = "repository:tag";
-        public static ResourceType Volume              = "volume";                // AKA drive
+        public static ResourceType Volume              = "volume";
 
         // KMS --------------------------------------------------------------------------------------------------
-        public static ResourceType DataEncryptionKey   = "kms:dek";           
-        public static ResourceType EncryptionKey       = "kms:key";
+        public static ResourceType Dek      = "kms:dek";           
+        public static ResourceType Key      = "kms:key";
+        public static ResourceType KeyGrant = "kms:grant";
 
         // Networking --------------------------------------------------------------------------------------------
 

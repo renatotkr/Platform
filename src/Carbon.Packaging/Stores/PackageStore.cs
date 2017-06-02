@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 
 using Carbon.Data.Protection;
 using Carbon.Storage;
-using Carbon.Versioning;
 
 namespace Carbon.Packaging
 {
@@ -17,7 +16,7 @@ namespace Carbon.Packaging
             this.bucket = bucket ?? throw new ArgumentNullException(nameof(bucket));
         }
 
-        public async Task<Hash> PutAsync(long id, SemanticVersion version, IPackage package)
+        public async Task<PutPackageResult> PutAsync(string name, IPackage package)
         {
             #region Preconditions
 
@@ -25,31 +24,27 @@ namespace Carbon.Packaging
 
             #endregion
 
-            var key = id.ToString() + "/" + version.ToString();
-
             using (var ms = new MemoryStream())
             {
                 await package.ZipToStreamAsync(ms).ConfigureAwait(false);
 
                 var hash = Hash.ComputeSHA256(ms, leaveOpen: true);
 
-                var blob = new Blob(key, ms, new BlobMetadata {  
+                var blob = new Blob(name, ms, new BlobMetadata {  
                     ContentType = "application/zip"
                 });
 
                 await bucket.PutAsync(blob).ConfigureAwait(false);
 
-                return hash;
+                return new PutPackageResult(name, hash.Data);
             }
         }
 
-        public async Task<IPackage> GetAsync(long id, SemanticVersion version)
+        public async Task<IPackage> GetAsync(string name)
         {
-            var key = id.ToString() + "/" + version.ToString();
-
             var ms = new MemoryStream();
 
-            using (var blob = await bucket.GetAsync(key).ConfigureAwait(false))
+            using (var blob = await bucket.GetAsync(name).ConfigureAwait(false))
             using (var blobStream = await blob.OpenAsync().ConfigureAwait(false))
             {
                 await blobStream.CopyToAsync(ms).ConfigureAwait(false);
@@ -62,4 +57,4 @@ namespace Carbon.Packaging
     }
 }
 
-// var key = tag.Path + ".zip";  (e.g. app/2.1.1.zip)
+// var name = appId + "/" + appVersion + ".zip";  (e.g. app/2.1.1.zip)

@@ -1,5 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using Carbon.CI;
 using Carbon.Versioning;
 
 namespace Carbon.Platform.Computing
@@ -9,25 +10,24 @@ namespace Carbon.Platform.Computing
         public CreateProgramReleaseRequest() { }
 
         public CreateProgramReleaseRequest(
-            long programId, 
+            Program program, 
             SemanticVersion version,
-            byte[] sha256, 
+            IPackageInfo package,
             long creatorId)
         {
-            ProgramId   = programId;
-            Version     = version;
-            Sha256      = sha256;
-            CreatorId   = creatorId;
+            Program   = program ?? throw new ArgumentNullException(nameof(program));
+            Version   = version;
+            Package   = package ?? throw new ArgumentNullException(nameof(package));
+            CreatorId = creatorId;
         }
 
-        [Range(1, 2_199_023_255_552)]
-        public long ProgramId { get; set; }
+        [Required]
+        public Program Program { get; set; }
 
         public SemanticVersion Version { get; set; }
 
         [Required]
-        [MaxLength(32)]
-        public byte[] Sha256 { get; set; }
+        public IPackageInfo Package { get; set; }
 
         [Range(1, 2_199_023_255_552)]
         public long CreatorId { get; set; }

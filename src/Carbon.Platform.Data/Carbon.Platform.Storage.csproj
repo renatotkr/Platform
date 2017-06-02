@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <AssemblyName>Carbon.Platform.Data</AssemblyName>
+    <AssemblyName>Carbon.Platform.Storage</AssemblyName>
     <VersionPrefix>0.5.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net451</TargetFrameworks>
 
@@ -33,9 +33,5 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
     <Reference Include="System.ComponentModel.DataAnnotations" />
 
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\" />
   </ItemGroup>
 </Project>

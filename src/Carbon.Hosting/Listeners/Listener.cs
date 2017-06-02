@@ -5,17 +5,16 @@ namespace Carbon.Net
 {
     // http://localhost:60000
     // https://*:5004
-    // {ip}:{port}:{hostName}
 
     public struct Listener : IEquatable<Listener>
     {
-        public static readonly Listener SSH   = new Listener(22,  ApplicationProtocal.SSH);
-        public static readonly Listener HTTP  = new Listener(80,  ApplicationProtocal.HTTP);
-        public static readonly Listener HTTPS = new Listener(443, ApplicationProtocal.HTTPS);
+        public static readonly Listener SSH   = new Listener(ApplicationProtocal.SSH,   22);
+        public static readonly Listener HTTP  = new Listener(ApplicationProtocal.HTTP,  80);
+        public static readonly Listener HTTPS = new Listener(ApplicationProtocal.HTTPS, 433);
         
         // Certificate?
 
-        public Listener(ushort port, ApplicationProtocal protocal)
+        public Listener(ApplicationProtocal protocal, ushort port)
         {
             #region Preconditions
 
@@ -24,32 +23,23 @@ namespace Carbon.Net
 
             #endregion
 
-            Protocal = protocal;
+            Scheme = protocal;
             Port     = port;
-            Host     = null;
-            Ip       = null;
+            Host     = "*";
         }
 
         public Listener(ApplicationProtocal protocal, string host, ushort port)
         {
-            Protocal = protocal;
-            Host     = host;
-            Ip       = null;
-            Port     = port;
+            Scheme = protocal;
+            Host   = host;
+            Port   = port;
         }
 
-        public ApplicationProtocal Protocal { get; }
-
-        public ushort Port { get; }
+        public ApplicationProtocal Scheme { get; }
 
         public string Host { get; }
 
-        // * | 192.168.1.1
-        public string Ip { get; }
-
-        // 7100/tcp
-        // 100-150/tcp
-        // 80/http
+        public ushort Port { get; }
 
         public static Listener Parse(string text)
         {
@@ -60,29 +50,21 @@ namespace Carbon.Net
 
             #endregion
 
-            if (text.StartsWith("http://"))
+            if (text.Contains("://"))
             {
-                var url = new Uri(text);
+                var parts = text.Split(new[] { "://" }, StringSplitOptions.None);
 
-                return new Listener(ApplicationProtocal.HTTP, url.Host, (ushort)url.Port);
+                var hostParts = parts[1].Split(':');
+                var protocal = ApplicationProtocalHelper.Parse(parts[0]);
+                
+                return new Listener(
+                    protocal : protocal,
+                    host     : hostParts[0],
+                    port     : hostParts.Length == 2 ? ushort.Parse(hostParts[1]) : (ushort)protocal
+                );
             }
 
-            switch (text)
-            {
-                case "http"  : return HTTP;
-                case "https" : return HTTPS;
-            }
-
-            var split = text.Split('/'); // '/'
-
-            ApplicationProtocal protocal = default(ApplicationProtocal);
-
-            if (split.Length > 1)
-            {
-                protocal = ApplicationProtocalHelper.Parse(split[1]);
-            }
-            
-            return new Listener(ushort.Parse(split[0]), protocal);
+            throw new Exception("Unsupported format:" + text);
         }
         
         public override string ToString()
@@ -92,17 +74,17 @@ namespace Carbon.Net
 
             if (Host != null)
             {
-                return Protocal.ToString().ToLower() + "://" + Host + ":" + Port;
+                return Scheme.ToString().ToLower() + "://" + Host + ":" + Port;
             }
 
             var sb = new StringBuilder();
 
             sb.Append(Port);
 
-            if (Protocal != default(ApplicationProtocal))
+            if (Scheme != default(ApplicationProtocal))
             {
                 sb.Append("/");
-                sb.Append(Protocal.Canonicalize());
+                sb.Append(Scheme.Canonicalize());
             }
 
             return sb.ToString();
@@ -112,7 +94,7 @@ namespace Carbon.Net
 
         public bool Equals(Listener other)
         {
-            return Host == other.Host && Port == other.Port && Protocal == other.Protocal;
+            return Host == other.Host && Port == other.Port && Scheme == other.Scheme;
         }
 
         #endregion

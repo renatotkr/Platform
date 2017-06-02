@@ -11,13 +11,17 @@ namespace Carbon.Platform.Storage
     {
         public DatabaseGrant() { }
 
-        public DatabaseGrant(long id, long userId, string schemaName, string tableName, string[] permissions)
+        public DatabaseGrant(
+            long id,
+            long userId, 
+            string schemaName, 
+            string tableName, 
+            string[] actions)
         {
-            Id          = id;
-            UserId      = userId;
-            SchemaName  = schemaName;
-            TableName   = tableName;
-            Permissions = permissions;
+            Id       = id;
+            UserId   = userId;
+            Resource = schemaName + "/" + tableName ?? "*";
+            Actions  = actions;
         }
 
         // databaseId + grantId
@@ -28,16 +32,12 @@ namespace Carbon.Platform.Storage
         [Member("userId")]
         public long UserId { get; }
 
-        [Member("schemaName")]
-        [StringLength(100)]
-        public string SchemaName { get; }
+        // schemaName:tableName
+        [Member("resource")]
+        public string Resource { get; }
 
-        [Member("tableName")]
-        [StringLength(100)]
-        public string TableName { get; }
-
-        [Member("permissions")]
-        public string[] Permissions { get; }
+        [Member("actions")]
+        public string[] Actions { get; }
 
         #region Timestamps
 

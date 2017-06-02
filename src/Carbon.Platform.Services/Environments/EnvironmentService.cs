@@ -24,11 +24,11 @@ namespace Carbon.Platform.Services
             return db.Environments.FindAsync(id) ?? throw ResourceError.NotFound(ResourceTypes.Environment, id);
         }
 
-        public Task<EnvironmentInfo> GetAsync(IProgram program, EnvironmentType type)
+        public Task<EnvironmentInfo> GetAsync(long programId, EnvironmentType type)
         {
             // We can lookup directly by id...
 
-            var id = program.Id + (((int)type) - 1);
+            long id = programId + (((int)type) - 1);
 
             return GetAsync(id);
         }
@@ -49,24 +49,6 @@ namespace Carbon.Platform.Services
             ).ConfigureAwait(false);
 
             return hosts.ToArray();
-        }
-
-        public async Task<IHost[]> GetHostsAsync(IEnvironment env)
-        {
-            #region Preconditions
-
-            if (env == null)
-                throw new ArgumentNullException(nameof(env));
-
-            #endregion
-
-            // An environment may be divided into x groups
-
-            var instances = await db.Hosts.QueryAsync(
-                And(Eq("environmentId", env.Id), IsNull("terminated"))
-            ).ConfigureAwait(false);
-
-            return instances.ToArray();
         }
     }
 }
