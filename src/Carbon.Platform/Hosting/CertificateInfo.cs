@@ -33,11 +33,9 @@ namespace Carbon.Platform.Hosting
 
         // primary subject is first, followed by subjectAlternate names
         [Member("subjects")]
+        [StringLength(1000)]
         public string[] Subjects { get; }
 
-        [Member("description")]
-        public string Description { get; set; }
-        
         // KeyAlgorithm
         // RSA_2048 | RSA_1024 | EC_prime256v1
 

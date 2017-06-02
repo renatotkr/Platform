@@ -42,6 +42,9 @@ namespace Carbon.Platform.Storage
         [Member("ownerId")]
         public long OwnerId { get; }
 
+        [Member("flags")]
+        public ChannelFlags Flags { get; set; }
+
         [Member("details")]
         [StringLength(1000)]
         public JsonObject Details { get; set; }
@@ -86,5 +89,10 @@ namespace Carbon.Platform.Storage
         public DateTime? Deleted { get; }
 
         #endregion
+    }
+
+    public enum ChannelFlags
+    {
+        None = 0
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 
 /*
-namespace Carbon.Platform.CI
+namespace Carbon.CI
 {
     using static BuildStatus;
 

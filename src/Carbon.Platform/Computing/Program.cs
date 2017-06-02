@@ -4,18 +4,19 @@ using System.Runtime.Serialization;
 using Carbon.Data.Annotations;
 using Carbon.Json;
 using Carbon.Platform.Resources;
+using Carbon.Versioning;
 
 namespace Carbon.Platform.Computing
 {
     [Dataset("Programs", Schema = "Computing")]
     [UniqueIndex("ownerId", "name")]
-    public class Program : IProgram, IResource
+    public class Program : IApplication, IResource
     {
         public Program() { }
 
         public Program(
             long id, 
-            string name, 
+            string name,
             string slug, 
             long ownerId,
             ProgramType type = ProgramType.Application)
@@ -44,7 +45,6 @@ namespace Carbon.Platform.Computing
         public ProgramType Type { get; }
 
         [Member("ownerId")]
-        [Indexed]
         public long OwnerId { get; }
 
         [Member("name")]
@@ -55,6 +55,13 @@ namespace Carbon.Platform.Computing
         [Member("slug"), Unique]
         [StringLength(63)]
         public string Slug { get; }
+
+        [Member("version")]
+        public SemanticVersion Version { get; }
+        
+        [Member("runtime")]
+        [StringLength(50)]
+        public string Runtime { get; set; }
 
         [Member("details")]
         [StringLength(1000)]
@@ -71,6 +78,17 @@ namespace Carbon.Platform.Computing
 
         [Member("repositoryId")]
         public long RepositoryId { get; set; }
+
+        #endregion
+
+        #region Details
+
+        string[] IApplication.Urls
+        {
+            get => (Details.TryGetValue("urls", out var addresses))
+                ? addresses.ToArrayOf<string>()
+                : null;
+        }
 
         #endregion
 

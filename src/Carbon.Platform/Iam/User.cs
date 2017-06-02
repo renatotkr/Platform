@@ -8,7 +8,7 @@ using Carbon.Platform.Resources;
 namespace Carbon.Platform.Iam
 {
     [Dataset("Users")]
-    // [DataIndex(IndexFlags.Unique, "organizationId", "name")]
+    [DataIndex(IndexFlags.Unique, "organizationId", "name")]
     public class User : IResource
     {
         public User() { }
@@ -29,7 +29,7 @@ namespace Carbon.Platform.Iam
 
         [Member("organizationId")]
         public long? OrganizationId { get; }
-
+        
         [Member("details")]
         [StringLength(1000)]
         public JsonObject Details { get; set; }
@@ -65,8 +65,8 @@ namespace Carbon.Platform.Iam
 
     public static class UserProperties
     {
-        public const string Oid     = "oid"; // Directories
-        public const string Uid     = "uid"; // Linux users
-        public const string IamRole = "iamRole";
+        public const string Oid = "oid"; // Directories
+        public const string Uid = "uid"; // Linux users
+        public const string Arn = "arn"; 
     }
 }

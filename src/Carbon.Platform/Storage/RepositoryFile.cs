@@ -57,7 +57,8 @@ namespace Carbon.Platform.Storage
         public long Size { get; set; }
 
         // of body...
-        [Member("sha256", TypeName = "binary(32)"), Mutable]
+        [Member("sha256"), Mutable]
+        [FixedSize(32)]
         public byte[] Sha256 { get; set; }
         
         // Sha3?

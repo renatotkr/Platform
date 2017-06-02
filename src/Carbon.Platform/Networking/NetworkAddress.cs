@@ -22,7 +22,7 @@ namespace Carbon.Platform.Networking
         }
 
         // networkId | #
-        [Member("id")]
+        [Member("id"), Key]
         public long Id { get; }
 
         [Member("address")]

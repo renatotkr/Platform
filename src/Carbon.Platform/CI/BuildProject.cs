@@ -1,10 +1,9 @@
 ﻿using System;
 
 using Carbon.Data.Annotations;
-using Carbon.Json;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.CI
+namespace Carbon.CI
 {
     [Dataset("BuildProjects")]
     public class BuildProject : IBuildProject
@@ -44,16 +43,13 @@ namespace Carbon.Platform.CI
         public long Id { get; }
 
         [Member("name")]
-        public string Name { get; set; }
+        public string Name { get; }
 
         [Member("repositoryId")]
         public long RepositoryId { get; }
-        
-        [Member("details")]
-        [StringLength(1000)]
-        public JsonObject Details { get; set; }
-        
-        // ImageId
+
+        [Member("imageId")]
+        public long ImageId { get; set; }
         
         [Member("ownerId")]
         public long OwnerId { get; }

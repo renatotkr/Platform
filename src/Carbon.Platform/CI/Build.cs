@@ -1,10 +1,9 @@
 ﻿using System;
 
 using Carbon.Data.Annotations;
-using Carbon.Json;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.CI
+namespace Carbon.CI
 {
     [Dataset("Builds")]
     public class Build : IBuild, IManagedResource
@@ -36,15 +35,12 @@ namespace Carbon.Platform.CI
         [Member("id"), Key]
         public long Id { get; }
         
-        [Member("projectId")]
-        public long ProjectId { get; set; }
-
         [Member("status"), Mutable]
         public BuildStatus Status { get; set; }
         
-        [Member("commitId")] // scopeId w/ repositoryId
+        [Member("commitId")]
         public long CommitId { get; }
-
+        
         [Member("initiatorId")]
         public long InitiatorId { get; }
 
@@ -54,10 +50,6 @@ namespace Carbon.Platform.CI
 
         [Member("duration"), Mutable]
         public TimeSpan? Duration { get; set; }
-
-        [Member("details")]
-        [StringLength(1000)]
-        public JsonObject Details { get; set; }
 
         #region IResource
 
@@ -89,12 +81,5 @@ namespace Carbon.Platform.CI
         public DateTime? Completed { get; set; }
 
         #endregion
-    }
-
-    public static class BuildProperties
-    {
-        // e.g. builds/1  | carbon/1
-
-        public const string OutputPath = "outputPath";
     }
 }

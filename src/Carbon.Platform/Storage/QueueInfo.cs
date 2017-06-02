@@ -36,9 +36,8 @@ namespace Carbon.Platform.Storage
         [Member("ownerId")]
         public long OwnerId { get; }
 
-        [Member("details")]
-        [StringLength(1000)]
-        public JsonObject Details { get; set; }
+        [Member("flags")]
+        public QueueFlags Flags { get; set; }
 
         #region IResource
 
@@ -75,5 +74,10 @@ namespace Carbon.Platform.Storage
         public DateTime? Deleted { get; }
 
         #endregion
+    }
+
+    public enum QueueFlags
+    {
+        None = 0
     }
 }

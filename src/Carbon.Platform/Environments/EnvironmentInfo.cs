@@ -2,7 +2,6 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
-using Carbon.Json;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform
@@ -16,8 +15,7 @@ namespace Carbon.Platform
             long id, 
             string name,
             long ownerId,
-            string slug = null,
-            JsonObject variables = null)
+            string slug = null)
         {
             #region Preconditions
 
@@ -29,11 +27,10 @@ namespace Carbon.Platform
 
             #endregion
 
-            Id        = id;
-            Name      = name;
-            Slug      = slug;
-            OwnerId   = ownerId;
-            Variables = variables;
+            Id      = id;
+            Name    = name;
+            Slug    = slug;
+            OwnerId = ownerId;
         }
 
         [Member("id"), Key]
@@ -46,14 +43,6 @@ namespace Carbon.Platform
         [Member("slug"), Unique]
         [StringLength(63)]
         public string Slug { get; }
-
-        [Member("variables")]
-        [StringLength(1000)]
-        public JsonObject Variables { get; }
-  
-        // e.g. 1.2.9
-        [Member("revision"), Mutable]
-        public string Revision { get; set; }
 
         [Member("ownerId")]
         public long OwnerId { get; }

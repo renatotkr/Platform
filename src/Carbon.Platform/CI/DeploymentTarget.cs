@@ -1,7 +1,7 @@
 ﻿using System;
 using Carbon.Data.Annotations;
 
-namespace Carbon.Platform.CI
+namespace Carbon.CI
 {
     [Dataset("DeploymentTargets")]
     public class DeploymentTarget : IDeploymentTarget

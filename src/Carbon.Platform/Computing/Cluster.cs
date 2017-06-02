@@ -18,7 +18,9 @@ namespace Carbon.Platform.Computing
             string name,
             long environmentId,
             JsonObject details,
-            ManagedResource resource)
+            ManagedResource resource,
+            long? hostTemplateId,
+            long? healthCheckId)
         {
             #region Preconditions
 
@@ -27,13 +29,14 @@ namespace Carbon.Platform.Computing
 
             #endregion
 
-            Id            = id;
-            Name          = name ?? throw new ArgumentNullException(nameof(name));
-            EnvironmentId = environmentId;
-            Details       = details ?? throw new ArgumentNullException(nameof(details));
-            ProviderId    = resource.ProviderId;
-            LocationId    = resource.LocationId;
-            ResourceId    = resource.ResourceId;
+            Id             = id;
+            Name           = name ?? throw new ArgumentNullException(nameof(name));
+            EnvironmentId  = environmentId;
+            Details        = details ?? throw new ArgumentNullException(nameof(details));
+            ProviderId     = resource.ProviderId;
+            LocationId     = resource.LocationId;
+            ResourceId     = resource.ResourceId;
+            HostTemplateId = hostTemplateId;
         }
         
         [Member("id"), Key("clusterId")]
@@ -47,8 +50,14 @@ namespace Carbon.Platform.Computing
         [Indexed]
         public long? EnvironmentId { get; }
 
+        [Member("hostTemplateId")]
+        public long? HostTemplateId { get; }
+        
+        [Member("healthCheckId")]
+        public long? HealthCheckId { get; }
+
         [Member("details")]
-        [StringLength(1000)]
+        [StringLength(500)]
         public JsonObject Details { get; set; }
 
         #region Stats
@@ -102,9 +111,5 @@ namespace Carbon.Platform.Computing
     {
         // When used with an application load balancer target group
         public const string TargetGroupArn = "targetGroupArn";
-
-        public const string HealthCheckId  = "healthCheckId";
-
-        public const string HostTemplateId = "hostTemplateId";
     }
 }

@@ -1,12 +1,10 @@
 ﻿using System;
 
 using Carbon.Data.Annotations;
-using Carbon.Json;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Sequences;
-using Carbon.Versioning;
 
-namespace Carbon.Platform.CI
+namespace Carbon.CI
 {
     [Dataset("Deployments")]
     public class Deployment : IDeployment
@@ -32,16 +30,14 @@ namespace Carbon.Platform.CI
 
             #endregion
 
-            Id             = id;
-            Status         = status;
-            ReleaseType    = release.Type;
-            ReleaseId      = release.Id;
-            ReleaseVersion = release.Version; 
-            CommitId       = release.CommitId;
-            InitiatorId     = initiatorId;
+            Id          = id;
+            Status      = status;
+            ReleaseType = release.Type;
+            ReleaseId   = release.Id;
+            InitiatorId = initiatorId;
         }
 
-        // environmentId + deployCount [within enviornment]
+        // environmentId | #
         [Member("id"), Key]
         public long Id { get; }
 
@@ -52,21 +48,11 @@ namespace Carbon.Platform.CI
         [Member("releaseType")]
         public ReleaseType ReleaseType { get; }
 
-        [Member("resourceId")]
+        [Member("releaseId")]
         public long ReleaseId { get; }
-
-        [Member("releaseVersion")]
-        public SemanticVersion ReleaseVersion { get; }
-        
-        [Member("commitId")]
-        public long CommitId { get; }
 
         [Member("initiatorId")]
         public long InitiatorId { get; }
-
-        [Member("details")]
-        [StringLength(1000)]
-        public JsonObject Details { get; set; }
 
         #region IResource
 
@@ -80,6 +66,7 @@ namespace Carbon.Platform.CI
         public DateTime Created { get; }
 
         [Member("completed")]
+        [TimePrecision(TimePrecision.Second)]
         public DateTime? Completed { get; set; }
 
         #endregion

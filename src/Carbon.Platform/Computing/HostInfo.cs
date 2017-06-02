@@ -23,7 +23,6 @@ namespace Carbon.Platform.Computing
             long imageId,
             long machineTypeId,
             long ownerId,
-            DateTime created,
             ManagedResource resource,
             long networkId    = 0,
             HostType type     = HostType.Virtual,
@@ -41,7 +40,6 @@ namespace Carbon.Platform.Computing
             ResourceId    = resource.ResourceId;
             NetworkId     = networkId;
             OwnerId       = ownerId;
-            Created       = created;
         }
 
         // locationId | #
@@ -63,8 +61,8 @@ namespace Carbon.Platform.Computing
         [Member("networkId")]
         public long NetworkId { get; }
 
-        [Member("parentId")]
-        public long? ParentId { get; set; }
+        [Member("parentId"), Indexed]
+        public long? ParentId { get; }
 
         [Member("ownerId")]
         public long OwnerId { get; }
@@ -115,6 +113,8 @@ namespace Carbon.Platform.Computing
         [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
+
+        // Initialized...
 
         [Member("terminated")]
         [TimePrecision(TimePrecision.Second)]
@@ -180,5 +180,3 @@ namespace Carbon.Platform.Computing
         #endregion
     }
 }
-
-// ParentID?

@@ -54,10 +54,6 @@ namespace Carbon.Platform.Networking
         [Member("ownerId")]
         public long OwnerId { get; }
 
-        [Member("details")]
-        [StringLength(1000)]
-        public JsonObject Details { get; set; }
-
         #region IResource
 
         [IgnoreDataMember]

@@ -34,7 +34,7 @@ namespace Carbon.Platform.Storage
         [Member("repositoryId")]
         public long RepositoryId { get; }
 
-        [Member("sha1", TypeName = "binary(20)")]
+        [Member("sha1"), FixedSize(20)]
         public byte[] Sha1 { get; }
 
         [Member("message")]

@@ -2,7 +2,7 @@
 
 using Carbon.Data.Annotations;
 
-namespace Carbon.Platform.CI
+namespace Carbon.CI
 {
     [Dataset("BuildArtifacts")]
     public class BuildArtifact

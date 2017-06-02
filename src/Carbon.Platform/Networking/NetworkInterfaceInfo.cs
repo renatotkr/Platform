@@ -48,7 +48,7 @@ namespace Carbon.Platform.Networking
         [Member("addresses")]
         public IPAddress[] Addresses { get; }
 
-        [Member("macAddress", TypeName = "binary(6)")]
+        [Member("macAddress"), FixedSize(6)]
         [Indexed]
         public MacAddress MacAddress { get; }
 

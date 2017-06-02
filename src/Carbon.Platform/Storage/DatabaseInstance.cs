@@ -46,10 +46,6 @@ namespace Carbon.Platform.Storage
         [Member("priority")]
         public int Priority { get; }
 
-        [Member("details")]
-        [StringLength(1000)]
-        public JsonObject Details { get; set; }
-
         #region IResource
 
         [IgnoreDataMember]

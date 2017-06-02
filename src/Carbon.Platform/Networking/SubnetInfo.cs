@@ -34,18 +34,15 @@ namespace Carbon.Platform.Networking
         /// </summary>
         [Member("addressBlocks")]
         [StringLength(100)]
-        public string[] AddressBlocks { get; } 
-
-        [IgnoreDataMember]
-        public long NetworkId => ScopedId.GetScope(Id);
-
-        // [a-z]([-a-z0-9]*[a-z0-9])?
-        // Validate alphanumeric
+        public string[] AddressBlocks { get; }
 
         [Member("name")]
         [StringLength(63)]
         public string Name { get; set; }
 
+        [IgnoreDataMember]
+        public long NetworkId => ScopedId.GetScope(Id);
+        
         #region IResource
 
         [IgnoreDataMember]

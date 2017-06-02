@@ -5,8 +5,6 @@ using System.Text;
 using Carbon.Data.Annotations;
 using Carbon.Platform.Resources;
 
-// Repositories layer on-top of containers...
-
 namespace Carbon.Platform.Storage
 {
     [Dataset("Repositories")]
@@ -41,11 +39,11 @@ namespace Carbon.Platform.Storage
         public long Id { get; }
         
         [Member("name")]
-        [StringLength(120)]
+        [StringLength(100)]
         public string Name { get; }
 
         [Member("fullName")]
-        [StringLength(100)]
+        [StringLength(160)]
         public string FullName { get; }
 
         // Note: may change ownership
@@ -53,14 +51,12 @@ namespace Carbon.Platform.Storage
         [Member("ownerId")] 
         [Indexed]
         public long OwnerId { get; }
-
         
-        // public long MasterBranchId { get; set; }
-
         /// <summary>
         /// An encrypted token to access the repository
         /// </summary>
-        [Member("encryptedToken", TypeName = "BLOB(1000)")]
+        [Member("encryptedToken")]
+        [MaxLength(1000)]
         public byte[] EncryptedToken { get; }
 
         #region Stats
