@@ -1,26 +1,25 @@
-﻿using System;
-
-using Carbon.Data.Annotations;
+﻿using Carbon.Data.Annotations;
 
 namespace Carbon.CI
 {
-    [Dataset("BuildArtifacts", Schema = "CI")]
+    [Dataset("BuildArtifacts", Schema = "Ciad")]
     public class BuildArtifact
     {
         public BuildArtifact() { }
 
-        public BuildArtifact(long id, string name)
+        public BuildArtifact(long id, string name, byte[] sha256 = null)
         {
             #region Preconditions
 
             Validate.Id(id);
 
-            Validate.NotNullOrEmpty(name);
+            Validate.NotNullOrEmpty(name, nameof(name));
 
             #endregion
 
-            Id   = id;
-            Name = name;
+            Id     = id;
+            Name   = name;
+            Sha256 = sha256;
         }
 
         // buildId | #
@@ -30,7 +29,7 @@ namespace Carbon.CI
         [Member("name")]
         public string Name { get; }
 
-        // TODO: Choose a hash
-        // Leaning toward SHA3, depending on GIT choice
+        [Member("sha256"), FixedSize(32)]
+        public byte[] Sha256 { get; }
     }
 }

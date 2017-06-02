@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Carbon.CI\Carbon.CI.csproj" />
     <ProjectReference Include="..\Carbon.Hosting\Carbon.Hosting.csproj" />
     <ProjectReference Include="..\Carbon.Kms\Carbon.Kms.csproj" />
     <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj" />

@@ -6,7 +6,7 @@ using Carbon.Platform.Sequences;
 
 namespace Carbon.CI
 {
-    [Dataset("Deployments", Schema = "CI")]
+    [Dataset("Deployments", Schema = "Ciad")]
     public class Deployment : IDeployment, IResource
     {
         public Deployment() { }

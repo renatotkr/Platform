@@ -38,6 +38,8 @@ namespace Carbon.Platform.Storage
         [Member("id"), Key(sequenceName: "repositoryId")]
         public long Id { get; }
         
+        // namespace...
+
         [Member("name")]
         [StringLength(100)]
         public string Name { get; }
@@ -59,7 +61,7 @@ namespace Carbon.Platform.Storage
         [MaxLength(1000)]
         public byte[] EncryptedToken { get; }
 
-        #region Stats
+        #region Statistics
 
         // Max ~4M
         [IgnoreDataMember]

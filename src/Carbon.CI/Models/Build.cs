@@ -5,7 +5,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.CI
 {
-    [Dataset("Builds", Schema = "CI")]
+    [Dataset("Builds", Schema = "Ciad")]
     public class Build : IBuild, IManagedResource
     {
         public Build() { }
@@ -19,6 +19,8 @@ namespace Carbon.CI
             #region Preconditions
 
             Validate.Id(id);
+            
+            Validate.Id(initiatorId, nameof(initiatorId));
 
             #endregion
 

@@ -5,12 +5,13 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.CI
 {
-    [Dataset("BuildProjects", Schema = "CI")]
-    public class BuildProject : IManagedResource, IProject
+    [Dataset("Projects", Schema = "Ciad")]
+    [UniqueIndex("ownerId", "name")]
+    public class Project : IManagedResource, IProject
     {
-        public BuildProject() { }
+        public Project() { }
 
-        public BuildProject(
+        public Project(
             long id, 
             string name,
             long repositoryId,
@@ -23,9 +24,9 @@ namespace Carbon.CI
 
             Validate.Id(repositoryId, nameof(repositoryId));
 
-            Validate.Id(ownerId, nameof(ownerId));
-
             Validate.NotNullOrEmpty(name, nameof(name));
+
+            Validate.Id(ownerId, nameof(ownerId));
 
             #endregion
 
@@ -38,10 +39,11 @@ namespace Carbon.CI
             LocationId   = resource.LocationId;
         }
 
-        [Member("id"), Key(sequenceName: "buildProjectId")]
+        [Member("id"), Key(sequenceName: "projectId")]
         public long Id { get; }
 
         [Member("name")]
+        [StringLength(100)]
         public string Name { get; }
 
         [Member("repositoryId")]
@@ -71,7 +73,7 @@ namespace Carbon.CI
         [Member("locationId")]
         public int LocationId { get; }
         
-        ResourceType IResource.ResourceType => ResourceTypes.BuildProject; // ci:project
+        ResourceType IResource.ResourceType => ResourceTypes.Project; // ci:project
 
         #endregion
 
@@ -79,6 +81,9 @@ namespace Carbon.CI
 
         [Member("created"), Timestamp]
         public DateTime Created { get; }
+
+        [Member("deleted")]
+        public DateTime? Deleted { get; }
 
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }

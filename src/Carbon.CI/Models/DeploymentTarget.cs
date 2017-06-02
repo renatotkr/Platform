@@ -3,7 +3,7 @@ using Carbon.Data.Annotations;
 
 namespace Carbon.CI
 {
-    [Dataset("DeploymentTargets", Schema = "CI")]
+    [Dataset("DeploymentTargets", Schema = "Ciad")]
     public class DeploymentTarget : IDeploymentTarget
     {
         public DeploymentTarget() { }

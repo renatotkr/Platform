@@ -43,11 +43,12 @@ namespace Carbon.Platform.Resources
 
         // Computing  -----------------------------------------------------------------------------------------
         public static ResourceType Cluster              = "cluster";
-        public static ResourceType Host                 = "host";          // includes metal, vm instances, and container instances
+        public static ResourceType Host                 = "host";          //  metal, vms, and containers
         public static ResourceType HostTemplate         = "host:template";
         public static ResourceType Image                = "host:image";
         public static ResourceType MachineType          = "machineType";
         public static ResourceType Program              = "program";
+        public static ResourceType ProgramRelease       = "program:release";
         public static ResourceType LoadBalancer         = "loadBalancer";
         public static ResourceType LoadBalancerListener = "loadBalancer:listener";
         public static ResourceType LoadBalancerRule     = "loadBalancer:rule";
@@ -55,16 +56,19 @@ namespace Carbon.Platform.Resources
         // Storage --------------------------------------------------------------------------------------------
         public static ResourceType Bucket              = "bucket";        
         public static ResourceType Channel             = "channel";               // AKA Stream / Topic           
-        public static ResourceType Database            = "database";
-        public static ResourceType DatabaseCluster     = "database:cluster";
-        public static ResourceType DatabaseInstance    = "database:instance";
-        public static ResourceType DatabaseSchema      = "database:schema";
+        public static ResourceType Database            = "db";
+        public static ResourceType DatabaseCluster     = "db:cluster";
+        public static ResourceType DatabaseInstance    = "db:instance";
+        public static ResourceType DatabaseSchema      = "db:schema";
+        public static ResourceType DatabaseGrant       = "db:grant";
+        public static ResourceType DatabaseUser        = "db:user";
         public static ResourceType Queue               = "queue";         
         public static ResourceType Repository          = "repository";
         public static ResourceType RepositoryBranch    = "repository:branch";
         public static ResourceType RepositoryCommit    = "repository:commit"; 
         public static ResourceType RepositoryTag       = "repository:tag";
         public static ResourceType Volume              = "volume";
+        public static ResourceType VolumeSnapshot      = "volume:snapshot";
 
         // KMS --------------------------------------------------------------------------------------------------
         public static ResourceType Dek      = "kms:dek";           
@@ -83,7 +87,7 @@ namespace Carbon.Platform.Resources
         public static ResourceType Subnet               = "subnet";
 
         
-        // Web --------------------------------------------------------------------------------------------
+        // Web -----------------------------------------------------------------------------------------------
 
         public static ResourceType Domain        = "domain";
         public static ResourceType Certificate   = "certificate"; // web: ?
@@ -91,18 +95,21 @@ namespace Carbon.Platform.Resources
         public static ResourceType Website       = "web:site";
         public static ResourceType WebComponent  = "web:component";
         public static ResourceType WebLibrary    = "web:library";
-
-        public static ResourceType HealthCheck   = "healthCheck";
-
+        
         public static ResourceType DnsZone       = "dns:zone";
         public static ResourceType DnsRecord     = "dns:record";
 
+        // Health --------------------------------------------------------------------------------------------
+        public static ResourceType HealthCheck  = "health:check";
+
         // CI ------------------------------------------------------------------------------------------------
         public static ResourceType Build         = "ci:build";
-        public static ResourceType BuildProject  = "ci:project";
+        public static ResourceType Project       = "ci:project";
         public static ResourceType Deployment    = "ci:deployment";
 
         // Metrics --------------------------------------------------------------------------------------------
-        public static ResourceType Metric        = "metric";
+        public static ResourceType Metric          = "metric";
+        public static ResourceType MetricDimension = "metric:dimension";
+
     }
 }

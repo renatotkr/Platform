@@ -16,8 +16,8 @@ namespace Carbon.CI
             using (var connection = context.GetConnection())
             {
                 var currentCommitCount = await connection.ExecuteScalarAsync<int>(
-                  @"SELECT `buildCount` FROM `BuildProjects` WHERE id = @id FOR UPDATE;
-                      UPDATE `BuildProjects`
+                  @"SELECT `buildCount` FROM `Projects` WHERE id = @id FOR UPDATE;
+                      UPDATE `Projects`
                       SET `buildCount` = `buildCount` + 1
                       WHERE id = @id", new { id = projectId }).ConfigureAwait(false);
 
@@ -26,6 +26,3 @@ namespace Carbon.CI
         }
     }
 }
-
-
-// arn:aws:codebuild:region-ID:account-ID:build

@@ -10,9 +10,9 @@ namespace Carbon.CI
 {
     public class DeploymentService : IDeploymentService
     {
-        private readonly CIDb db;
+        private readonly CiadDb db;
 
-        public DeploymentService(CIDb db)
+        public DeploymentService(CiadDb db)
         {
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }

@@ -1,5 +1,6 @@
 dotnet pack ./src/Bash                          -c Release -o ./../../build/Bash
 dotnet pack ./src/Carbon.CI                     -c Release -o ./../../build/Carbon.CI
+dotnet pack ./src/Carbon.CI.Abstractions        -c Release -o ./../../build/Carbon.CI.Abstractions
 dotnet pack ./src/Carbon.Platform.Diagnostics   -c Release -o ./../../build/Carbon.Platform.Diagnostics
 dotnet pack ./src/GitHub                        -c Release -o ./../../build/GitHub
 dotnet pack ./src/Bitbucket                     -c Release -o ./../../build/Bitbucket

@@ -4,15 +4,18 @@ using Carbon.Data;
 
 namespace Carbon.CI
 {
-    public class CIDb
+    /// <summary>
+    /// Continuous intergration & deployment
+    /// </summary>
+    public class CiadDb
     {
-        public CIDb(IDbContext context)
+        public CiadDb(IDbContext context)
         {
             Context = context ?? throw new ArgumentNullException(nameof(context));
 
             Builds                = new Dataset<Build, long>(context);
             BuildArtifacts        = new Dataset<BuildArtifact, long>(context);
-            BuildProjects         = new Dataset<BuildProject, long>(context);
+            Projects              = new Dataset<Project, long>(context);
 
             Deployments           = new Dataset<Deployment, long>(context);
             DeploymentTargets     = new Dataset<DeploymentTarget, (long, long)>(context);
@@ -22,8 +25,9 @@ namespace Carbon.CI
 
         public Dataset<Build, long>                    Builds            { get; }
         public Dataset<BuildArtifact, long>            BuildArtifacts    { get; }
-        public Dataset<BuildProject, long>             BuildProjects     { get; }
         public Dataset<Deployment, long>               Deployments       { get; }
         public Dataset<DeploymentTarget, (long, long)> DeploymentTargets { get; }
+        public Dataset<Project, long>                  Projects { get; }
+
     }
 }

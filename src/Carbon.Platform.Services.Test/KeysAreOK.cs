@@ -2,6 +2,7 @@
 using System.Data;
 using System.Reflection;
 
+using Carbon.CI;
 using Carbon.Data;
 using Carbon.Data.Sql;
 using Carbon.Data.Sql.Adapters;
@@ -23,6 +24,14 @@ namespace Carbon.Platform.Services.Test
             KeysAndIndexesAreUnder767Bytes(database);
         }
 
+
+        [Fact]
+        public void CiadDbKeysAndIndexesAreUnder767Bytes()
+        {
+            var database = new CiadDb(new MySqlDataContext());
+
+            KeysAndIndexesAreUnder767Bytes(database);
+        }
 
         [Fact]
         public void PlatformDbKeysAndIndexesAreUnder767Bytes()

@@ -2,6 +2,9 @@
 We'll continue to make breaking API changes in minor releases until we reach 2.0.
 Services & management libraries will stabalize at v1.
 
+1.43.0
+- Breakout CI
+
 1.42.0
 - Breakout EncryptionKeys and DataEncryptionKey into KMS
 

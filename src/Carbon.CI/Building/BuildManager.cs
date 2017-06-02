@@ -16,9 +16,9 @@ namespace Carbon.CI
     public class BuildManager
     {
         private readonly CodeBuildClient codebuild;
-        private readonly CIDb db;
+        private readonly CiadDb db;
 
-        public BuildManager(CodeBuildClient codebuild, CIDb db)
+        public BuildManager(CodeBuildClient codebuild, CiadDb db)
         {
             this.db        = db        ?? throw new ArgumentNullException(nameof(db));
             this.codebuild = codebuild ?? throw new ArgumentNullException(nameof(codebuild));

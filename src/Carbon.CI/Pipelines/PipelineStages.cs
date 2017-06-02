@@ -1,5 +1,4 @@
-﻿
-namespace Carbon.CI
+﻿namespace Carbon.CI
 {
     public static class PipelineStages
     {
