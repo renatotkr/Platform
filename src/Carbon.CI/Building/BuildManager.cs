@@ -4,31 +4,34 @@ using System.Threading.Tasks;
 
 using Amazon.CodeBuild;
 using Amazon.Helpers;
+
 using Carbon.Data;
 using Carbon.Data.Expressions;
+using Carbon.Platform;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Sequences;
 
 using Dapper;
 
-namespace Carbon.Platform.CI
+namespace Carbon.CI
 {
     public class BuildManager
     {
-        private readonly CodeBuildClient builder;
+        private readonly CodeBuildClient codebuild;
         private readonly PlatformDb db;
 
         public BuildManager(
-            CodeBuildClient builder, 
+            CodeBuildClient codebuild, 
             PlatformDb db)
         {
-            this.db      = db      ?? throw new ArgumentNullException(nameof(db));
-            this.builder = builder ?? throw new ArgumentNullException(nameof(builder));
+            this.db        = db        ?? throw new ArgumentNullException(nameof(db));
+            this.codebuild = codebuild ?? throw new ArgumentNullException(nameof(codebuild));
         }
 
-        public Task<Build> GetAsync(long id)
+        public async Task<Build> GetAsync(long id)
         {
-            return db.Builds.FindAsync(id);
+            return await db.Builds.FindAsync(id).ConfigureAwait(false) 
+                ?? throw ResourceError.NotFound(ResourceTypes.Build, id);
         }
 
         public async Task<Build> GetLatestAsync(long projectId)
@@ -36,15 +39,17 @@ namespace Carbon.Platform.CI
             var range = ScopedId.GetRange(projectId);
 
             var builds = await db.Builds.QueryAsync(
-                expression: Expression.Between("id", range.Start, range.End),
-                order: Order.Descending("id"),
-                take: 1
+                expression : Expression.Between("id", range.Start, range.End),
+                order      : Order.Descending("id"),
+                take       : 1
             );
 
             return builds[0];
         }
 
-        public Task<IReadOnlyList<Build>> ListAsync(long projectId, int take = 1000)
+        public Task<IReadOnlyList<Build>> ListAsync(
+            long projectId, 
+            int take = 1000)
         {
             var range = ScopedId.GetRange(projectId);
 
@@ -57,7 +62,7 @@ namespace Carbon.Platform.CI
 
         public async Task<Amazon.CodeBuild.Build> CheckStatusAsync(IBuild build)
         {
-            var result = await builder.BatchGetBuildsAsync(new BatchGetBuildsRequest(build.ResourceId));
+            var result = await codebuild.BatchGetBuildsAsync(new BatchGetBuildsRequest(build.ResourceId));
 
             var b = result.Builds[0];
           
@@ -92,16 +97,14 @@ namespace Carbon.Platform.CI
                 };
             }
 
-            var externalBuild = (await builder.StartBuildAsync(startBuildRequest).ConfigureAwait(false)).Build;
+            var externalBuild = (await codebuild.StartBuildAsync(startBuildRequest).ConfigureAwait(false)).Build;
            
             var build = new Build(
                 id          : id,
                 initiatorId : request.InitiatorId,
                 commitId    : commit.Id,
-                resource    : ManagedResource.Build(Locations.Aws_US_East_1, externalBuild.Id)
+                resource    : ManagedResource.Build(Locations.Aws_USEast1, externalBuild.Id)
             );
-
-            build.ProjectId = project.Id;
 
             await db.Builds.InsertAsync(build).ConfigureAwait(false);
 
@@ -110,41 +113,9 @@ namespace Carbon.Platform.CI
 
         public async Task UpdateAsync(Build build)
         {
-            // status, message, completed
-
-            using (var connection = db.Context.GetConnection())
-            {
-                await connection.ExecuteAsync(
-                    @"UPDATE `Builds`
-                      SET `completed` = @completed,
-                          `status` = @status,
-                          `message` = @message,
-                          `duration` = @duration
-                      WHERE `id` = @id", build
-                ).ConfigureAwait(false);
-            }
-        }
-    }
-
-    internal static class BuildId
-    {
-        public static async Task<long> NextAsync(
-            IDbContext context,
-            long projectId)
-        {
-            using (var connection = context.GetConnection())
-            {
-                var currentCommitCount = await connection.ExecuteScalarAsync<int>(
-                  @"SELECT `buildCount` FROM `BuildProjects` WHERE id = @id FOR UPDATE;
-                      UPDATE `BuildProjects`
-                      SET `buildCount` = `buildCount` + 1
-                      WHERE id = @id", new { id = projectId }).ConfigureAwait(false);
-
-                return ScopedId.Create(projectId, currentCommitCount + 1);
-            }
+            await db.Builds.UpdateAsync(build).ConfigureAwait(false);
         }
     }
 }
-
 
 // arn:aws:codebuild:region-ID:account-ID:build

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Carbon.Platform.CI
+namespace Carbon.CI
 {
     public interface IWebsiteDeployer
     {

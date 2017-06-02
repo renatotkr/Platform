@@ -2,7 +2,7 @@
 
 using Carbon.Storage;
 
-namespace Carbon.Platform.CI
+namespace Carbon.CI
 {
     public class PublishingConflict : Exception
     {

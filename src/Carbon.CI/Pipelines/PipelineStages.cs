@@ -1,7 +1,7 @@
 ﻿
-namespace Carbon.Platform.CI
+namespace Carbon.CI
 {
-    public static class CIPiplineStages
+    public static class PipelineStages
     {
         public const string Download = "download";  // Map an environment ref to a commit
         public const string Build    = "build";     // Build the commit

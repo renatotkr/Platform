@@ -1,10 +1,11 @@
 ﻿using System.Threading.Tasks;
 
 using Carbon.Data;
+using Carbon.Platform;
 
 using Dapper;
 
-namespace Carbon.Platform.CI
+namespace Carbon.CI
 {
     public static class DeploymentId
     {

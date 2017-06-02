@@ -1,15 +1,19 @@
 ﻿using System;
 
+using Carbon.Platform;
 using Carbon.Platform.Web;
 using Carbon.Versioning;
 
-namespace Carbon.Platform.CI
+namespace Carbon.CI
 {
     public class DeployWebsiteRequest
     {
         public DeployWebsiteRequest() { }
 
-        public DeployWebsiteRequest(WebsiteRelease release, long initiatorId)
+        public DeployWebsiteRequest(
+            WebsiteRelease release, 
+            IEnvironment environment, 
+            long initiatorId)
         {
             #region Preconditions
 
@@ -18,16 +22,17 @@ namespace Carbon.Platform.CI
 
             #endregion
 
-            WebsiteId = release.WebsiteId;
+            WebsiteId      = release.WebsiteId;
             WebsiteVersion = release.Version;
-            InitiatorId = initiatorId;
+            Environment    = environment ?? throw new ArgumentNullException(nameof(environment));
+            InitiatorId    = initiatorId;
         }
 
         public long WebsiteId { get; set; }
 
         public SemanticVersion WebsiteVersion { get; set; }
 
-        public long EnvironmentId { get; set; }
+        public IEnvironment Environment { get; set; }
 
         public long InitiatorId { get; set; }
     }

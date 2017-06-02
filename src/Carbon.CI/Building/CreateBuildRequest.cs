@@ -1,38 +1,33 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using Carbon.Platform.Storage;
 
-namespace Carbon.Platform.CI
+namespace Carbon.CI
 {
     // Should be startBuildRequest, but avoiding conflict with codebuild...
 
     public class CreateBuildRequest
     {
-        public CreateBuildRequest() { }
-
         public CreateBuildRequest(
             IBuildProject project,
             IRepositoryCommit commit,
             long initiatorId)
         {
-            Project     = project ?? throw new ArgumentNullException(nameof(project));
-            Commit      = commit;
+            Project     = project     ?? throw new ArgumentNullException(nameof(project));
+            Commit      = commit      ?? throw new ArgumentNullException(nameof(commit));
             InitiatorId = initiatorId;
         }
         
-        public IBuildProject Project { get; set; }
+        public IBuildProject Project { get; }
 
-        public IRepositoryCommit Commit { get; set; }
+        public IRepositoryCommit Commit { get; }
 
         public BuildOutput Output { get; set; }
 
-        public long InitiatorId { get; set; }
+        public long InitiatorId { get; }
     }
 
     public class BuildOutput
     {
-        public BuildOutput() { }
-
         public BuildOutput(string bucketName, string path, string name = null)
         {
             BucketName = bucketName;
@@ -40,11 +35,11 @@ namespace Carbon.Platform.CI
             Name       = name;
         }
 
-        public string BucketName { get; set; }
+        public string BucketName { get; }
 
-        public string Path { get; set; }
+        public string Path { get; }
 
-        public string Name { get; set; }
+        public string Name { get; }
 
         // Encoding
     }

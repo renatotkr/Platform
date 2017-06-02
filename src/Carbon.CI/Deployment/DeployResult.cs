@@ -1,4 +1,4 @@
-﻿namespace Carbon.Platform.CI
+﻿namespace Carbon.CI
 {
     public struct DeployResult
     {

@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Storage
 {
-    public interface IRepositoryFactory
+    public interface IRepositoryClientFactory
     {
         IRepositoryClient Get(IRepository repository);
     }

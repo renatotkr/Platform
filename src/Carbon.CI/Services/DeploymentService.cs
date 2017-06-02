@@ -2,12 +2,10 @@
 using System.Threading.Tasks;
 
 using Carbon.Platform.Computing;
-using Carbon.Platform.Resources;
-using Carbon.Platform.Web;
 
 using Dapper;
 
-namespace Carbon.Platform.CI
+namespace Carbon.CI
 {
     public class DeploymentService : IDeploymentService
     {
@@ -18,21 +16,27 @@ namespace Carbon.Platform.CI
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public async Task<Deployment> StartAsync(IEnvironment env, IRelease release, long creatorId)
+        public async Task<Deployment> StartAsync(
+            IEnvironment environment, 
+            IRelease release, 
+            long creatorId)
         {
             #region Preconditions
 
-            if (env == null)
-                throw new ArgumentNullException(nameof(env));
+            if (environment == null)
+                throw new ArgumentNullException(nameof(environment));
 
             if (release == null)
                 throw new ArgumentNullException(nameof(release));
 
+            if (creatorId <= 0)
+                throw new ArgumentOutOfRangeException(nameof(creatorId), creatorId, "Must be > 0");
+
             #endregion
 
             var deployment = new Deployment(
-              id        : await DeploymentId.NextAsync(db.Context, env).ConfigureAwait(false),
-              release   : release,
+              id          : await DeploymentId.NextAsync(db.Context, environment).ConfigureAwait(false),
+              release     : release,
               initiatorId : creatorId
             );
 
@@ -50,7 +54,9 @@ namespace Carbon.Platform.CI
 
             #endregion
 
-            deployment.Status = succceded ? DeploymentStatus.Succeeded : DeploymentStatus.Failed;
+            deployment.Status = succceded
+                ? DeploymentStatus.Succeeded
+                : DeploymentStatus.Failed;
 
             deployment.Completed = DateTime.UtcNow;
             
@@ -62,31 +68,6 @@ namespace Carbon.Platform.CI
                           `completed` = NOW()
                       WHERE id = @id", deployment
                  ).ConfigureAwait(false);
-                
-                if (succceded)
-                {
-                    if (deployment.ReleaseType == ReleaseType.Website)
-                    {
-                        await connection.ExecuteAsync(
-                        @"UPDATE `Websites`
-                          SET `deploymentId` = @deploymentId
-                          WHERE id = @id", new {
-                            id = deployment.ReleaseId,
-                            deploymentId = deployment.Id
-                        }).ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        await connection.ExecuteAsync(
-                            @"UPDATE `Environments`
-                              SET `revision` = @revision
-                              WHERE `id` = @id", new {
-                                id       = deployment.EnvironmentId,
-                                revision = deployment.ReleaseVersion.ToString()
-                            }
-                        ).ConfigureAwait(false);
-                    }
-                }
             }
         }
 

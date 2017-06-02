@@ -10,7 +10,7 @@ using Carbon.Platform.Web;
 using Carbon.Storage;
 using Carbon.VersionControl;
 
-namespace Carbon.Platform.CI
+namespace Carbon.CI
 {
     public class WebLibraryDeployer
     {

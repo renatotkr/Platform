@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using Carbon.Data.Protection;
 
-namespace Carbon.Platform.CI
+namespace Carbon.CI
 {
     public sealed class ApiClient : IDisposable
     {

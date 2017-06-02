@@ -2,7 +2,7 @@
 
 using Carbon.Platform.Computing;
 
-namespace Carbon.Platform.CI
+namespace Carbon.CI
 {
     public interface IApplicationManager
     {

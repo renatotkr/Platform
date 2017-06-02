@@ -1,43 +1,50 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Linq;
 
 using Carbon.Logging;
 using Carbon.Platform.Computing;
 
-namespace Carbon.Platform.CI
+namespace Carbon.CI
 {
     public class ApplicationManager : IApplicationManager
     {
         private readonly ApiClient api;
         private readonly ILogger log;
-        private readonly IEnvironmentService environments;
+        private readonly IHostService hostService;
         private readonly IDeploymentService deployments;
         private readonly IProgramReleaseService programReleases;
 
         public ApplicationManager(
             ApiClient api, 
-            IDeploymentService deployments,
-            IEnvironmentService environments,
+            IDeploymentService deploymentService,
+            IHostService hostService,
             IProgramReleaseService programReleases,
             ILogger log)
         {
-            this.api             = api             ?? throw new ArgumentNullException(nameof(api));
-            this.log             = log             ?? throw new ArgumentNullException(nameof(log));
-            this.programReleases = programReleases ?? throw new ArgumentNullException(nameof(programReleases));
-            this.deployments     = deployments     ?? throw new ArgumentNullException(nameof(deployments));
-            this.environments    = environments    ?? throw new ArgumentNullException(nameof(environments));
+            this.api             = api               ?? throw new ArgumentNullException(nameof(api));
+            this.log             = log               ?? throw new ArgumentNullException(nameof(log));
+            this.programReleases = programReleases   ?? throw new ArgumentNullException(nameof(programReleases));
+            this.deployments     = deploymentService ?? throw new ArgumentNullException(nameof(deploymentService));
+            this.hostService     = hostService       ?? throw new ArgumentNullException(nameof(hostService));
         }
 
         public async Task<DeployResult> DeployAsync(DeployApplicationRequest request)
         {
-            // TODO: Validation
+            #region Preconditions
+
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
+            #endregion
+            
+            var environment = request.Environment;
 
             var release = await programReleases.GetAsync(request.ApplicationId, request.ApplicationVersion);
-            var env     = await environments.GetAsync(request.EnvironmentId);
-            var hosts   = await environments.GetHostsAsync(env).ConfigureAwait(false);
+            var hosts   = (await hostService.ListAsync(environment).ConfigureAwait(false)).ToArray();
 
             // Create a deployment record
-            var deployment = await deployments.StartAsync(env, release, request.CreatorId).ConfigureAwait(false);
+            var deployment = await deployments.StartAsync(environment, release, request.InitiatorId).ConfigureAwait(false);
 
             // Activate the release on the host list
             await ActivateAsync(release, hosts).ConfigureAwait(false);
@@ -107,7 +114,7 @@ namespace Carbon.Platform.CI
 
         public async Task RestartAsync(IApplication app, IHost host)
         {
-            var text = await api.SendAsync(host.Address, $"/apps/{app.Id}/reload").ConfigureAwait(false);
+            var text = await api.SendAsync(host.Address, $"/apps/{app.Id}/restart").ConfigureAwait(false);
 
             log.Info($"{host} : Reloading -- {text}");
         }
