@@ -7,12 +7,12 @@ namespace Carbon.Data.Sequences
     public struct BigId : IEquatable<BigId>
     {
         [FieldOffset(0)]
-        private long scopeId;
+        private long upperHalf;
 
         [FieldOffset(8)]
         private ulong lowerHalf;
 
-        public long ScopeId => scopeId;
+        public long ScopeId => upperHalf;
 
         // milliseconds since 1970
         public long Timestamp => new ScopedId(lowerHalf).ScopeId;
@@ -47,7 +47,7 @@ namespace Carbon.Data.Sequences
 
             return new BigId
             {
-                scopeId = scopeId,
+                upperHalf = scopeId,
                 lowerHalf = (ulong)lowerHalf
             };
         }
@@ -74,7 +74,7 @@ namespace Carbon.Data.Sequences
 
             return new BigId
             {
-                scopeId = BitConverter.ToInt64(a, 0),
+                upperHalf = BitConverter.ToInt64(a, 0),
                 lowerHalf = BitConverter.ToUInt64(b, 0)
             };
         }
@@ -83,7 +83,7 @@ namespace Carbon.Data.Sequences
         {
             byte[] data = new byte[16];
 
-            var a = BitConverter.GetBytes(scopeId);
+            var a = BitConverter.GetBytes(upperHalf);
             var b = BitConverter.GetBytes(lowerHalf);
 
             Array.Reverse(a);
@@ -110,7 +110,7 @@ namespace Carbon.Data.Sequences
         }
 
         public bool Equals(BigId other) =>
-            scopeId == other.scopeId &&
+            upperHalf == other.upperHalf &&
             lowerHalf == other.lowerHalf;
 
         public override bool Equals(object obj)
@@ -120,7 +120,7 @@ namespace Carbon.Data.Sequences
 
         public override int GetHashCode()
         {
-            return (scopeId, lowerHalf).GetHashCode();
+            return (upperHalf, lowerHalf).GetHashCode();
         }
 
         #endregion
