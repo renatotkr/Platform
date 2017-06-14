@@ -33,7 +33,7 @@ namespace Carbon.Platform.Networking
         public long Id { get; }
 
         [Member("condition")]
-        [StringLength(500)]
+        [StringLength(1000)]
         public string Condition { get; }
 
         [Member("action")]

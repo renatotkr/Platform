@@ -17,12 +17,12 @@ namespace Carbon.Platform.Computing
         public CreateClusterRequest(
             IEnvironment environment, 
             ILocation location,
-            JsonObject details = null)
+            JsonObject properties = null)
         {
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
             Location    = location    ?? throw new ArgumentNullException(nameof(location));
             Name        = environment.Name + "/" + location.Name;
-            Details     = details;
+            Properties  = properties;
         }
 
         public string Name { get; set; }
@@ -36,6 +36,6 @@ namespace Carbon.Platform.Computing
 
         public long? HealthCheckId { get; set; }
 
-        public JsonObject Details { get; set; }
+        public JsonObject Properties { get; set; }
     }
 }

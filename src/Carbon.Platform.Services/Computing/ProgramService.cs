@@ -65,19 +65,19 @@ namespace Carbon.Platform.Computing
             var id = db.Programs.Sequence.Next(); 
 
             var program = new Program(
-                id      : id,
-                name    : request.Name,
-                slug    : request.Slug,
-                ownerId : request.OwnerId
+                id         : id,
+                name       : request.Name,
+                slug       : request.Slug,
+                properties : new JsonObject(), 
+                ownerId    : request.OwnerId
             )
             { 
-                Runtime = request.Runtime,
-                Details = new JsonObject()
+                Runtime = request.Runtime
             };
 
             if (request.Urls != null)
             {
-                program.Details.Add("urls", request.Urls);
+                program.Properties.Add("urls", request.Urls);
             }
 
             // Each app is given 4 environments (using the consecutive ids reserved above): 

@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
 namespace GitHub.Events
 {
@@ -18,10 +19,10 @@ namespace GitHub.Events
 
         public string Compare { get; set; }
 
-        public ExtendedCommit[] Commits { get; set; }
+        public PushEventCommit[] Commits { get; set; }
 
         [DataMember(Name = "head_commit")]
-        public ExtendedCommit HeadCommit { get; set; }
+        public PushEventCommit HeadCommit { get; set; }
 
         public GitRepository Repository { get; set; }
         
@@ -31,8 +32,22 @@ namespace GitHub.Events
     }
 
 
-    public class ExtendedCommit : GitCommit
+    public class PushEventCommit
     {
+        public string Id { get; set; }
+
+        public bool Distinct { get; set; }
+
+        public string Message { get; set; }
+
+        public string Url { get; set; }
+
+        public DateTimeOffset Timestamp { get; set; }
+
+        public GitActor Author { get; set; }
+
+        public GitActor Committer { get; set; }
+
         public string[] Added { get; set; }
 
         public string[] Removed { get; set; }

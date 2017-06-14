@@ -12,7 +12,11 @@ namespace Carbon.Platform.Storage
 
             if (totalBytes < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(totalBytes), totalBytes, "Must be 0 or greater");
+                throw new ArgumentOutOfRangeException(
+                    paramName   : nameof(totalBytes),
+                    actualValue : totalBytes,
+                    message     : "Must be 0 or greater"
+                );
             }
 
             #endregion
@@ -22,11 +26,21 @@ namespace Carbon.Platform.Storage
 
         public long TotalBytes { get; }
 
-        private const int _1GiB = 1_073_741_824;
+        private const long _1KiB = 1024;
+        private const long _1MiB = _1KiB * 1024;
+        private const long _1GiB = _1MiB * 1024;
+        private const long _1TiB = _1GiB * 1024;
 
-        public static ByteSize GiB(long value) => new ByteSize(value * _1GiB);
+        public static ByteSize FromMiB(double value) => new ByteSize((long)(value * _1MiB));
+
+        public static ByteSize FromGiB(double value) => new ByteSize((long)(value * _1GiB));
+
+        public static ByteSize FromTiB(double value) => new ByteSize((long)(value * _1TiB));
     }
 }
 
-// TODO: Watch to see if this lands in CoreFx
-// https://github.com/dotnet/corefx/issues/14234
+/*
+TODO: 
+- Move to Carbon.Storage
+- Watch to see if this lands in CoreFx (https://github.com/dotnet/corefx/issues/14234)
+*/

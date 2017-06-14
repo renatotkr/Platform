@@ -35,29 +35,25 @@ namespace Carbon.Platform.Computing
             var program = request.Program;
 
             var release = new ProgramRelease(
-                id        : await GetNextId(program.Id),
-                program   : request.Program,
-                version   : request.Version,
-                runtime   : program.Runtime,
-                package   : request.Package,
-                creatorId : request.CreatorId
-            )
-            {
-                Details = program.Details
-            };
+                id         : await GetNextId(program.Id),
+                program    : request.Program,
+                version    : request.Version,
+                runtime    : program.Runtime,
+                package    : request.Package,
+                properties : program.Properties,
+                creatorId  : request.CreatorId
+            );
 
             await db.ProgramReleases.InsertAsync(release).ConfigureAwait(false);
 
             if (request.Version > program.Version)
             {
-                using (var connection = db.Context.GetConnection())
-                {
-                    await connection.ExecuteAsync(
-                        @"UPDATE `Programs`
-                          SET `version` = @version
-                          WHERE `id` = @programId", release
-                    ).ConfigureAwait(false);
-                }
+                await db.Programs.PatchAsync(
+                    key: release.ProgramId,
+                    changes: new[]  {
+                        Change.Replace("version", release.Version)
+                    }
+                ).ConfigureAwait(false);
             }
 
             #region Logging

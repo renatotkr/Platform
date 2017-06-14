@@ -61,7 +61,7 @@ namespace Carbon.Kms
 
         // scope, subject, etc
         [Member("context")]
-        [StringLength(500)]
+        [StringLength(1000)]
         public JsonObject Context { get; }
 
         [Member("accessed")]

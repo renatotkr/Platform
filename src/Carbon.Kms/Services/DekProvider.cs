@@ -35,6 +35,11 @@ namespace Carbon.Kms
                 take       : 1
             ).ConfigureAwait(false)).FirstOrDefault();
 
+            if (key == null)
+            {
+                throw new Exception($"dek#{id} does not exist");
+            }
+
             var result = await DecryptAsync(key);
 
             return new DataKey(key.Id, key.Version, result);

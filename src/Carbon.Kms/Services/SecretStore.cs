@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using Carbon.Data;
 using Carbon.Data.Expressions;
-
-using Dapper;
 
 namespace Carbon.Kms
 {
@@ -52,28 +51,18 @@ namespace Carbon.Kms
 
         public async Task RemoveAsync(SecretInfo secret)
         {
-            // TODO: Build a custom sql segment...
-
-            using (var context = db.Context.GetConnection())
-            {
-                await context.ExecuteAsync(
-                    @"UPDATE `Secrets`
-                      SET `deleted` = NOW()
-                      WHERE `id` = @id", secret
-                );
-            }
+            await db.Secrets.PatchAsync(
+               key      : secret.Id,
+               changes : new[] { Change.Replace("deleted", Func("NOW")) }
+            ).ConfigureAwait(false);
         }
 
         private async Task MarkAccessed(SecretInfo secret)
         {
-            using (var context = db.Context.GetConnection())
-            {
-                await context.ExecuteAsync(
-                    @"UPDATE `Secrets`
-                      SET `accessed` = NOW()
-                      WHERE `id` = @id", secret
-                );
-            }
+            await db.Secrets.PatchAsync(
+                 key     : secret.Id,
+                 changes : new[] { Change.Replace("accessed", Func("NOW")) }
+            ).ConfigureAwait(false);
         }
     }
 }

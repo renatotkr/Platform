@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Carbon.Data;
 using Carbon.Data.Expressions;
 
 using Dapper;
@@ -53,15 +54,12 @@ namespace Carbon.Platform.Storage
 
         public async Task DeleteAsync(DeleteFileRequest request)
         {
-            using (var connection = db.Context.GetConnection())
-            {
-                await connection.ExecuteAsync(
-                    @"UPDATE `RepositoryFiles` 
-                      SET `deleted` = NOW()  
-                      WHERE `branchId` = @branchId
-                        AND `path` = @path;", request
-                ).ConfigureAwait(false);
-            }
+            await db.RepositoryFiles.PatchAsync(
+                key : (request.BranchId, request.Path),
+                changes: new[] {
+                    Change.Replace("deleted", Func("NOW"))
+                }
+            );
         }
 
         public async Task<RepositoryFile> PutAsync(CreateFileRequest request)

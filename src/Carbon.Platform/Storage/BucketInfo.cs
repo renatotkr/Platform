@@ -17,7 +17,18 @@ namespace Carbon.Platform.Storage
             long ownerId,
             ManagedResource resource)
         {
-            Id         = id;
+            #region Preconditions
+
+            if (id <= 0)
+                throw new ArgumentException("Invalid", nameof(id));
+
+            if (ownerId <= 0)
+                throw new ArgumentException("Invalid", nameof(ownerId));
+
+
+            #endregion
+
+            Id = id;
             Name       = name ?? throw new ArgumentNullException(nameof(name));
             OwnerId    = ownerId;
             ProviderId = resource.ProviderId;

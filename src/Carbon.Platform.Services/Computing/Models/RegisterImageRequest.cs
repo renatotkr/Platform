@@ -23,6 +23,8 @@ namespace Carbon.Platform.Computing
 
         public long OwnerId { get; set; }
 
+        public long Size { get; set; }
+
         public ImageType Type { get; set; } = ImageType.Machine;
 
         public ManagedResource Resource { get; set; }

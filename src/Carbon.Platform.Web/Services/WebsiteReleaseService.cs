@@ -74,15 +74,12 @@ namespace Carbon.Platform.Web
         private async Task<long> GetNextId(IWebsite website)
         {
             using (var connection = db.Context.GetConnection())
-            using (var ts = connection.BeginTransaction())
             {
                 var result = await connection.ExecuteScalarAsync<int>(
                     @"SELECT `releaseCount` FROM `Websites` WHERE id = @id FOR UPDATE;
                       UPDATE `Websites`
                       SET `releaseCount` = `releaseCount` + 1
-                      WHERE id = @id", website, ts).ConfigureAwait(false);
-
-                ts.Commit();
+                      WHERE id = @id", website).ConfigureAwait(false);
 
                 return result + 1;
             }

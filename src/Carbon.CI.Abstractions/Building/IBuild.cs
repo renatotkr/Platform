@@ -6,12 +6,12 @@ namespace Carbon.CI
     {
         long Id { get; }
 
+        long CommitId { get; }
+
         BuildStatus Status { get; }
 
         DateTime? Started { get; }
 
         DateTime? Completed { get; }
-
-        string ResourceId { get; }
     }
 }

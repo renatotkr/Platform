@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using Carbon.Data;
+using Carbon.Data.Expressions;
 using Carbon.Platform;
 using Carbon.Platform.Computing;
-
-using Dapper;
 
 namespace Carbon.CI
 {
@@ -56,16 +56,14 @@ namespace Carbon.CI
                 : DeploymentStatus.Failed;
 
             deployment.Completed = DateTime.UtcNow;
-            
-            using (var connection = db.Context.GetConnection())
-            {
-                await connection.ExecuteAsync(
-                    @"UPDATE `Deployments`
-                      SET `status` = @status
-                          `completed` = NOW()
-                      WHERE id = @id", deployment
-                 ).ConfigureAwait(false);
-            }
+
+            await db.Deployments.PatchAsync(
+                key     : deployment.Id,
+                changes : new[] {
+                    Change.Replace("status", deployment.Status),
+                    Change.Replace("completed", Expression.Func("NOW"))
+                }
+            ).ConfigureAwait(false);
         }
 
         public async Task CreateTargetsAsync(IDeployment deployment, IHost[] hosts)

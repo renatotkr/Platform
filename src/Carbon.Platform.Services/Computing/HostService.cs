@@ -120,6 +120,8 @@ namespace Carbon.Platform.Computing
 
         #endregion
 
+        static readonly string nextIdSql = SqlHelper.GetCurrentValueAndIncrement<LocationInfo>("hostCount");
+
         // 4B per zone per region
         private async Task<HostId> GetNextId(ILocation location)
         {
@@ -133,11 +135,7 @@ namespace Carbon.Platform.Computing
 
             using (var connection = db.Context.GetConnection())
             {
-                sequenceNumber = await connection.ExecuteScalarAsync<int>(
-                    @"SELECT `hostCount` FROM `Locations` WHERE id = @id FOR UPDATE;
-                    UPDATE `Locations`
-                    SET `hostCount` = `hostCount` + 1
-                    WHERE id = @id", location).ConfigureAwait(false) + 1;
+                sequenceNumber = await connection.ExecuteScalarAsync<int>(nextIdSql, location).ConfigureAwait(false) + 1;
             }
 
             return HostId.Create(location, sequenceNumber);

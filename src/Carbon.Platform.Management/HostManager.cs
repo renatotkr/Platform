@@ -7,14 +7,13 @@ using Amazon.Ec2;
 using Amazon.Elb;
 using Amazon.Ssm;
 
+using Carbon.Data;
 using Carbon.Json;
 using Carbon.Net;
 using Carbon.Platform.Computing;
 using Carbon.Platform.Networking;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Storage;
-
-using Dapper;
 
 namespace Carbon.Platform.Management
 {
@@ -142,7 +141,7 @@ namespace Carbon.Platform.Management
 
             #region AWS Specific Properties
 
-            foreach (var property in template.Details)
+            foreach (var property in template.Properties)
             {
                 switch (property.Key)
                 {
@@ -220,26 +219,21 @@ namespace Carbon.Platform.Management
             {
                 var cluster = await clusterService.GetAsync(host.ClusterId).ConfigureAwait(false);
 
-                if (cluster.Details.ContainsKey(ClusterProperties.TargetGroupArn))
+                if (cluster.Properties.ContainsKey(ClusterProperties.TargetGroupArn))
                 {
                     await RegisterWithTargetGroupAsync(host, cluster).ConfigureAwait(false);
                 }
 
-                using (var connection = db.Context.GetConnection())
-                {
-                    await connection.ExecuteAsync(
-                        @"UPDATE `Hosts`
-                          SET `status` = @status
-                          WHERE `id` = @id", host
-                    ).ConfigureAwait(false);
-                }
+                await db.Hosts.PatchAsync(host.Id, new[] {
+                    Change.Replace("status", host.Status)
+                }).ConfigureAwait(false);
             }
         }
 
         public async Task RegisterWithTargetGroupAsync(HostInfo host, Cluster group)
         {
             var targetRegistration = new RegisterTargetsRequest(
-                targetGroupArn : group.Details[ClusterProperties.TargetGroupArn],
+                targetGroupArn : group.Properties[ClusterProperties.TargetGroupArn],
                 targets        : new[] { new TargetDescription(id: host.ResourceId) }
             );
             
@@ -251,7 +245,7 @@ namespace Carbon.Platform.Management
         {
             var cluster = await clusterService.GetAsync(host.ClusterId);
 
-            if (cluster.Details.TryGetValue("targetGroupArn", out var targetGroupArn))
+            if (cluster.Properties.TryGetValue(ClusterProperties.TargetGroupArn, out var targetGroupArn))
             {
                 // Degister the instances from the load balancers target group
                 await elb.DeregisterTargetsAsync(new DeregisterTargetsRequest(
@@ -422,7 +416,7 @@ namespace Carbon.Platform.Management
                     if (device.Ebs == null) continue;
 
                     var volumeSize = device.Ebs.VolumeSize is int ebsSize
-                        ? ByteSize.GiB(ebsSize)
+                        ? ByteSize.FromGiB(ebsSize)
                         : ByteSize.Zero;
 
                     volumes[volumeIndex] = new RegisterVolumeRequest(

@@ -180,6 +180,9 @@ namespace GitHub.Tests
 
             Assert.Equal(35129377, e.Repository.Id);
 
+
+            Assert.Equal("0d1a26e67d8f5eaf1f6ba5c57fc3c7d91ac0fd1c", e.Commits[0].Id);
+
             Assert.Equal("baxterthehacker", e.Pusher.Name);
         }
     }

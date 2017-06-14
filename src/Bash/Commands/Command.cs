@@ -39,6 +39,13 @@ namespace Bash.Commands
 
         public static Command Echo(string text)
         {
+            #region Preconditions
+
+            if (text == null)
+                throw new ArgumentNullException(nameof(text));
+
+            #endregion
+
             return new Command("echo \"" + text + "\"");
         }
 

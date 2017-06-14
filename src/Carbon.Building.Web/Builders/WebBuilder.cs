@@ -109,7 +109,7 @@ namespace Carbon.Building.Web
                 {
                     var blob = new Blob(
                         name   : file.Name,
-                        stream : await file.AsMemoryStreamAsync().ConfigureAwait(false)
+                        stream : await file.ToMemoryStreamAsync().ConfigureAwait(false)
                     );
                     
                     // Metadata / ContenType?

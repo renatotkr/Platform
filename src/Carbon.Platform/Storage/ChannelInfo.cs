@@ -45,9 +45,9 @@ namespace Carbon.Platform.Storage
         [Member("flags")]
         public ChannelFlags Flags { get; set; }
 
-        [Member("details")]
+        [Member("properties")]
         [StringLength(1000)]
-        public JsonObject Details { get; set; }
+        public JsonObject Properties { get; set; }
 
         // A channel may be a firehose, SNS Topic, Kinesis Stream, etc
         // A channel may have one or more consumers / subscribers

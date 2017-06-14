@@ -8,16 +8,16 @@ using Carbon.Platform.Resources;
 namespace Carbon.Platform.Iam
 {
     [Dataset("Users")]
-    [DataIndex(IndexFlags.Unique, "organizationId", "name")]
+    [DataIndex(IndexFlags.Unique, "providerId", "name")]
     public class User : IResource
     {
         public User() { }
 
         public User(long id, string name, long? organizationId = null)
         {
-            Id             = id;
-            Name           = name ?? throw new ArgumentNullException(nameof(name));
-            OrganizationId = organizationId;
+            Id         = id;
+            Name       = name ?? throw new ArgumentNullException(nameof(name));
+            ProviderId = organizationId;
         }
 
         [Member("id"), Key(sequenceName: "userId")]
@@ -27,12 +27,12 @@ namespace Carbon.Platform.Iam
         [StringLength(63)]
         public string Name { get; }
 
-        [Member("organizationId")]
-        public long? OrganizationId { get; }
+        [Member("providerId")]
+        public long? ProviderId { get; }
         
-        [Member("details")]
+        [Member("properties")]
         [StringLength(1000)]
-        public JsonObject Details { get; set; }
+        public JsonObject Properties { get; set; }
 
         #region IResource
 

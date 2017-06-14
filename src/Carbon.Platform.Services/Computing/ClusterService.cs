@@ -38,7 +38,7 @@ namespace Carbon.Platform.Computing
                id             : db.Clusters.Sequence.Next(),
                name           : request.Environment.Name + "/" + request.Location.Name,
                environmentId  : request.Environment.Id,
-               details        : request.Details,
+               properties     : request.Properties,
                healthCheckId  : request.HealthCheckId,
                hostTemplateId : request.HostTemplateId,
                resource       : ManagedResource.Cluster(request.Location, Guid.NewGuid().ToString())

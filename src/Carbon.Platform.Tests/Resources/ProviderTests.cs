@@ -17,6 +17,7 @@ namespace Carbon.Platform.Resources
             Assert.Equal(id,   provider.Id);
         }
 
+        /*
         [Theory]
         [InlineData("github",    1000)]
         [InlineData("bitbucket", 1001)]
@@ -37,5 +38,6 @@ namespace Carbon.Platform.Resources
 
             Assert.Equal(code, provider.Code);
         }
+        */
     }
 }

@@ -10,32 +10,20 @@ namespace Carbon.Platform
         public static readonly ResourceProvider Aws   = new ResourceProvider(2, "aws",   "AWS",   "amazonaws.com");
         public static readonly ResourceProvider Gcp   = new ResourceProvider(3, "gcp",   "GCP",   "cloud.google.com");
         public static readonly ResourceProvider Azure = new ResourceProvider(4, "azure", "Azure", "azure.microsoft.com");
-        
-        // Code Repository Providers = 1000
-        public static readonly ResourceProvider GitHub    = new ResourceProvider(1000, "github",    "GitHub",    "github.com");
-        public static readonly ResourceProvider Bitbucket = new ResourceProvider(1001, "bitbucket", "Bitbucket", "bitbucket.org");
-        public static readonly ResourceProvider GitLab    = new ResourceProvider(1002, "gitlab",    "GitLab",    "gitlab.com");
 
-        // Payment Processors = 2000
-        public static readonly ResourceProvider Braintree = new ResourceProvider(2000, "braintree", "Braintree", "braintreepayments.com");
-        public static readonly ResourceProvider PayPal    = new ResourceProvider(2001, "paypal",    "PayPal", "paypal.com");
-        public static readonly ResourceProvider Stripe    = new ResourceProvider(2002, "stripe",    "Stripe", "stripe.com");
-        
+        // Banks
+        public static readonly ResourceProvider Braintree = new ResourceProvider(5001, "braintree", "Braintree", "braintreepayments.com");
+        public static readonly ResourceProvider PayPal    = new ResourceProvider(5000, "paypal",    "PayPal", "paypal.com");
+        public static readonly ResourceProvider Stripe    = new ResourceProvider(5002, "stripe",    "Stripe", "stripe.com");
+
+        // Code Repository Providers 
+        public static readonly ResourceProvider GitHub    = new ResourceProvider(6000, "github", "GitHub", "github.com");
+        public static readonly ResourceProvider Bitbucket = new ResourceProvider(6001, "bitbucket", "Bitbucket", "bitbucket.org");
+
         // Certificates = 3000
-        public static readonly ResourceProvider LetEncrypt = new ResourceProvider(3000, "letsencrypt", "Let’s Encrypt");
+        // public static readonly ResourceProvider LetEncrypt = new ResourceProvider(3000, "letsencrypt", "Let’s Encrypt");
 
-        // Email Delivery Providers = 5000
-        public static readonly ResourceProvider Postmark = new ResourceProvider(5000, "postmark", "Postmark");
-
-        // Site Builders...
-
-
-        // Linux Vendors (1000)
-
-        // provider of Ubuntu images
-
-        public static readonly ResourceProvider Canonical = new ResourceProvider(10_000, "canonical", "Canonical");
-
+        // public static readonly ResourceProvider Postmark = new ResourceProvider(5000, "postmark", "Postmark");
 
         public static readonly Dictionary<int, ResourceProvider> map = new Dictionary<int, ResourceProvider> {
             { 1,    Borg },
@@ -43,16 +31,12 @@ namespace Carbon.Platform
             { 3,    Gcp },
             { 4,    Azure },
 
-            { 2000,  Braintree },
-            { 2001,  PayPal },
-            { 2002,  Stripe },
+            { 5000,  PayPal },
+            { 5001,  Braintree },
+            { 5002,  Stripe },
 
-            { 1000,  GitHub },
-            { 1001,  Bitbucket },
-            { 1002,  GitLab },
-
-            { 3000,  LetEncrypt },
-            { 5000,  Postmark }
+            { 6000,  GitHub },
+            { 6001,  Bitbucket }
         };
 
         // GitHub
@@ -115,9 +99,6 @@ namespace Carbon.Platform
                 case "braintree"   : return Braintree;
                 case "paypal"      : return PayPal;
                 case "stripe"      : return Stripe;
-                
-                case "postmark"    : return Postmark;
-                case "letsencrypt" : return LetEncrypt;
 
                 default: throw new Exception($"Unexpected provider '{name}'");
             } 

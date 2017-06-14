@@ -51,6 +51,7 @@ namespace Carbon.Platform.Computing
                 id       : db.Images.Sequence.Next(),
                 type     : request.Type,
                 name     : request.Name,
+                size     : request.Size,
                 ownerId  : request.OwnerId,
                 resource : request.Resource
             );

@@ -12,7 +12,6 @@ using Carbon.Platform.Sequences;
 
 using codebuild = Amazon.CodeBuild;
 
-
 namespace Carbon.CI
 {
     public class BuildManager : IBuildManager

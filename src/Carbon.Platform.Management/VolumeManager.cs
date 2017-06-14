@@ -36,7 +36,7 @@ namespace Carbon.Platform.Services
                 var location = Locations.Get(provider, ec2Volume.AvailabilityZone);
 
                 var registerRequest = new RegisterVolumeRequest { 
-                    Size     = ByteSize.GiB(ec2Volume.Size),
+                    Size     = ByteSize.FromGiB(ec2Volume.Size),
                     Resource = ManagedResource.Volume(location, ec2Volume.VolumeId)
                 };
 
