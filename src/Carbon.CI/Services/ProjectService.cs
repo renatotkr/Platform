@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Carbon.Data.Expressions;
@@ -6,6 +7,8 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.CI
 {
+    using static Expression;
+
     public class ProjectService : IProjectService
     {
         private readonly CiadDb db;
@@ -13,6 +16,11 @@ namespace Carbon.CI
         public ProjectService(CiadDb db)
         {
             this.db = db ?? throw new ArgumentNullException(nameof(db));
+        }
+
+        public Task<IReadOnlyList<Project>> ListAsync(long ownerId)
+        {
+            return db.Projects.QueryAsync(And(Eq("ownerId", ownerId), IsNull("deleted")));
         }
 
         public async Task<Project> GetAsync(long id)
@@ -24,7 +32,7 @@ namespace Carbon.CI
         public async Task<Project> GetAsync(long ownerId, string name)
         {
             return await db.Projects.QueryFirstOrDefaultAsync(
-              Expression.And(Expression.Eq("ownerId", ownerId), Expression.Eq("name", name))  
+              And(Eq("ownerId", ownerId), Eq("name", name))  
             ) ?? throw ResourceError.NotFound(ResourceTypes.Project, ownerId, name);
         }
 
@@ -48,6 +56,14 @@ namespace Carbon.CI
 
     public class CreateProjectRequest
     {
+        public CreateProjectRequest() { }
+
+        public CreateProjectRequest(string name, long ownerId)
+        {
+            Name    = name;
+            OwnerId = ownerId;
+        }
+
         public string Name { get; set; }
 
         public long RepositoryId { get; set; }
