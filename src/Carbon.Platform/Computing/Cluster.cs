@@ -17,7 +17,7 @@ namespace Carbon.Platform.Computing
             long id,
             string name,
             long environmentId,
-            JsonObject details,
+            JsonObject properties,
             ManagedResource resource,
             long? hostTemplateId,
             long? healthCheckId)
@@ -32,7 +32,7 @@ namespace Carbon.Platform.Computing
             Id             = id;
             Name           = name ?? throw new ArgumentNullException(nameof(name));
             EnvironmentId  = environmentId;
-            Details        = details ?? throw new ArgumentNullException(nameof(details));
+            Properties     = properties ?? throw new ArgumentNullException(nameof(properties));
             ProviderId     = resource.ProviderId;
             LocationId     = resource.LocationId;
             ResourceId     = resource.ResourceId;
@@ -56,9 +56,9 @@ namespace Carbon.Platform.Computing
         [Member("healthCheckId")]
         public long? HealthCheckId { get; }
 
-        [Member("details")]
-        [StringLength(500)]
-        public JsonObject Details { get; set; }
+        [Member("properties")]
+        [StringLength(1000)]
+        public JsonObject Properties { get; set; }
 
         #region Stats
 

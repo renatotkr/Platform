@@ -19,7 +19,9 @@ namespace Carbon.Platform.Computing
             string name,
             string slug, 
             long ownerId,
-            ProgramType type = ProgramType.Application)
+            JsonObject properties = null,
+            ProgramType type = ProgramType.Application
+        )
         {
             #region Preconditions
 
@@ -31,11 +33,12 @@ namespace Carbon.Platform.Computing
 
             #endregion
 
-            Id      = id;
-            Name    = name ?? throw new ArgumentNullException(nameof(name));
-            Slug    = slug;
-            Type    = type;
-            OwnerId = ownerId;
+            Id         = id;
+            Name       = name ?? throw new ArgumentNullException(nameof(name));
+            Slug       = slug;
+            Type       = type;
+            Properties = properties;
+            OwnerId    = ownerId;
         }
 
         [Member("id"), Key(sequenceName: "programId", increment: 4)]
@@ -63,9 +66,9 @@ namespace Carbon.Platform.Computing
         [StringLength(50)]
         public string Runtime { get; set; }
 
-        [Member("details")]
+        [Member("properties")]
         [StringLength(1000)]
-        public JsonObject Details { get; set; }
+        public JsonObject Properties { get; }
 
         #region Stats
 
@@ -81,11 +84,11 @@ namespace Carbon.Platform.Computing
 
         #endregion
 
-        #region Details
+        #region Properties
 
         string[] IApplication.Urls
         {
-            get => (Details.TryGetValue("urls", out var addresses))
+            get => (Properties.TryGetValue("urls", out var addresses))
                 ? addresses.ToArrayOf<string>()
                 : null;
         }

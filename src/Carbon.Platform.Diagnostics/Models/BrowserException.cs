@@ -1,5 +1,4 @@
-﻿using System.Runtime.Serialization;
-
+﻿
 using Carbon.Data.Sequences;
 
 namespace Carbon.Platform.Diagnostics
@@ -28,9 +27,9 @@ namespace Carbon.Platform.Diagnostics
         [StringLength(2000)]
         public string StackTrace { get; set; }
         
-        [Member("details")]
+        [Member("properties")]
         [StringLength(1000)]
-        public JsonObject Details { get; set; }
+        public JsonObject Properties { get; set; }
 
         // userAgent, url, etc.
         [Member("context")]
@@ -45,18 +44,5 @@ namespace Carbon.Platform.Diagnostics
 
         [Member("clientId")]
         public long? ClientId { get; set; }
-
-        #region Helpers
-
-        [IgnoreDataMember]
-        public string[] Stack => StackTrace?.Split('\n');
-
-        [IgnoreDataMember]
-        public string Url => Context["url"];
-
-        [IgnoreDataMember]
-        public string HttpMethod => Context["httpMethod"] ?? "GET";
-
-        #endregion
     }
 }

@@ -18,12 +18,21 @@ namespace Carbon.Platform.Computing
             ImageType type,
             string name,
             long ownerId,
+            long size,
             ManagedResource resource)
         {
+            #region Preconditions
+
+            if (id <= 0)
+                throw new ArgumentException("Invalid", nameof(id));
+
+            #endregion
+
             Id          = id;
             Type        = type;
             Name        = name ?? throw new ArgumentNullException(nameof(name));
             OwnerId     = ownerId;
+            Size        = size;
             ResourceId  = resource.ResourceId;
             ProviderId  = resource.ProviderId;
             LocationId  = resource.LocationId;
@@ -39,12 +48,15 @@ namespace Carbon.Platform.Computing
         [StringLength(3, 128)]
         public string Name { get; }
 
+        [Member("size")]
+        public long Size { get; }
+
         [Member("ownerId")]
         public long OwnerId { get; }
 
-        [Member("details")]
+        [Member("properties")]
         [StringLength(1000)]
-        public JsonObject Details { get; set; }
+        public JsonObject Properties { get; set; }
 
         #region IResource
 

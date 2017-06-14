@@ -2,6 +2,8 @@
 We'll continue to make breaking API changes in minor releases until we reach 2.0.
 Services & management libraries will stabalize at v1.
 
+- Rename Details to Properties (Image, Program, ...)
+
 1.43.0
 - Breakout CI
 
@@ -22,7 +24,7 @@ Services & management libraries will stabalize at v1.
 1.38.0
 - Add SecurityGroupIds to NetworkInterface
 - Rename MachineImageInfo -> Image
-- Add Details to: Build, Deployment, Program, ProgramRelease, Image, LoadBalancer, Volume, Channel, and Queue
+- Add Properties to: Build, Deployment, Program, ProgramRelease, Image, LoadBalancer, Volume, Channel, and Queue
 - Add OwnerId to Image & HealthCheck
 - Add InitiatorId to Build & Deployment
 - Introduce Cluster and consolidate Environment Locations, Host Groups, and DatabaseClusters
@@ -32,7 +34,7 @@ Services & management libraries will stabalize at v1.
 - Change ResourceType from a structure to a class 
 - Add Build
 - Simplify Activity model
-- Move User to Iam namespace and add details and suspended properties
+- Move User to Iam namespace and add properties and suspended
 - Rename Apps to Programs to support Services and Tasks
 - Add OwnerId to remaining top level objects 
 - Make host addresses a string[] to to support names in the future.

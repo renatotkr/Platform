@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Json;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform
@@ -47,6 +48,10 @@ namespace Carbon.Platform
         [Member("ownerId")]
         public long OwnerId { get; }
 
+        [Member("properties")]
+        [StringLength(1000)]
+        public JsonObject Properties { get; set; }
+
         public EnvironmentType Type
         {
             get
@@ -57,7 +62,7 @@ namespace Carbon.Platform
                     case 1  : return EnvironmentType.Production;
                     case 2  : return EnvironmentType.Staging;
                     case 3  : return EnvironmentType.Intergration;
-                    default: throw new Exception("unknown");
+                    default : throw new Exception("unknown");
                 }
             }
         }

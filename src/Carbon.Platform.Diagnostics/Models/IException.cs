@@ -11,7 +11,7 @@ namespace Carbon.Platform.Diagnostics
 
         string Message { get; }
 
-        JsonObject Details { get; }
+        JsonObject Properties { get; }
 
         long? IssueId { get; }
         

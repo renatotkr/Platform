@@ -22,7 +22,8 @@ namespace Carbon.Platform.Computing
             long creatorId,
             long? buildId = null,
             long commitId = 0,
-            string runtime = null)
+            string runtime = null,
+            JsonObject properties = null)
         {
             #region Preconditions
 
@@ -58,6 +59,7 @@ namespace Carbon.Platform.Computing
             PackageDekId  = package.DekId;
             PackageIV     = package.IV;
             PackageSha256 = package.Sha256;
+            Properties    = properties;
         }
 
         // programId | #
@@ -87,9 +89,9 @@ namespace Carbon.Platform.Computing
         [Ascii, StringLength(50)]
         public string Runtime { get; }
 
-        [Member("details")]
+        [Member("properties")]
         [StringLength(1000)]
-        public JsonObject Details { get; set; }
+        public JsonObject Properties { get; }
 
         #region Package
 
@@ -124,7 +126,7 @@ namespace Carbon.Platform.Computing
 
         string[] IApplication.Urls
         {
-            get => (Details.TryGetValue("urls", out var addresses))
+            get => (Properties.TryGetValue("urls", out var addresses))
                 ? addresses.ToArrayOf<string>()
                 : null;
         }
