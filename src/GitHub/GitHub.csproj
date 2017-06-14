@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>GitHub</AssemblyName>
-    <VersionPrefix>1.5.3</VersionPrefix>
+    <VersionPrefix>1.5.4</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
 
     <!-- Package Details -->
