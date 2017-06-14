@@ -9,17 +9,13 @@ namespace Carbon.CI
 {
     public static class DeploymentId
     {
+        private static readonly string sql = SqlHelper.GetCurrentValueAndIncrement<EnvironmentInfo>("deploymentCount");
+
         public static async Task<long> NextAsync(IDbContext context, IEnvironment env)
         {
             using (var connection = context.GetConnection())
             {
-                var result = await connection.ExecuteScalarAsync<int>(
-                    @"SELECT `deploymentCount` FROM `Environments` WHERE id = @id FOR UPDATE;
-                      UPDATE `Environments`
-                      SET `deploymentCount` = `deploymentCount` + 1
-                      WHERE id = @id", env).ConfigureAwait(false);
-
-                return result + 1;
+                return await connection.ExecuteScalarAsync<int>(sql, env).ConfigureAwait(false) + 1;
             }
         }
     }

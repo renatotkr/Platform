@@ -7,11 +7,11 @@ namespace Carbon.CI
 {
     [Dataset("Projects", Schema = "Ciad")]
     [UniqueIndex("ownerId", "name")]
-    public class Project : IManagedResource, IProject
+    public class ProjectInfo : IManagedResource, IProject
     {
-        public Project() { }
+        public ProjectInfo() { }
 
-        public Project(
+        public ProjectInfo(
             long id, 
             string name,
             long repositoryId,

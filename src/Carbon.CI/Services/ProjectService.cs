@@ -18,27 +18,27 @@ namespace Carbon.CI
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public Task<IReadOnlyList<Project>> ListAsync(long ownerId)
+        public Task<IReadOnlyList<ProjectInfo>> ListAsync(long ownerId)
         {
             return db.Projects.QueryAsync(And(Eq("ownerId", ownerId), IsNull("deleted")));
         }
 
-        public async Task<Project> GetAsync(long id)
+        public async Task<ProjectInfo> GetAsync(long id)
         {
             return await db.Projects.FindAsync(id) 
                 ?? throw ResourceError.NotFound(ResourceTypes.Project, id);
         }
 
-        public async Task<Project> GetAsync(long ownerId, string name)
+        public async Task<ProjectInfo> GetAsync(long ownerId, string name)
         {
             return await db.Projects.QueryFirstOrDefaultAsync(
               And(Eq("ownerId", ownerId), Eq("name", name))  
             ) ?? throw ResourceError.NotFound(ResourceTypes.Project, ownerId, name);
         }
 
-        public async Task<Project> CreateAsync(CreateProjectRequest request)
+        public async Task<ProjectInfo> CreateAsync(CreateProjectRequest request)
         {
-            var project = new Project(
+            var project = new ProjectInfo(
                 id           : db.Projects.Sequence.Next(),
                 name         : request.Name,
                 repositoryId : request.RepositoryId,

@@ -15,7 +15,7 @@ namespace Carbon.CI
 
             Builds                = new Dataset<Build, long>(context);
             BuildArtifacts        = new Dataset<BuildArtifact, long>(context);
-            Projects              = new Dataset<Project, long>(context);
+            Projects              = new Dataset<ProjectInfo, long>(context);
 
             Deployments           = new Dataset<Deployment, long>(context);
             DeploymentTargets     = new Dataset<DeploymentTarget, (long, long)>(context);
@@ -27,7 +27,7 @@ namespace Carbon.CI
         public Dataset<BuildArtifact, long>            BuildArtifacts    { get; }
         public Dataset<Deployment, long>               Deployments       { get; }
         public Dataset<DeploymentTarget, (long, long)> DeploymentTargets { get; }
-        public Dataset<Project, long>                  Projects { get; }
+        public Dataset<ProjectInfo, long>                  Projects { get; }
 
     }
 }
