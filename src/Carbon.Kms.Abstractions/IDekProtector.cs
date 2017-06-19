@@ -6,6 +6,6 @@ namespace Carbon.Kms
     {
         byte[] Decrypt(EncryptedData data);
 
-        EncryptedData Encrypt(long keyId, byte[] plaintext);
+        EncryptedData Encrypt(string keyId, byte[] plaintext);
     }
 }

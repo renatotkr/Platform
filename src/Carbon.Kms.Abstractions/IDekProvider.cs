@@ -6,8 +6,8 @@ namespace Carbon.Kms
 {
     public interface IDekProvider
     {
-        ValueTask<DataKey> GetAsync(long id);
+        ValueTask<DataKey> GetAsync(string keyId);
 
-        ValueTask<DataKey> GetAsync(long id, int version);
+        ValueTask<DataKey> GetAsync(string keyId, int keyVersion);
     }
 }

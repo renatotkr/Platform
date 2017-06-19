@@ -7,7 +7,7 @@ namespace Carbon.Kms
     {
         public static EncryptedData EncryptString(
             this IDekProtector protector,
-            long keyId,
+            string keyId,
             string plaintext)
         {
             var data = Encoding.UTF8.GetBytes(plaintext);

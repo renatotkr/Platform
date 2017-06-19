@@ -14,7 +14,7 @@ namespace Carbon.Kms
         public SecretInfo(
             string name,
             long ownerId,
-            long keyId,
+            string keyId,
             int keyVersion,
             byte[] iv, 
             byte[] ciphertext,
@@ -25,8 +25,8 @@ namespace Carbon.Kms
             if (ownerId <= 0)
                 throw new ArgumentException("Invalid", nameof(ownerId));
 
-            if (keyId <= 0)
-                throw new ArgumentException("Invalid", nameof(keyId));
+            if (keyId == null)
+                throw new ArgumentNullException(nameof(keyId));
 
             if (name == null || string.IsNullOrEmpty(name))
                 throw new ArgumentException("Required", nameof(name));
@@ -56,7 +56,7 @@ namespace Carbon.Kms
         public string Name { get; }
 
         [Member("keyId")]
-        public long KeyId { get; }
+        public string KeyId { get; }
 
         [Member("keyVersion"), Mutable]
         public int KeyVersion { get; set; }
@@ -83,7 +83,6 @@ namespace Carbon.Kms
 
         [IgnoreDataMember]
         [Member("deleted")]
-        [TimePrecision(TimePrecision.Second)]
         public DateTime? Deleted { get; }
         
         [Member("modified"), Timestamp(true)]

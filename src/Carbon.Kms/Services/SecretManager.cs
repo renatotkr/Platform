@@ -49,7 +49,11 @@ namespace Carbon.Kms
             }
         }
 
-        public async Task CreateAsync(string name, byte[] value, long keyId, DateTime? expires)
+        public async Task CreateAsync(
+            string name,
+            byte[] value,
+            string keyId, 
+            DateTime? expires)
         {
             #region Preconditions
 

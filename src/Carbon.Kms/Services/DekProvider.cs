@@ -27,32 +27,32 @@ namespace Carbon.Kms
             this.masterKeyProvider = masterKeyProvider ?? throw new ArgumentNullException(nameof(masterKeyProvider));
         }
 
-        public async ValueTask<DataKey> GetAsync(long id)
+        public async ValueTask<DataKey> GetAsync(string keyId)
         {
             var key = (await db.Deks.QueryAsync(
-                expression : And(Eq("id", id), IsNull("deleted")),
+                expression : And(Eq("id", long.Parse(keyId)), IsNull("deleted")),
                 order      : Order.Descending("version"),
                 take       : 1
             ).ConfigureAwait(false)).FirstOrDefault();
 
             if (key == null)
             {
-                throw new Exception($"dek#{id} does not exist");
+                throw new Exception($"dek#{keyId} does not exist");
             }
 
             var result = await DecryptAsync(key);
 
-            return new DataKey(key.Id, key.Version, result);
+            return new DataKey(key.Id.ToString(), key.Version, result);
         }
 
-        public async ValueTask<DataKey> GetAsync(long id, int version)
+        public async ValueTask<DataKey> GetAsync(string keyId, int keyVersion)
         {
-            var key = await db.Deks.FindAsync((id, version))
-                ?? throw new Exception($"dek#{id}@{version} not found");
+            var key = await db.Deks.FindAsync((long.Parse(keyId), keyVersion))
+                ?? throw new Exception($"dek#{keyId}@{keyVersion} not found");
 
             var result = await DecryptAsync(key).ConfigureAwait(false);
 
-            return new DataKey(key.Id, key.Version, result);
+            return new DataKey(key.Id.ToString(), key.Version, result);
         }
 
         private async Task<byte[]> DecryptAsync(DekInfo dek)

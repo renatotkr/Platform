@@ -40,7 +40,6 @@ namespace Carbon.Kms
             Status     = status;
         }
 
-        // keyId + #
         [Member("id"), Key]
         public long Id { get; }
 
@@ -63,17 +62,16 @@ namespace Carbon.Kms
         [Member("context")]
         [StringLength(1000)]
         public JsonObject Context { get; }
-
-        [Member("accessed")]
-        public DateTime? Accessed { get; }
         
         #region Timestamps
         
         [Member("activated")]
         public DateTime? Activated { get; }
 
+        [Member("accessed")]
+        public DateTime? Accessed { get; }
+
         [Member("expires")]
-        [TimePrecision(TimePrecision.Second)]
         public DateTime? Expires { get; }
 
         [IgnoreDataMember]
@@ -86,12 +84,13 @@ namespace Carbon.Kms
 
         [IgnoreDataMember]
         [Member("deleted")]
-        [TimePrecision(TimePrecision.Second)]
         public DateTime? Deleted { get; }
 
         #endregion
 
         #region IDek
+
+        string IKeyInfo.Id => Id.ToString();
 
         public IEnumerable<KeyValuePair<string, string>> GetAuthenticatedData()
         {

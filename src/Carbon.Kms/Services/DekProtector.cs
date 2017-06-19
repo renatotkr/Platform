@@ -13,7 +13,7 @@ namespace Carbon.Kms
             this.dekProvider = dekProvider ?? throw new ArgumentNullException(nameof(dekProvider));
         }
 
-        public EncryptedData Encrypt(long keyId, byte[] plaintext)
+        public EncryptedData Encrypt(string keyId, byte[] plaintext)
         {
             var key = dekProvider.GetAsync(keyId).Result;
 

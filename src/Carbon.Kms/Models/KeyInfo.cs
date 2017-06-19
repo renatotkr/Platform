@@ -47,6 +47,14 @@ namespace Carbon.Kms
         [Member("id"), Key(sequenceName: "keyId")]
         public long Id { get; }
 
+        [Member("version")]
+        public int Version { get; }
+
+        /*
+        [Member("oid")]
+        public string Oid { get; }
+        */
+
         [Member("ownerId")]
         public long OwnerId { get; }
 
@@ -54,16 +62,19 @@ namespace Carbon.Kms
         [StringLength(63)]
         public string Name { get; }
 
-        [Member("version")]
-        public int Version { get; }
-
         [Member("status")]
-        public KeyStatus Status { get; set; }
+        public KeyStatus Status { get; }
 
         #region Stats
 
         [Member("dekCount")]
         public int DekCount { get; }
+
+        #endregion
+
+        #region IKey
+
+        string IKeyInfo.Id => Id.ToString();
 
         #endregion
 
@@ -94,33 +105,18 @@ namespace Carbon.Kms
 
         [IgnoreDataMember]
         [Member("deleted")]
-        [TimePrecision(TimePrecision.Second)]
         public DateTime? Deleted { get; }
+
+        [IgnoreDataMember]
+        [Member("deactivated")]
+        public DateTime? Deactivated { get; }
 
         [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
 
         #endregion
+
+        
     }
 }
-
-// master keying material 
-// derive DEKs
-
-// Google KMS: CryptoKey
-// $0.06 per key per month
-// stored within a "KeyRing"
-
-// Azure: HSM Protected keys
-// $1/m
-
-// The actual key never leaves the device...
-
-// CryptoKey ?
-
-/*
-aws   | KMS       | https://aws.amazon.com/kms/
-azure | Key Vault | https://azure.microsoft.com/en-us/services/key-vault/
-gcp   | KMS       | https://cloud.google.com/kms/
-*/
