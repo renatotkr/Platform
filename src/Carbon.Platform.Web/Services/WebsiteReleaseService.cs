@@ -56,12 +56,12 @@ namespace Carbon.Platform.Web
             #endregion
 
             var release = new WebsiteRelease(
-                id        : await GetNextId(request.Website),
-                website   : request.Website,
-                version   : request.Version, 
-                package   : request.Package, 
-                commit    : request.Commit, 
-                creatorId : request.CreatorId
+                id         : await GetNextId(request.Website),
+                website    : request.Website,
+                version    : request.Version, 
+                properties : request.Properties,
+                commit     : request.Commit, 
+                creatorId  : request.CreatorId
             );
             
             await db.WebsiteReleases.InsertAsync(release).ConfigureAwait(false);

@@ -28,10 +28,10 @@ namespace Carbon.Platform
         private readonly HttpClient http = new HttpClient
         {
             DefaultRequestHeaders = {
-                { "User-Agent", "Carbon/1.1.0" },
+                { "User-Agent", "Carbon/1.2.0" },
                 { "Accept", "application/json" }
             },
-            Timeout = TimeSpan.FromSeconds(15)
+            Timeout = TimeSpan.FromSeconds(10)
         };
 
         protected async Task<string> PostAsync(string path, object data)

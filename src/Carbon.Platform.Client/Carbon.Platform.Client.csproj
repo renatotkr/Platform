@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Client</AssemblyName>
-    <VersionPrefix>0.26.2</VersionPrefix>
+    <VersionPrefix>0.27.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
   
     <!-- Package Details -->
@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Carbon.Data.Protection" Version="0.8.2" />
+    <PackageReference Include="Carbon.Data.Protection" Version="0.9.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">

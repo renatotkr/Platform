@@ -7,7 +7,7 @@ using Carbon.Platform.Sequences;
 
 namespace Carbon.Platform.Networking
 {
-    [Dataset("NetworkRouters")]
+    [Dataset("NetworkRouters", Schema = "Networking")]
     public class NetworkRouter : INetworkRouter
     {
         public NetworkRouter() { }
@@ -15,7 +15,7 @@ namespace Carbon.Platform.Networking
         public NetworkRouter(long id, string name, ManagedResource resource)
         {
             Id         = id;
-            Name       = name;
+            Name       = name ?? throw new ArgumentNullException(nameof(name));
             ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
             ResourceId = resource.ResourceId;
@@ -56,7 +56,6 @@ namespace Carbon.Platform.Networking
 
         [IgnoreDataMember]
         [Member("deleted")]
-        [TimePrecision(TimePrecision.Second)]
         public DateTime? Deleted { get; }
 
         [IgnoreDataMember]

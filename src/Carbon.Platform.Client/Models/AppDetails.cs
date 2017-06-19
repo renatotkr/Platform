@@ -1,5 +1,5 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
+
 using Carbon.CI;
 using Carbon.Versioning;
 
@@ -19,8 +19,14 @@ namespace Carbon.Platform.Computing
         [DataMember(Name = "version", Order = 4)]
         public SemanticVersion Version { get; set; }
 
-        [DataMember(Name = "package", Order = 5)]
-        public PackageInfo Package { get; set; }
+        [DataMember(Name = "encryptionKey", Order = 5)]
+        public string EncryptionKey { get; }
+
+        [DataMember(Name = "iv", Order = 6)]
+        public byte[] IV { get; }
+
+        [DataMember(Name = "sha256", Order = 7)]
+        public byte[] Sha256 { get; }
 
         #region Details
 
@@ -32,15 +38,15 @@ namespace Carbon.Platform.Computing
 
         #endregion
 
-        #region IProgramRelease
+        #region IRelease
+
+        ReleaseType IRelease.Type => ReleaseType.Program;
 
         long IProgramRelease.ProgramId => Id;
 
-        long IProgramRelease.CommitId => 0;
+        long IRelease.CommitId => 0;
 
-        long IProgramRelease.CreatorId => 0;
-
-        IPackageInfo IProgramRelease.Package => Package;
+        long IRelease.CreatorId => 0;
 
         #endregion
     }

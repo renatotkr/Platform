@@ -14,19 +14,22 @@ namespace Carbon.Platform
         [DataMember(Name = "type", Order = 2)]
         public HostType Type { get; set; }
 
-        [DataMember(Name = "addresses", Order = 3)]
+        [DataMember(Name = "clusterId", Order = 3)]
+        public long ClusterId { get; set; }
+
+        [DataMember(Name = "addresses", Order = 4)]
         public string[] Addresses { get; set; }
 
-        [DataMember(Name = "heartbeat", EmitDefaultValue = false, Order = 4)]
+        [DataMember(Name = "heartbeat", EmitDefaultValue = false, Order = 5)]
         public DateTime? Heartbeat { get; set; }
 
-        [DataMember(Name = "terminated", EmitDefaultValue = false, Order = 5)]
+        [DataMember(Name = "terminated", EmitDefaultValue = false, Order = 6)]
         public DateTime? Terminated { get; set; }
 
-        [DataMember(Name = "networkInterfaces", Order = 6)]
+        [DataMember(Name = "networkInterfaces", Order = 7)]
         public NetworkInterfaceDetails[] NetworkInterfaces { get; set; }
 
-        [DataMember(Name = "volumes", Order = 7)]
+        [DataMember(Name = "volumes", Order = 8)]
         public VolumeDetails[] Volumes { get; set; }
 
         #region IHost

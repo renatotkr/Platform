@@ -1,5 +1,6 @@
 ﻿using System;
 
+/*
 using Carbon.Data.Annotations;
 
 namespace Carbon.Platform
@@ -56,6 +57,7 @@ namespace Carbon.Platform
     }
 }
 
+    */
 
 // Slugs are a globally unique identifier
 // Reserving a slug allows it's use across each resource type
