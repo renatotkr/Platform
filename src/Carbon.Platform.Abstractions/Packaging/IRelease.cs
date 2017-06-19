@@ -10,8 +10,6 @@ namespace Carbon.CI
         
         SemanticVersion Version { get;  }
 
-        IPackageInfo Package { get; }
-
         long CommitId { get; }
 
         long CreatorId { get; }

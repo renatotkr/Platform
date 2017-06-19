@@ -21,8 +21,5 @@ namespace Carbon.Platform.Web
 
         [DataMember(Name = "modified", Order = 5)]
         public DateTime Modified { get; set; }
-
-        [DataMember(Name = "package", Order = 5)]
-        public PackageInfo Package { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Carbon.CI;
+﻿using Carbon.Json;
 using Carbon.Platform.Storage;
 using Carbon.Versioning;
 
@@ -12,7 +12,7 @@ namespace Carbon.Platform.Web
 
         public IRepositoryCommit Commit { get; set; }
 
-        public IPackageInfo Package { get; set; }
+        public JsonObject Properties { get; set; }
 
         public long CreatorId { get; set; }
     }

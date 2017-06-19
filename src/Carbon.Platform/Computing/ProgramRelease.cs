@@ -4,13 +4,12 @@ using Carbon.Data.Annotations;
 using Carbon.Versioning;
 using Carbon.CI;
 using Carbon.Json;
-using System.Runtime.Serialization;
 
 namespace Carbon.Platform.Computing
 {
     [Dataset("ProgramReleases", Schema = "Computing")]
     [UniqueIndex("programId", "version")]
-    public class ProgramRelease : IApplication, IProgramRelease, IRelease
+    public class ProgramRelease : IApplication, IProgramRelease
     {
         public ProgramRelease() { }
 
@@ -18,7 +17,6 @@ namespace Carbon.Platform.Computing
             long id,
             IProgram program,
             SemanticVersion version,
-            IPackageInfo package,
             long creatorId,
             long? buildId = null,
             long commitId = 0,
@@ -36,30 +34,20 @@ namespace Carbon.Platform.Computing
             if (version == SemanticVersion.Zero)
                 throw new ArgumentException("May not be 0.0.0", nameof(version));
 
-            if (package == null)
-                throw new ArgumentNullException(nameof(package));
-
-            if (package.Sha256.Length != 32)
-                throw new ArgumentException("Must be 32 bytes", nameof(package.Sha256));
-
             if (creatorId <= 0)
                 throw new ArgumentException("Must be > 0", nameof(creatorId));
 
             #endregion
 
-            Id            = id;
-            ProgramId     = program.Id;
-            ProgramName   = program.Name;
-            Version       = version;
-            CommitId      = commitId;
-            CreatorId     = creatorId;
-            BuildId       = buildId;
-            Runtime       = runtime;
-            PackageName   = package.Name;
-            PackageDekId  = package.DekId;
-            PackageIV     = package.IV;
-            PackageSha256 = package.Sha256;
-            Properties    = properties;
+            Id          = id;
+            ProgramId   = program.Id;
+            ProgramName = program.Name;
+            Version     = version;
+            CommitId    = commitId;
+            CreatorId   = creatorId;
+            BuildId     = buildId;
+            Runtime     = runtime;
+            Properties  = properties;
         }
 
         // programId | #
@@ -93,29 +81,6 @@ namespace Carbon.Platform.Computing
         [StringLength(1000)]
         public JsonObject Properties { get; }
 
-        #region Package
-
-        [Member("packageName")]
-        [StringLength(100)]
-        public string PackageName { get; }
-
-        [Member("packageDekId")]
-        public long? PackageDekId { get; }
-
-        [Member("packageIV"), FixedSize(16)]
-        public byte[] PackageIV { get; }
-
-        [Member("packageSha256"), FixedSize(32)]
-        public byte[] PackageSha256 { get; }
-
-        [IgnoreDataMember]
-        public IPackageInfo Package
-        {
-            get => new ProgramPackage(PackageName, PackageDekId, PackageIV, PackageSha256);
-        }
-
-        #endregion
-
         #region IProgram
 
         string IProgram.Name => ProgramName;
@@ -147,28 +112,5 @@ namespace Carbon.Platform.Computing
         public DateTime Created { get; }
 
         #endregion
-    }
-
-    internal class ProgramPackage : IPackageInfo
-    {
-        public ProgramPackage(
-            string name,
-            long? dekId,
-            byte[] iv,
-            byte[] sha256)
-        {
-            Name   = name;
-            DekId  = dekId;
-            IV     = iv;
-            Sha256 = sha256;
-        }
-
-        public string Name { get; }
-
-        public long? DekId { get; }
-
-        public byte[] IV { get; }
-
-        public byte[] Sha256 { get; }
     }
 }
