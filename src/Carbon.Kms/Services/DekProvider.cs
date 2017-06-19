@@ -29,8 +29,12 @@ namespace Carbon.Kms
 
         public async ValueTask<DataKey> GetAsync(string keyId)
         {
+            var keyExpression = long.TryParse(keyId, out var id)
+                ? Eq("id", id)
+                : Eq("slug", keyId);
+
             var key = (await db.Deks.QueryAsync(
-                expression : And(Eq("id", long.Parse(keyId)), IsNull("deleted")),
+                expression : And(keyExpression, IsNull("deleted")),
                 order      : Order.Descending("version"),
                 take       : 1
             ).ConfigureAwait(false)).FirstOrDefault();

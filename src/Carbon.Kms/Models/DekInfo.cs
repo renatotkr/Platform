@@ -16,6 +16,7 @@ namespace Carbon.Kms
             long kekId,
             byte[] ciphertext,
             JsonObject context,
+            string slug = null,
             int version = 1,
             KeyStatus status = KeyStatus.Active)
         {
@@ -36,6 +37,7 @@ namespace Carbon.Kms
             Ciphertext = ciphertext;
             Context    = context;
             KekId      = kekId;
+            Slug       = slug;
             Version    = 1;
             Status     = status;
         }
@@ -53,8 +55,6 @@ namespace Carbon.Kms
         [Member("status")]
         public KeyStatus Status { get; }
 
-        // TODO: KeyAlgorithm
-
         [Member("ciphertext"), MaxLength(1000)]
         public byte[] Ciphertext { get; }
 
@@ -62,9 +62,12 @@ namespace Carbon.Kms
         [Member("context")]
         [StringLength(1000)]
         public JsonObject Context { get; }
-        
+
+        [Member("slug"), Unique]
+        public string Slug { get; set; }
+
         #region Timestamps
-        
+
         [Member("activated")]
         public DateTime? Activated { get; }
 
