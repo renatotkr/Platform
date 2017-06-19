@@ -10,6 +10,8 @@ namespace Carbon.Platform.Computing
 
         Task<ProgramRelease> GetAsync(long programId, SemanticVersion version);
 
+        Task<bool> ExistsAsync(long programId, SemanticVersion version);
+
         Task<IReadOnlyList<ProgramRelease>> ListAsync(long programId);
     }
 }

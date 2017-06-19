@@ -39,21 +39,19 @@ namespace Carbon.Platform.Computing
                 program    : request.Program,
                 version    : request.Version,
                 runtime    : program.Runtime,
-                package    : request.Package,
                 properties : program.Properties,
                 creatorId  : request.CreatorId
             );
 
             await db.ProgramReleases.InsertAsync(release).ConfigureAwait(false);
 
+            // Update properties?
+
             if (request.Version > program.Version)
             {
-                await db.Programs.PatchAsync(
-                    key: release.ProgramId,
-                    changes: new[]  {
-                        Change.Replace("version", release.Version)
-                    }
-                ).ConfigureAwait(false);
+                await db.Programs.PatchAsync(release.ProgramId, changes: new[] {
+                    Change.Replace("version", release.Version)
+                }).ConfigureAwait(false);
             }
 
             #region Logging
@@ -72,6 +70,13 @@ namespace Carbon.Platform.Computing
             );
         }
 
+        public async Task<bool> ExistsAsync(long programId, SemanticVersion version)
+        {
+            return await db.ProgramReleases.CountAsync(
+                And(Eq("programId", programId), Eq("version", version))
+            ) > 0;
+        }
+
         public Task<IReadOnlyList<ProgramRelease>> ListAsync(long appId)
         {
             return db.ProgramReleases.QueryAsync(Eq("programId", appId), Order.Descending("version"));
@@ -79,15 +84,14 @@ namespace Carbon.Platform.Computing
 
         #region Helper
 
+        static readonly string nextIdSql = SqlHelper.GetCurrentValueAndIncrement<Program>("releaseCount");
+
         private async Task<long> GetNextId(long programId)
         {
             using (var connection = db.Context.GetConnection())
             {
-                return (await connection.ExecuteScalarAsync<int>(
-                    @"SELECT `releaseCount` FROM `Programs` WHERE id = @id FOR UPDATE;
-                      UPDATE `Programs`
-                      SET `releaseCount` = `releaseCount` + 1
-                      WHERE id = @id", new { id = programId }).ConfigureAwait(false)) + 1;
+                return (await connection.ExecuteScalarAsync<int>(nextIdSql,
+                    new { id = programId }).ConfigureAwait(false)) + 1;
             }
         }
 

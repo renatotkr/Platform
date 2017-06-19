@@ -26,7 +26,8 @@ namespace Carbon.Platform.Computing
 
         public async Task<Program> GetAsync(long id)
         {
-            return await db.Programs.FindAsync(id).ConfigureAwait(false) ?? throw ResourceError.NotFound(ResourceTypes.Program, id);
+            return await db.Programs.FindAsync(id).ConfigureAwait(false)
+                ?? throw ResourceError.NotFound(ResourceTypes.Program, id);
         }
 
         public Task<Program> FindAsync(string slug)
