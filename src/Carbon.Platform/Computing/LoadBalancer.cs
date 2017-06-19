@@ -4,9 +4,9 @@ using System.Runtime.Serialization;
 using Carbon.Data.Annotations;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.Networking
+namespace Carbon.Platform.Computing
 {
-    [Dataset("LoadBalancers")]
+    [Dataset("LoadBalancers", Schema = "Computing")]
     [UniqueIndex("providerId", "resourceId")]
     public class LoadBalancer : ILoadBalancer
     {
@@ -81,7 +81,6 @@ namespace Carbon.Platform.Networking
 
         [IgnoreDataMember]
         [Member("deleted")]
-        [TimePrecision(TimePrecision.Second)]
         public DateTime? Deleted { get; }
 
         [IgnoreDataMember]

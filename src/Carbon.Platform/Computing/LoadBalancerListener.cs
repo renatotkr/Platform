@@ -6,9 +6,9 @@ using Carbon.Net;
 using Carbon.Platform.Sequences;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.Networking
+namespace Carbon.Platform.Computing
 {
-    [Dataset("LoadBalancerListener")]
+    [Dataset("LoadBalancerListener", Schema = "Computing")]
     [UniqueIndex("providerId", "resourceId")]
     public class LoadBalancerListener : ILoadBalancerListener
     {
@@ -76,7 +76,6 @@ namespace Carbon.Platform.Networking
 
         [IgnoreDataMember]
         [Member("deleted")]
-        [TimePrecision(TimePrecision.Second)]
         public DateTime? Deleted { get; }
 
         [IgnoreDataMember]

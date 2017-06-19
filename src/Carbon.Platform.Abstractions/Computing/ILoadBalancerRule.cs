@@ -1,6 +1,6 @@
 ﻿using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.Networking
+namespace Carbon.Platform.Computing
 {
     public interface ILoadBalancerRule : IResource
     {

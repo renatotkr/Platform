@@ -1,7 +1,7 @@
 ﻿using Carbon.Net;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.Networking
+namespace Carbon.Platform.Computing
 {
     public interface ILoadBalancerListener : IManagedResource
     {
