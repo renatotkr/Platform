@@ -37,7 +37,7 @@ namespace Carbon.Platform.Diagnostics
         public JsonObject Context { get; set; }
 
         [Member("issueId"), Indexed]
-        public long? IssueId { get; set; }
+        public BigId? IssueId { get; set; }
         
         [Member("sessionId")]
         public long? SessionId { get; set; }

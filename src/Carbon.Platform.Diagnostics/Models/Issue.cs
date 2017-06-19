@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Data.Sequences;
 using Carbon.Json;
 
 namespace Carbon.Platform.Diagnostics
@@ -12,7 +13,7 @@ namespace Carbon.Platform.Diagnostics
         public Issue() { }
 
         public Issue(
-            long id, 
+            BigId id, 
             IssueType type = IssueType.Unknown, 
             string description = null)
         {
@@ -28,9 +29,9 @@ namespace Carbon.Platform.Diagnostics
             Description = description;
         }
 
-        // environmentId + sequence
+        // environmentId | timestamp/ms | #
         [Member("id"), Key]
-        public long Id { get; }
+        public BigId Id { get; }
 
         [Member("type")]
         public IssueType Type { get; set; }
@@ -55,14 +56,10 @@ namespace Carbon.Platform.Diagnostics
         #region Timestamps
 
         [IgnoreDataMember]
-        [Member("created"), Timestamp]
-        public DateTime Created { get; }
-
-        [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
 
-        [Member("resolved")]
+        [Member("resolved"), Mutable]
         public DateTime? Resolved { get; set; }
 
         #endregion

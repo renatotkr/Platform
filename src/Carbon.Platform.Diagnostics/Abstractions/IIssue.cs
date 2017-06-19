@@ -1,10 +1,12 @@
 ﻿using System;
+using Carbon.Data.Sequences;
 
 namespace Carbon.Platform.Diagnostics
 {
     public interface IIssue
     {
-        long Id { get; }
+        // environmentId | timestamp/ms | #
+        BigId Id { get; }
 
         int? LocationId { get; }
         

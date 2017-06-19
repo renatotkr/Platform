@@ -13,7 +13,7 @@ namespace Carbon.Platform.Diagnostics
 
         JsonObject Properties { get; }
 
-        long? IssueId { get; }
+        BigId? IssueId { get; }
         
         long? SessionId { get; }
 

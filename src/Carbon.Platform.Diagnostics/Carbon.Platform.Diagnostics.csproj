@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Diagnostics</AssemblyName>
-    <VersionPrefix>0.13.0</VersionPrefix>
+    <VersionPrefix>0.14.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
 
     <!-- Package Info-->
