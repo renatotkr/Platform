@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Computing
 {
-    public interface ICluster : IManagedResource
+    public interface ICluster : IResource
     {
     }
 }

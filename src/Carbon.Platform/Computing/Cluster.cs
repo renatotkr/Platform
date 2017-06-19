@@ -18,7 +18,7 @@ namespace Carbon.Platform.Computing
             string name,
             long environmentId,
             JsonObject properties,
-            ManagedResource resource,
+            ILocation location,
             long? hostTemplateId,
             long? healthCheckId)
         {
@@ -27,15 +27,16 @@ namespace Carbon.Platform.Computing
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
 
+            if (location == null)
+                throw new ArgumentNullException(nameof(location));
+
             #endregion
 
             Id             = id;
             Name           = name ?? throw new ArgumentNullException(nameof(name));
             EnvironmentId  = environmentId;
             Properties     = properties ?? throw new ArgumentNullException(nameof(properties));
-            ProviderId     = resource.ProviderId;
-            LocationId     = resource.LocationId;
-            ResourceId     = resource.ResourceId;
+            LocationId     = location.Id;
             HostTemplateId = hostTemplateId;
         }
         
@@ -70,20 +71,11 @@ namespace Carbon.Platform.Computing
 
         #endregion
 
-        #region IResource
-
-        [IgnoreDataMember]
-        [Member("providerId")]
-        public int ProviderId { get; }
-
-        [IgnoreDataMember]
-        [Member("resourceId")]
-        [Ascii, StringLength(100)]
-        public string ResourceId { get; }
-        
         // global, regional, or zonal
         [Member("locationId")]
         public int LocationId { get; }
+
+        #region IResource
 
         ResourceType IResource.ResourceType => ResourceTypes.Cluster;
 
@@ -97,7 +89,6 @@ namespace Carbon.Platform.Computing
 
         [IgnoreDataMember]
         [Member("deleted")]
-        [TimePrecision(TimePrecision.Second)]
         public DateTime? Deleted { get; }
 
         [IgnoreDataMember]

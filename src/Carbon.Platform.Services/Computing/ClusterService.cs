@@ -32,21 +32,20 @@ namespace Carbon.Platform.Computing
 
             #endregion
             
-            // e.g. carbon/us-east-1
-
-            var group = new Cluster(
+            var cluster = new Cluster(
                id             : db.Clusters.Sequence.Next(),
                name           : request.Environment.Name + "/" + request.Location.Name,
                environmentId  : request.Environment.Id,
+               location       : request.Location,
                properties     : request.Properties,
                healthCheckId  : request.HealthCheckId,
-               hostTemplateId : request.HostTemplateId,
-               resource       : ManagedResource.Cluster(request.Location, Guid.NewGuid().ToString())
+               hostTemplateId : request.HostTemplateId
+               
             );
 
-            await db.Clusters.InsertAsync(group).ConfigureAwait(false);
+            await db.Clusters.InsertAsync(cluster).ConfigureAwait(false);
 
-            return group;
+            return cluster;
         }
 
         public async Task<Cluster> GetAsync(long id)
