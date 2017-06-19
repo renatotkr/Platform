@@ -49,7 +49,6 @@ namespace Carbon.Platform.Computing
 
         [IgnoreDataMember]
         [Member("created"), Timestamp]
-        [TimePrecision(TimePrecision.Second)]
         public DateTime Created { get; }
 
         #endregion

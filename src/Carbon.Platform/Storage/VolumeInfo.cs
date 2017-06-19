@@ -6,7 +6,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Storage
 {
-    [Dataset("Volumes")]
+    [Dataset("Volumes", Schema = "Storage")]
     [UniqueIndex("providerId", "resourceId")]
     public class VolumeInfo : IVolume
     {
@@ -73,11 +73,9 @@ namespace Carbon.Platform.Storage
 
         [IgnoreDataMember]
         [Member("deleted")]
-        [TimePrecision(TimePrecision.Second)]
         public DateTime? Deleted { get; }
 
         [IgnoreDataMember]
-        [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
 
         #endregion

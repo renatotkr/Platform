@@ -6,7 +6,7 @@ namespace Carbon.Platform.Storage
 {
     // {branchId}/scripts/app.js
 
-    [Dataset("RepositoryFiles")]
+    [Dataset("RepositoryFiles", Schema = "Storage")]
     public class RepositoryFile : IRepositoryFile
     {
         public RepositoryFile() { }
@@ -76,7 +76,6 @@ namespace Carbon.Platform.Storage
         public DateTime Created { get; }
 
         [Member("deleted")]
-        [TimePrecision(TimePrecision.Second)]
         public DateTime? Deleted { get; }
 
         [Member("modified"), Timestamp(true)]

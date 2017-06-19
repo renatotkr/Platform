@@ -16,7 +16,8 @@ namespace Carbon.Platform.Storage
             long id, 
             string name,
             long ownerId,
-            ManagedResource resource)
+            ManagedResource resource,
+            ChannelFlags flags = ChannelFlags.None)
         {
             #region Preconditions
 
@@ -30,6 +31,7 @@ namespace Carbon.Platform.Storage
             ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
             ResourceId = resource.ResourceId;
+            Flags      = flags;
         }
 
         [Member("id"), Key(sequenceName: "channelId")]
@@ -43,7 +45,7 @@ namespace Carbon.Platform.Storage
         public long OwnerId { get; }
 
         [Member("flags")]
-        public ChannelFlags Flags { get; set; }
+        public ChannelFlags Flags { get; }
 
         [Member("properties")]
         [StringLength(1000)]
@@ -85,7 +87,6 @@ namespace Carbon.Platform.Storage
 
         [IgnoreDataMember]
         [Member("deleted")]
-        [TimePrecision(TimePrecision.Second)]
         public DateTime? Deleted { get; }
 
         #endregion

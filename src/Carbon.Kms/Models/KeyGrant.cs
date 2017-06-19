@@ -68,7 +68,6 @@ namespace Carbon.Kms
 
         [IgnoreDataMember]
         [Member("deleted")]
-        [TimePrecision(TimePrecision.Second)]
         public DateTime? Deleted { get; }
 
         [Member("modified"), Timestamp(true)]

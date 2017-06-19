@@ -117,7 +117,6 @@ namespace Carbon.Platform.Computing
         // Initialized...
 
         [Member("terminated")]
-        [TimePrecision(TimePrecision.Second)]
         public DateTime? Terminated { get; set; }
 
         #endregion

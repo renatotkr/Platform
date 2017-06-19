@@ -85,7 +85,6 @@ namespace Carbon.Platform.Networking
 
         [IgnoreDataMember]
         [Member("deleted")]
-        [TimePrecision(TimePrecision.Second)]
         public DateTime? Deleted { get; }
 
         #endregion

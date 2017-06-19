@@ -6,7 +6,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Storage
 {
-    [Dataset("RepositoryBranches")]
+    [Dataset("RepositoryBranches", Schema = "Storage")]
     [UniqueIndex("repositoryId", "name")]
     public class RepositoryBranch : IRepositoryBranch
     {

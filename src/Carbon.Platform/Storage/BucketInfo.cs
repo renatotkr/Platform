@@ -6,7 +6,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Storage
 {
-    [Dataset("Buckets")]
+    [Dataset("Buckets", Schema = "Storage")]
     public class BucketInfo : IBucketInfo
     {
         public BucketInfo() { }
@@ -77,7 +77,6 @@ namespace Carbon.Platform.Storage
 
         [IgnoreDataMember]
         [Member("deleted")]
-        [TimePrecision(TimePrecision.Second)]
         public DateTime? Deleted { get; }
 
         #endregion

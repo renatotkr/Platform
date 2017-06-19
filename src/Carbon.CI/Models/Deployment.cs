@@ -64,7 +64,6 @@ namespace Carbon.CI
         public DateTime Created { get; }
 
         [Member("completed")]
-        [TimePrecision(TimePrecision.Second)]
         public DateTime? Completed { get; set; }
 
         #endregion

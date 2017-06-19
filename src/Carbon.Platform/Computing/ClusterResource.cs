@@ -5,7 +5,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
-    [Dataset("ClusterResources")]
+    [Dataset("ClusterResources", Schema = "Computing")]
     [UniqueIndex("clusterId", "resourceType", "resourceId")]
     public class ClusterResource
     {

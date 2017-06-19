@@ -7,7 +7,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Storage
 {
-    [Dataset("Repositories")]
+    [Dataset("Repositories", Schema = "Storage")]
     [UniqueIndex("providerId", "fullName")]
     [UniqueIndex("ownerId", "name")]
     public class RepositoryInfo : IRepository
@@ -108,7 +108,6 @@ namespace Carbon.Platform.Storage
 
         [IgnoreDataMember]
         [Member("deleted")]
-        [TimePrecision(TimePrecision.Second)]
         public DateTime? Deleted { get; }
 
         #endregion

@@ -2,12 +2,11 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
-using Carbon.Json;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Storage
 {
-    [Dataset("Queues")]
+    [Dataset("Queues", Schema = "Storage")]
     public class QueueInfo : IQueueInfo
     {
         public QueueInfo() { }
@@ -16,7 +15,8 @@ namespace Carbon.Platform.Storage
             long id, 
             string name,
             long ownerId,
-            ManagedResource resource)
+            ManagedResource resource,
+            QueueFlags flags = QueueFlags.None)
         {
             Id         = id;
             Name       = name ?? throw new ArgumentNullException(nameof(name));
@@ -37,7 +37,7 @@ namespace Carbon.Platform.Storage
         public long OwnerId { get; }
 
         [Member("flags")]
-        public QueueFlags Flags { get; set; }
+        public QueueFlags Flags { get; }
 
         #region IResource
 
@@ -70,7 +70,6 @@ namespace Carbon.Platform.Storage
 
         [IgnoreDataMember]
         [Member("deleted")]
-        [TimePrecision(TimePrecision.Second)]
         public DateTime? Deleted { get; }
 
         #endregion

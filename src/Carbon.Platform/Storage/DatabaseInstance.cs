@@ -71,7 +71,6 @@ namespace Carbon.Platform.Storage
         public DateTime? Heartbeat { get; }
 
         [Member("terminated")]
-        [TimePrecision(TimePrecision.Second)]
         public DateTime? Terminated { get; }
 
         [Member("created"), Timestamp]
