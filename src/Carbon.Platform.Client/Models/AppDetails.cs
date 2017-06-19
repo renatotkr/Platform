@@ -19,15 +19,6 @@ namespace Carbon.Platform.Computing
         [DataMember(Name = "version", Order = 4)]
         public SemanticVersion Version { get; set; }
 
-        [DataMember(Name = "encryptionKey", Order = 5)]
-        public string EncryptionKey { get; }
-
-        [DataMember(Name = "iv", Order = 6)]
-        public byte[] IV { get; }
-
-        [DataMember(Name = "sha256", Order = 7)]
-        public byte[] Sha256 { get; }
-
         #region Details
 
         [DataMember(Name = "runtime", Order = 10)]

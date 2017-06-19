@@ -17,13 +17,6 @@ namespace Carbon.Platform.Diagnostics
             IssueType type = IssueType.Unknown, 
             string description = null)
         {
-            #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            #endregion
-
             Id          = id;
             Type        = type;
             Description = description;
