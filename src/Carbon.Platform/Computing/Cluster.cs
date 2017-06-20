@@ -8,7 +8,6 @@ using Carbon.Platform.Resources;
 namespace Carbon.Platform.Computing
 {
     [Dataset("Clusters", Schema = "Computing")]
-    [UniqueIndex("providerId", "resourceId")]
     public class Cluster : ICluster
     {
         public Cluster() { }

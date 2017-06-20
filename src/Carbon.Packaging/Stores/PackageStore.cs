@@ -16,7 +16,10 @@ namespace Carbon.Packaging
             this.bucket = bucket ?? throw new ArgumentNullException(nameof(bucket));
         }
 
-        public async Task<PutPackageResult> PutAsync(string name, IPackage package)
+        public async Task<PutPackageResult> PutAsync(
+            string key, 
+            IPackage package,
+            PutPackageOptions? options = null)
         {
             #region Preconditions
 
@@ -30,21 +33,27 @@ namespace Carbon.Packaging
 
                 var hash = Hash.ComputeSHA256(ms, leaveOpen: true);
 
-                var blob = new Blob(name, ms, new BlobMetadata {  
+                var blob = new Blob(key, ms, new BlobMetadata {
                     ContentType = "application/zip"
                 });
 
-                await bucket.PutAsync(blob).ConfigureAwait(false);
+                await bucket.PutAsync(blob, new PutBlobOptions {
+                    EncryptionKey = options?.EncryptionKey
+                }).ConfigureAwait(false);
 
-                return new PutPackageResult(name, hash.Data);
+                return new PutPackageResult(key, hash.Data);
             }
         }
 
-        public async Task<IPackage> GetAsync(string name)
+        public async Task<IPackage> GetAsync(string key, GetPackageOptions? options = null)
         {
             var ms = new MemoryStream();
 
-            using (var blob = await bucket.GetAsync(name).ConfigureAwait(false))
+            var blobOptions = new GetBlobOptions {
+                EncryptionKey = options?.EncryptionKey
+            };
+
+            using (var blob = await bucket.GetAsync(key, blobOptions).ConfigureAwait(false))
             using (var blobStream = await blob.OpenAsync().ConfigureAwait(false))
             {
                 await blobStream.CopyToAsync(ms).ConfigureAwait(false);
@@ -53,8 +62,6 @@ namespace Carbon.Packaging
             ms.Position = 0;
 
             return ZipPackage.FromStream(ms, stripFirstLevel: false);
-        }     
+        }
     }
 }
-
-// var name = appId + "/" + appVersion + ".zip";  (e.g. app/2.1.1.zip)

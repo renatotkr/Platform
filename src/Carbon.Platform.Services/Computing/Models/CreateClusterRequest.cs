@@ -10,8 +10,8 @@ namespace Carbon.Platform.Computing
 
         public CreateClusterRequest(string name, ILocation location)
         {
-            Name     = name;
-            Location = location;
+            Name     = name ?? throw new ArgumentNullException(nameof(name));
+            Location = location ?? throw new ArgumentNullException(nameof(location));
         }
 
         public CreateClusterRequest(

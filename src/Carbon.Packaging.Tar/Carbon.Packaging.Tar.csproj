@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Carbon.Packaging.Tar</AssemblyName>
+    <VersionPrefix>0.6.0</VersionPrefix>
+    <TargetFrameworks>net461;netstandard1.6</TargetFrameworks>
+
+    <!-- Package Details -->
+    <Authors>iamcarbon</Authors>
+    <Copyright>© Jason Nelson</Copyright>
+    <Description>Implements a tar package reader and writer.</Description>
+    <PackageTags>packaging;tar;carbon</PackageTags>
+    <PackageLicenseUrl>https://github.com/carbon/Platform/blob/master/LICENCE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/carbon/Platform</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Carbon.Storage" Version="1.8.1" />
+    <PackageReference Include="SharpCompress" Version="0.17.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
+    <PackageReference Include="System.Net.Http" Version="4.3.2" />
+  </ItemGroup>
+
+</Project>

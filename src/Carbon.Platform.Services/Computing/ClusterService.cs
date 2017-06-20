@@ -40,7 +40,6 @@ namespace Carbon.Platform.Computing
                properties     : request.Properties,
                healthCheckId  : request.HealthCheckId,
                hostTemplateId : request.HostTemplateId
-               
             );
 
             await db.Clusters.InsertAsync(cluster).ConfigureAwait(false);

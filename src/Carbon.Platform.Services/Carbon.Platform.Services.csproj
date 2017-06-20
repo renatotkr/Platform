@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Services</AssemblyName>
-    <VersionPrefix>0.52.0</VersionPrefix>
+    <VersionPrefix>0.52.2</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
 
     <!-- Package Details -->
@@ -22,7 +22,6 @@
     <PackageReference Include="Carbon.Data.Protection" Version="0.9.0" />
     <PackageReference Include="Carbon.Data.Sql" Version="0.22.0" />
     <PackageReference Include="Carbon.Json" Version="1.4.1" />
-    <PackageReference Include="protobuf-net" Version="2.2.1" />
     <PackageReference Include="System.ValueTuple" Version="4.3.1" />
   </ItemGroup>
 

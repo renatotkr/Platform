@@ -6,8 +6,12 @@ namespace Carbon.Packaging
 {
     public interface IPackageStore
     {
-        Task<IPackage> GetAsync(string name);
+        Task<IPackage> GetAsync(string key, GetPackageOptions? options = null);
 
-        Task<PutPackageResult> PutAsync(string name, IPackage package);
+        Task<PutPackageResult> PutAsync(
+            string key,
+            IPackage package,
+            PutPackageOptions? options = null
+        );
     }
 }

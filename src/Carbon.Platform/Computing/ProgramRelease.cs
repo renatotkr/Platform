@@ -20,7 +20,6 @@ namespace Carbon.Platform.Computing
             long creatorId,
             long? buildId = null,
             long commitId = 0,
-            string runtime = null,
             JsonObject properties = null)
         {
             #region Preconditions
@@ -46,7 +45,6 @@ namespace Carbon.Platform.Computing
             CommitId    = commitId;
             CreatorId   = creatorId;
             BuildId     = buildId;
-            Runtime     = runtime;
             Properties  = properties;
         }
 
@@ -72,10 +70,6 @@ namespace Carbon.Platform.Computing
 
         [Member("creatorId")]
         public long CreatorId { get; }
-
-        [Member("runtime")]
-        [Ascii, StringLength(50)]
-        public string Runtime { get; }
 
         [Member("properties")]
         [StringLength(1000)]

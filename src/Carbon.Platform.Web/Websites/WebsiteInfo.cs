@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Json;
 using Carbon.Versioning;
 
 namespace Carbon.Platform.Web
@@ -47,6 +48,12 @@ namespace Carbon.Platform.Web
 
         [Member("version")]
         public SemanticVersion Version { get; }
+
+        /*
+        [Member("properties")]
+        [StringLength(1000)]
+        public JsonObject Properties { get; set; }
+        */
 
         [IgnoreDataMember]
         [Member("ownerId")]

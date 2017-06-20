@@ -28,5 +28,3 @@ namespace Carbon.Packaging
         public byte[] Sha256 { get; }
     }
 }
-
-// var key = tag.Path + ".zip";  (e.g. app/2.1.1.zip)

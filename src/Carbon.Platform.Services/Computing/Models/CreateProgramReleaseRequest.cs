@@ -11,11 +11,17 @@ namespace Carbon.Platform.Computing
         public CreateProgramReleaseRequest() { }
 
         public CreateProgramReleaseRequest(
-            Program program, 
+            IProgram program, 
             SemanticVersion version,
             JsonObject properties,
             long creatorId)
         {
+            #region Preconditions
+
+            Validate.Id(creatorId, nameof(creatorId));
+
+            #endregion
+
             Program    = program ?? throw new ArgumentNullException(nameof(program));
             Version    = version;
             Properties = properties ?? throw new ArgumentNullException(nameof(properties));
@@ -23,7 +29,7 @@ namespace Carbon.Platform.Computing
         }
 
         [Required]
-        public Program Program { get; set; }
+        public IProgram Program { get; set; }
 
         public SemanticVersion Version { get; set; }
         

@@ -9,6 +9,7 @@ dotnet pack ./src/Carbon.Building.Web           -c Release -o ./../../release/Ca
 dotnet pack ./src/Carbon.Hosting                -c Release -o ./../../release/Carbon.Hosting
 dotnet pack ./src/Carbon.Hosting.IIS            -c Release -o ./../../release/Carbon.Hosting.IIS
 dotnet pack ./src/Carbon.Packaging              -c Release -o ./../../release/Carbon.Packaging
+dotnet pack ./src/Carbon.Packaging.Tar          -c Release -o ./../../release/Carbon.Packaging.Tar
 dotnet pack ./src/Carbon.Platform               -c Release -o ./../../release/Carbon.Platform
 dotnet pack ./src/Carbon.Platform.Abstractions  -c Release -o ./../../release/Carbon.Platform.Abstractions
 dotnet pack ./src/Carbon.Platform.Web           -c Release -o ./../../release/Carbon.Platform.Web

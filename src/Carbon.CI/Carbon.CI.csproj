@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.CI</AssemblyName>
-    <VersionPrefix>0.7.1</VersionPrefix>
+    <VersionPrefix>0.8.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
 
     <!-- Package Details-->
@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Carbon.CI.Abstractions\Carbon.CI.Abstractions.csproj" />
+    <ProjectReference Include="..\Carbon.Kms.Abstractions\Carbon.Kms.Abstractions.csproj" />
     <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj" />
     <ProjectReference Include="..\Carbon.Platform.Services\Carbon.Platform.Services.csproj" />
     <ProjectReference Include="..\Carbon.Platform.Web\Carbon.Platform.Web.csproj" />

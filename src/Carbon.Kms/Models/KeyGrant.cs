@@ -51,6 +51,8 @@ namespace Carbon.Kms
         [Member("userId")]
         public long UserId { get; }
 
+        // Principal
+
         // Encrypt, Decrypt, ...
         [Member("actions")]
         public string[] Actions { get; }

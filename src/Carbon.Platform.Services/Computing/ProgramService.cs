@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Platform.Resources;
+using Carbon.Json;
 
 namespace Carbon.Platform.Computing
 {
-    using Carbon.Json;
     using static Expression;
 
     // Programs can be Applications, Services, or Tasks
@@ -69,12 +69,9 @@ namespace Carbon.Platform.Computing
                 id         : id,
                 name       : request.Name,
                 slug       : request.Slug,
-                properties : new JsonObject(), 
+                properties : request.Properties ?? new JsonObject(),
                 ownerId    : request.OwnerId
-            )
-            { 
-                Runtime = request.Runtime
-            };
+            );
 
             if (request.Urls != null)
             {

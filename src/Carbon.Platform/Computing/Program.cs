@@ -61,10 +61,6 @@ namespace Carbon.Platform.Computing
 
         [Member("version")]
         public SemanticVersion Version { get; }
-        
-        [Member("runtime")]
-        [StringLength(50)]
-        public string Runtime { get; set; }
 
         [Member("properties")]
         [StringLength(1000)]

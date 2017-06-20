@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+
+using Carbon.Json;
 
 namespace Carbon.Platform.Computing
 {
@@ -9,7 +12,7 @@ namespace Carbon.Platform.Computing
         public CreateProgramRequest(
             string name, 
             long ownerId, 
-            string runtime = null,
+            JsonObject properties,
             string[] urls = null)
         {
             #region Preconditions
@@ -18,17 +21,16 @@ namespace Carbon.Platform.Computing
 
             #endregion
 
-            Name    = name;
-            OwnerId = ownerId;
-            Runtime = runtime;
-            Urls    = urls;
+            Name       = name ?? throw new ArgumentNullException(nameof(name));
+            OwnerId    = ownerId;
+            Properties = properties;
+            Urls       = urls;
         }
 
         [Required, StringLength(63)]
         public string Name { get; set; }
         
-        [StringLength(50)]
-        public string Runtime { get; set; }
+        public JsonObject Properties { get; set; }
 
         public string[] Urls { get; set; }
 

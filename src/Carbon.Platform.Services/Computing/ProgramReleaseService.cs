@@ -11,6 +11,7 @@ using Dapper;
 
 namespace Carbon.Platform.Computing
 {
+    using Carbon.Platform.Resources;
     using static Expression;
 
     public class ProgramReleaseService : IProgramReleaseService
@@ -20,7 +21,7 @@ namespace Carbon.Platform.Computing
 
         public ProgramReleaseService(PlatformDb db, IProgramService programService)
         {
-            this.db             = db ?? throw new ArgumentNullException(nameof(db));
+            this.db             = db             ?? throw new ArgumentNullException(nameof(db));
             this.programService = programService ?? throw new ArgumentNullException(nameof(programService));
         }
 
@@ -38,14 +39,11 @@ namespace Carbon.Platform.Computing
                 id         : await GetNextId(program.Id),
                 program    : request.Program,
                 version    : request.Version,
-                runtime    : program.Runtime,
-                properties : program.Properties,
+                properties : request.Properties,
                 creatorId  : request.CreatorId
             );
 
             await db.ProgramReleases.InsertAsync(release).ConfigureAwait(false);
-
-            // Update properties?
 
             if (request.Version > program.Version)
             {
@@ -56,7 +54,7 @@ namespace Carbon.Platform.Computing
 
             #region Logging
 
-            await db.Activities.InsertAsync(new Activity("publish", program)).ConfigureAwait(false);
+            await db.Activities.InsertAsync(new Activity("publish", program as IResource)).ConfigureAwait(false);
 
             #endregion
 

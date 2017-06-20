@@ -115,7 +115,6 @@ namespace Carbon.Platform.Services.Test
 
                 return member.Size.Value;
             }
-
             else if (member.Type == typeof(int))
             {
                 return 4;
@@ -125,7 +124,7 @@ namespace Carbon.Platform.Services.Test
                 return 8;
             }
 
-            throw new Exception("unknown type:" + member.Name + "/" + member.Type.Name);
+            throw new Exception($"unknown type '{member.Type.Name}' for {member.Name}");
         }
 
 
