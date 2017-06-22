@@ -12,21 +12,20 @@ namespace Carbon.Kms
         public SecretInfo() { }
 
         public SecretInfo(
+            long id,
             string name,
             long ownerId,
-            string keyId,
+            long keyId,
             int keyVersion,
             byte[] iv, 
             byte[] ciphertext,
+            long vaultId,
             DateTime? expires = null)
         {
             #region Preconditions
 
             if (ownerId <= 0)
                 throw new ArgumentException("Invalid", nameof(ownerId));
-
-            if (keyId == null)
-                throw new ArgumentNullException(nameof(keyId));
 
             if (name == null || string.IsNullOrEmpty(name))
                 throw new ArgumentException("Required", nameof(name));
@@ -39,6 +38,7 @@ namespace Carbon.Kms
 
             #endregion
 
+            Id         = id;
             OwnerId    = ownerId;
             Name       = name;
             KeyId      = keyId;
@@ -46,17 +46,23 @@ namespace Carbon.Kms
             IV         = iv;
             Ciphertext = ciphertext;
             Expires    = expires;
+            VaultId    = vaultId;
         }
 
-        [Member("id"), Key(sequenceName: "secretId")]
+        // vaultId | #
+        [Member("id"), Key]
         public long Id { get; set; }
+
+        [Member("ownerId")]
+        public long OwnerId { get; }
 
         [Member("name")]
         [StringLength(180)]
         public string Name { get; }
 
+        // The key that protects the secret...
         [Member("keyId")]
-        public string KeyId { get; }
+        public long KeyId { get; }
 
         [Member("keyVersion"), Mutable]
         public int KeyVersion { get; set; }
@@ -66,17 +72,17 @@ namespace Carbon.Kms
 
         [Member("ciphertext"), MaxLength(2000), Mutable]
         public byte[] Ciphertext { get; set; }
-        
-        [Member("ownerId")]
-        public long OwnerId { get; }
-        
+
+        [Member("vaultId")]
+        public long VaultId { get; }
+
+        #region Timestamps
+
         [Member("accessed")]
         public DateTime? Accessed { get; }
 
         [Member("expires"), Mutable]
         public DateTime? Expires { get; }
-
-        #region Timestamps
 
         [Member("created"), Timestamp]
         public DateTime Created { get; }

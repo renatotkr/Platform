@@ -2,9 +2,10 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Platform.Hosting;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.Hosting
+namespace Carbon.Kms
 {
     [Dataset("Certificates")]
     [UniqueIndex("providerId", "resourceId")]
@@ -13,22 +14,33 @@ namespace Carbon.Platform.Hosting
         public CertificateInfo() { }
 
         public CertificateInfo(
-            long id, 
+            long id,
+            string name,
             string[] subjects,
             long issuerId,
-            ManagedResource resource)
+            ManagedResource resource,
+            int version = 1)
         {
             Id         = id;
+            Name       = name ?? throw new ArgumentNullException(nameof(name));
             Subjects   = subjects ?? throw new ArgumentNullException(nameof(subjects));
             IssuerId   = issuerId;
             ProviderId = resource.ProviderId;
             ResourceId = resource.ResourceId;
             LocationId = resource.LocationId;
+            Version = version;
         }
 
         [Member("id"), Key(sequenceName: "certificateId")]
         public long Id { get; }
-        
+
+        [Member("name")]
+        [StringLength(1000)]
+        public string Name { get; }
+
+        [Member("version")]
+        public int Version { get; }
+
         // e.g. carbon.net,*.accelerator.net
 
         // primary subject is first, followed by subjectAlternate names
@@ -38,14 +50,28 @@ namespace Carbon.Platform.Hosting
 
         // KeyAlgorithm
         // RSA_2048 | RSA_1024 | EC_prime256v1
-
-        // Not, may be different from the resource provider managing the certificate
+        
         [Member("issuerId")]
         public long IssuerId { get; }
 
-        // TEMP
-        [Member("revocationReason")]
-        public byte? RevocationReason { get; set; }
+        #region Preconditions
+
+        // [Member("keyId")] // the key used to encrypt the certificate
+        // public long KeyId { get; set; }
+
+
+        // x509 (PFX | PEM)
+
+        // public byte[] EncryptedData { get; set; }
+
+        /// <summary>
+        /// Certificate thumbprint
+        /// </summary>
+        [Member("x5t")]
+        public byte[] X5t { get; set; }
+
+        #endregion
+
 
         #region Helpers
 
@@ -104,11 +130,9 @@ namespace Carbon.Platform.Hosting
 
         #endregion
     }
-
-    //  PENDING_VALIDATION | ISSUED | INACTIVE | EXPIRED | VALIDATION_TIMED_OUT | REVOKED | FAILED
-
 }
 
+// PENDING_VALIDATION | ISSUED | INACTIVE | EXPIRED | VALIDATION_TIMED_OUT | REVOKED | FAILED
 
 // [Column("keyAlgorithm")]
 //  public string KeyAlgorithm { get; set; }

@@ -4,18 +4,18 @@ using Carbon.Data.Protection;
 
 namespace Carbon.Kms
 {
-    public class DekProtector : IDekProtector
+    public class DataProtector : IDataProtector
     {
-        private readonly IDekProvider dekProvider;
+        private readonly IKeyProvider keyProvider;
 
-        public DekProtector(IDekProvider dekProvider)
+        public DataProtector(IKeyProvider keyProvider)
         {
-            this.dekProvider = dekProvider ?? throw new ArgumentNullException(nameof(dekProvider));
+            this.keyProvider = keyProvider ?? throw new ArgumentNullException(nameof(keyProvider));
         }
 
-        public EncryptedData Encrypt(string keyId, byte[] plaintext)
+        public EncryptedData Encrypt(long keyId, byte[] plaintext)
         {
-            var key = dekProvider.GetAsync(keyId).Result;
+            var key = keyProvider.GetAsync(keyId).Result;
 
             var iv = Secret.Generate(16); // 128 bit iv
 
@@ -34,9 +34,9 @@ namespace Carbon.Kms
 
         public byte[] Decrypt(EncryptedData data)
         {
-            var dek = dekProvider.GetAsync(data.KeyId, data.KeyVersion).Result;
+            var key = keyProvider.GetAsync(long.Parse(data.KeyId), data.KeyVersion).Result;
 
-            using (var aes = new AesDataProtector(dek.Value, data.IV))
+            using (var aes = new AesDataProtector(key.Value, data.IV))
             {
                 return aes.Decrypt(data.Ciphertext);
             }

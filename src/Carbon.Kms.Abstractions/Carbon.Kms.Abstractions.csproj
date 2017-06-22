@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.9.0</VersionPrefix>
+    <VersionPrefix>0.10.0</VersionPrefix>
     <TargetFrameworks>netstandard1.1;net451</TargetFrameworks>
 
     <!-- Package Details -->
     <Authors>iamcarbon</Authors>
     <Copyright>© Jason Nelson</Copyright>
     <Description>KMS abstractions.</Description>
-    <PackageTags>platform;carbon</PackageTags>
+    <PackageTags>platform;kms;carbon</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Carbon.Data.Protection.Primitives" Version="0.6.0" />
+    <PackageReference Include="Carbon.Data.Protection.Primitives" Version="0.7.0" />
   </ItemGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.1' ">

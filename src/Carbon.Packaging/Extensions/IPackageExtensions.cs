@@ -74,23 +74,23 @@ namespace Carbon.Packaging
             }
         }
 
-        public static async Task ZipToStreamAsync(this IPackage package, Stream stream)
+        public static async Task ZipToStreamAsync(this IPackage package, Stream stream, bool leaveStreamOpen = false)
         {
-            using (var archive = new ZipArchive(stream, ZipArchiveMode.Create, leaveOpen: true))
+            using (var archive = new ZipArchive(stream, ZipArchiveMode.Create, leaveOpen: leaveStreamOpen))
             {
-                foreach (var item in package)
+                foreach (var packageEntry in package)
                 {
-                    var format = Path.GetExtension(item.Name).Trim(Seperators.Period);
+                    var format = Path.GetExtension(packageEntry.Name).Trim(Seperators.Period);
 
                     var compressionLevel = FileFormat.IsText(format)
                         ? CompressionLevel.Optimal
                         : CompressionLevel.NoCompression;
 
-                    var entry = archive.CreateEntry(item.Name, compressionLevel);
+                    var archiveEntry = archive.CreateEntry(packageEntry.Name, compressionLevel);
 
-                    using (var targetStream = entry.Open())
+                    using (var targetStream = archiveEntry.Open())
                     {
-                        using (var sourceStream = await item.OpenAsync().ConfigureAwait(false))
+                        using (var sourceStream = await packageEntry.OpenAsync().ConfigureAwait(false))
                         {
                             await sourceStream.CopyToAsync(targetStream).ConfigureAwait(false);
                         }

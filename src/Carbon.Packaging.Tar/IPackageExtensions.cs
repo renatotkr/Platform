@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 
 using Carbon.Storage;
-
 using SharpCompress.Archives.Tar;
 using SharpCompress.Writers;
 
@@ -26,11 +25,11 @@ namespace Carbon.Packaging
                         source      : await item.OpenAsync().ConfigureAwait(false),
                         closeStream : true
                     );
-
-                    archive.SaveTo(stream, new WriterOptions(SharpCompress.Common.CompressionType.GZip) {
-                        LeaveStreamOpen = leaveStreamOpen
-                    });
                 }
+
+                archive.SaveTo(stream, new WriterOptions(SharpCompress.Common.CompressionType.GZip) {
+                    LeaveStreamOpen = leaveStreamOpen
+                });
             }
         }
     }

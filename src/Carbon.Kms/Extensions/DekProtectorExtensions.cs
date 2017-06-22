@@ -3,11 +3,11 @@ using Carbon.Data.Protection;
 
 namespace Carbon.Kms
 {
-    public static class DekProtectorExtensions
+    public static class DataProtectorExtensions
     {
         public static EncryptedData EncryptString(
-            this IDekProtector protector,
-            string keyId,
+            this IDataProtector protector,
+            long keyId,
             string plaintext)
         {
             var data = Encoding.UTF8.GetBytes(plaintext);
@@ -16,7 +16,7 @@ namespace Carbon.Kms
         }
 
         public static string DecryptString(
-            this IDekProtector protector,
+            this IDataProtector protector,
             EncryptedData data)
         {
             var plaintext = protector.Decrypt(data);

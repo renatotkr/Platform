@@ -5,11 +5,13 @@
         string Id { get; }
 
         int Version { get; }
+
+        // Type
     }
 }
 
 // master keying material 
-// derive DEKs
+// derive DEKs/CEKs
 
 // Google KMS: CryptoKey
 // $0.06 per key per month

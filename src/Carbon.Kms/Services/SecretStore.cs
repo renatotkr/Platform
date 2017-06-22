@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 using Carbon.Data;
 using Carbon.Data.Expressions;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Kms
 {
@@ -19,6 +20,11 @@ namespace Carbon.Kms
 
         public async Task AddAsync(SecretInfo secret)
         {
+            if (secret.Id == 0)
+            {
+                secret.Id = await SecretId.NextAsync(db.Context, secret.VaultId).ConfigureAwait(false);
+            }
+
             await db.Secrets.InsertAsync(secret);
         }
 
@@ -42,7 +48,7 @@ namespace Carbon.Kms
         public async Task<SecretInfo> GetAsync(long id)
         {
             var secret = await db.Secrets.FindAsync(id).ConfigureAwait(false)
-                ?? throw new Exception($"secret#{id} not found");
+                ?? throw ResourceError.NotFound(ResourceTypes.VaultSecret, id);
 
             await MarkAccessed(secret);
 

@@ -51,7 +51,6 @@ namespace Carbon.Platform
             Volumes               = new Dataset<VolumeInfo,               long>(context);
 
             // Hosting ------------------------------------------------------------------
-            Certificates          = new Dataset<CertificateInfo,          long>(context);
             Domains               = new Dataset<DomainInfo,               long>(context);
 
             // Networks --------------------------------------------------------------
@@ -108,10 +107,7 @@ namespace Carbon.Platform
         public Dataset<SubnetInfo,           long> Subnets               { get; }
 
         // Hosting --------------------------------------------------------------
-        public Dataset<CertificateInfo,      long> Certificates          { get; }
         public Dataset<DomainInfo,           long> Domains               { get; }
-
-       
 
         // IAM ------------------------------------------------------------------
         public Dataset<Activity, long>                 Activities        { get; }

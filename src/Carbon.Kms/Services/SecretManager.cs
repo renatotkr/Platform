@@ -8,24 +8,27 @@ namespace Carbon.Kms
 {
     public class SecretManager : ISecretManager
     {
+        private readonly long vaultId;
         private readonly IClock clock;
         private readonly ISecretStore secretStore;
-        private readonly IDekProvider dekProvider;
+        private readonly IKeyProvider keyProvider;
         private readonly long ownerId;
 
         public SecretManager(
+            long vaultId,
             IClock clock,
-            IDekProvider dekProvider,
+            IKeyProvider keyProvider,
             ISecretStore secretStore, 
             long ownerId)
         {
+            this.vaultId     = vaultId;
             this.clock       = clock       ?? throw new ArgumentNullException(nameof(clock));
-            this.dekProvider = dekProvider ?? throw new ArgumentNullException(nameof(dekProvider));
+            this.keyProvider = keyProvider ?? throw new ArgumentNullException(nameof(keyProvider));
             this.secretStore = secretStore ?? throw new ArgumentNullException(nameof(secretStore));
             this.ownerId     = ownerId;
         }
 
-        public async Task<byte[]> DecryptAsync(string name)
+        public async Task<byte[]> GetAsync(string name)
         {
             #region Preconditions
 
@@ -41,9 +44,9 @@ namespace Carbon.Kms
                 throw new Exception("Secret is expired");
             }
             
-            var dek = await dekProvider.GetAsync(secret.KeyId, secret.KeyVersion).ConfigureAwait(false);
+            var key = await keyProvider.GetAsync(secret.KeyId, secret.KeyVersion).ConfigureAwait(false);
 
-            using (var protector = new AesDataProtector(dek.Value, secret.IV))
+            using (var protector = new AesDataProtector(key.Value, secret.IV))
             {
                 return protector.Decrypt(secret.Ciphertext);
             }
@@ -52,7 +55,7 @@ namespace Carbon.Kms
         public async Task CreateAsync(
             string name,
             byte[] value,
-            string keyId, 
+            long keyId, 
             DateTime? expires)
         {
             #region Preconditions
@@ -65,28 +68,26 @@ namespace Carbon.Kms
 
             #endregion
 
-            // TODO....
+            var key = await keyProvider.GetAsync(keyId);
 
-            var dek = await dekProvider.GetAsync(keyId);
-
-            // should every secret have it's own DEK?
             var iv = Secret.Generate(16).Value;
             byte[] ciphertext;
 
-            using (var protector = new AesDataProtector(dek.Value, iv))
+            using (var protector = new AesDataProtector(key.Value, iv))
             {
                 ciphertext = protector.Encrypt(value);
             }
-
-            // id is assigned on insert...
+            
             var secret = new SecretInfo(
+                id         : 0, // assigned on insert
                 name       : name,
-                keyId      : dek.Id,
-                keyVersion : dek.Version,
+                keyId      : keyId,
+                keyVersion : key.Version,
                 iv         : iv,
                 ciphertext : ciphertext,
                 expires    : expires,
-                ownerId    : ownerId
+                ownerId    : ownerId,
+                vaultId    : vaultId
             );
 
             await secretStore.AddAsync(secret).ConfigureAwait(false);

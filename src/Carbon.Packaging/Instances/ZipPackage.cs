@@ -77,7 +77,7 @@ namespace Carbon.Packaging
             }
         }
 
-        public static ZipPackage FromStream(Stream stream, bool stripFirstLevel = true, bool leaveOpen = false)
+        public static ZipPackage FromStream(Stream stream, bool stripFirstLevel = true, bool leaveStreamOpen = false)
         {
             #region Preconditions
 
@@ -88,7 +88,7 @@ namespace Carbon.Packaging
             if (stream.CanSeek) stream.Position = 0;
 
             // Dispose the stream when we've disposed the archive
-            var zip = new ZipArchive(stream, ZipArchiveMode.Read, leaveOpen);
+            var zip = new ZipArchive(stream, ZipArchiveMode.Read, leaveStreamOpen);
 
             return new ZipPackage(zip, stripFirstLevel);
         }

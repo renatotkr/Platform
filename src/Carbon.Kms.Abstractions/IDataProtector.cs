@@ -2,10 +2,10 @@
 
 namespace Carbon.Kms
 {
-    public interface IDekProtector
+    public interface IDataProtector
     {
         byte[] Decrypt(EncryptedData data);
 
-        EncryptedData Encrypt(string keyId, byte[] plaintext);
+        EncryptedData Encrypt(long keyId, byte[] plaintext);
     }
 }

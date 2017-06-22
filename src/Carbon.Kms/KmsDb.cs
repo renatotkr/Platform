@@ -12,17 +12,19 @@ namespace Carbon.Kms
           
             Context = context ?? throw new ArgumentNullException(nameof(context));
 
-            Keys      = new Dataset<KeyInfo,  long>(context);
-            KeyGrants = new Dataset<KeyGrant, long>(context);
-            Deks      = new Dataset<DekInfo, (long, int)>(context);
-            Secrets   = new Dataset<SecretInfo, long>(context);
+            Certificates = new Dataset<CertificateInfo, long>(context);
+            Vaults       = new Dataset<VaultInfo,       long>(context);
+            Grants       = new Dataset<VaultGrant,      long>(context);
+            Keys         = new Dataset<KeyInfo,  (long, int)>(context);
+            Secrets      = new Dataset<SecretInfo,      long>(context);
         }
 
         public IDbContext Context { get; }
 
-        public Dataset<KeyInfo,        long> Keys      { get; }
-        public Dataset<KeyGrant,       long> KeyGrants { get; }
-        public Dataset<DekInfo, (long, int)> Deks      { get; }
-        public Dataset<SecretInfo,     long> Secrets   { get; }
+        public Dataset<CertificateInfo, long> Certificates { get; }
+        public Dataset<VaultInfo,       long> Vaults       { get; }
+        public Dataset<VaultGrant,      long> Grants       { get; }
+        public Dataset<KeyInfo,  (long, int)> Keys         { get; }
+        public Dataset<SecretInfo,      long> Secrets      { get; }
     }
 }

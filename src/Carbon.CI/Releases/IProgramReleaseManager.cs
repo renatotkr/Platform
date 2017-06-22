@@ -5,7 +5,7 @@ using Carbon.Versioning;
 
 namespace Carbon.CI
 {
-    public interface IReleaseManager
+    public interface IProgramReleaseManager
     {
         Task<ProgramRelease> CreateAsync(
             Program program, 

@@ -70,10 +70,11 @@ namespace Carbon.Platform.Resources
         public static ResourceType Volume              = "volume";
         public static ResourceType VolumeSnapshot      = "volume:snapshot";
 
-        // KMS --------------------------------------------------------------------------------------------------
-        public static ResourceType Dek      = "kms:dek";           
-        public static ResourceType Key      = "kms:key";
-        public static ResourceType KeyGrant = "kms:grant";
+        // Vaults --------------------------------------------------------------------------------------------------
+        public static ResourceType Vault       = "vault";
+        public static ResourceType VaultGrant  = "vault:grant";
+        public static ResourceType VaultKey    = "vault:key";
+        public static ResourceType VaultSecret = "vault:secret";
 
         // Networking --------------------------------------------------------------------------------------------
 

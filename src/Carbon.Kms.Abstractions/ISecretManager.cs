@@ -5,9 +5,9 @@ namespace Carbon.Kms
 {
     public interface ISecretManager
     {
-        Task CreateAsync(string name, byte[] value, string keyId, DateTime? expires = null);
+        Task CreateAsync(string name, byte[] value, long keyId, DateTime? expires = null);
 
-        Task<byte[]> DecryptAsync(string name);
+        Task<byte[]> GetAsync(string name);
 
         Task DeleteAsync(long id);
     }

@@ -28,9 +28,9 @@ namespace Carbon.Platform.Storage
         [StringLength(100)]
         public string Name { get; }
         
-        // Data encryption key id
-        [Member("dekId")]
-        public long DekId { get; set; }
+        // the key used to protect the backup
+        [Member("keyId")]
+        public long KeyId { get; set; }
 
         [Member("size")]
         public long Size { get; set; }

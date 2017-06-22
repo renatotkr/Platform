@@ -82,7 +82,7 @@ namespace Carbon.Platform.Resources
             FromLocation(location, ResourceTypes.DatabaseInstance, id);
 
         public static ManagedResource EncryptionKey(ILocation location, string id) =>
-            FromLocation(location, ResourceTypes.KeyGrant, id);
+            FromLocation(location, ResourceTypes.VaultGrant, id);
 
         public static ManagedResource LoadBalancer(ILocation location, string id) =>
             FromLocation(location, ResourceTypes.LoadBalancer, id);

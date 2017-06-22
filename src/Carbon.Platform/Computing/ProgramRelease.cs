@@ -55,10 +55,6 @@ namespace Carbon.Platform.Computing
         [Member("programId")]
         public long ProgramId { get; }
 
-        [Member("programName")]
-        [StringLength(63)]
-        public string ProgramName { get; }
-
         [Member("version")]
         public SemanticVersion Version { get; }
 
@@ -74,6 +70,10 @@ namespace Carbon.Platform.Computing
         [Member("properties")]
         [StringLength(1000)]
         public JsonObject Properties { get; }
+
+        [Member("programName")]
+        [StringLength(63)]
+        public string ProgramName { get; }
 
         #region IProgram
 
@@ -104,6 +104,12 @@ namespace Carbon.Platform.Computing
 
         [Member("created"), Timestamp]
         public DateTime Created { get; }
+
+        [Member("deleted")]
+        public DateTime? Deleted { get; }
+
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; }
 
         #endregion
     }

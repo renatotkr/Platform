@@ -29,7 +29,7 @@ namespace Carbon.Packaging
 
             using (var ms = new MemoryStream())
             {
-                await package.ZipToStreamAsync(ms).ConfigureAwait(false);
+                await package.ZipToStreamAsync(ms, leaveStreamOpen: true).ConfigureAwait(false);
 
                 var hash = Hash.ComputeSHA256(ms, leaveOpen: true);
 

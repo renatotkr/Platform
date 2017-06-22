@@ -5,13 +5,14 @@ using System.Threading.Tasks;
 using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Platform.Logging;
+using Carbon.Platform.Resources;
+using Carbon.Platform.Sequences;
 using Carbon.Versioning;
 
 using Dapper;
 
 namespace Carbon.Platform.Computing
 {
-    using Carbon.Platform.Resources;
     using static Expression;
 
     public class ProgramReleaseService : IProgramReleaseService
@@ -30,13 +31,18 @@ namespace Carbon.Platform.Computing
             #region Preconditions
 
             Validate.Object(request, nameof(request));
+            
+            if (await ExistsAsync(request.Program.Id, request.Version).ConfigureAwait(false))
+            {
+                throw new Exception($"{request.Program.Id}@{request.Version} already exists");
+            }
 
             #endregion
 
             var program = request.Program;
 
             var release = new ProgramRelease(
-                id         : await GetNextId(program.Id),
+                id         : await ProgramReleaseId.NextAsync(db.Context, program.Id),
                 program    : request.Program,
                 version    : request.Version,
                 properties : request.Properties,
@@ -75,24 +81,27 @@ namespace Carbon.Platform.Computing
             ) > 0;
         }
 
-        public Task<IReadOnlyList<ProgramRelease>> ListAsync(long appId)
+        public Task<IReadOnlyList<ProgramRelease>> ListAsync(long programId)
         {
-            return db.ProgramReleases.QueryAsync(Eq("programId", appId), Order.Descending("version"));
+            return db.ProgramReleases.QueryAsync(
+                And(Eq("programId", programId), IsNull("deleted")),
+                Order.Descending("version")
+            );
         }
+    }
 
-        #region Helper
+    internal class ProgramReleaseId
+    {
+        static readonly string sql = SqlHelper.GetCurrentValueAndIncrement<Program>("releaseCount");
 
-        static readonly string nextIdSql = SqlHelper.GetCurrentValueAndIncrement<Program>("releaseCount");
-
-        private async Task<long> GetNextId(long programId)
+        public static async Task<long> NextAsync(IDbContext context, long programId)
         {
-            using (var connection = db.Context.GetConnection())
+            using (var connection = context.GetConnection())
             {
-                return (await connection.ExecuteScalarAsync<int>(nextIdSql,
-                    new { id = programId }).ConfigureAwait(false)) + 1;
+                var currentReleaseCount = await connection.ExecuteScalarAsync<int>(sql, new { id = programId }).ConfigureAwait(false);
+
+                return ScopedId.Create(programId, currentReleaseCount + 1);
             }
         }
-
-        #endregion
     }
 }

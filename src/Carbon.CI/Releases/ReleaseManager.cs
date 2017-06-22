@@ -6,21 +6,22 @@ using Carbon.Json;
 using Carbon.Kms;
 using Carbon.Packaging;
 using Carbon.Platform.Computing;
+using Carbon.Serialization;
 using Carbon.Storage;
 using Carbon.Versioning;
 
 namespace Carbon.CI
 {
-    public class ReleaseManager : IReleaseManager
+    public class ProgramReleaseManager : IProgramReleaseManager
     {
         private readonly IPackageStore packageStore;
         private readonly IProgramReleaseService releaseService;
-        private readonly IDekProtector keyProtector;
+        private readonly IDataProtector keyProtector;
 
-        public ReleaseManager(
+        public ProgramReleaseManager(
             IPackageStore packageStore, 
             IProgramReleaseService releaseService,
-            IDekProtector keyProtector)
+            IDataProtector keyProtector)
         {
             this.packageStore   = packageStore   ?? throw new ArgumentNullException(nameof(packageStore));
             this.releaseService = releaseService ?? throw new ArgumentNullException(nameof(releaseService));
@@ -55,11 +56,11 @@ namespace Carbon.CI
             {
                 encryptionKey = Secret.Generate(256 / 8).Value;
 
-                var cek = keyProtector.Encrypt(keyId.ToString(), encryptionKey);
+                var cek = keyProtector.Encrypt(keyId.Value, encryptionKey);
                 
-                properties.Add("em", "sse"); // cse
-
-                properties["cek"] = JsonObject.FromObject(cek);
+                properties.Add("encryptionStrategy",  "sse");
+                properties.Add("encryptionAlgorithm", "AES256");
+                properties.Add("cek", Serializer.Serialize(cek));
             }
 
             var result = await packageStore.PutAsync(key, package, new PutPackageOptions {
@@ -102,9 +103,11 @@ namespace Carbon.CI
 
             byte[] encryptionKey = null;
 
-            if (release.Properties.TryGetValue("cek", out var cek))
+            if (release.Properties.TryGetValue("cek", out var cekData))
             {
-                encryptionKey = keyProtector.Decrypt(cek.As<EncryptedData>());
+                var cek = Serializer.Deserialize<EncryptedData>(Convert.FromBase64String(cekData.ToString()));
+
+                encryptionKey = keyProtector.Decrypt(cek);
             }
 
             var key = release.ProgramId + "/" + release.Version.ToString() + ".zip";

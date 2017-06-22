@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
-using SharpCompress.Archives.Tar;
+using SharpCompress.Archives;
 
 namespace Carbon.Packaging
 {
     using Storage;
 
-    internal class TarEntryBlob : IBlob
+    internal class ArchiveEntryBlob : IBlob
     {
-        private readonly TarArchiveEntry entry;
+        private readonly IArchiveEntry entry;
 
-        public TarEntryBlob(string name, TarArchiveEntry entry)
+        public ArchiveEntryBlob(string name, IArchiveEntry entry)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
 
