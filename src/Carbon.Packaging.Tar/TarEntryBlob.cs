@@ -7,13 +7,14 @@ using SharpCompress.Archives;
 
 namespace Carbon.Packaging
 {
+    using SharpCompress.Archives.Tar;
     using Storage;
 
-    internal class ArchiveEntryBlob : IBlob
+    internal class TarEntryBlob : IBlob
     {
-        private readonly IArchiveEntry entry;
+        private readonly TarArchiveEntry entry;
 
-        public ArchiveEntryBlob(string name, IArchiveEntry entry)
+        public TarEntryBlob(string name, TarArchiveEntry entry)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
 
@@ -31,6 +32,11 @@ namespace Carbon.Packaging
         public ValueTask<Stream> OpenAsync()
         {
             return new ValueTask<Stream>(entry.OpenEntryStream());
+        }
+
+        public void WriteTo(Stream stream)
+        {
+            entry.WriteTo(stream);
         }
 
         public void Dispose()

@@ -74,7 +74,10 @@ namespace Carbon.Packaging
             }
         }
 
-        public static async Task ZipToStreamAsync(this IPackage package, Stream stream, bool leaveStreamOpen = false)
+        public static async Task ToZipStreamAsync(
+            this IPackage package,
+            Stream stream, 
+            bool leaveStreamOpen = false)
         {
             using (var archive = new ZipArchive(stream, ZipArchiveMode.Create, leaveOpen: leaveStreamOpen))
             {
@@ -87,14 +90,14 @@ namespace Carbon.Packaging
                         : CompressionLevel.NoCompression;
 
                     var archiveEntry = archive.CreateEntry(packageEntry.Name, compressionLevel);
-
+                    
                     using (var targetStream = archiveEntry.Open())
+                    using (var sourceStream = await packageEntry.OpenAsync().ConfigureAwait(false))
                     {
-                        using (var sourceStream = await packageEntry.OpenAsync().ConfigureAwait(false))
-                        {
-                            await sourceStream.CopyToAsync(targetStream).ConfigureAwait(false);
-                        }
+                        await sourceStream.CopyToAsync(targetStream).ConfigureAwait(false);
+
                     }
+                   
                 }
             }
         }

@@ -65,32 +65,34 @@ namespace Carbon.Packaging
             #endregion
 
             using (var httpClient = new HttpClient())
+            using (var httpStream = await httpClient.GetStreamAsync(url).ConfigureAwait(false))
             {
-                using (var httpStream = await httpClient.GetStreamAsync(url).ConfigureAwait(false))
-                {
-                    var ms = new MemoryStream();
+                var ms = new MemoryStream();
 
-                    await httpStream.CopyToAsync(ms).ConfigureAwait(false);
+                await httpStream.CopyToAsync(ms).ConfigureAwait(false);
 
-                    return FromStream(ms);
-                }
+                return FromStream(ms);
             }
         }
 
-        public static ZipPackage FromStream(Stream stream, bool stripFirstLevel = true, bool leaveStreamOpen = false)
+        public static ZipPackage FromStream(
+            Stream stream, 
+            bool stripFirstLevel = true, 
+            bool leaveStreamOpen = false)
         {
             #region Preconditions
 
-            if (stream == null) throw new ArgumentNullException(nameof(stream));
+            if (stream == null)
+                throw new ArgumentNullException(nameof(stream));
+
+            if (!stream.CanSeek)
+                throw new ArgumentException("Must be seekable", nameof(stream));
 
             #endregion
 
-            if (stream.CanSeek) stream.Position = 0;
+            var archive = new ZipArchive(stream, ZipArchiveMode.Read, leaveStreamOpen);
 
-            // Dispose the stream when we've disposed the archive
-            var zip = new ZipArchive(stream, ZipArchiveMode.Read, leaveStreamOpen);
-
-            return new ZipPackage(zip, stripFirstLevel);
+            return new ZipPackage(archive, stripFirstLevel);
         }
     }
 }

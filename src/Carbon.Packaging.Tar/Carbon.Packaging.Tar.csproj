@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Packaging.Tar</AssemblyName>
-    <VersionPrefix>0.7.0</VersionPrefix>
+    <VersionPrefix>0.8.0</VersionPrefix>
     <TargetFrameworks>net461;netstandard1.6</TargetFrameworks>
 
     <!-- Package Details -->
@@ -24,5 +24,4 @@
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
   </ItemGroup>
-
 </Project>

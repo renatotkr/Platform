@@ -1,7 +1,9 @@
 ﻿using System.IO;
+using System.IO.Compression;
 using System.Threading.Tasks;
 
 using Carbon.Storage;
+
 using SharpCompress.Archives.Tar;
 using SharpCompress.Writers;
 
@@ -9,27 +11,28 @@ namespace Carbon.Packaging
 {
     public static class IPackageExtensions
     {
-        public static async Task ToTarAsync(
+        public static async Task ToTarStreamAsync(
             this IPackage package, 
             Stream stream, 
             bool leaveStreamOpen = false)
         {
-            using (var archive = TarArchive.Create())
+            using (var compressedStream = new GZipStream(stream, CompressionMode.Compress))
+            using (var writer = WriterFactory.Open(compressedStream, SharpCompress.Common.ArchiveType.Tar, new WriterOptions(SharpCompress.Common.CompressionType.None) {
+                LeaveStreamOpen = leaveStreamOpen,
+            }))
             {
                 foreach (var item in package)
                 {
                     var format = Path.GetExtension(item.Name).Trim('.');
 
-                    var entry = archive.AddEntry(
-                        key         : item.Name, 
-                        source      : await item.OpenAsync().ConfigureAwait(false),
-                        closeStream : true
+                    writer.Write(
+                        filename         : item.Name,
+                        source           : await item.OpenAsync().ConfigureAwait(false),
+                        modificationTime : item.Modified
                     );
                 }
 
-                archive.SaveTo(stream, new WriterOptions(SharpCompress.Common.CompressionType.GZip) {
-                    LeaveStreamOpen = leaveStreamOpen
-                });
+                
             }
         }
     }

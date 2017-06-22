@@ -29,10 +29,10 @@ namespace Carbon.Packaging
 
             using (var ms = new MemoryStream())
             {
-                await package.ZipToStreamAsync(ms, leaveStreamOpen: true).ConfigureAwait(false);
+                await package.ToZipStreamAsync(ms, leaveStreamOpen: true).ConfigureAwait(false);
 
                 var hash = Hash.ComputeSHA256(ms, leaveOpen: true);
-
+                
                 var blob = new Blob(key, ms, new BlobMetadata {
                     ContentType = "application/zip"
                 });
@@ -53,7 +53,7 @@ namespace Carbon.Packaging
                 EncryptionKey = options?.EncryptionKey
             };
 
-            using (var blob = await bucket.GetAsync(key, blobOptions).ConfigureAwait(false))
+            using (var blob       = await bucket.GetAsync(key, blobOptions).ConfigureAwait(false))
             using (var blobStream = await blob.OpenAsync().ConfigureAwait(false))
             {
                 await blobStream.CopyToAsync(ms).ConfigureAwait(false);

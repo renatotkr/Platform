@@ -63,7 +63,7 @@ namespace Carbon.CI
                 properties.Add("cek", Serializer.Serialize(cek));
             }
 
-            var result = await packageStore.PutAsync(key, package, new PutPackageOptions {
+            PutPackageResult result = await packageStore.PutAsync(key, package, new PutPackageOptions {
                 EncryptionKey = encryptionKey
             });
 

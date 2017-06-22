@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Packaging</AssemblyName>
-    <VersionPrefix>1.9.1</VersionPrefix>
+    <VersionPrefix>1.9.2</VersionPrefix>
     <TargetFrameworks>net461;netstandard1.6</TargetFrameworks>
 
     <!-- Package Details -->

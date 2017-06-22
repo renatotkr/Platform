@@ -3,27 +3,34 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Threading.Tasks;
 using Carbon.Storage;
-using SharpCompress.Archives;
+using SharpCompress.Archives.Tar;
 using SharpCompress.Readers;
 
 namespace Carbon.Packaging
 {
     public class TarPackage : IPackage, IDisposable
     {
-        private readonly IArchive archive;
+        private readonly TarArchive archive;
         private readonly bool stripFirstLevel;
+        private readonly TarArchiveEntry[] entries;
 
-        public TarPackage(IArchive archive, bool stripFirstLevel = true)
+        public TarPackage(TarArchive archive, bool stripFirstLevel = true)
         {
             this.archive = archive ?? throw new ArgumentNullException(nameof(archive));
             this.stripFirstLevel = stripFirstLevel;
+            
+            // This is required to prevent the stream from being repositioned during enumeration
+            // see: https://github.com/adamhathcock/sharpcompress/issues/116
+
+            this.entries = archive.Entries.ToArray();
         }
 
         public IEnumerable<IBlob> Enumerate()
         {
-            foreach (var entry in archive.Entries)
+            foreach (var entry in entries)
             {
                 var key = GetKey(entry.Key);
 
@@ -32,7 +39,7 @@ namespace Carbon.Packaging
                     || key.EndsWith("/") 
                     || entry.Size == 0) continue;
 
-                yield return new ArchiveEntryBlob(key, entry);
+                yield return new TarEntryBlob(key, entry);
             }
         }
 
@@ -89,8 +96,9 @@ namespace Carbon.Packaging
                 targetStream = stream;
             }
 
-            var archive = ArchiveFactory.Open(targetStream, new ReaderOptions {
+            var archive = TarArchive.Open(targetStream, new ReaderOptions {
                 LeaveStreamOpen = leaveStreamOpen,
+                LookForHeader = true
             });
             
             return new TarPackage(archive, stripFirstLevel);
