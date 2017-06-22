@@ -1,7 +1,5 @@
-﻿using System;
+﻿using System.Net;
 using System.Runtime.Serialization;
-using System.Net;
-
 using Carbon.Net;
 using Carbon.Platform.Resources;
 
@@ -29,7 +27,8 @@ namespace Carbon.Platform
 
         ResourceType IResource.ResourceType => ResourceTypes.NetworkInterface;
 
-        string IManagedResource.ResourceId => throw new NotImplementedException();
+        [DataMember(Name = "resourceId", Order = 5, EmitDefaultValue = false)]
+        public string ResourceId { get; set; }
 
         #endregion
     }

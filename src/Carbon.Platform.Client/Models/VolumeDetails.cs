@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 using Carbon.Platform.Resources;
 using Carbon.Platform.Storage;
@@ -19,11 +18,12 @@ namespace Carbon.Platform
 
         #region IManagedResource
 
+        [DataMember(Name = "resourceId", Order = 5, EmitDefaultValue = false)]
+        public string ResourceId { get; set; }
+
         int IManagedResource.ProviderId => Platform.LocationId.Create(LocationId).ProviderId;
 
         ResourceType IResource.ResourceType => ResourceTypes.Volume;
-
-        string IManagedResource.ResourceId => throw new NotImplementedException();
 
         #endregion
     }

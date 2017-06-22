@@ -60,6 +60,10 @@ namespace Carbon.Platform.Computing
         [StringLength(1000)]
         public JsonObject Properties { get; set; }
 
+        // global, regional, or zonal
+        [Member("locationId")]
+        public int LocationId { get; }
+
         #region Stats
 
         // The number of resources added to the cluster
@@ -69,10 +73,6 @@ namespace Carbon.Platform.Computing
         public int ResourceCount { get; }
 
         #endregion
-
-        // global, regional, or zonal
-        [Member("locationId")]
-        public int LocationId { get; }
 
         #region IResource
 

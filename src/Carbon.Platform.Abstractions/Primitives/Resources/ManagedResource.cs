@@ -129,42 +129,56 @@ namespace Carbon.Platform.Resources
 
         #endregion
 
-        private static readonly char[] splitOn = { ':', '/' };
-
+        private static readonly char[] colon = { ':' };
+        private static readonly char[] forwardSlash = { '/' };
         // e.g. 
-        // amzn:instance/i-453-352-18
 
-        // amzn:us-east-1:bucket/carbon
+        /*
+        arn:partition:service:region:account-id:resource
+        arn:partition:service:region:account-id:resourcetype/resource
+        arn:partition:service:region:account-id:resourcetype:resource
+        */
+
+        // aws:host/i-453-352-18
+        // aws:us-east-1:bucket/carbon
 
         public static ManagedResource Parse(string text)
         {
-            var parts = text.Split(splitOn);
+            var segments = text.Split(forwardSlash); // '/'
+
+            if (segments.Length != 2)
+            {
+                throw new Exception("missing id seperator '/')");
+            }
+
+            var parts = segments[0].Split(colon); // ':'
 
             var provider = ResourceProvider.Parse(parts[0]);
 
-            string regionName = null;
+            string locationName = null;
             string typeName = null;
-            string id = null;
 
-            if (parts.Length == 3)
+            if (parts.Length == 1)
+            {
+                typeName = "unknown";
+            }
+            if (parts.Length == 2)
             {
                 typeName = parts[1];
-                id = parts[2];
             }
-            else if (parts.Length == 4)
+            else if (parts.Length == 3)
             {
-                regionName = parts[1];
-                typeName = parts[2];
-                id = parts[3];
+                locationName = parts[1];
+                typeName   = parts[2];
             }
 
-            // TODO: Normalize typeName?
+            var id = segments[1];
 
-            var resourceType = new ResourceType(typeName);
+            var resourceType = new ResourceType(typeName); // normalize?
 
-            if (regionName != null)
+            if (locationName != null)
             {
-                var location = Locations.Get(provider, regionName);
+                var location = Locations.Get(provider, locationName);
 
                 return FromLocation(location, resourceType, id);
             }

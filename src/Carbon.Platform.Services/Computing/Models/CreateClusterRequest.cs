@@ -10,7 +10,7 @@ namespace Carbon.Platform.Computing
 
         public CreateClusterRequest(string name, ILocation location)
         {
-            Name     = name ?? throw new ArgumentNullException(nameof(name));
+            Name     = name     ?? throw new ArgumentNullException(nameof(name));
             Location = location ?? throw new ArgumentNullException(nameof(location));
         }
 
@@ -22,7 +22,7 @@ namespace Carbon.Platform.Computing
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
             Location    = location    ?? throw new ArgumentNullException(nameof(location));
             Name        = environment.Name + "/" + location.Name;
-            Properties  = properties;
+            Properties  = properties ?? new JsonObject();
         }
 
         public string Name { get; set; }

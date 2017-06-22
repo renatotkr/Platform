@@ -24,13 +24,13 @@ namespace Carbon.Platform.Computing
             this.envService = envService;
         }
 
-        public async Task<Program> GetAsync(long id)
+        public async Task<ProgramInfo> GetAsync(long id)
         {
             return await db.Programs.FindAsync(id).ConfigureAwait(false)
                 ?? throw ResourceError.NotFound(ResourceTypes.Program, id);
         }
 
-        public Task<Program> FindAsync(string slug)
+        public Task<ProgramInfo> FindAsync(string slug)
         {
             if (long.TryParse(slug, out var id))
             {
@@ -42,7 +42,7 @@ namespace Carbon.Platform.Computing
             }
         }
 
-        public Task<IReadOnlyList<Program>> ListAsync(long ownerId)
+        public Task<IReadOnlyList<ProgramInfo>> ListAsync(long ownerId)
         {
             return db.Programs.QueryAsync(
                 And(Eq("ownerId", ownerId), IsNull("deleted")),
@@ -51,7 +51,7 @@ namespace Carbon.Platform.Computing
         }
 
         // TODO: Create the environments
-        public async Task<Program> CreateAsync(CreateProgramRequest request)
+        public async Task<ProgramInfo> CreateAsync(CreateProgramRequest request)
         {
             #region Preconditions
 
@@ -65,7 +65,7 @@ namespace Carbon.Platform.Computing
             // this sequence incriments by 4, reserving 4 consecutive ids
             var id = db.Programs.Sequence.Next(); 
 
-            var program = new Program(
+            var program = new ProgramInfo(
                 id         : id,
                 name       : request.Name,
                 slug       : request.Slug,
@@ -116,7 +116,7 @@ namespace Carbon.Platform.Computing
 
         #region Helpers
 
-        private async Task<EnvironmentInfo> CreateEnvironmentAsync(Program program, EnvironmentType type)
+        private async Task<EnvironmentInfo> CreateEnvironmentAsync(ProgramInfo program, EnvironmentType type)
         {
             var env = GetConfiguredEnvironment(program, type);
 
@@ -126,7 +126,7 @@ namespace Carbon.Platform.Computing
         }
 
         private EnvironmentInfo GetConfiguredEnvironment(
-            Program program, 
+            ProgramInfo program, 
             EnvironmentType type)
         {
             // Production   = programId

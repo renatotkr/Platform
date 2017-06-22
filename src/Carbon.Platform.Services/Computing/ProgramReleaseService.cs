@@ -92,7 +92,7 @@ namespace Carbon.Platform.Computing
 
     internal class ProgramReleaseId
     {
-        static readonly string sql = SqlHelper.GetCurrentValueAndIncrement<Program>("releaseCount");
+        static readonly string sql = SqlHelper.GetCurrentValueAndIncrement<ProgramInfo>("releaseCount");
 
         public static async Task<long> NextAsync(IDbContext context, long programId)
         {

@@ -5,7 +5,7 @@ namespace Carbon.Platform
 {
     public class ResourceProvider
     {
-        // Cloud Platforms (1-255)      
+        // Clouds (1-255)      
         public static readonly ResourceProvider Borg  = new ResourceProvider(1, "borg",  "Borg",  "borg.cloud");
         public static readonly ResourceProvider Aws   = new ResourceProvider(2, "aws",   "AWS",   "amazonaws.com");
         public static readonly ResourceProvider Gcp   = new ResourceProvider(3, "gcp",   "GCP",   "cloud.google.com");

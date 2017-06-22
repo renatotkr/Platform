@@ -29,7 +29,7 @@ namespace Carbon.CI
         }
 
         public async Task<ProgramRelease> CreateAsync(
-            Program program, 
+            ProgramInfo program, 
             SemanticVersion version,
             IPackage package,
             long creatorId,

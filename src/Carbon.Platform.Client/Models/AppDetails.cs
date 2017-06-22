@@ -5,7 +5,7 @@ using Carbon.Versioning;
 
 namespace Carbon.Platform.Computing
 {
-    public class AppDetails : IApplication, IProgramRelease
+    public class ProgramDetails : IApplication, IProgramRelease
     {
         [DataMember(Name = "id", Order = 1)]
         public long Id { get; set; }

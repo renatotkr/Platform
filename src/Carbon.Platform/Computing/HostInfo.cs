@@ -64,6 +64,10 @@ namespace Carbon.Platform.Computing
         [Member("parentId"), Indexed]
         public long? ParentId { get; }
 
+        // RSA Public Key (2048 bits -- ASN.1 encoded)
+        [Member("publicKey"), MaxLength(1200)]
+        public byte[] PublicKey { get; }
+
         [Member("ownerId")]
         public long OwnerId { get; }
 

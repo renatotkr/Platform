@@ -200,7 +200,7 @@ namespace Carbon.Platform.Management
             
             for (var i = 0; i < hosts.Length; i++)
             {
-                var registerRequest = await GetRegisterHostRequestAsync(
+                var registerRequest = await GetRegistrationAsync(
                     instance     : runInstancesResponse.Instances[i],
                     cluster      : cluster,
                     image        : image, 
@@ -303,12 +303,12 @@ namespace Carbon.Platform.Management
             var ec2Instance = await ec2.DescribeInstanceAsync(instanceId).ConfigureAwait(false) 
                 ?? throw new ResourceNotFoundException(resource: $"aws:host/{instanceId}");
 
-            var request = await GetRegisterHostRequestAsync(ec2Instance, cluster);
+            var request = await GetRegistrationAsync(ec2Instance, cluster);
 
             return await hostService.RegisterAsync(request).ConfigureAwait(false);
         }
 
-        private async Task<RegisterHostRequest> GetRegisterHostRequestAsync(
+        private async Task<RegisterHostRequest> GetRegistrationAsync(
             Instance instance,
             Cluster cluster,
             IImage image = null,
@@ -369,14 +369,13 @@ namespace Carbon.Platform.Management
             }
             
             var registerRequest = new RegisterHostRequest(
-                addresses    : addresses,
-                cluster      : cluster,
-                location     : location,
-                image : image,
-                machineType  : machineType,
-                status       : instance.InstanceState.ToStatus(),
-                ownerId      : 1,
-                resource     : ManagedResource.Host(location, instance.InstanceId)                
+                addresses   : addresses,
+                cluster     : cluster,
+                image       : image,
+                machineType : machineType,
+                status      : instance.InstanceState.ToStatus(),
+                ownerId     : 1,
+                resource    : ManagedResource.Host(location, instance.InstanceId)                
             );
 
             #region Network Interfaces

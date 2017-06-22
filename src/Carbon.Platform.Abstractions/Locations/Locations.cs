@@ -42,30 +42,45 @@ namespace Carbon.Platform
             throw ResourceError.NotFound(provider, ResourceTypes.Location, name);
         }
 
+        private static Location GetAwsRegionByNumber(int number)
+        {
+            switch (number)
+            {
+                case 1  : return Aws_USEast1;
+                case 2  : return Aws_EUWest1;
+                case 3  : return Aws_USWest1;
+                case 4  : return Aws_APSouthEast1;
+                case 5  : return Aws_APNorthEast1;
+                case 6  : return Aws_USGovWest1;
+                case 7  : return Aws_USWest2;
+                case 8  : return Aws_SAEast1;
+                case 9  : return Aws_APSouthEast2;
+                case 10 : return Aws_CNNorth1;
+                case 11 : return Aws_EUCentral1;
+                case 12 : return Aws_APNortheast2;
+                case 13 : return Aws_APSouth1;
+                case 14 : return Aws_USEast2;
+                case 15 : return Aws_CACentral1;
+                case 16 : return Aws_EUWest2;
+                default : throw new Exception("Unknown AWS REGION #" + number);
+            }
+        }
+
         public static Location Get(int id)
         {
             var lid = LocationId.Create(id);
 
             if (lid.ProviderId == ResourceProvider.Aws.Id)
             {
-                switch (lid.RegionNumber)
+                var region = GetAwsRegionByNumber(lid.RegionNumber);
+
+                if (lid.ZoneNumber != 0)
                 {
-                    case 1  : return Aws_USEast1;
-                    case 2  : return Aws_EUWest1;
-                    case 3  : return Aws_USWest1;
-                    case 4  : return Aws_APSouthEast1;
-                    case 5  : return Aws_APNorthEast1;
-                    case 6  : return Aws_USGovWest1;
-                    case 7  : return Aws_USWest2;
-                    case 8  : return Aws_SAEast1;
-                    case 9  : return Aws_APSouthEast2;
-                    case 10 : return Aws_CNNorth1;
-                    case 11 : return Aws_EUCentral1;
-                    case 12 : return Aws_APNortheast2;
-                    case 13 : return Aws_APSouth1;
-                    case 14 : return Aws_USEast2;
-                    case 15 : return Aws_CACentral1;
-                    case 16 : return Aws_EUWest2;
+                    return region.WithZone(ZoneHelper.GetLetter(lid.ZoneNumber));
+                }
+                else
+                {
+                    return region;
                 }
             }
 
@@ -128,7 +143,7 @@ namespace Carbon.Platform
         public static readonly Location Aws_APSouthEast2 = Create(aws,  9, "ap-southeast-2");  // | AP    | Sydney        | 2012-11-12
         public static readonly Location Aws_CNNorth1     = Create(aws, 10, "cn-north-1");      // | China | Beijing       | 2013-12-18
         public static readonly Location Aws_EUCentral1   = Create(aws, 11, "eu-central-1");    // | EU    | Frankfurt     | 2014-10-23
-        public static readonly Location Aws_APNortheast2 = Create(aws, 12, "ap-northeast-2");  // | AP    | Seoul	        | 2016-01-06
+        public static readonly Location Aws_APNortheast2 = Create(aws, 12, "ap-northeast-2");  // | AP    | Seoul	      | 2016-01-06
         public static readonly Location Aws_APSouth1     = Create(aws, 13, "ap-south-1");      // | AP    | Mumbai        | 2016-06-27
         public static readonly Location Aws_USEast2      = Create(aws, 14, "us-east-2");       // | US    | Ohio          | 2016-10-17
         public static readonly Location Aws_CACentral1   = Create(aws, 15, "ca-central-1");    // | CA    | Central       | 2016-12-08
@@ -138,6 +153,7 @@ namespace Carbon.Platform
         Paris
         Ningxia
         Stockholm
+        Hong Kong
         */
 
         // Azure (https://azure.microsoft.com/en-us/regions/) -- announced 2008, launched 2010-01

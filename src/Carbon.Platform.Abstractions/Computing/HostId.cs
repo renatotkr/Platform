@@ -24,11 +24,11 @@ namespace Carbon.Platform.Computing
 
         public static HostId Get(long value) => new HostId { value = value };
 
-        public static HostId Create(ILocation location, int sequenceNumber)
+        public static HostId Create(int locationId, int sequenceNumber)
         {
             return new HostId {
                 sequenceNumber = sequenceNumber,
-                locationId = location.Id
+                locationId = locationId
             };
         }
 

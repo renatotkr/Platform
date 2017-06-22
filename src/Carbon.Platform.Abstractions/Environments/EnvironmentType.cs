@@ -1,4 +1,4 @@
-﻿// Environments span computing & storage
+﻿using System;
 
 namespace Carbon.Platform
 {
@@ -22,7 +22,7 @@ namespace Carbon.Platform
                 case EnvironmentType.Development  : return "development";
             }
 
-            throw new System.Exception("unexcepted environment type:" + type.ToString());
+            throw new Exception("unexcepted type:" + type.ToString());
         }
     }
 }

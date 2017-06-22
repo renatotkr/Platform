@@ -14,6 +14,11 @@ namespace Carbon.Platform
             'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
         };
 
+        public static char GetLetter(int number)
+        {
+            return letters[number - 1];
+        }
+
         public static byte GetNumber(char zone)
         {
             if (!char.IsUpper(zone))

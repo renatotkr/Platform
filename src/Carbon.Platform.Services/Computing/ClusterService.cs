@@ -1,12 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-
-using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Platform.Resources;
-using Carbon.Platform.Sequences;
-
-using Dapper;
 
 namespace Carbon.Platform.Computing
 {
@@ -20,7 +16,12 @@ namespace Carbon.Platform.Computing
         {
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
-        
+
+        public Task<IReadOnlyList<Cluster>> ListAsync(IEnvironment env)
+        {
+            return db.Clusters.QueryAsync(Eq("environmentId", env.Id));
+        }
+
         public async Task<Cluster> CreateAsync(CreateClusterRequest request)
         {
             #region Preconditions
@@ -68,44 +69,6 @@ namespace Carbon.Platform.Computing
             }
             
             return group;
-        }
-
-        public async Task<ClusterResource> AddResourceAsync(Cluster cluster, IResource resource)
-        {
-            var location = Locations.Get(cluster.LocationId);
-
-            var id = await ClusterResourceId.NextAsync(db.Context, cluster.Id).ConfigureAwait(false);
-
-            var record = new ClusterResource(
-                id            : id,
-                cluster       : cluster,
-                resource      : resource,
-                environmentId : cluster.EnvironmentId,
-                location      : location
-            );
-
-            await db.ClusterResources.InsertAsync(record).ConfigureAwait(false);
-
-            return record;
-        }
-    }
-
-    internal static class ClusterResourceId
-    {
-        static readonly string sql = SqlHelper.GetCurrentValueAndIncrement<Cluster>("resourceCount");
-
-        public static async Task<long> NextAsync(
-            IDbContext context,
-            long clusterId)
-        {
-            using (var connection = context.GetConnection())
-            {
-                var currentResourceCount = await connection.ExecuteScalarAsync<int>(sql, 
-                    new { id = clusterId }
-                ).ConfigureAwait(false);
-
-                return ScopedId.Create(clusterId, currentResourceCount + 1);
-            }
         }
     }
 }

@@ -12,8 +12,6 @@ namespace Carbon.Platform.Computing
     }
 }
 
-// A host may be divided into containers to host mutiple programs
-
 /*
       | id                 | name
 gcp   | UInt64             | compute#instance

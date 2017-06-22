@@ -32,13 +32,12 @@ namespace Carbon.Platform
             Locations            = new Dataset<LocationInfo,              long>(context);
 
             // Computing ----------------------------------------------------------------
-            Hosts                 = new Dataset<HostInfo,                 long>(context);
             Clusters              = new Dataset<Cluster,                  long>(context);
-            ClusterResources      = new Dataset<ClusterResource,          long>(context);
+            Hosts                 = new Dataset<HostInfo,                 long>(context);
             HostTemplates         = new Dataset<HostTemplate,             long>(context);
             Images                = new Dataset<Image,                    long>(context);
             MachineTypes          = new Dataset<MachineType,              long>(context);
-            Programs              = new Dataset<Program,                  long>(context);
+            Programs              = new Dataset<ProgramInfo,                  long>(context);
             ProgramReleases       = new Dataset<ProgramRelease,           long>(context);
 
             // Storage ------------------------------------------------------------------
@@ -79,12 +78,11 @@ namespace Carbon.Platform
         // Computing ------------------------------------------------------------
         public Dataset<HostInfo,             long> Hosts                 { get; }
         public Dataset<Cluster,              long> Clusters              { get; }
-        public Dataset<ClusterResource,      long> ClusterResources      { get; }
         public Dataset<HostTemplate,         long> HostTemplates         { get; }
         public Dataset<HealthCheck,          long> HealthChecks          { get; }
         public Dataset<Image,                long> Images                { get; }
         public Dataset<MachineType,          long> MachineTypes          { get; }
-        public Dataset<Program,              long> Programs              { get; }
+        public Dataset<ProgramInfo,              long> Programs              { get; }
         public Dataset<ProgramRelease,       long> ProgramReleases       { get; }
         public Dataset<VolumeInfo,           long> Volumes               { get; }
                                                                            

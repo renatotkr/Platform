@@ -10,11 +10,11 @@ namespace Carbon.Platform.Computing
 {
     [Dataset("Programs", Schema = "Computing")]
     [UniqueIndex("ownerId", "name")]
-    public class Program : IApplication, IResource
+    public class ProgramInfo : IApplication, IResource
     {
-        public Program() { }
+        public ProgramInfo() { }
 
-        public Program(
+        public ProgramInfo(
             long id, 
             string name,
             string slug, 

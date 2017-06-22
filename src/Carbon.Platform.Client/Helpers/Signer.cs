@@ -1,42 +1,41 @@
 ﻿using System;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
+using System.Security.Cryptography;
 
-using Carbon.Data.Protection;
+using Carbon.Json;
+using Carbon.Security.Claims;
 
 namespace Carbon.Platform
 {
     public static class Signer
     {
-        public static void SignRequest(Secret secret, HttpRequestMessage request)
+        public static void SignRequest(string subject, HttpRequestMessage request, RSA privateKey)
         {
             #region Preconditions
 
-            if (secret.Value == null) throw new ArgumentNullException(nameof(secret.Value));
+            if (privateKey == null) throw new ArgumentNullException(nameof(privateKey));
 
             #endregion
+
+            var token = Carbon.Jwt.Jwt.Sign(
+                new JsonObject {
+                    { "typ", "JWT" },
+                    { "alg", "RS256" }
+                },
+                new JsonObject {
+                    { ClaimNames.JwtId,      Guid.NewGuid().ToString().Replace("-", "") },
+                    { ClaimNames.Subject,    subject }, // e.g. host#4502452345
+                    { ClaimNames.Expiration, DateTimeOffset.UtcNow.AddMinutes(5).ToUnixTimeSeconds() }
+                },
+                privateKey
+            );
 
             var now = DateTimeOffset.UtcNow;
 
             request.Headers.Date = now;
             request.Headers.Add("User-Agent", "Carbon/1.2.0");
             
-            var dateHeader = request.Headers.GetValues("Date").First();
-            
-            var stringToSign = string.Join("\n",
-                dateHeader,
-                request.Method.ToString().ToUpper(),
-                request.RequestUri.Authority,
-                request.RequestUri.AbsolutePath
-            );
-
-            var signature = Signature.ComputeHmacSha256(
-                key  : secret,
-                data : Encoding.UTF8.GetBytes(stringToSign)
-            );
-            
-            var headerValue = $"TBD Signature={signature.ToHexString()}";
+            var headerValue = "Bearer " + token.ToString();
 
             request.Headers.TryAddWithoutValidation("Authorization", headerValue);
         }

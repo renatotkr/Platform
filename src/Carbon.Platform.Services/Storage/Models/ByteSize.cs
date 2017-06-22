@@ -36,6 +36,17 @@ namespace Carbon.Platform.Storage
         public static ByteSize FromGiB(double value) => new ByteSize((long)(value * _1GiB));
 
         public static ByteSize FromTiB(double value) => new ByteSize((long)(value * _1TiB));
+        
+        public override string ToString()
+        {
+            return TotalBytes.ToString();
+        }
+
+        public static ByteSize Parse(string text)
+        {
+            return new ByteSize(long.Parse(text));
+        }
+
     }
 }
 

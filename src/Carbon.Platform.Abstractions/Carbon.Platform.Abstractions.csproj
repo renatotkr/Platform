@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Abstractions</AssemblyName>
-    <VersionPrefix>1.28.0</VersionPrefix>
+    <VersionPrefix>1.29.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net451</TargetFrameworks>
 
     <!-- Package Info-->
@@ -16,6 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Carbon.Security.Primitives" Version="0.14.0" />
     <PackageReference Include="Carbon.Versioning" Version="1.2.0" />
   </ItemGroup>
 
@@ -30,6 +31,12 @@
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
     <Reference Include="System.Runtime.Serialization" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.6'">
+    <PackageReference Include="Carbon.Authentication.Jwt">
+      <Version>0.5.0</Version>
+    </PackageReference>
   </ItemGroup>
 
 </Project>

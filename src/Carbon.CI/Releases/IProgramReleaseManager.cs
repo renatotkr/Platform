@@ -8,7 +8,7 @@ namespace Carbon.CI
     public interface IProgramReleaseManager
     {
         Task<ProgramRelease> CreateAsync(
-            Program program, 
+            ProgramInfo program, 
             SemanticVersion version, 
             IPackage package, 
             long creatorId, 

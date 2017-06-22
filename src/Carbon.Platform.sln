@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{99657337-0EDE-4049-B666-2D0A679E1FE2}"
 EndProject
@@ -10,8 +10,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carbon.Hosting.IIS", "Carbon.Hosting.IIS\Carbon.Hosting.IIS.csproj", "{5B83C75D-FBC9-4883-9534-CC99AE2130A3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Platform", "Carbon.Platform\Carbon.Platform.csproj", "{2366C4FC-2B6F-4E83-B0A5-3B165353FA80}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Packaging.Tests", "Carbon.Packaging.Tests\Carbon.Packaging.Tests.csproj", "{622B7F30-EA1D-449F-B868-31EC3F7609DC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Hosting", "Carbon.Hosting\Carbon.Hosting.csproj", "{DE758587-8A23-47B8-B3E5-7852BADC3FAF}"
 EndProject
@@ -93,10 +91,6 @@ Global
 		{2366C4FC-2B6F-4E83-B0A5-3B165353FA80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2366C4FC-2B6F-4E83-B0A5-3B165353FA80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2366C4FC-2B6F-4E83-B0A5-3B165353FA80}.Release|Any CPU.Build.0 = Release|Any CPU
-		{622B7F30-EA1D-449F-B868-31EC3F7609DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{622B7F30-EA1D-449F-B868-31EC3F7609DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{622B7F30-EA1D-449F-B868-31EC3F7609DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{622B7F30-EA1D-449F-B868-31EC3F7609DC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DE758587-8A23-47B8-B3E5-7852BADC3FAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DE758587-8A23-47B8-B3E5-7852BADC3FAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE758587-8A23-47B8-B3E5-7852BADC3FAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -234,7 +228,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{622B7F30-EA1D-449F-B868-31EC3F7609DC} = {99657337-0EDE-4049-B666-2D0A679E1FE2}
 		{055D15B9-39B0-43C3-B4F0-9B7B52DD754A} = {99657337-0EDE-4049-B666-2D0A679E1FE2}
 		{7ACCF84D-00F6-45F2-BF39-862B733D8D04} = {DAC43875-7B0B-4536-8FF7-D643C6562B7A}
 		{535A6E9E-F824-4EDF-BD46-F3658A7EAD7C} = {DAC43875-7B0B-4536-8FF7-D643C6562B7A}
