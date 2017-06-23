@@ -5,7 +5,7 @@ namespace Carbon.Hosting.IIS
 {
     using Versioning;
 
-    public class IISApplication : IApplication
+    public class IISApplication : IProgram
     {
         public IISApplication(long id, string name, SemanticVersion version)
         {
@@ -20,8 +20,8 @@ namespace Carbon.Hosting.IIS
 
         public SemanticVersion Version { get; }
 
-        public string Runtime => "net461";
+        public string Runtime => "net470";
         
-        public string[] Urls => Array.Empty<string>();
+        public string[] Addresses => Array.Empty<string>();
     }
 }

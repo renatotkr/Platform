@@ -8,7 +8,7 @@ namespace Carbon.Platform.Computing
 {
     [Dataset("ProgramReleases", Schema = "Computing")]
     [UniqueIndex("programId", "version")]
-    public class ProgramRelease : IApplication, IProgramRelease
+    public class ProgramRelease : IProgram, IProgramRelease
     {
         public ProgramRelease() { }
 
@@ -74,6 +74,9 @@ namespace Carbon.Platform.Computing
         [StringLength(63)]
         public string ProgramName { get; }
 
+        [Member("addresses")]
+        public string[] Addresses { get; set; }
+
         [Member("runtime")]
         [StringLength(50)]
         public string Runtime { get; set; }
@@ -81,17 +84,6 @@ namespace Carbon.Platform.Computing
         #region IProgram
 
         string IProgram.Name => ProgramName;
-
-        #endregion
-
-        #region Detail Helpers
-
-        string[] IApplication.Urls
-        {
-            get => (Properties.TryGetValue("urls", out var addresses))
-                ? addresses.ToArrayOf<string>()
-                : null;
-        }
 
         #endregion
 

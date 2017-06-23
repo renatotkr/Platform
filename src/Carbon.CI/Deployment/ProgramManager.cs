@@ -112,7 +112,7 @@ namespace Carbon.CI
             return results;
         }
 
-        public async Task RestartAsync(IApplication app, IHost host)
+        public async Task RestartAsync(IProgram app, IHost host)
         {
             var text = await api.SendAsync(host.Address, $"/programs/{app.Id}/restart").ConfigureAwait(false);
 

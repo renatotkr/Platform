@@ -30,7 +30,7 @@ namespace Carbon.Hosting.IIS
             this.log = log ?? throw new ArgumentNullException(nameof(log));
         }
 
-        public IEnumerable<IApplication> Scan()
+        public IEnumerable<IProgram> Scan()
         {
             foreach (var site in manager.Sites)
             {
@@ -40,7 +40,7 @@ namespace Carbon.Hosting.IIS
             }
         }
 
-        public IApplication Find(long id)
+        public IProgram Find(long id)
         {
             var site = FindSite(id);
 
@@ -49,7 +49,7 @@ namespace Carbon.Hosting.IIS
             return FromSite(site);
         }
 
-        public Task CreateAsync(IApplication app)
+        public Task CreateAsync(IProgram app)
         {
             var poolName = GetApplicationPoolName(app);
 
@@ -97,7 +97,7 @@ namespace Carbon.Hosting.IIS
         }
 
         public async Task DeployAsync(
-            IApplication app, 
+            IProgram app, 
             IPackage package)
         {
             #region Ensure the app exists
@@ -164,7 +164,7 @@ namespace Carbon.Hosting.IIS
             LogInfo(app, $"Deployed v{app.Version}");
         }
 
-        public IEnumerable<SemanticVersion> GetDeployedVersions(IApplication app)
+        public IEnumerable<SemanticVersion> GetDeployedVersions(IProgram app)
         {
             var root = GetAppRootDirectory(app);
 
@@ -186,12 +186,12 @@ namespace Carbon.Hosting.IIS
             }
         }
 
-        public bool IsDeployed(IApplication app)
+        public bool IsDeployed(IProgram app)
         {
             return GetAppPath(app).Exists;
         }
 
-        public Task ActivateAsync(IApplication app, SemanticVersion version)
+        public Task ActivateAsync(IProgram app, SemanticVersion version)
         {
             var site = FindSite(app.Id);
 
@@ -231,7 +231,7 @@ namespace Carbon.Hosting.IIS
             return Task.CompletedTask;
         }
 
-        public Task RestartAsync(IApplication app)
+        public Task RestartAsync(IProgram app)
         {
             var site = FindSite(app.Id);
 
@@ -242,7 +242,7 @@ namespace Carbon.Hosting.IIS
             return Task.CompletedTask;
         }
 
-        public Task DeleteAsync(IApplication app)
+        public Task DeleteAsync(IProgram app)
         {
             var site = FindSite(app.Id) ?? throw new ArgumentNullException($"No site with id #{app.Id} found");
 
@@ -267,7 +267,7 @@ namespace Carbon.Hosting.IIS
 
         #region Helpers
 
-        private string GetApplicationPoolName(IApplication app)
+        private string GetApplicationPoolName(IProgram app)
         {
             return app.Name;
         }
@@ -287,15 +287,15 @@ namespace Carbon.Hosting.IIS
             return null;
         }
 
-        private Site GetConfigureSite(IApplication app)
+        private Site GetConfigureSite(IProgram app)
         {
             #region Preconditions
 
             if (app == null)
                 throw new ArgumentNullException(nameof(app));
 
-            if (app.Urls == null)
-                throw new ArgumentException("Must have at least one url", nameof(app));
+            if (app.Addresses == null || app.Addresses.Length == 0)
+                throw new ArgumentException("Must have at least one address", nameof(app));
 
             #endregion
 
@@ -330,7 +330,7 @@ namespace Carbon.Hosting.IIS
             }
             */
 
-            foreach (var address in app.Urls)
+            foreach (var address in app.Addresses)
             {
                 var b = new IISBinding(Listener.Parse(address));
 
@@ -352,7 +352,7 @@ namespace Carbon.Hosting.IIS
             return site;
         }
 
-        private void LogInfo(IApplication app, string message)
+        private void LogInfo(IProgram app, string message)
         {
             var logsDir = Path.Combine(env.AppsRoot.FullName, app.Id.ToString(), "logs");
 
@@ -369,7 +369,7 @@ namespace Carbon.Hosting.IIS
             File.AppendAllLines(path, new[] { line });
         }
 
-        private string GetAppRootDirectory(IApplication app)
+        private string GetAppRootDirectory(IProgram app)
         {
             return Path.Combine(env.AppsRoot.FullName, app.Id.ToString());
         }
@@ -377,14 +377,14 @@ namespace Carbon.Hosting.IIS
         // linux   : /var/apps/1.0.0
         // windows : c:/apps/1/1.0.0
 
-        private DirectoryInfo GetAppPath(IApplication app)
+        private DirectoryInfo GetAppPath(IProgram app)
         {
             var path = Path.Combine(env.AppsRoot.FullName, app.Id.ToString(), app.Version.ToString());
 
             return new DirectoryInfo(path);
         }
 
-        public List<Request> GetActiveRequests(IApplication app, TimeSpan elapsedFilter)
+        public List<Request> GetActiveRequests(IProgram app, TimeSpan elapsedFilter)
         {
             var pool = manager.ApplicationPools[app.Name];
 

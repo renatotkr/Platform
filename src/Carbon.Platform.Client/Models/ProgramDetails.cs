@@ -4,7 +4,7 @@ using Carbon.Versioning;
 
 namespace Carbon.Platform.Computing
 {
-    public class ProgramDetails : IApplication, IProgramRelease
+    public class ProgramDetails : IProgram
     {
         [DataMember(Name = "id", Order = 1)]
         public long Id { get; set; }
@@ -21,20 +21,12 @@ namespace Carbon.Platform.Computing
         [DataMember(Name = "runtime", Order = 4)]
         public string Runtime { get; set; }
 
+        // CertificateId ?
+
         #region Details
 
-        [DataMember(Name = "urls", Order = 11)]
-        public string[] Urls { get; set; }
-
-        #endregion
-
-        #region IRelease
-
-        long IProgramRelease.ProgramId => Id;
-
-        long IProgramRelease.CommitId => 0;
-
-        long IProgramRelease.CreatorId => 0;
+        [DataMember(Name = "addresses", Order = 11)]
+        public string[] Addresses { get; set; }
 
         #endregion
     }

@@ -24,7 +24,7 @@ namespace Carbon.Platform.Computing
 
             Program    = program ?? throw new ArgumentNullException(nameof(program));
             Version    = version;
-            Properties = properties ?? throw new ArgumentNullException(nameof(properties));
+            Properties = properties ?? new JsonObject();
             CreatorId  = creatorId;
         }
 

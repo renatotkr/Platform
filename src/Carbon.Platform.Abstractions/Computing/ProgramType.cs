@@ -2,10 +2,16 @@
 {
     public enum ProgramType : byte
     {
-        Application = 1, // user interactive
-        Service     = 2,
-        Task        = 3
+        App     = 1,
+        Site    = 2,
+        Service = 3,
+        Task    = 4,
     }
+    
+    // var/apps
+    // var/sites
+    // var/services
+    // var/tasks
 }
 
 // https://en.wikipedia.org/wiki/Computer_program

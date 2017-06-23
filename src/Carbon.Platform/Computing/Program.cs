@@ -10,7 +10,7 @@ namespace Carbon.Platform.Computing
 {
     [Dataset("Programs", Schema = "Computing")]
     [UniqueIndex("ownerId", "name")]
-    public class ProgramInfo : IApplication, IResource
+    public class ProgramInfo : IProgram, IResource
     {
         public ProgramInfo() { }
 
@@ -20,7 +20,7 @@ namespace Carbon.Platform.Computing
             string slug, 
             long ownerId,
             JsonObject properties = null,
-            ProgramType type = ProgramType.Application
+            ProgramType type = ProgramType.App
         )
         {
             #region Preconditions
@@ -63,6 +63,10 @@ namespace Carbon.Platform.Computing
         [StringLength(50)]
         public string Runtime { get; }
 
+        [Member("addresses")]
+        [StringLength(200)]
+        public string[] Addresses { get; set; }
+
         [Member("version")]
         public SemanticVersion Version { get; }
 
@@ -81,17 +85,6 @@ namespace Carbon.Platform.Computing
 
         [Member("repositoryId")]
         public long RepositoryId { get; set; }
-
-        #endregion
-
-        #region Properties
-
-        string[] IApplication.Urls
-        {
-            get => (Properties.TryGetValue("urls", out var addresses))
-                ? addresses.ToArrayOf<string>()
-                : null;
-        }
 
         #endregion
 

@@ -8,9 +8,11 @@ namespace Carbon.Platform.Computing
 
         string Name { get; }
 
-        string Runtime { get; }
-
         SemanticVersion Version { get; }
+        
+        string[] Addresses { get; }
+
+        string Runtime { get; }
     }
 }
 

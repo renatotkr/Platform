@@ -9,19 +9,19 @@ namespace Carbon.Hosting
     
     public interface IHostService
     {
-        IEnumerable<IApplication> Scan();
+        IEnumerable<IProgram> Scan();
 
-        IApplication Find(long id);
+        IProgram Find(long id);
 
-        Task DeployAsync(IApplication app, IPackage package);
+        Task DeployAsync(IProgram app, IPackage package);
 
         // Start
         // Stop
 
-        Task RestartAsync(IApplication app);
+        Task RestartAsync(IProgram app);
 
-        Task DeleteAsync(IApplication app);
+        Task DeleteAsync(IProgram app);
 
-        bool IsDeployed(IApplication app);
+        bool IsDeployed(IProgram app);
     }
 }
