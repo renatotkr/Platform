@@ -7,6 +7,8 @@ namespace Carbon.Platform.Diagnostics
     {
         public long EnvironmentId { get; set; }
 
+        public long ProgramId { get; set; }
+
         public string Type { get; set; }
 
         public string Message { get; set; }

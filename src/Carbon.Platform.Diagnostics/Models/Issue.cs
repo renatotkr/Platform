@@ -40,11 +40,18 @@ namespace Carbon.Platform.Diagnostics
         [StringLength(1000)]
         public JsonObject Details { get; set; }
 
+
+        #region IResource
+
         // i.e. GitHub issue...
+        [Member("providerId")]
+        public long ProviderId { get; set; }
 
         [Member("externalId")]
         [StringLength(50)]
         public string ExternalId { get; set; }
+
+        #endregion
 
         #region Timestamps
 

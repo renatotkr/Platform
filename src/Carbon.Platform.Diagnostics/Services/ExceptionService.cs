@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Data.Sequences;
-using Carbon.Json;
 
 namespace Carbon.Platform.Diagnostics
 {
@@ -49,8 +48,9 @@ namespace Carbon.Platform.Diagnostics
 
             var ex = new ExceptionInfo {
                 Id         = id,
-                Context    = request.Context ?? new JsonObject(),
-                Properties    = request.Details ?? new JsonObject(),
+                ProgramId  = request.ProgramId,
+                Context    = request.Context,
+                Properties = request.Details,
                 HostId     = request.HostId,
                 Message    = request.Message,
                 SessionId  = request.SessionId,

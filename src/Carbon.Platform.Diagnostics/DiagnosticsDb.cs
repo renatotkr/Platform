@@ -13,15 +13,15 @@ namespace Carbon.Platform.Diagnostics
 
             context.Types.TryAdd(new BigIdHandler());
 
-            BrowserExceptions = new Dataset<BrowserException, BigId>(context);
-            Exceptions        = new Dataset<ExceptionInfo, BigId>(context);
-            Issues            = new Dataset<Issue, long>(context);
+            Exceptions = new Dataset<ExceptionInfo, BigId>(context);
+            Issues     = new Dataset<Issue, long>(context);
         }
 
         public IDbContext Context { get; }
 
-        public Dataset<BrowserException, BigId> BrowserExceptions { get; }
-        public Dataset<ExceptionInfo, BigId>    Exceptions { get; }
-        public Dataset<Issue, long>             Issues { get; }
+        // Traces?
+
+        public Dataset<ExceptionInfo, BigId> Exceptions { get; }
+        public Dataset<Issue, long>          Issues { get; }
     }
 }

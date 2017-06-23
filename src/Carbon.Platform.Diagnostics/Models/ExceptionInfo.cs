@@ -4,6 +4,8 @@ using Carbon.Json;
 
 namespace Carbon.Platform.Diagnostics
 {
+    // Can be client or server side...
+
     [Dataset("Exceptions", Schema = "Diagnostics")]
     public class ExceptionInfo : IException
     {
@@ -13,9 +15,12 @@ namespace Carbon.Platform.Diagnostics
 
         [Member("requestId")]
         public BigId? RequestId { get; set; }
-
+     
+        [Member("programId")]
+        public long ProgramId { get; set; }
+        
         [Member("hostId")]
-        public long HostId { get; set; }
+        public long? HostId { get; set; }
 
         [Member("type")]
         [MaxLength(1000)]
