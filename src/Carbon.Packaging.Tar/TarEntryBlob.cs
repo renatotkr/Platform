@@ -34,11 +34,6 @@ namespace Carbon.Packaging
             return new ValueTask<Stream>(entry.OpenEntryStream());
         }
 
-        public void WriteTo(Stream stream)
-        {
-            entry.WriteTo(stream);
-        }
-
         public void Dispose()
         {
         }

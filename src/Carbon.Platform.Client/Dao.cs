@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -10,6 +11,15 @@ namespace Carbon.Platform
 {
     public partial class PlatformClient
     {
+        private readonly HttpClient http = new HttpClient {
+            DefaultRequestHeaders = {
+                { "User-Agent", "Carbon/1.5.0" },
+                { "Accept", "application/json" }
+            },
+            Timeout = TimeSpan.FromSeconds(10)
+        };
+
+
         public class Dao<T>
             where T : new()
         {
@@ -28,15 +38,6 @@ namespace Carbon.Platform
             }
         }
 
-        private readonly HttpClient http = new HttpClient {
-            DefaultRequestHeaders = {
-                { "User-Agent", "Carbon/1.2.0" },
-                { "Accept", "application/json" }
-            },
-
-            Timeout = TimeSpan.FromSeconds(10)
-        };
-
         protected async Task<T> PostAsync<T>(string path, object data)
             where T : new()
         {
@@ -46,7 +47,7 @@ namespace Carbon.Platform
                 Content = new StringContent(jsonText, Encoding.UTF8, "application/json")
             };
 
-            Signer.SignRequest(subject, request, privateKey);
+            Signer.SignRequest(request, credentials);
 
             using (var response = await http.SendAsync(request).ConfigureAwait(false))
             {
@@ -61,12 +62,42 @@ namespace Carbon.Platform
            }
         }
 
+        protected async Task<MemoryStream> DownloadAsync(string path)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, baseUri + path);
+
+            Signer.SignRequest(request, credentials);
+
+            var ms = new MemoryStream();
+
+            using (var response = await http.SendAsync(request).ConfigureAwait(false))
+            {
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    throw new Exception("not found");
+                }
+                
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+                }
+
+                var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+
+                await stream.CopyToAsync(ms).ConfigureAwait(false);    
+            }
+
+            ms.Position = 0;
+
+            return ms;
+        }
+
         protected async Task<T1> GetAsync<T1>(string path)
             where T1 : new()
         {
             var request = new HttpRequestMessage(HttpMethod.Get, baseUri + path);
 
-            Signer.SignRequest(subject, request, privateKey);
+            Signer.SignRequest(request, credentials);
 
             using (var response = await http.SendAsync(request).ConfigureAwait(false))
             {

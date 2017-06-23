@@ -5,23 +5,23 @@ using Carbon.Versioning;
 
 namespace Carbon.CI
 {
-    public class DeployApplicationRequest
+    public class DeployRequest
     {
-        public DeployApplicationRequest() { }
+        public DeployRequest() { }
 
-        public DeployApplicationRequest(
-            long applicationId, 
+        public DeployRequest(
+            long programId, 
             SemanticVersion version,
             IEnvironment environment,
             long initiatorId)
         {
-            ApplicationId      = applicationId;
+            ProgramId      = programId;
             ApplicationVersion = version;
             Environment        = environment ?? throw new ArgumentNullException(nameof(environment));
             InitiatorId        = initiatorId;
         }
 
-        public long ApplicationId { get; set; }
+        public long ProgramId { get; set; }
 
         public SemanticVersion ApplicationVersion { get; set; }
         
@@ -29,6 +29,7 @@ namespace Carbon.CI
 
         public long InitiatorId { get; set; }
     }
+
     
     // Targets (environment, cluster, host)
 }

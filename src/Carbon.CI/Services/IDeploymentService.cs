@@ -9,7 +9,7 @@ namespace Carbon.CI
     {
         Task<Deployment> StartAsync(
             IEnvironment env, 
-            IRelease release, 
+            IProgramRelease release, 
             long creatorId
         );
 

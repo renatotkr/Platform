@@ -41,7 +41,8 @@ namespace Carbon.Platform.Computing
 
             (var provider, var resourceId) = ResourceName.Parse(name);
 
-            return FindAsync(provider, resourceId) ?? throw ResourceError.NotFound(provider, ResourceTypes.Host, name);
+            return FindAsync(provider, resourceId) 
+                ?? throw ResourceError.NotFound(provider, ResourceTypes.Host, name);
         }
 
         public async Task<HostInfo> FindAsync(ResourceProvider provider, string id)
@@ -97,7 +98,10 @@ namespace Carbon.Platform.Computing
                 imageId       : request.ImageId,
                 networkId     : request.NetworkId,
                 ownerId       : request.OwnerId
-            );
+            )
+            {
+                PublicKey = request.PublicKey
+            };
         
             await db.Hosts.InsertAsync(host).ConfigureAwait(false);
 
@@ -106,7 +110,7 @@ namespace Carbon.Platform.Computing
 
         #region Network Interfaces
 
-        public Task<IReadOnlyList<NetworkInterfaceInfo>> GetNetworkInterfacesAsync(long hostId)
+            public Task<IReadOnlyList<NetworkInterfaceInfo>> GetNetworkInterfacesAsync(long hostId)
         {
             return db.NetworkInterfaces.QueryAsync(Eq("hostId", hostId));
         }

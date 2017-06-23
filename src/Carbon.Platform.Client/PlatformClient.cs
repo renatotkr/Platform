@@ -1,34 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Security.Cryptography;
 
+using Carbon.Packaging;
 using Carbon.Platform.Computing;
-using Carbon.Platform.Web;
+using Carbon.Storage;
 using Carbon.Versioning;
 
 namespace Carbon.Platform
 {
-    using System.Security.Principal;
     using Resources;
 
     public partial class PlatformClient
     {
         private readonly string host;
         private readonly string baseUri;
-        private readonly RSA privateKey;
-        private readonly string subject;
+        private readonly Credentials credentials;
         
-        public PlatformClient(string host, string subject, RSA privateKey)
+        public PlatformClient(string host, Credentials credentials)
         {
-            this.host       = host ?? throw new ArgumentNullException(nameof(host));
-            this.privateKey = privateKey;
-            this.baseUri    = "https://" + host;
-            this.subject    = subject;
+            this.host        = host ?? throw new ArgumentNullException(nameof(host));
+            this.baseUri     = "https://" + host;
+            this.credentials = credentials;
 
             Programs = new ProgramClient(this);
             Hosts    = new HostsClient(this);
-            Websites = new WebsitesClient(this);
         }
 
         #region Apps
@@ -41,7 +37,15 @@ namespace Carbon.Platform
                 : base("programs", platform) { }
 
             public Task<ProgramDetails> GetAsync(long id, SemanticVersion version) => 
-                platform.GetAsync<ProgramDetails>($"/programs/{id}@{version}");           
+                platform.GetAsync<ProgramDetails>($"/programs/{id}@{version}");
+
+            public async Task<IPackage> DownloadAsync(long id, SemanticVersion version)
+            {
+                var packageStream = await platform.DownloadAsync(
+                    $"/programs/{id}@{version}/package.zip");
+
+                return ZipPackage.FromStream(packageStream, true);
+            }
         }
 
         #endregion
@@ -59,7 +63,10 @@ namespace Carbon.Platform
 
             public Task<HostDetails> RegisterAsync(HostDetails details)
             {
-                return platform.PostAsync<HostDetails>($"/hosts", details);
+                var provider = ResourceProvider.Get(details.Resource.Value.ProviderId);
+
+                return platform.PostAsync<HostDetails>(
+                    $"/hosts/{provider.Code}:{details.Resource.Value.ResourceId}", details);
             }
 
             public Task<HostDetails> GetAsync(ManagedResource resource)
@@ -73,21 +80,6 @@ namespace Carbon.Platform
             {
                 return platform.GetAsync<List<ProgramDetails>>($"/hosts/{id}/programs");
             }
-        }
-
-        #endregion
-
-        #region Websites
-
-        public WebsitesClient Websites { get; }
-
-        public class WebsitesClient : Dao<WebsiteDetails>
-        {
-            public WebsitesClient(PlatformClient platform)
-                : base("websites", platform) { }
-
-            public Task<WebsiteDetails> GetReleaseAsync(long websiteId, SemanticVersion version) =>
-                platform.GetAsync<WebsiteDetails>($"/websites/{websiteId}@{version}");
         }
 
         #endregion

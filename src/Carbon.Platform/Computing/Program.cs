@@ -54,10 +54,14 @@ namespace Carbon.Platform.Computing
         [StringLength(63)]
         public string Name { get; }
         
-        // e.g. accelerator | ngnix
+        // e.g. accelerator | ngnix | caddy
         [Member("slug"), Unique]
         [StringLength(63)]
         public string Slug { get; }
+
+        [Member("runtime")]
+        [StringLength(50)]
+        public string Runtime { get; }
 
         [Member("version")]
         public SemanticVersion Version { get; }

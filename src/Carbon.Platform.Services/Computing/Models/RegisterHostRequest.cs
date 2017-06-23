@@ -51,6 +51,8 @@ namespace Carbon.Platform.Computing
 
         public long ClusterId { get; set; }
 
+        public byte[] PublicKey { get; set; }
+
         [Range(1, 2_199_023_255_552)]
         public long OwnerId { get; set; }
 

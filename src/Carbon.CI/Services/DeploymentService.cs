@@ -19,7 +19,7 @@ namespace Carbon.CI
 
         public async Task<Deployment> StartAsync(
             IEnvironment environment, 
-            IRelease release, 
+            IProgramRelease release, 
             long creatorId)
         {
             #region Preconditions

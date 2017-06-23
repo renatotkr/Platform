@@ -7,7 +7,7 @@ using Carbon.Platform.Computing;
 
 namespace Carbon.CI
 {
-    public class ApplicationManager : IApplicationManager
+    public class ProgramManager : IProgramManager
     {
         private readonly ApiClient api;
         private readonly ILogger log;
@@ -15,7 +15,7 @@ namespace Carbon.CI
         private readonly IDeploymentService deployments;
         private readonly IProgramReleaseService programReleases;
 
-        public ApplicationManager(
+        public ProgramManager(
             ApiClient api, 
             IDeploymentService deploymentService,
             IHostService hostService,
@@ -29,7 +29,7 @@ namespace Carbon.CI
             this.hostService     = hostService       ?? throw new ArgumentNullException(nameof(hostService));
         }
 
-        public async Task<DeployResult> DeployAsync(DeployApplicationRequest request)
+        public async Task<DeployResult> DeployAsync(DeployRequest request)
         {
             #region Preconditions
 
@@ -40,7 +40,7 @@ namespace Carbon.CI
             
             var environment = request.Environment;
 
-            var release = await programReleases.GetAsync(request.ApplicationId, request.ApplicationVersion);
+            var release = await programReleases.GetAsync(request.ProgramId, request.ApplicationVersion);
             var hosts   = (await hostService.ListAsync(environment).ConfigureAwait(false)).ToArray();
 
             // Create a deployment record
@@ -74,7 +74,7 @@ namespace Carbon.CI
 
             try
             {
-                text = await api.SendAsync(host.Address, $"/apps/{release.ProgramId}@{release.Version}/activate").ConfigureAwait(false);
+                text = await api.SendAsync(host.Address, $"/programs/{release.ProgramId}@{release.Version}/activate").ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -114,7 +114,7 @@ namespace Carbon.CI
 
         public async Task RestartAsync(IApplication app, IHost host)
         {
-            var text = await api.SendAsync(host.Address, $"/apps/{app.Id}/restart").ConfigureAwait(false);
+            var text = await api.SendAsync(host.Address, $"/programs/{app.Id}/restart").ConfigureAwait(false);
 
             log.Info($"{host} : Reloading -- {text}");
         }

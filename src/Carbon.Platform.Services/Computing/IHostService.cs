@@ -8,6 +8,8 @@ namespace Carbon.Platform.Computing
 
         Task<HostInfo> GetAsync(string name);
 
+        Task<HostInfo> FindAsync(ResourceProvider provider, string resourceId);
+
         Task<HostInfo> RegisterAsync(RegisterHostRequest request);
         
         Task<HostInfo[]> ListAsync(ICluster cluster);

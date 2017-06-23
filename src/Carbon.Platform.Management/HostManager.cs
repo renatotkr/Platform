@@ -17,8 +17,6 @@ using Carbon.Platform.Storage;
 
 namespace Carbon.Platform.Management
 {
-    using static ResourceProvider;
-
     public class HostManager
     {
         private readonly Ec2Client ec2;
@@ -51,7 +49,59 @@ namespace Carbon.Platform.Management
             this.images  = new ImageService(db);
         }
 
-        public async Task<IHost[]> LaunchHostsAsync(
+        // This will also patch
+        public async Task<HostInfo> RegisterAsync(RegisterHostRequest request)
+        {
+            #region Preconditions
+
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
+            #endregion
+
+            var provider = ResourceProvider.Get(request.Resource.ProviderId);
+
+            var host = await hostService.FindAsync(provider, request.Resource.ResourceId).ConfigureAwait(false);
+
+            ICluster cluster = null;
+
+            if (request.ClusterId != 0)
+            {
+                cluster = await clusterService.GetAsync(request.ClusterId);
+
+                // Ensure the cluster exists
+            }
+
+            if (request.NetworkId != 0)
+            {
+                // Ensure the network exists
+            }
+
+            if (host == null)
+            {
+                host = await hostService.RegisterAsync(request).ConfigureAwait(false);
+            }
+            else
+            {
+                // Set the public key, if it hasn't already been set
+                if (host.PublicKey == null && request.PublicKey != null)
+                {
+                    // TODO: Verify the public key
+
+                    await db.Hosts.PatchAsync(host.Id, changes: new[] {
+                        Change.Replace("publicKey", request.PublicKey)
+                    }).ConfigureAwait(false);
+                }
+
+                // transition the state if it has changed
+
+                await TransitionStateAsync(host, request.Status).ConfigureAwait(false);
+            }
+
+            return host;
+        }
+
+        public async Task<IHost[]> LaunchAsync(
             IEnvironment env,
             ILocation zone,
             int launchCount = 1)
@@ -82,10 +132,10 @@ namespace Carbon.Platform.Management
 
             var template = await db.HostTemplates.FindAsync(cluster.HostTemplateId.Value);
 
-            return await LaunchHostsAsync(cluster, zone, template, launchCount).ConfigureAwait(false);
+            return await LaunchAsync(cluster, zone, template, launchCount).ConfigureAwait(false);
         }
 
-        public async Task<IHost[]> LaunchHostsAsync(
+        public async Task<IHost[]> LaunchAsync(
             Cluster cluster, 
             ILocation zone, 
             HostTemplate template, 
@@ -308,6 +358,8 @@ namespace Carbon.Platform.Management
             return await hostService.RegisterAsync(request).ConfigureAwait(false);
         }
 
+        private static readonly ResourceProvider aws = ResourceProvider.Aws;
+
         private async Task<RegisterHostRequest> GetRegistrationAsync(
             Instance instance,
             Cluster cluster,
@@ -330,14 +382,14 @@ namespace Carbon.Platform.Management
 
             if (location == null)
             {
-                location = Locations.Get(Aws, instance.Placement.AvailabilityZone);
+                location = Locations.Get(aws, instance.Placement.AvailabilityZone);
             }
 
             if (image == null)
             {
                 // "imageId": "ami-1647537c",
                 
-                image = await images.GetAsync(Aws, instance.ImageId).ConfigureAwait(false);
+                image = await images.GetAsync(aws, instance.ImageId).ConfigureAwait(false);
             }
 
             if (machineType == null)
@@ -345,7 +397,7 @@ namespace Carbon.Platform.Management
                 machineType = AwsInstanceType.Get(instance.InstanceType);
             }
 
-            var network = await db.Networks.FindAsync(Aws, instance.VpcId).ConfigureAwait(false);
+            var network = await db.Networks.FindAsync(aws, instance.VpcId).ConfigureAwait(false);
 
             #endregion
 

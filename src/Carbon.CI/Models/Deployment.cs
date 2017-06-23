@@ -1,8 +1,10 @@
 ﻿using System;
 
 using Carbon.Data.Annotations;
+using Carbon.Platform.Computing;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Sequences;
+using Carbon.Versioning;
 
 namespace Carbon.CI
 {
@@ -13,7 +15,7 @@ namespace Carbon.CI
 
         public Deployment(
             long id,
-            IRelease release,
+            IProgramRelease release,
             long initiatorId,
             DeploymentStatus status = DeploymentStatus.Pending)
         {
@@ -22,16 +24,17 @@ namespace Carbon.CI
             Validate.Id(id);
 
             Validate.NotNull(release, nameof(release));
-
+            
             Validate.Id(initiatorId, nameof(initiatorId));
 
             #endregion
 
-            Id          = id;
-            Status      = status;
-            ReleaseType = release.Type;
-            ReleaseId   = release.Id;
-            InitiatorId = initiatorId;
+            Id             = id;
+            Status         = status;
+            ReleaseId      = release.Id;
+            ProgramId      = release.ProgramId;
+            ProgramVersion = release.Version;
+            InitiatorId    = initiatorId;
         }
 
         // environmentId | #
@@ -41,13 +44,16 @@ namespace Carbon.CI
         [Member("status")]
         public DeploymentStatus Status { get; set; }
        
-        
-        // Website | Program
-        [Member("releaseType")]
-        public ReleaseType ReleaseType { get; }
+        // borg:program/1@1.234
 
         [Member("releaseId")]
         public long ReleaseId { get; }
+
+        [Member("programId")]
+        public long ProgramId { get; }
+
+        [Member("programVersion")]
+        public SemanticVersion ProgramVersion { get; }
 
         [Member("initiatorId")]
         public long InitiatorId { get; }

@@ -87,7 +87,7 @@ namespace Carbon.Packaging
 
                     var compressionLevel = FileFormat.IsText(format)
                         ? CompressionLevel.Optimal
-                        : CompressionLevel.NoCompression;
+                        : CompressionLevel.Fastest;
 
                     var archiveEntry = archive.CreateEntry(packageEntry.Name, compressionLevel);
                     

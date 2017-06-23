@@ -32,12 +32,15 @@ namespace Carbon.Platform.Computing
         [DataMember(Name = "machineTypeId", Order = 9, EmitDefaultValue = false)]
         public long MachineTypeId { get; set; }
 
+        [DataMember(Name = "publicKey", EmitDefaultValue = false, Order = 10)]
+        public byte[] PublicKey { get; set; }
+
         #region Timestamps
 
-        [DataMember(Name = "heartbeat", EmitDefaultValue = false, Order = 10)]
+        [DataMember(Name = "heartbeat", EmitDefaultValue = false, Order = 11)]
         public DateTime? Heartbeat { get; set; }
 
-        [DataMember(Name = "terminated", EmitDefaultValue = false, Order = 11)]
+        [DataMember(Name = "terminated", EmitDefaultValue = false, Order = 12)]
         public DateTime? Terminated { get; set; }
 
         #endregion

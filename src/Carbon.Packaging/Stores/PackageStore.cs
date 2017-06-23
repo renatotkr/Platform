@@ -61,7 +61,7 @@ namespace Carbon.Packaging
 
             ms.Position = 0;
 
-            return ZipPackage.FromStream(ms, stripFirstLevel: false);
+            return ZipPackage.FromStream(ms, stripFirstLevel: options?.StripeFirstLevel == true);
         }
     }
 }

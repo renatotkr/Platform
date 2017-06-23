@@ -66,7 +66,7 @@ namespace Carbon.Platform.Computing
 
         // RSA Public Key (2048 bits -- ASN.1 encoded)
         [Member("publicKey"), MaxLength(1200)]
-        public byte[] PublicKey { get; }
+        public byte[] PublicKey { get; set; }
 
         [Member("ownerId")]
         public long OwnerId { get; }

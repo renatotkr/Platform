@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Text;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 using Carbon.Data.Protection;
@@ -60,6 +60,8 @@ namespace Carbon.CI
                 return text;
             }
         }
+
+        // TODO: Use JWT tokens signed with public key ...
 
         private void Sign(HttpRequestMessage message)
         {

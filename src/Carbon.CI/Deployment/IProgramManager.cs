@@ -4,9 +4,9 @@ using Carbon.Platform.Computing;
 
 namespace Carbon.CI
 {
-    public interface IApplicationManager
+    public interface IProgramManager
     {
-        Task<DeployResult> DeployAsync(DeployApplicationRequest request);
+        Task<DeployResult> DeployAsync(DeployRequest request);
 
         Task<DeployResult> DeployAsync(ProgramRelease release, IHost host);
     }

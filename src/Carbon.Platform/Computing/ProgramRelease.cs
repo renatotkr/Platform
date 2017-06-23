@@ -2,7 +2,6 @@
 
 using Carbon.Data.Annotations;
 using Carbon.Versioning;
-using Carbon.CI;
 using Carbon.Json;
 
 namespace Carbon.Platform.Computing
@@ -75,6 +74,10 @@ namespace Carbon.Platform.Computing
         [StringLength(63)]
         public string ProgramName { get; }
 
+        [Member("runtime")]
+        [StringLength(50)]
+        public string Runtime { get; set; }
+
         #region IProgram
 
         string IProgram.Name => ProgramName;
@@ -89,14 +92,6 @@ namespace Carbon.Platform.Computing
                 ? addresses.ToArrayOf<string>()
                 : null;
         }
-
-        #endregion
-
-        #region IDeployable
-
-        ReleaseType IRelease.Type => ReleaseType.Program;
-
-        long IRelease.Id => Id;
 
         #endregion
 
