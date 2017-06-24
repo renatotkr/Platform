@@ -57,7 +57,7 @@ namespace Carbon.CI
             );
         }
 
-        public async Task<Build> CheckStatusAsync(Build build)
+        public async Task<Build> SyncAsync(Build build)
         {
             if (build.Status != BuildStatus.Pending)
             {

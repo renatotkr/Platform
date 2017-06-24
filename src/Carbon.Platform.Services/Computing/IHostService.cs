@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Carbon.Platform.Computing
 {
@@ -12,9 +13,9 @@ namespace Carbon.Platform.Computing
 
         Task<HostInfo> RegisterAsync(RegisterHostRequest request);
         
-        Task<HostInfo[]> ListAsync(ICluster cluster);
+        Task<IReadOnlyList<HostInfo>> ListAsync(ICluster cluster);
 
-        Task<HostInfo[]> ListAsync(IEnvironment environment);
+        Task<IReadOnlyList<HostInfo>> ListAsync(IEnvironment environment);
 
     }
 }

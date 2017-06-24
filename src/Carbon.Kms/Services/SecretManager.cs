@@ -44,7 +44,7 @@ namespace Carbon.Kms
                 throw new Exception("Secret is expired");
             }
             
-            var key = await keyProvider.GetAsync(secret.KeyId, secret.KeyVersion).ConfigureAwait(false);
+            var key = await keyProvider.GetAsync(secret.KeyId).ConfigureAwait(false);
 
             using (var protector = new AesDataProtector(key.Value, secret.IV))
             {
@@ -82,7 +82,6 @@ namespace Carbon.Kms
                 id         : 0, // assigned on insert
                 name       : name,
                 keyId      : keyId,
-                keyVersion : key.Version,
                 iv         : iv,
                 ciphertext : ciphertext,
                 expires    : expires,

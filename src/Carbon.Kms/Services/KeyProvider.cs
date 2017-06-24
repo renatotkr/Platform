@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 
-using Carbon.Data;
-using Carbon.Data.Expressions;
 using Carbon.Data.Protection;
 using Carbon.Platform.Resources;
 using Carbon.Time;
 
 namespace Carbon.Kms
 {
-    using static Expression;
-
     public class KeyProvider : IKeyProvider
     {
         private readonly KmsDb db;
@@ -26,37 +21,18 @@ namespace Carbon.Kms
             this.db            = db            ?? throw new ArgumentNullException(nameof(db));
             this.clock         = clock         ?? throw new ArgumentNullException(nameof(clock));
             this.vaultProvider = vaultProvider ?? throw new ArgumentNullException(nameof(vaultProvider));
-        }
+        }   
 
-        public async ValueTask<DataKey> GetAsync(long keyId)
+        public async ValueTask<CryptoKey> GetAsync(long id)
         {
-            var key = (await db.Keys.QueryAsync(
-                expression : And(Eq("id", keyId), IsNull("deleted")),
-                order      : Order.Descending("version"),
-                take       : 1
-            ).ConfigureAwait(false)).FirstOrDefault();
-
-            if (key == null)
-            {
-                throw ResourceError.NotFound(ResourceTypes.VaultKey, keyId);
-            }
-
-            var result = await DecryptAsync(key);
-
-            return new DataKey(key.Id.ToString(), key.Version, result);
-        }
-
-        public async ValueTask<DataKey> GetAsync(long keyId, int keyVersion)
-        {
-            var key = await db.Keys.FindAsync((keyId, keyVersion))
-                ?? throw new Exception($"key#{keyId}@{keyVersion} not found");
+            var key = await db.Keys.FindAsync(id)
+                ?? throw ResourceError.NotFound(ResourceTypes.VaultKey, id);
 
             var result = await DecryptAsync(key).ConfigureAwait(false);
 
-            return new DataKey(
-                id      : key.Id.ToString(),
-                version : key.Version,
-                value   : result
+            return new CryptoKey(
+                id    : key.Id.ToString(),
+                value : result
             );
         }
 
@@ -68,7 +44,7 @@ namespace Carbon.Kms
                 throw new ArgumentNullException(nameof(key));
          
             if (key.Expires != null && key.Expires < clock.Observe())
-                throw new Exception($"key#{key.Id}@{key.Version} is expired and may not be decrypted");
+                throw new Exception($"key#{key.Id} is expired");
 
             #endregion
 

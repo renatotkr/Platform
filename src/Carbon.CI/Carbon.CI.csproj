@@ -17,7 +17,6 @@
     <ProjectReference Include="..\Carbon.Kms.Abstractions\Carbon.Kms.Abstractions.csproj" />
     <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj" />
     <ProjectReference Include="..\Carbon.Platform.Services\Carbon.Platform.Services.csproj" />
-    <ProjectReference Include="..\Carbon.Platform.Web\Carbon.Platform.Web.csproj" />
     <ProjectReference Include="..\Carbon.VersionControl\Carbon.VersionControl.csproj" />
   </ItemGroup>
 

@@ -6,8 +6,6 @@ namespace Carbon.Kms
 {
     public interface IKeyProvider
     {
-        ValueTask<DataKey> GetAsync(long keyId);
-
-        ValueTask<DataKey> GetAsync(long keyId, int keyVersion);
+        ValueTask<CryptoKey> GetAsync(long keyId);
     }
 }

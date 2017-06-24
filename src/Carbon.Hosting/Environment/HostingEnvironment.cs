@@ -22,9 +22,9 @@ namespace Carbon.Hosting
                     AppsRoot = new DirectoryInfo(config["appsRoot"]);
                 }
 
-                if (config.ContainsKey("websitesRoot"))
+                if (config.ContainsKey("sitesRoot"))
                 {
-                    WebsitesRoot = new DirectoryInfo(config["websitesRoot"]);
+                    SitesRoot = new DirectoryInfo(config["sitesRoot"]);
                 }
             }
 
@@ -37,9 +37,9 @@ namespace Carbon.Hosting
                 AppsRoot = new DirectoryInfo(driveLetter + ":/apps");
             }
 
-            if (WebsitesRoot == null)
+            if (SitesRoot == null)
             {
-                WebsitesRoot = new DirectoryInfo(driveLetter + ":/websites");
+                SitesRoot = new DirectoryInfo(driveLetter + ":/sites");
             }
 
             // C:/frontends/1/1.0.0/...
@@ -54,9 +54,9 @@ namespace Carbon.Hosting
         // linux   : var/apps
         public DirectoryInfo AppsRoot { get; }
 
-        // windows : C:\\websites
-        // linux   : var/websites
-        public DirectoryInfo WebsitesRoot { get; }
+        // windows : /mnt/c/sites
+        // linux   : /var/sites
+        public DirectoryInfo SitesRoot { get; }
     }
 }
 
@@ -64,8 +64,8 @@ namespace Carbon.Hosting
 /*
 config.json
 { 
-  "appsRoot": "Z:/apps/",
-  "websitesRoot": "Z:/websites/"
+  "appsRoot": "Z:/apps",
+  "sitesRoot": "Z:/sites"
 }
 */ 
  

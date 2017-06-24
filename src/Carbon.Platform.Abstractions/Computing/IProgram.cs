@@ -17,7 +17,7 @@ namespace Carbon.Platform.Computing
 }
 
 /*
-There are three specialized types of programs: Applications, Services, and Tasks
+There are four specialized types of programs: Apps, Sites, Services, and Tasks
 
 ref: https://en.wikipedia.org/wiki/Computer_program
 */

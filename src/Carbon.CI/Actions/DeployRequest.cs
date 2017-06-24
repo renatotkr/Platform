@@ -1,35 +1,27 @@
 ﻿using System;
 using Carbon.Platform;
-
-using Carbon.Versioning;
+using Carbon.Platform.Computing;
 
 namespace Carbon.CI
 {
     public class DeployRequest
     {
-        public DeployRequest() { }
-
         public DeployRequest(
-            long programId, 
-            SemanticVersion version,
+            IProgram program,
             IEnvironment environment,
             long initiatorId)
         {
-            ProgramId      = programId;
-            ApplicationVersion = version;
-            Environment        = environment ?? throw new ArgumentNullException(nameof(environment));
-            InitiatorId        = initiatorId;
+            Program     = program     ?? throw new ArgumentNullException(nameof(program));
+            Environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            InitiatorId = initiatorId;
         }
 
-        public long ProgramId { get; set; }
-
-        public SemanticVersion ApplicationVersion { get; set; }
+        public IProgram Program { get; }
         
-        public IEnvironment Environment { get; set; }
+        public IEnvironment Environment { get; }
 
-        public long InitiatorId { get; set; }
+        public long InitiatorId { get; }
     }
-
     
     // Targets (environment, cluster, host)
 }

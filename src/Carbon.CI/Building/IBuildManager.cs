@@ -5,11 +5,11 @@ namespace Carbon.CI
 {
     public interface IBuildManager
     {
-        Task<Build> CheckStatusAsync(Build build);
-
         Task<Build> GetAsync(long id);
 
         Task<Build> GetLatestAsync(long projectId);
+
+        Task<Build> SyncAsync(Build build);
 
         Task<IReadOnlyList<Build>> ListAsync(long projectId, int take = 1000);
 

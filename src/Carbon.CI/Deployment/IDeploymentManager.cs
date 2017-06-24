@@ -4,7 +4,7 @@ using Carbon.Platform.Computing;
 
 namespace Carbon.CI
 {
-    public interface IProgramManager
+    public interface IDeploymentManager
     {
         Task<DeployResult> DeployAsync(DeployRequest request);
 

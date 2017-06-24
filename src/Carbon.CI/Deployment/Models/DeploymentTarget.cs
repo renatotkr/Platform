@@ -37,9 +37,9 @@ namespace Carbon.CI
         // ClusterId?
 
         [Member("status")]
-        public DeploymentStatus Status { get; }
+        public DeploymentStatus Status { get; set; }
         
         [Member("message")]
-        public string Message { get; }
+        public string Message { get; set; }
     }
 }

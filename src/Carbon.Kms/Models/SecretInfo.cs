@@ -16,7 +16,6 @@ namespace Carbon.Kms
             string name,
             long ownerId,
             long keyId,
-            int keyVersion,
             byte[] iv, 
             byte[] ciphertext,
             long vaultId,
@@ -42,7 +41,6 @@ namespace Carbon.Kms
             OwnerId    = ownerId;
             Name       = name;
             KeyId      = keyId;
-            KeyVersion = keyVersion;
             IV         = iv;
             Ciphertext = ciphertext;
             Expires    = expires;
@@ -63,9 +61,6 @@ namespace Carbon.Kms
         // The key that protects the secret...
         [Member("keyId")]
         public long KeyId { get; }
-
-        [Member("keyVersion"), Mutable]
-        public int KeyVersion { get; set; }
 
         [Member("iv"), FixedSize(16), Mutable]
         public byte[] IV { get; set; }

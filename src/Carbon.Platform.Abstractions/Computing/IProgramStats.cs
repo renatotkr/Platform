@@ -6,6 +6,6 @@
 
         long RequestCount { get; }
 
-        decimal ComputeUnits { get; }
+        long ComputeUnits { get; }
     }
 }

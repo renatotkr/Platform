@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+
+using Carbon.Data;
+using Carbon.Data.Expressions;
 using Carbon.Data.Protection;
 using Carbon.Json;
 using Carbon.Time;
-
-using Dapper;
 
 namespace Carbon.Kms
 {
@@ -51,11 +52,10 @@ namespace Carbon.Kms
                 kekId       : vaultId,
                 vaultId     : vaultId,
                 ciphertext  : ciphertext,
+                activated   : DateTime.UtcNow.AddMinutes(-5),
                 type        : type,
                 context     : ToJson(context)
             );
-
-            key.Activated = DateTime.UtcNow;
 
             await db.Keys.InsertAsync(key).ConfigureAwait(false);
 
@@ -80,12 +80,10 @@ namespace Carbon.Kms
                 kekId      : vaultId,
                 vaultId    : vaultId,
                 ciphertext : ciphertext,
+                activated  : DateTime.UtcNow.AddMinutes(-5),
                 type       : KeyType.Secret,
                 context    : ToJson(context)
-            )
-            {
-                Activated = DateTime.UtcNow
-            };
+            );
 
             await db.Keys.InsertAsync(key).ConfigureAwait(false);
 
@@ -96,33 +94,18 @@ namespace Carbon.Kms
 
         public async Task DeactivateAsync(long id)
         {
-            using (var connection = db.Context.GetConnection())
-            {
-                await connection.ExecuteAsync(
-                    @"UPDATE `Keys`
-                      SET `status` = @status,
-                          `activated` = NULL
-                      WHERE `id` = @id", new {
-                        id = id,
-                        status = KeyStatus.Deactivated
-                    }
-                ).ConfigureAwait(false);
-            }
+            await db.Keys.PatchAsync(id, changes: new[] {
+                Change.Remove("activated"),
+                Change.Replace("status", KeyStatus.Deactivated)
+            }).ConfigureAwait(false);
         }
 
         public async Task DeleteAsync(long id)
         {
-            // Clear out the ciphertext when deleting...
-
-            using (var connection = db.Context.GetConnection())
-            {
-                await connection.ExecuteAsync(
-                    @"UPDATE `Keys`
-                      SET `ciphertext` = NULL,
-                          `deleted` = NOW()
-                      WHERE `id` = @id", new { id }
-                ).ConfigureAwait(false);
-            }
+            await db.Keys.PatchAsync(id, changes: new[] {
+                Change.Remove("ciphertext"),
+                Change.Replace("deleted", Expression.Func("NOW"))
+            }).ConfigureAwait(false);
         }
 
         /*

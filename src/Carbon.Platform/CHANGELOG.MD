@@ -2,6 +2,7 @@
 We'll continue to make breaking API changes in minor releases until we reach 2.0.
 Services & management libraries will stabalize at v1.
 
+- Merge Websites into Programs
 - Rename Details to Properties (Image, Program, ...)
 
 1.43.0

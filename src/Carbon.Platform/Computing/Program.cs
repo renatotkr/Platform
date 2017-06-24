@@ -51,7 +51,7 @@ namespace Carbon.Platform.Computing
         public long OwnerId { get; }
 
         [Member("name")]
-        [StringLength(63)]
+        [StringLength(100)]
         public string Name { get; }
         
         // e.g. accelerator | ngnix | caddy

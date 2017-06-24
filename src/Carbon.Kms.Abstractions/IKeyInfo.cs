@@ -1,12 +1,14 @@
-﻿namespace Carbon.Kms
+﻿using Carbon.Data.Protection;
+
+namespace Carbon.Kms
 {
     public interface IKeyInfo
     {
         string Id { get; }
 
-        int Version { get; }
+        // KeyType Type { get; }
 
-        // Type
+        // KeyUsage Usages { get; }
     }
 }
 

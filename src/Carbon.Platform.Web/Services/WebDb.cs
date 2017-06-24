@@ -9,13 +9,14 @@ namespace Carbon.Platform.Web
         public WebDb(IDbContext context)
         {
             Context = context ?? throw new ArgumentNullException(nameof(context));
-            WebComponents   = new Dataset<WebComponent, long>(context);
-            WebLibraries    = new Dataset<WebLibrary, long>(context);
+
+            WebComponents = new Dataset<WebComponent, long>(context);
+            WebLibraries  = new Dataset<WebLibrary, long>(context);
         }
 
         public IDbContext Context { get; }
 
-        public Dataset<WebComponent,   long> WebComponents      { get; }
-        public Dataset<WebLibrary,     long> WebLibraries       { get; }
+        public Dataset<WebComponent , long> WebComponents  { get; }
+        public Dataset<WebLibrary   , long> WebLibraries   { get; }
     }
 }

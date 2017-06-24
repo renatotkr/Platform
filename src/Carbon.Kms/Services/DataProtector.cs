@@ -25,7 +25,6 @@ namespace Carbon.Kms
 
                 return new EncryptedData(
                     keyId      : key.Id,
-                    keyVersion : key.Version,
                     iv         : iv.Value,
                     ciphertext : ciphertext
                 );
@@ -34,7 +33,7 @@ namespace Carbon.Kms
 
         public byte[] Decrypt(EncryptedData data)
         {
-            var key = keyProvider.GetAsync(long.Parse(data.KeyId), data.KeyVersion).Result;
+            var key = keyProvider.GetAsync(long.Parse(data.KeyId)).Result;
 
             using (var aes = new AesDataProtector(key.Value, data.IV))
             {

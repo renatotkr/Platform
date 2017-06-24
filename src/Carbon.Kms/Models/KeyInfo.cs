@@ -9,26 +9,30 @@ using Carbon.Json;
 namespace Carbon.Kms
 {
     [Dataset("Keys", Schema = "Kms")]
-    [UniqueIndex("vaultId", "name", "version")]
+    [UniqueIndex("vaultId", "name")]
     public class KeyInfo : IKeyInfo
     {
         public KeyInfo() { }
 
         public KeyInfo(
-            long id,          
+            long id,
+            string name,
             byte[] ciphertext,
             JsonObject context,
-            string name,
             long kekId,
             long vaultId,
-            int version      = 1,
-            KeyType type     = KeyType.Secret,
-            KeyStatus status = KeyStatus.Active)
+            DateTime? activated = null,
+            KeyType type        = KeyType.Secret,
+            KeyStatus status    = KeyStatus.Active,
+            int providerId      = 1)
         {
             #region Preconditions
 
             if (id <= 0)
                 throw new ArgumentException("Invalid", nameof(id));
+
+            if (name == null || string.IsNullOrEmpty(name))
+                throw new ArgumentException("Required", nameof(name));
 
             if (kekId <= 0)
                 throw new ArgumentException("Invalid", nameof(kekId));
@@ -39,21 +43,18 @@ namespace Carbon.Kms
             #endregion
 
             Id         = id;
+            Name       = name;
             Ciphertext = ciphertext;
             Context    = context;
             KekId      = kekId;
-            Name       = name ?? throw new ArgumentNullException(nameof(name));
-            Version    = 1;
+            Activated  = activated;
             Status     = status;
-            ProviderId = 1;
+            ProviderId = providerId;
         }
 
         // vaultId | #
         [Member("id"), Key]
         public long Id { get; }
-
-        [Member("version"), Key]
-        public int Version { get; }
 
         [Member("vaultId"), Indexed]
         public long VaultId { get; }
@@ -85,18 +86,18 @@ namespace Carbon.Kms
         #region IResource
 
         [Member("providerId")]
-        public int ProviderId { get; set; }
+        public int ProviderId { get; }
 
         [Member("resourceId")]
         [StringLength(100)]
-        public string ResourceId { get; set; }
+        public string ResourceId { get; }
 
         #endregion
 
         #region Timestamps
 
         [Member("activated")] // may be in future...
-        public DateTime? Activated { get; set; }
+        public DateTime? Activated { get; }
 
         [Member("accessed")]
         public DateTime? Accessed { get; }

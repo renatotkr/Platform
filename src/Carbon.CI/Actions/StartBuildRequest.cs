@@ -3,8 +3,6 @@ using Carbon.Platform.Storage;
 
 namespace Carbon.CI
 {
-    // Should be startBuildRequest, but avoiding conflict with codebuild...
-
     public class StartBuildRequest
     {
         public StartBuildRequest(

@@ -27,8 +27,12 @@ namespace Carbon.Platform
 
             var date = DateTimeOffset.UtcNow;
 
+            // HexString.FromBytes(Entropy.GenerateBytes(16));
+
+            string tokenId = Guid.NewGuid().ToString().Replace("-", "");
+
             var claims = new JsonObject {
-                { ClaimNames.JwtId,      Guid.NewGuid().ToString().Replace("-", "") },
+                { ClaimNames.JwtId,      tokenId },
                 { ClaimNames.Subject,    credentials.Principal }, // e.g. aws:role/processor-ai
                 { ClaimNames.IssuedAt,   date.ToUnixTimeSeconds() },
                 { ClaimNames.Expiration, date.AddMinutes(5).ToUnixTimeSeconds() }
@@ -41,9 +45,6 @@ namespace Carbon.Platform
 
             if (credentials.VerificationParameters != null)
             {
-                // caller verification parameters?
-                // principal verification parameters?
-
                 claims.Add("vp", credentials.VerificationParameters);
             }
 
@@ -64,11 +65,11 @@ namespace Carbon.Platform
 
     public class Credentials
     {
-        // aws:role/processor-ai
-        // borg:host/1
+        // borg:host/1;aws:role/processor-ai
         public string Principal { get; set; }
 
-        // aws:host/i-1234
+        // host?
+        // hostId? 
         public string HostName { get; set; }
 
         // { url, headers, body }

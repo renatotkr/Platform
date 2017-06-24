@@ -8,7 +8,7 @@ namespace Carbon.CI
 
         DeploymentStatus Status { get; }
 
-        long InitiatorId { get; }
+        long CreatorId { get; }
 
         DateTime Created { get; }
 

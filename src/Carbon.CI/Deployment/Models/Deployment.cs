@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Carbon.Data.Annotations;
+using Carbon.Json;
 using Carbon.Platform.Computing;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Sequences;
@@ -16,7 +17,7 @@ namespace Carbon.CI
         public Deployment(
             long id,
             IProgramRelease release,
-            long initiatorId,
+            long creatorId,
             DeploymentStatus status = DeploymentStatus.Pending)
         {
             #region Preconditions
@@ -25,7 +26,7 @@ namespace Carbon.CI
 
             Validate.NotNull(release, nameof(release));
             
-            Validate.Id(initiatorId, nameof(initiatorId));
+            Validate.Id(creatorId, nameof(creatorId));
 
             #endregion
 
@@ -34,7 +35,7 @@ namespace Carbon.CI
             ReleaseId      = release.Id;
             ProgramId      = release.ProgramId;
             ProgramVersion = release.Version;
-            InitiatorId    = initiatorId;
+            CreatorId      = creatorId;
         }
 
         // environmentId | #
@@ -44,19 +45,23 @@ namespace Carbon.CI
         [Member("status")]
         public DeploymentStatus Status { get; set; }
        
-        // borg:program/1@1.234
-
         [Member("releaseId")]
         public long ReleaseId { get; }
-
+        
         [Member("programId")]
         public long ProgramId { get; }
 
         [Member("programVersion")]
         public SemanticVersion ProgramVersion { get; }
 
-        [Member("initiatorId")]
-        public long InitiatorId { get; }
+        [Member("creatorId")]
+        public long CreatorId { get; }
+
+        // packageName: 1/1.1.4.tar.gz
+
+        [Member("properties")]
+        [StringLength(1000)]
+        public JsonObject Properties { get; set; }
 
         #region IResource
 

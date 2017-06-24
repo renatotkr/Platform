@@ -13,10 +13,10 @@ namespace Carbon.Platform
     {
         private readonly HttpClient http = new HttpClient {
             DefaultRequestHeaders = {
-                { "User-Agent", "Carbon/1.5.0" },
-                { "Accept", "application/json" }
+                { "User-Agent", "Carbon/1.6.0" },
+                { "Accept",     "application/json" }
             },
-            Timeout = TimeSpan.FromSeconds(10)
+            Timeout = TimeSpan.FromSeconds(15)
         };
 
 
