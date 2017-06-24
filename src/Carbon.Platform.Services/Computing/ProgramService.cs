@@ -11,7 +11,7 @@ namespace Carbon.Platform.Computing
 {
     using static Expression;
 
-    // Programs can be Applications, Services, or Tasks
+    // Programs can be Apps, Sites, Services, or Tasks
 
     public class ProgramService : IProgramService
     {
@@ -20,8 +20,8 @@ namespace Carbon.Platform.Computing
 
         public ProgramService(PlatformDb db, IEnvironmentService envService)
         {
-            this.db         = db ?? throw new ArgumentNullException(nameof(db));
-            this.envService = envService;
+            this.db         = db         ?? throw new ArgumentNullException(nameof(db));
+            this.envService = envService ?? throw new ArgumentNullException(nameof(envService));
         }
 
         public async Task<ProgramInfo> GetAsync(long id)
@@ -116,7 +116,8 @@ namespace Carbon.Platform.Computing
 
         #region Helpers
 
-        private async Task<EnvironmentInfo> CreateEnvironmentAsync(ProgramInfo program, EnvironmentType type)
+        private async Task<EnvironmentInfo> CreateEnvironmentAsync(
+            ProgramInfo program, EnvironmentType type)
         {
             var env = GetConfiguredEnvironment(program, type);
 

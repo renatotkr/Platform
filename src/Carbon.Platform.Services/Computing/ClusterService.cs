@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using Carbon.Data.Expressions;
 using Carbon.Platform.Resources;
 
@@ -26,18 +27,16 @@ namespace Carbon.Platform.Computing
         {
             #region Preconditions
 
-            if (LocationId.Create(request.Location.Id).ZoneNumber > 0)
-                throw new ArgumentException("Must be a region. Was a zone.", nameof(request.Location));
-
-            // TODO: Add support for zone groups
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
 
             #endregion
-            
+
             var cluster = new Cluster(
                id             : db.Clusters.Sequence.Next(),
-               name           : request.Environment.Name + "/" + request.Location.Name,
-               environmentId  : request.Environment.Id,
-               location       : request.Location,
+               name           : request.Name,
+               environmentId  : request.EnvironmentId,
+               locationId     : request.LocationId,
                properties     : request.Properties,
                healthCheckId  : request.HealthCheckId,
                hostTemplateId : request.HostTemplateId
@@ -50,7 +49,8 @@ namespace Carbon.Platform.Computing
 
         public async Task<Cluster> GetAsync(long id)
         {
-            return await db.Clusters.FindAsync(id) ?? throw ResourceError.NotFound(ResourceTypes.Cluster, id);
+            return await db.Clusters.FindAsync(id).ConfigureAwait(false)
+                ?? throw ResourceError.NotFound(ResourceTypes.Cluster, id);
         }
 
         public async Task<Cluster> GetAsync(IEnvironment env, ILocation location)

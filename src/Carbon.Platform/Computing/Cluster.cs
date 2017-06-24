@@ -16,8 +16,8 @@ namespace Carbon.Platform.Computing
             long id,
             string name,
             long environmentId,
+            int locationId,
             JsonObject properties,
-            ILocation location,
             long? hostTemplateId,
             long? healthCheckId)
         {
@@ -26,16 +26,19 @@ namespace Carbon.Platform.Computing
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
 
-            if (location == null)
-                throw new ArgumentNullException(nameof(location));
+            if (name == null || string.IsNullOrEmpty(name))
+                throw new ArgumentException("Required", nameof(name));
+
+            if (locationId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(locationId));
 
             #endregion
 
             Id             = id;
-            Name           = name ?? throw new ArgumentNullException(nameof(name));
+            Name           = name;
             EnvironmentId  = environmentId;
-            Properties     = properties ?? throw new ArgumentNullException(nameof(properties));
-            LocationId     = location.Id;
+            Properties     = properties ?? new JsonObject();
+            LocationId     = locationId;
             HostTemplateId = hostTemplateId;
         }
         
@@ -49,6 +52,10 @@ namespace Carbon.Platform.Computing
         [Member("environmentId")]
         [Indexed]
         public long? EnvironmentId { get; }
+        
+        // global, regional, or zonal
+        [Member("locationId")]
+        public int LocationId { get; }
 
         [Member("hostTemplateId")]
         public long? HostTemplateId { get; }
@@ -59,10 +66,6 @@ namespace Carbon.Platform.Computing
         [Member("properties")]
         [StringLength(1000)]
         public JsonObject Properties { get; set; }
-
-        // global, regional, or zonal
-        [Member("locationId")]
-        public int LocationId { get; }
 
         #region Stats
 

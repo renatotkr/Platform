@@ -77,6 +77,23 @@ namespace Carbon.Platform.Computing
             );
         }
 
+
+        public Task<IReadOnlyList<HostInfo>> ListAsync(IEnvironment environment, ILocation location)
+        {
+            var locationId = LocationId.Create(location.Id);
+
+            var idStart = HostId.Create(locationId.WithZoneNumber(0), sequenceNumber: 0);
+            var idEnd   = HostId.Create(locationId.WithZoneNumber(byte.MaxValue), sequenceNumber: int.MaxValue);
+
+            return db.Hosts.QueryAsync(
+                Conjunction(
+                    Eq("environmentId", environment.Id), // env index...
+                    Between("id", idStart, idEnd),
+                    IsNull("terminated")
+                )
+            );
+        }
+
         public async Task<HostInfo> RegisterAsync(RegisterHostRequest request)
         {
             var regionId = LocationId.Create(request.Resource.LocationId).WithZoneNumber(0);

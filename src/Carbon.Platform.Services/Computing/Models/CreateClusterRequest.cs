@@ -1,5 +1,5 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
+
 using Carbon.Json;
 
 namespace Carbon.Platform.Computing
@@ -8,29 +8,32 @@ namespace Carbon.Platform.Computing
     {
         public CreateClusterRequest() { }
 
-        public CreateClusterRequest(string name, ILocation location)
-        {
-            Name     = name     ?? throw new ArgumentNullException(nameof(name));
-            Location = location ?? throw new ArgumentNullException(nameof(location));
-        }
-
         public CreateClusterRequest(
             IEnvironment environment, 
             ILocation location,
             JsonObject properties = null)
         {
-            Environment = environment ?? throw new ArgumentNullException(nameof(environment));
-            Location    = location    ?? throw new ArgumentNullException(nameof(location));
-            Name        = environment.Name + "/" + location.Name;
-            Properties  = properties ?? new JsonObject();
+            #region Preconditions
+
+            if (environment == null)
+                throw new ArgumentNullException(nameof(environment));
+
+            if (location == null)
+                throw new ArgumentNullException(nameof(location));
+
+            #endregion
+
+            EnvironmentId = environment.Id;
+            LocationId    = location.Id;
+            Name          = environment.Name + "/" + location.Name;
+            Properties    = properties ?? new JsonObject();
         }
 
         public string Name { get; set; }
 
-        public IEnvironment Environment { get; set; }
+        public long EnvironmentId { get; set; }
 
-        [Required]
-        public ILocation Location { get; set; }
+        public int LocationId { get; set; }
 
         public long? HostTemplateId { get; set; }
 
