@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Carbon.Json;
+using Carbon.Platform.Security;
 
 namespace Carbon.Platform
 {
@@ -96,6 +97,8 @@ namespace Carbon.Platform
             where T1 : new()
         {
             var request = new HttpRequestMessage(HttpMethod.Get, baseUri + path);
+
+            // Accept application/json
 
             Signer.SignRequest(request, credentials);
 

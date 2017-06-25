@@ -111,6 +111,10 @@ namespace Carbon.Platform.Computing
         [Member("deleted")]
         public DateTime? Deleted { get; }
 
+        [IgnoreDataMember]
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; }
+
         #endregion
     }
 }

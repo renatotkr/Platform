@@ -12,14 +12,14 @@ namespace Carbon.CI
 {
     public class DeploymentManager : IDeploymentManager
     {
-        private readonly ApiClient api;
+        private readonly HostAgentClient api;
         private readonly ILogger log;
         private readonly IHostService hostService;
         private readonly CiadDb db;
         private readonly IProgramReleaseService releaseService;
 
         public DeploymentManager(
-            ApiClient api, 
+            HostAgentClient api, 
             CiadDb db,
             IHostService hostService,
             IProgramReleaseService releaseService,
@@ -80,12 +80,12 @@ namespace Carbon.CI
         }
 
         // Activate on a single host
-        public async Task<DeployResult> DeployAsync(ProgramRelease release, IHost host)
+        public async Task<DeployResult> DeployAsync(IProgram program, IHost host)
         {
             #region Preconditions
 
-            if (release == null)
-                throw new ArgumentNullException(nameof(release));
+            if (program == null)
+                throw new ArgumentNullException(nameof(program));
 
             if (host == null)
                 throw new ArgumentNullException(nameof(host));
@@ -94,11 +94,11 @@ namespace Carbon.CI
 
             log.Info($"{host.Id} / activating");
 
-            string text;
+            DeployResult result;
 
             try
             {
-                text = await api.SendAsync(host.Address, $"/programs/{release.ProgramId}@{release.Version}/activate");
+                result = await api.DeployAsync(program, host);
             }
             catch (Exception ex)
             {
@@ -107,17 +107,17 @@ namespace Carbon.CI
                 return new DeployResult(false, ex.Message);
             }
 
-            log.Info(host.Id + " - " + text);
+            log.Info(host.Id + " - " + result.Message);
 
-            return new DeployResult(true, text);
+            return result;
         }
 
-        private async Task<DeployResult[]> ActivateAsync(ProgramRelease release, IReadOnlyList<IHost> hosts)
+        private async Task<DeployResult[]> ActivateAsync(IProgram program, IReadOnlyList<IHost> hosts)
         {
             #region Preconditions
 
-            if (release == null)
-                throw new ArgumentNullException(nameof(release));
+            if (program == null)
+                throw new ArgumentNullException(nameof(program));
 
             if (hosts == null)
                 throw new ArgumentNullException(nameof(hosts));
@@ -128,15 +128,15 @@ namespace Carbon.CI
 
             for (var i = 0; i < hosts.Count; i++)
             {
-                tasks[i] = DeployAsync(release, hosts[i]);
+                tasks[i] = DeployAsync(program, hosts[i]);
             }
 
             return await Task.WhenAll(tasks).ConfigureAwait(false);
         }
 
-        public async Task RestartAsync(IProgram app, IHost host)
+        public async Task RestartAsync(IProgram program, IHost host)
         {
-            var text = await api.SendAsync(host.Address, $"/programs/{app.Id}/restart");
+            var text = await api.RestartAsync(program, host);
 
             log.Info($"{host} : Reloading -- {text}");
         }

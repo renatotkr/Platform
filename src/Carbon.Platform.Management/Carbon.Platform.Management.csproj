@@ -19,6 +19,7 @@
     <PackageReference Include="Amazon.Ec2" Version="0.8.8" />
     <PackageReference Include="Amazon.Ssm" Version="0.5.6" />
     <PackageReference Include="Amazon.Elb" Version="0.5.3" />
+    <PackageReference Include="Carbon.Logging" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>

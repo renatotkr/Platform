@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 using Carbon.Packaging;
 using Carbon.Platform.Computing;
+using Carbon.Platform.Security;
 using Carbon.Storage;
 using Carbon.Versioning;
 
@@ -13,15 +14,18 @@ namespace Carbon.Platform
 
     public partial class PlatformClient
     {
-        private readonly string host;
         private readonly string baseUri;
-        private readonly Credentials credentials;
+        private readonly Credential credentials;
         
-        public PlatformClient(string host, Credentials credentials)
+        public PlatformClient(string baseUri, Credential credential)
         {
-            this.host        = host ?? throw new ArgumentNullException(nameof(host));
-            this.baseUri     = "https://" + host;
-            this.credentials = credentials;
+            if (!baseUri.StartsWith("https://"))
+            {
+                throw new ArgumentException("Must be https", nameof(baseUri));
+            }
+
+            this.baseUri     = baseUri.TrimEnd('/');
+            this.credentials = credential;
 
             Programs = new ProgramClient(this);
             Hosts    = new HostsClient(this);
@@ -36,8 +40,10 @@ namespace Carbon.Platform
             public ProgramClient(PlatformClient platform)
                 : base("programs", platform) { }
 
-            public Task<ProgramDetails> GetAsync(long id, SemanticVersion version) => 
-                platform.GetAsync<ProgramDetails>($"/programs/{id}@{version}");
+            public Task<ProgramDetails> GetAsync(long id, SemanticVersion version)
+            {
+                return platform.GetAsync<ProgramDetails>($"/programs/{id}@{version}");
+            }
 
             public async Task<IPackage> DownloadAsync(long id, SemanticVersion version)
             {

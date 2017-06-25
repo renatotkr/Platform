@@ -6,10 +6,12 @@ namespace Carbon.Platform
     public class ResourceProvider
     {
         // Clouds (1-255)      
-        public static readonly ResourceProvider Borg  = new ResourceProvider(1, "borg",  "Borg",  "borg.cloud");
-        public static readonly ResourceProvider Aws   = new ResourceProvider(2, "aws",   "AWS",   "amazonaws.com");
-        public static readonly ResourceProvider Gcp   = new ResourceProvider(3, "gcp",   "GCP",   "cloud.google.com");
-        public static readonly ResourceProvider Azure = new ResourceProvider(4, "azure", "Azure", "azure.microsoft.com");
+        public static readonly ResourceProvider Borg         = new ResourceProvider(1,  "borg",  "Borg",  "borg.cloud");
+        public static readonly ResourceProvider Aws          = new ResourceProvider(2,  "aws",   "AWS",   "amazonaws.com");
+        public static readonly ResourceProvider Gcp          = new ResourceProvider(3,  "gcp",   "GCP",   "cloud.google.com");
+        public static readonly ResourceProvider Azure        = new ResourceProvider(4,  "azure", "Azure", "azure.microsoft.com");
+        public static readonly ResourceProvider DigitalOcean = new ResourceProvider(10, "do",    "Digital Ocean", "digitalocean.com");
+
 
         // Banks
         public static readonly ResourceProvider Braintree = new ResourceProvider(5001, "braintree", "Braintree", "braintreepayments.com");
@@ -30,6 +32,7 @@ namespace Carbon.Platform
             { 2,    Aws },
             { 3,    Gcp },
             { 4,    Azure },
+            { 10,   DigitalOcean },
 
             { 5000,  PayPal },
             { 5001,  Braintree },
@@ -87,18 +90,19 @@ namespace Carbon.Platform
 
             switch (name.ToLower())
             {
-                case "borg"        : return Borg;
-                case "aws"         : return Aws;
-                case "gcp"         : return Gcp;
-                case "azure"       : return Azure;
+                case "borg"      : return Borg;
+                case "aws"       : return Aws;
+                case "gcp"       : return Gcp;
+                case "azure"     : return Azure;
+                case "do"        : return DigitalOcean;
 
                 // Full names
-                case "bitbucket"   : return Bitbucket;
-                case "github"      : return GitHub;
+                case "bitbucket" : return Bitbucket;
+                case "github"    : return GitHub;
 
-                case "braintree"   : return Braintree;
-                case "paypal"      : return PayPal;
-                case "stripe"      : return Stripe;
+                case "braintree" : return Braintree;
+                case "paypal"    : return PayPal;
+                case "stripe"    : return Stripe;
 
                 default: throw new Exception($"Unexpected provider '{name}'");
             } 

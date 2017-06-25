@@ -2,7 +2,9 @@
 using System.Net;
 using System.Runtime.Serialization;
 
+using Carbon.Platform.Networking;
 using Carbon.Platform.Resources;
+using Carbon.Platform.Storage;
 
 namespace Carbon.Platform.Computing
 {
@@ -13,14 +15,17 @@ namespace Carbon.Platform.Computing
 
         [DataMember(Name = "type", Order = 2)]
         public HostType Type { get; set; }
+        
+        [DataMember(Name = "status", Order = 3, EmitDefaultValue = false)]
+        public HostStatus Status { get; set; }
 
-        [DataMember(Name = "clusterId", Order = 3, EmitDefaultValue = false)]
+        [DataMember(Name = "clusterId", Order = 4, EmitDefaultValue = false)]
         public long ClusterId { get; set; }
 
-        [DataMember(Name = "addresses", Order = 4)]
+        [DataMember(Name = "addresses", Order = 5)]
         public string[] Addresses { get; set; }
 
-        [DataMember(Name = "locationId", Order = 5, EmitDefaultValue = false)]
+        [DataMember(Name = "locationId", Order = 6, EmitDefaultValue = false)]
         public int LocationId { get; set; }
 
         [DataMember(Name = "networkInterfaces", Order = 7, EmitDefaultValue = false)]

@@ -8,6 +8,6 @@ namespace Carbon.CI
     {
         Task<DeployResult> DeployAsync(DeployRequest request);
 
-        Task<DeployResult> DeployAsync(ProgramRelease release, IHost host);
+        Task<DeployResult> DeployAsync(IProgram program, IHost host);
     }
 }

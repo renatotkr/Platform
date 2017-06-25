@@ -76,6 +76,7 @@ namespace Carbon.Platform.Storage
         public DateTime? Deleted { get; }
 
         [IgnoreDataMember]
+        [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
 
         #endregion

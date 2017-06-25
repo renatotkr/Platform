@@ -10,6 +10,5 @@
     
     // /var/apps
     // /var/sites
-    // /var/services
     // /var/tasks
 }

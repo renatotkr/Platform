@@ -3,10 +3,8 @@ using System.Runtime.Serialization;
 using Carbon.Net;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform
+namespace Carbon.Platform.Networking
 {
-    using Networking;
-
     public class NetworkInterfaceDetails : INetworkInterface
     {
         [DataMember(Name = "id", Order = 1)]

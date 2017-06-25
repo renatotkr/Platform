@@ -13,23 +13,23 @@ namespace Carbon.CI
         public Build(
             long id, 
             long commitId, 
-            long initiatorId,
+            long creatorId,
             ManagedResource resource)
         {
             #region Preconditions
 
             Validate.Id(id);
             
-            Validate.Id(initiatorId, nameof(initiatorId));
+            Validate.Id(creatorId, nameof(creatorId));
 
             #endregion
 
-            Id          = id;
-            CommitId    = commitId;
-            InitiatorId = initiatorId;
-            ProviderId  = resource.ProviderId;
-            ResourceId  = resource.ResourceId;
-            LocationId  = resource.LocationId;
+            Id         = id;
+            CommitId   = commitId;
+            CreatorId  = creatorId;
+            ProviderId = resource.ProviderId;
+            ResourceId = resource.ResourceId;
+            LocationId = resource.LocationId;
         }
 
         // projectId | #
@@ -46,15 +46,12 @@ namespace Carbon.CI
         [Member("commitId")]
         public long CommitId { get; }
         
-        [Member("initiatorId")]
-        public long InitiatorId { get; }
+        [Member("creatorId")]
+        public long CreatorId { get; }
 
         [Member("message"), Mutable]
         [StringLength(200)]
         public string Message { get; set; }
-
-        [Member("duration"), Mutable]
-        public TimeSpan? Duration { get; set; }
 
         #region IResource
 

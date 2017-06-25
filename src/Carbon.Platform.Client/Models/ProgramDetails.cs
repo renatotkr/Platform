@@ -12,22 +12,20 @@ namespace Carbon.Platform.Computing
         [DataMember(Name = "name", Order = 2)]
         public string Name { get; set; }
         
-        [DataMember(Name = "version", Order = 4)]
+        [DataMember(Name = "version", Order = 3)]
         public SemanticVersion Version { get; set; }
 
-        [DataMember(Name = "type", Order = 3)]
+        [DataMember(Name = "type", Order = 4)]
         public ProgramType Type { get; set; }
 
-        [DataMember(Name = "runtime", Order = 4)]
+        [DataMember(Name = "runtime", Order = 5)]
         public string Runtime { get; set; }
+
+        [DataMember(Name = "addresses", Order = 6)]
+        public string[] Addresses { get; set; }
+
 
         // CertificateId ?
 
-        #region Details
-
-        [DataMember(Name = "addresses", Order = 11)]
-        public string[] Addresses { get; set; }
-
-        #endregion
     }
 }

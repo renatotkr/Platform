@@ -46,6 +46,10 @@ namespace Carbon.Platform.Storage
         [Member("created"), Timestamp]
         public DateTime Created { get; }
 
+        [IgnoreDataMember]
+        [Member("deleted")]
+        public DateTime? Deleted { get; }
+
         #endregion
 
         #region IResource

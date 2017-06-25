@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.CI</AssemblyName>
-    <VersionPrefix>0.10.0</VersionPrefix>
+    <VersionPrefix>0.10.3</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
 
     <!-- Package Details-->
@@ -16,12 +16,13 @@
     <ProjectReference Include="..\Carbon.CI.Abstractions\Carbon.CI.Abstractions.csproj" />
     <ProjectReference Include="..\Carbon.Kms.Abstractions\Carbon.Kms.Abstractions.csproj" />
     <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj" />
+    <ProjectReference Include="..\Carbon.Platform.Security\Carbon.Platform.Security.csproj" />
     <ProjectReference Include="..\Carbon.Platform.Services\Carbon.Platform.Services.csproj" />
     <ProjectReference Include="..\Carbon.VersionControl\Carbon.VersionControl.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Amazon.CodeBuild" Version="0.5.5" />
+    <PackageReference Include="Amazon.CodeBuild" Version="0.6.0" />
     <PackageReference Include="Carbon.Logging" Version="1.1.0" />
     <PackageReference Include="Carbon.Versioning" Version="1.2.0" />
     <PackageReference Include="protobuf-net" Version="2.2.1" />

@@ -1,9 +1,8 @@
 ﻿using System.Runtime.Serialization;
 
 using Carbon.Platform.Resources;
-using Carbon.Platform.Storage;
 
-namespace Carbon.Platform
+namespace Carbon.Platform.Storage
 {
     public class VolumeDetails : IVolume
     {
@@ -16,10 +15,10 @@ namespace Carbon.Platform
         [DataMember(Name = "locationId", Order = 3)]
         public int LocationId { get; set; }
 
-        #region IManagedResource
-
         [DataMember(Name = "resourceId", Order = 5, EmitDefaultValue = false)]
         public string ResourceId { get; set; }
+
+        #region IManagedResource
 
         int IManagedResource.ProviderId => Platform.LocationId.Create(LocationId).ProviderId;
 

@@ -51,9 +51,9 @@ namespace Carbon.CI
             var range = ScopedId.GetRange(projectId);
 
             return db.Builds.QueryAsync(
-                expression  : Expression.Between("id", range.Start, range.End),
-                order       : Order.Descending("id"),
-                take        : take
+                expression : Expression.Between("id", range.Start, range.End),
+                order      : Order.Descending("id"),
+                take       : take
             );
         }
 
@@ -70,18 +70,10 @@ namespace Carbon.CI
 
             var external = result.Builds[0];
             
-            build.Started = external.StartTime;
-            build.Status  = external.GetStatus();
-            build.Phase   = external.CurrentPhase;
-
-            if (external.BuildComplete)
-            {
-                try
-                {
-                    build.Completed = external.Phases[external.Phases.Length].EndTime.Value;
-                }
-                catch { }
-            }
+            build.Started   = external.StartTime;
+            build.Completed = external.EndTime;
+            build.Status    = external.GetStatus();
+            build.Phase     = external.CurrentPhase?.ToLower();
 
             await UpdateAsync(build);
 
@@ -100,7 +92,7 @@ namespace Carbon.CI
             var project = request.Project;
             var commit  = request.Commit;
 
-            var id = await BuildId.NextAsync(db.Context, project.Id).ConfigureAwait(false);
+            var id = await BuildId.NextAsync(db.Context, project.Id);
 
             // code build also injects
             // CODEBUILD_BUILD_ID
@@ -125,11 +117,11 @@ namespace Carbon.CI
 
             var codeBuildRegion = Locations.Get(ResourceProvider.Aws, codebuild.Region.Name);
 
-            var externalBuild = await codebuild.StartBuildAsync(startBuildRequest).ConfigureAwait(false);
+            var externalBuild = await codebuild.StartBuildAsync(startBuildRequest);
 
             var build = new Build(
                 id          : id,
-                initiatorId : request.InitiatorId,
+                creatorId : request.InitiatorId,
                 commitId    : commit.Id,
                 resource    : ManagedResource.Build(codeBuildRegion, externalBuild.Build.Id)
             )
@@ -137,14 +129,14 @@ namespace Carbon.CI
                 Status = BuildStatus.Pending
             };
 
-            await db.Builds.InsertAsync(build).ConfigureAwait(false);
+            await db.Builds.InsertAsync(build);
 
             return build;
         }
 
         public async Task UpdateAsync(Build build)
         {
-            await db.Builds.UpdateAsync(build).ConfigureAwait(false);
+            await db.Builds.UpdateAsync(build);
         }
     }
 }

@@ -86,9 +86,10 @@ namespace Carbon.Platform.Computing
         [Member("deleted")]
         public DateTime? Deleted { get; }
 
-        // Machine images are immutable 
-        // They may only be marked as deleted
-
+        [IgnoreDataMember]
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; }
+        
         #endregion
     }
 }
