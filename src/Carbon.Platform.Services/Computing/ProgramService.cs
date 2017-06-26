@@ -69,14 +69,11 @@ namespace Carbon.Platform.Computing
                 id         : id,
                 name       : request.Name,
                 slug       : request.Slug,
-                properties : request.Properties ?? new JsonObject(),
+                properties : new JsonObject(),
+                runtime    : request.Runtime,
+                addresses  : request.Addresses,
                 ownerId    : request.OwnerId
             );
-
-            if (request.Urls != null)
-            {
-                program.Properties.Add("urls", request.Urls);
-            }
 
             // Each app is given 4 environments (using the consecutive ids reserved above): 
             // Production, Staging, Intergration, and Development

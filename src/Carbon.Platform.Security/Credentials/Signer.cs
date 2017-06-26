@@ -74,7 +74,7 @@ namespace Carbon.Platform.Security
             }
 
             var token = Jwt.Jwt.Sign(
-                defaultHeader,
+                header,
                 claims,
                 credential.PrivateKey
             );

@@ -12,27 +12,30 @@ namespace Carbon.Platform.Computing
         public CreateProgramRequest(
             string name, 
             long ownerId, 
-            JsonObject properties,
-            string[] urls = null)
+            string runtime,
+            string[] addresses)
         {
             #region Preconditions
 
             Validate.Id(ownerId, nameof(ownerId));
 
+            if (name == null || string.IsNullOrEmpty(name))
+                throw new ArgumentNullException(nameof(name));
+
             #endregion
 
-            Name       = name ?? throw new ArgumentNullException(nameof(name));
-            OwnerId    = ownerId;
-            Properties = properties;
-            Urls       = urls;
+            Name      = name;
+            OwnerId   = ownerId;
+            Addresses = addresses;
+            Runtime   = runtime;
         }
 
-        [Required, StringLength(63)]
+        [Required, StringLength(100)]
         public string Name { get; set; }
         
-        public JsonObject Properties { get; set; }
+        public string Runtime { get; set; }
 
-        public string[] Urls { get; set; }
+        public string[] Addresses { get; set; }
 
         [StringLength(63)]
         public string Slug { get; set; }

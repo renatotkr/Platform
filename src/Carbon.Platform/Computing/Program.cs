@@ -20,6 +20,8 @@ namespace Carbon.Platform.Computing
             string slug, 
             long ownerId,
             JsonObject properties = null,
+            string runtime = null,
+            string[] addresses = null,
             ProgramType type = ProgramType.App
         )
         {
@@ -37,6 +39,8 @@ namespace Carbon.Platform.Computing
             Name       = name ?? throw new ArgumentNullException(nameof(name));
             Slug       = slug;
             Type       = type;
+            Runtime    = runtime;
+            Addresses  = addresses,
             Properties = properties;
             OwnerId    = ownerId;
         }
@@ -65,7 +69,7 @@ namespace Carbon.Platform.Computing
 
         [Member("addresses")]
         [StringLength(200)]
-        public string[] Addresses { get; set; }
+        public string[] Addresses { get; }
 
         [Member("version")]
         public SemanticVersion Version { get; }

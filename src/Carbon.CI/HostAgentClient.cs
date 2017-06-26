@@ -34,14 +34,14 @@ namespace Carbon.CI
         {
             var path = $"/token/debug";
 
-            return await SendAsync(host.Address, path);
+            return await SendAsync(host, path);
         }
 
         public async Task<DeployResult> DeployAsync(IProgram program, IHost host)
         {
             var path = $"/programs/{program.Id}@{program.Version}/deploy";
 
-            await SendAsync(host.Address, path);
+            await SendAsync(host, path);
 
             return new DeployResult();
         }
@@ -50,7 +50,7 @@ namespace Carbon.CI
         {
             var path = $"/programs/{program.Id}@{program.Version}/activate";
 
-            await SendAsync(host.Address, path);
+            await SendAsync(host, path);
 
             return new DeployResult();
         }
@@ -59,14 +59,14 @@ namespace Carbon.CI
         {
             var path = $"/programs/{program.Id}@{program.Version}/restart";
 
-            await SendAsync(host.Address, path);
+            await SendAsync(host, path);
 
             return true;
         }
 
         #region Internal
 
-        private async Task<string> SendAsync(IPAddress host, string path)
+        private async Task<string> SendAsync(IHost host, string path)
         {
             #region Preconditions
 
@@ -83,11 +83,13 @@ namespace Carbon.CI
                 path = path.Trim('/');
             }
 
-            var url = $"http://{host}:{port}/{path}";
+            var url = $"http://{host.Address}:{port}/{path}";
 
             var request = new HttpRequestMessage(HttpMethod.Post,
                 requestUri: url
             );
+
+            request.Headers.Host = host.Id + ".borg.host";
 
             Signer.SignRequest(request, credential);
 
