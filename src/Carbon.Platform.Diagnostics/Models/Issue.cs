@@ -2,7 +2,6 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
-using Carbon.Data.Sequences;
 using Carbon.Json;
 
 namespace Carbon.Platform.Diagnostics
@@ -13,24 +12,28 @@ namespace Carbon.Platform.Diagnostics
         public Issue() { }
 
         public Issue(
-            BigId id, 
+            long id, 
             IssueType type = IssueType.Unknown, 
-            string description = null)
+            int? locationId = null,
+            string description = null,
+            string externalId = null)
         {
             Id          = id;
             Type        = type;
+            LocationId  = locationId;
             Description = description;
+            ExternalId  = externalId;
         }
 
-        // environmentId | timestamp/ms | #
+        // environmentId | #
         [Member("id"), Key]
-        public BigId Id { get; }
+        public long Id { get; }
 
         [Member("type")]
-        public IssueType Type { get; set; }
+        public IssueType Type { get; }
 
         [Member("locationId")]
-        public int? LocationId { get; set; }
+        public int? LocationId { get; }
 
         [Member("description")]
         [StringLength(1000)]
@@ -40,20 +43,16 @@ namespace Carbon.Platform.Diagnostics
         [StringLength(1000)]
         public JsonObject Details { get; set; }
 
-
-        #region IResource
-
-        // i.e. GitHub issue...
-        [Member("providerId")]
-        public long ProviderId { get; set; }
-
+        // e.g. github:issue/1
         [Member("externalId")]
-        [StringLength(50)]
-        public string ExternalId { get; set; }
-
-        #endregion
+        [StringLength(100)]
+        public string ExternalId { get; }
 
         #region Timestamps
+
+        [IgnoreDataMember]
+        [Member("created"), Timestamp]
+        public DateTime Created { get; }
 
         [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]

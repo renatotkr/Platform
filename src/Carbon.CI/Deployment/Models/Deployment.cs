@@ -8,7 +8,7 @@ using Carbon.Platform.Sequences;
 using Carbon.Versioning;
 
 namespace Carbon.CI
-{
+{ 
     [Dataset("Deployments", Schema = "Ciad")]
     public class Deployment : IDeployment, IResource
     {
@@ -57,6 +57,8 @@ namespace Carbon.CI
         [Member("creatorId")]
         public long CreatorId { get; }
 
+        // 1@1.1.4
+
         // packageName: 1/1.1.4.tar.gz
 
         [Member("properties")]
@@ -82,3 +84,5 @@ namespace Carbon.CI
         public long EnvironmentId => ScopedId.GetScope(Id);
     }
 }
+
+// v2: all programs should be bundled into immutable images

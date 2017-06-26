@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Carbon.Json;
 
 namespace Carbon.Platform.Diagnostics
@@ -7,7 +8,9 @@ namespace Carbon.Platform.Diagnostics
     {
         public long EnvironmentId { get; set; }
 
-        public long ProgramId { get; set; }
+        public long ProgramId { get; set; } // version?
+
+        public long? IssueId { get; set; }
 
         public string Type { get; set; }
 

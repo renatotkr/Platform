@@ -182,6 +182,7 @@ namespace Carbon.CI
             deployment.Completed = DateTime.UtcNow;
 
             // TODO: complete this in a transaction
+            // todo: patch all the host versions...
 
             await db.DeploymentTargets.InsertAsync(targets);
 

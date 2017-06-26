@@ -42,6 +42,8 @@ namespace Carbon.Platform.Computing
             HostTemplateId = hostTemplateId;
         }
         
+        // environmentId | #
+        // parition on environment...
         [Member("id"), Key("clusterId")]
         public long Id { get; }
 
@@ -51,7 +53,7 @@ namespace Carbon.Platform.Computing
 
         [Member("environmentId")]
         [Indexed]
-        public long? EnvironmentId { get; }
+        public long EnvironmentId { get; }
         
         // global, regional, or zonal
         [Member("locationId")]
@@ -66,16 +68,6 @@ namespace Carbon.Platform.Computing
         [Member("properties")]
         [StringLength(1000)]
         public JsonObject Properties { get; set; }
-
-        #region Stats
-
-        // The number of resources added to the cluster
-        // e.g. buckets, encryptionKeys, loadBalancers, etc
-
-        [Member("resourceCount")]
-        public int ResourceCount { get; }
-
-        #endregion
 
         #region IResource
 

@@ -19,10 +19,12 @@ namespace Carbon.Platform.Computing
             string name,
             string slug, 
             long ownerId,
+            SemanticVersion version,
             JsonObject properties = null,
             string runtime = null,
             string[] addresses = null,
-            ProgramType type = ProgramType.App
+            ProgramType type = ProgramType.App,
+            long? parentId = null
         )
         {
             #region Preconditions
@@ -40,12 +42,14 @@ namespace Carbon.Platform.Computing
             Slug       = slug;
             Type       = type;
             Runtime    = runtime;
-            Addresses  = addresses,
+            Addresses  = addresses;
             Properties = properties;
             OwnerId    = ownerId;
+            Version    = version;
+            ParentId   = parentId;
         }
-
-        [Member("id"), Key(sequenceName: "programId", increment: 4)]
+        
+        [Member("id"), Key(sequenceName: "programId")]
         public long Id { get; }
 
         [Member("type")]
@@ -73,6 +77,10 @@ namespace Carbon.Platform.Computing
 
         [Member("version")]
         public SemanticVersion Version { get; }
+
+        // a site is "run" by an application
+        [Member("parentId")]
+        public long? ParentId { get; }
 
         [Member("properties")]
         [StringLength(1000)]

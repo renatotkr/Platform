@@ -44,14 +44,16 @@ namespace Carbon.Platform.Computing.Tests
         private HostInfo GetWithAddresses(params string[] addresses)
         {
             return new HostInfo(
-               1,
-               addresses,
-               1,
-               1,
-               1,
-               1,
-               1,
-               resource : default(ManagedResource)
+               id            : 1,
+               addresses     : addresses,
+               environmentId : 1,
+               clusterId     : 1,
+               machineTypeId : 1,
+               ownerId       : 1,
+               imageId       : 1,
+               locationId    : 1,
+               programId     : 1,
+               resource      : default(ManagedResource)
            );
         }
     }

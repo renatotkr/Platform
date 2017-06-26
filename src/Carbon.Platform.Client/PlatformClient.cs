@@ -67,12 +67,12 @@ namespace Carbon.Platform
 
             // hosts/aws:i-0234123
 
-            public Task<HostDetails> RegisterAsync(HostDetails details)
+            public Task<HostDetails> RegisterAsync(HostDetails host)
             {
-                var provider = ResourceProvider.Get(details.Resource.Value.ProviderId);
+                var provider = ResourceProvider.Get(host.Resource.ProviderId);
 
                 return platform.PostAsync<HostDetails>(
-                    $"/hosts/{provider.Code}:{details.Resource.Value.ResourceId}", details);
+                    $"/hosts/{provider.Code}:{host.Resource.ResourceId}", host);
             }
 
             public Task<HostDetails> GetAsync(ManagedResource resource)

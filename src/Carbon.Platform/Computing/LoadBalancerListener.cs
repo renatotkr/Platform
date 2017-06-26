@@ -50,7 +50,6 @@ namespace Carbon.Platform.Computing
 
         #region IResource
 
-        // aws
         [Member("providerId")]
         public int ProviderId { get; }
         

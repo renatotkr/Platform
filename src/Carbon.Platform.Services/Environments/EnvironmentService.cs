@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.Services
+namespace Carbon.Platform.Environments
 {
     public class EnvironmentService : IEnvironmentService
     {
@@ -20,13 +20,24 @@ namespace Carbon.Platform.Services
                 ?? throw ResourceError.NotFound(ResourceTypes.Environment, id);
         }
 
-        public Task<EnvironmentInfo> GetAsync(long programId, EnvironmentType type)
+        public async Task<EnvironmentInfo> CreateAsync(CreateEnvironmentRequest request)
         {
-            // We can lookup directly by id...
+            #region Preconditions
 
-            long id = programId + (((int)type) - 1);
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
 
-            return GetAsync(id);
+            #endregion
+
+            var environment = new EnvironmentInfo(
+                id      : db.Environments.Sequence.Next(),
+                name    : request.Name,
+                ownerId : request.OwnerId
+            );
+            
+            await db.Environments.InsertAsync(environment);
+
+            return environment;
         }
     }
 }

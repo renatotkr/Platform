@@ -45,6 +45,7 @@ namespace Carbon.Platform.Computing
         public string Name { get; }
 
         [Member("address")]
+        [StringLength(100)]
         public string Address { get; }
 
         [Member("networkId")]

@@ -23,9 +23,5 @@ namespace Carbon.Platform.Computing
 
         [DataMember(Name = "addresses", Order = 6)]
         public string[] Addresses { get; set; }
-
-
-        // CertificateId ?
-
     }
 }

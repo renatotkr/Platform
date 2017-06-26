@@ -5,7 +5,7 @@ using Carbon.Data.Annotations;
 using Carbon.Json;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform
+namespace Carbon.Platform.Environments
 {
     [Dataset("Environments")]
     public class EnvironmentInfo : IEnvironment
@@ -23,6 +23,9 @@ namespace Carbon.Platform
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
 
+            if (name == null || string.IsNullOrEmpty(name))
+                throw new ArgumentException("Required", nameof(name));
+
             if (ownerId <= 0)
                 throw new ArgumentException("Must be > 0", nameof(ownerId));
 
@@ -34,7 +37,7 @@ namespace Carbon.Platform
             OwnerId = ownerId;
         }
 
-        [Member("id"), Key]
+        [Member("id"), Key("environmentId")]
         public long Id { get; }
 
         [Member("name")]
@@ -51,21 +54,6 @@ namespace Carbon.Platform
         [Member("properties")]
         [StringLength(1000)]
         public JsonObject Properties { get; set; }
-
-        public EnvironmentType Type
-        {
-            get
-            {
-                switch (Id % 4)
-                {
-                    case 0  : return EnvironmentType.Development;
-                    case 1  : return EnvironmentType.Production;
-                    case 2  : return EnvironmentType.Staging;
-                    case 3  : return EnvironmentType.Intergration;
-                    default : throw new Exception("unknown");
-                }
-            }
-        }
         
         #region IResource
 
@@ -75,11 +63,7 @@ namespace Carbon.Platform
 
         #region Stats
 
-        // the number of deployments made to the environment
-        [Member("deploymentCount")]
-        public int DeploymentCount { get; }
-
-        // the number of commands issued against the environment
+        // the number of commands (including deployments) issued against the environment
         [Member("commandCount")]
         public int CommandCount { get; }
 

@@ -8,7 +8,7 @@ using Carbon.Platform.Storage;
 
 namespace Carbon.Platform.Computing
 {
-    public class HostDetails : IHost, IResource
+    public class HostDetails : IHost, IManagedResource
     {
         [DataMember(Name = "id", Order = 1)]
         public long Id { get; set; }
@@ -25,20 +25,26 @@ namespace Carbon.Platform.Computing
         [DataMember(Name = "addresses", Order = 5)]
         public string[] Addresses { get; set; }
 
-        [DataMember(Name = "locationId", Order = 6, EmitDefaultValue = false)]
+        [DataMember(Name = "image", Order = 6, EmitDefaultValue = false)]
+        public ImageDetails Image { get; set; }
+
+        [DataMember(Name = "locationId", Order = 7, EmitDefaultValue = false)]
         public int LocationId { get; set; }
 
-        [DataMember(Name = "networkInterfaces", Order = 7, EmitDefaultValue = false)]
+        [DataMember(Name = "networkInterfaces", Order = 8, EmitDefaultValue = false)]
         public NetworkInterfaceDetails[] NetworkInterfaces { get; set; }
 
-        [DataMember(Name = "volumes", Order = 8, EmitDefaultValue = false)]
+        [DataMember(Name = "volumes", Order = 9, EmitDefaultValue = false)]
         public VolumeDetails[] Volumes { get; set; }
 
-        [DataMember(Name = "machineTypeId", Order = 9, EmitDefaultValue = false)]
+        [DataMember(Name = "machineTypeId", Order = 10, EmitDefaultValue = false)]
         public long MachineTypeId { get; set; }
 
-        [DataMember(Name = "publicKey", EmitDefaultValue = false, Order = 10)]
+        [DataMember(Name = "publicKey", EmitDefaultValue = false, Order = 11)]
         public byte[] PublicKey { get; set; }
+
+        [DataMember(Name = "resource", Order = 20, EmitDefaultValue = false)]
+        public ManagedResource Resource { get; set; }
 
         #region Timestamps
 
@@ -52,8 +58,9 @@ namespace Carbon.Platform.Computing
 
         #region IResource
 
-        [DataMember(Name = "resource", Order = 20, EmitDefaultValue = false)]
-        public ManagedResource? Resource { get; set; }
+        int IManagedResource.ProviderId    => Resource.ProviderId;
+
+        string IManagedResource.ResourceId => Resource.ResourceId;
 
         ResourceType IResource.ResourceType => ResourceTypes.Host;
 

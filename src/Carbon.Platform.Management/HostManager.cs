@@ -63,14 +63,9 @@ namespace Carbon.Platform.Management
 
             var host = await hostService.FindAsync(provider, request.Resource.ResourceId).ConfigureAwait(false);
 
-            ICluster cluster = null;
-
-            if (request.ClusterId != 0)
-            {
-                cluster = await clusterService.GetAsync(request.ClusterId);
-
-                // Ensure the cluster exists
-            }
+            ICluster cluster = request.ClusterId != 0
+                ? await clusterService.GetAsync(request.ClusterId)
+                : null;
 
             if (request.NetworkId != 0)
             {
@@ -86,7 +81,7 @@ namespace Carbon.Platform.Management
                 // Set the public key, if it hasn't already been set
                 if (host.PublicKey == null && request.PublicKey != null)
                 {
-                    // TODO: Verify the public key
+                    // TODO: Verify the public key w/ Carbon.Cryptography
 
                     await db.Hosts.PatchAsync(host.Id, changes: new[] {
                         Change.Replace("publicKey", request.PublicKey)
@@ -100,67 +95,54 @@ namespace Carbon.Platform.Management
 
             return host;
         }
+        
 
-        public async Task<IHost[]> LaunchAsync(
-            IEnvironment env,
-            ILocation zone,
-            int launchCount = 1)
-        {
-            #region Preconditions
-
-            if (env == null)
-                throw new ArgumentNullException(nameof(env));
-
-            if (zone == null)
-                throw new ArgumentNullException(nameof(zone));
-
-            #endregion
-
-            var locationId = LocationId.Create(zone.Id);
-
-            var region = Locations.Get(locationId.WithZoneNumber(0));
-
-            var cluster = await clusterService.GetAsync(env, region).ConfigureAwait(false);
-
-            // TODO:
-            // if the location is a region, select the avaiability zone with the least hosts
-
-            if (cluster.HostTemplateId == null)
-            {
-                throw new Exception("The cluster does not have a host template");
-            }
-
-            var template = await db.HostTemplates.FindAsync(cluster.HostTemplateId.Value);
-
-            return await LaunchAsync(cluster, zone, template, launchCount).ConfigureAwait(false);
-        }
-
-        public async Task<IHost[]> LaunchAsync(
-            Cluster cluster, 
-            ILocation zone, 
-            HostTemplate template, 
-            int launchCount = 1)
+        public async Task<IHost[]> LaunchAsync(Cluster cluster, int launchCount = 1)
         {
             #region Preconditions
 
             if (cluster == null)
                 throw new ArgumentNullException(nameof(cluster));
 
-            if (zone == null)
-                throw new ArgumentNullException(nameof(zone));
+            #endregion
 
-            if (template == null)
-                throw new ArgumentNullException(nameof(template));
+            var zoneId = LocationId.Create(cluster.LocationId).WithZoneNumber(1);
+
+            var zone = Locations.Get(zoneId);
+
+            // TODO:
+            // if the location is a region, select the avaiability zone with the least hosts
+
+            if (cluster.HostTemplateId == null)
+            {
+                throw new Exception("The cluster does not specify a template");
+            }
+
+            var template = await db.HostTemplates.FindAsync(cluster.HostTemplateId.Value);
+
+            return await LaunchAsync(new LaunchHostRequest(cluster, zone, template, launchCount)).ConfigureAwait(false);
+        }
+
+        public async Task<IHost[]> LaunchAsync(LaunchHostRequest launchRequest)
+        {
+            #region Preconditions
+
+            if (launchRequest == null)
+                throw new ArgumentNullException(nameof(launchRequest));
 
             #endregion
 
-            var zoneId = LocationId.Create(zone.Id);
+            var zoneId = LocationId.Create(launchRequest.Location.Id);
 
             if (zoneId.ZoneNumber == 0)
             {
-                throw new Exception("Must launch within in availability zone. Was a region:" + zone.Name);
+                throw new Exception("Must launch within in availability zone. Was a region:" + launchRequest.Location.Name);
             }
 
+            var cluster  = launchRequest.Cluster;
+            var zone     = launchRequest.Location;
+            var template = launchRequest.Template;
+            
             var region = Locations.Get(zoneId.WithZoneNumber(0));
 
             var image = await images.GetAsync(template.ImageId).ConfigureAwait(false);
@@ -171,22 +153,24 @@ namespace Carbon.Platform.Management
                 ClientToken  = Guid.NewGuid().ToString(),
                 InstanceType = machineType.Name,
                 ImageId      = image.ResourceId,
-                MinCount     = launchCount,
-                MaxCount     = launchCount,
+                MinCount     = launchRequest.LaunchCount,
+                MaxCount     = launchRequest.LaunchCount,
                 Placement    = new Placement(availabilityZone: zone.Name),
                 TagSpecifications = new[] {
                     new TagSpecification(
-                        resourceType: "instance",
-                        tags: new[] { new Amazon.Ec2.Tag("envId", cluster.EnvironmentId.Value.ToString()) }
+                        resourceType : "instance",
+                        tags         : new[] { new Amazon.Ec2.Tag("envId", cluster.EnvironmentId.ToString()) }
                     )
                 }
             };
 
-            if (template.StartupScript != null)
-            {
-                // Open Question: Can we use UTF8?
+            var startupScript = launchRequest.StartupScript ?? template.StartupScript;
 
-                request.UserData = Convert.ToBase64String(Encoding.ASCII.GetBytes(template.StartupScript));
+            if (startupScript != null)
+            {
+                // Can we use UTF8?
+
+                request.UserData = Convert.ToBase64String(Encoding.ASCII.GetBytes(startupScript));
             }
 
             #region AWS Specific Properties
@@ -425,6 +409,8 @@ namespace Carbon.Platform.Management
                 cluster     : cluster,
                 image       : image,
                 machineType : machineType,
+                program     : null,
+                location    : location,
                 status      : instance.InstanceState.ToStatus(),
                 ownerId     : 1,
                 resource    : ManagedResource.Host(location, instance.InstanceId)                

@@ -29,14 +29,14 @@ namespace Carbon.Platform.Security
         // https://a.cloud   | provider:host/1
         public string Audience { get; set; }
 
-        // used to verify the subject with it's authority
-        // { url, headers, body }
-        public JsonObject VerificationParameters { get; set; }
-
         public string KeyId { get; set; }
 
         // Used to sign the reqest
         // the host & platform both have a private & public key
         public RSA PrivateKey { get; set; }
+
+        // used to verify the subject with it's authority
+        // { url, headers, body }
+        public JsonObject VerificationParameters { get; set; }
     }
 }

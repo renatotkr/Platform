@@ -12,15 +12,16 @@ namespace Carbon.Platform.Storage
         [DataMember(Name = "size", Order = 2)]
         public long Size { get; set; }
 
-        [DataMember(Name = "locationId", Order = 3)]
-        public int LocationId { get; set; }
-
-        [DataMember(Name = "resourceId", Order = 5, EmitDefaultValue = false)]
-        public string ResourceId { get; set; }
+        [DataMember(Name = "resource", Order = 4)]
+        public ManagedResource Resource { get; set; }
 
         #region IManagedResource
 
-        int IManagedResource.ProviderId => Platform.LocationId.Create(LocationId).ProviderId;
+        string IManagedResource.ResourceId => Resource.ResourceId;
+
+        int IManagedResource.ProviderId => Resource.ProviderId;
+
+        int IManagedResource.LocationId => Resource.LocationId;
 
         ResourceType IResource.ResourceType => ResourceTypes.Volume;
 

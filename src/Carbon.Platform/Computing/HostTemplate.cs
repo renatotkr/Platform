@@ -57,6 +57,8 @@ namespace Carbon.Platform.Computing
         [Member("machineTypeId")]
         public long MachineTypeId { get; }
 
+        // Program + Configuration
+
         [Member("startupScript")]
         [StringLength(2000)]
         public string StartupScript { get; set; }

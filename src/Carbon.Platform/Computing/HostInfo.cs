@@ -16,15 +16,17 @@ namespace Carbon.Platform.Computing
         public HostInfo() { }
 
         public HostInfo(
-            long id, 
+            long id,
+            int locationId,
             string[] addresses,
-            long clusterId,
             long environmentId,
+            long clusterId,
             long imageId,
+            long? programId,
             long machineTypeId,
             long ownerId,
             ManagedResource resource,
-            long networkId    = 0,
+            long networkId = 0,
             HostType type     = HostType.Virtual,
             HostStatus status = HostStatus.Running)
         {
@@ -34,7 +36,9 @@ namespace Carbon.Platform.Computing
             Addresses     = addresses;
             ClusterId     = clusterId;
             EnvironmentId = environmentId;
+            LocationId    = locationId;
             ImageId       = imageId;
+            ProgramId     = programId;
             MachineTypeId = machineTypeId;
             ProviderId    = resource.ProviderId;
             ResourceId    = resource.ResourceId;
@@ -43,26 +47,34 @@ namespace Carbon.Platform.Computing
         }
 
         // locationId | #
+        // v2: partition on locationId
         [Member("id"), Key]
         public long Id { get; }
 
         [Member("type")] // Physical, Virtual, Container
         public HostType Type { get; }
-       
-        [Member("addresses")]
-        public string[] Addresses { get; }
-
-        [Member("clusterId"), Indexed]
-        public long ClusterId { get; }
+      
+        [Member("locationId")]
+        public int LocationId { get; }
 
         [Member("environmentId"), Indexed]
         public long EnvironmentId { get; }
-        
+
+        // could be a subset of environment?
+        [Member("clusterId"), Indexed]
+        public long ClusterId { get; }
+
+        [Member("imageId")]
+        public long ImageId { get; }
+
+        [Member("programId"), Indexed]
+        public long? ProgramId { get; }
+
+        [Member("addresses")]
+        public string[] Addresses { get; }
+
         [Member("networkId")]
         public long NetworkId { get; }
-
-        [Member("parentId"), Indexed]
-        public long? ParentId { get; }
 
         // RSA Public Key (2048 bits -- ASN.1 encoded)
         [Member("publicKey"), MaxLength(1200)]
@@ -70,16 +82,15 @@ namespace Carbon.Platform.Computing
 
         [Member("ownerId")]
         public long OwnerId { get; }
+        
+        [Member("programVersion"), Optional]
+        public string ProgramVersion { get; }
 
-        #region Image / Template
-
-        [Member("imageId")]
-        public long ImageId { get; }
+        [Member("parentId"), Indexed]
+        public long? ParentId { get; }
 
         [Member("machineTypeId")]
         public long MachineTypeId { get; }
-
-        #endregion
             
         #region Health
 
@@ -101,8 +112,6 @@ namespace Carbon.Platform.Computing
         [Member("resourceId")]
         [Ascii, StringLength(100)]
         public string ResourceId { get; }
-
-        public int LocationId => HostId.Get(Id).LocationId;
 
         ResourceType IResource.ResourceType => ResourceTypes.Host;
 
@@ -183,3 +192,6 @@ namespace Carbon.Platform.Computing
         #endregion
     }
 }
+
+
+// host|os|runtime|program

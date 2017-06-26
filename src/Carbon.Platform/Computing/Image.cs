@@ -28,14 +28,14 @@ namespace Carbon.Platform.Computing
 
             #endregion
 
-            Id          = id;
-            Type        = type;
-            Name        = name ?? throw new ArgumentNullException(nameof(name));
-            OwnerId     = ownerId;
-            Size        = size;
-            ResourceId  = resource.ResourceId;
-            ProviderId  = resource.ProviderId;
-            LocationId  = resource.LocationId;
+            Id         = id;
+            Type       = type;
+            Name       = name ?? throw new ArgumentNullException(nameof(name));
+            OwnerId    = ownerId;
+            Size       = size;
+            ResourceId = resource.ResourceId;
+            ProviderId = resource.ProviderId;
+            LocationId = resource.LocationId;
         }
 
         [Member("id"), Key(sequenceName: "imageId")]
@@ -43,9 +43,9 @@ namespace Carbon.Platform.Computing
         
         [Member("type")]
         public ImageType Type { get; }
-        
+
         [Member("name")]
-        [StringLength(3, 128)]
+        [StringLength(150)]
         public string Name { get; }
 
         [Member("size")]
@@ -60,6 +60,7 @@ namespace Carbon.Platform.Computing
 
         #region IResource
 
+        // docker:hub/ | aws |
         [IgnoreDataMember]
         [Member("providerId")]
         public int ProviderId { get; }

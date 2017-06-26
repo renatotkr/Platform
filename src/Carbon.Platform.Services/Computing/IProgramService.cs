@@ -12,9 +12,5 @@ namespace Carbon.Platform.Computing
         Task<IReadOnlyList<ProgramInfo>> ListAsync(long ownerId);
 
         Task<ProgramInfo> CreateAsync(CreateProgramRequest request);
-
-        Task<EnvironmentInfo> GetEnvironmentAsync(long programId, EnvironmentType type);
-
-        Task<IReadOnlyList<EnvironmentInfo>> GetEnvironmentsAsync(IProgram program);
     }
 }

@@ -104,10 +104,12 @@ namespace Carbon.Platform.Computing
                 status        : request.Status,
                 addresses     : request.Addresses,
                 clusterId     : request.ClusterId,
+                imageId       : request.ImageId,
+                programId     : request.ProgramId,
+                locationId    : request.LocationId,
                 resource      : request.Resource,
                 environmentId : request.EnvironmentId,
                 machineTypeId : request.MachineTypeId,
-                imageId       : request.ImageId,
                 networkId     : request.NetworkId,
                 ownerId       : request.OwnerId
             )

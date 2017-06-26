@@ -2,6 +2,7 @@
 
 namespace Carbon.Platform
 {
+    /*
     public enum EnvironmentType : byte
     {
         Production   = 1,
@@ -25,4 +26,5 @@ namespace Carbon.Platform
             throw new Exception("unexcepted type:" + type.ToString());
         }
     }
+    */
 }

@@ -11,8 +11,10 @@ namespace Carbon.Platform.Computing
 
         public RegisterHostRequest(
             string[] addresses,
-            Cluster cluster,
+            ILocation location,
+            ICluster cluster,
             IImage image,
+            IProgram program,
             IMachineType machineType,
             long ownerId,
             ManagedResource resource,
@@ -20,14 +22,16 @@ namespace Carbon.Platform.Computing
             HostStatus status = HostStatus.Pending,
             HostType type = HostType.Virtual)
         {
+            LocationId    = location.Id;
             Addresses     = addresses;
-            EnvironmentId = cluster.EnvironmentId.Value;
+            EnvironmentId = cluster.EnvironmentId;
+            ClusterId     = cluster.Id;
+            ProgramId     = program?.Id;
             ImageId       = image.Id;
             MachineTypeId = machineType.Id;
             NetworkId     = networkId;
             Status        = status;
             Resource      = resource;
-            ClusterId     = cluster.Id;
             Type          = type;
             OwnerId       = ownerId;
         }
@@ -43,6 +47,8 @@ namespace Carbon.Platform.Computing
 
         public long EnvironmentId { get; set; }
 
+        public int LocationId { get; set; }
+
         public long MachineTypeId { get; set; }
 
         public long ImageId { get; set; }
@@ -50,6 +56,8 @@ namespace Carbon.Platform.Computing
         public long NetworkId { get; set; }
 
         public long ClusterId { get; set; }
+
+        public long? ProgramId { get; set; }
 
         public byte[] PublicKey { get; set; }
 

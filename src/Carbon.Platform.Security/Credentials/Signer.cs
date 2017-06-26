@@ -28,6 +28,9 @@ namespace Carbon.Platform.Security
             if (credential.Subject == null)
                 throw new ArgumentException("Subject is required", nameof(credential));
 
+            if (credential.Audience == null)
+                throw new ArgumentException("Audience is required", nameof(credential));
+
             if (credential.Issuer == null)
                 throw new ArgumentException("Issuer is required", nameof(credential));
 
@@ -42,17 +45,13 @@ namespace Carbon.Platform.Security
             var claims = new JsonObject {
                 { ClaimNames.JwtId,      tokenId },
                 { ClaimNames.Issuer,     credential.Issuer },
+                { ClaimNames.Audience,   credential.Audience },
                 { ClaimNames.Subject,    credential.Subject }, // e.g. aws:role/processor-ai
                 { ClaimNames.IssuedAt,   date.ToUnixTimeSeconds() },
                 { ClaimNames.Expiration, date.AddMinutes(5).ToUnixTimeSeconds() }
             };
 
-            if (credential.Audience != null)
-            {
-                claims.Add(ClaimNames.Audience, credential.Audience);
-            }
-            
-            // used to verify the subject against a trusted third party (i.e. aws:sts)
+            // used to verify the subject claim against a trusted third party (i.e. aws:sts)
             if (credential.VerificationParameters != null)
             {
                 claims.Add("vp", credential.VerificationParameters);

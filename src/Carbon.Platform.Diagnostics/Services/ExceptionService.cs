@@ -19,6 +19,11 @@ namespace Carbon.Platform.Diagnostics
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
+        public Task<ExceptionInfo> FindAsync(BigId id)
+        {
+            return db.Exceptions.FindAsync(id);
+        }
+
         public async Task<IReadOnlyList<ExceptionInfo>> ListAsync(long environmentId)
         {
             var start = BigId.Create(environmentId, DateTime.UtcNow.AddYears(-10), 0);

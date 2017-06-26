@@ -4,6 +4,7 @@ namespace Carbon.Platform.Computing
 {
     public interface ICluster : IResource
     {
+        long EnvironmentId { get; }
     }
 }
 
