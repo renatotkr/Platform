@@ -17,7 +17,7 @@ namespace Carbon.Platform.Computing
 
         public ProgramService(PlatformDb db)
         {
-            this.db         = db         ?? throw new ArgumentNullException(nameof(db));
+            this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
         public async Task<ProgramInfo> GetAsync(long id)
@@ -65,7 +65,8 @@ namespace Carbon.Platform.Computing
                 properties : new JsonObject(),
                 runtime    : request.Runtime,
                 addresses  : request.Addresses,
-                ownerId    : request.OwnerId
+                ownerId    : request.OwnerId,
+                parentId   : request.ParentId
             );
             
             await db.Programs.InsertAsync(program).ConfigureAwait(false);

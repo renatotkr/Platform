@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Logging;
-using Carbon.Platform;
 using Carbon.Platform.Computing;
+using Carbon.Platform.Environments;
 
 namespace Carbon.CI
 {

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Carbon.Platform.Environments;
+
 namespace Carbon.Platform.Computing
 {
     public interface IClusterService

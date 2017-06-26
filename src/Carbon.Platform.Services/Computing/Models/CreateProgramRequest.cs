@@ -13,7 +13,8 @@ namespace Carbon.Platform.Computing
             string name, 
             long ownerId, 
             string runtime,
-            string[] addresses)
+            string[] addresses,
+            long? parentId = null)
         {
             #region Preconditions
 
@@ -28,6 +29,7 @@ namespace Carbon.Platform.Computing
             OwnerId   = ownerId;
             Addresses = addresses;
             Runtime   = runtime;
+            ParentId  = parentId;
         }
 
         [Required, StringLength(100)]
@@ -39,8 +41,12 @@ namespace Carbon.Platform.Computing
 
         public string[] Addresses { get; set; }
 
+        // ConfigurationTemplate
+
         [StringLength(63)]
         public string Slug { get; set; }
+        
+        public long? ParentId { get; set; }
         
         [Range(1, 2_199_023_255_552)]
         public long OwnerId { get; set; }

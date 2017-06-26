@@ -8,6 +8,7 @@ using Carbon.Platform.Resources;
 namespace Carbon.Platform.Environments
 {
     [Dataset("Environments")]
+    [UniqueIndex("ownerId", "name")]
     public class EnvironmentInfo : IEnvironment
     {
         public EnvironmentInfo() { }
@@ -40,16 +41,16 @@ namespace Carbon.Platform.Environments
         [Member("id"), Key("environmentId")]
         public long Id { get; }
 
+        [Member("ownerId")] // may change ownership...
+        public long OwnerId { get; }
+
         [Member("name")]
-        [StringLength(63)]
+        [StringLength(100)]
         public string Name { get; }
 
         [Member("slug"), Unique]
-        [StringLength(63)]
+        [StringLength(63), Optional]
         public string Slug { get; }
-
-        [Member("ownerId")]
-        public long OwnerId { get; }
 
         [Member("properties")]
         [StringLength(1000)]

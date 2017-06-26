@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Carbon.Json;
+using Carbon.Platform.Environments;
 
 namespace Carbon.Platform.Computing
 {

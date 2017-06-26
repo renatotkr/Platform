@@ -1,6 +1,7 @@
 ﻿using System;
 using Carbon.Platform;
 using Carbon.Platform.Computing;
+using Carbon.Platform.Environments;
 
 namespace Carbon.CI
 {

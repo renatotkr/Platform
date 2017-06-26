@@ -1,6 +1,6 @@
 ﻿using Carbon.Platform.Resources;
 
-namespace Carbon.Platform
+namespace Carbon.Platform.Environments
 {
     public interface IEnvironment : IResource
     {
