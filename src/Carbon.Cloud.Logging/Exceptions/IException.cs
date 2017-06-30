@@ -5,7 +5,7 @@ namespace Carbon.Platform.Diagnostics
 {
     public interface IException
     {
-        BigId Id { get; }
+        Uid Id { get; }
 
         string Type { get; }
 
@@ -14,9 +14,5 @@ namespace Carbon.Platform.Diagnostics
         JsonObject Properties { get; }
 
         long? IssueId { get; }
-        
-        long? SessionId { get; }
-
-        long? ClientId { get; }
     }
 }

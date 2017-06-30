@@ -48,7 +48,7 @@ namespace Carbon.Platform.Computing
             #endregion
 
             var image = new Image(
-                id       : db.Images.Sequence.Next(),
+                id       : await db.Images.Sequence.NextAsync(),
                 type     : request.Type,
                 name     : request.Name,
                 size     : request.Size,

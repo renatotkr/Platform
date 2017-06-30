@@ -49,9 +49,9 @@ namespace Carbon.Platform.Storage
         [Member("type")]
         public FileType Type { get; }
 
-        // TODO: Change to bigId
-        [Member("blobId"), Mutable]
-        public long? BlobId { get; set; }
+        // TODO: Change to Uid
+        // [Member("blobId"), Mutable]
+        // public long? BlobId { get; set; }
 
         [Member("size"), Mutable]
         public long Size { get; set; }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Carbon.Cloud.Logging;
 using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Data.Sequences;
@@ -12,22 +13,22 @@ namespace Carbon.Platform.Diagnostics
 
     public class ExceptionService : IExceptionService
     {
-        private readonly DiagnosticsDb db;
+        private readonly LoggingDb db;
 
-        public ExceptionService(DiagnosticsDb db)
+        public ExceptionService(LoggingDb db)
         {
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public Task<ExceptionInfo> FindAsync(BigId id)
+        public Task<ExceptionInfo> FindAsync(Uid id)
         {
             return db.Exceptions.FindAsync(id);
         }
 
         public async Task<IReadOnlyList<ExceptionInfo>> ListAsync(long environmentId)
         {
-            var start = BigId.Create(environmentId, DateTime.UtcNow.AddYears(-10), 0);
-            var end   = BigId.Create(environmentId, DateTime.UtcNow.AddYears(10), 0);
+            var start = ExceptionId.Create(environmentId, DateTime.UtcNow.AddYears(-10), 0);
+            var end   = ExceptionId.Create(environmentId, DateTime.UtcNow.AddYears(10), 0);
             
             var result = await db.Exceptions.QueryAsync(
                 expression  : Between("id", start, end),
@@ -49,18 +50,22 @@ namespace Carbon.Platform.Diagnostics
 
             // 1 per millisecond for now...
 
-            var id = BigId.Create(request.EnvironmentId, DateTime.UtcNow, 0);
+            var id = ExceptionId.Create(
+                request.EnvironmentId,
+                request.Created ?? DateTime.UtcNow, 
+                0 // TODO: Random
+            );
 
             var ex = new ExceptionInfo {
                 Id         = id,
                 ProgramId  = request.ProgramId,
                 Context    = request.Context,
-                Properties = request.Details,
+                Properties = request.Properties,
                 HostId     = request.HostId,
                 Message    = request.Message,
-                SessionId  = request.SessionId,
                 Type       = request.Type,
-                StackTrace = request.StackTrace
+                StackTrace = request.StackTrace,
+                RequestId  = request.RequestId
             };
 
             await db.Exceptions.InsertAsync(ex);

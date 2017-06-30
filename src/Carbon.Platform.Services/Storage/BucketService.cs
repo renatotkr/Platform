@@ -28,7 +28,7 @@ namespace Carbon.Platform.Storage
             #endregion
 
             var bucket = new BucketInfo(
-                id       : db.Buckets.Sequence.Next(),
+                id       : await db.Buckets.Sequence.NextAsync(),
                 name     : request.Name,
                 ownerId  : request.OwnerId,
                 resource : request.Resource

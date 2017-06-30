@@ -13,7 +13,7 @@ namespace Carbon.Kms
 
         public static async Task<long> NextAsync(IDbContext context, long vaultId)
         {
-            using (var connection = context.GetConnection())
+            using (var connection = await context.GetConnectionAsync())
             {
                 var currentCount = await connection.ExecuteScalarAsync<int>(sql, new { id = vaultId }).ConfigureAwait(false);
 

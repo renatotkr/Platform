@@ -11,9 +11,8 @@ namespace Carbon.Platform.Diagnostics
         {
             Context = context ?? throw new ArgumentNullException(nameof(context));
 
-            context.Types.TryAdd(new BigIdHandler());
+            context.Types.TryAdd(new UidHandler());
 
-            Exceptions = new Dataset<ExceptionInfo, BigId>(context);
             Issues     = new Dataset<Issue, long>(context);
         }
 
@@ -21,7 +20,6 @@ namespace Carbon.Platform.Diagnostics
 
         // Traces?
 
-        public Dataset<ExceptionInfo, BigId> Exceptions { get; }
-        public Dataset<Issue, long>          Issues { get; }
+        public Dataset<Issue, long>        Issues { get; }
     }
 }

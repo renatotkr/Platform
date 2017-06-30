@@ -165,7 +165,7 @@ namespace Carbon.Platform.Computing
 
             int currentHostCount;
 
-            using (var connection = db.Context.GetConnection())
+            using (var connection = await db.Context.GetConnectionAsync())
             {
                 currentHostCount = await connection.ExecuteScalarAsync<int>(nextIdSql, location).ConfigureAwait(false);
             }

@@ -14,6 +14,7 @@ namespace Carbon.Platform.Computing
             long ownerId, 
             string runtime,
             string[] addresses,
+            ProgramType type = ProgramType.App,
             long? parentId = null)
         {
             #region Preconditions
@@ -29,6 +30,7 @@ namespace Carbon.Platform.Computing
             OwnerId   = ownerId;
             Addresses = addresses;
             Runtime   = runtime;
+            Type      = type;
             ParentId  = parentId;
         }
 
@@ -40,6 +42,8 @@ namespace Carbon.Platform.Computing
         public string Runtime { get; set; }
 
         public string[] Addresses { get; set; }
+
+        public ProgramType Type { get; set; }
 
         // ConfigurationTemplate
 

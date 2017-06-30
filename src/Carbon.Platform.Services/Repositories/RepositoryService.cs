@@ -71,7 +71,7 @@ namespace Carbon.Platform.Storage
             #endregion
 
             var repository = new RepositoryInfo(
-                id       : db.Repositories.Sequence.Next(),
+                id       : await db.Repositories.Sequence.NextAsync(),
                 name     : request.Name,
                 ownerId  : request.OwnerId,
                 resource : request.Resource

@@ -7,6 +7,7 @@ using Amazon.Ec2;
 using Amazon.Elb;
 using Amazon.Ssm;
 
+using Carbon.Cloud.Logging;
 using Carbon.Data;
 using Carbon.Json;
 using Carbon.Net;
@@ -15,6 +16,7 @@ using Carbon.Platform.Environments;
 using Carbon.Platform.Networking;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Storage;
+using Carbon.Security;
 
 namespace Carbon.Platform.Management
 {
@@ -27,10 +29,10 @@ namespace Carbon.Platform.Management
         private readonly IHostService hostService;
         private readonly IClusterService clusterService;
         private readonly IImageService images;
-
+        private readonly IEventLogger log;
         private readonly PlatformDb db;
 
-        public HostManager(IAwsCredential credential, PlatformDb db)
+        public HostManager(IAwsCredential credential, PlatformDb db, IEventLogger log)
         {
             #region Precondtions
 
@@ -39,7 +41,8 @@ namespace Carbon.Platform.Management
 
             #endregion
 
-            this.db = db ?? throw new ArgumentNullException(nameof(db));
+            this.db  = db  ?? throw new ArgumentNullException(nameof(db));
+            this.log = log ?? throw new ArgumentNullException(nameof(log));
 
             ec2 = new Ec2Client(AwsRegion.USEast1, credential);
             ssm = new SsmClient(AwsRegion.USEast1, credential);
@@ -47,7 +50,7 @@ namespace Carbon.Platform.Management
 
             this.hostService    = new HostService(db);
             this.clusterService = new ClusterService(db);
-            this.images  = new ImageService(db);
+            this.images         = new ImageService(db);
         }
 
         // This will also patch
@@ -96,9 +99,8 @@ namespace Carbon.Platform.Management
 
             return host;
         }
-        
 
-        public async Task<IHost[]> LaunchAsync(Cluster cluster, int launchCount = 1)
+        public async Task<IHost[]> LaunchAsync(Cluster cluster, ISecurityContext context)
         {
             #region Preconditions
 
@@ -121,15 +123,18 @@ namespace Carbon.Platform.Management
 
             var template = await db.HostTemplates.FindAsync(cluster.HostTemplateId.Value);
 
-            return await LaunchAsync(new LaunchHostRequest(cluster, zone, template, launchCount)).ConfigureAwait(false);
+            return await LaunchAsync(new LaunchHostRequest(cluster, zone, template), context).ConfigureAwait(false);
         }
 
-        public async Task<IHost[]> LaunchAsync(LaunchHostRequest launchRequest)
+        public async Task<IHost[]> LaunchAsync(LaunchHostRequest launchRequest, ISecurityContext context)
         {
             #region Preconditions
 
             if (launchRequest == null)
                 throw new ArgumentNullException(nameof(launchRequest));
+
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
 
             #endregion
 
@@ -245,6 +250,16 @@ namespace Carbon.Platform.Management
                 hosts[i] = await hostService.RegisterAsync(registerRequest).ConfigureAwait(false);
             }
 
+            #region Logging
+
+            await log.CreateAsync(new Event(
+                action   : "launch",
+                resource : "hosts",
+                context  : context)
+            ).ConfigureAwait(false);
+
+            #endregion
+
             return hosts;
         }
 
@@ -276,7 +291,7 @@ namespace Carbon.Platform.Management
             await elb.RegisterTargetsAsync(targetRegistration);
         }
 
-        public async Task TerminateHostAsync(HostInfo host, TimeSpan cooldown)
+        public async Task TerminateHostAsync(HostInfo host, TimeSpan cooldown, ISecurityContext context)
         {
             var cluster = await clusterService.GetAsync(host.ClusterId);
 
@@ -297,6 +312,16 @@ namespace Carbon.Platform.Management
             var request = new TerminateInstancesRequest(host.ResourceId);
 
             await ec2.TerminateInstancesAsync(request).ConfigureAwait(false);
+
+            #region Logging
+
+            await log.CreateAsync(new Event(
+                action   : "terminate",
+                resource : "host#" + host.Id,
+                context  : context)
+            ).ConfigureAwait(false);
+
+            #endregion
         }
 
         public Task<SendCommandResponse> RunCommandAsync(

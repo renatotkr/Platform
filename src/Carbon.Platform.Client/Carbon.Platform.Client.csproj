@@ -13,13 +13,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj" />
     <ProjectReference Include="..\Carbon.Platform.Abstractions\Carbon.Platform.Abstractions.csproj" />
     <ProjectReference Include="..\Carbon.Platform.Security\Carbon.Platform.Security.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Carbon.Data.Protection" Version="0.9.0" />
-    <PackageReference Include="Carbon.Packaging" Version="1.9.3" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">

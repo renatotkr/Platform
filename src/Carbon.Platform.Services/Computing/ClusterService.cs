@@ -34,7 +34,7 @@ namespace Carbon.Platform.Computing
             #endregion
 
             var cluster = new Cluster(
-               id             : db.Clusters.Sequence.Next(),
+               id             : await db.Clusters.Sequence.NextAsync(),
                name           : request.Name,
                environmentId  : request.EnvironmentId,
                locationId     : request.LocationId,
@@ -43,7 +43,7 @@ namespace Carbon.Platform.Computing
                hostTemplateId : request.HostTemplateId
             );
 
-            await db.Clusters.InsertAsync(cluster).ConfigureAwait(false);
+            await db.Clusters.InsertAsync(cluster);
 
             return cluster;
         }

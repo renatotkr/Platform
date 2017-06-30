@@ -38,11 +38,11 @@ namespace Carbon.Platform.Environments
             ).ConfigureAwait(false) ?? throw ResourceError.NotFound(ResourceTypes.Environment, ownerId, name);
         }
 
-        public async Task<bool> ExistsAsync(long ownerId, string name)
+        public Task<bool> ExistsAsync(long ownerId, string name)
         {
-            return await db.Environments.CountAsync(
+            return db.Environments.ExistsAsync(
                 And(Eq("ownerId", ownerId), Eq("name", name))
-            ).ConfigureAwait(false) > 0;
+            );
         }
 
         public async Task<EnvironmentInfo> GetAsync(string slug)
@@ -68,7 +68,7 @@ namespace Carbon.Platform.Environments
             }
 
             var environment = new EnvironmentInfo(
-                id      : db.Environments.Sequence.Next(),
+                id      : await db.Environments.Sequence.NextAsync(),
                 name    : request.Name,
                 ownerId : request.OwnerId
             );

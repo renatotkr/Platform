@@ -53,7 +53,7 @@ namespace Carbon.Platform.Networking
             #endregion
 
             var network = new NetworkInfo(
-                id            : db.Networks.Sequence.Next(),
+                id            : await db.Networks.Sequence.NextAsync(),
                 addressBlocks : request.AddressBlocks,
                 ownerId       : request.OwnerId,
                 resource      : request.Resource

@@ -15,7 +15,7 @@ namespace Carbon.CI
             IDbContext context,
             long projectId)
         {
-            using (var connection = context.GetConnection())
+            using (var connection = await context.GetConnectionAsync())
             {
                 var currentCommitCount = await connection.ExecuteScalarAsync<int>(sql, 
                     new { id = projectId }

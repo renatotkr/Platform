@@ -79,7 +79,7 @@ namespace Carbon.Platform.Storage
                 creatorId : request.CreatorId
             );
 
-            using (var connection = db.Context.GetConnection())
+            using (var connection = await db.Context.GetConnectionAsync().ConfigureAwait(false))
             {
                 await connection.ExecuteAsync(
                     @"INSERT INTO `RepositoryFiles` (`branchId`, `path`, `version`, `type`, `size`, `sha256`, `creatorId`)

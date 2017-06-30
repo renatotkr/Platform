@@ -9,11 +9,11 @@ namespace Carbon.Platform.Diagnostics
     {
         // environmentId | timestamp/ms | sequenceNumber
         [Member("id"), Key]
-        public BigId Id { get; set; }
-
-        [Member("requestId")]
-        public BigId? RequestId { get; set; }
+        public Uid Id { get; set; }
      
+        [Member("requestId")]
+        public Uid RequestId { get; set; }
+
         [Member("programId")]
         public long ProgramId { get; set; }
         
@@ -25,7 +25,7 @@ namespace Carbon.Platform.Diagnostics
         public string Type { get; set; }
 
         [Member("message")]
-        [StringLength(255)]
+        [StringLength(1000)]
         public string Message { get; set; }
         
         // [ { file, line, function } ]
@@ -38,19 +38,12 @@ namespace Carbon.Platform.Diagnostics
         [Member("properties")]
         [StringLength(1000)]
         public JsonObject Properties { get; set; }
-
-        // userAgent, url, etc.
+        
         [Member("context")]
         [StringLength(1000)]
         public JsonObject Context { get; set; }
 
         [Member("issueId"), Indexed]
         public long? IssueId { get; set; }
-
-        [Member("sessionId"), Optional]
-        public long? SessionId { get; set; }
-
-        [Member("clientId")]
-        public long? ClientId { get; set; }
     }
 }

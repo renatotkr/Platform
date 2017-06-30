@@ -7,7 +7,6 @@ namespace Carbon.Platform
     using Environments;
     using Hosting;
     using Iam;
-    using Logging;
     using Networking;
     using Storage;
 
@@ -68,9 +67,6 @@ namespace Carbon.Platform
 
             // IAM ---------------------------------------------------------------------
             Users = new Dataset<User, long>(context);
-            
-            // Logging -----------------------------------------------------------------
-            Activities = new Dataset<Activity, long>(context);
         }
 
         public IDbContext Context { get; }
@@ -115,7 +111,6 @@ namespace Carbon.Platform
         public Dataset<DomainInfo,           long> Domains               { get; }
 
         // IAM ------------------------------------------------------------------
-        public Dataset<Activity, long>                 Activities        { get; }
-        public Dataset<User, long>                     Users             { get; }
+        public Dataset<User,                 long> Users                 { get; }
     }
 }

@@ -44,7 +44,7 @@ namespace Carbon.Platform.Storage
             #endregion
 
             var volume = new VolumeInfo(
-                id       : db.Volumes.Sequence.Next(),
+                id       : await db.Volumes.Sequence.NextAsync(),
                 size     : request.Size.TotalBytes,
                 ownerId  : request.OwnerId,
                 resource : request.Resource,

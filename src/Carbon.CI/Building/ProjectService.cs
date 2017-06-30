@@ -39,7 +39,7 @@ namespace Carbon.CI
         public async Task<ProjectInfo> CreateAsync(CreateProjectRequest request)
         {
             var project = new ProjectInfo(
-                id           : db.Projects.Sequence.Next(),
+                id           : await db.Projects.Sequence.NextAsync(),
                 name         : request.Name,
                 repositoryId : request.RepositoryId,
                 ownerId      : request.OwnerId,

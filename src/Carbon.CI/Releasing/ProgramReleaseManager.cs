@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using Carbon.Cloud.Logging;
 using Carbon.Data.Protection;
 using Carbon.Json;
 using Carbon.Kms;
 using Carbon.Packaging;
 using Carbon.Platform.Computing;
+using Carbon.Security;
 using Carbon.Serialization;
 using Carbon.Storage;
 using Carbon.Versioning;
@@ -17,22 +19,25 @@ namespace Carbon.CI
         private readonly IPackageStore packageStore;
         private readonly IProgramReleaseService releaseService;
         private readonly IDataProtector keyProtector;
+        private readonly IEventLogger log;
 
         public ProgramReleaseManager(
             IPackageStore packageStore, 
             IProgramReleaseService releaseService,
-            IDataProtector keyProtector)
+            IDataProtector keyProtector,
+            IEventLogger log)
         {
             this.packageStore   = packageStore   ?? throw new ArgumentNullException(nameof(packageStore));
             this.releaseService = releaseService ?? throw new ArgumentNullException(nameof(releaseService));
             this.keyProtector   = keyProtector   ?? throw new ArgumentNullException(nameof(keyProtector)); 
+            this.log            = log            ?? throw new ArgumentNullException(nameof(log));
         }
 
         public async Task<ProgramRelease> CreateAsync(
             ProgramInfo program, 
             SemanticVersion version,
             IPackage package,
-            long creatorId,
+            ISecurityContext context,
             long? keyId = null)
         {
             #region Preconditions
@@ -82,14 +87,24 @@ namespace Carbon.CI
                 }
             }
 
-            var release = new CreateProgramReleaseRequest(
+            var release = await releaseService.CreateAsync(new CreateProgramReleaseRequest(
                 program    : program,
                 version    : version,
                 properties : properties,
-                creatorId  : creatorId
-            );
+                creatorId  : context.UserId.Value
+            ));
 
-            return await releaseService.CreateAsync(release);           
+            #region Logging
+
+            await log.CreateAsync(new Event(
+                action   : "publish",
+                resource : "program#" + program.Id, 
+                context  : context)
+            ).ConfigureAwait(false);
+
+            #endregion
+
+            return release;
         }
 
         public async Task<IPackage> DownloadAsync(ProgramRelease release)

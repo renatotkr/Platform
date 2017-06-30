@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 
 using Carbon.Data;
 using Carbon.Data.Expressions;
-using Carbon.Platform.Logging;
-using Carbon.Platform.Resources;
 using Carbon.Platform.Sequences;
 using Carbon.Versioning;
 
@@ -58,12 +56,6 @@ namespace Carbon.Platform.Computing
                 }).ConfigureAwait(false);
             }
 
-            #region Logging
-
-            await db.Activities.InsertAsync(new Activity("publish", program as IResource)).ConfigureAwait(false);
-
-            #endregion
-
             return release;
         }
 
@@ -74,11 +66,11 @@ namespace Carbon.Platform.Computing
             );
         }
 
-        public async Task<bool> ExistsAsync(long programId, SemanticVersion version)
+        public Task<bool> ExistsAsync(long programId, SemanticVersion version)
         {
-            return await db.ProgramReleases.CountAsync(
+            return db.ProgramReleases.ExistsAsync(
                 And(Eq("programId", programId), Eq("version", version))
-            ) > 0;
+            );
         }
 
         public Task<IReadOnlyList<ProgramRelease>> ListAsync(long programId)
@@ -96,7 +88,7 @@ namespace Carbon.Platform.Computing
 
         public static async Task<long> NextAsync(IDbContext context, long programId)
         {
-            using (var connection = context.GetConnection())
+            using (var connection = await context.GetConnectionAsync())
             {
                 var currentReleaseCount = await connection.ExecuteScalarAsync<int>(sql, new { id = programId }).ConfigureAwait(false);
 

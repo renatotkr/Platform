@@ -52,13 +52,14 @@ namespace Carbon.Platform.Computing
 
             Validate.Object(request, nameof(request));
 
-            if (ProgramName.Validate(request.Name) == false)
-                throw new ArgumentException($"Invalid name '{request.Name}", nameof(request.Name));
+            if (request.Type != ProgramType.Site && ProgramName.Validate(request.Name) == false)
+                throw new ArgumentException($"Not a valid program name '{request.Name}", nameof(request.Name));
 
             #endregion
 
             var program = new ProgramInfo(
-                id         : db.Programs.Sequence.Next(),
+                id         : await db.Programs.Sequence.NextAsync(),
+                type       : request.Type,
                 name       : request.Name,
                 slug       : request.Slug,
                 version    : request.Version,

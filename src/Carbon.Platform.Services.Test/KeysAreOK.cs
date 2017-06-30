@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
 using System.Reflection;
-
+using System.Threading.Tasks;
 using Carbon.CI;
 using Carbon.Data;
 using Carbon.Data.Sql;
@@ -145,6 +146,6 @@ namespace Carbon.Platform.Services.Test
 
         public DbTypeMap Types => new DbTypeMap(MySqlAdapter.Default);
 
-        public IDbConnection GetConnection() => null;
+        public Task<DbConnection> GetConnectionAsync() => null;
     }
 }

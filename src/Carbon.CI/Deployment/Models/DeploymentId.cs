@@ -15,7 +15,7 @@ namespace Carbon.CI
 
         public static async Task<long> NextAsync(IDbContext context, IEnvironment environment)
         {
-            using (var connection = context.GetConnection())
+            using (var connection = await context.GetConnectionAsync())
             {
                 return await connection.ExecuteScalarAsync<int>(sql, environment).ConfigureAwait(false) + 1;
             }
