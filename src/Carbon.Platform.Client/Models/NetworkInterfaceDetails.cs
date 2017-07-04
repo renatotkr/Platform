@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Runtime.Serialization;
+
 using Carbon.Net;
 using Carbon.Platform.Resources;
 
@@ -16,15 +17,16 @@ namespace Carbon.Platform.Networking
         [DataMember(Name = "addresses", Order = 3)]
         public IPAddress[] Addresses { get; set; }
 
-        [DataMember(Name = "locationId", Order = 4)]
-        public int LocationId { get; set; }
+        #region IResource
 
-        #region IManagedResource
+        [DataMember(Name = "resource", Order = 4, EmitDefaultValue = false)]
+        public ManagedResource Resource { get; set; }
 
-        [DataMember(Name = "resourceId", Order = 5, EmitDefaultValue = false)]
-        public string ResourceId { get; set; }
+        int IManagedResource.LocationId => Resource.LocationId;
 
-        int IManagedResource.ProviderId => Platform.LocationId.Create(LocationId).ProviderId;
+        string IManagedResource.ResourceId => Resource.ResourceId;
+
+        int IManagedResource.ProviderId => Resource.ProviderId;
 
         ResourceType IResource.ResourceType => ResourceTypes.NetworkInterface;
 

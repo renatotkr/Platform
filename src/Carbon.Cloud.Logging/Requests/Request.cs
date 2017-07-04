@@ -41,39 +41,39 @@ namespace Carbon.Cloud.Logging
                 ClientHash = Logging.ClientHash.Compute(context);
             }
         }
-
-        // accountId | timestamp | # 
+        
         [Member("id"), Key]
         public Uid Id { get; }
 
-        [Member("siteId")]
+        [Member("siteId")] 
         public long SiteId { get; }
         
         [Member("method")]
         [StringLength(10)]
         public string Method { get; }
 
-        [Member("path")] // Code
+        [Member("path")]
         [StringLength(2000)]
         public string Path { get; }
 
         [Member("status")]
         public int Status { get; set; }
         
+        // is the siteId sufficient?
         [Member("environmentId")]
         public long EnvironmentId { get; }
+
+        [Member("referrerId")]
+        public long? ReferrerId { get; }
 
         [Member("blobId")] // if the response was a blob
         public Uid? BlobId { get; set; }
 
         [Member("parentId")]
         public Uid? ParentId { get; }
-
-        [Member("exceptionId")]
-        public Uid? ExceptionId { get; }
         
-        [Member("referrerId")]
-        public long? ReferrerId { get; }
+        [Member("exceptionId")]
+        public Uid? ExceptionId { get; }        
 
         #region Resource Usage (Compute & Data Transfer)
 

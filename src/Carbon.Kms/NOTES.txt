@@ -2,10 +2,4 @@
 KEK - Key Encryption Key     - The key used to decrypt the DEK
 CEK - Content Encryption Key - A key that may be further encrypted using a KEK, where the content may be a message, audio, image, video, executable code, etc.
 
-
-// Encryption keys should be destroyed shortly after expiration...
-
-// Envelope Encryption
-// Secrets may be stored in Dynamo or a database...
-
 // http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r4.pdf

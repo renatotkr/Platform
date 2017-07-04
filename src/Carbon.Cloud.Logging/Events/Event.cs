@@ -22,7 +22,7 @@ namespace Carbon.Cloud.Logging
             Action     = action   ?? throw new ArgumentNullException(nameof(action));
             Resource   = resource ?? throw new ArgumentNullException(nameof(resource));
             Properties = properties;
-            UserId     = context.UserId;
+            UserId     = context?.UserId;
         }
 
         // accountId | timestamp | #
@@ -37,7 +37,7 @@ namespace Carbon.Cloud.Logging
         public string Resource { get; }
 
         // origin?
-        [Member("source")]
+        [Member("source"), Optional]
         [StringLength(120)]
         public string Source { get; }
 

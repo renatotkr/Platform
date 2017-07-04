@@ -10,9 +10,12 @@ using Carbon.Platform.Security;
 
 namespace Carbon.Platform
 {
-    public partial class PlatformClient
+    public abstract class ApiBase
     {
-        private readonly HttpClient http = new HttpClient {
+        private readonly string baseUri;
+        private readonly Credential credential;
+
+         private readonly HttpClient http = new HttpClient {
             DefaultRequestHeaders = {
                 { "User-Agent", "Carbon/1.6.0" },
                 { "Accept",     "application/json" }
@@ -20,26 +23,23 @@ namespace Carbon.Platform
             Timeout = TimeSpan.FromSeconds(15)
         };
 
-
-        public class Dao<T>
-            where T : new()
+        public ApiBase(Uri endpoint, Credential credential)
         {
-            protected readonly PlatformClient platform;
-            private readonly string prefix;
-             
-            internal Dao(string prefix, PlatformClient platform)
-            {
-                this.prefix = prefix;
-                this.platform = platform;
-            }
+            #region Preconditions
 
-            public Task<T> GetAsync(long id)
-            {
-                return platform.GetAsync<T>($"/{prefix}/{id}");
-            }
+            if (endpoint == null)
+                throw new ArgumentNullException(nameof(endpoint));
+
+            if (endpoint.Scheme != "https")
+                throw new ArgumentException("scheme must be https", nameof(endpoint));
+            
+            #endregion
+
+            this.baseUri    = endpoint.ToString().TrimEnd('/');
+            this.credential = credential ?? throw new ArgumentNullException(nameof(credential));
         }
 
-        protected async Task<T> PostAsync<T>(string path, object data)
+        internal async Task<T> PostAsync<T>(string path, object data)
             where T : new()
         {
             var jsonText = JsonObject.FromObject(data).ToString(pretty: false);
@@ -48,7 +48,7 @@ namespace Carbon.Platform
                 Content = new StringContent(jsonText, Encoding.UTF8, "application/json")
             };
 
-            Signer.SignRequest(request, credentials);
+            Signer.SignRequest(request, credential);
 
             using (var response = await http.SendAsync(request).ConfigureAwait(false))
             {
@@ -63,11 +63,11 @@ namespace Carbon.Platform
            }
         }
 
-        protected async Task<MemoryStream> DownloadAsync(string path)
+        internal async Task<MemoryStream> DownloadAsync(string path)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, baseUri + path);
 
-            Signer.SignRequest(request, credentials);
+            Signer.SignRequest(request, credential);
 
             var ms = new MemoryStream();
 
@@ -93,14 +93,12 @@ namespace Carbon.Platform
             return ms;
         }
 
-        protected async Task<T1> GetAsync<T1>(string path)
+        internal async Task<T1> GetAsync<T1>(string path)
             where T1 : new()
         {
             var request = new HttpRequestMessage(HttpMethod.Get, baseUri + path);
 
-            // Accept application/json
-
-            Signer.SignRequest(request, credentials);
+            Signer.SignRequest(request, credential);
 
             using (var response = await http.SendAsync(request).ConfigureAwait(false))
             {

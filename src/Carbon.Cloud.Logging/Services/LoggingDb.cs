@@ -18,28 +18,24 @@ namespace Carbon.Cloud.Logging
 
             Clients        = new Dataset<Client, (Uid, byte[])>(context);
 
-            Exceptions = new Dataset<ExceptionInfo, Uid>(context);
+            Exceptions     = new Dataset<ExceptionInfo, Uid>(context);
 
-            // UserAgents     = new Dataset<UserAgent, byte[]>();
-            // Referrers      = new Dataset<Referrer, byte[>(context);
+            Referrers      = new Dataset<Referrer, long>(context);
 
-            Requests = new Dataset<Request, Uid>(context);
+            Requests       = new Dataset<Request, Uid>(context);
             RequestTimings = new Dataset<RequestTiming, (Uid, string)>(context);
 
-            // Logging -----------------------------------------------------------------
-            Events = new Dataset<Event, long>(context);
+            Events         = new Dataset<Event, long>(context);
         }
 
         public IDbContext Context { get; }
 
 
-        public Dataset<Event, long>                 Events        { get; }
-
-        public Dataset<Client, (Uid, byte[])> Clients { get; }
-
-        public Dataset<Request, Uid>                 Requests { get; }
+        public Dataset<Event, long>                  Events         { get; }
+        public Dataset<Client, (Uid, byte[])>        Clients        { get; }
+        public Dataset<Request, Uid>                 Requests       { get; }
         public Dataset<RequestTiming, (Uid, string)> RequestTimings { get; }
-
-        public Dataset<ExceptionInfo, Uid> Exceptions { get; }
+        public Dataset<Referrer, long>               Referrers      { get; }
+        public Dataset<ExceptionInfo, Uid>           Exceptions     { get; }
     }
 }

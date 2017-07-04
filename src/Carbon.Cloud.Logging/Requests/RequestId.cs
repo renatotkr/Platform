@@ -28,6 +28,7 @@ namespace Carbon.Cloud.Logging
 
             #endregion
 
+
             // change to a ulong before 2039
             var lowerHalf = ScopedId.Create(timestamp.ToUnixTimeMilliseconds(), sequence);
 
@@ -38,3 +39,6 @@ namespace Carbon.Cloud.Logging
         }
     }
 }
+
+// 42        | 22    | 22 | 44     | ...
+// accountId | hours | ms | hostId | sequence

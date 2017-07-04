@@ -28,7 +28,7 @@ namespace Carbon.Platform.Computing
                 // Automatically register machine images until we can depend on the manager to register them before use
 
                 var registerRequest = new RegisterImageRequest(
-                    name     : Guid.NewGuid().ToString().Replace("-", ""),
+                    name     : Guid.NewGuid().ToString("N"),
                     resource : new ManagedResource(provider, ResourceTypes.Image, resourceId),
                     type     : ImageType.Machine
                 );

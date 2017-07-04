@@ -15,12 +15,11 @@ namespace Carbon.Cloud.Logging
         public Client(Uid id, IPAddress ip, string userAgent)
         {
             Id        = id;
-            Ip        = ip ?? throw new ArgumentNullException(nameof(ip));
-            UserAgent = userAgent ?? throw new ArgumentNullException(nameof(userAgent));
+            Ip        = ip          ?? throw new ArgumentNullException(nameof(ip));
+            UserAgent = userAgent   ?? throw new ArgumentNullException(nameof(userAgent));
             Hash      = ClientHash.Compute(this); // sha1(id, ip, userAgent)
         }
-        // entropy | entropy
-        // upper   | lower
+
         [Member("id"), Key]
         public Uid Id { get; }
         

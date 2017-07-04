@@ -1,63 +1,65 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using Carbon.Data.Annotations;
-using Carbon.Data.Protection;
+using Carbon.Data.Sequences;
 using Carbon.Json;
 
 namespace Carbon.Kms
 {
-    [Dataset("VaultGrants")]
-    public class VaultGrant
+    [Dataset("KeyGrants")]
+    public class KeyGrant
     {
-        public VaultGrant() { }
+        public KeyGrant() { }
 
-        public VaultGrant(
-            long id,
-            long? keyId,
+        public KeyGrant(
+            Uid grantId,
+            Uid keyId,
             string name,
-            KeyUsage permissions,
+            string[] actions,
             long userId,
+            JsonObject constraints,
             string externalId = null)
         {
             #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Invalid", nameof(id));
 
             if (userId <= 0)
                 throw new ArgumentException("Invalid", nameof(userId));
             
             #endregion
 
-            Id          = id;
-            KeyId       = keyId;
-            Name        = name ?? throw new ArgumentNullException(nameof(name));
-            Permissions = permissions;
-            UserId      = userId;
-            ResourceId  = externalId;
+            Id         = grantId;
+            KeyId      = keyId;
+            Name       = name ?? throw new ArgumentNullException(nameof(name));
+            Actions    = actions;
+            UserId     = userId;
+            Constraints = constraints;
+            ResourceId = externalId;
         }
         
-        // vaultId | #
         [Member("id"), Key]
-        public long Id { get; }
+        public Uid Id { get; }
+
+        [Member("keyId"), Indexed]
+        public Uid KeyId { get; }
 
         [Member("name")]
         [StringLength(100)]
         public string Name { get; }
 
-        [Member("keyId"), Indexed]
-        public long? KeyId { get; }
-
-        [Member("userId"), Indexed] // principal
+        // principal / subject?
+        [Member("userId"), Indexed]
         public long UserId { get; }
         
-        // Encrypt, Decrypt, ...
-        [Member("permissions")]
-        public KeyUsage Permissions { get; }
+        // encrypt, decrypt, ...
+        [Member("actions")]
+        public string[] Actions { get; }
 
         // The context may grant access to mutiple keys...
-        [Member("context"), StringLength(200)]
-        public JsonObject Constraints { get; set; }
+        [Member("constraints"), StringLength(200)]
+        public JsonObject Constraints { get; }
+
+        [Member("properties"), StringLength(200)]
+        public JsonObject Properties { get; }
 
         #region Resource
 

@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Hosting</AssemblyName>
-    <AssemblyTitle>Carbon Hosting</AssemblyTitle>
     <VersionPrefix>1.9.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6</TargetFrameworks>
     

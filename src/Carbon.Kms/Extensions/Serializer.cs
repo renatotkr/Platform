@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Carbon.Serialization
+namespace Carbon
 {
     internal static class Serializer
     {

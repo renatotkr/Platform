@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
-using Carbon.Data;
-using Carbon.Data.Expressions;
-using Carbon.Data.Protection;
+using Carbon.Data.Sequences;
 using Carbon.Json;
 using Carbon.Time;
 
@@ -13,57 +11,24 @@ namespace Carbon.Kms
 {
     public class KeyManager : IKeyManager
     {
-        private readonly long vaultId;
-        private readonly KmsDb db;
+        private readonly Uid masterKeyId;
+        private readonly IKeyStore keyStore;
         private readonly IClock clock;
-        private readonly IKeyProtector vault;
+        private readonly IDataProtectorProvider protectorProvider;
 
         public KeyManager(
             IClock clock,
-            KmsDb db, 
-            long vaultId,
-            IKeyProtector vault)
+            IKeyStore keyStore, 
+            Uid masterKeyId,
+            IDataProtectorProvider protectorProvider)
         {
-            #region Preconditions
-
-            if (vaultId <= 0)
-                throw new ArgumentException("Invalid", nameof(vaultId));
-
-            #endregion
-
-            this.vaultId = vaultId;
-            this.clock   = clock     ?? throw new ArgumentNullException(nameof(clock));
-            this.db      = db        ?? throw new ArgumentNullException(nameof(db));
-            this.vault   = vault ?? throw new ArgumentNullException(nameof(vault));
+            this.clock             = clock             ?? throw new ArgumentNullException(nameof(clock));
+            this.keyStore          = keyStore          ?? throw new ArgumentNullException(nameof(keyStore));
+            this.masterKeyId       = masterKeyId;
+            this.protectorProvider = protectorProvider ?? throw new ArgumentNullException(nameof(protectorProvider));
         }
 
-        // TODO: Generate a private key...
-
-        public async Task<IKeyInfo> PutAsync(
-            byte[] plaintext,
-            KeyType type,
-            IEnumerable<KeyValuePair<string, string>> context)
-        {
-            var ciphertext = await vault.EncryptAsync(plaintext, context).ConfigureAwait(false);
-
-            var key = new KeyInfo(
-                id          : await KeyId.NextAsync(db.Context, vaultId).ConfigureAwait(false),
-                name        : Guid.NewGuid().ToString().Replace("-", ""),
-                kekId       : vaultId,
-                vaultId     : vaultId,
-                ciphertext  : ciphertext,
-                activated   : DateTime.UtcNow.AddMinutes(-5),
-                type        : type,
-                context     : ToJson(context)
-            );
-
-            await db.Keys.InsertAsync(key).ConfigureAwait(false);
-
-            return key;
-        }
-
-        public async Task<IKeyInfo> GenerateAsync(
-            IEnumerable<KeyValuePair<string, string>> context)
+        public async Task<IKeyInfo> GenerateAsync(GenerateKeyRequest request)
         {
             var aes = Aes.Create();
             
@@ -72,60 +37,38 @@ namespace Carbon.Kms
             aes.KeySize = 256;
             aes.GenerateKey();
 
-            var ciphertext = await vault.EncryptAsync(aes.Key, context).ConfigureAwait(false);
+            var masterKey = await protectorProvider.GetAsync(masterKeyId.ToString(), request.Aad).ConfigureAwait(false);
+
+            var ciphertext = await masterKey.EncryptAsync(aes.Key).ConfigureAwait(false);
+
+            var id = Guid.NewGuid();
 
             var key = new KeyInfo(
-                id         : await KeyId.NextAsync(db.Context, vaultId).ConfigureAwait(false),
-                name       : Guid.NewGuid().ToString().Replace("-", ""),
-                kekId      : vaultId,
-                vaultId    : vaultId,
-                ciphertext : ciphertext,
-                activated  : DateTime.UtcNow.AddMinutes(-5),
-                type       : KeyType.Secret,
-                context    : ToJson(context)
+                id          : id,
+                ownerId     : 1,
+                name        : request.Name ?? id.ToString(),
+                kekId       : masterKeyId,
+                format      : KeyDataFormat.AwsKmsEncryptedData,
+                data        : ciphertext,
+                activated   : DateTime.UtcNow.AddMinutes(-5),
+                type        : request.Type,
+                aad         : ToJson(request.Aad)
             );
 
-            await db.Keys.InsertAsync(key).ConfigureAwait(false);
+            await keyStore.CreateAsync(key).ConfigureAwait(false);
 
             return key;
         }
 
-        // RotateAsync...
-
-        public async Task DeactivateAsync(long id)
+        public async Task DeactivateAsync(Uid id)
         {
-            await db.Keys.PatchAsync(id, changes: new[] {
-                Change.Remove("activated"),
-                Change.Replace("status", KeyStatus.Deactivated)
-            }).ConfigureAwait(false);
+            await keyStore.DeactivateAsync(id);
         }
 
-        public async Task DeleteAsync(long id)
+        public async Task DestroyAsync(Uid id)
         {
-            await db.Keys.PatchAsync(id, changes: new[] {
-                Change.Remove("ciphertext"),
-                Change.Replace("deleted", Expression.Func("NOW"))
-            }).ConfigureAwait(false);
+            await keyStore.DeleteAsync(id);
         }
-
-        /*
-        public async Task<VaultGrant> CreateGrant(string principal, IKeyInfo grant)
-        {
-            var result = await kmsService.CreateGrantAsync(principal, null, new[] {
-                new KeyValuePair<string, string>("keyid", grant.Id.ToString())
-            });
-
-            var grant = new VaultGrant(
-                id = GrantId.NextAsync(db.Context, vaultId),
-                keyId: 1,
-                permissions: KeyUsage.Decrypt,
-                userId: 1,
-                externalId: null
-            };
-
-            await db.Grants.InsertAsync(grant);
-        }
-        */
 
         #region Helpers
 

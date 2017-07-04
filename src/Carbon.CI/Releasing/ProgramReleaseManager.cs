@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 
 using Carbon.Cloud.Logging;
 using Carbon.Data.Protection;
+using Carbon.Data.Sequences;
 using Carbon.Json;
 using Carbon.Kms;
 using Carbon.Packaging;
 using Carbon.Platform.Computing;
 using Carbon.Security;
-using Carbon.Serialization;
 using Carbon.Storage;
 using Carbon.Versioning;
 
@@ -18,19 +18,22 @@ namespace Carbon.CI
     {
         private readonly IPackageStore packageStore;
         private readonly IProgramReleaseService releaseService;
-        private readonly IDataProtector keyProtector;
+        private readonly IDataProtectorProvider protectorProvider;
+        private readonly IDataDecrypter dataDecrypter;
         private readonly IEventLogger log;
 
         public ProgramReleaseManager(
             IPackageStore packageStore, 
             IProgramReleaseService releaseService,
-            IDataProtector keyProtector,
+            IDataProtectorProvider protectorProvider,
+            IDataDecrypter dataDecrypter,
             IEventLogger log)
         {
-            this.packageStore   = packageStore   ?? throw new ArgumentNullException(nameof(packageStore));
-            this.releaseService = releaseService ?? throw new ArgumentNullException(nameof(releaseService));
-            this.keyProtector   = keyProtector   ?? throw new ArgumentNullException(nameof(keyProtector)); 
-            this.log            = log            ?? throw new ArgumentNullException(nameof(log));
+            this.packageStore      = packageStore      ?? throw new ArgumentNullException(nameof(packageStore));
+            this.releaseService    = releaseService    ?? throw new ArgumentNullException(nameof(releaseService));
+            this.protectorProvider = protectorProvider ?? throw new ArgumentNullException(nameof(ProgramReleaseManager.protectorProvider)); 
+            this.log               = log               ?? throw new ArgumentNullException(nameof(log));
+            this.dataDecrypter     = dataDecrypter     ?? throw new ArgumentNullException(nameof(dataDecrypter));
         }
 
         public async Task<ProgramRelease> CreateAsync(
@@ -38,7 +41,7 @@ namespace Carbon.CI
             SemanticVersion version,
             IPackage package,
             ISecurityContext context,
-            long? keyId = null)
+            Uid? keyId = null)
         {
             #region Preconditions
 
@@ -55,17 +58,20 @@ namespace Carbon.CI
 
             var properties = new JsonObject();
 
+            
             byte[] encryptionKey = null;
 
             if (keyId != null)
             {
+                var protector = await protectorProvider.GetAsync(keyId.Value.ToString());
+
                 encryptionKey = Secret.Generate(256 / 8).Value;
 
-                var cek = keyProtector.Encrypt(keyId.Value, encryptionKey);
+                var cek = await protector.EncryptAsync(encryptionKey).ConfigureAwait(false);
                 
                 properties.Add("encryptionStrategy",  "sse");
                 properties.Add("encryptionAlgorithm", "AES256");
-                properties.Add("cek", Serializer.Serialize(cek));
+                properties.Add("cek", cek);
             }
 
             PutPackageResult result = await packageStore.PutAsync(key, package, new PutPackageOptions {
@@ -118,11 +124,11 @@ namespace Carbon.CI
 
             byte[] encryptionKey = null;
 
-            if (release.Properties.TryGetValue("cek", out var cekData))
+            if (release.Properties.TryGetValue("cek", out var cek))
             {
-                var cek = Serializer.Deserialize<EncryptedData>(Convert.FromBase64String(cekData.ToString()));
+                var cekData = Convert.FromBase64String(cek.ToString());
 
-                encryptionKey = keyProtector.Decrypt(cek);
+                encryptionKey = await dataDecrypter.DecryptAsync(cekData);
             }
 
             var key = release.ProgramId + "/" + release.Version.ToString() + ".zip";

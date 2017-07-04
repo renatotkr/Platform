@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Kms</AssemblyName>
-    <VersionPrefix>0.12.0</VersionPrefix>
+    <VersionPrefix>0.14.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
 
     <!-- Package Details -->
@@ -13,12 +13,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Carbon.Kms.Abstractions\Carbon.Kms.Abstractions.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <PackageReference Include="Carbon.Data.Annotations" Version="1.4.0" />
-    <PackageReference Include="Carbon.Data.Protection" Version="0.9.0" />
-    <PackageReference Include="Carbon.Data.Protection.Primitives" Version="0.8.0" />
+    <PackageReference Include="Carbon.Data.Protection.Primitives" Version="0.13.0" />
     <PackageReference Include="Carbon.Data.Sql" Version="0.25.0" />
     <PackageReference Include="Carbon.Json" Version="1.4.1" />
     <PackageReference Include="Carbon.Time" Version="1.2.0" />
+    <PackageReference Include="protobuf-net" Version="2.2.1" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
@@ -30,11 +35,6 @@
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <Reference Include="System.ComponentModel.DataAnnotations" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="..\Carbon.Kms.Abstractions\Carbon.Kms.Abstractions.csproj" />
-    <ProjectReference Include="..\Carbon.Platform.Abstractions\Carbon.Platform.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

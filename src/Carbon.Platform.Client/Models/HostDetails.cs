@@ -28,9 +28,6 @@ namespace Carbon.Platform.Computing
         [DataMember(Name = "image", Order = 6, EmitDefaultValue = false)]
         public ImageDetails Image { get; set; }
 
-        [DataMember(Name = "locationId", Order = 7, EmitDefaultValue = false)]
-        public int LocationId { get; set; }
-
         [DataMember(Name = "networkInterfaces", Order = 8, EmitDefaultValue = false)]
         public NetworkInterfaceDetails[] NetworkInterfaces { get; set; }
 
@@ -42,6 +39,9 @@ namespace Carbon.Platform.Computing
 
         [DataMember(Name = "publicKey", EmitDefaultValue = false, Order = 11)]
         public byte[] PublicKey { get; set; }
+
+        [DataMember(Name = "locationId", Order = 7, EmitDefaultValue = false)]
+        public int LocationId { get; set; }
 
         [DataMember(Name = "resource", Order = 20, EmitDefaultValue = false)]
         public ManagedResource Resource { get; set; }

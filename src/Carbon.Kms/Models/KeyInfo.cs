@@ -1,92 +1,111 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 using Carbon.Data.Protection;
+using Carbon.Data.Sequences;
 using Carbon.Json;
 
 namespace Carbon.Kms
 {
     [Dataset("Keys", Schema = "Kms")]
-    [UniqueIndex("vaultId", "name")]
+    [DataIndex(IndexFlags.Secondary, "ownerId", "name")]
     public class KeyInfo : IKeyInfo
     {
         public KeyInfo() { }
 
+        #region Master Key Constructor
+
         public KeyInfo(
-            long id,
+           Uid id,
+           long ownerId,
+           string name,
+           int locationId,
+           string resourceId,
+           KeyType type)
+        {
+            Id         = id;
+            OwnerId    = ownerId;
+            Name       = name;
+            LocationId = locationId;
+            ResourceId = resourceId;
+            Activated  = DateTime.UtcNow;
+            Type       = type;
+        }
+
+        #endregion
+
+        public KeyInfo(
+            Uid id,
+            long ownerId,
             string name,
-            byte[] ciphertext,
-            JsonObject context,
-            long kekId,
-            long vaultId,
+            KeyDataFormat format,
+            byte[] data,
+            JsonObject aad,
+            Uid kekId,
             DateTime? activated = null,
-            KeyType type        = KeyType.Secret,
-            KeyStatus status    = KeyStatus.Active,
-            int providerId      = 1)
+            KeyType type = KeyType.Secret,
+            KeyStatus status = KeyStatus.Active)
         {
             #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Invalid", nameof(id));
 
             if (name == null || string.IsNullOrEmpty(name))
                 throw new ArgumentException("Required", nameof(name));
 
-            if (kekId <= 0)
-                throw new ArgumentException("Invalid", nameof(kekId));
-
-            if (ciphertext == null || ciphertext.Length == 0)
-                throw new ArgumentException("Required", nameof(ciphertext));
+            if (data == null || data.Length == 0)
+                throw new ArgumentException("Required", nameof(data));
 
             #endregion
 
-            Id         = id;
-            Name       = name;
-            Ciphertext = ciphertext;
-            Context    = context;
-            KekId      = kekId;
-            Activated  = activated;
-            Status     = status;
-            ProviderId = providerId;
+            Id        = id;
+            OwnerId   = ownerId;
+            Name      = name;
+            Data      = data;
+            Aad       = aad;
+            KekId     = kekId;
+            Activated = activated;
+            Status    = status;
         }
 
-        // vaultId | #
         [Member("id"), Key]
-        public long Id { get; }
+        public Uid Id { get; }
 
-        [Member("vaultId"), Indexed]
-        public long VaultId { get; }
-
+        [Member("ownerId")]
+        public long OwnerId { get; }
+        
         [Member("name")]
-        [StringLength(63)]
+        [StringLength(100)]
         public string Name { get; }
 
-        // public, private, secret
+        // master, public, private, secret
         [Member("type")]
         public KeyType Type { get; }
 
-        // the key used to decrypt the ciphertext
-        [Member("kekId")]
-        public long KekId { get; }
+        [Member("format")]
+        public KeyDataFormat Format { get; set; }
 
-        // enough to hold a 2048 bit key + wrapper
-        [Member("ciphertext"), MaxLength(2500)] 
-        public byte[] Ciphertext { get; }
+        [Member("data"), MaxLength(2500)]
+        public byte[] Data { get; }
+        
+        [Member("kekId")]
+        public Uid? KekId { get; }
 
         // kid, scope, subject, etc
-        [Member("context")]
+        [Member("aad"), Optional]
         [StringLength(1000)]
-        public JsonObject Context { get; }
-        
+        public JsonObject Aad { get; }
+
+        [Member("properties"), Optional]
+        [StringLength(500)]
+        public JsonObject Properties { get; }
+
         [Member("status")]
         public KeyStatus Status { get; }
 
         #region IResource
 
-        [Member("providerId")]
-        public int ProviderId { get; }
+        [Member("locationId")]
+        public int LocationId { get; }
 
         [Member("resourceId")]
         [StringLength(100)]
@@ -96,7 +115,7 @@ namespace Carbon.Kms
 
         #region Timestamps
 
-        [Member("activated")] // may be in future...
+        [Member("activated")]
         public DateTime? Activated { get; }
 
         [Member("accessed")]
@@ -123,17 +142,6 @@ namespace Carbon.Kms
 
         string IKeyInfo.Id => Id.ToString();
 
-        public IEnumerable<KeyValuePair<string, string>> GetAuthenticatedData()
-        {
-            if (Context == null) yield break;
-
-            foreach (var property in Context)
-            {
-                yield return new KeyValuePair<string, string>(property.Key, property.Value.ToString());
-            }
-            
-        }
-    
         #endregion
     }
 }

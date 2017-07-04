@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 using Carbon.Data.Protection;
 
@@ -6,16 +7,21 @@ namespace Carbon.Kms
 {
     public class DataProtector : IDataProtector
     {
-        private readonly IKeyProvider keyProvider;
+        private readonly CryptoKey key;
 
-        public DataProtector(IKeyProvider keyProvider)
+        public DataProtector(CryptoKey key)
         {
-            this.keyProvider = keyProvider ?? throw new ArgumentNullException(nameof(keyProvider));
+            this.key = key;
         }
 
-        public EncryptedData Encrypt(long keyId, byte[] plaintext)
+        public ValueTask<byte[]> EncryptAsync(byte[] plaintext)
         {
-            var key = keyProvider.GetAsync(keyId).Result;
+            #region Preconditions
+
+            if (plaintext == null)
+                throw new ArgumentNullException(nameof(plaintext));
+
+            #endregion
 
             var iv = Secret.Generate(16); // 128 bit iv
 
@@ -23,27 +29,48 @@ namespace Carbon.Kms
             {
                 var ciphertext = aes.Encrypt(plaintext);
 
-                return new EncryptedData(
+                var message = new EncryptedMessage(
                     keyId      : key.Id,
                     iv         : iv.Value,
                     ciphertext : ciphertext
                 );
+
+                var encryptedMessageData = Serializer.Serialize(message);
+
+                return new ValueTask<byte[]>(encryptedMessageData);
             }
         }
 
-        public byte[] Decrypt(EncryptedData data)
+        public ValueTask<byte[]> DecryptAsync(byte[] ciphertext)
         {
-            var key = keyProvider.GetAsync(long.Parse(data.KeyId)).Result;
+            #region Preconditions
 
-            using (var aes = new AesDataProtector(key.Value, data.IV))
+            if (ciphertext == null)
+                throw new ArgumentNullException(nameof(ciphertext));
+
+            #endregion
+
+            var message = Serializer.Deserialize<EncryptedMessage>(ciphertext);
+            
+            return DecryptAsync(message);
+        }
+
+        public ValueTask<byte[]> DecryptAsync(EncryptedMessage message)
+        {
+            #region Preconditions
+
+            if (message == null)
+                throw new ArgumentNullException(nameof(message));
+
+            if (message.Header.KeyId != key.Id)
+                throw new Exception("wrong key:" + message.Header.KeyId);
+
+            #endregion
+
+            using (var aes = new AesDataProtector(key.Value, message.IV))
             {
-                return aes.Decrypt(data.Ciphertext);
+                return new ValueTask<byte[]>(aes.Decrypt(message.Ciphertext));
             }
         }
     }
 }
-
-/*
-DEK: Data Encryption Key 
-KEK: Key Encryption Key 
-*/

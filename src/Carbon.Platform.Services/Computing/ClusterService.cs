@@ -19,9 +19,16 @@ namespace Carbon.Platform.Computing
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public Task<IReadOnlyList<Cluster>> ListAsync(IEnvironment env)
+        public Task<IReadOnlyList<Cluster>> ListAsync(IEnvironment environment)
         {
-            return db.Clusters.QueryAsync(Eq("environmentId", env.Id));
+            #region Preconditions
+
+            if (environment == null)
+                throw new ArgumentNullException(nameof(environment));
+
+            #endregion
+
+            return db.Clusters.QueryAsync(Eq("environmentId", environment.Id));
         }
 
         public async Task<Cluster> CreateAsync(CreateClusterRequest request)
@@ -66,7 +73,7 @@ namespace Carbon.Platform.Computing
 
             if (group == null)
             {
-                throw new ResourceNotFoundException($"cluster(env#{env.Id}, location#{location.Id})");
+                throw new ResourceNotFoundException($"cluster(environment#{env.Id}, location#{location.Id})");
             }
             
             return group;

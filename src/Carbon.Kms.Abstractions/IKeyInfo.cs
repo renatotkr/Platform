@@ -6,7 +6,7 @@ namespace Carbon.Kms
     {
         string Id { get; }
 
-        // KeyType Type { get; }
+        KeyType Type { get; }
 
         // KeyUsage Usages { get; }
     }

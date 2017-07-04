@@ -113,10 +113,7 @@ namespace Carbon.Platform.Computing
                 machineTypeId : request.MachineTypeId,
                 networkId     : request.NetworkId,
                 ownerId       : request.OwnerId
-            )
-            {
-                PublicKey = request.PublicKey
-            };
+            );
         
             await db.Hosts.InsertAsync(host).ConfigureAwait(false);
 

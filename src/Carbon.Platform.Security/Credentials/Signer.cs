@@ -2,7 +2,7 @@
 using System.Net.Http;
 
 using Carbon.Json;
-using Carbon.Security.Claims;
+using Carbon.Jwt;
 
 namespace Carbon.Platform.Security
 {
@@ -13,9 +13,8 @@ namespace Carbon.Platform.Security
             { "alg", "RS256" }
         };
 
-        public static void SignRequest(
-            HttpRequestMessage request,
-            Credential credential)
+        // Expire in 15 minutes
+        public static void SignRequest(HttpRequestMessage request, Credential credential)
         {
             #region Preconditions
 
@@ -37,10 +36,8 @@ namespace Carbon.Platform.Security
             #endregion
 
             var date = DateTimeOffset.UtcNow;
-
-            // HexString.FromBytes(Entropy.GenerateBytes(16));
-
-            var tokenId = Guid.NewGuid().ToString().Replace("-", "");
+            
+            var tokenId = Guid.NewGuid().ToString("N");
 
             var claims = new JsonObject {
                 { ClaimNames.JwtId,      tokenId },
@@ -48,10 +45,11 @@ namespace Carbon.Platform.Security
                 { ClaimNames.Audience,   credential.Audience },
                 { ClaimNames.Subject,    credential.Subject }, // e.g. aws:role/processor-ai
                 { ClaimNames.IssuedAt,   date.ToUnixTimeSeconds() },
-                { ClaimNames.Expiration, date.AddMinutes(5).ToUnixTimeSeconds() }
+                { ClaimNames.Expiration, date.AddMinutes(15).ToUnixTimeSeconds() }
             };
 
             // used to verify the subject claim against a trusted third party (i.e. aws:sts)
+
             if (credential.VerificationParameters != null)
             {
                 claims.Add("vp", credential.VerificationParameters);
@@ -64,7 +62,7 @@ namespace Carbon.Platform.Security
                 header = new JsonObject {
                     { "typ", "JWT" },
                     { "alg", "RS256" },
-                    { "kid", credential.KeyId }
+                    { "kid",  credential.KeyId }
                 };
             }
             else
@@ -72,14 +70,10 @@ namespace Carbon.Platform.Security
                 header = defaultHeader;
             }
 
-            var token = Jwt.Jwt.Sign(
-                header,
-                claims,
-                credential.PrivateKey
-            );
+            var token = JwtSigner.Sign(header, claims, credential.PrivateKey);
 
             request.Headers.Date = date;
-            request.Headers.Add("User-Agent", "Carbon/1.0.0");
+            request.Headers.Add("User-Agent", "Carbon/2.0.0");
             
             var headerValue = "Bearer " + token.ToString();
 

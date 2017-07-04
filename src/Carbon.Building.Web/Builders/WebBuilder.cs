@@ -31,7 +31,7 @@ namespace Carbon.Building.Web
             this.fs      = fs      ?? throw new ArgumentNullException(nameof(fs));
             this.package = package ?? throw new ArgumentNullException(nameof(package));
 
-            var unique = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 16);
+            var unique = Guid.NewGuid().ToString("N");
 
             this.buildId = DateTime.UtcNow.ToString("yyyyMMddHHmmss") + "-" + unique;
             this.basePath = BaseDirectory + $@"/{buildId}/";

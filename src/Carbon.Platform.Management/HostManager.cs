@@ -82,6 +82,7 @@ namespace Carbon.Platform.Management
             }
             else
             {
+                /*
                 // Set the public key, if it hasn't already been set
                 if (host.PublicKey == null && request.PublicKey != null)
                 {
@@ -91,6 +92,7 @@ namespace Carbon.Platform.Management
                         Change.Replace("publicKey", request.PublicKey)
                     }).ConfigureAwait(false);
                 }
+                */
 
                 // transition the state if it has changed
 

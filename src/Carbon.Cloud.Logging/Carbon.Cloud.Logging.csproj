@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Cloud.Logging</AssemblyName>
-    <VersionPrefix>0.3.4</VersionPrefix>
+    <VersionPrefix>0.4.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
 
     <!-- Package Info-->
@@ -13,10 +13,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Carbon.Data.Annotations" Version="1.4.0" />
     <PackageReference Include="Carbon.Data.Sql" Version="0.25.0" />
     <PackageReference Include="Carbon.Json" Version="1.4.1" />
-    <PackageReference Include="Carbon.Security.Primitives" Version="0.16.0" />
+    <PackageReference Include="Carbon.Security.Primitives" Version="0.17.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">

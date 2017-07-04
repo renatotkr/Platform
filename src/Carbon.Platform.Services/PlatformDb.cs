@@ -6,7 +6,6 @@ namespace Carbon.Platform
     using Data;
     using Environments;
     using Hosting;
-    using Iam;
     using Networking;
     using Storage;
 
@@ -64,9 +63,6 @@ namespace Carbon.Platform
             LoadBalancerListeners = new Dataset<LoadBalancerListener,     long>(context);
             LoadBalancerRules     = new Dataset<LoadBalancerRule,         long>(context);
             Subnets               = new Dataset<SubnetInfo,               long>(context);
-
-            // IAM ---------------------------------------------------------------------
-            Users = new Dataset<User, long>(context);
         }
 
         public IDbContext Context { get; }
@@ -109,8 +105,5 @@ namespace Carbon.Platform
 
         // Hosting --------------------------------------------------------------
         public Dataset<DomainInfo,           long> Domains               { get; }
-
-        // IAM ------------------------------------------------------------------
-        public Dataset<User,                 long> Users                 { get; }
     }
 }

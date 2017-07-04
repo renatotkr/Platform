@@ -76,10 +76,6 @@ namespace Carbon.Platform.Computing
         [Member("networkId")]
         public long NetworkId { get; }
 
-        // RSA Public Key (2048 bits -- ASN.1 encoded)
-        [Member("publicKey"), MaxLength(1200)]
-        public byte[] PublicKey { get; set; }
-
         [Member("ownerId")]
         public long OwnerId { get; }
         

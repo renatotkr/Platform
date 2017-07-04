@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.CI</AssemblyName>
-    <VersionPrefix>0.12.0</VersionPrefix>
+    <VersionPrefix>0.15.1</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
 
     <!-- Package Details-->
@@ -24,10 +24,10 @@
 
   <ItemGroup>
     <PackageReference Include="Amazon.CodeBuild" Version="0.6.0" />
+    <PackageReference Include="Carbon.Data.Protection" Version="0.12.0" />
     <PackageReference Include="Carbon.Logging" Version="1.1.0" />
-    <PackageReference Include="Carbon.Security.Primitives" Version="0.16.0" />
+    <PackageReference Include="Carbon.Security.Primitives" Version="0.17.0" />
     <PackageReference Include="Carbon.Versioning" Version="1.2.0" />
-    <PackageReference Include="protobuf-net" Version="2.2.1" />
   </ItemGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">

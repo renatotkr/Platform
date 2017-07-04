@@ -69,8 +69,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Platform.Primitives"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Kms", "Carbon.Kms\Carbon.Kms.csproj", "{07E27AE8-1BCC-4541-AD63-EE4C668AAC07}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Kms.Abstractions", "Carbon.Kms.Abstractions\Carbon.Kms.Abstractions.csproj", "{A4EC2C78-4DD3-4FA9-BAD4-FCB2A32DA550}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.CI", "Carbon.CI\Carbon.CI.csproj", "{CC8A2A98-907D-4866-8F27-13A7ABB989BB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.CI.Abstractions", "Carbon.CI.Abstractions\Carbon.CI.Abstractions.csproj", "{76280282-F461-4789-8E93-CE63D470D920}"
@@ -83,7 +81,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Platform.Security", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Cloud.Logging", "Carbon.Cloud.Logging\Carbon.Cloud.Logging.csproj", "{CBD7BE7B-1564-44F0-BDA3-9A468505EE7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carbon.Cloud.Logging.Tests", "Carbon.Cloud.Logging.Tests\Carbon.Cloud.Logging.Tests.csproj", "{B9E352BE-8E13-4F4E-A1FB-B7EC8238D27F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Cloud.Logging.Tests", "Carbon.Cloud.Logging.Tests\Carbon.Cloud.Logging.Tests.csproj", "{B9E352BE-8E13-4F4E-A1FB-B7EC8238D27F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Kms.Abstractions", "Carbon.Kms.Abstractions\Carbon.Kms.Abstractions.csproj", "{44E98219-BDCE-4404-8FE0-92B9A2CDD337}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -215,10 +215,6 @@ Global
 		{07E27AE8-1BCC-4541-AD63-EE4C668AAC07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07E27AE8-1BCC-4541-AD63-EE4C668AAC07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07E27AE8-1BCC-4541-AD63-EE4C668AAC07}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A4EC2C78-4DD3-4FA9-BAD4-FCB2A32DA550}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A4EC2C78-4DD3-4FA9-BAD4-FCB2A32DA550}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A4EC2C78-4DD3-4FA9-BAD4-FCB2A32DA550}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A4EC2C78-4DD3-4FA9-BAD4-FCB2A32DA550}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CC8A2A98-907D-4866-8F27-13A7ABB989BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CC8A2A98-907D-4866-8F27-13A7ABB989BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC8A2A98-907D-4866-8F27-13A7ABB989BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -247,6 +243,10 @@ Global
 		{B9E352BE-8E13-4F4E-A1FB-B7EC8238D27F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9E352BE-8E13-4F4E-A1FB-B7EC8238D27F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9E352BE-8E13-4F4E-A1FB-B7EC8238D27F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44E98219-BDCE-4404-8FE0-92B9A2CDD337}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44E98219-BDCE-4404-8FE0-92B9A2CDD337}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44E98219-BDCE-4404-8FE0-92B9A2CDD337}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44E98219-BDCE-4404-8FE0-92B9A2CDD337}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
