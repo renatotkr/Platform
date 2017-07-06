@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Client</AssemblyName>
-    <VersionPrefix>0.37.0</VersionPrefix>
+    <VersionPrefix>0.39.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
   
     <!-- Package Details -->
@@ -13,9 +13,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Carbon.Authentication.Jwt" Version="0.10.0" />
+    <PackageReference Include="Carbon.OAuth2" Version="0.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj" />
     <ProjectReference Include="..\Carbon.Platform.Abstractions\Carbon.Platform.Abstractions.csproj" />
-    <ProjectReference Include="..\Carbon.Platform.Security\Carbon.Platform.Security.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">

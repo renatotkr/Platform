@@ -2,28 +2,29 @@
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
 using Carbon.Json;
-using Carbon.Platform.Security;
+using Carbon.OAuth2;
 
 namespace Carbon.Platform
 {
     public abstract class ApiBase
     {
         private readonly string baseUri;
-        private readonly Credential credential;
+        private readonly IAccessToken accessToken;
 
          private readonly HttpClient http = new HttpClient {
             DefaultRequestHeaders = {
-                { "User-Agent", "Carbon/1.6.0" },
+                { "User-Agent", "Carbon/1.0.0" },
                 { "Accept",     "application/json" }
             },
             Timeout = TimeSpan.FromSeconds(15)
         };
 
-        public ApiBase(Uri endpoint, Credential credential)
+        public ApiBase(Uri endpoint, IAccessToken accessToken)
         {
             #region Preconditions
 
@@ -32,11 +33,14 @@ namespace Carbon.Platform
 
             if (endpoint.Scheme != "https")
                 throw new ArgumentException("scheme must be https", nameof(endpoint));
-            
+
+            if (accessToken == null)
+                throw new ArgumentNullException(nameof(accessToken));
+
             #endregion
 
-            this.baseUri    = endpoint.ToString().TrimEnd('/');
-            this.credential = credential ?? throw new ArgumentNullException(nameof(credential));
+            this.baseUri     = endpoint.ToString().TrimEnd('/');
+            this.accessToken = accessToken;
         }
 
         internal async Task<T> PostAsync<T>(string path, object data)
@@ -48,7 +52,7 @@ namespace Carbon.Platform
                 Content = new StringContent(jsonText, Encoding.UTF8, "application/json")
             };
 
-            Signer.SignRequest(request, credential);
+            Sign(request);
 
             using (var response = await http.SendAsync(request).ConfigureAwait(false))
             {
@@ -67,7 +71,7 @@ namespace Carbon.Platform
         {
             var request = new HttpRequestMessage(HttpMethod.Get, baseUri + path);
 
-            Signer.SignRequest(request, credential);
+            Sign(request);
 
             var ms = new MemoryStream();
 
@@ -93,12 +97,38 @@ namespace Carbon.Platform
             return ms;
         }
 
+        internal async Task<T> UploadAsync<T>(string path, string contentType, Stream stream)
+            where T: new()
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, baseUri + path) {
+                Content = new StreamContent(stream) {
+                    Headers = {
+                        ContentType = new MediaTypeHeaderValue(contentType)
+                    }
+                }
+            };
+
+            Sign(request);
+            
+            using (var response = await http.SendAsync(request).ConfigureAwait(false))
+            {
+                var text = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception(response.StatusCode + ":" + text);
+                }
+
+                return JsonObject.Parse(text).As<T>();
+            }
+        }
+
         internal async Task<T1> GetAsync<T1>(string path)
             where T1 : new()
         {
             var request = new HttpRequestMessage(HttpMethod.Get, baseUri + path);
 
-            Signer.SignRequest(request, credential);
+            Sign(request);
 
             using (var response = await http.SendAsync(request).ConfigureAwait(false))
             {
@@ -123,6 +153,14 @@ namespace Carbon.Platform
                     throw new Exception("Error parsing:" + text);
                 }
             }
+        }
+
+        // Expire in 15 minutes
+        private void Sign(HttpRequestMessage request)
+        {
+            request.Headers.Date = DateTimeOffset.UtcNow;
+
+            request.Headers.TryAddWithoutValidation("Authorization", accessToken.ToString());
         }
     }
 }

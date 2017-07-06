@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
 
 using Carbon.Packaging;
 using Carbon.Platform.Computing;
@@ -33,5 +35,26 @@ namespace Carbon.Platform
 
             return ZipPackage.FromStream(packageStream, true);
         }
-    }
+
+        public async Task<ProgramDetails> UploadAsync(long id, SemanticVersion version, Package package)
+         {
+             #region Preconditions
+ 
+             if (package == null)
+                 throw new ArgumentNullException(nameof(package));
+ 
+             #endregion
+ 
+             var stream = new MemoryStream();
+ 
+             await package.ToZipStreamAsync(stream, leaveStreamOpen: true);
+ 
+             stream.Position = 0;
+ 
+             return await api.UploadAsync<ProgramDetails>(
+                 path        : $"/programs/{id}@{version}/package",
+                 contentType : "application/zip",
+                 stream      : stream
+             );
+         }
 }

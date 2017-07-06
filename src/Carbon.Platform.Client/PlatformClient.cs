@@ -1,12 +1,13 @@
 ﻿using System;
-using Carbon.Platform.Security;
+
+using Carbon.OAuth2;
 
 namespace Carbon.Platform
 {
     public class PlatformClient : ApiBase
     {
-        public PlatformClient(Uri endpoint, Credential credential)
-            : base(endpoint, credential)
+        public PlatformClient(Uri endpoint, IAccessToken accessToken)
+            : base(endpoint, accessToken)
         {
             Programs = new ProgramClient(this);
             Hosts    = new HostClient(this);
@@ -14,6 +15,12 @@ namespace Carbon.Platform
         
         public ProgramClient Programs { get; }
 
-        public HostClient Hosts { get; }        
+        public HostClient Hosts { get; }
+
+        // Volumes
+
+        // Clusters
+
+        // ...
     }
 }
