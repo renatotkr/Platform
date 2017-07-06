@@ -8,6 +8,8 @@ namespace Carbon.Kms
     {
         Task<IKeyInfo> GenerateAsync(GenerateKeyRequest request);
 
+        // Rotate?
+
         Task DeactivateAsync(Uid keyId);
 
         Task DestroyAsync(Uid keyId);

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 using Carbon.Data;
@@ -29,13 +28,30 @@ namespace Carbon.Kms
 
         public async Task<KeyInfo> GetAsync(long ownerId, string name)
         {
+            #region Preconditions
+
+            if (ownerId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(ownerId));
+
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+
+            #endregion
+
             var keys = await db.Keys.QueryAsync(Conjunction(
                 Eq("ownerId", ownerId),
                 Eq("name", name),
-                IsNull("deleted")
+                IsNotNull("activated"),
+                Lte("activated", DateTime.UtcNow),  // activated ||  Func("NOW")
+                IsNull("deleted")                   // not deleted
             ), Order.Descending("expires"), take: 1);
 
-            return keys.FirstOrDefault();
+            if (keys.Count == 0)
+            {
+                throw new Exception($"no active keys exist for '{ownerId}/{name}'");
+            }
+
+            return keys[0];
         }
 
         public Task<IReadOnlyList<KeyInfo>> ListAsync(long ownerId)

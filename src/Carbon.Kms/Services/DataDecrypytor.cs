@@ -3,37 +3,43 @@ using System.Threading.Tasks;
 
 using Carbon.Data.Protection;
 
-namespace Carbon.Kms.Services
+namespace Carbon.Kms
 {
-    public class DataDecrypytor : IDataDecrypter
+    public class DataDecryptor : IDataDecryptor
     {
         private readonly IDataProtectorProvider protectorProvider;
 
-        public DataDecrypytor(IDataProtectorProvider protectorProvider)
+        public DataDecryptor(IDataProtectorProvider protectorProvider)
         {
             this.protectorProvider = protectorProvider ?? throw new ArgumentNullException(nameof(protectorProvider));
         }
 
-        public async ValueTask<byte[]> DecryptAsync(EncryptedMessage encryptedDataMessage)
+        public async ValueTask<byte[]> DecryptAsync(EncryptedDataMessage message)
         {
             #region Preconditions
 
-            if (encryptedDataMessage == null)
-                throw new ArgumentNullException(nameof(encryptedDataMessage));
+            if (message == null)
+                throw new ArgumentNullException(nameof(message));
             
             #endregion
 
-            var protector = await protectorProvider.GetAsync(encryptedDataMessage.Header.KeyId).ConfigureAwait(false) as DataProtector;
+            var protector = await protectorProvider.GetAsync(message.Header.KeyId).ConfigureAwait(false) as DataProtector;
             
-            return await protector.DecryptAsync(encryptedDataMessage).ConfigureAwait(false);
+            return await protector.DecryptAsync(message).ConfigureAwait(false);
         }
 
         public ValueTask<byte[]> DecryptAsync(byte[] data)
         {
-            var message = Serializer.Deserialize<EncryptedMessage>(data);
+            #region Preconditions
+
+            if (data == null)
+                throw new ArgumentNullException(nameof(data));
+
+            #endregion
+
+            var message = Serializer.Deserialize<EncryptedDataMessage>(data);
 
             return DecryptAsync(message);
-          
         }
     }
 }

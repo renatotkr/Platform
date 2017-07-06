@@ -21,6 +21,9 @@ namespace Carbon.Kms
             if (plaintext == null)
                 throw new ArgumentNullException(nameof(plaintext));
 
+            if (plaintext.Length == 0)
+                throw new ArgumentException("May not be empty", nameof(plaintext));
+
             #endregion
 
             var iv = Secret.Generate(16); // 128 bit iv
@@ -29,33 +32,33 @@ namespace Carbon.Kms
             {
                 var ciphertext = aes.Encrypt(plaintext);
 
-                var message = new EncryptedMessage(
+                var message = new EncryptedDataMessage(
                     keyId      : key.Id,
                     iv         : iv.Value,
                     ciphertext : ciphertext
                 );
 
-                var encryptedMessageData = Serializer.Serialize(message);
+                var messageData = Serializer.Serialize(message);
 
-                return new ValueTask<byte[]>(encryptedMessageData);
+                return new ValueTask<byte[]>(messageData);
             }
         }
 
-        public ValueTask<byte[]> DecryptAsync(byte[] ciphertext)
+        public ValueTask<byte[]> DecryptAsync(byte[] data)
         {
             #region Preconditions
 
-            if (ciphertext == null)
-                throw new ArgumentNullException(nameof(ciphertext));
+            if (data == null)
+                throw new ArgumentNullException(nameof(data));
 
             #endregion
 
-            var message = Serializer.Deserialize<EncryptedMessage>(ciphertext);
+            var message = Serializer.Deserialize<EncryptedDataMessage>(data);
             
             return DecryptAsync(message);
         }
 
-        public ValueTask<byte[]> DecryptAsync(EncryptedMessage message)
+        public ValueTask<byte[]> DecryptAsync(EncryptedDataMessage message)
         {
             #region Preconditions
 
@@ -63,7 +66,7 @@ namespace Carbon.Kms
                 throw new ArgumentNullException(nameof(message));
 
             if (message.Header.KeyId != key.Id)
-                throw new Exception("wrong key:" + message.Header.KeyId);
+                throw new Exception($"message key '{message.Header.KeyId}' does not match protector");
 
             #endregion
 

@@ -30,6 +30,7 @@ namespace Carbon.Kms
             LocationId = locationId;
             ResourceId = resourceId;
             Activated  = DateTime.UtcNow;
+            Status     = KeyStatus.Active;
             Type       = type;
         }
 
@@ -49,6 +50,9 @@ namespace Carbon.Kms
         {
             #region Preconditions
 
+            if (ownerId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(ownerId));
+
             if (name == null || string.IsNullOrEmpty(name))
                 throw new ArgumentException("Required", nameof(name));
 
@@ -60,6 +64,7 @@ namespace Carbon.Kms
             Id        = id;
             OwnerId   = ownerId;
             Name      = name;
+            Format    = format;
             Data      = data;
             Aad       = aad;
             KekId     = kekId;

@@ -18,22 +18,33 @@ namespace Carbon.Kms
             string[] actions,
             long userId,
             JsonObject constraints,
+            JsonObject properties = null,
             string externalId = null)
         {
             #region Preconditions
 
             if (userId <= 0)
                 throw new ArgumentException("Invalid", nameof(userId));
-            
+
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Required", nameof(name));
+
+            if (actions == null)
+                throw new ArgumentNullException(nameof(actions));
+
             #endregion
 
-            Id         = grantId;
-            KeyId      = keyId;
-            Name       = name ?? throw new ArgumentNullException(nameof(name));
-            Actions    = actions;
-            UserId     = userId;
+            Id          = grantId;
+            KeyId       = keyId;
+            Name        = name;
+            Actions     = actions;
+            UserId      = userId;
             Constraints = constraints;
-            ResourceId = externalId;
+            Properties  = properties;
+            ResourceId  = externalId;
         }
         
         [Member("id"), Key]
@@ -54,11 +65,13 @@ namespace Carbon.Kms
         [Member("actions")]
         public string[] Actions { get; }
 
-        // The context may grant access to mutiple keys...
+        // operations / permissions?
+
+        // The context may grant access to mutiple derived keys...
         [Member("constraints"), StringLength(200)]
         public JsonObject Constraints { get; }
 
-        [Member("properties"), StringLength(200)]
+        [Member("properties"), StringLength(500)]
         public JsonObject Properties { get; }
 
         #region Resource

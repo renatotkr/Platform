@@ -11,38 +11,63 @@ namespace Carbon.Kms
     public class KeyProvider : IKeyProvider
     {
         private readonly IClock clock;
-        private readonly IDataProtectorProvider protectorProvider;
+        private readonly IDataProtectorProvider protectorFactory;
         private readonly IKeyStore keyStore;
 
         public KeyProvider(
             IClock clock,
             IDataProtectorProvider protectorProvider,
-            IKeyStore keyService)
+            IKeyStore keyStore)
         {
-            this.keyStore          = keyService        ?? throw new ArgumentNullException(nameof(keyService));
-            this.clock             = clock             ?? throw new ArgumentNullException(nameof(clock));
-            this.protectorProvider = protectorProvider ?? throw new ArgumentNullException(nameof(protectorProvider));
-        }   
+            this.clock            = clock             ?? throw new ArgumentNullException(nameof(clock));
+            this.keyStore         = keyStore          ?? throw new ArgumentNullException(nameof(keyStore));
+            this.protectorFactory = protectorProvider ?? throw new ArgumentNullException(nameof(protectorProvider));
+        }
+
+        public async ValueTask<CryptoKey> GetAsync(long ownerId, string name)
+        {
+            var key = await keyStore.GetAsync(ownerId, name).ConfigureAwait(false);
+
+            return await DecryptAsync(key).ConfigureAwait(false);
+        }
 
         public async ValueTask<CryptoKey> GetAsync(Uid id)
         {
-            var key = await keyStore.GetAsync(id);
+            var key = await keyStore.GetAsync(id).ConfigureAwait(false);
+
+            return await DecryptAsync(key).ConfigureAwait(false);
+        }
+
+        private async Task<CryptoKey> DecryptAsync(KeyInfo key)
+        {
+            #region Preconditions
+
+            switch (key.Status)
+            {
+                case KeyStatus.Deactivated : throw new Exception($"key#{key.Id} is deactivated");
+                case KeyStatus.Compromised : throw new Exception($"key#{key.Id} was comprimised and may not longer be used");
+                case KeyStatus.Destroyed   : throw new Exception($"key#{key.Id} is destroyed");
+                case KeyStatus.Suspended   : throw new Exception($"key#{key.Id} is suspended");
+            }
 
             if (key.Expires != null && key.Expires <= clock.Observe())
             {
-                throw new Exception($"key expired on '{key.Expires}' and may not be used");
+                throw new Exception($"key#{key.Id} expired on '{key.Expires}'");
             }
 
-            var dek = await protectorProvider.GetAsync(
-                keyId : key.KekId.ToString(), 
-                aad   : key.GetAad()
+            #endregion
+
+            var kek = await protectorFactory.GetAsync(
+                keyId: key.KekId.ToString(),
+                aad: key.GetAad()
             ).ConfigureAwait(false);
 
-            var result = await dek.DecryptAsync(key.Data).ConfigureAwait(false);
+            // use the key encryption key to decrypt it
+            var result = await kek.DecryptAsync(key.Data).ConfigureAwait(false);
 
             return new CryptoKey(
-                id    : key.Id.ToString(),
-                value : result
+                id: key.Id.ToString(),
+                value: result
             );
         }
     }

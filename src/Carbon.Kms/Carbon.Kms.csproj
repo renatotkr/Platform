@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Kms</AssemblyName>
-    <VersionPrefix>0.14.0</VersionPrefix>
+    <VersionPrefix>0.15.6</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
 
     <!-- Package Details -->
@@ -17,8 +17,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Carbon.Data.Annotations" Version="1.4.0" />
-    <PackageReference Include="Carbon.Data.Protection.Primitives" Version="0.13.0" />
     <PackageReference Include="Carbon.Data.Sql" Version="0.25.0" />
     <PackageReference Include="Carbon.Json" Version="1.4.1" />
     <PackageReference Include="Carbon.Time" Version="1.2.0" />
