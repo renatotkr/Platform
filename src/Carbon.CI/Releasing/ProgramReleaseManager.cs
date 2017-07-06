@@ -19,14 +19,14 @@ namespace Carbon.CI
         private readonly IPackageStore packageStore;
         private readonly IProgramReleaseService releaseService;
         private readonly IDataProtectorProvider protectorProvider;
-        private readonly IDataDecrypter dataDecrypter;
+        private readonly IDataDecryptor dataDecrypter;
         private readonly IEventLogger log;
 
         public ProgramReleaseManager(
             IPackageStore packageStore, 
             IProgramReleaseService releaseService,
             IDataProtectorProvider protectorProvider,
-            IDataDecrypter dataDecrypter,
+            IDataDecryptor dataDecrypter,
             IEventLogger log)
         {
             this.packageStore      = packageStore      ?? throw new ArgumentNullException(nameof(packageStore));

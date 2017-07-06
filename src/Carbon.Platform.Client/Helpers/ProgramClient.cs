@@ -15,7 +15,7 @@ namespace Carbon.Platform
 
         internal ProgramClient(ApiBase api)
         {
-            this.api = api;
+            this.api = api ?? throw new ArgumentNullException(nameof(api));
         }
 
         public Task<ProgramDetails> GetAsync(long id)
@@ -37,24 +37,25 @@ namespace Carbon.Platform
         }
 
         public async Task<ProgramDetails> UploadAsync(long id, SemanticVersion version, Package package)
-         {
-             #region Preconditions
- 
-             if (package == null)
-                 throw new ArgumentNullException(nameof(package));
- 
-             #endregion
- 
-             var stream = new MemoryStream();
- 
-             await package.ToZipStreamAsync(stream, leaveStreamOpen: true);
- 
-             stream.Position = 0;
- 
-             return await api.UploadAsync<ProgramDetails>(
-                 path        : $"/programs/{id}@{version}/package",
-                 contentType : "application/zip",
-                 stream      : stream
-             );
-         }
+        {
+            #region Preconditions
+
+            if (package == null)
+                throw new ArgumentNullException(nameof(package));
+
+            #endregion
+
+            var stream = new MemoryStream();
+
+            await package.ToZipStreamAsync(stream, leaveStreamOpen: true);
+
+            stream.Position = 0;
+
+            return await api.UploadAsync<ProgramDetails>(
+                path        : $"/programs/{id}@{version}/package",
+                contentType : "application/zip",
+                stream      : stream
+            );
+        }
+    }
 }

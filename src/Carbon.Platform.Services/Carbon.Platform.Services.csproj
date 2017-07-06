@@ -19,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Carbon.Data.Protection" Version="0.12.0" />
     <PackageReference Include="Carbon.Data.Sql" Version="0.25.0" />
     <PackageReference Include="Carbon.Json" Version="1.4.1" />
     <PackageReference Include="System.ValueTuple" Version="4.3.1" />

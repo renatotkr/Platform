@@ -8,6 +8,7 @@ using Carbon.Platform.Resources;
 namespace Carbon.Platform.Computing
 {
     [Dataset("Clusters", Schema = "Computing")]
+    [UniqueIndex("environmentId", "locationId")]
     public class Cluster : ICluster
     {
         public Cluster() { }
@@ -43,7 +44,6 @@ namespace Carbon.Platform.Computing
         }
         
         // environmentId | #
-        // parition on environment...
         [Member("id"), Key("clusterId")]
         public long Id { get; }
 
@@ -52,7 +52,6 @@ namespace Carbon.Platform.Computing
         public string Name { get; }
 
         [Member("environmentId")]
-        [Indexed]
         public long EnvironmentId { get; }
         
         // global, regional, or zonal

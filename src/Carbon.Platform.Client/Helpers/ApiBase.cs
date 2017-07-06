@@ -160,7 +160,7 @@ namespace Carbon.Platform
         {
             request.Headers.Date = DateTimeOffset.UtcNow;
 
-            request.Headers.TryAddWithoutValidation("Authorization", accessToken.ToString());
+            request.Headers.Add("Authorization", accessToken.ToString());
         }
     }
 }

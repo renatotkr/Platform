@@ -15,9 +15,3 @@ namespace Carbon.Platform.Computing
         string Runtime { get; }
     }
 }
-
-/*
-There are four specialized types of programs: Apps, Sites, Services, and Tasks
-
-ref: https://en.wikipedia.org/wiki/Computer_program
-*/

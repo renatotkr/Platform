@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-
+using Carbon.OAuth2;
 using Carbon.Platform.Computing;
-using Carbon.Platform.Security;
 
 namespace Carbon.CI
 {
@@ -12,16 +10,16 @@ namespace Carbon.CI
     {
         private readonly HttpClient http = new HttpClient {
             DefaultRequestHeaders = {
-                { "User-Agent", "Carbon/1.6.0" },
+                { "User-Agent", "Carbon/1.0.0" },
                 { "Accept",     "application/json" }
             },
             Timeout = TimeSpan.FromSeconds(30)
         };
 
         private int port;
-        private readonly Credential credential;
+        private readonly IAccessToken credential;
 
-        public HostAgentClient(Credential credential, int port)
+        public HostAgentClient(IAccessToken credential, int port = 8000)
         {
             // subject = provider:user/1
             // issuer  = https://provider/
@@ -89,9 +87,7 @@ namespace Carbon.CI
                 requestUri: url
             );
 
-            request.Headers.Host = host.Id + ".borg.host";
-
-            Signer.SignRequest(request, credential);
+            request.Headers.Add("Authorization", credential.ToString());
 
             using (var response = await http.SendAsync(request).ConfigureAwait(false))
             {
