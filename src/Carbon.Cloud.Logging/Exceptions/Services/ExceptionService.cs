@@ -27,8 +27,8 @@ namespace Carbon.Platform.Diagnostics
 
         public async Task<IReadOnlyList<ExceptionInfo>> ListAsync(long environmentId)
         {
-            var start = ExceptionId.Create(environmentId, DateTime.UtcNow.AddYears(-10), 0);
-            var end   = ExceptionId.Create(environmentId, DateTime.UtcNow.AddYears(10), 0);
+            var start = RequestId.Create(environmentId, DateTime.UtcNow.AddYears(-10), 0);
+            var end   = RequestId.Create(environmentId, DateTime.UtcNow.AddYears(10), 0);
             
             var result = await db.Exceptions.QueryAsync(
                 expression  : Between("id", start, end),
@@ -50,7 +50,7 @@ namespace Carbon.Platform.Diagnostics
 
             // 1 per millisecond for now...
 
-            var id = ExceptionId.Create(
+            var id = RequestId.Create(
                 request.EnvironmentId,
                 request.Created ?? DateTime.UtcNow, 
                 0 // TODO: Random

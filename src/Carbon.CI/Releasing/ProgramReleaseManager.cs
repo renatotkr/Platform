@@ -57,7 +57,6 @@ namespace Carbon.CI
             var key = program.Id + "/" + version.ToString() + ".zip";
 
             var properties = new JsonObject();
-
             
             byte[] encryptionKey = null;
 
@@ -74,7 +73,7 @@ namespace Carbon.CI
                 properties.Add("cek", cek);
             }
 
-            PutPackageResult result = await packageStore.PutAsync(key, package, new PutPackageOptions {
+            var result = await packageStore.PutAsync(key, package, new PutPackageOptions {
                 EncryptionKey = encryptionKey
             });
 
@@ -83,7 +82,8 @@ namespace Carbon.CI
                 properties.Add("iv", result.IV);
             }
 
-            properties.Add("sha256", result.Sha256);
+            properties.Add("sha256",      result.Sha256);
+            properties.Add("packageName", key);
 
             if (program.Properties != null)
             {

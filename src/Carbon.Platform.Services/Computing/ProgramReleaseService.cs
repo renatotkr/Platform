@@ -44,6 +44,7 @@ namespace Carbon.Platform.Computing
                 program    : request.Program,
                 version    : request.Version,
                 properties : request.Properties,
+                commitId   : request.Commit?.Id ?? 0,
                 creatorId  : request.CreatorId
             );
 

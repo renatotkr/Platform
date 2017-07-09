@@ -7,14 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Carbon.Json;
-using Carbon.OAuth2;
+using Carbon.Security.Tokens;
 
 namespace Carbon.Platform
 {
     public abstract class ApiBase
     {
         private readonly string baseUri;
-        private readonly IAccessToken accessToken;
+        private readonly ISecurityToken credential;
 
          private readonly HttpClient http = new HttpClient {
             DefaultRequestHeaders = {
@@ -24,7 +24,7 @@ namespace Carbon.Platform
             Timeout = TimeSpan.FromSeconds(15)
         };
 
-        public ApiBase(Uri endpoint, IAccessToken accessToken)
+        public ApiBase(Uri endpoint, ISecurityToken credential)
         {
             #region Preconditions
 
@@ -34,13 +34,10 @@ namespace Carbon.Platform
             if (endpoint.Scheme != "https")
                 throw new ArgumentException("scheme must be https", nameof(endpoint));
 
-            if (accessToken == null)
-                throw new ArgumentNullException(nameof(accessToken));
-
             #endregion
 
-            this.baseUri     = endpoint.ToString().TrimEnd('/');
-            this.accessToken = accessToken;
+            this.baseUri    = endpoint.ToString().TrimEnd('/');
+            this.credential = credential ?? throw new ArgumentNullException(nameof(credential));
         }
 
         internal async Task<T> PostAsync<T>(string path, object data)
@@ -155,12 +152,11 @@ namespace Carbon.Platform
             }
         }
 
-        // Expire in 15 minutes
         private void Sign(HttpRequestMessage request)
         {
             request.Headers.Date = DateTimeOffset.UtcNow;
 
-            request.Headers.Add("Authorization", accessToken.ToString());
+            request.Headers.Add("Authorization", "Bearer " + credential.Value);
         }
     }
 }

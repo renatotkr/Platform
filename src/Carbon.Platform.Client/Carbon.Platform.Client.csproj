@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="Carbon.Authentication.Jwt" Version="0.10.0" />
-    <PackageReference Include="Carbon.OAuth2" Version="0.6.0" />
+    <PackageReference Include="Carbon.Security.Primitives" Version="0.20.0" />
   </ItemGroup>
 
   <ItemGroup>

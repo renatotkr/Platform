@@ -55,7 +55,7 @@ namespace Carbon.Cloud.Logging
         #region Helpers
 
         [IgnoreDataMember]
-        public DateTime Created => Id.GetTimestamp();
+        public DateTime Created => RequestId.GetTimestamp(Id);
 
         #endregion
     }

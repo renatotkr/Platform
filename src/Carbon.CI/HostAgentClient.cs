@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Carbon.OAuth2;
 using Carbon.Platform.Computing;
+using Carbon.Security.Tokens;
 
 namespace Carbon.CI
 {
@@ -17,9 +17,9 @@ namespace Carbon.CI
         };
 
         private int port;
-        private readonly IAccessToken credential;
+        private readonly ISecurityToken credential;
 
-        public HostAgentClient(IAccessToken credential, int port = 8000)
+        public HostAgentClient(ISecurityToken credential, int port = 8000)
         {
             // subject = provider:user/1
             // issuer  = https://provider/
@@ -87,7 +87,7 @@ namespace Carbon.CI
                 requestUri: url
             );
 
-            request.Headers.Add("Authorization", credential.ToString());
+            request.Headers.Add("Authorization", "Bearer " + credential.Value);
 
             using (var response = await http.SendAsync(request).ConfigureAwait(false))
             {

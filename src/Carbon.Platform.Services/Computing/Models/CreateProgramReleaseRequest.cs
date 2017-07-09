@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 using Carbon.Json;
+using Carbon.Platform.Storage;
 using Carbon.Versioning;
 
 namespace Carbon.Platform.Computing
@@ -32,7 +33,9 @@ namespace Carbon.Platform.Computing
         public IProgram Program { get; set; }
 
         public SemanticVersion Version { get; set; }
-        
+
+        public IRepositoryCommit Commit { get; set; }
+
         public JsonObject Properties { get; set; }
 
         [Range(1, 2_199_023_255_552)]

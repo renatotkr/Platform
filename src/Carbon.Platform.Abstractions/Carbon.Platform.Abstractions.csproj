@@ -15,10 +15,7 @@
     <PackageProjectUrl>https://github.com/carbon/platform</PackageProjectUrl>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Carbon.Versioning" Version="1.2.0" />
-  </ItemGroup>
-
+  
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
     <PackageReference Remove="NETStandard.Library" />
     <PackageReference Include="System.Runtime" Version="4.3.0" />
@@ -30,6 +27,10 @@
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <Reference Include="System.Runtime.Serialization" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Carbon.Versioning" Version="1.2.0" />
   </ItemGroup>
 
 </Project>

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Carbon.Packaging.Tar</AssemblyName>
     <VersionPrefix>0.8.1</VersionPrefix>
-    <TargetFrameworks>net461;netstandard1.6</TargetFrameworks>
+    <TargetFrameworks>netstandard1.6</TargetFrameworks>
 
     <!-- Package Details -->
     <Authors>iamcarbon</Authors>
@@ -17,9 +17,6 @@
   <ItemGroup>
     <PackageReference Include="Carbon.Storage" Version="1.8.1" />
     <PackageReference Include="SharpCompress" Version="0.17.1" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">

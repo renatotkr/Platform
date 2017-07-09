@@ -35,7 +35,7 @@ namespace Carbon.Cloud.Logging
 
         #region IClient
 
-        Guid IClient.Id => new Guid(Id.Serialize());
+        string IClient.Id => Id.ToString();
 
         #endregion
     }

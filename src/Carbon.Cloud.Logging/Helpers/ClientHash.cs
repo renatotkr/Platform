@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using Carbon.Data.Sequences;
 using Carbon.Security;
 
 namespace Carbon.Cloud.Logging
@@ -13,15 +14,15 @@ namespace Carbon.Cloud.Logging
 
         public static byte[] Compute(ISecurityContext context)
         {
-            return Compute(context.ClientId, context.ClientIp, context.UserAgent);
+            return Compute(Uid.Parse(context.ClientId), context.ClientIp, context.UserAgent);
         }
 
         public static byte[] Compute(IClient client)
         {
-            return Compute(client.Id, client.Ip, client.UserAgent);
+            return Compute(Uid.Parse(client.Id), client.Ip, client.UserAgent);
         }
 
-        public static byte[] Compute(Guid id, IPAddress ip, string userAgent)
+        public static byte[] Compute(Uid id, IPAddress ip, string userAgent)
         {
             #region Preconditions
 
@@ -35,7 +36,7 @@ namespace Carbon.Cloud.Logging
 
             // TODO: Avoid some of these allocations....
 
-            var idBytes        = id.ToByteArray();
+            var idBytes        = id.Serialize();
             var addressBytes   = ip.GetAddressBytes();
             var userAgentBytes = Encoding.UTF8.GetBytes(userAgent);
             

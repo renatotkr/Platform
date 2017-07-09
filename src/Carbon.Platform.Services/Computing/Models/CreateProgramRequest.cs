@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-
 using Carbon.Versioning;
 
 namespace Carbon.Platform.Computing
@@ -44,8 +43,6 @@ namespace Carbon.Platform.Computing
         public string[] Addresses { get; set; }
 
         public ProgramType Type { get; set; }
-
-        // ConfigurationTemplate
 
         [StringLength(63)]
         public string Slug { get; set; }

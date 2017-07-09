@@ -27,7 +27,7 @@ namespace Carbon.CI
         public Dataset<BuildArtifact, long>            BuildArtifacts    { get; }
         public Dataset<Deployment, long>               Deployments       { get; }
         public Dataset<DeploymentTarget, (long, long)> DeploymentTargets { get; }
-        public Dataset<ProjectInfo, long>                  Projects { get; }
+        public Dataset<ProjectInfo, long>              Projects { get; }
 
     }
 }

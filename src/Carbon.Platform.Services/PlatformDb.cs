@@ -17,7 +17,6 @@ namespace Carbon.Platform
             context.Types.TryAdd(new SemanticVersionHandler());
             context.Types.TryAdd(new IPAddressHandler());
             context.Types.TryAdd(new IPAddressArrayHandler());
-            context.Types.TryAdd(new HashHandler());
             context.Types.TryAdd(new JsonObjectHandler());
             context.Types.TryAdd(new StringArrayHandler());
             context.Types.TryAdd(new MacAddressHandler());

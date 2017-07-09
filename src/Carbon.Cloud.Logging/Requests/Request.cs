@@ -37,8 +37,8 @@ namespace Carbon.Cloud.Logging
 
             if (context != null)
             {
-                ClientId   = Uid.Deserialize(context.ClientId.ToByteArray());
-                ClientHash = Logging.ClientHash.Compute(context);
+                ClientId   = Uid.Parse(context.ClientId);
+                ClientHash = Logging.ClientHash.Compute(ClientId, context.ClientIp, context.UserAgent);
             }
         }
         
@@ -126,7 +126,7 @@ namespace Carbon.Cloud.Logging
 
         #region Helpers
 
-        public DateTime Created => Id.GetTimestamp();
+        public DateTime Created => RequestId.GetTimestamp(Id);
 
         public RequestTiming[] Timings { get; set; }
 
