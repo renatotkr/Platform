@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Carbon.Data.Sequences;
 
 using Xunit;
@@ -21,10 +20,110 @@ namespace Carbon.Cloud.Logging
 
             var b = Uid.Deserialize(data);
 
-            Assert.Equal((ulong)1, a.Upper);
+            Assert.Equal(4588768ul, a.Upper);
 
-            // Assert.Equal(date, a.GetTimestamp());
-            // Assert.Equal(3, a.GetSequenceNumber());
+            Assert.Equal(date, RequestId.GetTimestamp(a));
+            Assert.Equal(3, RequestId.GetSequenceNumber(a));
+        }
+
+        [Fact]
+        public void Base62Encode()
+        {
+            for (var i = 0ul; i < 1_000_000; i++)
+            {
+                Assert.Equal(i, Base62.Decode(Base62.Encode(i)));
+            }
+        }
+
+        [Fact]
+        public void Limits()
+        {
+            var maxId       = 2199023255552; // 2 ^ 41
+            var maxSequence = (2199023255552 * 2) - 1; // 2 ^ 42
+
+            var maxDate = new DateTime(1970 + 478, 01, 01, 18, 17, 37, 999, DateTimeKind.Utc); // 478 years
+
+            var id = RequestId.Create(maxId, maxDate, maxSequence);
+            
+            Assert.Equal(4653133208748031999ul, id.Lower);
+
+            Assert.Equal("80000000003fef8240933fffffffffff", id.ToString());
+
+            Assert.Equal(maxDate,       RequestId.GetTimestamp(id));
+            Assert.Equal(maxSequence,   RequestId.GetSequenceNumber(id));
+        }
+
+        [Fact]
+        public void SequenceNumber()
+        {
+            for (var i = 0; i < 10; i++)
+            {
+                var id = RequestId.Create(0, new DateTime(2000, 01, 01), i);
+
+                Assert.Equal(i, RequestId.GetSequenceNumber(id));
+            }
+        }
+
+
+        [Fact]
+        public void Uid2()
+        {
+            var date1 = new DateTime(1970, 01, 01, 00, 00, 00, DateTimeKind.Utc);
+            var date2 = new DateTime(2000, 01, 01, 03, 17, 37, 593, DateTimeKind.Utc);
+            var date3 = new DateTime(2000, 01, 01, 03, 17, 37, 594, DateTimeKind.Utc);
+            var date4 = new DateTime(2099, 01, 01, 03, 17, 37, 595, DateTimeKind.Utc);
+            var date5 = new DateTime(1970 + 478, 01, 01, 18, 17, 37, 999, DateTimeKind.Utc); // 478 years
+
+            var id1 = RequestId.Create(1, date1, 1);
+            var id2 = RequestId.Create(1, date1, 2);
+            var id3 = RequestId.Create(1, date2, 2);
+            var id4 = RequestId.Create(1, date3, 2);
+            var id5 = RequestId.Create(1, date4, 2);
+            var id6 = RequestId.Create(2, date4, 2);
+            var id7 = RequestId.Create((long)Math.Pow(2, 41), date5, 2);
+            var id8 = RequestId.Create((long)Math.Pow(2, 41), date5, (long)Math.Pow(2, 42) - 2);
+
+            Assert.Equal("00000000004000000000000000000001", id1.ToString());
+            Assert.Equal("00000000004000000000000000000002", id2.ToString());
+            Assert.Equal("000000000044033b408ce40000000002", id3.ToString());
+            Assert.Equal("000000000044033b408ce80000000002", id4.ToString());
+            Assert.Equal("000000000051413b408cec0000000002", id5.ToString());
+            Assert.Equal("000000000091413b408cec0000000002", id6.ToString());
+            Assert.Equal("80000000003fef8240933c0000000002", id7.ToString());
+            Assert.Equal("80000000003fef8240933ffffffffffe", id8.ToString());
+
+
+            Assert.Equal("0000000hB8400000000001", Base62.Encode(id1));
+            Assert.Equal("0000000hB8400000000002", Base62.Encode(id2));
+            Assert.Equal("0000000iHxx5xBctuwgWJQ", Base62.Encode(id3));
+            Assert.Equal("0000000iHxx5xBdIVbtTZU", Base62.Encode(id4));
+            Assert.Equal("0000000mliX5xBeYlQGRfY", Base62.Encode(id5));
+            Assert.Equal("0000000DWr15xBeYlQGRfY", Base62.Encode(id6));
+            Assert.Equal("aZl8N0ymIO65xJnw6n6ZW2", Base62.Encode(id7));
+            Assert.Equal("aZl8N0ymIO65xJoLx2jXc2", Base62.Encode(id8));
+
+            /*
+            // .PadLeft(24, '0')
+            throw new Exception(string.Join(Environment.NewLine,
+                new[] { id1, id2, id3, id4, id5, id6, id7, id8 }.Select(a => Base62.Encode(a))));
+            */
+
+
+            Assert.Equal(date4, RequestId.GetTimestamp(id5));
+            Assert.Equal(date5, RequestId.GetTimestamp(id7));
+            Assert.Equal(date5, RequestId.GetTimestamp(id7));
+
+
+            Assert.Equal(1, RequestId.GetSequenceNumber(id1));
+            Assert.Equal(2, RequestId.GetSequenceNumber(id2));
+            Assert.Equal(2, RequestId.GetSequenceNumber(id3));
+
+            Assert.Equal((long)Math.Pow(2, 41), RequestId.GetAccountId(id7));
+
+            Assert.Equal(0,   RequestId.GetTimestamp(id1).Millisecond);
+            Assert.Equal(593, RequestId.GetTimestamp(id3).Millisecond);
+            Assert.Equal(594, RequestId.GetTimestamp(id4).Millisecond);
+            Assert.Equal(595, RequestId.GetTimestamp(id5).Millisecond);
         }
 
         [Fact]
@@ -34,66 +133,32 @@ namespace Carbon.Cloud.Logging
 
             var id = RequestId.Create(1, date, 1);
 
-            Assert.Equal("0000000000000001371ab3eb00000001", id.ToString());
+            Assert.Equal("00000000004403380000000000000001", id.ToString());
 
             var data = id.Serialize();
             var id2 = Uid.Deserialize(data);
 
-            Assert.Equal(date,      id2.GetTimestamp());
-            Assert.Equal((ulong)1,  id2.Upper);
+            Assert.Equal(date, RequestId.GetTimestamp(id2));
+            Assert.Equal(4457272ul, id2.Upper);
 
-            // Assert.Equal(1, id2.GetSequenceNumber());
+            Assert.Equal(1, RequestId.GetSequenceNumber(id2));
 
             var a = Uid.Parse(id.ToString());
 
-            Assert.Equal("0000000000000001371ab3eb00000001", a.ToString());
+            Assert.Equal("00000000004403380000000000000001", a.ToString());
         }
-
-        [Fact]
-        public void ToStringTests3()
-        {
-            var date = new DateTime(2015, 01, 01);
-
-            Assert.Equal("00002df3a845d7b452a8b2ac0000cc79", RequestId.Create(50524523452340, date, 52345).ToString());
-            Assert.Equal("7fffffffffffffff52a8b2ac0000cc79", RequestId.Create(long.MaxValue, date, 52345).ToString());
-            Assert.Equal("7ffffffffffffffe52a8b2ac0000cc79", RequestId.Create(long.MaxValue - 1, date, 52345).ToString());
-            Assert.Equal("800000000000000052a8b2ac0000cc79", RequestId.Create(long.MinValue, date, 52345).ToString());
-            Assert.Equal("800000000000000052a8b2ac0000cc79", Uid.Parse(RequestId.Create(long.MinValue, date, 52345).ToString()).ToString());
-        }
-
-        [Fact]
-        public void ToStringTests()
-        {
-            var date = new DateTime(2015, 01, 01);
-
-            var a = RequestId.Create(1, date, 3);
-            var b = Uid.Parse(a.ToString());
-
-            Assert.Equal("000000000000000152a8b2ac00000003", a.ToString());
-            Assert.Equal("000000000000000152a8b2ac00000003", b.ToString());
-
-            Assert.Equal((ulong)1, b.Upper);
-            // Assert.Equal(2u, b.timestamp);
-            // Assert.Equal(3, b.GetSequenceNumber());
-
-            var date2 = new DateTime(2016, 12, 13);
-
-            Assert.Equal("0000000000000001563d5ea400000003", RequestId.Create(1, date2, 3).ToString());
-            Assert.Equal("0000000000000001563d5ea400000004", RequestId.Create(1, date2, 4).ToString());
-            // Assert.Equal("0000000000000001563d5ea4003fffff", RequestId.Create(1, date2, ScopedId.MaxSequenceNumber).ToString());
-        }
-
+    
         [Fact]
         public void GuidToUidCast()
         {
             var date2 = new DateTime(2016, 12, 13);
             var uid = RequestId.Create(1, date2, 3);
 
-            Assert.Equal("0000000000000001563d5ea400000003", RequestId.Create(1, date2, 3).ToString());
+            Assert.Equal("00000000004647a00000000000000003", RequestId.Create(1, date2, 3).ToString());
 
             var a = (Uid)new Guid(uid.Serialize());
 
-            Assert.Equal("0000000000000001563d5ea400000003", a.ToString());
+            Assert.Equal("00000000004647a00000000000000003", a.ToString());
         }
     }
 }
