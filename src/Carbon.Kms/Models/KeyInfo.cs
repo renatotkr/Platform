@@ -87,7 +87,7 @@ namespace Carbon.Kms
         public KeyType Type { get; }
 
         [Member("format")]
-        public KeyDataFormat Format { get; set; }
+        public KeyDataFormat Format { get; }
 
         [Member("data"), MaxLength(2500)]
         public byte[] Data { get; }

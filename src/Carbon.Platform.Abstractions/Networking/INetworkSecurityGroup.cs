@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Networking
 {
-    public interface INetworkSecurityGroup : IManagedResource
+    public interface INetworkSecurityGroup : IResource
     {
         string Name { get; }
 

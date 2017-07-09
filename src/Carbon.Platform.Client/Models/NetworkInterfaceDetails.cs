@@ -8,26 +8,20 @@ namespace Carbon.Platform.Networking
 {
     public class NetworkInterfaceDetails : INetworkInterface
     {
-        [DataMember(Name = "id", Order = 1)]
+        [DataMember(Name = "id")]
         public long Id { get; set; }
 
-        [DataMember(Name = "macAddress", Order = 2)]
+        [DataMember(Name = "macAddress")]
         public MacAddress MacAddress { get; set; }
 
-        [DataMember(Name = "addresses", Order = 3)]
+        [DataMember(Name = "addresses")]
         public IPAddress[] Addresses { get; set; }
-
-        #region IResource
-
-        [DataMember(Name = "resource", Order = 4, EmitDefaultValue = false)]
+        
+        [DataMember(Name = "resource", EmitDefaultValue = false)]
         public ManagedResource Resource { get; set; }
 
-        int IManagedResource.LocationId => Resource.LocationId;
-
-        string IManagedResource.ResourceId => Resource.ResourceId;
-
-        int IManagedResource.ProviderId => Resource.ProviderId;
-
+        #region IResource
+        
         ResourceType IResource.ResourceType => ResourceTypes.NetworkInterface;
 
         #endregion

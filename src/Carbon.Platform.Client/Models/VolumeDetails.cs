@@ -6,22 +6,16 @@ namespace Carbon.Platform.Storage
 {
     public class VolumeDetails : IVolume
     {
-        [DataMember(Name = "id", Order = 1)]
+        [DataMember(Name = "id")]
         public long Id { get; set; }
 
-        [DataMember(Name = "size", Order = 2)]
+        [DataMember(Name = "size")]
         public long Size { get; set; }
 
-        [DataMember(Name = "resource", Order = 4)]
+        [DataMember(Name = "resource")]
         public ManagedResource Resource { get; set; }
 
         #region IManagedResource
-
-        string IManagedResource.ResourceId => Resource.ResourceId;
-
-        int IManagedResource.ProviderId => Resource.ProviderId;
-
-        int IManagedResource.LocationId => Resource.LocationId;
 
         ResourceType IResource.ResourceType => ResourceTypes.Volume;
 

@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Networking
 {
-    public interface INetworkRouter : IManagedResource
+    public interface INetworkRouter : IResource
     {
     }
 }

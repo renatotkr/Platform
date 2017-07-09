@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Storage
 {
-    public interface IChannelInfo : IManagedResource
+    public interface IChannelInfo : IResource
     {
         string Name { get; }
     }

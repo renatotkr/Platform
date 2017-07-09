@@ -4,7 +4,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Hosting
 {
-    public interface ICertificate : IManagedResource
+    public interface ICertificate : IResource
     {
         string[] Subjects { get; }
         

@@ -5,25 +5,19 @@ namespace Carbon.Platform.Computing
 {
     public class ImageDetails : IImage
     {
-        [DataMember(Name = "id", Order = 1)]
+        [DataMember(Name = "id")]
         public long Id { get; set; }
 
-        [DataMember(Name = "type", Order = 2)]
+        [DataMember(Name = "type")]
         public ImageType Type { get; set; }
 
-        [DataMember(Name = "name", Order = 3)]
+        [DataMember(Name = "name")]
         public string Name { get; set; }
 
-        [DataMember(Name = "name", Order = 4, EmitDefaultValue = false)]
+        [DataMember(Name = "name",  EmitDefaultValue = false)]
         public ManagedResource Resource { get; set; }
 
         #region IResource
-
-        int IManagedResource.ProviderId => Resource.ProviderId;
-
-        int IManagedResource.LocationId => Resource.LocationId;
-
-        string IManagedResource.ResourceId => Resource.ResourceId;
 
         ResourceType IResource.ResourceType => ResourceTypes.Image;
 

@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Computing
 {
-    public interface IImage : IManagedResource
+    public interface IImage : IResource
     {
         ImageType Type { get; }
 

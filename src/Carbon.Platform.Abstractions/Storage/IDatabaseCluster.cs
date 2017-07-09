@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Storage
 {
-    public interface IDatabaseCluster : IManagedResource
+    public interface IDatabaseCluster : IResource
     {
         long DatabaseId { get; }
 

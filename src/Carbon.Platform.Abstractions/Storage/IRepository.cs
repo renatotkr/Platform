@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Storage
 {
-    public interface IRepository : IManagedResource
+    public interface IRepository : IResource
     {
         string Name { get; }     // platform
 

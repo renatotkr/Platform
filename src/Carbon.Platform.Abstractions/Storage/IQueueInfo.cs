@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Storage
 {
-    public interface IQueueInfo : IManagedResource
+    public interface IQueueInfo : IResource
     {
         string Name { get; }
     }

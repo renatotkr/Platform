@@ -83,9 +83,8 @@ namespace Carbon.Platform.Storage
         [Member("providerId")]
         public int ProviderId { get; }
 
-        // e.g. carbon/cropper
-        [StringLength(100)]
-        string IManagedResource.ResourceId => FullName;
+        // // e.g. carbon/cropper
+        // string IManagedResource.ResourceId => FullName;
         
         // Used by aws:codecommit
         [IgnoreDataMember]

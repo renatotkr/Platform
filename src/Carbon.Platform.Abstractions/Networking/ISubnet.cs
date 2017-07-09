@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Networking
 {
-    public interface ISubnet : IManagedResource
+    public interface ISubnet : IResource
     {
         long NetworkId { get; }
 

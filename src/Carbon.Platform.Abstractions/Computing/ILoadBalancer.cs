@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Computing
 {
-    public interface ILoadBalancer : IManagedResource
+    public interface ILoadBalancer : IResource
     {
         // gcp | Unicast IP Address
         // aws | CNAME (name-424835706.us-west-2.elb.amazonaws.com)

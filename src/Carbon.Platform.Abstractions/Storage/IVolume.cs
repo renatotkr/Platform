@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Storage
 {
-    public interface IVolume : IManagedResource
+    public interface IVolume : IResource
     {        
         long Size { get; } // in octets
     }

@@ -1,10 +1,11 @@
 ﻿using System;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform
 {
     // A location may a multi-region, region, or zone
 
-    public class Location : ILocation, IEquatable<Location>
+    public class Location : ILocation, IResource, IEquatable<Location>
     {
         private readonly LocationId id;
 
@@ -88,6 +89,14 @@ namespace Carbon.Platform
         public bool Equals(Location other) =>
             other.Id == Id &&
             other.Name == Name;
+
+        #endregion
+
+        #region IResource
+        
+        long IResource.Id => Id;
+
+        ResourceType IResource.ResourceType => ResourceTypes.Location;
 
         #endregion
     }

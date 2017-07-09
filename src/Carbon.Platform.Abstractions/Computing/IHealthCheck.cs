@@ -5,7 +5,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
-    public interface IHealthCheck : IManagedResource
+    public interface IHealthCheck : IResource
     {
         string Host { get; }
 
@@ -24,7 +24,6 @@ namespace Carbon.Platform.Computing
         int UnhealthyThreshold { get; }
     }
 }
-
 
 // gcp    | ulong       compute#healthCheck
 // fastly |             Healthcheck    

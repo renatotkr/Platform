@@ -4,7 +4,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Networking
 {
-    public interface INetworkAddress : IManagedResource
+    public interface INetworkAddress : IResource
     {        
         IPAddress Address { get; }
     }

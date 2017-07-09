@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Storage
 {
-    public interface IBucketInfo : IManagedResource
+    public interface IBucketInfo : IResource
     {
         string Name { get; }
     }

@@ -5,7 +5,7 @@ using Carbon.Net;
 
 namespace Carbon.Platform.Networking
 {
-    public interface INetworkInterface : IManagedResource
+    public interface INetworkInterface : IResource
     {
         MacAddress MacAddress { get; }
 

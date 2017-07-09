@@ -2,65 +2,62 @@
 using System.Net;
 using System.Runtime.Serialization;
 
+using Carbon.Jwt;
 using Carbon.Platform.Networking;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Storage;
 
 namespace Carbon.Platform.Computing
 {
-    public class HostDetails : IHost, IManagedResource
+    public class HostDetails : IHost, IResource
     {
-        [DataMember(Name = "id", Order = 1)]
+        [DataMember(Name = "id")]
         public long Id { get; set; }
 
-        [DataMember(Name = "type", Order = 2)]
+        [DataMember(Name = "type")]
         public HostType Type { get; set; }
         
-        [DataMember(Name = "status", Order = 3, EmitDefaultValue = false)]
+        [DataMember(Name = "status", EmitDefaultValue = false)]
         public HostStatus Status { get; set; }
 
-        [DataMember(Name = "clusterId", Order = 4, EmitDefaultValue = false)]
+        [DataMember(Name = "clusterId", EmitDefaultValue = false)]
         public long ClusterId { get; set; }
 
-        [DataMember(Name = "addresses", Order = 5)]
+        [DataMember(Name = "addresses")]
         public string[] Addresses { get; set; }
 
-        [DataMember(Name = "image", Order = 6, EmitDefaultValue = false)]
+        [DataMember(Name = "image", EmitDefaultValue = false)]
         public ImageDetails Image { get; set; }
 
-        [DataMember(Name = "networkInterfaces", Order = 8, EmitDefaultValue = false)]
+        [DataMember(Name = "networkInterfaces", EmitDefaultValue = false)]
         public NetworkInterfaceDetails[] NetworkInterfaces { get; set; }
 
-        [DataMember(Name = "volumes", Order = 9, EmitDefaultValue = false)]
+        [DataMember(Name = "volumes", EmitDefaultValue = false)]
         public VolumeDetails[] Volumes { get; set; }
 
-        [DataMember(Name = "machineTypeId", Order = 10, EmitDefaultValue = false)]
+        [DataMember(Name = "machineTypeId", EmitDefaultValue = false)]
         public long MachineTypeId { get; set; }
 
-        [DataMember(Name = "publicKey", EmitDefaultValue = false, Order = 11)]
-        public byte[] PublicKey { get; set; }
+        [DataMember(Name = "publicKey", EmitDefaultValue = false)]
+        public Jwk PublicKey { get; set; }
 
-        [DataMember(Name = "locationId", Order = 7, EmitDefaultValue = false)]
+        [DataMember(Name = "locationId", EmitDefaultValue = false)]
         public int LocationId { get; set; }
 
-        [DataMember(Name = "resource", Order = 20, EmitDefaultValue = false)]
+        [DataMember(Name = "resource", EmitDefaultValue = false)]
         public ManagedResource Resource { get; set; }
 
         #region Timestamps
 
-        [DataMember(Name = "heartbeat", EmitDefaultValue = false, Order = 11)]
+        [DataMember(Name = "heartbeat", EmitDefaultValue = false)]
         public DateTime? Heartbeat { get; set; }
 
-        [DataMember(Name = "terminated", EmitDefaultValue = false, Order = 12)]
+        [DataMember(Name = "terminated", EmitDefaultValue = false)]
         public DateTime? Terminated { get; set; }
 
         #endregion
 
         #region IResource
-
-        int IManagedResource.ProviderId    => Resource.ProviderId;
-
-        string IManagedResource.ResourceId => Resource.ResourceId;
 
         ResourceType IResource.ResourceType => ResourceTypes.Host;
 

@@ -3,7 +3,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
-    public interface ILoadBalancerListener : IManagedResource
+    public interface ILoadBalancerListener : IResource
     {
         long LoadBalancerId { get; }
 
