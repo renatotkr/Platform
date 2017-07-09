@@ -1,11 +1,12 @@
 ﻿using System;
 
-using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Hosting
 {
-    public interface ICertificate : IResource
+    public interface ICertificate // : IResource
     {
+        // Uid Id { get; }
+
         string[] Subjects { get; }
         
         long IssuerId { get; }

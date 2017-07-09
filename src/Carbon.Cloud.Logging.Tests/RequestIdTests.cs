@@ -26,6 +26,7 @@ namespace Carbon.Cloud.Logging
             Assert.Equal(3, RequestId.GetSequenceNumber(a));
         }
 
+        /*
         [Fact]
         public void Base62Encode()
         {
@@ -34,6 +35,7 @@ namespace Carbon.Cloud.Logging
                 Assert.Equal(i, Base62.Decode(Base62.Encode(i)));
             }
         }
+        */
 
         [Fact]
         public void Limits()
@@ -47,7 +49,7 @@ namespace Carbon.Cloud.Logging
             
             Assert.Equal(4653133208748031999ul, id.Lower);
 
-            Assert.Equal("80000000003fef8240933fffffffffff", id.ToString());
+            Assert.Equal("aZl8N0ymIO65xJoLx2jXc3", id.ToString());
 
             Assert.Equal(maxDate,       RequestId.GetTimestamp(id));
             Assert.Equal(maxSequence,   RequestId.GetSequenceNumber(id));
@@ -83,24 +85,14 @@ namespace Carbon.Cloud.Logging
             var id7 = RequestId.Create((long)Math.Pow(2, 41), date5, 2);
             var id8 = RequestId.Create((long)Math.Pow(2, 41), date5, (long)Math.Pow(2, 42) - 2);
 
-            Assert.Equal("00000000004000000000000000000001", id1.ToString());
-            Assert.Equal("00000000004000000000000000000002", id2.ToString());
-            Assert.Equal("000000000044033b408ce40000000002", id3.ToString());
-            Assert.Equal("000000000044033b408ce80000000002", id4.ToString());
-            Assert.Equal("000000000051413b408cec0000000002", id5.ToString());
-            Assert.Equal("000000000091413b408cec0000000002", id6.ToString());
-            Assert.Equal("80000000003fef8240933c0000000002", id7.ToString());
-            Assert.Equal("80000000003fef8240933ffffffffffe", id8.ToString());
-
-
-            Assert.Equal("0000000hB8400000000001", Base62.Encode(id1));
-            Assert.Equal("0000000hB8400000000002", Base62.Encode(id2));
-            Assert.Equal("0000000iHxx5xBctuwgWJQ", Base62.Encode(id3));
-            Assert.Equal("0000000iHxx5xBdIVbtTZU", Base62.Encode(id4));
-            Assert.Equal("0000000mliX5xBeYlQGRfY", Base62.Encode(id5));
-            Assert.Equal("0000000DWr15xBeYlQGRfY", Base62.Encode(id6));
-            Assert.Equal("aZl8N0ymIO65xJnw6n6ZW2", Base62.Encode(id7));
-            Assert.Equal("aZl8N0ymIO65xJoLx2jXc2", Base62.Encode(id8));
+            Assert.Equal("0000000hB8400000000001", id1.ToString());
+            Assert.Equal("0000000hB8400000000002", id2.ToString());
+            Assert.Equal("0000000iHxx5xBctuwgWJQ", id3.ToString());
+            Assert.Equal("0000000iHxx5xBdIVbtTZU", id4.ToString());
+            Assert.Equal("0000000mliX5xBeYlQGRfY", id5.ToString());
+            Assert.Equal("0000000DWr15xBeYlQGRfY", id6.ToString());
+            Assert.Equal("aZl8N0ymIO65xJnw6n6ZW2", id7.ToString());
+            Assert.Equal("aZl8N0ymIO65xJoLx2jXc2", id8.ToString());
 
             /*
             // .PadLeft(24, '0')
@@ -133,7 +125,7 @@ namespace Carbon.Cloud.Logging
 
             var id = RequestId.Create(1, date, 1);
 
-            Assert.Equal("00000000004403380000000000000001", id.ToString());
+            Assert.Equal("0000000iHxu00000000001", id.ToString());
 
             var data = id.Serialize();
             var id2 = Uid.Deserialize(data);
@@ -145,7 +137,7 @@ namespace Carbon.Cloud.Logging
 
             var a = Uid.Parse(id.ToString());
 
-            Assert.Equal("00000000004403380000000000000001", a.ToString());
+            Assert.Equal("0000000iHxu00000000001", a.ToString());
         }
     
         [Fact]
@@ -154,11 +146,11 @@ namespace Carbon.Cloud.Logging
             var date2 = new DateTime(2016, 12, 13);
             var uid = RequestId.Create(1, date2, 3);
 
-            Assert.Equal("00000000004647a00000000000000003", RequestId.Create(1, date2, 3).ToString());
+            Assert.Equal("0000000jkc000000000003", RequestId.Create(1, date2, 3).ToString());
 
             var a = (Uid)new Guid(uid.Serialize());
 
-            Assert.Equal("00000000004647a00000000000000003", a.ToString());
+            Assert.Equal("0000000jkc000000000003", a.ToString());
         }
     }
 }

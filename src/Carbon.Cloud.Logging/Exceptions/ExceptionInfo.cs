@@ -14,11 +14,11 @@ namespace Carbon.Platform.Diagnostics
         [Member("requestId")]
         public Uid RequestId { get; set; }
 
-        [Member("programId")]
+        [Member("programId")]           // Uid?
         public long ProgramId { get; set; }
         
         [Member("hostId")]
-        public long? HostId { get; set; }
+        public long? HostId { get; set; } // Uid (could contain environment...)
 
         [Member("type")]
         [MaxLength(1000)]
