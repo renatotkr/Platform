@@ -102,7 +102,7 @@ namespace Carbon.Platform.Storage
 
             var branch = new RepositoryBranch(
                 id           : branchId,
-                repositoryId : request.RepositoryId, 
+                repositoryId : request.RepositoryId,
                 name         : request.Name, 
                 creatorId    : request.CreatorId
             );
@@ -121,7 +121,8 @@ namespace Carbon.Platform.Storage
 
         public async Task<RepositoryBranch> GetBranchAsync(long id)
         {
-            return await db.RepositoryBranches.FindAsync(id) ?? throw ResourceError.NotFound(ResourceTypes.RepositoryBranch, id);
+            return await db.RepositoryBranches.FindAsync(id)
+                ?? throw ResourceError.NotFound(ResourceTypes.RepositoryBranch, id);
         }
 
         public async Task<RepositoryBranch> GetBranchAsync(long repositoryId, string name)

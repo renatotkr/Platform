@@ -42,7 +42,7 @@ namespace Carbon.Kms
                 Eq("ownerId", ownerId),
                 Eq("name", name),
                 IsNotNull("activated"),
-                Lte("activated", DateTime.UtcNow),  // activated ||  Func("NOW")
+                Lte("activated", Func("NOW")),      // activated
                 IsNull("deleted")                   // not deleted
             ), Order.Descending("expires"), take: 1);
 

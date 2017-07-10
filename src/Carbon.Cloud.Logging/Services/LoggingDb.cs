@@ -14,28 +14,24 @@ namespace Carbon.Cloud.Logging
             // context.Types.TryAdd(new JsonObjectHandler());
             context.Types.TryAdd(new UidHandler());
 
-            Context = context ?? throw new ArgumentNullException(nameof(context));
+            Context        = context ?? throw new ArgumentNullException(nameof(context));
 
             Clients        = new Dataset<Client, (Uid, byte[])>(context);
 
             Exceptions     = new Dataset<ExceptionInfo, Uid>(context);
 
-            Referrers      = new Dataset<Referrer, long>(context);
-
             Requests       = new Dataset<Request, Uid>(context);
             RequestTimings = new Dataset<RequestTiming, (Uid, string)>(context);
 
-            Events         = new Dataset<Event, long>(context);
+            Events         = new Dataset<Event, Uid>(context);
         }
 
         public IDbContext Context { get; }
 
-
-        public Dataset<Event, long>                  Events         { get; }
         public Dataset<Client, (Uid, byte[])>        Clients        { get; }
+        public Dataset<Event, Uid>                   Events         { get; }
+        public Dataset<ExceptionInfo, Uid>           Exceptions     { get; }
         public Dataset<Request, Uid>                 Requests       { get; }
         public Dataset<RequestTiming, (Uid, string)> RequestTimings { get; }
-        public Dataset<Referrer, long>               Referrers      { get; }
-        public Dataset<ExceptionInfo, Uid>           Exceptions     { get; }
     }
 }

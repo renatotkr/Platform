@@ -9,28 +9,31 @@ namespace Carbon.Cloud.Logging
 
     public static class RequestId
     {
-        public static DateTime GetTimestamp(Uid id) // ts/ms
-        {
-            return DateTimeOffset.FromUnixTimeMilliseconds(
-                Timestamp.Combine(GetHours(id), GetMilliseconds(id))
-            ).UtcDateTime;
-        }
-
         public static Uid Create(long accountId, DateTime timestamp, long sequenceNumber)
         {
             return Create(
-                scopeId        : accountId,
+                accountId      : accountId,
                 timestamp      : new DateTimeOffset(DateTime.SpecifyKind(timestamp, DateTimeKind.Utc)),
                 sequenceNumber : sequenceNumber
             );
         }
 
-        public static Uid Create(long scopeId, DateTimeOffset timestamp, long sequenceNumber)
+        public static Uid Create(long accountId, DateTimeOffset timestamp, long sequenceNumber)
         {
+            #region Preconditions
+
+            if (accountId < 0)
+                throw new ArgumentException("Must be positive", nameof(accountId));
+
+            if (sequenceNumber < 0)
+                throw new ArgumentException("Must be positive", nameof(sequenceNumber));
+
+            #endregion
+
             var parts = Timestamp.Split(timestamp.ToUnixTimeMilliseconds());
 
             return new Uid(
-                upper: (ulong)ScopedId.Create(scopeId, (int)parts.hours),
+                upper: (ulong)ScopedId.Create(accountId, (int)parts.hours),
                 lower: RequestIdLower.Create((ulong)parts.milliseconds, (ulong)sequenceNumber)
             );
         }
@@ -43,6 +46,13 @@ namespace Carbon.Cloud.Logging
         public static long GetSequenceNumber(Uid id)
         {
             return new RequestIdLower(id.Lower).SequenceNumber;
+        }
+
+        public static DateTime GetTimestamp(Uid id) // ts/ms
+        {
+            return DateTimeOffset.FromUnixTimeMilliseconds(
+                Timestamp.Combine(GetHours(id), GetMilliseconds(id))
+            ).UtcDateTime;
         }
 
         private static long GetHours(Uid id)

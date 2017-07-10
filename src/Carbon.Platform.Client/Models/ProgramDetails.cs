@@ -6,22 +6,24 @@ namespace Carbon.Platform.Computing
 {
     public class ProgramDetails : IProgram
     {
-        [DataMember(Name = "id", Order = 1)]
+        [DataMember(Name = "id")]
         public long Id { get; set; }
 
-        [DataMember(Name = "name", Order = 2)]
+        // Uid?
+
+        [DataMember(Name = "name")]
         public string Name { get; set; }
         
-        [DataMember(Name = "version", Order = 3)]
+        [DataMember(Name = "version")]
         public SemanticVersion Version { get; set; }
 
-        [DataMember(Name = "type", Order = 4)]
+        [DataMember(Name = "type")]
         public ProgramType Type { get; set; }
 
-        [DataMember(Name = "runtime", Order = 5)]
+        [DataMember(Name = "runtime")]
         public string Runtime { get; set; }
 
-        [DataMember(Name = "addresses", Order = 6)]
+        [DataMember(Name = "addresses")]
         public string[] Addresses { get; set; }
     }
 }

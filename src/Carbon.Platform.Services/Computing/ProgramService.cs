@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 
 using Carbon.Data;
 using Carbon.Data.Expressions;
+using Carbon.Data.Sequences;
 using Carbon.Json;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
-    using Carbon.Data.Sequences;
     using static Expression;
 
     public class ProgramService : IProgramService
@@ -65,7 +65,6 @@ namespace Carbon.Platform.Computing
 
             var program = new ProgramInfo(
                 id         : await db.Programs.Sequence.NextAsync(),
-                uid        : request.Uid ?? Guid.NewGuid(),
                 type       : request.Type,
                 name       : request.Name,
                 slug       : request.Slug,

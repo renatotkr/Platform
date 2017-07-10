@@ -21,7 +21,9 @@ namespace Carbon.Platform
             var provider = ResourceProvider.Get(host.Resource.ProviderId);
 
             return api.PostAsync<HostDetails>(
-                $"/hosts/{provider.Code}:{host.Resource.ResourceId}", host);
+                path : $"/hosts/{provider.Code}:{host.Resource.ResourceId}",
+                data : host
+            );
         }
 
         public Task<HostDetails> GetAsync(long id)

@@ -28,6 +28,14 @@ namespace Carbon.Platform
             return api.GetAsync<ProgramDetails>($"/programs/{id}@{version}");
         }
 
+        public Task<ProgramDetails> CreateAsync(ProgramDetails program)
+        {
+            return api.PostAsync<ProgramDetails>(
+                path: $"/programs",
+                data: program
+            );
+        }
+
         public async Task<IPackage> DownloadAsync(long id, SemanticVersion version)
         {
             var packageStream = await api.DownloadAsync(

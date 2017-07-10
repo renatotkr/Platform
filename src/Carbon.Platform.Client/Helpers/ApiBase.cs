@@ -40,30 +40,6 @@ namespace Carbon.Platform
             this.credential = credential ?? throw new ArgumentNullException(nameof(credential));
         }
 
-        internal async Task<T> PostAsync<T>(string path, object data)
-            where T : new()
-        {
-            var jsonText = JsonObject.FromObject(data).ToString(pretty: false);
-
-            var request = new HttpRequestMessage(HttpMethod.Post, baseUri + path) {
-                Content = new StringContent(jsonText, Encoding.UTF8, "application/json")
-            };
-
-            Sign(request);
-
-            using (var response = await http.SendAsync(request).ConfigureAwait(false))
-            {
-                var text = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new Exception(text);
-                }
-
-                return JsonObject.Parse(text).As<T>();
-           }
-        }
-
         internal async Task<MemoryStream> DownloadAsync(string path)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, baseUri + path);
@@ -94,7 +70,7 @@ namespace Carbon.Platform
             return ms;
         }
 
-        internal async Task<T> UploadAsync<T>(string path, string contentType, Stream stream)
+        internal Task<T> UploadAsync<T>(string path, string contentType, Stream stream)
             where T: new()
         {
             var request = new HttpRequestMessage(HttpMethod.Post, baseUri + path) {
@@ -105,37 +81,52 @@ namespace Carbon.Platform
                 }
             };
 
-            Sign(request);
-            
-            using (var response = await http.SendAsync(request).ConfigureAwait(false))
-            {
-                var text = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new Exception(response.StatusCode + ":" + text);
-                }
-
-                return JsonObject.Parse(text).As<T>();
-            }
+            return SendAsync<T>(request);
         }
 
-        internal async Task<T1> GetAsync<T1>(string path)
-            where T1 : new()
+        internal Task<T> PostAsync<T>(string path, object data)
+             where T : new()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, baseUri + path);
+            #region Preconditions
 
+            if (data == null)
+                throw new ArgumentNullException(nameof(data));
+
+            #endregion
+
+            var jsonText = JsonObject.FromObject(data).ToString(pretty: false);
+
+            var request = new HttpRequestMessage(HttpMethod.Post, baseUri + path) {
+                Content = new StringContent(jsonText, Encoding.UTF8, "application/json")
+            };
+
+            return SendAsync<T>(request);
+        }
+
+        internal Task<T> GetAsync<T>(string path)
+            where T : new()
+        {
+            return SendAsync<T>(new HttpRequestMessage(
+                method     : HttpMethod.Get, 
+                requestUri : baseUri + path
+            ));
+        }
+
+        private async Task<T> SendAsync<T>(HttpRequestMessage request)
+            where T : new()
+        {
             Sign(request);
 
             using (var response = await http.SendAsync(request).ConfigureAwait(false))
             {
                 if (response.StatusCode == HttpStatusCode.NotFound)
                 {
-                    return default(T1);
+                    return default(T);
                 }
 
                 var text = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
+                // TODO: standarize error response and return a message message
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new Exception(text);
@@ -143,7 +134,7 @@ namespace Carbon.Platform
 
                 try
                 {
-                    return JsonObject.Parse(text).As<T1>();
+                    return JsonObject.Parse(text).As<T>();
                 }
                 catch
                 {

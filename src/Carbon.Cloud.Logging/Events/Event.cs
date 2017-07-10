@@ -30,6 +30,7 @@ namespace Carbon.Cloud.Logging
         public Uid Id { get; set; }
 
         [Member("action")]
+        [StringLength(100)]
         public string Action { get; }
 
         [Member("resource"), Indexed]

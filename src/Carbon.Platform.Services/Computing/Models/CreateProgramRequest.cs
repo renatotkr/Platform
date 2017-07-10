@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Carbon.Data.Sequences;
 using Carbon.Versioning;
 
 namespace Carbon.Platform.Computing
@@ -36,8 +35,6 @@ namespace Carbon.Platform.Computing
 
         [Required, StringLength(100)]
         public string Name { get; set; }
-
-        public Uid? Uid { get; set; }
 
         public SemanticVersion Version { get; set; } = SemanticVersion.Zero;
 

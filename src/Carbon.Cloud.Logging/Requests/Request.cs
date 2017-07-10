@@ -18,6 +18,7 @@ namespace Carbon.Cloud.Logging
             string path,
             long environmentId,
             long serverId,
+            string referrer,
             ISecurityContext context = null,
             TimeSpan computeTime = default(TimeSpan), // 0
             Uid? parentId = null,
@@ -34,11 +35,12 @@ namespace Carbon.Cloud.Logging
             EnvironmentId = environmentId;
             ComputeTime   = computeTime;
             ExceptionId   = exceptionId;
+            Referrer      = referrer;
 
             if (context != null)
             {
-                ClientId   = Uid.Parse(context.ClientId);
-                ClientHash = Logging.ClientHash.Compute(ClientId, context.ClientIp, context.UserAgent);
+                SessionId = context.SessionId;
+                ClientId  = Uid.Parse(context.ClientId);
             }
         }
         
@@ -63,9 +65,6 @@ namespace Carbon.Cloud.Logging
         [Member("environmentId")]
         public long EnvironmentId { get; }
 
-        [Member("referrerId")]
-        public long? ReferrerId { get; }
-
         [Member("blobId")] // if the response was a blob
         public Uid? BlobId { get; set; }
 
@@ -73,7 +72,7 @@ namespace Carbon.Cloud.Logging
         public Uid? ParentId { get; }
         
         [Member("exceptionId")]
-        public Uid? ExceptionId { get; }        
+        public Uid? ExceptionId { get; }
 
         #region Resource Usage (Compute & Data Transfer)
 
@@ -106,9 +105,16 @@ namespace Carbon.Cloud.Logging
         [Member("clientId")]
         public Uid ClientId { get; }
         
-        // sha1(clientId, ip, userAgent)
-        [Member("clientHash"), FixedSize(20)]
-        public byte[] ClientHash { get; }
+        [Member("referrer")]
+        [StringLength(1000)]
+        public string Referrer { get; }
+
+        [Member("origin")]
+        [StringLength(1000)]
+        public string Origin { get; }
+
+        // UserAgent
+        // ClientIp
 
         #endregion
 

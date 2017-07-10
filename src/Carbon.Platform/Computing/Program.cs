@@ -24,7 +24,6 @@ namespace Carbon.Platform.Computing
             JsonObject properties = null,
             string runtime = null,
             string[] addresses = null,
-            Uid? uid = null,
             ProgramType type = ProgramType.App,
             long? parentId = null
         )
@@ -48,15 +47,11 @@ namespace Carbon.Platform.Computing
             Properties = properties;
             OwnerId    = ownerId;
             Version    = version;
-            Uid        = uid ?? Guid.NewGuid();
             ParentId   = parentId;
         }
         
         [Member("id"), Key(sequenceName: "programId")]
         public long Id { get; }
-        
-        [Member("uid"), Unique]
-        public Uid Uid { get; }
 
         [Member("type")]
         public ProgramType Type { get; }

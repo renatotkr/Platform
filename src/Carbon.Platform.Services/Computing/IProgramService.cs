@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Carbon.Data.Sequences;
 
 namespace Carbon.Platform.Computing
 {
     public interface IProgramService
     {
         Task<ProgramInfo> GetAsync(long id);
+
+        Task<ProgramInfo> GetAsync(Uid id);
 
         Task<ProgramInfo> FindAsync(string slug);
 
