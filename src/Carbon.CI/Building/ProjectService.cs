@@ -31,6 +31,13 @@ namespace Carbon.CI
 
         public async Task<ProjectInfo> GetAsync(long ownerId, string name)
         {
+            #region Preconditions
+
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+
+            #endregion
+
             return await db.Projects.QueryFirstOrDefaultAsync(
               And(Eq("ownerId", ownerId), Eq("name", name))  
             ) ?? throw ResourceError.NotFound(ResourceTypes.Project, ownerId, name);
@@ -38,6 +45,13 @@ namespace Carbon.CI
 
         public async Task<ProjectInfo> CreateAsync(CreateProjectRequest request)
         {
+            #region Preconditions
+
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
+            #endregion
+
             var project = new ProjectInfo(
                 id           : await db.Projects.Sequence.NextAsync(),
                 name         : request.Name,

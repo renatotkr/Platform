@@ -37,8 +37,13 @@ namespace Carbon.Platform.Storage
 
         [Member("id"), Key(sequenceName: "repositoryId")]
         public long Id { get; }
-        
+
         // namespace...
+
+        // Note: may change ownership
+        [IgnoreDataMember]
+        [Member("ownerId")]
+        public long OwnerId { get; }
 
         [Member("name")]
         [StringLength(100)]
@@ -48,12 +53,6 @@ namespace Carbon.Platform.Storage
         [StringLength(160)]
         public string FullName { get; }
 
-        // Note: may change ownership
-        [IgnoreDataMember]
-        [Member("ownerId")] 
-        [Indexed]
-        public long OwnerId { get; }
-        
         /// <summary>
         /// An encrypted token to access the repository
         /// </summary>

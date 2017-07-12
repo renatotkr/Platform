@@ -78,7 +78,6 @@ namespace Carbon.Platform.Computing
             );
         }
 
-
         public Task<IReadOnlyList<HostInfo>> ListAsync(IEnvironment environment, ILocation location)
         {
             var locationId = LocationId.Create(location.Id);

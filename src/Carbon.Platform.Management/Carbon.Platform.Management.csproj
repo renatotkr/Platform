@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Management</AssemblyName>
-    <VersionPrefix>0.12.0</VersionPrefix>
-    <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
+    <VersionPrefix>0.13.1</VersionPrefix>
+    <TargetFrameworks>netstandard1.6</TargetFrameworks>
 
     <!-- Package Info-->
     <Authors>iamcarbon</Authors>
@@ -25,10 +25,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Carbon.Cloud.Logging\Carbon.Cloud.Logging.csproj" />
     <ProjectReference Include="..\Carbon.Platform.Services\Carbon.Platform.Services.csproj" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-
   </ItemGroup>
   
 </Project>

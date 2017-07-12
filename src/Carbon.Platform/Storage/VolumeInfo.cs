@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Json;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Storage
@@ -17,12 +18,14 @@ namespace Carbon.Platform.Storage
             long size,
             long ownerId,
             ManagedResource resource,
+            JsonObject properties = null,
             long? hostId = null)
         {
             Id         = id;
             Size       = size;
             OwnerId    = ownerId;
             HostId     = hostId;
+            Properties = properties;
             ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
             ResourceId = resource.ResourceId;
@@ -34,17 +37,15 @@ namespace Carbon.Platform.Storage
         [Member("size")] // in bytes
         public long Size { get; }
 
-        [Member("hostId")]
+        [Member("hostId"), Indexed]
         public long? HostId { get; }
 
-        [Member("ownerId")]
+        [Member("ownerId"), Indexed]
         public long OwnerId { get; }
 
-        [Member("flags")]
-        public VolumeFlags Flags { get; set; }
-
-        // IOPS
-        // ...
+        [Member("properties")]
+        [StringLength(1000)]
+        public JsonObject Properties { get; }
 
         #region IResource
 
@@ -80,11 +81,5 @@ namespace Carbon.Platform.Storage
         public DateTime Modified { get; }
 
         #endregion
-    }
-    
-    public enum VolumeFlags
-    {
-        None = 0,
-        SDD  = 1 << 0
     }
 }

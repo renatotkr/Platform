@@ -2,11 +2,13 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Json;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Storage
 {
     [Dataset("Queues", Schema = "Storage")]
+    [UniqueIndex("ownerId", "name")]
     public class QueueInfo : IQueueInfo
     {
         public QueueInfo() { }
@@ -16,11 +18,12 @@ namespace Carbon.Platform.Storage
             string name,
             long ownerId,
             ManagedResource resource,
-            QueueFlags flags = QueueFlags.None)
+            JsonObject properties = null)
         {
             Id         = id;
             Name       = name ?? throw new ArgumentNullException(nameof(name));
             OwnerId    = ownerId;
+            Properties = properties;
             ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
             ResourceId = resource.ResourceId;
@@ -29,15 +32,16 @@ namespace Carbon.Platform.Storage
         [Member("id"), Key(sequenceName: "queueId")]
         public long Id { get; }
 
-        [Member("name")]
-        [StringLength(63)]
-        public string Name { get; }
-
         [Member("ownerId")]
         public long OwnerId { get; }
+        
+        [Member("name")]
+        [StringLength(100)]
+        public string Name { get; }
 
-        [Member("flags")]
-        public QueueFlags Flags { get; }
+        [Member("properties")]
+        [StringLength(1000)]
+        public JsonObject Properties { get; }
 
         #region IResource
 
@@ -73,10 +77,5 @@ namespace Carbon.Platform.Storage
         public DateTime Modified { get; }
 
         #endregion
-    }
-
-    public enum QueueFlags
-    {
-        None = 0
     }
 }

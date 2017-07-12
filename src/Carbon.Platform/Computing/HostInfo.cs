@@ -60,7 +60,6 @@ namespace Carbon.Platform.Computing
         [Member("environmentId"), Indexed]
         public long EnvironmentId { get; }
 
-        // could be a subset of environment?
         [Member("clusterId"), Indexed]
         public long ClusterId { get; }
 

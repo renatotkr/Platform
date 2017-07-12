@@ -1,4 +1,5 @@
-﻿// using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 using Carbon.Platform.Resources;
 
@@ -13,12 +14,12 @@ namespace Carbon.Platform.Computing
             ManagedResource resource,
             ImageType type = ImageType.Machine)
         {
-            Name     = name;
+            Name     = name ?? throw new ArgumentNullException(nameof(name));
             Resource = resource;
             Type     = type;
         }
         
-        // [Required, StringLenth(3, 128)]
+        [Required]
         public string Name { get; set; }
 
         public long OwnerId { get; set; }

@@ -8,8 +8,8 @@ namespace Carbon.Cloud.Logging
         const int SequenceBits    = 42;
 
         const ulong SequenceMask = ulong.MaxValue ^ (ulong.MaxValue << SequenceBits);
-        const ulong NanoMask = ulong.MaxValue ^ SequenceMask;
-
+        const ulong NanoMask     = ulong.MaxValue ^ SequenceMask;
+        
         public RequestIdLower(ulong value)
         {
             Value = value;

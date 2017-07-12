@@ -53,7 +53,6 @@ namespace Carbon.Platform.Management
             this.images         = new ImageService(db);
         }
 
-        // This will also patch
         public async Task<HostInfo> RegisterAsync(RegisterHostRequest request)
         {
             #region Preconditions
@@ -82,20 +81,6 @@ namespace Carbon.Platform.Management
             }
             else
             {
-                /*
-                // Set the public key, if it hasn't already been set
-                if (host.PublicKey == null && request.PublicKey != null)
-                {
-                    // TODO: Verify the public key w/ Carbon.Cryptography
-
-                    await db.Hosts.PatchAsync(host.Id, changes: new[] {
-                        Change.Replace("publicKey", request.PublicKey)
-                    }).ConfigureAwait(false);
-                }
-                */
-
-                // transition the state if it has changed
-
                 await TransitionStateAsync(host, request.Status).ConfigureAwait(false);
             }
 
@@ -125,7 +110,9 @@ namespace Carbon.Platform.Management
 
             var template = await db.HostTemplates.FindAsync(cluster.HostTemplateId.Value);
 
-            return await LaunchAsync(new LaunchHostRequest(cluster, zone, template), context).ConfigureAwait(false);
+            var request = new LaunchHostRequest(cluster, zone, template);
+
+            return await LaunchAsync(request, context).ConfigureAwait(false);
         }
 
         public async Task<IHost[]> LaunchAsync(LaunchHostRequest launchRequest, ISecurityContext context)
@@ -257,7 +244,7 @@ namespace Carbon.Platform.Management
             await log.CreateAsync(new Event(
                 action   : "launch",
                 resource : "hosts",
-                context  : context)
+                userId   : context.UserId)
             ).ConfigureAwait(false);
 
             #endregion
@@ -267,6 +254,13 @@ namespace Carbon.Platform.Management
 
         public async Task TransitionStateAsync(HostInfo host, HostStatus newStatus)
         {
+            #region Preconditions
+
+            if (host == null)
+                throw new ArgumentNullException(nameof(host));
+
+            #endregion
+
             if (host.Status == HostStatus.Pending && newStatus == HostStatus.Running)
             {
                 var cluster = await clusterService.GetAsync(host.ClusterId).ConfigureAwait(false);
@@ -279,6 +273,19 @@ namespace Carbon.Platform.Management
                 await db.Hosts.PatchAsync(host.Id, new[] {
                     Change.Replace("status", host.Status)
                 }).ConfigureAwait(false);
+
+                await log.CreateAsync(new Event(
+                    action   : "update",
+                    resource : "host#" + host.Id,
+                    properties: JsonObject.FromObject(new {
+                        changes = new {
+                            status = new {
+                                oldValue = host.Status.ToString(),
+                                newValue = newStatus.ToString()
+                            }
+                        }
+                    })
+                )).ConfigureAwait(false);
             }
         }
 
@@ -291,10 +298,25 @@ namespace Carbon.Platform.Management
             
             // Register the instances with the lb's target group
             await elb.RegisterTargetsAsync(targetRegistration);
+
+            await log.CreateAsync(new Event(
+                action   : "addToLoadBalancerTargetGroup",
+                resource : "host#" + host.Id
+            )).ConfigureAwait(false);
         }
 
         public async Task TerminateHostAsync(HostInfo host, TimeSpan cooldown, ISecurityContext context)
         {
+            #region Preconditions
+
+            if (host == null)
+                throw new ArgumentNullException(nameof(host));
+
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
+            #endregion
+
             var cluster = await clusterService.GetAsync(host.ClusterId);
 
             if (cluster.Properties.TryGetValue(ClusterProperties.TargetGroupArn, out var targetGroupArn))
@@ -320,7 +342,7 @@ namespace Carbon.Platform.Management
             await log.CreateAsync(new Event(
                 action   : "terminate",
                 resource : "host#" + host.Id,
-                context  : context)
+                userId   : context.UserId)
             ).ConfigureAwait(false);
 
             #endregion
@@ -328,7 +350,7 @@ namespace Carbon.Platform.Management
 
         public Task<SendCommandResponse> RunCommandAsync(
             string documentName,
-            IEnvironment env,
+            IEnvironment environment,
             JsonObject parameters,
             RunCommandOptions options)
         {
@@ -337,14 +359,14 @@ namespace Carbon.Platform.Management
             if (documentName == null)
                 throw new ArgumentNullException(nameof(documentName));
 
-            if (env == null)
-                throw new ArgumentNullException(nameof(env));
+            if (environment == null)
+                throw new ArgumentNullException(nameof(environment));
 
             #endregion
 
             return ssm.SendCommandAsync(new SendCommandRequest(
                documentName : documentName,
-               targets      : new[] { new CommandTarget("tag:envId", env.Id.ToString()) }) {
+               targets      : new[] { new CommandTarget("tag:envId", environment.Id.ToString()) }) {
                MaxErrors      = options.MaxErrors,
                MaxConcurrency = options.MaxConcurrency,
                Parameters     = parameters
@@ -359,6 +381,9 @@ namespace Carbon.Platform.Management
 
             if (instanceId == null)
                 throw new ArgumentNullException(nameof(instanceId));
+
+            if (cluster == null)
+                throw new ArgumentNullException(nameof(cluster));
 
             #endregion
 

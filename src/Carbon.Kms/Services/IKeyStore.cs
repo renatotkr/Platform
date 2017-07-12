@@ -21,6 +21,5 @@ namespace Carbon.Kms
         Task DeactivateAsync(Uid key);
         
         Task DeleteAsync(Uid key);
-
     }
 }

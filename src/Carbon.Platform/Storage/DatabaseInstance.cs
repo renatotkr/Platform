@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Runtime.Serialization;
-
 using Carbon.Data.Annotations;
-using Carbon.Platform.Sequences;
 using Carbon.Platform.Resources;
-using Carbon.Json;
+using Carbon.Platform.Sequences;
 
 namespace Carbon.Platform.Storage
 {

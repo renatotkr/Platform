@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Configuration</AssemblyName>
-    <TargetFrameworks>netstandard1.3;net451</TargetFrameworks>
-    <VersionPrefix>0.5.3</VersionPrefix>
+    <TargetFrameworks>netstandard1.6</TargetFrameworks>
+    <VersionPrefix>0.6.0</VersionPrefix>
 
     <!-- Package Info-->
     <Authors>iamcarbon</Authors>
@@ -14,7 +14,7 @@
     <PackageProjectUrl>https://github.com/carbon/platform</PackageProjectUrl>
   </PropertyGroup>
   
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
+  <ItemGroup>
     <PackageReference Remove="NETStandard.Library" />
     <PackageReference Include="System.Collections" Version="4.3.0" />
     <PackageReference Include="System.Linq" Version="4.3.0" />

@@ -28,8 +28,7 @@ namespace Carbon.Platform.Networking
         [Member("address")]
         public IPAddress Address { get; }
 
-        [Member("hostId")]
-        [Indexed]
+        [Member("hostId"), Indexed]
         public long? HostId { get; set; }
 
         [Member("networkInterfaceId")]

@@ -105,7 +105,7 @@ namespace Carbon.CI
             await log.CreateAsync(new Event(
                 action   : "publish",
                 resource : "program#" + program.Id, 
-                context  : context)
+                userId   : context.UserId)
             ).ConfigureAwait(false);
 
             #endregion

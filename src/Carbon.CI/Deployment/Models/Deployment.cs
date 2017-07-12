@@ -18,13 +18,15 @@ namespace Carbon.CI
             long id,
             IProgramRelease release,
             long creatorId,
-            DeploymentStatus status = DeploymentStatus.Pending)
+            DeploymentStatus status = DeploymentStatus.Pending,
+            JsonObject properties = null)
         {
             #region Preconditions
 
             Validate.Id(id);
 
-            Validate.NotNull(release, nameof(release));
+            if (release == null)
+                throw new ArgumentNullException(nameof(release));
             
             Validate.Id(creatorId, nameof(creatorId));
 
@@ -32,10 +34,10 @@ namespace Carbon.CI
 
             Id             = id;
             Status         = status;
-            ReleaseId      = release.Id;
             ProgramId      = release.ProgramId;
             ProgramVersion = release.Version;
             CreatorId      = creatorId;
+            Properties     = properties;
         }
 
         // environmentId | #
@@ -45,9 +47,6 @@ namespace Carbon.CI
         [Member("status")]
         public DeploymentStatus Status { get; set; }
        
-        [Member("releaseId")]
-        public long ReleaseId { get; }
-        
         [Member("programId")]
         public long ProgramId { get; }
 
@@ -63,7 +62,7 @@ namespace Carbon.CI
 
         [Member("properties")]
         [StringLength(1000)]
-        public JsonObject Properties { get; set; }
+        public JsonObject Properties { get; }
 
         #region IResource
 

@@ -17,7 +17,7 @@ namespace Carbon.Platform.Storage
             Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
-        // databaseId + sequenceNumber
+        // databaseId | #
         [Member("id"), Key]
         public long Id { get; }
 
@@ -30,6 +30,10 @@ namespace Carbon.Platform.Storage
         [IgnoreDataMember]
         [Member("created"), Timestamp]
         public DateTime Created { get; }
+
+        [IgnoreDataMember]
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; }
 
         [IgnoreDataMember]
         [Member("deleted")]

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Carbon.Json;
 using Carbon.Versioning;
 
 namespace Carbon.Platform.Computing
@@ -47,6 +48,8 @@ namespace Carbon.Platform.Computing
         [StringLength(63)]
         public string Slug { get; set; }
         
+        public JsonObject Properties { get; set; }
+
         public long? ParentId { get; set; }
         
         [Range(1, 2_199_023_255_552)]

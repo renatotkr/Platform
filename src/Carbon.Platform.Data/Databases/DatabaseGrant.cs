@@ -24,7 +24,7 @@ namespace Carbon.Platform.Storage
             Actions  = actions;
         }
 
-        // databaseId + grantId
+        // databaseId | grantId
         [Member("id"), Key]
         public long Id { get; }
 

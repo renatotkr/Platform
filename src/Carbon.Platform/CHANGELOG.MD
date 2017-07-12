@@ -2,6 +2,7 @@
 We'll continue to make breaking API changes in minor releases until we reach 2.0.
 Services & management libraries will stabalize at v1.
 
+- Convert to NETSTANDARD1.6
 - Eliminate sync data connections
 - Add program to hosts
 - Merge Websites into Programs

@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Carbon.Platform.Computing;
 
 namespace Carbon.Platform.Management
@@ -7,6 +8,13 @@ namespace Carbon.Platform.Management
     {
         public LaunchHostRequest(Cluster cluster, ILocation location, HostTemplate template, int launchCount = 1)
         {
+            #region Preconditions
+
+            if (launchCount <= 0)
+                throw new ArgumentException("Must be > 0", nameof(launchCount));
+
+            #endregion
+
             Cluster     = cluster  ?? throw new ArgumentNullException(nameof(cluster));
             Location    = location ?? throw new ArgumentNullException(nameof(location));
             Template    = template ?? throw new ArgumentNullException(nameof(template));

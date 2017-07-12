@@ -3,54 +3,48 @@ using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 using Carbon.Data.Sequences;
+using Carbon.Json;
 
 namespace Carbon.Kms
 {
     [Dataset("Certificates")]
     [UniqueIndex("providerId", "resourceId")]
-    public class CertificateInfo // : ICertificate
+    public class CertificateInfo : ICertificate
     {
         public CertificateInfo() { }
 
         public CertificateInfo(
             Uid id,
+            long ownerId,
             string name,
-            string[] subjects,
+            string subject,
             long issuerId,
             int providerId,
             string resourceId,
-            int version = 1)
+            JsonObject properties = null)
         {
-            Id         = id;
-            Name       = name ?? throw new ArgumentNullException(nameof(name));
-            Subjects   = subjects ?? throw new ArgumentNullException(nameof(subjects));
+            Id         = id;           
+            Subject    = subject ?? throw new ArgumentNullException(nameof(subject));
+            Properties = properties ?? new JsonObject();
             IssuerId   = issuerId;
             ProviderId = providerId;
             ResourceId = resourceId;
             // LocationId = resource.LocationId;
-            Version    = version;
         }
 
         [Member("id"), Key]
         public Uid Id { get; }
 
-        [Member("name")]
+        [Member("subject"), Indexed]
         [StringLength(100)]
-        public string Name { get; }
+        public string Subject { get; set; }
 
-        [Member("version")]
-        public int Version { get; }
-        
-        // e.g. carbon.net,*.accelerator.net
-
-        // primary subject is first, followed by subjectAlternate names
-        [Member("subjects")]
+        /*
+        [Member("subjectAlternateNames")]
         [StringLength(1000)]
-        public string[] Subjects { get; }
+        public string[] SubjectAlternateNames { get; }
+        */
 
-        // KeyAlgorithm
-        // RSA_2048 | RSA_1024 | EC_prime256v1
-        
         [Member("issuerId")]
         public long IssuerId { get; }
 
@@ -58,18 +52,14 @@ namespace Carbon.Kms
 
         // x509 (PFX | PEM)
 
-        // public EncryptedData[] PrivateKey { get; set; }
-
-        [Member("x5t")]
-        public byte[] X5t { get; set; }
-
         #endregion
 
-        #region Helpers
+        // fingerprint  = x5t#S256
+        // keyAlgorithm = RSA_2048 | RSA_1024 | EC_prime256v1
 
-        public string PrimarySubject => Subjects[1];
-
-        #endregion
+        [Member("properties")]
+        [StringLength(1000)]
+        public JsonObject Properties { get; }
 
         #region IResource
 
@@ -79,19 +69,13 @@ namespace Carbon.Kms
         public int ProviderId { get; }
 
         [IgnoreDataMember]
+        [Member("locationId")]
+        public int LocationId { get; }
+
+        [IgnoreDataMember]
         [Member("resourceId")]
         [Ascii, StringLength(100)]
         public string ResourceId { get; }
-
-        [Member("resourceVersion")]
-        public int ResourceVersion { get; set; }
-
-        // ResourceType IResource.ResourceType => ResourceTypes.Certificate;
-
-        // aws certificates are region scoped
-        [IgnoreDataMember]
-        [Member("locationId")]
-        public int LocationId { get; }
 
         #endregion
 

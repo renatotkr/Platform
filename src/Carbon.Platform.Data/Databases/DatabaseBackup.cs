@@ -1,6 +1,8 @@
 ﻿using System;
 
 using Carbon.Data.Annotations;
+using Carbon.Data.Sequences;
+using Carbon.Json;
 using Carbon.Platform.Sequences;
 
 namespace Carbon.Platform.Storage
@@ -10,11 +12,12 @@ namespace Carbon.Platform.Storage
     {
         public DatabaseBackup() { }
 
-        public DatabaseBackup(long id, long bucketId, string name)
+        public DatabaseBackup(long id, long bucketId, string name, JsonObject properties = null)
         {
-            Id        = id;
-            BucketId  = bucketId;
-            Name      = name;
+            Id         = id;
+            BucketId   = bucketId;
+            Name       = name;
+            Properties = properties;
         }
 
         // databaseId | sequenceNumber
@@ -30,7 +33,7 @@ namespace Carbon.Platform.Storage
         
         // the key used to protect the backup
         [Member("keyId")]
-        public long KeyId { get; set; }
+        public Uid? KeyId { get; set; }
 
         [Member("size")]
         public long Size { get; set; }
@@ -42,6 +45,10 @@ namespace Carbon.Platform.Storage
 
         [Member("locationId")]
         public int LocationId { get; set; }
+
+        [Member("properties")]
+        [StringLength(1000)]
+        public JsonObject Properties { get; }
 
         #region Timestamps
 

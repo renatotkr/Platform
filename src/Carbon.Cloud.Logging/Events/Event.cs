@@ -4,7 +4,6 @@ using System.Runtime.Serialization;
 using Carbon.Data.Annotations;
 using Carbon.Data.Sequences;
 using Carbon.Json;
-using Carbon.Security;
 
 namespace Carbon.Cloud.Logging
 {
@@ -16,13 +15,13 @@ namespace Carbon.Cloud.Logging
         public Event(
             string action,
             string resource,
-            ISecurityContext context,
+            long? userId = null,
             JsonObject properties = null)
         {
             Action     = action   ?? throw new ArgumentNullException(nameof(action));
             Resource   = resource ?? throw new ArgumentNullException(nameof(resource));
             Properties = properties;
-            UserId     = context?.UserId;
+            UserId     = userId;
         }
 
         // accountId | timestamp | #

@@ -7,7 +7,7 @@ using Carbon.Storage;
 
 namespace Carbon.Packaging
 {
-    public class Manifest : Dictionary<string, IManifestEntry>
+    public sealed class Manifest : Dictionary<string, IManifestEntry>
     {
         public Manifest(IEnumerable<IBlob> blobs)
         {
@@ -19,26 +19,33 @@ namespace Carbon.Packaging
 
         public Manifest(IEnumerable<IManifestEntry> items)
         {
+            #region Preconditions
+
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
+
+            #endregion
+
             foreach (var item in items)
             {
                 Add(item.Path, item);
             }
         }
 
-        public bool TryFind(string name, out IManifestEntry item)
+        public bool TryFind(string key, out IManifestEntry item)
         {
             #region Preconditions
 
-            if (name == null) throw new ArgumentNullException(nameof(name));
+            if (key == null) throw new ArgumentNullException(nameof(key));
 
             #endregion
 
-            if (name[0] == '/')
+            if (key[0] == '/')
             {
-                name = name.Trim(Seperators.ForwardSlash);
+                key = key.Trim(Seperators.ForwardSlash);
             }
 
-            return TryGetValue(name, out item);
+            return TryGetValue(key, out item);
         }
 
         public bool Contains(string name) => ContainsKey(name);

@@ -2,7 +2,6 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
-using Carbon.Data.Sequences;
 using Carbon.Json;
 using Carbon.Platform.Resources;
 using Carbon.Versioning;
@@ -44,7 +43,7 @@ namespace Carbon.Platform.Computing
             Type       = type;
             Runtime    = runtime;
             Addresses  = addresses;
-            Properties = properties;
+            Properties = properties ?? new JsonObject();
             OwnerId    = ownerId;
             Version    = version;
             ParentId   = parentId;

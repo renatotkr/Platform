@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Kms</AssemblyName>
-    <VersionPrefix>0.15.0</VersionPrefix>
-    <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
+    <VersionPrefix>0.17.0</VersionPrefix>
+    <TargetFrameworks>netstandard1.6</TargetFrameworks>
 
     <!-- Package Details -->
     <Authors>iamcarbon</Authors>
@@ -17,22 +17,15 @@
   </ItemGroup>
   
   <ItemGroup>
+    <PackageReference Remove="NETStandard.Library" />
     <PackageReference Include="Carbon.Data.Sql" Version="0.26.0" />
     <PackageReference Include="Carbon.Json" Version="1.4.1" />
     <PackageReference Include="Carbon.Time" Version="1.2.0" />
     <PackageReference Include="protobuf-net" Version="2.2.1" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.3.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <PackageReference Remove="NETStandard.Library" />
     <PackageReference Include="System.Runtime" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
     <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.3.0" />
   </ItemGroup>
 
 </Project>

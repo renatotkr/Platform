@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 using Carbon.Data.Annotations;
 using Carbon.Platform.Sequences;
 using Carbon.Platform.Resources;
+using Carbon.Json;
 
 namespace Carbon.Platform.Networking
 {
@@ -39,6 +40,10 @@ namespace Carbon.Platform.Networking
         [Member("name")]
         [StringLength(63)]
         public string Name { get; set; }
+
+        [Member("properties")]
+        [StringLength(1000)]
+        public JsonObject Properties { get; }
 
         [IgnoreDataMember]
         public long NetworkId => ScopedId.GetScope(Id);

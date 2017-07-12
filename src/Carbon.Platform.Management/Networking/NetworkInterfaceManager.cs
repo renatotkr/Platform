@@ -33,14 +33,14 @@ namespace Carbon.Platform.Networking
             this.nsgManager        = new NetworkSecurityGroupManager(nsgService);
         }
        
-        public async Task<NetworkInterfaceInfo> GetAsync(ResourceProvider provider, string id)
+        public async Task<NetworkInterfaceInfo> GetAsync(ResourceProvider provider, string resourceId)
         {
-            var record = await networkInterfaces.FindAsync(provider, id).ConfigureAwait(false);
+            var record = await networkInterfaces.FindAsync(provider, resourceId).ConfigureAwait(false);
 
             if (record == null)
             {
-                var nic = await ec2.DescribeNetworkInterfaceAsync(id).ConfigureAwait(false)
-                    ?? throw new ResourceNotFoundException($"aws:networkInterface/{id}");
+                var nic = await ec2.DescribeNetworkInterfaceAsync(resourceId).ConfigureAwait(false)
+                    ?? throw ResourceError.NotFound(Aws, ResourceTypes.NetworkInterface, resourceId);
 
                 var network = await networks.GetAsync(Aws, nic.VpcId);
                 var region = Locations.Get(network.LocationId);

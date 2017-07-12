@@ -6,6 +6,7 @@ using Carbon.Data.Annotations;
 using Carbon.Net;
 using Carbon.Platform.Sequences;
 using Carbon.Platform.Resources;
+using Carbon.Json;
 
 namespace Carbon.Platform.Networking
 {
@@ -21,7 +22,8 @@ namespace Carbon.Platform.Networking
             MacAddress macAddress,
             long[] securityGroupIds,
             long subnetId,
-            ManagedResource resource)
+            ManagedResource resource,
+            JsonObject properties = null)
         {
             #region Preconditions
             
@@ -38,6 +40,7 @@ namespace Carbon.Platform.Networking
             ProviderId       = resource.ProviderId;
             ResourceId       = resource.ResourceId;
             LocationId       = resource.LocationId;
+            Properties       = properties;
         }
 
         // networkId | #
@@ -59,12 +62,15 @@ namespace Carbon.Platform.Networking
         public long SubnetId { get; }
 
         [IgnoreDataMember]
-        [Member("hostId"), Mutable]
-        [Indexed] // Current Attachment
+        [Member("hostId"), Mutable, Indexed]
         public long? HostId { get; set; }
 
         [IgnoreDataMember]
         public long NetworkId => ScopedId.GetScope(SubnetId);
+
+        [Member("properties")]
+        [StringLength(1000)]
+        public JsonObject Properties { get; }
 
         #region IResource
 

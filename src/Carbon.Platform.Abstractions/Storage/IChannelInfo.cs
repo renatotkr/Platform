@@ -7,3 +7,8 @@ namespace Carbon.Platform.Storage
         string Name { get; }
     }
 }
+
+// A channel may be a firehose, SNS Topic, Kinesis Stream, etc
+// A channel may have one or more consumers / subscribers
+
+// RentitionPeriod

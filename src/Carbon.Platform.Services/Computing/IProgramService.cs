@@ -8,8 +8,6 @@ namespace Carbon.Platform.Computing
     {
         Task<ProgramInfo> GetAsync(long id);
 
-        Task<ProgramInfo> GetAsync(Uid id);
-
         Task<ProgramInfo> FindAsync(string slug);
 
         Task<IReadOnlyList<ProgramInfo>> ListAsync(long ownerId);

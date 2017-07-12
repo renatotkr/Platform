@@ -2,11 +2,13 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Json;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Storage
 {
     [Dataset("Buckets", Schema = "Storage")]
+    [UniqueIndex("ownerId", "name")]
     public class BucketInfo : IBucketInfo
     {
         public BucketInfo() { }
@@ -39,12 +41,16 @@ namespace Carbon.Platform.Storage
         [Member("id"), Key(sequenceName: "bucketId")]
         public long Id { get; }
 
-        [Member("name")]
-        [StringLength(1, 63)]
-        public string Name { get; }
-
         [Member("ownerId")]
         public long OwnerId { get; }
+
+        [Member("name")]
+        [StringLength(100)]
+        public string Name { get; }
+
+        [Member("properties")]
+        [StringLength(1000)]
+        public JsonObject Properties { get; }
 
         #region IResource
 

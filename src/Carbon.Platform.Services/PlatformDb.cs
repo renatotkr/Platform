@@ -39,7 +39,6 @@ namespace Carbon.Platform
             MachineTypes          = new Dataset<MachineType,              long>(context);
             Programs              = new Dataset<ProgramInfo,              long>(context);
             ProgramReleases       = new Dataset<ProgramRelease,           long>(context);
-            // Processes             = new Dataset<ProcessInfo,              long>(context);
 
             // Storage ------------------------------------------------------------------
             Buckets               = new Dataset<BucketInfo,               long>(context);

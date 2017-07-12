@@ -54,8 +54,8 @@ namespace Carbon.Platform.Environments
 
         [Member("properties")]
         [StringLength(1000)]
-        public JsonObject Properties { get; set; }
-        
+        public JsonObject Properties { get; }
+
         #region IResource
 
         ResourceType IResource.ResourceType => ResourceTypes.Environment;

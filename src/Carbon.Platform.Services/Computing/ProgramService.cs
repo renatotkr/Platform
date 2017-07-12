@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 
 using Carbon.Data;
 using Carbon.Data.Expressions;
-using Carbon.Data.Sequences;
-using Carbon.Json;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
@@ -27,20 +25,22 @@ namespace Carbon.Platform.Computing
                 ?? throw ResourceError.NotFound(ResourceTypes.Program, id);
         }
 
-        public async Task<ProgramInfo> GetAsync(Uid uid)
+        public Task<ProgramInfo> FindAsync(string name)
         {
-            return await db.Programs.QueryFirstOrDefaultAsync(Eq("uid", uid)).ConfigureAwait(false);
-        }
+            #region Preconditions
 
-        public Task<ProgramInfo> FindAsync(string slug)
-        {
-            if (long.TryParse(slug, out var id))
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+
+            #endregion
+
+            if (long.TryParse(name, out var id))
             {
                 return db.Programs.FindAsync(id);
             }
             else
             {
-                return db.Programs.QueryFirstOrDefaultAsync(Eq("slug", slug));
+                return db.Programs.QueryFirstOrDefaultAsync(Eq("slug", name));
             }
         }
 
@@ -69,7 +69,7 @@ namespace Carbon.Platform.Computing
                 name       : request.Name,
                 slug       : request.Slug,
                 version    : request.Version,
-                properties : new JsonObject(),
+                properties : request.Properties,
                 runtime    : request.Runtime,
                 addresses  : request.Addresses,
                 ownerId    : request.OwnerId,

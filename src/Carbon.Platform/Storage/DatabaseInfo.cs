@@ -2,11 +2,13 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Json;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Storage
 {
     [Dataset("Databases")]
+    [UniqueIndex("ownerId", "name")]
     public class DatabaseInfo : IDatabaseInfo
     {
         public DatabaseInfo() { }
@@ -31,20 +33,26 @@ namespace Carbon.Platform.Storage
         [Member("id"), Key(sequenceName: "databaseId")]
         public long Id { get; }
 
-        [Member("name"), Unique]
+        [Member("ownerId")]
+        public long OwnerId { get; }
+
+        [Member("name")]
         [StringLength(1, 63)]
         public string Name { get; }
 
-        // DatabaseType Type { get; set; }
-
-        [Member("ownerId")]
-        public long OwnerId { get; }
+        [Member("properties")]
+        [StringLength(1000)]
+        public JsonObject Properties { get; }
 
         #region Timestamps
 
         [IgnoreDataMember]
         [Member("created"), Timestamp]
         public DateTime Created { get; }
+
+        [IgnoreDataMember]
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; }
 
         [IgnoreDataMember]
         [Member("deleted")]
@@ -59,6 +67,3 @@ namespace Carbon.Platform.Storage
         #endregion
     }
 }
-
-// MySQL = 64
-// PostgreSQL = 63 (begin with letter or underscore)

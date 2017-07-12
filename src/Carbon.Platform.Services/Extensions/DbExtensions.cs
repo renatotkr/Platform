@@ -34,9 +34,6 @@ namespace Carbon.Platform
 
         // Computing
 
-        public static Task<Cluster> FindAsync(this Dataset<Cluster, long> dataset, ResourceProvider provider, string resourceId) =>
-            dataset.QueryFirstOrDefaultAsync(And(Eq("providerId", provider.Id), Eq("resourceId", resourceId)));
-
         public static Task<HostInfo> FindAsync(this Dataset<HostInfo, long> dataset, ResourceProvider provider, string resourceId) =>
             dataset.QueryFirstOrDefaultAsync(And(Eq("providerId", provider.Id), Eq("resourceId", resourceId)));
 

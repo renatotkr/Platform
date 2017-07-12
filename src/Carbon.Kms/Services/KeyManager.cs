@@ -41,7 +41,7 @@ namespace Carbon.Kms
 
             var ciphertext = await masterKey.EncryptAsync(aes.Key).ConfigureAwait(false);
 
-            var id = Guid.NewGuid();
+            Uid id = Guid.NewGuid();
 
             var key = new KeyInfo(
                 id          : id,

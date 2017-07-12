@@ -16,7 +16,8 @@ namespace Carbon.CI
             string name,
             long repositoryId,
             long ownerId,
-            ManagedResource resource)
+            ManagedResource resource,
+            long imageId = 0)
         {
             #region Preconditions
 
@@ -33,6 +34,7 @@ namespace Carbon.CI
             Id           = id;
             Name         = name;
             RepositoryId = repositoryId;
+            ImageId      = imageId;
             OwnerId      = ownerId;
             ProviderId   = resource.ProviderId;
             ResourceId   = resource.ResourceId;
@@ -42,6 +44,9 @@ namespace Carbon.CI
         [Member("id"), Key(sequenceName: "projectId")]
         public long Id { get; }
 
+        [Member("ownerId")]
+        public long OwnerId { get; }
+
         [Member("name")]
         [StringLength(100)]
         public string Name { get; }
@@ -50,10 +55,9 @@ namespace Carbon.CI
         public long RepositoryId { get; }
 
         [Member("imageId")]
-        public long ImageId { get; set; }
+        public long ImageId { get; }
         
-        [Member("ownerId")]
-        public long OwnerId { get; }
+        // Properties
 
         #region Stats
 

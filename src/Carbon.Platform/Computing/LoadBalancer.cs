@@ -2,11 +2,13 @@
 using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Json;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
     [Dataset("LoadBalancers", Schema = "Computing")]
+    [UniqueIndex("ownerId", "name")]
     [UniqueIndex("providerId", "resourceId")]
     public class LoadBalancer : ILoadBalancer
     {
@@ -40,6 +42,9 @@ namespace Carbon.Platform.Computing
         [Member("id"), Key(sequenceName: "loadBalancerId")]
         public long Id { get; }
 
+        [Member("ownerId")]
+        public long OwnerId { get; }
+
         [Member("name")]
         [StringLength(63)]
         public string Name { get; }
@@ -51,8 +56,9 @@ namespace Carbon.Platform.Computing
         [Member("networkId")]
         public long NetworkId { get; }
 
-        [Member("ownerId")]
-        public long OwnerId { get; }
+        [Member("properties")]
+        [StringLength(1000)]
+        public JsonObject Properties { get; }
 
         #region IResource
 

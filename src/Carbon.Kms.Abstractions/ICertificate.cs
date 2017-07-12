@@ -1,13 +1,12 @@
 ﻿using System;
 
-
-namespace Carbon.Platform.Hosting
+namespace Carbon.Kms
 {
     public interface ICertificate // : IResource
     {
         // Uid Id { get; }
 
-        string[] Subjects { get; }
+        string Subject { get; }
         
         long IssuerId { get; }
 
@@ -21,7 +20,6 @@ namespace Carbon.Platform.Hosting
 
 // aws | arn   | Certificate
 // gcp | ulong | compute#sslCertificate
-
 
 /*
 Certificate

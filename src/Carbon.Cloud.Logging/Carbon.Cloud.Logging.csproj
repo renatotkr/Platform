@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Cloud.Logging</AssemblyName>
-    <VersionPrefix>0.6.0</VersionPrefix>
-    <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
+    <VersionPrefix>0.8.0</VersionPrefix>
+    <TargetFrameworks>netstandard1.6</TargetFrameworks>
 
     <!-- Package Info-->
     <Authors>iamcarbon</Authors>
@@ -13,21 +13,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Remove="NETStandard.Library" />
     <PackageReference Include="Carbon.Data.Sql" Version="0.26.0" />
     <PackageReference Include="Carbon.Json" Version="1.4.1" />
     <PackageReference Include="Carbon.Security.Primitives" Version="0.20.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <PackageReference Remove="NETStandard.Library" />
     <PackageReference Include="System.Runtime" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.3.0" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-  </ItemGroup>
 </Project>

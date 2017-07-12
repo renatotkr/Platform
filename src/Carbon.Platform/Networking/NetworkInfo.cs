@@ -4,6 +4,7 @@ using System.Net;
 
 using Carbon.Data.Annotations;
 using Carbon.Platform.Resources;
+using Carbon.Json;
 
 namespace Carbon.Platform.Networking
 {
@@ -53,6 +54,10 @@ namespace Carbon.Platform.Networking
 
         [Member("ownerId")]
         public long OwnerId { get; }
+
+        [Member("properties")]
+        [StringLength(1000)]
+        public JsonObject Properties { get; }
 
         #region IResource
 
