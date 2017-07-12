@@ -24,7 +24,7 @@ namespace Carbon.Platform.Computing
             #region Preconditions
 
             if (id <= 0)
-                throw new ArgumentException("Invalid", nameof(id));
+                throw new ArgumentException("Must be > 0", nameof(id));
 
             #endregion
 

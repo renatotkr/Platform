@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Platform.Environments;
 using Carbon.Platform.Networking;
@@ -45,9 +46,18 @@ namespace Carbon.Platform.Computing
                 ?? throw ResourceError.NotFound(provider, ResourceTypes.Host, name);
         }
 
-        public async Task<HostInfo> FindAsync(ResourceProvider provider, string id)
+        public async Task<HostInfo> FindAsync(ResourceProvider provider, string resourceId)
         {
-            return await db.Hosts.FindAsync(provider, id).ConfigureAwait(false);
+            return await db.Hosts.FindAsync(provider, resourceId).ConfigureAwait(false);
+        }
+
+        public Task<IReadOnlyList<HostInfo>> ListAsync()
+        {
+            return db.Hosts.QueryAsync(
+                expression : IsNull("terminated"),
+                order      : Order.Descending("id"),
+                take       : 1000
+            );
         }
 
         public Task<IReadOnlyList<HostInfo>> ListAsync(ICluster cluster)

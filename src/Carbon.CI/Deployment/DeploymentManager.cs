@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using Carbon.Cloud.Logging;
 using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Logging;
 using Carbon.Platform.Computing;
 using Carbon.Platform.Environments;
+using Carbon.Security;
 
 namespace Carbon.CI
 {
@@ -17,12 +18,14 @@ namespace Carbon.CI
         private readonly IHostService hostService;
         private readonly CiadDb db;
         private readonly IProgramReleaseService releaseService;
+        private readonly IEventLogger eventLog;
 
         public DeploymentManager(
             HostAgentClient api, 
             CiadDb db,
             IHostService hostService,
             IProgramReleaseService releaseService,
+            IEventLogger eventLog,
             ILogger log)
         {
             this.api            = api            ?? throw new ArgumentNullException(nameof(api));
@@ -30,14 +33,18 @@ namespace Carbon.CI
             this.releaseService = releaseService ?? throw new ArgumentNullException(nameof(releaseService));
             this.db             = db             ?? throw new ArgumentNullException(nameof(db));
             this.hostService    = hostService    ?? throw new ArgumentNullException(nameof(hostService));
+            this.eventLog       = eventLog       ?? throw new ArgumentNullException(nameof(eventLog));
         }
 
-        public async Task<DeployResult> DeployAsync(DeployRequest request)
+        public async Task<DeployResult> DeployAsync(DeployRequest request, ISecurityContext context)
         {
             #region Preconditions
 
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
+
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
 
             #endregion
             
@@ -47,7 +54,11 @@ namespace Carbon.CI
             var release = await releaseService.GetAsync(program.Id, program.Version);
             var hosts   = await hostService.ListAsync(environment);
 
-            var deployment = await StartAsync(environment, release, request.InitiatorId);
+            var deployment = await StartAsync(
+                environment : environment,
+                release     : release,
+                creatorId   : context.UserId.Value
+            );
 
             var targets = new DeploymentTarget[hosts.Count];
             
@@ -75,7 +86,14 @@ namespace Carbon.CI
 
             // Complete the deployment & save the targets
             await CompleteAsync(deployment, targets, succceded: true);
-            
+
+            // Log the action
+            await eventLog.CreateAsync(new Event(
+                action   : "deploy",
+                resource : "application#" + release.Id + "@" + release.Version,
+                userId   : context.UserId
+            ));
+
             return new DeployResult(true);
         }
 
@@ -150,7 +168,7 @@ namespace Carbon.CI
             long creatorId)
         { 
             var deployment = new Deployment(
-                id        : await DeploymentId.NextAsync(db.Context, environment),
+                id        : await db.Deployments.Sequence.NextAsync(),
                 release   : release,
                 creatorId : creatorId
             );

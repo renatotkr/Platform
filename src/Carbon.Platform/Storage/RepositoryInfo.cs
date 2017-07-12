@@ -38,12 +38,11 @@ namespace Carbon.Platform.Storage
         [Member("id"), Key(sequenceName: "repositoryId")]
         public long Id { get; }
 
-        // namespace...
-
-        // Note: may change ownership
-        [IgnoreDataMember]
         [Member("ownerId")]
+        [IgnoreDataMember]
         public long OwnerId { get; }
+
+        // Namespace?
 
         [Member("name")]
         [StringLength(100)]
@@ -53,12 +52,9 @@ namespace Carbon.Platform.Storage
         [StringLength(160)]
         public string FullName { get; }
 
-        /// <summary>
-        /// An encrypted token to access the repository
-        /// </summary>
-        [Member("encryptedToken")]
+        [Member("encryptedAccessToken")]
         [MaxLength(1000)]
-        public byte[] EncryptedToken { get; set; }
+        public byte[] EncryptedAccessToken { get; set; }
 
         #region Statistics
 
@@ -70,13 +66,6 @@ namespace Carbon.Platform.Storage
         #endregion
 
         #region IResource
-
-        /*
-        AWS CodeCommit : 1
-        GitHub         : 1000
-        BitBucket      : 1001
-        GitLab         : 1002
-        */
 
         [IgnoreDataMember]
         [Member("providerId")]

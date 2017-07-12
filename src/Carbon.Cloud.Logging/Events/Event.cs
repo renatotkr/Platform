@@ -50,7 +50,7 @@ namespace Carbon.Cloud.Logging
         public JsonObject Context { get; }
 
         [Member("userId"), Indexed]
-        public long? UserId { get; set; }
+        public long? UserId { get; }
 
         #region Helpers
 

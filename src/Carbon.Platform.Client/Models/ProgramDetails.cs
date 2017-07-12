@@ -9,8 +9,6 @@ namespace Carbon.Platform.Computing
         [DataMember(Name = "id")]
         public long Id { get; set; }
 
-        // Uid?
-
         [DataMember(Name = "name")]
         public string Name { get; set; }
         

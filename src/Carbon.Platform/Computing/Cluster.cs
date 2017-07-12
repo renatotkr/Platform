@@ -43,7 +43,6 @@ namespace Carbon.Platform.Computing
             HostTemplateId = hostTemplateId;
         }
         
-        // environmentId | #
         [Member("id"), Key("clusterId")]
         public long Id { get; }
 

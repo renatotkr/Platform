@@ -4,11 +4,10 @@ using Carbon.Data.Annotations;
 using Carbon.Json;
 using Carbon.Platform.Computing;
 using Carbon.Platform.Resources;
-using Carbon.Platform.Sequences;
 using Carbon.Versioning;
 
 namespace Carbon.CI
-{ 
+{
     [Dataset("Deployments", Schema = "Ciad")]
     public class Deployment : IDeployment, IResource
     {
@@ -40,8 +39,7 @@ namespace Carbon.CI
             Properties     = properties;
         }
 
-        // environmentId | #
-        [Member("id"), Key]
+        [Member("id"), Key("deploymentId")]
         public long Id { get; }
 
         [Member("status")]
@@ -79,8 +77,6 @@ namespace Carbon.CI
         public DateTime? Completed { get; set; }
 
         #endregion
-
-        public long EnvironmentId => ScopedId.GetScope(Id);
     }
 }
 

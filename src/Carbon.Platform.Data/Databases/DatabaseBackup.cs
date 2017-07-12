@@ -20,7 +20,7 @@ namespace Carbon.Platform.Storage
             Properties = properties;
         }
 
-        // databaseId | sequenceNumber
+        // databaseId | #
         [Member("id"), Key]
         public long Id { get; }
 

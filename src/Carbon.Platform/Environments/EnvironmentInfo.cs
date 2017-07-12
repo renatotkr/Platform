@@ -62,14 +62,6 @@ namespace Carbon.Platform.Environments
 
         #endregion
 
-        #region Stats
-
-        // the number of commands (including deployments) issued against the environment
-        [Member("commandCount")]
-        public int CommandCount { get; }
-
-        #endregion
-
         #region Timestamps
 
         [IgnoreDataMember]

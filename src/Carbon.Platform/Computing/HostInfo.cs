@@ -47,7 +47,6 @@ namespace Carbon.Platform.Computing
         }
 
         // locationId | #
-        // v2: partition on locationId
         [Member("id"), Key]
         public long Id { get; }
 

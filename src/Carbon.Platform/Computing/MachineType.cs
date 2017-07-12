@@ -19,6 +19,13 @@ namespace Carbon.Platform.Computing
             JsonObject properties, 
             ResourceProvider provider)
         {
+            #region Preconditions
+
+            if (id <= 0)
+                throw new ArgumentException("Must be > 0", nameof(id));
+
+            #endregion
+
             Id         = id;
             Name       = name ?? throw new ArgumentNullException(nameof(name));
             Properties = properties;

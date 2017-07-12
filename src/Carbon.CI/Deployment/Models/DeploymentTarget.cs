@@ -34,8 +34,6 @@ namespace Carbon.CI
         [Member("hostId"), Key]
         public long HostId { get; }
 
-        // ClusterId?
-
         [Member("status")]
         public DeploymentStatus Status { get; set; }
         
