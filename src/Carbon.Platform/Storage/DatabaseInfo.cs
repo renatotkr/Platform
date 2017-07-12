@@ -16,7 +16,8 @@ namespace Carbon.Platform.Storage
         public DatabaseInfo(
             long id,
             string name, 
-            long ownerId)
+            long ownerId,
+            JsonObject properties = null)
         {
             #region Preconditions
 
@@ -25,9 +26,10 @@ namespace Carbon.Platform.Storage
 
             #endregion
 
-            Id   = id;
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-            OwnerId = ownerId;
+            Id         = id;
+            Name       = name ?? throw new ArgumentNullException(nameof(name));
+            OwnerId    = ownerId;
+            Properties = properties;
         }
 
         [Member("id"), Key(sequenceName: "databaseId")]

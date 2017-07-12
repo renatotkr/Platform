@@ -16,11 +16,15 @@ namespace Carbon.Cloud.Logging
             string action,
             string resource,
             long? userId = null,
+            string source = null,
+            JsonObject context = null,
             JsonObject properties = null)
         {
             Action     = action   ?? throw new ArgumentNullException(nameof(action));
             Resource   = resource ?? throw new ArgumentNullException(nameof(resource));
+            Context    = context;
             Properties = properties;
+            Source     = source;
             UserId     = userId;
         }
 

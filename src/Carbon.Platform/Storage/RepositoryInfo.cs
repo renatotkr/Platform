@@ -18,21 +18,29 @@ namespace Carbon.Platform.Storage
             long id,
             string name, 
             long ownerId,
-            ManagedResource resource)
+            ManagedResource resource,
+            byte[] encryptedAcessToken = null)
         {
             #region Preconditions
 
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
 
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Required", nameof(name));
+
             #endregion
 
-            Id         = id;
-            Name       = name ?? throw new ArgumentNullException(nameof(name));
-            FullName   = resource.ResourceId;
-            OwnerId    = ownerId;
-            ProviderId = resource.ProviderId;
-            LocationId = resource.LocationId;
+            Id                   = id;
+            Name                 = name;
+            FullName             = resource.ResourceId;
+            OwnerId              = ownerId;
+            ProviderId           = resource.ProviderId;
+            LocationId           = resource.LocationId;
+            EncryptedAccessToken = encryptedAcessToken;
         }
 
         [Member("id"), Key(sequenceName: "repositoryId")]
@@ -42,19 +50,17 @@ namespace Carbon.Platform.Storage
         [IgnoreDataMember]
         public long OwnerId { get; }
 
-        // Namespace?
-
         [Member("name")]
         [StringLength(100)]
         public string Name { get; }
 
-        [Member("fullName")]
+        [Member("fullName")] // Key?
         [StringLength(160)]
         public string FullName { get; }
 
         [Member("encryptedAccessToken")]
         [MaxLength(1000)]
-        public byte[] EncryptedAccessToken { get; set; }
+        public byte[] EncryptedAccessToken { get; }
 
         #region Statistics
 

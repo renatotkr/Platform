@@ -31,8 +31,8 @@ namespace Carbon.Platform
         public Task<ProgramDetails> CreateAsync(ProgramDetails program)
         {
             return api.PostAsync<ProgramDetails>(
-                path: $"/programs",
-                data: program
+                path : $"/programs",
+                data : program
             );
         }
 

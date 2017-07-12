@@ -16,7 +16,8 @@ namespace Carbon.Platform.Storage
             long id,
             long repositoryId,
             string name, 
-            long creatorId)
+            long creatorId,
+            long? containerId = null)
         {
             #region Preconditions
 
@@ -35,6 +36,7 @@ namespace Carbon.Platform.Storage
             RepositoryId = repositoryId;
             Name         = name ?? throw new ArgumentNullException(nameof(name));
             CreatorId    = creatorId;
+            ContainerId  = containerId;
         }
 
         // repositoryId | #
@@ -54,6 +56,9 @@ namespace Carbon.Platform.Storage
 
         [Member("creatorId")]
         public long CreatorId { get; }
+
+        [Member("containerId")]
+        public long? ContainerId { get; set; }
 
         #region Timestamps
 

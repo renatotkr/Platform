@@ -71,19 +71,18 @@ namespace Carbon.Platform.Storage
             #endregion
 
             var repository = new RepositoryInfo(
-                id       : await db.Repositories.Sequence.NextAsync(),
-                name     : request.Name,
-                ownerId  : request.OwnerId,
-                resource : request.Resource
-            )
-            {
-                EncryptedToken = request.EncryptedToken
-            };
+                id                  : await db.Repositories.Sequence.NextAsync(),
+                name                : request.Name,
+                ownerId             : request.OwnerId,
+                resource            : request.Resource,
+                encryptedAcessToken : request.EncryptedAccessToken
+            );
+
+            // TODO: Do this inside of a single transaction / connection
 
             await db.Repositories.InsertAsync(repository).ConfigureAwait(false);
 
-            // Recreate the master branch
-
+            // Create the master branch
             await CreateBranchAsync(new CreateBranchRequest(repository.Id, "master", request.OwnerId));
 
             return repository;

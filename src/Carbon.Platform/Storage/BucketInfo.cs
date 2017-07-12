@@ -17,12 +17,19 @@ namespace Carbon.Platform.Storage
             long id, 
             string name,
             long ownerId,
-            ManagedResource resource)
+            ManagedResource resource,
+            JsonObject properties = null)
         {
             #region Preconditions
 
             if (id <= 0)
                 throw new ArgumentException("Invalid", nameof(id));
+
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Required", nameof(name));
 
             if (ownerId <= 0)
                 throw new ArgumentException("Invalid", nameof(ownerId));
@@ -30,12 +37,13 @@ namespace Carbon.Platform.Storage
 
             #endregion
 
-            Id = id;
-            Name       = name ?? throw new ArgumentNullException(nameof(name));
+            Id         = id;
+            Name       = name;
             OwnerId    = ownerId;
             ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
             ResourceId = resource.ResourceId;
+            Properties = properties;
         }
 
         [Member("id"), Key(sequenceName: "bucketId")]

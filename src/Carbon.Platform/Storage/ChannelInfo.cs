@@ -22,7 +22,11 @@ namespace Carbon.Platform.Storage
         {
             #region Preconditions
 
-            if (id <= 0) throw new ArgumentException("Invalid", nameof(id));
+            if (id <= 0)
+                throw new ArgumentException("Must be > 0", nameof(id));
+
+            if (ownerId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(ownerId));
 
             #endregion
 

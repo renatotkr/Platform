@@ -113,9 +113,6 @@ namespace Carbon.Cloud.Logging
         [StringLength(1000)]
         public string Origin { get; }
 
-        // UserAgent
-        // ClientIp
-
         #endregion
 
         #region Timings
