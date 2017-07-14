@@ -1,20 +1,29 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 using Carbon.Platform.Sequences;
 
-namespace Carbon.Platform.Storage
+namespace Carbon.Rds
 {
-    [Dataset("DatabaseSchemas")]
-    public class DatabaseSchema
+    [Dataset("DatabaseSchemas", Schema = "Rds")]
+    public class DatabaseSchema : IDatabaseSchema
     {
         public DatabaseSchema() { }
 
         public DatabaseSchema(long id, string name)
         {
+            #region Preconditions
+
+            if (id <= 0)
+                throw new ArgumentException("Must be > 0", nameof(id));
+
+            if (string.IsNullOrEmpty(nameof(name)))
+                throw new ArgumentException("Required", nameof(name));
+
+            #endregion
+
             Id   = id;
-            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Name = name;
         }
 
         // databaseId | #
@@ -25,17 +34,21 @@ namespace Carbon.Platform.Storage
         [StringLength(63)]
         public string Name { get; }
 
+        #region Preconditions
+
+        [Member("tableCount")]
+        public int TableCount { get; }
+
+        #endregion
+
         #region Timestamps
 
-        [IgnoreDataMember]
         [Member("created"), Timestamp]
         public DateTime Created { get; }
 
-        [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
 
-        [IgnoreDataMember]
         [Member("deleted")]
         public DateTime? Deleted { get; }
 

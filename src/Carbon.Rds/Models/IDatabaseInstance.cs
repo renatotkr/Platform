@@ -1,9 +1,11 @@
 ﻿using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.Storage
+namespace Carbon.Rds
 {
     public interface IDatabaseInstance : IResource
     {
         long DatabaseId { get; }
+
+        long HostId { get; }
     }
 }

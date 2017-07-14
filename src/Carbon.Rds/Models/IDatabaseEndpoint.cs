@@ -1,7 +1,9 @@
-﻿namespace Carbon.Platform.Storage
+﻿namespace Carbon.Rds
 {
     public interface IDatabaseEndpoint
     {
+        long DatabaseId { get; }
+
         string Host { get; }
 
         ushort Port { get; }

@@ -5,18 +5,36 @@ using Carbon.Data.Sequences;
 using Carbon.Json;
 using Carbon.Platform.Sequences;
 
-namespace Carbon.Platform.Storage
+namespace Carbon.Rds
 {
-    [Dataset("DatabaseBackups")]
-    public class DatabaseBackup
+    [Dataset("DatabaseBackups", Schema = "Rds")]
+    public class DatabaseBackup : IDatabaseBackup
     {
         public DatabaseBackup() { }
 
-        public DatabaseBackup(long id, long bucketId, string name, JsonObject properties = null)
+        public DatabaseBackup(
+            long id, 
+            long bucketId, 
+            string name, 
+            DatabaseBackupType type = DatabaseBackupType.Full,
+            Uid? encryptionKeyId = null,
+            JsonObject properties = null)
         {
+            #region Preconditions
+
+            if (id <= 0)
+                throw new ArgumentException("Must be > 0", nameof(id));
+
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Required", nameof(name));
+
+            #endregion
+
             Id         = id;
             BucketId   = bucketId;
             Name       = name;
+            KeyId      = encryptionKeyId;
+            Type       = type;
             Properties = properties;
         }
 
@@ -24,27 +42,32 @@ namespace Carbon.Platform.Storage
         [Member("id"), Key]
         public long Id { get; }
 
+        [Member("type")]
+        public DatabaseBackupType Type { get; }
+
         [Member("bucketId")]
         public long BucketId { get; }
 
         [Member("name")]
         [StringLength(100)]
         public string Name { get; }
-        
+
+        [Member("status")]
+        public DatabaseBackupStatus Status { get; }
+
         // the key used to protect the backup
         [Member("keyId")]
-        public Uid? KeyId { get; set; }
+        public Uid? KeyId { get; }
 
         [Member("size")]
-        public long Size { get; set; }
+        public long Size { get; }
 
         [Member("sha256"), FixedSize(32)]
-        public byte[] Sha256 { get; set; }
-
-        // CompressionMethod...
-
-        [Member("locationId")]
-        public int LocationId { get; set; }
+        public byte[] Sha256 { get; }
+        
+        [Member("message")]
+        [StringLength(500)]
+        public string Message { get; }
 
         [Member("properties")]
         [StringLength(1000)]
@@ -60,6 +83,9 @@ namespace Carbon.Platform.Storage
         
         [Member("created"), Timestamp]
         public DateTime Created { get; }
+
+        [Member("modified"), Timestamp(true)]
+        public DateTime Modified { get; }
 
         #endregion
 

@@ -1,4 +1,4 @@
-﻿namespace Carbon.Platform.Storage
+﻿namespace Carbon.Rds
 {
     public enum DatabaseBackupType : byte
     {
