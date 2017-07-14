@@ -35,6 +35,9 @@ namespace Carbon.Kms
             if (actions == null)
                 throw new ArgumentNullException(nameof(actions));
 
+            if (actions.Length == 0)
+                throw new ArgumentException("Required", nameof(actions));
+
             #endregion
 
             Id          = grantId;

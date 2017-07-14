@@ -8,11 +8,11 @@ namespace Carbon.Kms
 
         string Subject { get; }
         
-        long IssuerId { get; }
+        long? IssuerId { get; }
 
         DateTime? Issued { get; }
 
-        DateTime Expires { get; }
+        DateTime? Expires { get; }
 
         DateTime? Revoked { get; }
     }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Carbon.Data.Expressions;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
@@ -13,13 +15,18 @@ namespace Carbon.Platform.Computing
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public async Task<Image> GetAsync(long id)
+        public Task<IReadOnlyList<ImageInfo>> ListAsync()
+        {
+            return db.Images.QueryAsync(Expression.IsNull("deleted"));
+        }
+
+        public async Task<ImageInfo> GetAsync(long id)
         {
             return await db.Images.FindAsync(id).ConfigureAwait(false) 
                 ?? throw ResourceError.NotFound(ResourceTypes.Image, id);
         }
 
-        public async Task<Image> GetAsync(ResourceProvider provider, string resourceId)
+        public async Task<ImageInfo> GetAsync(ResourceProvider provider, string resourceId)
         {
             var image = await db.Images.FindAsync(provider, resourceId).ConfigureAwait(false);
 
@@ -39,7 +46,7 @@ namespace Carbon.Platform.Computing
             return image;
         }
 
-        public async Task<Image> RegisterAsync(RegisterImageRequest request)
+        public async Task<ImageInfo> RegisterAsync(RegisterImageRequest request)
         {
             #region Preconditions
             
@@ -47,7 +54,7 @@ namespace Carbon.Platform.Computing
 
             #endregion
 
-            var image = new Image(
+            var image = new ImageInfo(
                 id       : await db.Images.Sequence.NextAsync(),
                 type     : request.Type,
                 name     : request.Name,

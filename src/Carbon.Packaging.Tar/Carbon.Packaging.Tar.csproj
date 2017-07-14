@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Packaging.Tar</AssemblyName>
-    <VersionPrefix>0.8.1</VersionPrefix>
+    <VersionPrefix>0.9.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6</TargetFrameworks>
 
     <!-- Package Details -->
@@ -15,10 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Carbon.Storage" Version="1.8.1" />
+    <PackageReference Include="Carbon.Storage" Version="1.9.0" />
     <PackageReference Include="SharpCompress" Version="0.17.1" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
   </ItemGroup>
 </Project>

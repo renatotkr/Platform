@@ -7,7 +7,7 @@ using Carbon.Json;
 
 namespace Carbon.Cloud.Logging
 {
-    [Dataset("Events", Schema = "Logging")]
+    [Dataset("Events", Schema = "Logs")]
     public class Event
     {
         public Event() { }

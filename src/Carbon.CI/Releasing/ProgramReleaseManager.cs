@@ -3,14 +3,12 @@ using System.Threading.Tasks;
 
 using Carbon.Cloud.Logging;
 using Carbon.Data.Protection;
-using Carbon.Data.Sequences;
 using Carbon.Json;
 using Carbon.Kms;
 using Carbon.Packaging;
 using Carbon.Platform.Computing;
 using Carbon.Security;
 using Carbon.Storage;
-using Carbon.Versioning;
 
 namespace Carbon.CI
 {
@@ -27,31 +25,27 @@ namespace Carbon.CI
             IProgramReleaseService releaseService,
             IDataProtectorProvider protectorProvider,
             IDataDecryptor dataDecrypter,
-            IEventLogger log)
+            IEventLogger eventLog)
         {
             this.packageStore      = packageStore      ?? throw new ArgumentNullException(nameof(packageStore));
             this.releaseService    = releaseService    ?? throw new ArgumentNullException(nameof(releaseService));
-            this.protectorProvider = protectorProvider ?? throw new ArgumentNullException(nameof(ProgramReleaseManager.protectorProvider)); 
-            this.log               = log               ?? throw new ArgumentNullException(nameof(log));
+            this.protectorProvider = protectorProvider ?? throw new ArgumentNullException(nameof(protectorProvider));
             this.dataDecrypter     = dataDecrypter     ?? throw new ArgumentNullException(nameof(dataDecrypter));
+            this.log               = eventLog          ?? throw new ArgumentNullException(nameof(eventLog));
         }
 
-        public async Task<ProgramRelease> CreateAsync(
-            ProgramInfo program, 
-            SemanticVersion version,
-            IPackage package,
-            ISecurityContext context,
-            Uid? keyId = null)
+        public async Task<ProgramRelease> CreateAsync(PublishProgramRequest request, ISecurityContext context)
         {
             #region Preconditions
 
-            if (program == null)
-                throw new ArgumentNullException(nameof(program));
-
-            if (package == null)
-                throw new ArgumentNullException(nameof(package));
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
 
             #endregion
+
+            var program = request.Program;
+            var version = request.Version;
+            var package = request.Package;
 
             // 1/1.0.0.zip
             var key = program.Id + "/" + version.ToString() + ".zip";
@@ -60,13 +54,13 @@ namespace Carbon.CI
             
             byte[] encryptionKey = null;
 
-            if (keyId != null)
+            if (request.EncryptionKeyId != null)
             {
-                var protector = await protectorProvider.GetAsync(keyId.Value.ToString());
+                var protector = await protectorProvider.GetAsync(request.EncryptionKeyId.Value.ToString());
 
                 encryptionKey = Secret.Generate(256 / 8).Value;
 
-                var cek = await protector.EncryptAsync(encryptionKey).ConfigureAwait(false);
+                var cek = await protector.EncryptAsync(encryptionKey);
                 
                 properties.Add("encryptionStrategy",  "sse");
                 properties.Add("encryptionAlgorithm", "AES256");
@@ -106,12 +100,14 @@ namespace Carbon.CI
                 action   : "publish",
                 resource : "program#" + program.Id, 
                 userId   : context.UserId)
-            ).ConfigureAwait(false);
+            );
 
             #endregion
 
             return release;
         }
+
+        // TODO: Download stream... (avoid package allocations)
 
         public async Task<IPackage> DownloadAsync(ProgramRelease release)
         {

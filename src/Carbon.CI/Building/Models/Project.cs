@@ -1,13 +1,14 @@
 ﻿using System;
 
 using Carbon.Data.Annotations;
+using Carbon.Json;
 using Carbon.Platform.Resources;
 
 namespace Carbon.CI
 {
     [Dataset("Projects", Schema = "Ciad")]
     [UniqueIndex("ownerId", "name")]
-    public class ProjectInfo : IManagedResource, IProject
+    public class ProjectInfo : IResource, IProject
     {
         public ProjectInfo() { }
 
@@ -17,7 +18,8 @@ namespace Carbon.CI
             long repositoryId,
             long ownerId,
             ManagedResource resource,
-            long imageId = 0)
+            long imageId = 0,
+            JsonObject properties = null)
         {
             #region Preconditions
 
@@ -39,6 +41,7 @@ namespace Carbon.CI
             ProviderId   = resource.ProviderId;
             ResourceId   = resource.ResourceId;
             LocationId   = resource.LocationId;
+            Properties   = properties;
         }
 
         [Member("id"), Key(sequenceName: "projectId")]
@@ -56,8 +59,10 @@ namespace Carbon.CI
 
         [Member("imageId")]
         public long ImageId { get; }
-        
-        // Properties
+
+        [Member("properties")]
+        [StringLength(1000)]
+        public JsonObject Properties { get; }
 
         #region Stats
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 using Carbon.Json;
@@ -17,7 +16,8 @@ namespace Carbon.Platform.Environments
             long id, 
             string name,
             long ownerId,
-            string slug = null)
+            string slug = null,
+            JsonObject properties = null)
         {
             #region Preconditions
 
@@ -32,10 +32,11 @@ namespace Carbon.Platform.Environments
 
             #endregion
 
-            Id      = id;
-            Name    = name;
-            Slug    = slug;
-            OwnerId = ownerId;
+            Id         = id;
+            OwnerId    = ownerId;
+            Name       = name;
+            Slug       = slug;
+            Properties = properties;
         }
 
         [Member("id"), Key("environmentId")]
@@ -64,15 +65,12 @@ namespace Carbon.Platform.Environments
 
         #region Timestamps
 
-        [IgnoreDataMember]
         [Member("created"), Timestamp]
         public DateTime Created { get; }
 
-        [IgnoreDataMember]
         [Member("deleted")]
         public DateTime? Deleted { get; }
 
-        [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
 

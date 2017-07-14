@@ -13,7 +13,7 @@ namespace Carbon.CI
 {
     public class DeploymentManager : IDeploymentManager
     {
-        private readonly HostAgentClient api;
+        private readonly HostAgentClient hostAgent;
         private readonly ILogger log;
         private readonly IHostService hostService;
         private readonly CiadDb db;
@@ -28,7 +28,7 @@ namespace Carbon.CI
             IEventLogger eventLog,
             ILogger log)
         {
-            this.api            = api            ?? throw new ArgumentNullException(nameof(api));
+            this.hostAgent       = api           ?? throw new ArgumentNullException(nameof(api));
             this.log            = log            ?? throw new ArgumentNullException(nameof(log));
             this.releaseService = releaseService ?? throw new ArgumentNullException(nameof(releaseService));
             this.db             = db             ?? throw new ArgumentNullException(nameof(db));
@@ -116,7 +116,7 @@ namespace Carbon.CI
 
             try
             {
-                result = await api.DeployAsync(program, host);
+                result = await hostAgent.DeployAsync(program, host);
             }
             catch (Exception ex)
             {
@@ -149,16 +149,15 @@ namespace Carbon.CI
                 tasks[i] = DeployAsync(program, hosts[i]);
             }
 
-            return await Task.WhenAll(tasks).ConfigureAwait(false);
+            return await Task.WhenAll(tasks);
         }
 
         public async Task RestartAsync(IProgram program, IHost host)
         {
-            var text = await api.RestartAsync(program, host);
+            var text = await hostAgent.RestartAsync(program, host);
 
             log.Info($"{host} : Reloading -- {text}");
         }
-
 
         #region Data Acesss
 
@@ -204,13 +203,10 @@ namespace Carbon.CI
 
             await db.DeploymentTargets.InsertAsync(targets);
 
-            await db.Deployments.PatchAsync(
-                 key     : deployment.Id,
-                 changes : new[] {
-                     Change.Replace("status",    deployment.Status),
-                     Change.Replace("completed", Expression.Func("NOW"))
-                 }
-             ).ConfigureAwait(false);
+            await db.Deployments.PatchAsync(deployment.Id, changes: new[] {
+                Change.Replace("status",    deployment.Status),
+                Change.Replace("completed", Expression.Func("NOW"))
+            });
          }
  
         #endregion

@@ -27,7 +27,7 @@ namespace Carbon.CI
 
         public async Task<Build> GetAsync(long id)
         {
-            return await db.Builds.FindAsync(id).ConfigureAwait(false) 
+            return await db.Builds.FindAsync(id)
                 ?? throw ResourceError.NotFound(ResourceTypes.Build, id);
         }
 

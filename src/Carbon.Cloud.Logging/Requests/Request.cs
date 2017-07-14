@@ -6,7 +6,7 @@ using Carbon.Security;
 
 namespace Carbon.Cloud.Logging
 {
-    [Dataset("Requests", Schema = "Logging")]
+    [Dataset("Requests", Schema = "Logs")]
     public class Request // : IRequest
     {
         public Request() { }

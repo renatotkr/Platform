@@ -3,5 +3,5 @@
     public struct PutPackageOptions
     {
         public byte[] EncryptionKey { get; set; }
-    }        
+    }
 }

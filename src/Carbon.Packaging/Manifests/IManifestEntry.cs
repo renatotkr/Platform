@@ -6,7 +6,7 @@ namespace Carbon.Packaging
 {
     public interface IManifestEntry
     {
-        string Path { get; }
+        string Key { get; }
 
         Hash Hash { get; }
 

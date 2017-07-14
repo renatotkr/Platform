@@ -20,7 +20,8 @@ namespace Carbon.Platform.Computing
             string address, 
             long ownerId,
             ManagedResource resource,
-            long networkId = 0)
+            long networkId = 0,
+            JsonObject properties = null)
         {
             #region Preconditions
 
@@ -37,6 +38,7 @@ namespace Carbon.Platform.Computing
             ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
             ResourceId = resource.ResourceId;
+            Properties = properties ?? new JsonObject();
         }
         
         [Member("id"), Key(sequenceName: "loadBalancerId")]
@@ -82,15 +84,12 @@ namespace Carbon.Platform.Computing
 
         #region Timestamps
 
-        [IgnoreDataMember]
         [Member("created"), Timestamp]
         public DateTime Created { get; }
 
-        [IgnoreDataMember]
         [Member("deleted")]
         public DateTime? Deleted { get; }
 
-        [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
 

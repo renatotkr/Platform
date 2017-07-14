@@ -28,7 +28,7 @@ namespace Carbon.Packaging
 
             foreach (var item in items)
             {
-                Add(item.Path, item);
+                Add(item.Key, item);
             }
         }
 

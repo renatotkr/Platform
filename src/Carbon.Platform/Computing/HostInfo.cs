@@ -22,11 +22,10 @@ namespace Carbon.Platform.Computing
             long environmentId,
             long clusterId,
             long imageId,
-            long? programId,
             long machineTypeId,
             long ownerId,
             ManagedResource resource,
-            long networkId = 0,
+            long networkId    = 0,
             HostType type     = HostType.Virtual,
             HostStatus status = HostStatus.Running)
         {
@@ -38,7 +37,6 @@ namespace Carbon.Platform.Computing
             EnvironmentId = environmentId;
             LocationId    = locationId;
             ImageId       = imageId;
-            ProgramId     = programId;
             MachineTypeId = machineTypeId;
             ProviderId    = resource.ProviderId;
             ResourceId    = resource.ResourceId;
@@ -65,20 +63,14 @@ namespace Carbon.Platform.Computing
         [Member("imageId")]
         public long ImageId { get; }
 
-        [Member("programId"), Indexed]
-        public long? ProgramId { get; }
-
         [Member("addresses")]
         public string[] Addresses { get; }
 
         [Member("networkId")]
         public long NetworkId { get; }
 
-        [Member("ownerId")]
+        [Member("ownerId"), Indexed]
         public long OwnerId { get; }
-        
-        [Member("programVersion"), Optional]
-        public string ProgramVersion { get; }
 
         [Member("parentId"), Indexed]
         public long? ParentId { get; }
@@ -88,11 +80,11 @@ namespace Carbon.Platform.Computing
             
         #region Health
 
-        [Member("status"), Mutable]
-        public HostStatus Status { get; set; }
+        [Member("status")]
+        public HostStatus Status { get; }
 
         [Member("heartbeat"), Mutable]
-        public DateTime? Heartbeat { get; set; }
+        public DateTime? Heartbeat { get; }
 
         #endregion
 
@@ -114,7 +106,6 @@ namespace Carbon.Platform.Computing
         #region Timestamps
 
         [Member("created"), Timestamp]
-        [IgnoreDataMember]
         public DateTime Created { get; }
 
         [IgnoreDataMember]
@@ -124,7 +115,7 @@ namespace Carbon.Platform.Computing
         // Initialized...
 
         [Member("terminated")]
-        public DateTime? Terminated { get; set; }
+        public DateTime? Terminated { get; }
 
         #endregion
 

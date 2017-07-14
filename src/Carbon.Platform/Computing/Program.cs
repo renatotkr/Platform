@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 using Carbon.Json;
@@ -24,6 +23,7 @@ namespace Carbon.Platform.Computing
             string runtime = null,
             string[] addresses = null,
             ProgramType type = ProgramType.App,
+            long? repositoryId = null,
             long? parentId = null
         )
         {
@@ -32,21 +32,28 @@ namespace Carbon.Platform.Computing
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
 
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Required", nameof(name));
+             
             if (ownerId <= 0)
                 throw new ArgumentException("Must be > 0", nameof(ownerId));
 
             #endregion
 
-            Id         = id;
-            Name       = name ?? throw new ArgumentNullException(nameof(name));
-            Slug       = slug;
-            Type       = type;
-            Runtime    = runtime;
-            Addresses  = addresses;
-            Properties = properties ?? new JsonObject();
-            OwnerId    = ownerId;
-            Version    = version;
-            ParentId   = parentId;
+            Id           = id;
+            Name         = name;
+            Slug         = slug;
+            Type         = type;
+            Runtime      = runtime;
+            Addresses    = addresses;
+            Properties   = properties ?? new JsonObject();
+            OwnerId      = ownerId;
+            Version      = version;
+            RepositoryId = repositoryId;
+            ParentId     = parentId;
         }
         
         [Member("id"), Key(sequenceName: "programId")]
@@ -82,6 +89,9 @@ namespace Carbon.Platform.Computing
         [Member("parentId")]
         public long? ParentId { get; }
 
+        [Member("repositoryId")]
+        public long? RepositoryId { get; }
+
         [Member("properties")]
         [StringLength(1000)]
         public JsonObject Properties { get; }
@@ -93,13 +103,6 @@ namespace Carbon.Platform.Computing
 
         #endregion
 
-        #region Resource
-
-        [Member("repositoryId")]
-        public long RepositoryId { get; set; }
-
-        #endregion
-
         #region IResource
 
         ResourceType IResource.ResourceType => ResourceTypes.Program;
@@ -108,15 +111,12 @@ namespace Carbon.Platform.Computing
 
         #region Timestamps
 
-        [IgnoreDataMember]
         [Member("created"), Timestamp]
         public DateTime Created { get; }
 
-        [IgnoreDataMember]
         [Member("deleted")]
         public DateTime? Deleted { get; }
 
-        [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
 

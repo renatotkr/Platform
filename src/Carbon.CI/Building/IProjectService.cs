@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Carbon.Security;
+
 namespace Carbon.CI
 {
     public interface IProjectService
@@ -12,5 +14,7 @@ namespace Carbon.CI
         Task<ProjectInfo> GetAsync(long id);
 
         Task<ProjectInfo> GetAsync(long ownerId, string name);
+
+        Task DeleteAsync(ProjectInfo project, ISecurityContext context);
     }
 }

@@ -126,7 +126,12 @@ namespace Carbon.Platform.Configuration.Docker
 
     public struct Comment
     {
-        string Name { get; set; }
+        public Comment(string text)
+        {
+            Text = text;
+        }
+
+        public string Text { get; }
     }
 
     public enum RunMode

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
 
@@ -14,6 +15,13 @@ namespace Carbon.Packaging
             Stream stream, 
             bool leaveStreamOpen = false)
         {
+            #region Preconditions
+
+            if (stream == null)
+                throw new ArgumentNullException(nameof(stream));
+
+            #endregion
+
             using (var compressedStream = new GZipStream(stream, CompressionMode.Compress))
             using (var writer = WriterFactory.Open(compressedStream,
                 SharpCompress.Common.ArchiveType.Tar, 

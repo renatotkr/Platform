@@ -58,7 +58,7 @@ namespace Carbon.Platform.Storage
         public long CreatorId { get; }
 
         [Member("containerId")]
-        public long? ContainerId { get; set; }
+        public long? ContainerId { get; }
 
         #region Timestamps
 

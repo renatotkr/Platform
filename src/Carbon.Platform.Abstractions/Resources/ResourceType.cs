@@ -56,12 +56,6 @@ namespace Carbon.Platform.Resources
         // Storage --------------------------------------------------------------------------------------------
         public static ResourceType Bucket              = "bucket";        
         public static ResourceType Channel             = "channel";               // AKA Stream / Topic           
-        public static ResourceType Database            = "db";
-        public static ResourceType DatabaseCluster     = "db:cluster";
-        public static ResourceType DatabaseInstance    = "db:instance";
-        public static ResourceType DatabaseSchema      = "db:schema";
-        public static ResourceType DatabaseGrant       = "db:grant";
-        public static ResourceType DatabaseUser        = "db:user";
         public static ResourceType Queue               = "queue";         
         public static ResourceType Repository          = "repository";
         public static ResourceType RepositoryBranch    = "repository:branch";
@@ -69,6 +63,14 @@ namespace Carbon.Platform.Resources
         public static ResourceType RepositoryTag       = "repository:tag";
         public static ResourceType Volume              = "volume";
         public static ResourceType VolumeSnapshot      = "volume:snapshot";
+
+        // Rds --------------------------------------------------------------------
+        public static ResourceType Database         = "database";
+        public static ResourceType DatabaseCluster  = "database:cluster";
+        public static ResourceType DatabaseInstance = "database:instance";
+        public static ResourceType DatabaseSchema   = "database:schema";
+        public static ResourceType DatabaseGrant    = "database:grant";
+        public static ResourceType DatabaseUser     = "database:user";
 
         // Vaults --------------------------------------------------------------------------------------------------
         public static ResourceType Vault       = "vault";

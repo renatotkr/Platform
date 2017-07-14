@@ -16,13 +16,15 @@ namespace Carbon.Platform.Diagnostics
             IssueType type = IssueType.Unknown, 
             int? locationId = null,
             string description = null,
-            string externalId = null)
+            string externalId = null,
+            JsonObject details = null)
         {
             Id          = id;
             Type        = type;
             LocationId  = locationId;
             Description = description;
             ExternalId  = externalId;
+            Properties     = details ?? new JsonObject();
         }
 
         // environmentId | #
@@ -39,9 +41,9 @@ namespace Carbon.Platform.Diagnostics
         [StringLength(1000)]
         public string Description { get; }
 
-        [Member("details")]
+        [Member("properties")]
         [StringLength(1000)]
-        public JsonObject Details { get; set; }
+        public JsonObject Properties { get; }
 
         // e.g. github:issue/1
         [Member("externalId")]

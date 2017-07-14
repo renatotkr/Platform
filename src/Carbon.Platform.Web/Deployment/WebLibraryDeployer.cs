@@ -102,7 +102,7 @@ namespace Carbon.CI
             }
 
             var mainBlob = new Blob(
-                name        : $"libs/{metadata.Name}/{version}/{mainName}",
+                key         : $"libs/{metadata.Name}/{version}/{mainName}",
                 stream      : mainBlobStream,
                 metadata    : new BlobMetadata {
                     ContentType = "application/javascript"
@@ -144,7 +144,7 @@ namespace Carbon.CI
                     }
 
                     var blob = new Blob(
-                        name     : $"libs/{metadata.Name}/{version}/{n}",
+                        key      : $"libs/{metadata.Name}/{version}/{n}",
                         stream   : ms,
                         metadata : new BlobMetadata {
                             ContentType = GetMime(format)

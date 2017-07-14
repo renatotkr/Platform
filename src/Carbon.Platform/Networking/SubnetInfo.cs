@@ -39,7 +39,7 @@ namespace Carbon.Platform.Networking
 
         [Member("name")]
         [StringLength(63)]
-        public string Name { get; set; }
+        public string Name { get; }
 
         [Member("properties")]
         [StringLength(1000)]

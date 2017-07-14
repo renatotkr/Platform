@@ -23,7 +23,8 @@ namespace Carbon.Platform.Networking
             long[] securityGroupIds,
             long subnetId,
             ManagedResource resource,
-            JsonObject properties = null)
+            JsonObject properties = null,
+            long? hostId = null)
         {
             #region Preconditions
             
@@ -41,6 +42,7 @@ namespace Carbon.Platform.Networking
             ResourceId       = resource.ResourceId;
             LocationId       = resource.LocationId;
             Properties       = properties;
+            HostId           = hostId;
         }
 
         // networkId | #
@@ -51,8 +53,7 @@ namespace Carbon.Platform.Networking
         [Member("addresses")]
         public IPAddress[] Addresses { get; }
 
-        [Member("macAddress"), FixedSize(6)]
-        [Indexed]
+        [Member("macAddress"), FixedSize(6), Indexed]
         public MacAddress MacAddress { get; }
 
         [Member("securityGroupIds")]
@@ -61,29 +62,25 @@ namespace Carbon.Platform.Networking
         [Member("subnetId")]
         public long SubnetId { get; }
 
-        [IgnoreDataMember]
         [Member("hostId"), Mutable, Indexed]
-        public long? HostId { get; set; }
-
-        [IgnoreDataMember]
-        public long NetworkId => ScopedId.GetScope(SubnetId);
+        public long? HostId { get; }
 
         [Member("properties")]
         [StringLength(1000)]
         public JsonObject Properties { get; }
 
+        [IgnoreDataMember]
+        public long NetworkId => ScopedId.GetScope(SubnetId);
+
         #region IResource
 
-        [IgnoreDataMember]
         [Member("providerId")]
         public int ProviderId { get; }
 
-        [IgnoreDataMember]
         [Member("resourceId")]
         [Ascii, StringLength(100)]
         public string ResourceId { get; }
 
-        [IgnoreDataMember]
         [Member("locationId")]
         public int LocationId { get; }
 
@@ -93,15 +90,12 @@ namespace Carbon.Platform.Networking
 
         #region Timestamps
 
-        [IgnoreDataMember]
         [Member("created"), Timestamp]
         public DateTime Created { get; }
 
-        [IgnoreDataMember]
         [Member("deleted")]
         public DateTime? Deleted { get; }
 
-        [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
 

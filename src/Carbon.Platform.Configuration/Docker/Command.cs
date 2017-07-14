@@ -11,7 +11,7 @@ namespace Carbon.Platform.Configuration.Docker
             Text = text;
         }
 
-        public CommandType Type { get; set; }
+        public CommandType Type { get; }
 
         public string Text { get; }
 

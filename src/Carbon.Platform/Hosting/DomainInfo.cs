@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 using Carbon.Platform.Resources;
@@ -14,8 +13,7 @@ namespace Carbon.Platform.Hosting
         public DomainInfo(
             long id,
             string name,
-            long ownerId,
-            long? certificateId = null)
+            long ownerId)
         {
             #region Preconditions
 
@@ -27,10 +25,9 @@ namespace Carbon.Platform.Hosting
 
             #endregion
 
-            Id            = id;
-            Name          = name ?? throw new ArgumentNullException(nameof(name));
-            CertificateId = certificateId;
-            OwnerId       = ownerId;
+            Id      = id;
+            Name    = name ?? throw new ArgumentNullException(nameof(name));
+            OwnerId = ownerId;
         }
 
         [Member("id"), Key(sequenceName: "domainId")]
@@ -42,14 +39,14 @@ namespace Carbon.Platform.Hosting
         [StringLength(180)]
         public string Name { get; }
 
-        [Member("certificateId")]
-        public long? CertificateId { get; }
-
-        [Member("ownerId")]
+        [Member("ownerId"), Indexed]
         public long OwnerId { get; }
 
+        [Member("registrarId")]
+        public long RegistrarId { get; }
+
         #region IResource
-        
+
         ResourceType IResource.ResourceType => ResourceTypes.Domain;
 
         #endregion
@@ -62,15 +59,12 @@ namespace Carbon.Platform.Hosting
         [Member("expires"), Mutable]
         public DateTime Expires { get; }
 
-        [IgnoreDataMember]
         [Member("created"), Timestamp]
         public DateTime Created { get; }
 
-        [IgnoreDataMember]
         [Member("deleted")]
         public DateTime? Deleted { get; }
 
-        [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
 

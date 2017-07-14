@@ -9,33 +9,42 @@ namespace Carbon.Platform.Computing
 {
     [Dataset("Images", Schema = "Computing")]
     [UniqueIndex("providerId", "resourceId")]
-    public class Image : IImage
+    [UniqueIndex("ownerId", "name")]
+    public class ImageInfo : IImage
     {
-        public Image() { }
+        public ImageInfo() { }
 
-        public Image(
+        public ImageInfo(
             long id,
             ImageType type,
             string name,
             long ownerId,
             long size,
-            ManagedResource resource)
+            ManagedResource resource,
+            JsonObject properties = null)
         {
             #region Preconditions
 
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
 
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Required", nameof(name));
+
             #endregion
 
             Id         = id;
             Type       = type;
-            Name       = name ?? throw new ArgumentNullException(nameof(name));
+            Name       = name;
             OwnerId    = ownerId;
             Size       = size;
             ResourceId = resource.ResourceId;
             ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
+            Properties = properties;
         }
 
         [Member("id"), Key(sequenceName: "imageId")]
@@ -44,6 +53,9 @@ namespace Carbon.Platform.Computing
         [Member("type")]
         public ImageType Type { get; }
 
+        [Member("ownerId")]
+        public long OwnerId { get; }
+
         [Member("name")]
         [StringLength(150)]
         public string Name { get; }
@@ -51,12 +63,9 @@ namespace Carbon.Platform.Computing
         [Member("size")]
         public long Size { get; }
 
-        [Member("ownerId")]
-        public long OwnerId { get; }
-
         [Member("properties")]
         [StringLength(1000)]
-        public JsonObject Properties { get; set; }
+        public JsonObject Properties { get; }
 
         #region IResource
 

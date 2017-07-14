@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Platform.Resources;
+using Carbon.Security;
 
 namespace Carbon.CI
 {
@@ -39,7 +41,7 @@ namespace Carbon.CI
             #endregion
 
             return await db.Projects.QueryFirstOrDefaultAsync(
-              And(Eq("ownerId", ownerId), Eq("name", name))  
+                And(Eq("ownerId", ownerId), Eq("name", name))  
             ) ?? throw ResourceError.NotFound(ResourceTypes.Project, ownerId, name);
         }
 
@@ -60,30 +62,26 @@ namespace Carbon.CI
                 resource     : request.Resource
             );
 
-            await db.Projects.InsertAsync(project).ConfigureAwait(false);
+            await db.Projects.InsertAsync(project);
             
             return project;
         }
 
-        // DeleteAsync
-    }
-
-    public class CreateProjectRequest
-    {
-        public CreateProjectRequest() { }
-
-        public CreateProjectRequest(string name, long ownerId)
+        public async Task DeleteAsync(ProjectInfo project, ISecurityContext context)
         {
-            Name    = name;
-            OwnerId = ownerId;
+            #region Preconditions
+
+            if (project == null)
+                throw new ArgumentNullException(nameof(project));
+
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
+            #endregion
+
+            await db.Projects.PatchAsync(project.Id, new[] {
+                Change.Replace("deleted", Func("NOW"))
+            });
         }
-
-        public string Name { get; set; }
-
-        public long RepositoryId { get; set; }
-
-        public long OwnerId { get; set; }
-
-        public ManagedResource Resource { get; set; }
     }
 }

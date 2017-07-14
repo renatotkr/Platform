@@ -21,8 +21,7 @@ namespace Carbon.Platform.Computing
 
             Validate.Id(ownerId, nameof(ownerId));
 
-            if (name == null || string.IsNullOrEmpty(name))
-                throw new ArgumentNullException(nameof(name));
+            Validate.NotNullOrEmpty(name, nameof(name));
 
             #endregion
 

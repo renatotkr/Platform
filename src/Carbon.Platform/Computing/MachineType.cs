@@ -16,8 +16,8 @@ namespace Carbon.Platform.Computing
         public MachineType(
             long id, 
             string name,
-            JsonObject properties, 
-            ResourceProvider provider)
+            ResourceProvider provider,
+            JsonObject properties = null)
         {
             #region Preconditions
 
@@ -28,7 +28,7 @@ namespace Carbon.Platform.Computing
 
             Id         = id;
             Name       = name ?? throw new ArgumentNullException(nameof(name));
-            Properties = properties;
+            Properties = properties ?? new JsonObject();
             ProviderId = provider.Id;
         }
 
@@ -54,7 +54,6 @@ namespace Carbon.Platform.Computing
 
         #region Timestamps
 
-        [IgnoreDataMember]
         [Member("created"), Timestamp]
         public DateTime Created { get; }
 

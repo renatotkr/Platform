@@ -1,13 +1,16 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Carbon.Platform.Computing
 {
     public interface IImageService
     {
-        Task<Image> GetAsync(long id);
+        Task<IReadOnlyList<ImageInfo>> ListAsync();
 
-        Task<Image> GetAsync(ResourceProvider provider, string id); // bool autoRegister = true
+        Task<ImageInfo> GetAsync(long id);
 
-        Task<Image> RegisterAsync(RegisterImageRequest request);
+        Task<ImageInfo> GetAsync(ResourceProvider provider, string resourceId); // bool autoRegister = true
+
+        Task<ImageInfo> RegisterAsync(RegisterImageRequest request);
     }
 }

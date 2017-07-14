@@ -1,31 +1,30 @@
 ﻿using System;
 
 using Carbon.Data.Protection;
+using Carbon.Storage;
 
 namespace Carbon.Packaging
 {
-    using Storage;
-
     public class ManifestEntry : IManifestEntry
     {
-        public ManifestEntry(string path, Hash hash, DateTime modified)
+        public ManifestEntry(string key, Hash hash, DateTime modified)
         {
             #region Preconditions
 
-            if (path == null)
-                throw new ArgumentNullException(nameof(path));
+            if (key == null)
+                throw new ArgumentNullException(nameof(key));
 
-            if (path.Length == 0)
-                throw new ArgumentException("Must not be empty", nameof(path));
+            if (key.Length == 0)
+                throw new ArgumentException("Must not be empty", nameof(key));
 
             #endregion
 
-            Path = path;
+            Key = key;
             Hash = hash;
             Modified = modified;
         }
 
-        public string Path { get; }
+        public string Key { get; }
 
         public DateTime Modified { get; }
 
@@ -36,7 +35,7 @@ namespace Carbon.Packaging
             var hash = Hash.Compute(HashType.SHA256, blob.OpenAsync().Result, leaveOpen: false);
 
             return new ManifestEntry(
-                path     : blob.Name,
+                key      : blob.Name,
                 modified : blob.Modified,
                 hash     : hash
             );

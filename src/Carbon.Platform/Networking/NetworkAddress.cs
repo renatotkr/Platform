@@ -13,12 +13,19 @@ namespace Carbon.Platform.Networking
     {
         public NetworkAddress() { }
 
-        public NetworkAddress(long id, IPAddress address, ManagedResource resource)
+        public NetworkAddress(
+            long id, 
+            IPAddress address, 
+            ManagedResource resource, 
+            long? hostId = null, 
+            long? networkInterfaceId = null)
         {
-            Id         = id;
-            Address    = address ?? throw new ArgumentNullException(nameof(address));
-            ProviderId = resource.ProviderId;
-            ResourceId = resource.ResourceId;
+            Id                 = id;
+            Address            = address ?? throw new ArgumentNullException(nameof(address));
+            ProviderId         = resource.ProviderId;
+            ResourceId         = resource.ResourceId;
+            HostId             = hostId;
+            NetworkInterfaceId = networkInterfaceId;
         }
 
         // networkId | #
@@ -29,11 +36,10 @@ namespace Carbon.Platform.Networking
         public IPAddress Address { get; }
 
         [Member("hostId"), Indexed]
-        public long? HostId { get; set; }
+        public long? HostId { get; }
 
-        [Member("networkInterfaceId")]
-        [Indexed]
-        public long? NetworkInterfaceId { get; set; }
+        [Member("networkInterfaceId"), Indexed]
+        public long? NetworkInterfaceId { get; }
 
         #region IResource
 
@@ -53,14 +59,11 @@ namespace Carbon.Platform.Networking
         #region Timestamps
 
         [Member("created"), Timestamp]
-        [IgnoreDataMember]
         public DateTime Created { get; }
 
-        [IgnoreDataMember]
         [Member("deleted")]
         public DateTime? Deleted { get; }
 
-        [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
 

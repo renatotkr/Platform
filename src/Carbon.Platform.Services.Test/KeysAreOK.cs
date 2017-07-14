@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Data;
 using System.Data.Common;
 using System.Reflection;
 using System.Threading.Tasks;
+
 using Carbon.CI;
 using Carbon.Data;
 using Carbon.Data.Sql;
@@ -10,6 +10,7 @@ using Carbon.Data.Sql.Adapters;
 using Carbon.Kms;
 using Carbon.Platform.Storage;
 using Carbon.Platform.Web;
+using Carbon.Rds;
 
 using Xunit;
 
@@ -17,10 +18,20 @@ namespace Carbon.Platform.Services.Test
 {
     public class KeyLengthsAreUnderXBytes
     {
+        private static readonly MySqlDataContext dbContext = new MySqlDataContext();
+
         [Fact]
         public void KmsDbIsOk()
         {
-            var database = new KmsDb(new MySqlDataContext());
+            var database = new KmsDb(dbContext);
+
+            KeysAndIndexesAreUnder767Bytes(database);
+        }
+
+        [Fact]
+        public void RdsDbIsOk()
+        {
+            var database = new RdsDb(dbContext);
 
             KeysAndIndexesAreUnder767Bytes(database);
         }
@@ -29,7 +40,7 @@ namespace Carbon.Platform.Services.Test
         [Fact]
         public void CiadDbKeysAndIndexesAreUnder767Bytes()
         {
-            var database = new CiadDb(new MySqlDataContext());
+            var database = new CiadDb(dbContext);
 
             KeysAndIndexesAreUnder767Bytes(database);
         }
@@ -37,7 +48,7 @@ namespace Carbon.Platform.Services.Test
         [Fact]
         public void PlatformDbKeysAndIndexesAreUnder767Bytes()
         {
-            var database = new PlatformDb(new MySqlDataContext());
+            var database = new PlatformDb(dbContext);
 
             KeysAndIndexesAreUnder767Bytes(database);
         }
@@ -45,7 +56,7 @@ namespace Carbon.Platform.Services.Test
         [Fact]
         public void RepositoryDbKeysAndIndexesAreUnder767Bytes()
         {
-            var database = new RepositoryDb(new MySqlDataContext());
+            var database = new RepositoryDb(dbContext);
 
             KeysAndIndexesAreUnder767Bytes(database);
         }
@@ -53,7 +64,7 @@ namespace Carbon.Platform.Services.Test
         [Fact]
         public void WebDbKeysAndIndexesAreUnder767Bytes()
         {
-            var database = new WebDb(new MySqlDataContext());
+            var database = new WebDb(dbContext);
 
             KeysAndIndexesAreUnder767Bytes(database);
         }
@@ -80,7 +91,7 @@ namespace Carbon.Platform.Services.Test
                     {
                         var m = dataset[member.Name];
 
-                        indexLength += GetLength(m);
+                        indexLength += GetLength(m, dataset);
                     }
 
                     if (indexLength > 767)
@@ -94,7 +105,7 @@ namespace Carbon.Platform.Services.Test
 
                 foreach (var key in dataset.PrimaryKey)
                 {
-                    primaryKeyLength += GetLength(key);
+                    primaryKeyLength += GetLength(key, dataset);
                 }
 
                 if (primaryKeyLength > 767)
@@ -104,7 +115,7 @@ namespace Carbon.Platform.Services.Test
             }
         }
 
-        private int GetLength(IMember member)
+        private int GetLength(IMember member, DatasetInfo dataset)
         {
             if (member.Size != null)
             {
@@ -125,7 +136,7 @@ namespace Carbon.Platform.Services.Test
                 return 8;
             }
 
-            throw new Exception($"unknown type '{member.Type.Name}' for {member.Name}");
+            throw new Exception($"unknown type '{member.Type.Name}' for {dataset.Name}/{member.Name}");
         }
 
 

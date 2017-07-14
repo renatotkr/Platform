@@ -52,7 +52,6 @@ namespace Carbon.Platform.Computing.Tests
                ownerId       : 1,
                imageId       : 1,
                locationId    : 1,
-               programId     : 1,
                resource      : default(ManagedResource)
            );
         }

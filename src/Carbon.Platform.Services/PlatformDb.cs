@@ -35,7 +35,8 @@ namespace Carbon.Platform
             Clusters              = new Dataset<Cluster,                  long>(context);
             Hosts                 = new Dataset<HostInfo,                 long>(context);
             HostTemplates         = new Dataset<HostTemplate,             long>(context);
-            Images                = new Dataset<Image,                    long>(context);
+            HostPrograms          = new Dataset<HostProgram,       (long, long)>(context);
+            Images                = new Dataset<ImageInfo,                    long>(context);
             MachineTypes          = new Dataset<MachineType,              long>(context);
             Programs              = new Dataset<ProgramInfo,              long>(context);
             ProgramReleases       = new Dataset<ProgramRelease,           long>(context);
@@ -43,9 +44,6 @@ namespace Carbon.Platform
             // Storage ------------------------------------------------------------------
             Buckets               = new Dataset<BucketInfo,               long>(context);
             Channels              = new Dataset<ChannelInfo,              long>(context);
-            Databases             = new Dataset<DatabaseInfo,             long>(context);
-            DatabaseEndpoints     = new Dataset<DatabaseEndpoint,         long>(context);
-            DatabaseInstances     = new Dataset<DatabaseInstance,         long>(context);
             Queues                = new Dataset<QueueInfo,                long>(context);
             Volumes               = new Dataset<VolumeInfo,               long>(context);
 
@@ -74,9 +72,10 @@ namespace Carbon.Platform
         // Computing ------------------------------------------------------------
         public Dataset<HostInfo,             long> Hosts                 { get; }
         public Dataset<Cluster,              long> Clusters              { get; }
+        public Dataset<HostProgram,  (long, long)> HostPrograms          { get; }
         public Dataset<HostTemplate,         long> HostTemplates         { get; }
         public Dataset<HealthCheck,          long> HealthChecks          { get; }
-        public Dataset<Image,                long> Images                { get; }
+        public Dataset<ImageInfo,                long> Images                { get; }
         public Dataset<MachineType,          long> MachineTypes          { get; }
         // public Dataset<ProcessInfo,          long> Processes             { get; }
         public Dataset<ProgramInfo,          long> Programs              { get; }
@@ -86,9 +85,6 @@ namespace Carbon.Platform
         // Data -----------------------------------------------------------------
         public Dataset<BucketInfo,           long> Buckets               { get; }
         public Dataset<ChannelInfo,          long> Channels              { get; }
-        public Dataset<DatabaseInfo,         long> Databases             { get; }
-        public Dataset<DatabaseEndpoint,     long> DatabaseEndpoints     { get; }
-        public Dataset<DatabaseInstance,     long> DatabaseInstances     { get; }
         public Dataset<QueueInfo,            long> Queues                { get; }
 
         // Networks -------------------------------------------------------------

@@ -28,7 +28,7 @@ namespace Carbon.Packaging
 
             foreach (var entry in left)
             {
-                if (right.TryGetValue(entry.Value.Path, out var item))
+                if (right.TryGetValue(entry.Value.Key, out var item))
                 {
                     if (item.Hash != entry.Value.Hash)
                     {
@@ -47,7 +47,7 @@ namespace Carbon.Packaging
             // Check for any new files on the right
             foreach (var entry in right)
             {
-                if (!left.Contains(entry.Value.Path))
+                if (!left.Contains(entry.Value.Key))
                 {
                     added.Add(entry.Value); // Added
                 }

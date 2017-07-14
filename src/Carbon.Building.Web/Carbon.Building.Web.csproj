@@ -20,7 +20,7 @@
   <ItemGroup>
     <PackageReference Include="Carbon.Css" Version="0.6.0" />
     <PackageReference Include="Carbon.Logging" Version="1.1.0" />
-    <PackageReference Include="Carbon.Storage" Version="1.8.1" />
+    <PackageReference Include="Carbon.Storage" Version="1.9.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">

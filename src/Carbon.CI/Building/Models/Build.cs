@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Carbon.Data.Annotations;
+using Carbon.Json;
 using Carbon.Platform.Resources;
 
 namespace Carbon.CI
@@ -14,7 +15,8 @@ namespace Carbon.CI
             long id, 
             long commitId, 
             long creatorId,
-            ManagedResource resource)
+            ManagedResource resource,
+            JsonObject properties = null)
         {
             #region Preconditions
 
@@ -30,6 +32,7 @@ namespace Carbon.CI
             ProviderId = resource.ProviderId;
             ResourceId = resource.ResourceId;
             LocationId = resource.LocationId;
+            Properties = properties;
         }
 
         // projectId | #
@@ -52,6 +55,10 @@ namespace Carbon.CI
         [Member("message"), Mutable]
         [StringLength(200)]
         public string Message { get; set; }
+
+        [Member("properties")]
+        [StringLength(1000)]
+        public JsonObject Properties { get; }
 
         #region IResource
 

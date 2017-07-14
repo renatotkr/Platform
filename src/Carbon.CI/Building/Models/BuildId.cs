@@ -17,11 +17,9 @@ namespace Carbon.CI
         {
             using (var connection = await context.GetConnectionAsync())
             {
-                var currentCommitCount = await connection.ExecuteScalarAsync<int>(sql, 
-                    new { id = projectId }
-                ).ConfigureAwait(false);
+                var currentCount = await connection.ExecuteScalarAsync<int>(sql, new { id = projectId });
 
-                return ScopedId.Create(projectId, currentCommitCount + 1);
+                return ScopedId.Create(projectId, currentCount + 1);
             }
         }
     }

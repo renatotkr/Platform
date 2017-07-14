@@ -18,17 +18,28 @@ namespace Carbon.Kms
             long ownerId,
             string name,
             string subject,
-            long issuerId,
             int providerId,
             string resourceId,
+            long? issuerId = null,
             JsonObject properties = null)
         {
+            #region Preconditions
+
+            if (subject == null)
+                throw new ArgumentNullException(nameof(subject));
+
+            if (string.IsNullOrEmpty(subject))
+                throw new ArgumentException("Required", nameof(subject));
+
+            #endregion
+
             Id         = id;           
-            Subject    = subject ?? throw new ArgumentNullException(nameof(subject));
+            Subject    = subject;
             Properties = properties ?? new JsonObject();
             IssuerId   = issuerId;
-            ProviderId = providerId;
             ResourceId = resourceId;
+            ProviderId = providerId;
+
             // LocationId = resource.LocationId;
         }
 
@@ -37,20 +48,23 @@ namespace Carbon.Kms
 
         [Member("subject"), Indexed]
         [StringLength(100)]
-        public string Subject { get; set; }
-
+        public string Subject { get; }
+        
         /*
         [Member("subjectAlternateNames")]
         [StringLength(1000)]
         public string[] SubjectAlternateNames { get; }
         */
-
+        
+        // self issued if null
         [Member("issuerId")]
-        public long IssuerId { get; }
+        public long? IssuerId { get; }
 
         #region Key Material
 
         // x509 (PFX | PEM)
+        
+        // public key?
 
         #endregion
 
@@ -82,28 +96,32 @@ namespace Carbon.Kms
         #region Timestamps
 
         [Member("expires")]
-        public DateTime Expires { get; set; }
+        public DateTime? Expires { get; }
 
         [Member("issued")]
         [TimePrecision(TimePrecision.Second)]
-        public DateTime? Issued { get; set; }
+        public DateTime? Issued { get; }
 
         [Member("revoked"), Mutable]
         [TimePrecision(TimePrecision.Second)]
-        public DateTime? Revoked { get; set; }
+        public DateTime? Revoked { get; }
 
-        [IgnoreDataMember]
         [Member("created"), Timestamp]
         public DateTime Created { get; }
 
-        [IgnoreDataMember]
         [Member("deleted")]
         public DateTime? Deleted { get; }
 
-        [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
 
         #endregion
+    }
+
+    public static class CertificateProperties
+    {
+        // RSA_2048 | RSA_1024 | EC_prime256v1
+
+        public const string KeyAlgorithm = "keyAlgorithm";
     }
 }

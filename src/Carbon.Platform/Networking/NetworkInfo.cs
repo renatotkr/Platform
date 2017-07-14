@@ -20,8 +20,16 @@ namespace Carbon.Platform.Networking
             long ownerId,
             ManagedResource resource, 
             IPAddress gatewayAddress = null,
-            int? asn = null)
+            int? asn = null,
+            JsonObject properties = null)
         {
+            #region Preconditions
+
+            if (id <= 0)
+                throw new ArgumentException("Must be > 0", nameof(id));
+
+            #endregion
+
             Id             = id;
             AddressBlocks  = addressBlocks ?? throw new ArgumentNullException(nameof(addressBlocks));
             GatewayAddress = gatewayAddress;
@@ -30,6 +38,7 @@ namespace Carbon.Platform.Networking
             LocationId     = resource.LocationId;
             ResourceId     = resource.ResourceId;
             OwnerId        = ownerId;
+            Properties     = properties;
         }
         
         [Member("id"), Key(sequenceName: "networkId")]
@@ -52,7 +61,7 @@ namespace Carbon.Platform.Networking
         [DataMember(Name = "asn", EmitDefaultValue = false)]
         public int? Asn { get; }
 
-        [Member("ownerId")]
+        [Member("ownerId"), Indexed]
         public long OwnerId { get; }
 
         [Member("properties")]
@@ -80,15 +89,12 @@ namespace Carbon.Platform.Networking
 
         #region Timestamps
 
-        [IgnoreDataMember]
         [Member("created"), Timestamp]
         public DateTime Created { get; }
 
-        [IgnoreDataMember]
         [Member("deleted")]
         public DateTime? Deleted { get; }
 
-        [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
 

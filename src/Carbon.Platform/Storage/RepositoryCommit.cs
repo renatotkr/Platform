@@ -57,9 +57,6 @@ namespace Carbon.Platform.Storage
         [Member("created"), Timestamp]
         public DateTime Created { get; }
 
-        // Commits are immutable
-        // No need for modified or delete
-
         #endregion
     }
 }

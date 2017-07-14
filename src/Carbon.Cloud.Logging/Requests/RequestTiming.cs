@@ -5,7 +5,7 @@ using Carbon.Data.Sequences;
 
 namespace Carbon.Cloud.Logging
 {
-    [Dataset("RequestTimings", Schema = "Logging")]
+    [Dataset("RequestTimings", Schema = "Logs")]
     public class RequestTiming
     {
         public RequestTiming(

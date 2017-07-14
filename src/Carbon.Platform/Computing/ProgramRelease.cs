@@ -19,6 +19,8 @@ namespace Carbon.Platform.Computing
             long creatorId,
             long? buildId = null,
             long commitId = 0,
+            string runtime = null,
+            string[] addresses = null,
             JsonObject properties = null)
         {
             #region Preconditions
@@ -44,6 +46,8 @@ namespace Carbon.Platform.Computing
             CommitId    = commitId;
             CreatorId   = creatorId;
             BuildId     = buildId;
+            Runtime     = runtime;
+            Addresses   = addresses;
             Properties  = properties;
         }
 
@@ -75,11 +79,11 @@ namespace Carbon.Platform.Computing
         public string ProgramName { get; }
 
         [Member("addresses")]
-        public string[] Addresses { get; set; }
+        public string[] Addresses { get; }
 
         [Member("runtime")]
         [StringLength(50)]
-        public string Runtime { get; set; }
+        public string Runtime { get; }
 
         #region IProgram
 

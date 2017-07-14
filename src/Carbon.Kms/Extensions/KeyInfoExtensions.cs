@@ -12,7 +12,6 @@ namespace Carbon.Kms
             {
                 yield return new KeyValuePair<string, string>(property.Key, property.Value.ToString());
             }
-
         }
     }
 }

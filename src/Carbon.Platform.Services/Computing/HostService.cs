@@ -35,6 +35,13 @@ namespace Carbon.Platform.Computing
 
         public Task<HostInfo> GetAsync(string name)
         {
+            #region Preconditions
+
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+
+            #endregion
+
             if (long.TryParse(name, out var id))
             {
                 return GetAsync(id);
@@ -115,7 +122,6 @@ namespace Carbon.Platform.Computing
                 addresses     : request.Addresses,
                 clusterId     : request.ClusterId,
                 imageId       : request.ImageId,
-                programId     : request.ProgramId,
                 locationId    : request.LocationId,
                 resource      : request.Resource,
                 environmentId : request.EnvironmentId,

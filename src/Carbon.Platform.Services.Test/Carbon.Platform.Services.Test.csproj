@@ -12,6 +12,7 @@
     <ProjectReference Include="..\Carbon.Platform.Services\Carbon.Platform.Services.csproj" />
     <ProjectReference Include="..\Carbon.Platform.Web\Carbon.Platform.Web.csproj" />
     <ProjectReference Include="..\Carbon.Platform\Carbon.Platform.csproj" />
+    <ProjectReference Include="..\Carbon.Rds\Carbon.Rds.csproj" />
   </ItemGroup>
 
   <ItemGroup>

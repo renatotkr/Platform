@@ -8,6 +8,7 @@ using Carbon.Platform.Resources;
 namespace Carbon.Platform.Computing
 {
     [Dataset("HostTemplates")]
+    [UniqueIndex("ownerId", "name")]
     public class HostTemplate : IHostTemplate
     {
         public HostTemplate() { }
@@ -17,9 +18,9 @@ namespace Carbon.Platform.Computing
             string name,
             IMachineType machineType,
             IImage image,
-            JsonObject properties,
             long ownerId,
-            ManagedResource resource)
+            ManagedResource resource,
+            JsonObject properties = null)
         {
             #region Preconditions
 
@@ -35,17 +36,20 @@ namespace Carbon.Platform.Computing
             #endregion
 
             Id            = id;
+            OwnerId       = ownerId;
             Name          = name;
             MachineTypeId = machineType.Id;
             ImageId       = image.Id;
             ProviderId    = resource.ProviderId;
-            Properties    = properties ?? throw new ArgumentNullException(nameof(properties));
-            OwnerId       = ownerId;
             ResourceId    = resource.ResourceId;
+            Properties    = properties ?? new JsonObject();
         }
 
         [Member("id"), Key(sequenceName: "hostTemplateId")]
         public long Id { get; }
+        
+        [Member("ownerId")]
+        public long OwnerId { get; }
 
         [Member("name")]
         [StringLength(63)]
@@ -67,9 +71,6 @@ namespace Carbon.Platform.Computing
         [StringLength(1000)]
         public JsonObject Properties { get; }
 
-        [Member("ownerId")]
-        public long OwnerId { get; }
-
         #region IResource
 
         [IgnoreDataMember]
@@ -89,15 +90,12 @@ namespace Carbon.Platform.Computing
 
         #region Timestamps
 
-        [IgnoreDataMember]
         [Member("created"), Timestamp]
         public DateTime Created { get; }
         
-        [IgnoreDataMember]
         [Member("deleted"), Timestamp]
         public DateTime? Deleted { get; }
         
-        [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
 

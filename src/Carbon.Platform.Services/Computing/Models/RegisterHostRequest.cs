@@ -26,7 +26,6 @@ namespace Carbon.Platform.Computing
             Addresses     = addresses;
             EnvironmentId = cluster.EnvironmentId;
             ClusterId     = cluster.Id;
-            ProgramId     = program?.Id;
             ImageId       = image.Id;
             MachineTypeId = machineType.Id;
             NetworkId     = networkId;
@@ -56,8 +55,6 @@ namespace Carbon.Platform.Computing
         public long NetworkId { get; set; }
 
         public long ClusterId { get; set; }
-
-        public long? ProgramId { get; set; }
 
         [Range(1, 2_199_023_255_552)]
         public long OwnerId { get; set; }

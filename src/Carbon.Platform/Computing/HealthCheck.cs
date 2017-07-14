@@ -79,7 +79,7 @@ namespace Carbon.Platform.Computing
         [Member("unhealtyThreshold")]
         public int UnhealthyThreshold { get; set; }   // e.g. 5.5
 
-        [Member("ownerId")]
+        [Member("ownerId"), Indexed]
         public long OwnerId { get; }
 
         #region IResource
@@ -103,15 +103,12 @@ namespace Carbon.Platform.Computing
 
         #region Timestamps
 
-        [IgnoreDataMember]
         [Member("created"), Timestamp]
         public DateTime Created { get; }
 
-        [IgnoreDataMember]
         [Member("deleted")]
         public DateTime? Deleted { get; }
 
-        [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
 

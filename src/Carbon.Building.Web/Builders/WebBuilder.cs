@@ -108,7 +108,7 @@ namespace Carbon.Building.Web
                 else if (FormatHelper.IsStaticFormat(format))
                 {
                     var blob = new Blob(
-                        name   : file.Name,
+                        key    : file.Name,
                         stream : await file.ToMemoryStreamAsync().ConfigureAwait(false)
                     );
                     

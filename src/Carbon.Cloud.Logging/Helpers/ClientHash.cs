@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+
 using Carbon.Data.Sequences;
 using Carbon.Security;
 
@@ -14,6 +15,13 @@ namespace Carbon.Cloud.Logging
 
         public static byte[] Compute(ISecurityContext context)
         {
+            #region Preconditions
+
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
+            #endregion
+
             return Compute(Uid.Parse(context.ClientId), context.ClientIp, context.UserAgent);
         }
 

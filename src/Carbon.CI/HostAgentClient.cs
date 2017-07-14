@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+
 using Carbon.Platform.Computing;
 using Carbon.Security.Tokens;
 
@@ -39,9 +40,9 @@ namespace Carbon.CI
         {
             var path = $"/programs/{program.Id}@{program.Version}/deploy";
 
-            await SendAsync(host, path);
+            var result = await SendAsync(host, path);
 
-            return new DeployResult();
+            return new DeployResult(true, result);
         }
 
         public async Task<DeployResult> ActivateAsync(IProgram program, IHost host)
@@ -55,6 +56,16 @@ namespace Carbon.CI
 
         public async Task<bool> RestartAsync(IProgram program, IHost host)
         {
+            #region Preconditions
+
+            if (program == null)
+                throw new ArgumentNullException(nameof(program));
+
+            if (host == null)
+                throw new ArgumentNullException(nameof(host));
+
+            #endregion
+
             var path = $"/programs/{program.Id}@{program.Version}/restart";
 
             await SendAsync(host, path);
@@ -66,16 +77,6 @@ namespace Carbon.CI
 
         private async Task<string> SendAsync(IHost host, string path)
         {
-            #region Preconditions
-
-            if (host == null)
-                throw new ArgumentNullException(nameof(host));
-
-            if (path == null)
-                throw new ArgumentNullException(nameof(path));
-
-            #endregion
-
             if (path.StartsWith("/"))
             {
                 path = path.Trim('/');
@@ -89,9 +90,9 @@ namespace Carbon.CI
 
             request.Headers.Add("Authorization", "Bearer " + credential.Value);
 
-            using (var response = await http.SendAsync(request).ConfigureAwait(false))
+            using (var response = await http.SendAsync(request))
             {
-                var text = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var text = await response.Content.ReadAsStringAsync();
 
                 if (!response.IsSuccessStatusCode)
                 {

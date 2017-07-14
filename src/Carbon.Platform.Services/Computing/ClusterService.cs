@@ -61,19 +61,25 @@ namespace Carbon.Platform.Computing
                 ?? throw ResourceError.NotFound(ResourceTypes.Cluster, id);
         }
 
-        public async Task<Cluster> GetAsync(IEnvironment env, ILocation location)
+        public async Task<Cluster> GetAsync(IEnvironment environment, ILocation location)
         {
-            var group = await db.Clusters.QueryFirstOrDefaultAsync(
-                Conjunction(
-                    Eq("environmentId", env.Id),
-                    Eq("locationId", location.Id),
-                    IsNull("deleted")
-                )
-            ).ConfigureAwait(false);
+            #region Preconditions
 
-            if (group == null)
+            if (environment == null)
+                throw new ArgumentNullException(nameof(environment));
+
+            if (location == null)
+                throw new ArgumentNullException(nameof(location));
+
+            #endregion
+
+            var group = await db.Clusters.QueryFirstOrDefaultAsync(
+                And(Eq("environmentId", environment.Id), Eq("locationId", location.Id))
+            ).ConfigureAwait(false);
+            
+            if (group == null || group.Deleted != null)
             {
-                throw new ResourceNotFoundException($"cluster(environment#{env.Id}, location#{location.Id})");
+                throw new ResourceNotFoundException($"cluster(environment#{environment.Id}, location#{location.Id})");
             }
             
             return group;

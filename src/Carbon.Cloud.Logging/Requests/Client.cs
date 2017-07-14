@@ -7,7 +7,7 @@ using Carbon.Security;
 
 namespace Carbon.Cloud.Logging
 {
-    [Dataset("Clients", Schema = "Logging")]
+    [Dataset("Clients", Schema = "Logs")]
     public class Client : IClient
     {
         public Client() { }
