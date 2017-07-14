@@ -4,27 +4,37 @@ using Carbon.Data.Annotations;
 namespace Carbon.Rds
 {
     [Dataset("DatabaseGrants", Schema = "Rds")]
-    [UniqueIndex("databaseId", "userId", "resource")]
-    public class DatabaseGrant
+    public class DatabaseGrant : IDatabaseGrant
     {
-        public DatabaseGrant(long id, long databaseId, long userId, string resource, string[] actions)
+        public DatabaseGrant(
+            long id,
+            long databaseId, 
+            long userId, 
+            string schemaName,
+            string tableName, 
+            string[] actions)
         {
             #region Preconditions
 
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
-
+            
             if (databaseId <= 0)
                 throw new ArgumentException("Must be > 0", nameof(databaseId));
 
             if (userId <= 0)
                 throw new ArgumentException("Must be > 0", nameof(userId));
 
+            if (string.IsNullOrEmpty(schemaName))
+                throw new ArgumentException("Required", nameof(schemaName));
+
             #endregion
 
+            Id         = id;
             DatabaseId = databaseId;
             UserId     = userId;
-            Resource   = resource ?? throw new ArgumentNullException(nameof(resource));
+            SchemaName = schemaName;
+            TableName  = tableName;
             Actions    = actions ?? throw new ArgumentNullException(nameof(actions));
         }
 
@@ -38,9 +48,21 @@ namespace Carbon.Rds
         [Member("userId")]
         public long UserId { get; }
 
-        [Member("resource")]
-        [StringLength(100)]
-        public string Resource { get; set; }
+        [Member("schemaName")]
+        [StringLength(63)]
+        public string SchemaName { get; }
+
+        [Member("tableName")]
+        [StringLength(63)]
+        public string TableName { get; }
+
+        [Member("columnNames")]
+        [StringLength(200)]
+        public string[] ColumnNames { get; set; }
+
+        [Member("functionName")]
+        [StringLength(63)]
+        public string FunctionName { get; set; }
 
         // aka privileges
         [Member("actions")]

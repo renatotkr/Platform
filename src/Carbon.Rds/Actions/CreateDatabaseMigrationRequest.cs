@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Carbon.Rds
+namespace Carbon.Rds.Services
 {
     public class CreateDatabaseMigrationRequest
     {

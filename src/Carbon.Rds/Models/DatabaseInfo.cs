@@ -65,6 +65,9 @@ namespace Carbon.Rds
         [Member("grantCount")]
         public int GrantCount { get; }
 
+        [Member("instanceCount")]
+        public int InstanceCount { get; }
+
         [Member("migrationCount")]
         public int MigrationCount { get; }
 

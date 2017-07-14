@@ -1,7 +1,7 @@
 ﻿using System;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Rds
+namespace Carbon.Rds.Services
 {
     public class RegisterDatabaseClusterRequest
     {

@@ -7,7 +7,7 @@ namespace Carbon.Rds.Services
 {
     using static Expression;
 
-    public class DatabaseService
+    public class DatabaseService : IDatabaseService
     {
         private readonly RdsDb db;
 

@@ -1,4 +1,4 @@
-﻿namespace Carbon.Rds
+﻿namespace Carbon.Rds.Services
 {
     public class StartDatabaseBackupRequest
     {

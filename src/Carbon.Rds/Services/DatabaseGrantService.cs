@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Platform.Sequences;
-using Carbon.Platform.Storage;
 
 namespace Carbon.Rds.Services
 {
-    public class DatabaseGrantService
+    public class DatabaseGrantService : IDatabaseGrantService
     {
         private readonly RdsDb db;
 
@@ -42,32 +42,35 @@ namespace Carbon.Rds.Services
 
             #endregion
 
-            var id = await DatabaseGrantId.NextAsync(db.Context, request.DatabaseId);
+            var grantId = await DatabaseGrantId.NextAsync(db.Context, request.DatabaseId);
 
             var grant = new DatabaseGrant(
-                id         : id,
+                id         : grantId,
                 databaseId : request.DatabaseId,
                 userId     : request.UserId,
-                resource   : request.Resource, 
+                schemaName : request.Resource.SchemaName,
+                tableName  : request.Resource.TableName,
                 actions    : request.Actions
             );
 
-            await  db.DatabaseGrants.InsertAsync(grant);
+            await db.DatabaseGrants.InsertAsync(grant);
 
             return grant;
-
         }
-        
-    }
 
-    public class CreateDatabaseGrantRequest
-    {
-        public long DatabaseId { get; set; }
 
-        public long UserId { get; set; }
+        public async Task DeleteAsync(IDatabaseGrant grant)
+        {
+            #region Preconditions
 
-        public string Resource { get; set; }
+            if (grant == null)
+                throw new ArgumentNullException(nameof(grant));
 
-        public string[] Actions { get; set; }
+            #endregion
+
+            await db.DatabaseGrants.PatchAsync(grant.Id, new[] {
+                Change.Replace("deleted", Expression.Func("NOW"))
+            });
+        }
     }
 }

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Carbon.Rds</AssemblyName>
     <TargetFramework>netstandard1.6</TargetFramework>
-    <VersionPrefix>0.2.0</VersionPrefix>
+    <VersionPrefix>0.4.1</VersionPrefix>
 
     <!-- Package Details -->
     <Authors>iamcarbon</Authors>

@@ -1,4 +1,6 @@
-﻿namespace Carbon.Rds
+﻿using System;
+
+namespace Carbon.Rds.Services
 {
     public class RegisterDatabaseRequest
     {
@@ -8,7 +10,7 @@
             string[] schemaNames = null,
             RegisterDatabaseClusterRequest[] clusters = null)
         {
-            Name        = name;
+            Name        = name ?? throw new ArgumentNullException(nameof(name));
             OwnerId     = ownerId;
             SchemaNames = schemaNames;
             Clusters    = clusters;

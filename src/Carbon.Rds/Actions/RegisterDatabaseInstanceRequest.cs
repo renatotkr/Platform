@@ -1,7 +1,7 @@
 ﻿using Carbon.Platform.Resources;
 using Carbon.Platform.Storage;
 
-namespace Carbon.Rds
+namespace Carbon.Rds.Services
 {
     public class RegisterDatabaseInstanceRequest
     {
