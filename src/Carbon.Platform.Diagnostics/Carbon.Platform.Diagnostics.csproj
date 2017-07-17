@@ -19,7 +19,7 @@
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.3.0" />
 
-    <PackageReference Include="Carbon.Data.Sql" Version="0.28.0" />
+    <PackageReference Include="Carbon.Data.Sql" Version="0.30.0" />
     <PackageReference Include="Carbon.Json" Version="1.4.1" />
   </ItemGroup>
   

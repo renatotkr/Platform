@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.CI</AssemblyName>
-    <VersionPrefix>0.22.0</VersionPrefix>
+    <VersionPrefix>0.24.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6</TargetFrameworks>
 
     <!-- Package Details-->
@@ -25,7 +25,7 @@
     <PackageReference Include="Amazon.CodeBuild" Version="0.6.0" />
     <PackageReference Include="Carbon.Data.Protection" Version="0.12.0" />
     <PackageReference Include="Carbon.Logging" Version="1.1.0" />
-    <PackageReference Include="Carbon.Security.Primitives" Version="0.20.0" />
+    <PackageReference Include="Carbon.Security.Primitives" Version="0.21.0" />
     <PackageReference Include="Carbon.Versioning" Version="1.2.0" />
   </ItemGroup>
 </Project>

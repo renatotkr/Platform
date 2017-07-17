@@ -2,21 +2,21 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Cloud.Logging</AssemblyName>
-    <VersionPrefix>0.10.0</VersionPrefix>
+    <VersionPrefix>0.12.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6</TargetFrameworks>
 
     <!-- Package Info-->
     <Authors>iamcarbon</Authors>
     <Copyright>© Jason Nelson</Copyright>
-    <Description>Logging primitives for the cloud.</Description>
+    <Description>Cloud logging services.</Description>
     <PackageTags>cloud;logging;carbon</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Remove="NETStandard.Library" />
-    <PackageReference Include="Carbon.Data.Sql" Version="0.28.0" />
+    <PackageReference Include="Carbon.Data.Sql" Version="0.30.0" />
     <PackageReference Include="Carbon.Json" Version="1.4.1" />
-    <PackageReference Include="Carbon.Security.Primitives" Version="0.20.0" />
+    <PackageReference Include="Carbon.Security.Primitives" Version="0.21.0" />
     <PackageReference Include="System.Runtime" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />

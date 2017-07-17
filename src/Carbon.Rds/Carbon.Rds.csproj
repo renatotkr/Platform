@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Carbon.Rds</AssemblyName>
     <TargetFramework>netstandard1.6</TargetFramework>
-    <VersionPrefix>0.4.1</VersionPrefix>
+    <VersionPrefix>0.6.1</VersionPrefix>
 
     <!-- Package Details -->
     <Authors>iamcarbon</Authors>
@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Carbon.Data.Sql" Version="0.28.0" />
+    <PackageReference Include="Carbon.Data.Sql" Version="0.30.0" />
     <PackageReference Include="Carbon.Json" Version="1.4.1" />
   </ItemGroup>
 

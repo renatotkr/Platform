@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Kms</AssemblyName>
-    <VersionPrefix>0.20.0</VersionPrefix>
+    <VersionPrefix>0.21.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6</TargetFrameworks>
 
     <!-- Package Details -->
@@ -23,7 +23,7 @@
     <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.0" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.3.0" />
   
-    <PackageReference Include="Carbon.Data.Sql" Version="0.28.0" />
+    <PackageReference Include="Carbon.Data.Sql" Version="0.30.0" />
     <PackageReference Include="Carbon.Json" Version="1.4.1" />
     <PackageReference Include="Carbon.Time" Version="1.2.0" />
     <PackageReference Include="protobuf-net" Version="2.3.0" />
