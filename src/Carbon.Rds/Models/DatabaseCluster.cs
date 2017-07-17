@@ -9,6 +9,8 @@ namespace Carbon.Rds
     [Dataset("DatabaseClusters", Schema = "Rds")]
     public class DatabaseCluster : IDatabaseCluster
     {
+        public DatabaseCluster() { }
+
         public DatabaseCluster(long id, string name, ManagedResource resource, JsonObject properties = null)
         {
             Id         = id;

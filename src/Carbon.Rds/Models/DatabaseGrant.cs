@@ -1,41 +1,43 @@
 ﻿using System;
 using Carbon.Data.Annotations;
+using Carbon.Data.Sql;
 
 namespace Carbon.Rds
 {
     [Dataset("DatabaseGrants", Schema = "Rds")]
     public class DatabaseGrant : IDatabaseGrant
     {
+        public DatabaseGrant() { }
+
         public DatabaseGrant(
             long id,
-            long databaseId, 
-            long userId, 
-            string schemaName,
-            string tableName, 
-            string[] actions)
+            long databaseId,
+            DbObject resource,
+            string[] actions,
+            long userId,
+            string[] columnNames = null)
         {
             #region Preconditions
 
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
-            
+
             if (databaseId <= 0)
                 throw new ArgumentException("Must be > 0", nameof(databaseId));
 
             if (userId <= 0)
                 throw new ArgumentException("Must be > 0", nameof(userId));
 
-            if (string.IsNullOrEmpty(schemaName))
-                throw new ArgumentException("Required", nameof(schemaName));
-
             #endregion
 
-            Id         = id;
-            DatabaseId = databaseId;
-            UserId     = userId;
-            SchemaName = schemaName;
-            TableName  = tableName;
-            Actions    = actions ?? throw new ArgumentNullException(nameof(actions));
+            Id          = id;
+            DatabaseId  = databaseId;
+            UserId      = userId;
+            SchemaName  = resource.SchemaName;
+            ObjectType  = resource.Type;
+            ObjectName  = resource.ObjectName;
+            Actions     = actions ?? throw new ArgumentNullException(nameof(actions));
+            ColumnNames = columnNames;
         }
 
         // databaseId | #
@@ -45,24 +47,23 @@ namespace Carbon.Rds
         [Member("databaseId")]
         public long DatabaseId { get; }
 
-        [Member("userId")]
+        [Member("userId"), Indexed]
         public long UserId { get; }
 
         [Member("schemaName")]
         [StringLength(63)]
         public string SchemaName { get; }
 
-        [Member("tableName")]
+        [Member("objectType")]
+        public DbObjectType ObjectType { get; }
+
+        [Member("objectName")]
         [StringLength(63)]
-        public string TableName { get; }
+        public string ObjectName { get; }
 
         [Member("columnNames")]
         [StringLength(200)]
-        public string[] ColumnNames { get; set; }
-
-        [Member("functionName")]
-        [StringLength(63)]
-        public string FunctionName { get; set; }
+        public string[] ColumnNames { get; }
 
         // aka privileges
         [Member("actions")]

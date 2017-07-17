@@ -6,7 +6,7 @@
 
         string SchemaName { get; }
 
-        string TableName { get;  }
+        string ObjectName { get;  }
         
         string[] ColumnNames { get; }
 

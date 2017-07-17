@@ -1,15 +1,17 @@
 ﻿using System;
 
+using Carbon.Data.Sql;
+
 namespace Carbon.Rds.Services
 {
     public class CreateDatabaseGrantRequest
     {
-        public CreateDatabaseGrantRequest(IDatabaseInfo database, DatabaseResource resource, string[] actions, long userId)
+        public CreateDatabaseGrantRequest(IDatabaseInfo database, DbObject resource, string[] actions, long userId)
             : this(database.Id, resource, actions, userId) { }
 
         public CreateDatabaseGrantRequest(
             long databaseId,
-            DatabaseResource resource,
+            DbObject resource,
             string[] actions,
             long userId)
         {
@@ -37,9 +39,9 @@ namespace Carbon.Rds.Services
 
         public long DatabaseId { get; }
 
-        public DatabaseResource Resource { get; }
-
         public string[] Actions { get; }
+
+        public DbObject Resource { get; }
 
         public long UserId { get; }
     }
