@@ -28,7 +28,7 @@ namespace Carbon.Rds.Services
             #endregion
 
             return db.DatabaseUsers.QueryAsync(
-                And(Eq("databaseId", database.Id), IsNotNull("deleted"))
+                And(Eq("databaseId", database.Id), IsNull("deleted"))
             );
         }
 

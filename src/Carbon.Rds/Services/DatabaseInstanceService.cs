@@ -8,6 +8,8 @@ using Carbon.Platform.Sequences;
 
 namespace Carbon.Rds.Services
 {
+    using static Expression;
+
     public class DatabaseInstanceService : IDatabaseInstanceService
     {
         private readonly RdsDb db;
@@ -29,7 +31,7 @@ namespace Carbon.Rds.Services
             var range = ScopedId.GetRange(database.Id);
 
             return db.DatabaseInstances.QueryAsync(
-                Expression.And(Expression.Between("id", range.Start, range.End), Expression.IsNotNull("deleted"))
+                And(Between("id", range.Start, range.End), IsNull("deleted"))
             );
         }
 
@@ -67,7 +69,7 @@ namespace Carbon.Rds.Services
             #endregion
 
             await db.DatabaseInstances.PatchAsync(instance.Id, new[] {
-                Change.Replace("terminated", Expression.Func("NOW"))
+                Change.Replace("terminated", Func("NOW"))
             });
         }
     }

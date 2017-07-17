@@ -31,7 +31,7 @@ namespace Carbon.Rds.Services
             var range = ScopedId.GetRange(database.Id);
 
             return db.DatabaseEndpoints.QueryAsync(
-                And(Between("id", range.Start, range.End), IsNotNull("deleted"))
+                And(Between("id", range.Start, range.End), IsNull("deleted"))
             );
         }
     }

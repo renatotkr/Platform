@@ -23,7 +23,7 @@ namespace Carbon.Rds.Services
         public Task<IReadOnlyList<DatabaseInfo>> ListAsync(long ownerId)
         {
             return db.Databases.QueryAsync(
-                And(Eq("ownerId", ownerId), IsNotNull("deleted"))
+                And(Eq("ownerId", ownerId), IsNull("deleted"))
             );
         }
 
