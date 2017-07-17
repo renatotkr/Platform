@@ -53,7 +53,7 @@ namespace Carbon.Kms
             if (ownerId <= 0)
                 throw new ArgumentException("Must be > 0", nameof(ownerId));
 
-            if (name == null || string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("Required", nameof(name));
 
             if (data == null || data.Length == 0)
@@ -99,13 +99,13 @@ namespace Carbon.Kms
         [Member("aad"), Optional]
         [StringLength(1000)]
         public JsonObject Aad { get; }
-
-        [Member("properties"), Optional]
-        [StringLength(500)]
-        public JsonObject Properties { get; }
-
+        
         [Member("status")]
         public KeyStatus Status { get; }
+
+        [Member("properties"), Optional]
+        [StringLength(1000)]
+        public JsonObject Properties { get; }
 
         #region IResource
 
@@ -129,11 +129,9 @@ namespace Carbon.Kms
         [Member("expires")]
         public DateTime? Expires { get; }
 
-        [IgnoreDataMember]
         [Member("created"), Timestamp]
         public DateTime Created { get; }
 
-        [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
 

@@ -26,9 +26,6 @@ namespace Carbon.Kms
             if (userId <= 0)
                 throw new ArgumentException("Invalid", nameof(userId));
 
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
-
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("Required", nameof(name));
 

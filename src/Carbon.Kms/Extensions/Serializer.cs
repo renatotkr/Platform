@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace Carbon
 {
@@ -7,12 +6,6 @@ namespace Carbon
     {
         public static T Deserialize<T>(byte[] data)
         {
-            #region Preconditons
-
-            if (data == null) throw new ArgumentNullException(nameof(data));
-
-            #endregion
-
             using (var ms = new MemoryStream(data))
             {
                 return ProtoBuf.Serializer.Deserialize<T>(ms);

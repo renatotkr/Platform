@@ -68,9 +68,6 @@ namespace Carbon.Kms
 
         #endregion
 
-        // fingerprint  = x5t#S256
-        // keyAlgorithm = RSA_2048 | RSA_1024 | EC_prime256v1
-
         [Member("properties")]
         [StringLength(1000)]
         public JsonObject Properties { get; }
@@ -124,4 +121,7 @@ namespace Carbon.Kms
 
         public const string KeyAlgorithm = "keyAlgorithm";
     }
+
+    // fingerprint  = x5t#S256
+    // keyAlgorithm = RSA_2048 | RSA_1024 | EC_prime256v1
 }
