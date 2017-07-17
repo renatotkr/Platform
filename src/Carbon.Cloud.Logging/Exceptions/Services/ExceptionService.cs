@@ -13,14 +13,14 @@ namespace Carbon.Platform.Diagnostics
 
     public class ExceptionService : IExceptionService
     {
-        private readonly LoggingDb db;
+        private readonly LogsDb db;
 
-        public ExceptionService(LoggingDb db)
+        public ExceptionService(LogsDb db)
         {
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public Task<ExceptionInfo> FindAsync(Uid id)
+        public Task<ExceptionInfo> GetAsync(Uid id)
         {
             return db.Exceptions.FindAsync(id);
         }

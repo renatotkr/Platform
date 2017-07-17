@@ -5,9 +5,9 @@ using Carbon.Platform.Diagnostics;
 
 namespace Carbon.Cloud.Logging
 {
-    public class LoggingDb
+    public class LogsDb
     {
-        public LoggingDb(IDbContext context)
+        public LogsDb(IDbContext context)
         {
             // Ensure the db type handlers are registered
    
@@ -27,6 +27,8 @@ namespace Carbon.Cloud.Logging
         }
 
         public IDbContext Context { get; }
+
+        public string Name => "Logs";
 
         public Dataset<Client, (Uid, byte[])>        Clients        { get; }
         public Dataset<Event, Uid>                   Events         { get; }

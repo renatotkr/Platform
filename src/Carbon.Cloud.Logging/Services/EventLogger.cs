@@ -5,9 +5,9 @@ namespace Carbon.Cloud.Logging
 {
     public class EventLogger : IEventLogger
     {
-        private readonly LoggingDb db;
+        private readonly LogsDb db;
 
-        public EventLogger(LoggingDb db)
+        public EventLogger(LogsDb db)
         {
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }

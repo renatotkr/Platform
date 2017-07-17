@@ -9,7 +9,7 @@ namespace Carbon.Platform.Diagnostics
     {
         Task<ExceptionInfo> CreateAsync(CreateExceptionRequest request);
 
-        Task<ExceptionInfo> FindAsync(Uid id);
+        Task<ExceptionInfo> GetAsync(Uid id);
 
         Task<IReadOnlyList<ExceptionInfo>> ListAsync(long environmentId);
     }
