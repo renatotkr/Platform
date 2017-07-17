@@ -19,7 +19,17 @@ namespace Carbon.Platform.Storage
             long? authorId = null,
             long? commiterId = null)
         {
-            Id           = id;
+            #region Preconditions
+
+            if (id <= 0)
+                throw new ArgumentException("Must be > 0", nameof(id));
+
+            if (repositoryId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(repositoryId));
+
+            #endregion
+
+            Id = id;
             RepositoryId = repositoryId;
             Sha1         = sha1 ?? throw new ArgumentNullException(nameof(sha1));
             Message      = message;

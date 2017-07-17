@@ -16,9 +16,19 @@ namespace Carbon.Platform
             string name, 
             LocationStatus status = LocationStatus.Healthy)
         {
+            #region Preconditions
+
+            if (id <= 0)
+                throw new ArgumentException("Must be > 0", nameof(id));
+
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Required", nameof(name));
+
+            #endregion
+
             Id         = id;
             ProviderId = LocationId.Create(id).ProviderId;
-            Name       = name ?? throw new ArgumentNullException(nameof(name));
+            Name       = name;
             Status     = status;
         }
 

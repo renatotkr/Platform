@@ -23,8 +23,8 @@ namespace Carbon.Platform.Networking
             long[] securityGroupIds,
             long subnetId,
             ManagedResource resource,
-            JsonObject properties = null,
-            long? hostId = null)
+            long? hostId = null,
+            JsonObject properties = null)
         {
             #region Preconditions
             
@@ -41,15 +41,14 @@ namespace Carbon.Platform.Networking
             ProviderId       = resource.ProviderId;
             ResourceId       = resource.ResourceId;
             LocationId       = resource.LocationId;
-            Properties       = properties;
             HostId           = hostId;
+            Properties       = properties;
         }
 
         // networkId | #
         [Member("id"), Key]
         public long Id { get; }
 
-        [DataMember(EmitDefaultValue = false)]
         [Member("addresses")]
         public IPAddress[] Addresses { get; }
 

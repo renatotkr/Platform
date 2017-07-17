@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 using Carbon.Platform.Resources;
@@ -8,7 +7,6 @@ using Carbon.Platform.Sequences;
 namespace Carbon.Platform.Computing
 {
     [Dataset("LoadBalancerRules", Schema = "Computing")]
-    [UniqueIndex("providerId", "resourceId")]
     public class LoadBalancerRule : ILoadBalancerRule
     {
         public LoadBalancerRule() { }
@@ -18,14 +16,20 @@ namespace Carbon.Platform.Computing
             string condition,
             string action, 
             int priority,
-            ManagedResource resource)
+            string resourceId = null)
         {
-            Id         = id;
+            #region Preconditions
+
+            if (id <= 0)
+                throw new ArgumentException("Must be > 0", nameof(id));
+            
+            #endregion
+
+            Id = id;
             Condition  = condition ?? throw new ArgumentNullException(nameof(condition));
-            Action     = action ?? throw new ArgumentNullException(nameof(action));
+            Action     = action    ?? throw new ArgumentNullException(nameof(action));
             Priority   = priority;
-            ProviderId = resource.ProviderId;
-            ResourceId = resource.ResourceId;
+            ResourceId = resourceId;
         }
 
         // loadBalancerId | #
@@ -37,6 +41,7 @@ namespace Carbon.Platform.Computing
         public string Condition { get; }
 
         [Member("action")]
+        [StringLength(100)]
         public string Action { get; }
 
         [Member("priority")]
@@ -46,13 +51,8 @@ namespace Carbon.Platform.Computing
 
         #region IResource
 
-        [IgnoreDataMember]
-        [Member("providerId")]
-        public int ProviderId { get; }
-
-        [IgnoreDataMember]
         [Member("resourceId")]
-        [Ascii, StringLength(120)]
+        [StringLength(150)]
         public string ResourceId { get; }
         
         ResourceType IResource.ResourceType => ResourceTypes.LoadBalancerRule;
@@ -61,15 +61,12 @@ namespace Carbon.Platform.Computing
 
         #region Timestamps
 
-        [IgnoreDataMember]
         [Member("created"), Timestamp]
         public DateTime Created { get; }
 
-        [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
 
-        [IgnoreDataMember]
         [Member("deleted")]
         public DateTime? Deleted { get; }
 

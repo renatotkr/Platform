@@ -24,7 +24,7 @@ namespace Carbon.Platform.Environments
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
 
-            if (name == null || string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("Required", nameof(name));
 
             if (ownerId <= 0)
@@ -36,7 +36,7 @@ namespace Carbon.Platform.Environments
             OwnerId    = ownerId;
             Name       = name;
             Slug       = slug;
-            Properties = properties;
+            Properties = properties ?? new JsonObject();
         }
 
         [Member("id"), Key("environmentId")]

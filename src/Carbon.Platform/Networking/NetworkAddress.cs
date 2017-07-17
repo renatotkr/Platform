@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 using Carbon.Platform.Resources;
@@ -43,11 +42,9 @@ namespace Carbon.Platform.Networking
 
         #region IResource
 
-        [IgnoreDataMember]
         [Member("providerId")]
         public int ProviderId { get; }
 
-        [IgnoreDataMember]
         [Member("resourceId")]
         [Ascii, StringLength(100)]
         public string ResourceId { get; }

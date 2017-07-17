@@ -25,18 +25,21 @@ namespace Carbon.Platform.Storage
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
 
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Required", nameof(name));
+
             if (ownerId <= 0)
                 throw new ArgumentException("Must be > 0", nameof(ownerId));
 
             #endregion
 
             Id         = id;
-            Name       = name ?? throw new ArgumentNullException(nameof(name));
+            Name       = name;
             OwnerId    = ownerId;
-            Properties = properties;
             ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
             ResourceId = resource.ResourceId;
+            Properties = properties;
         }
 
         [Member("id"), Key(sequenceName: "channelId")]

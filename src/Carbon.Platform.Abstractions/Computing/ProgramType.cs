@@ -3,9 +3,9 @@
     public enum ProgramType : byte
     {
         App     = 1,
-        Site    = 2,
-        Service = 3,
-        Task    = 4,
+        Service = 2,
+        Site    = 3,
+        Task    = 4
     }
     
     // /var/apps

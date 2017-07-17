@@ -27,6 +27,10 @@ namespace Carbon.Platform.Storage
             if (repositoryId <= 0)
                 throw new ArgumentException("Must be > 0", nameof(repositoryId));
 
+            if (string.IsNullOrEmpty(nameof(name)))
+                throw new ArgumentException("Required", nameof(name));
+
+
             if (creatorId <= 0)
                 throw new ArgumentException("Must be > 0", nameof(creatorId));
 
@@ -34,7 +38,7 @@ namespace Carbon.Platform.Storage
 
             Id           = id;
             RepositoryId = repositoryId;
-            Name         = name ?? throw new ArgumentNullException(nameof(name));
+            Name         = name;
             CreatorId    = creatorId;
             ContainerId  = containerId;
         }

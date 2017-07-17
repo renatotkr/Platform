@@ -7,6 +7,8 @@ namespace Carbon.Platform.Computing
         ImageType Type { get; }
 
         string Name { get; }
+
+        long Size { get; }
     }
 }
 

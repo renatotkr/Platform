@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using System.Text;
 
 using Carbon.Extensions;
@@ -34,7 +35,7 @@ namespace Carbon.Platform.Computing
         public static implicit operator long(MachineTypeId id) => id.Value;
     }
 
-    public class AwsMachineType : IMachineType
+    public sealed class AwsMachineType : IMachineType
     {
         internal AwsMachineType(long id, string name)
         {
@@ -42,9 +43,11 @@ namespace Carbon.Platform.Computing
             Name = name;
         }
 
-        public string Name { get; }
-
+        [DataMember(Name = "id")]
         public long Id { get; }
+
+        [DataMember(Name = "name")]
+        public string Name { get; }
 
         #region IResource
 

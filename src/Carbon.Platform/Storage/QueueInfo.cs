@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 using Carbon.Json;
@@ -20,13 +19,26 @@ namespace Carbon.Platform.Storage
             ManagedResource resource,
             JsonObject properties = null)
         {
+            #region Preconditions
+
+            if (id <= 0)
+                throw new ArgumentException("Must be > 0", nameof(id));
+
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Required", nameof(name));
+
+            if (ownerId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(ownerId));
+
+            #endregion
+
             Id         = id;
-            Name       = name ?? throw new ArgumentNullException(nameof(name));
+            Name       = name;
             OwnerId    = ownerId;
-            Properties = properties;
             ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
             ResourceId = resource.ResourceId;
+            Properties = properties;
         }
 
         [Member("id"), Key(sequenceName: "queueId")]
@@ -45,16 +57,13 @@ namespace Carbon.Platform.Storage
 
         #region IResource
 
-        [IgnoreDataMember]
         [Member("providerId")]
         public int ProviderId { get; }
 
-        [IgnoreDataMember]
         [Member("resourceId")]
         [StringLength(100)]
         public string ResourceId { get; }
 
-        [IgnoreDataMember]
         [Member("locationId")]
         public int LocationId { get; }
 

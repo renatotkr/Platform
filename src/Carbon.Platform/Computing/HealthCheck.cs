@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 using Carbon.Net;
@@ -57,7 +56,7 @@ namespace Carbon.Platform.Computing
         [StringLength(100)]
         public string Host { get; }
 
-        [Member("path")]
+        [Member("path"), Optional]
         [StringLength(100)]
         public string Path { get; }
 
@@ -74,26 +73,23 @@ namespace Carbon.Platform.Computing
         public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(5);
         
         [Member("healthyThreshold")]
-        public int HealthyThreshold { get; set; }     // e.g. 4/5
+        public int HealthyThreshold { get; set; }
 
         [Member("unhealtyThreshold")]
-        public int UnhealthyThreshold { get; set; }   // e.g. 5.5
+        public int UnhealthyThreshold { get; set; }
 
         [Member("ownerId"), Indexed]
         public long OwnerId { get; }
 
         #region IResource
 
-        [IgnoreDataMember]
         [Member("providerId")]
         public int ProviderId { get; }
 
-        [IgnoreDataMember]
         [Member("resourceId")]
         [Ascii, StringLength(100)]
         public string ResourceId { get; }
 
-        [IgnoreDataMember]
         [Member("locationId")]
         public int LocationId { get; }
 

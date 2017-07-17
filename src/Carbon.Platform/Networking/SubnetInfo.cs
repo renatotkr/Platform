@@ -26,12 +26,12 @@ namespace Carbon.Platform.Networking
             ResourceId    = resource.ResourceId;
         }
 
-        // networkId + index
+        // networkId | #
         [Member("id"), Key]
         public long Id { get; }
-        
+
         /// <summary>
-        /// A list of address blocks in CIDR notation
+        /// A list of CIDR formatted address blocks
         /// </summary>
         [Member("addressBlocks")]
         [StringLength(100)]
@@ -50,16 +50,13 @@ namespace Carbon.Platform.Networking
         
         #region IResource
 
-        [IgnoreDataMember]
         [Member("providerId")]
         public int ProviderId { get; }
 
-        [IgnoreDataMember]
         [Member("resourceId")]
         [Ascii, StringLength(100)]
         public string ResourceId { get; }
 
-        [IgnoreDataMember]
         [Member("locationId")]
         public int LocationId { get; }
 
@@ -69,15 +66,12 @@ namespace Carbon.Platform.Networking
 
         #region Timestamps
 
-        [IgnoreDataMember]
         [Member("created"), Timestamp]
         public DateTime Created { get; }
 
-        [IgnoreDataMember]
         [Member("deleted")]
         public DateTime? Deleted { get; }
 
-        [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
 

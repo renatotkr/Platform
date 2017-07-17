@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 using Carbon.Json;
@@ -24,12 +23,15 @@ namespace Carbon.Platform.Computing
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
 
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Required", nameof(name));
+
             #endregion
 
             Id         = id;
-            Name       = name ?? throw new ArgumentNullException(nameof(name));
-            Properties = properties ?? new JsonObject();
+            Name       = name;
             ProviderId = provider.Id;
+            Properties = properties ?? new JsonObject();
         }
 
         [Member("id"), Key]

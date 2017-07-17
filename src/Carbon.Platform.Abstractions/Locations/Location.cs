@@ -12,7 +12,7 @@ namespace Carbon.Platform
         public Location(LocationId id, string name)
         {
             this.id = id;
-            Name = name;
+            Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
         public int Id => id.Value;

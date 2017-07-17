@@ -34,7 +34,7 @@ namespace Carbon.Platform.Resources
         public static ResourceType Account       = "account";
         public static ResourceType Entity        = "entity";   // Organization, Person, or IA
         public static ResourceType User          = "user";      
-        public static ResourceType Session       = "user:session";
+        public static ResourceType Session       = "session";
 
         // Environments-------------------------------------------------------------------------------------
 
@@ -72,11 +72,13 @@ namespace Carbon.Platform.Resources
         public static ResourceType DatabaseGrant    = "database:grant";
         public static ResourceType DatabaseUser     = "database:user";
 
-        // Vaults --------------------------------------------------------------------------------------------------
+        // Vaults / KMS--------------------------------------------------------------------------------------------------
         public static ResourceType Vault       = "vault";
         public static ResourceType VaultGrant  = "vault:grant";
         public static ResourceType VaultKey    = "vault:key";
         public static ResourceType VaultSecret = "vault:secret";
+
+        public static ResourceType Certificate = "certificate";
 
         // Networking --------------------------------------------------------------------------------------------
 
@@ -93,7 +95,6 @@ namespace Carbon.Platform.Resources
         // Web -----------------------------------------------------------------------------------------------
 
         public static ResourceType Domain        = "domain";
-        public static ResourceType Certificate   = "certificate"; // web: ?
                             
         public static ResourceType Website       = "web:site";
         public static ResourceType WebComponent  = "web:component";

@@ -11,6 +11,6 @@ namespace Carbon.Platform.Computing
 
         ushort Port { get; }
 
-        long? CertificateId { get; }
+        // long? CertificateId { get; }
     }
 }

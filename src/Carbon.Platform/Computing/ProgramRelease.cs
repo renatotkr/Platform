@@ -70,10 +70,6 @@ namespace Carbon.Platform.Computing
         [Member("creatorId")]
         public long CreatorId { get; }
 
-        [Member("properties")]
-        [StringLength(1000)]
-        public JsonObject Properties { get; }
-
         [Member("programName")]
         [StringLength(63)]
         public string ProgramName { get; }
@@ -84,6 +80,10 @@ namespace Carbon.Platform.Computing
         [Member("runtime")]
         [StringLength(50)]
         public string Runtime { get; }
+
+        [Member("properties")]
+        [StringLength(1000)]
+        public JsonObject Properties { get; }
 
         #region IProgram
 

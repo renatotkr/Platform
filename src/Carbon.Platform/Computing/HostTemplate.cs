@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 using Carbon.Json;
@@ -11,21 +10,31 @@ namespace Carbon.Platform.Computing
     [UniqueIndex("ownerId", "name")]
     public class HostTemplate : IHostTemplate
     {
+        private IImage image;
+        private IMachineType machineType;
+
         public HostTemplate() { }
         
         public HostTemplate(
-            long id, 
+            long id,
+            long ownerId,
             string name,
             IMachineType machineType,
             IImage image,
-            long ownerId,
-            ManagedResource resource,
+            int locationId,
+            string startupScript = null,
             JsonObject properties = null)
         {
             #region Preconditions
 
             if (id <= 0)
                 throw new ArgumentNullException("Must be > 0", nameof(id));
+
+            if (ownerId <= 0)
+                throw new ArgumentNullException("Must be > 0", nameof(ownerId));
+
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Required", nameof(name));
 
             if (machineType == null)
                 throw new ArgumentNullException(nameof(machineType));
@@ -40,8 +49,8 @@ namespace Carbon.Platform.Computing
             Name          = name;
             MachineTypeId = machineType.Id;
             ImageId       = image.Id;
-            ProviderId    = resource.ProviderId;
-            ResourceId    = resource.ResourceId;
+            LocationId    = locationId;
+            StartupScript = startupScript;
             Properties    = properties ?? new JsonObject();
         }
 
@@ -60,29 +69,19 @@ namespace Carbon.Platform.Computing
 
         [Member("machineTypeId")]
         public long MachineTypeId { get; }
-
-        // Program + Configuration
-
-        [Member("startupScript")]
-        [StringLength(2000)]
-        public string StartupScript { get; set; }
         
+        [Member("startupScript")]
+        [StringLength(4000)]
+        public string StartupScript { get; set; }
+
+        [Member("locationId")]
+        public int LocationId { get; }
+
         [Member("properties")]
         [StringLength(1000)]
         public JsonObject Properties { get; }
 
         #region IResource
-
-        [IgnoreDataMember]
-        [Member("providerId")]
-        public int ProviderId { get; }
-
-        [IgnoreDataMember]
-        [Member("resourceId")]
-        [Ascii, StringLength(100)]
-        public string ResourceId { get; }
-        
-        int IManagedResource.LocationId => 0;
 
         ResourceType IResource.ResourceType => ResourceTypes.HostTemplate;
 
@@ -111,20 +110,11 @@ namespace Carbon.Platform.Computing
         public const string Monitoring       = "monitoring";
 
         // volumes [ { size: 100, type: "" } ]
-        public const string Volumes = "volumes";
+        public const string Volumes  = "volumes";
         public const string Volume   = "volume";
 
         public const string IamRole  = "iamRole";
         public const string SubnetId = "subnetId";
         public const string KeyName  = "keyName";
-    }
-
-    public class VolumeSpec
-    {
-        public string DeviceName { get; set; }
-
-        public long Size { get; set; }
-
-        public string Type { get; set; }
     }
 }

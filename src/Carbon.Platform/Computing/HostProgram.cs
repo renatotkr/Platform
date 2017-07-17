@@ -15,6 +15,7 @@ namespace Carbon.Platform.Computing
             long programId, 
             SemanticVersion programVersion, 
             int? port = null,
+            JsonObject configuration = null,
             JsonObject properties = null)
         {
             #region Preconditions
@@ -31,6 +32,7 @@ namespace Carbon.Platform.Computing
             ProgramId      = programId;
             ProgramVersion = programVersion.ToString();
             Port           = port;
+            Configuration  = configuration;
             Properties     = properties;
         }
 
@@ -46,6 +48,10 @@ namespace Carbon.Platform.Computing
 
         [Member("port")]
         public int? Port { get; }
+
+        [Member("configuration")]
+        [StringLength(1000)]
+        public JsonObject Configuration { get; }
 
         [Member("properties")]
         [StringLength(1000)]

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 using Carbon.Json;
@@ -16,9 +15,9 @@ namespace Carbon.Platform.Computing
 
         public ImageInfo(
             long id,
-            ImageType type,
-            string name,
             long ownerId,
+            string name,
+            ImageType type,
             long size,
             ManagedResource resource,
             JsonObject properties = null)
@@ -28,11 +27,11 @@ namespace Carbon.Platform.Computing
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
 
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
-
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("Required", nameof(name));
+
+            if (ownerId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(ownerId));
 
             #endregion
 
@@ -70,11 +69,9 @@ namespace Carbon.Platform.Computing
         #region IResource
 
         // docker:hub/ | aws |
-        [IgnoreDataMember]
         [Member("providerId")]
         public int ProviderId { get; }
 
-        [IgnoreDataMember]
         [Member("resourceId")]
         [Ascii, StringLength(100)]
         public string ResourceId { get; }
@@ -88,15 +85,12 @@ namespace Carbon.Platform.Computing
 
         #region Timestamps
 
-        [IgnoreDataMember]
         [Member("created"), Timestamp]
         public DateTime Created { get; }
 
-        [IgnoreDataMember]
         [Member("deleted")]
         public DateTime? Deleted { get; }
 
-        [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
         

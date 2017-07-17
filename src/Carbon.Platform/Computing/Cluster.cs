@@ -17,8 +17,8 @@ namespace Carbon.Platform.Computing
             string name,
             long environmentId,
             int locationId,
+            long hostTemplateId,
             JsonObject properties = null,
-            long? hostTemplateId = null,
             long? healthCheckId = null)
         {
             #region Preconditions
@@ -52,12 +52,11 @@ namespace Carbon.Platform.Computing
         [Member("environmentId")]
         public long EnvironmentId { get; }
         
-        // global, regional, or zonal
-        [Member("locationId")]
+        [Member("locationId")] // global, regional, or zonal
         public int LocationId { get; }
 
         [Member("hostTemplateId")]
-        public long? HostTemplateId { get; }
+        public long HostTemplateId { get; }
         
         [Member("healthCheckId")]
         public long? HealthCheckId { get; }

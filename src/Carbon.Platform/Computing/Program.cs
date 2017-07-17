@@ -32,9 +32,6 @@ namespace Carbon.Platform.Computing
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
 
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
-
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("Required", nameof(name));
              
@@ -49,13 +46,13 @@ namespace Carbon.Platform.Computing
             Type         = type;
             Runtime      = runtime;
             Addresses    = addresses;
-            Properties   = properties ?? new JsonObject();
             OwnerId      = ownerId;
             Version      = version;
             RepositoryId = repositoryId;
             ParentId     = parentId;
+            Properties = properties ?? new JsonObject();
         }
-        
+
         [Member("id"), Key(sequenceName: "programId")]
         public long Id { get; }
 

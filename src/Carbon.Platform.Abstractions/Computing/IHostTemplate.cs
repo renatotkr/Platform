@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Computing
 {
-    public interface IHostTemplate : IManagedResource
+    public interface IHostTemplate : IResource
     {
         string Name { get; }
 

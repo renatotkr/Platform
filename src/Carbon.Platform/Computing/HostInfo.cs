@@ -25,7 +25,6 @@ namespace Carbon.Platform.Computing
             long machineTypeId,
             long ownerId,
             ManagedResource resource,
-            long networkId    = 0,
             HostType type     = HostType.Virtual,
             HostStatus status = HostStatus.Running)
         {
@@ -40,7 +39,6 @@ namespace Carbon.Platform.Computing
             MachineTypeId = machineTypeId;
             ProviderId    = resource.ProviderId;
             ResourceId    = resource.ResourceId;
-            NetworkId     = networkId;
             OwnerId       = ownerId;
         }
 
@@ -48,7 +46,7 @@ namespace Carbon.Platform.Computing
         [Member("id"), Key]
         public long Id { get; }
 
-        [Member("type")] // Physical, Virtual, Container
+        [Member("type")]
         public HostType Type { get; }
       
         [Member("locationId")]
@@ -65,9 +63,6 @@ namespace Carbon.Platform.Computing
 
         [Member("addresses")]
         public string[] Addresses { get; }
-
-        [Member("networkId")]
-        public long NetworkId { get; }
 
         [Member("ownerId"), Indexed]
         public long OwnerId { get; }

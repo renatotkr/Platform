@@ -26,8 +26,8 @@ namespace Carbon.Platform.Storage
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
 
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
+            if (ownerId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(ownerId));
 
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("Required", nameof(name));

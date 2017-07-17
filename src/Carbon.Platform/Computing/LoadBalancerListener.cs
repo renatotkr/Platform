@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
+using Carbon.Json;
 using Carbon.Net;
-using Carbon.Platform.Sequences;
 using Carbon.Platform.Resources;
+using Carbon.Platform.Sequences;
 
 namespace Carbon.Platform.Computing
 {
@@ -19,17 +19,24 @@ namespace Carbon.Platform.Computing
             ApplicationProtocal protocal,
             ushort port,
             ManagedResource resource,
-            long? certificateId = null
+            JsonObject properties
         )
         {
-            Id            = id;
-            Protocal      = protocal;
-            Port          = port;
-            CertificateId = certificateId;
+            #region Preconditions
+
+            if (id <= 0)
+                throw new ArgumentException("Must be > 0", nameof(id));
+
+            #endregion
+
+            Id         = id;
+            Protocal   = protocal;
+            Port       = port;
 
             ProviderId = resource.ProviderId;
             ResourceId = resource.ResourceId;
             LocationId = resource.LocationId;
+            Properties = properties; 
         }
 
         // loadBalancerId | #
@@ -42,9 +49,12 @@ namespace Carbon.Platform.Computing
 
         [Member("port")]
         public ushort Port { get; }
-     
-        [Member("certificateId")]
-        public long? CertificateId { get; }
+
+        [Member("properties")]
+        [StringLength(1000)]
+        public JsonObject Properties { get; set; }
+
+        // TODO: CertificateId
 
         public long LoadBalancerId => ScopedId.GetScope(Id);
 
@@ -57,7 +67,6 @@ namespace Carbon.Platform.Computing
         [Ascii, StringLength(120)]
         public string ResourceId { get; }
 
-        [IgnoreDataMember]
         [Member("locationId")]
         public int LocationId { get; }
 
@@ -69,15 +78,12 @@ namespace Carbon.Platform.Computing
 
         #region Timestamps
 
-        [IgnoreDataMember]
         [Member("created"), Timestamp]
         public DateTime Created { get; }
 
-        [IgnoreDataMember]
         [Member("deleted")]
         public DateTime? Deleted { get; }
 
-        [IgnoreDataMember]
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
       

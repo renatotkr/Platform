@@ -28,6 +28,9 @@ namespace Carbon.Platform.Networking
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
 
+            if (ownerId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(ownerId));
+
             #endregion
 
             Id             = id;
@@ -70,16 +73,13 @@ namespace Carbon.Platform.Networking
 
         #region IResource
 
-        [IgnoreDataMember]
         [Member("providerId")]
         public int ProviderId { get; }
 
-        [IgnoreDataMember]
         [Member("resourceId")]
         [Ascii, StringLength(100)]
         public string ResourceId { get; }
 
-        [IgnoreDataMember]
         [Member("locationId")]
         public int LocationId { get; }
 

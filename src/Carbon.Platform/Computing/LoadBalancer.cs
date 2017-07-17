@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 using Carbon.Json;
@@ -17,8 +16,8 @@ namespace Carbon.Platform.Computing
         public LoadBalancer(
             long id, 
             string name,
-            string address, 
             long ownerId,
+            string address,
             ManagedResource resource,
             long networkId = 0,
             JsonObject properties = null)
@@ -26,13 +25,22 @@ namespace Carbon.Platform.Computing
             #region Preconditions
 
             if (id <= 0)
-                throw new ArgumentException("Invalid", nameof(id));
+                throw new ArgumentException("Must be > 0", nameof(id));
+
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Required", nameof(name));
+
+            if (string.IsNullOrEmpty(address))
+                throw new ArgumentException("Required", nameof(address));
+
+            if (ownerId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(ownerId));
 
             #endregion
 
-            Id         = id;
+            Id = id;
             Name       = name;
-            Address    = address ?? throw new ArgumentNullException(nameof(address));
+            Address    = address;
             NetworkId  = networkId;
             OwnerId    = ownerId;
             ProviderId = resource.ProviderId;
@@ -62,15 +70,23 @@ namespace Carbon.Platform.Computing
         [StringLength(1000)]
         public JsonObject Properties { get; }
 
+        #region Stats
+
+        [Member("listenerCount")]
+        public int ListenerCount { get; }
+
+        [Member("ruleCount")]
+        public int RuleCount { get; }
+
+        #endregion
+
         #region IResource
 
-        [IgnoreDataMember]
         [Member("providerId")]
         public int ProviderId { get; }
 
         // app/my-load-balancer/50dc6c495c0c9188
 
-        [IgnoreDataMember]
         [Member("resourceId")]
         [Ascii, StringLength(100)]
         public string ResourceId { get; }
