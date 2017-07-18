@@ -8,6 +8,8 @@ using Carbon.Platform.Sequences;
 
 namespace Carbon.Rds.Services
 {
+    using static Expression;
+
     public class DatabaseGrantService : IDatabaseGrantService
     {
         private readonly RdsDb db;
@@ -29,10 +31,17 @@ namespace Carbon.Rds.Services
             var range = ScopedId.GetRange(database.Id);
 
             return db.DatabaseGrants.QueryAsync(
-                Expression.And(Expression.Between("id", range.Start, range.End), Expression.IsNotNull("deleted"))
+                And(Between("id", range.Start, range.End), IsNull("deleted"))
             );
         }
-      
+
+        public Task<IReadOnlyList<DatabaseGrant>> ListAsync(long userId) // IUser user
+        {
+            return db.DatabaseGrants.QueryAsync(
+                And(Eq("userId", userId), IsNull("deleted"))
+            );
+        }
+
         public async Task<DatabaseGrant> CreateAsync(CreateDatabaseGrantRequest request)
         {
             #region Preconditions
@@ -48,8 +57,7 @@ namespace Carbon.Rds.Services
                 id         : grantId,
                 databaseId : request.DatabaseId,
                 userId     : request.UserId,
-                schemaName : request.Resource.SchemaName,
-                tableName  : request.Resource.TableName,
+                resource   : request.Resource,
                 actions    : request.Actions
             );
 
@@ -57,7 +65,6 @@ namespace Carbon.Rds.Services
 
             return grant;
         }
-
 
         public async Task DeleteAsync(IDatabaseGrant grant)
         {
@@ -69,7 +76,7 @@ namespace Carbon.Rds.Services
             #endregion
 
             await db.DatabaseGrants.PatchAsync(grant.Id, new[] {
-                Change.Replace("deleted", Expression.Func("NOW"))
+                Change.Replace("deleted", Func("NOW"))
             });
         }
     }

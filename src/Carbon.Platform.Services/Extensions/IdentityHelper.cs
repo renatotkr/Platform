@@ -16,7 +16,7 @@ namespace Carbon.Platform
             // should be max id in range...
             var count = await dataset.CountAsync(
                 Expression.Between("id", range.Start, range.End)
-            ).ConfigureAwait(false);
+            );
 
             return ScopedId.Create(scopeId, count);
         }

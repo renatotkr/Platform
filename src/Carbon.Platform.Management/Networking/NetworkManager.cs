@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Carbon.Platform.Resources;
@@ -25,13 +26,27 @@ namespace Carbon.Platform.Networking
             this.ec2Client      = ec2Client      ?? throw new ArgumentNullException(nameof(ec2Client));
         }
 
+        private async Task<IReadOnlyList<NetworkInfo>> SyncAsync()
+        {
+            var vpcs = await ec2Client.DescribeVpcsAsync(new DescribeVpcsRequest());
+
+            var networks = new List<NetworkInfo>();
+
+            foreach (var vpc in vpcs.Vpcs)
+            {
+                networks.Add(await GetAsync(vpc.VpcId));
+            }
+
+            return networks;
+        }
+
         private async Task<NetworkInfo> GetAsync(string vpcId)
         {
-            var network = await networkService.FindAsync(Aws, vpcId).ConfigureAwait(false);
+            var network = await networkService.FindAsync(Aws, vpcId);;
             
             if (network == null)
             {
-                var vpc = await ec2Client.DescribeVpcAsync(vpcId).ConfigureAwait(false)
+                var vpc = await ec2Client.DescribeVpcAsync(vpcId)
                     ?? throw ResourceError.NotFound(Aws, ResourceTypes.Network, vpcId);
 
                 var region = Locations.Get(Aws, ec2Client.Region.Name);
@@ -42,10 +57,12 @@ namespace Carbon.Platform.Networking
                     ownerId       : 1
                 );
 
+                // TODO: Sync the subnets & security groups
+
                 // TODO: Support ipv6 address blocks
 
                 // Register the network with the platform
-                network = await networkService.RegisterAsync(registerRequest).ConfigureAwait(false);
+                network = await networkService.RegisterAsync(registerRequest);;
             }
 
             return network;
@@ -53,16 +70,16 @@ namespace Carbon.Platform.Networking
 
         public async Task<SubnetInfo> GetSubnetAsync(ResourceProvider provider, string subnetId)
         {
-            var subnet = await subnetService.FindAsync(provider, subnetId).ConfigureAwait(false);
+            var subnet = await subnetService.FindAsync(provider, subnetId);;
 
             if (subnet == null)
             {
-                var awsSubnet = await ec2Client.DescribeSubnetAsync(subnetId).ConfigureAwait(false)
+                var awsSubnet = await ec2Client.DescribeSubnetAsync(subnetId)
                     ?? throw ResourceError.NotFound(Aws, ResourceTypes.Subnet, subnetId);
 
                 var location = Locations.Get(Aws, awsSubnet.AvailabilityZone);
 
-                var network = await networkService.GetAsync(Aws, awsSubnet.VpcId).ConfigureAwait(false);
+                var network = await networkService.GetAsync(Aws, awsSubnet.VpcId);;
                 
                 var createRequest = new RegisterSubnetRequest(
                     addressBlocks : new[] { awsSubnet.CidrBlock },
@@ -73,7 +90,7 @@ namespace Carbon.Platform.Networking
                 // TODO: Include the ipv6 address blocks
 
                 // Register the subnet with the platform
-                subnet = await subnetService.RegisterAsync(createRequest).ConfigureAwait(false);
+                subnet = await subnetService.RegisterAsync(createRequest);;
             }
 
             return subnet;

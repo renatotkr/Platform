@@ -24,7 +24,7 @@ namespace Carbon.Platform.Computing
             this.programService = programService ?? throw new ArgumentNullException(nameof(programService));
         }
 
-        public async Task<ProgramRelease> CreateAsync(CreateProgramReleaseRequest request)
+        public async Task<ProgramRelease> CreateAsync(RegisterProgramReleaseRequest request)
         {
             #region Preconditions
 
@@ -44,17 +44,17 @@ namespace Carbon.Platform.Computing
                 program    : request.Program,
                 version    : request.Version,
                 properties : request.Properties,
-                commitId   : request.Commit?.Id ?? 0,
+                commitId   : request.CommitId,
                 creatorId  : request.CreatorId
             );
 
-            await db.ProgramReleases.InsertAsync(release).ConfigureAwait(false);
+            await db.ProgramReleases.InsertAsync(release);
 
             if (request.Version > program.Version)
             {
                 await db.Programs.PatchAsync(release.ProgramId, changes: new[] {
                     Change.Replace("version", release.Version)
-                }).ConfigureAwait(false);
+                });
             }
 
             return release;
@@ -91,7 +91,7 @@ namespace Carbon.Platform.Computing
         {
             using (var connection = await context.GetConnectionAsync())
             {
-                var currentReleaseCount = await connection.ExecuteScalarAsync<int>(sql, new { id = programId }).ConfigureAwait(false);
+                var currentReleaseCount = await connection.ExecuteScalarAsync<int>(sql, new { id = programId });
 
                 return ScopedId.Create(programId, currentReleaseCount + 1);
             }

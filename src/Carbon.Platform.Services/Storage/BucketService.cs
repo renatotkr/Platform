@@ -34,7 +34,7 @@ namespace Carbon.Platform.Storage
                 resource : request.Resource
             );
 
-            await db.Buckets.InsertAsync(bucket).ConfigureAwait(false);
+            await db.Buckets.InsertAsync(bucket);
 
             return bucket;
         }

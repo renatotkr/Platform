@@ -50,7 +50,7 @@ namespace Carbon.Platform.Computing
             Version      = version;
             RepositoryId = repositoryId;
             ParentId     = parentId;
-            Properties = properties ?? new JsonObject();
+            Properties   = properties ?? new JsonObject();
         }
 
         [Member("id"), Key(sequenceName: "programId")]
@@ -79,15 +79,14 @@ namespace Carbon.Platform.Computing
         [StringLength(200)]
         public string[] Addresses { get; }
 
-        [Member("version")]
-        public SemanticVersion Version { get; }
-
-        // a site is "run" by an application
         [Member("parentId")]
         public long? ParentId { get; }
 
         [Member("repositoryId")]
         public long? RepositoryId { get; }
+
+        [Member("version")]
+        public SemanticVersion Version { get; }
 
         [Member("properties")]
         [StringLength(1000)]

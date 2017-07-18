@@ -7,11 +7,10 @@ namespace Carbon.Platform.Computing
 {
     public class CreateClusterRequest
     {
-        public CreateClusterRequest() { }
-
         public CreateClusterRequest(
             IEnvironment environment, 
             ILocation location,
+            IHostTemplate hostTemplate,
             JsonObject properties = null)
         {
             #region Preconditions
@@ -21,25 +20,26 @@ namespace Carbon.Platform.Computing
 
             if (location == null)
                 throw new ArgumentNullException(nameof(location));
-
+            
             #endregion
 
             EnvironmentId = environment.Id;
             LocationId    = location.Id;
             Name          = environment.Name + "/" + location.Name;
+            HostTemplate  = hostTemplate;
             Properties    = properties ?? new JsonObject();
         }
 
-        public string Name { get; set; }
+        public string Name { get; }
 
-        public long EnvironmentId { get; set; }
+        public long EnvironmentId { get; }
 
-        public int LocationId { get; set; }
+        public int LocationId { get; }
 
-        public long? HostTemplateId { get; set; }
+        public IHostTemplate HostTemplate { get; }
 
         public long? HealthCheckId { get; set; }
 
-        public JsonObject Properties { get; set; }
+        public JsonObject Properties { get; }
     }
 }

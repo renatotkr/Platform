@@ -32,7 +32,7 @@ namespace Carbon.Platform.Networking
 
         public async Task<NetworkInterfaceInfo> FindAsync(ResourceProvider provider, string id)
         {
-            return await db.NetworkInterfaces.FindAsync(provider, id).ConfigureAwait(false);
+            return await db.NetworkInterfaces.FindAsync(provider, id);
         }
 
         public async Task<NetworkInterfaceInfo> RegisterAsync(RegisterNetworkInterfaceRequest request)
@@ -52,7 +52,7 @@ namespace Carbon.Platform.Networking
                 resource         : request.Resource
             );
 
-            await db.NetworkInterfaces.InsertAsync(nic).ConfigureAwait(false);
+            await db.NetworkInterfaces.InsertAsync(nic);
 
             return nic;
         }

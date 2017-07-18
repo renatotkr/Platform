@@ -41,7 +41,7 @@ namespace Carbon.Platform.Networking
 
         public async Task<NetworkInfo> FindAsync(ResourceProvider provider, string resourceId)
         {
-            return await db.Networks.FindAsync(provider, resourceId).ConfigureAwait(false);
+            return await db.Networks.FindAsync(provider, resourceId);
         }
 
         public async Task<NetworkInfo> RegisterAsync(RegisterNetworkAsync request)
@@ -59,7 +59,7 @@ namespace Carbon.Platform.Networking
                 resource      : request.Resource
             );
             
-            await db.Networks.InsertAsync(network).ConfigureAwait(false);
+            await db.Networks.InsertAsync(network);
 
             return network;
         }

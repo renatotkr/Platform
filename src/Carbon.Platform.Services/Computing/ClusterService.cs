@@ -31,6 +31,7 @@ namespace Carbon.Platform.Computing
             return db.Clusters.QueryAsync(Eq("environmentId", environment.Id));
         }
 
+      
         public async Task<Cluster> CreateAsync(CreateClusterRequest request)
         {
             #region Preconditions
@@ -47,7 +48,7 @@ namespace Carbon.Platform.Computing
                locationId     : request.LocationId,
                properties     : request.Properties,
                healthCheckId  : request.HealthCheckId,
-               hostTemplateId : request.HostTemplateId
+               hostTemplateId : request.HostTemplate.Id
             );
 
             await db.Clusters.InsertAsync(cluster);
@@ -75,7 +76,7 @@ namespace Carbon.Platform.Computing
 
             var group = await db.Clusters.QueryFirstOrDefaultAsync(
                 And(Eq("environmentId", environment.Id), Eq("locationId", location.Id))
-            ).ConfigureAwait(false);
+            );
             
             if (group == null || group.Deleted != null)
             {

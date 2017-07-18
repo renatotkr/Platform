@@ -15,6 +15,7 @@ namespace Carbon.Platform.Computing
             string runtime,
             string[] addresses,
             ProgramType type = ProgramType.App,
+            long? repositoryId = null,
             long? parentId = null)
         {
             #region Preconditions
@@ -25,12 +26,13 @@ namespace Carbon.Platform.Computing
 
             #endregion
 
-            Name      = name;
-            OwnerId   = ownerId;
-            Addresses = addresses;
-            Runtime   = runtime;
-            Type      = type;
-            ParentId  = parentId;
+            Name         = name;
+            OwnerId      = ownerId;
+            Addresses    = addresses;
+            Runtime      = runtime;
+            Type         = type;
+            RepositoryId = repositoryId;
+            ParentId     = parentId;
         }
 
         [Required, StringLength(100)]
@@ -47,11 +49,13 @@ namespace Carbon.Platform.Computing
         [StringLength(63)]
         public string Slug { get; set; }
         
-        public JsonObject Properties { get; set; }
-
         public long? ParentId { get; set; }
+
+        public long? RepositoryId { get; set; }
         
         [Range(1, 2_199_023_255_552)]
         public long OwnerId { get; set; }
+
+        public JsonObject Properties { get; set; }
     }
 }

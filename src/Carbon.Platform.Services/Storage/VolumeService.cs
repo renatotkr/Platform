@@ -51,7 +51,7 @@ namespace Carbon.Platform.Storage
                 hostId   : request.HostId
             );
 
-            await db.Volumes.InsertAsync(volume).ConfigureAwait(false);
+            await db.Volumes.InsertAsync(volume);
 
             return volume;
         }

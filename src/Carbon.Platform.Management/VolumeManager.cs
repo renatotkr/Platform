@@ -25,13 +25,13 @@ namespace Carbon.Platform.Services
             string resourceId,
             IHost host = null)
         {
-            var volume = await volumes.FindAsync(provider, resourceId).ConfigureAwait(false);
+            var volume = await volumes.FindAsync(provider, resourceId);;
             
             // If the volume isn't register, register it now...
 
             if (volume == null)
             {
-                var ec2Volume = await ec2.DescribeVolumeAsync(resourceId).ConfigureAwait(false);
+                var ec2Volume = await ec2.DescribeVolumeAsync(resourceId);;
 
                 var location = Locations.Get(provider, ec2Volume.AvailabilityZone);
 
@@ -40,7 +40,7 @@ namespace Carbon.Platform.Services
                     Resource = ManagedResource.Volume(location, ec2Volume.VolumeId)
                 };
 
-                volume = await volumes.RegisterAsync(registerRequest).ConfigureAwait(false);
+                volume = await volumes.RegisterAsync(registerRequest);;
             }
 
             return volume;

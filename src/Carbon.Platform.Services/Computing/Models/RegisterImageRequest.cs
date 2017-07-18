@@ -1,33 +1,45 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-
+using Carbon.Json;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
     public class RegisterImageRequest
     {
-        public RegisterImageRequest() { }
-
         public RegisterImageRequest(
             string name,
+            long ownerId,
             ManagedResource resource,
-            ImageType type = ImageType.Machine)
+            ImageType type = ImageType.Machine,
+            JsonObject properties = null)
         {
-            Name     = name ?? throw new ArgumentNullException(nameof(name));
-            Resource = resource;
-            Type     = type;
+            #region Preconditions
+
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Required", nameof(name));
+
+            if (ownerId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(ownerId));
+
+            #endregion
+
+            Name       = name;
+            OwnerId    = ownerId;
+            Resource   = resource;
+            Type       = type;
+            Properties = properties;
         }
         
-        [Required]
-        public string Name { get; set; }
+        public string Name { get; }
 
-        public long OwnerId { get; set; }
+        public long OwnerId { get; }
 
-        public long Size { get; set; }
+        public long Size { get; }
 
-        public ImageType Type { get; set; } = ImageType.Machine;
+        public ImageType Type { get; }
 
-        public ManagedResource Resource { get; set; }
+        public ManagedResource Resource { get; }
+
+        public JsonObject Properties { get; }
     }    
 }

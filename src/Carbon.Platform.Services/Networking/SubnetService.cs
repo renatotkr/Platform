@@ -37,7 +37,7 @@ namespace Carbon.Platform.Networking
 
         public async Task<SubnetInfo> FindAsync(ResourceProvider provider, string resourceId)
         {
-            return await db.Subnets.FindAsync(provider, resourceId).ConfigureAwait(false);
+            return await db.Subnets.FindAsync(provider, resourceId);
         }
 
         public async Task<SubnetInfo> RegisterAsync(RegisterSubnetRequest request)
@@ -56,7 +56,7 @@ namespace Carbon.Platform.Networking
                 resource      : request.Resource
             );
 
-            await db.Subnets.InsertAsync(subnet).ConfigureAwait(false);
+            await db.Subnets.InsertAsync(subnet);
 
             return subnet;
         }

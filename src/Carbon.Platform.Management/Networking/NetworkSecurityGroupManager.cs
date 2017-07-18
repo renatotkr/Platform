@@ -30,7 +30,7 @@ namespace Carbon.Platform.Networking
 
             var region = Locations.Get(network.LocationId);
 
-            var nsg = await nsgService.FindAsync(ResourceProvider.Aws, group.GroupId).ConfigureAwait(false);
+            var nsg = await nsgService.FindAsync(ResourceProvider.Aws, group.GroupId);;
 
             if (nsg == null)
             {
@@ -40,7 +40,7 @@ namespace Carbon.Platform.Networking
                     resource  : ManagedResource.NetworkSecurityGroup(region, group.GroupId)
                 );
 
-                nsg = await nsgService.RegisterAsync(registerRequest).ConfigureAwait(false);
+                nsg = await nsgService.RegisterAsync(registerRequest);;
             }
 
             return nsg;

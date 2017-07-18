@@ -1,5 +1,7 @@
 ﻿using System.Runtime.Serialization;
 
+using Carbon.Platform.Storage;
+
 using Carbon.Versioning;
 
 namespace Carbon.Platform.Computing
@@ -23,6 +25,9 @@ namespace Carbon.Platform.Computing
 
         [DataMember(Name = "addresses")]
         public string[] Addresses { get; set; }
+        
+        [DataMember(Name = "repository")]
+        public RepositoryDetails Repository { get; set; }
 
         [DataMember(Name = "ownerId", EmitDefaultValue = false)]
         public long OwnerId { get; set; }

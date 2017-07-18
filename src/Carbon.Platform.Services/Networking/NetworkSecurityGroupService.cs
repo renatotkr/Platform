@@ -22,7 +22,7 @@ namespace Carbon.Platform.Networking
 
         public async Task<NetworkSecurityGroup> FindAsync(ResourceProvider provider, string resourceId)
         {
-            return await db.NetworkSecurityGroups.FindAsync(provider, resourceId).ConfigureAwait(false);
+            return await db.NetworkSecurityGroups.FindAsync(provider, resourceId);
         }
 
         public async Task<NetworkSecurityGroup> RegisterAsync(RegisterNetworkSecurityGroupRequest request)
@@ -33,7 +33,7 @@ namespace Carbon.Platform.Networking
 
             #endregion
 
-            var id = await db.NetworkSecurityGroups.GetNextScopedIdAsync(request.NetworkId).ConfigureAwait(false);
+            var id = await db.NetworkSecurityGroups.GetNextScopedIdAsync(request.NetworkId);
 
             var nsg = new NetworkSecurityGroup(
                 id       : id,
@@ -41,7 +41,7 @@ namespace Carbon.Platform.Networking
                 resource : request.Resource
             );
 
-            await db.NetworkSecurityGroups.InsertAsync(nsg).ConfigureAwait(false);
+            await db.NetworkSecurityGroups.InsertAsync(nsg);
 
             return nsg;
         }

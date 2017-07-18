@@ -28,11 +28,11 @@ namespace Carbon.Platform.Management
 
         private readonly IHostService hostService;
         private readonly IClusterService clusterService;
-        private readonly IImageService images;
-        private readonly IEventLogger log;
+        private readonly IImageService imageService;
+        private readonly IEventLogger eventLog;
         private readonly PlatformDb db;
 
-        public HostManager(IAwsCredential credential, PlatformDb db, IEventLogger log)
+        public HostManager(IAwsCredential credential, PlatformDb db, IEventLogger eventLog)
         {
             #region Precondtions
 
@@ -42,7 +42,7 @@ namespace Carbon.Platform.Management
             #endregion
 
             this.db  = db  ?? throw new ArgumentNullException(nameof(db));
-            this.log = log ?? throw new ArgumentNullException(nameof(log));
+            this.eventLog = eventLog ?? throw new ArgumentNullException(nameof(eventLog));
 
             ec2 = new Ec2Client(AwsRegion.USEast1, credential);
             ssm = new SsmClient(AwsRegion.USEast1, credential);
@@ -50,7 +50,7 @@ namespace Carbon.Platform.Management
 
             this.hostService    = new HostService(db);
             this.clusterService = new ClusterService(db);
-            this.images         = new ImageService(db);
+            this.imageService   = new ImageService(db);
         }
 
         public async Task<HostInfo> RegisterAsync(RegisterHostRequest request)
@@ -64,24 +64,19 @@ namespace Carbon.Platform.Management
 
             var provider = ResourceProvider.Get(request.Resource.ProviderId);
 
-            var host = await hostService.FindAsync(provider, request.Resource.ResourceId).ConfigureAwait(false);
+            var host = await hostService.FindAsync(provider, request.Resource.ResourceId);;
 
             ICluster cluster = request.ClusterId != 0
                 ? await clusterService.GetAsync(request.ClusterId)
                 : null;
-
-            if (request.NetworkId != 0)
-            {
-                // Ensure the network exists
-            }
-
+           
             if (host == null)
             {
-                host = await hostService.RegisterAsync(request).ConfigureAwait(false);
+                host = await hostService.RegisterAsync(request);;
             }
             else
             {
-                await TransitionStateAsync(host, request.Status).ConfigureAwait(false);
+                await TransitionStateAsync(host, request.Status);;
             }
 
             return host;
@@ -103,16 +98,11 @@ namespace Carbon.Platform.Management
             // TODO:
             // if the location is a region, select the avaiability zone with the least hosts
 
-            if (cluster.HostTemplateId == null)
-            {
-                throw new Exception("The cluster does not specify a template");
-            }
-
-            var template = await db.HostTemplates.FindAsync(cluster.HostTemplateId.Value);
+            var template = await db.HostTemplates.FindAsync(cluster.HostTemplateId);
 
             var request = new LaunchHostRequest(cluster, zone, template);
 
-            return await LaunchAsync(request, context).ConfigureAwait(false);
+            return await LaunchAsync(request, context);;
         }
 
         public async Task<IHost[]> LaunchAsync(LaunchHostRequest launchRequest, ISecurityContext context)
@@ -140,7 +130,7 @@ namespace Carbon.Platform.Management
             
             var region = Locations.Get(zoneId.WithZoneNumber(0));
 
-            var image = await images.GetAsync(template.ImageId).ConfigureAwait(false);
+            var image = await imageService.GetAsync(template.ImageId);;
 
             var machineType = AwsInstanceType.Get(template.MachineTypeId);
 
@@ -202,7 +192,7 @@ namespace Carbon.Platform.Management
                         break;
 
                     case HostTemplateProperties.Volume:
-                        var volSpec = property.Value.As<VolumeSpec>();
+                        var volSpec = property.Value.As<AwsVolumeSpecification>();
 
                         // TODO: Device Name
                         request.BlockDeviceMappings = new[] {
@@ -223,7 +213,7 @@ namespace Carbon.Platform.Management
 
             #endregion
 
-            var runInstancesResponse = await ec2.RunInstancesAsync(request).ConfigureAwait(false);
+            var runInstancesResponse = await ec2.RunInstancesAsync(request);;
 
             var hosts = new IHost[runInstancesResponse.Instances.Length];
             
@@ -236,16 +226,16 @@ namespace Carbon.Platform.Management
                     machineType  : machineType, 
                     location     : zone);
 
-                hosts[i] = await hostService.RegisterAsync(registerRequest).ConfigureAwait(false);
+                hosts[i] = await hostService.RegisterAsync(registerRequest);;
             }
 
             #region Logging
 
-            await log.CreateAsync(new Event(
+            await eventLog.CreateAsync(new Event(
                 action   : "launch",
                 resource : "hosts",
                 userId   : context.UserId)
-            ).ConfigureAwait(false);
+            );;
 
             #endregion
 
@@ -263,18 +253,18 @@ namespace Carbon.Platform.Management
 
             if (host.Status == HostStatus.Pending && newStatus == HostStatus.Running)
             {
-                var cluster = await clusterService.GetAsync(host.ClusterId).ConfigureAwait(false);
+                var cluster = await clusterService.GetAsync(host.ClusterId);;
 
                 if (cluster.Properties.ContainsKey(ClusterProperties.TargetGroupArn))
                 {
-                    await RegisterWithTargetGroupAsync(host, cluster).ConfigureAwait(false);
+                    await RegisterWithTargetGroupAsync(host, cluster);;
                 }
 
                 await db.Hosts.PatchAsync(host.Id, new[] {
-                    Change.Replace("status", host.Status)
-                }).ConfigureAwait(false);
+                    Change.Replace("status", newStatus)
+                });;
 
-                await log.CreateAsync(new Event(
+                await eventLog.CreateAsync(new Event(
                     action   : "update",
                     resource : "host#" + host.Id,
                     properties: JsonObject.FromObject(new {
@@ -285,7 +275,7 @@ namespace Carbon.Platform.Management
                             }
                         }
                     })
-                )).ConfigureAwait(false);
+                ));;
             }
         }
 
@@ -299,10 +289,10 @@ namespace Carbon.Platform.Management
             // Register the instances with the lb's target group
             await elb.RegisterTargetsAsync(targetRegistration);
 
-            await log.CreateAsync(new Event(
+            await eventLog.CreateAsync(new Event(
                 action   : "addToLoadBalancerTargetGroup",
                 resource : "host#" + host.Id
-            )).ConfigureAwait(false);
+            ));;
         }
 
         public async Task TerminateHostAsync(HostInfo host, TimeSpan cooldown, ISecurityContext context)
@@ -335,15 +325,15 @@ namespace Carbon.Platform.Management
 
             var request = new TerminateInstancesRequest(host.ResourceId);
 
-            await ec2.TerminateInstancesAsync(request).ConfigureAwait(false);
+            await ec2.TerminateInstancesAsync(request);;
 
             #region Logging
 
-            await log.CreateAsync(new Event(
+            await eventLog.CreateAsync(new Event(
                 action   : "terminate",
                 resource : "host#" + host.Id,
                 userId   : context.UserId)
-            ).ConfigureAwait(false);
+            );;
 
             #endregion
         }
@@ -387,12 +377,12 @@ namespace Carbon.Platform.Management
 
             #endregion
 
-            var ec2Instance = await ec2.DescribeInstanceAsync(instanceId).ConfigureAwait(false) 
-                ?? throw new ResourceNotFoundException(resource: $"aws:host/{instanceId}");
+            var ec2Instance = await ec2.DescribeInstanceAsync(instanceId)
+                ?? throw ResourceError.NotFound(ResourceProvider.Aws, ResourceTypes.Host, instanceId);
 
             var request = await GetRegistrationAsync(ec2Instance, cluster);
 
-            return await hostService.RegisterAsync(request).ConfigureAwait(false);
+            return await hostService.RegisterAsync(request);;
         }
 
         private static readonly ResourceProvider aws = ResourceProvider.Aws;
@@ -426,7 +416,7 @@ namespace Carbon.Platform.Management
             {
                 // "imageId": "ami-1647537c",
                 
-                image = await images.GetAsync(aws, instance.ImageId).ConfigureAwait(false);
+                image = await imageService.GetAsync(aws, instance.ImageId);;
             }
 
             if (machineType == null)
@@ -434,7 +424,7 @@ namespace Carbon.Platform.Management
                 machineType = AwsInstanceType.Get(instance.InstanceType);
             }
 
-            var network = await db.Networks.FindAsync(aws, instance.VpcId).ConfigureAwait(false);
+            var network = await db.Networks.FindAsync(aws, instance.VpcId);;
 
             #endregion
 

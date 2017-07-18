@@ -64,19 +64,20 @@ namespace Carbon.Platform.Computing
             #endregion
 
             var program = new ProgramInfo(
-                id         : await db.Programs.Sequence.NextAsync(),
-                type       : request.Type,
-                name       : request.Name,
-                slug       : request.Slug,
-                version    : request.Version,
-                properties : request.Properties,
-                runtime    : request.Runtime,
-                addresses  : request.Addresses,
-                ownerId    : request.OwnerId,
-                parentId   : request.ParentId
+                id           : await db.Programs.Sequence.NextAsync(),
+                type         : request.Type,
+                name         : request.Name,
+                slug         : request.Slug,
+                version      : request.Version,
+                properties   : request.Properties,
+                runtime      : request.Runtime,
+                addresses    : request.Addresses,
+                repositoryId : request.RepositoryId,
+                ownerId      : request.OwnerId,
+                parentId     : request.ParentId
             );
             
-            await db.Programs.InsertAsync(program).ConfigureAwait(false);
+            await db.Programs.InsertAsync(program);
             
             return program;
         }

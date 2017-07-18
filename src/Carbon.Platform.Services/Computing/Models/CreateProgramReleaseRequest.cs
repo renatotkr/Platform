@@ -2,20 +2,18 @@
 using System.ComponentModel.DataAnnotations;
 
 using Carbon.Json;
-using Carbon.Platform.Storage;
 using Carbon.Versioning;
 
 namespace Carbon.Platform.Computing
 {
-    public class CreateProgramReleaseRequest
+    public class RegisterProgramReleaseRequest
     {
-        public CreateProgramReleaseRequest() { }
-
-        public CreateProgramReleaseRequest(
+        public RegisterProgramReleaseRequest(
             IProgram program, 
             SemanticVersion version,
-            JsonObject properties,
-            long creatorId)
+            long commitId,
+            long creatorId,
+            JsonObject properties = null)
         {
             #region Preconditions
 
@@ -25,20 +23,21 @@ namespace Carbon.Platform.Computing
 
             Program    = program ?? throw new ArgumentNullException(nameof(program));
             Version    = version;
-            Properties = properties ?? new JsonObject();
             CreatorId  = creatorId;
+            CommitId   = commitId;
+            Properties = properties ?? new JsonObject();
         }
 
         [Required]
-        public IProgram Program { get; set; }
+        public IProgram Program { get; }
 
-        public SemanticVersion Version { get; set; }
+        public SemanticVersion Version { get; }
 
-        public IRepositoryCommit Commit { get; set; }
-
-        public JsonObject Properties { get; set; }
+        public long CommitId { get; }
 
         [Range(1, 2_199_023_255_552)]
-        public long CreatorId { get; set; }
+        public long CreatorId { get; }
+
+        public JsonObject Properties { get; }
     }
 }

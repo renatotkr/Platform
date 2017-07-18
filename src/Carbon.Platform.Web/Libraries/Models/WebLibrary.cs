@@ -20,18 +20,18 @@ namespace Carbon.Platform.Web
             Version  = version;
         }
 
-        public WebLibrary(string name, SemanticVersion version, IRepositoryCommit commit)
+        public WebLibrary(string name, SemanticVersion version, long commitId)
         {
             #region Preconditions
             
-            if (commit == null)
-                throw new ArgumentNullException(nameof(commit));
+            if (commitId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(commitId));
 
             #endregion
 
             Name     = name ?? throw new ArgumentNullException(nameof(name));
             Version  = version;
-            CommitId = commit.Id;
+            CommitId = commitId;
         }
 
         [Member("name"), Key]

@@ -55,7 +55,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<HostInfo> FindAsync(ResourceProvider provider, string resourceId)
         {
-            return await db.Hosts.FindAsync(provider, resourceId).ConfigureAwait(false);
+            return await db.Hosts.FindAsync(provider, resourceId);
         }
 
         public Task<IReadOnlyList<HostInfo>> ListAsync()
@@ -126,11 +126,10 @@ namespace Carbon.Platform.Computing
                 resource      : request.Resource,
                 environmentId : request.EnvironmentId,
                 machineTypeId : request.MachineTypeId,
-                networkId     : request.NetworkId,
                 ownerId       : request.OwnerId
             );
         
-            await db.Hosts.InsertAsync(host).ConfigureAwait(false);
+            await db.Hosts.InsertAsync(host);
 
             return host;
         }
@@ -165,21 +164,21 @@ namespace Carbon.Platform.Computing
 
             #endregion
 
-            ILocation location = await db.Locations.FindAsync(locationId.Value).ConfigureAwait(false);
+            ILocation location = await db.Locations.FindAsync(locationId.Value);
 
             // Ensure the location exists
             if (location == null)
             {
                 location = Locations.Get(locationId);
 
-                await db.Locations.InsertAsync(new LocationInfo(location.Id, location.Name)).ConfigureAwait(false);
+                await db.Locations.InsertAsync(new LocationInfo(location.Id, location.Name));
             }
 
             int currentHostCount;
 
             using (var connection = await db.Context.GetConnectionAsync())
             {
-                currentHostCount = await connection.ExecuteScalarAsync<int>(nextIdSql, location).ConfigureAwait(false);
+                currentHostCount = await connection.ExecuteScalarAsync<int>(nextIdSql, location);
             }
 
             return HostId.Create(locationId, currentHostCount + 1);

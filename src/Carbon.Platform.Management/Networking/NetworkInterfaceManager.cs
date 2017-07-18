@@ -35,25 +35,25 @@ namespace Carbon.Platform.Networking
        
         public async Task<NetworkInterfaceInfo> GetAsync(ResourceProvider provider, string resourceId)
         {
-            var record = await networkInterfaces.FindAsync(provider, resourceId).ConfigureAwait(false);
+            var record = await networkInterfaces.FindAsync(provider, resourceId);;
 
             if (record == null)
             {
-                var nic = await ec2.DescribeNetworkInterfaceAsync(resourceId).ConfigureAwait(false)
+                var nic = await ec2.DescribeNetworkInterfaceAsync(resourceId)
                     ?? throw ResourceError.NotFound(Aws, ResourceTypes.NetworkInterface, resourceId);
 
                 var network = await networks.GetAsync(Aws, nic.VpcId);
                 var region = Locations.Get(network.LocationId);
 
                 SubnetInfo subnet = nic.SubnetId != null
-                   ? await subnetService.FindAsync(Aws, nic.SubnetId).ConfigureAwait(false)
+                   ? await subnetService.FindAsync(Aws, nic.SubnetId)
                    : null;
 
                 var securityGroupIds = new long[nic.Groups.Length];
                 
-                for(var i = 0;  i < securityGroupIds.Length; i++)
+                for (var i = 0;  i < securityGroupIds.Length; i++)
                 {
-                    var nsg = await nsgManager.GetAsync(network, nic.Groups[i]).ConfigureAwait(false);
+                    var nsg = await nsgManager.GetAsync(network, nic.Groups[i]);;
 
                     securityGroupIds[i] = nsg.Id;
                 }
@@ -67,7 +67,7 @@ namespace Carbon.Platform.Networking
                     resource         : new ManagedResource(Aws, ResourceTypes.NetworkInterface, nic.NetworkInterfaceId)
                 );
 
-                record = await networkInterfaces.RegisterAsync(registerRequest).ConfigureAwait(false);
+                record = await networkInterfaces.RegisterAsync(registerRequest);;
             }
 
             return record;

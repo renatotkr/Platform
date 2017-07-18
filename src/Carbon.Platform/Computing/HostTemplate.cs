@@ -10,9 +10,6 @@ namespace Carbon.Platform.Computing
     [UniqueIndex("ownerId", "name")]
     public class HostTemplate : IHostTemplate
     {
-        private IImage image;
-        private IMachineType machineType;
-
         public HostTemplate() { }
         
         public HostTemplate(

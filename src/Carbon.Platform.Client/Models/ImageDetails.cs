@@ -14,7 +14,10 @@ namespace Carbon.Platform.Computing
         [DataMember(Name = "name")]
         public string Name { get; set; }
 
-        [DataMember(Name = "name",  EmitDefaultValue = false)]
+        [DataMember(Name = "size", EmitDefaultValue = false)]
+        public long Size { get; set; }
+
+        [DataMember(Name = "name", EmitDefaultValue = false)]
         public ManagedResource Resource { get; set; }
 
         #region IResource

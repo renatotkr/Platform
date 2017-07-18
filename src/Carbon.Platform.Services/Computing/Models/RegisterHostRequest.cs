@@ -18,7 +18,6 @@ namespace Carbon.Platform.Computing
             IMachineType machineType,
             long ownerId,
             ManagedResource resource,
-            long networkId = 0,
             HostStatus status = HostStatus.Pending,
             HostType type = HostType.Virtual)
         {
@@ -28,7 +27,6 @@ namespace Carbon.Platform.Computing
             ClusterId     = cluster.Id;
             ImageId       = image.Id;
             MachineTypeId = machineType.Id;
-            NetworkId     = networkId;
             Status        = status;
             Resource      = resource;
             Type          = type;
@@ -51,8 +49,6 @@ namespace Carbon.Platform.Computing
         public long MachineTypeId { get; set; }
 
         public long ImageId { get; set; }
-
-        public long NetworkId { get; set; }
 
         public long ClusterId { get; set; }
 

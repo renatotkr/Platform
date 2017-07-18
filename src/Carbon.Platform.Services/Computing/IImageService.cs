@@ -9,7 +9,11 @@ namespace Carbon.Platform.Computing
 
         Task<ImageInfo> GetAsync(long id);
 
-        Task<ImageInfo> GetAsync(ResourceProvider provider, string resourceId); // bool autoRegister = true
+        Task<ImageInfo> GetAsync(long ownerId, string name);
+
+        Task<ImageInfo> GetAsync(ResourceProvider provider, string resourceId);
+
+        Task<bool> ExistsAsync(ResourceProvider provider, string resourceId);
 
         Task<ImageInfo> RegisterAsync(RegisterImageRequest request);
     }

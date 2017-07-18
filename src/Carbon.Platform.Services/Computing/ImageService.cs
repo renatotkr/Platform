@@ -6,6 +6,8 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
+    using static Expression;
+
     public class ImageService : IImageService
     {
         private readonly PlatformDb db;
@@ -17,7 +19,12 @@ namespace Carbon.Platform.Computing
 
         public Task<IReadOnlyList<ImageInfo>> ListAsync()
         {
-            return db.Images.QueryAsync(Expression.IsNull("deleted"));
+            return db.Images.QueryAsync(IsNull("deleted"));
+        }
+
+        public Task<IReadOnlyList<ImageInfo>> ListAsync(long ownerId)
+        {
+            return db.Images.QueryAsync(And(Eq("ownerId", ownerId), IsNull("deleted")));
         }
 
         public async Task<ImageInfo> GetAsync(long id)
@@ -26,9 +33,30 @@ namespace Carbon.Platform.Computing
                 ?? throw ResourceError.NotFound(ResourceTypes.Image, id);
         }
 
+        public async Task<ImageInfo> GetAsync(long ownerId, string name)
+        {
+            return await db.Images.QueryFirstOrDefaultAsync(
+                And(Eq("ownerId", ownerId), Eq("name", name))
+             ).ConfigureAwait(false) ?? throw ResourceError.NotFound(ResourceTypes.Image, ownerId, name);
+        }
+
+        public Task<bool> ExistsAsync(ResourceProvider provider, string resourceId)
+        {
+            return db.Images.ExistsAsync(
+                And(Eq("providerId", provider.Id), Eq("resourceId", resourceId))
+            );
+        }
+
         public async Task<ImageInfo> GetAsync(ResourceProvider provider, string resourceId)
         {
-            var image = await db.Images.FindAsync(provider, resourceId).ConfigureAwait(false);
+            #region Preconditions
+
+            if (resourceId == null)
+                throw new ArgumentNullException(nameof(resourceId));
+
+            #endregion
+
+            var image = await db.Images.FindAsync(provider, resourceId);
 
             if (image == null)
             {
@@ -36,11 +64,12 @@ namespace Carbon.Platform.Computing
 
                 var registerRequest = new RegisterImageRequest(
                     name     : Guid.NewGuid().ToString("N"),
+                    ownerId  : ResourceProvider.Aws.Id, // assume to be AWS for now
                     resource : new ManagedResource(provider, ResourceTypes.Image, resourceId),
                     type     : ImageType.Machine
                 );
 
-                image = await RegisterAsync(registerRequest).ConfigureAwait(false);
+                image = await RegisterAsync(registerRequest);
             }
 
             return image;
@@ -50,20 +79,22 @@ namespace Carbon.Platform.Computing
         {
             #region Preconditions
             
-            Validate.Object(request, nameof(request));
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
 
             #endregion
 
             var image = new ImageInfo(
-                id       : await db.Images.Sequence.NextAsync(),
-                type     : request.Type,
-                name     : request.Name,
-                size     : request.Size,
-                ownerId  : request.OwnerId,
-                resource : request.Resource
+                id         : await db.Images.Sequence.NextAsync(),
+                type       : request.Type,
+                name       : request.Name,
+                ownerId    : request.OwnerId,
+                size       : request.Size,
+                resource   : request.Resource,
+                properties : request.Properties
             );
 
-            await db.Images.InsertAsync(image).ConfigureAwait(false);
+            await db.Images.InsertAsync(image);
 
             return image;
         }

@@ -48,7 +48,7 @@ namespace Carbon.Platform.Computing
                 properties    : request.Properties
             );
 
-            await db.HostTemplates.InsertAsync(template).ConfigureAwait(false);
+            await db.HostTemplates.InsertAsync(template);
 
             return template;
         }

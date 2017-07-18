@@ -54,14 +54,6 @@ namespace Carbon.Platform.Services.Test
         }
 
         [Fact]
-        public void RepositoryDbKeysAndIndexesAreUnder767Bytes()
-        {
-            var database = new RepositoryDb(dbContext);
-
-            KeysAndIndexesAreUnder767Bytes(database);
-        }
-
-        [Fact]
         public void WebDbKeysAndIndexesAreUnder767Bytes()
         {
             var database = new WebDb(dbContext);

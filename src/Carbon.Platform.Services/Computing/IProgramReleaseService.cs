@@ -6,7 +6,7 @@ namespace Carbon.Platform.Computing
 {
     public interface IProgramReleaseService
     {
-        Task<ProgramRelease> CreateAsync(CreateProgramReleaseRequest request);
+        Task<ProgramRelease> CreateAsync(RegisterProgramReleaseRequest request);
 
         Task<ProgramRelease> GetAsync(long programId, SemanticVersion version);
 
