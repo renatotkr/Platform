@@ -6,7 +6,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.CI
 {
-    [Dataset("Builds", Schema = "Ciad")]
+    [Dataset("Builds", Schema = CiadDb.Name)]
     public class Build : IBuild, IManagedResource
     {
         public Build() { }

@@ -14,11 +14,11 @@ namespace Carbon.CI
             RepositoryId = repositoryId;
         }
 
+        public long OwnerId { get; set; }
+
         public string Name { get; set; }
 
         public long RepositoryId { get; set; }
-
-        public long OwnerId { get; set; }
 
         public ManagedResource Resource { get; set; }
     }

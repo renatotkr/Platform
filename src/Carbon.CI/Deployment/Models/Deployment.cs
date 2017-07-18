@@ -8,7 +8,7 @@ using Carbon.Versioning;
 
 namespace Carbon.CI
 {
-    [Dataset("Deployments", Schema = "Ciad")]
+    [Dataset("Deployments", Schema = CiadDb.Name)]
     public class Deployment : IDeployment, IResource
     {
         public Deployment() { }

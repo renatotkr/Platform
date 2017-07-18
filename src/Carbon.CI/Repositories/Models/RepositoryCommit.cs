@@ -3,11 +3,11 @@
 using Carbon.Data.Annotations;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.Storage
+namespace Carbon.CI
 {
-    [Dataset("RepositoryCommits", Schema = "Storage")]
+    [Dataset("RepositoryCommits", Schema = CiadDb.Name)]
     [UniqueIndex("repositoryId", "sha1")]
-    public class RepositoryCommit : IRepositoryCommit
+    public class RepositoryCommit : IRepositoryCommit, IResource
     {
         public RepositoryCommit() { }
 

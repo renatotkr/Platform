@@ -1,6 +1,7 @@
-﻿using Carbon.VersionControl;
+﻿using Carbon.Platform.Storage;
+using Carbon.VersionControl;
 
-namespace Carbon.Platform.Storage
+namespace Carbon.CI
 {
     public interface IRepositoryClientFactory
     {

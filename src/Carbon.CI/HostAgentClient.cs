@@ -88,6 +88,8 @@ namespace Carbon.CI
                 requestUri: url
             );
 
+            request.Headers.Host = host.Id.ToString() + ".carbon.host";
+
             request.Headers.Add("Authorization", "Bearer " + credential.Value);
 
             using (var response = await http.SendAsync(request))

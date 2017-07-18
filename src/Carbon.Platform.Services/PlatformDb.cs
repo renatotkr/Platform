@@ -36,7 +36,7 @@ namespace Carbon.Platform
             Hosts                 = new Dataset<HostInfo,                 long>(context);
             HostTemplates         = new Dataset<HostTemplate,             long>(context);
             HostPrograms          = new Dataset<HostProgram,       (long, long)>(context);
-            Images                = new Dataset<ImageInfo,                    long>(context);
+            Images                = new Dataset<ImageInfo,                long>(context);
             MachineTypes          = new Dataset<MachineType,              long>(context);
             Programs              = new Dataset<ProgramInfo,              long>(context);
             ProgramReleases       = new Dataset<ProgramRelease,           long>(context);
@@ -67,17 +67,16 @@ namespace Carbon.Platform
         public Dataset<EnvironmentInfo,      long> Environments          { get; }
         public Dataset<LocationInfo,         long> Locations             { get; }
 
-        public Dataset<EnvironmentProgram, (long, long)> EnvironmentPrograms { get; }
+        public Dataset<EnvironmentProgram, (long environmentId, long programId)> EnvironmentPrograms { get; }
 
         // Computing ------------------------------------------------------------
         public Dataset<HostInfo,             long> Hosts                 { get; }
         public Dataset<Cluster,              long> Clusters              { get; }
-        public Dataset<HostProgram,  (long, long)> HostPrograms          { get; }
+        public Dataset<HostProgram,  (long hostId, long programId)> HostPrograms { get; }
         public Dataset<HostTemplate,         long> HostTemplates         { get; }
         public Dataset<HealthCheck,          long> HealthChecks          { get; }
-        public Dataset<ImageInfo,                long> Images                { get; }
+        public Dataset<ImageInfo,            long> Images                { get; }
         public Dataset<MachineType,          long> MachineTypes          { get; }
-        // public Dataset<ProcessInfo,          long> Processes             { get; }
         public Dataset<ProgramInfo,          long> Programs              { get; }
         public Dataset<ProgramRelease,       long> ProgramReleases       { get; }
         public Dataset<VolumeInfo,           long> Volumes               { get; }

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Carbon.Platform.Storage
+namespace Carbon.CI
 {
     public interface IRepositoryCommitService
     {

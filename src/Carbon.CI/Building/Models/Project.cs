@@ -6,7 +6,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.CI
 {
-    [Dataset("Projects", Schema = "Ciad")]
+    [Dataset("Projects", Schema = CiadDb.Name)]
     [UniqueIndex("ownerId", "name")]
     public class ProjectInfo : IResource, IProject
     {

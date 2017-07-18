@@ -34,12 +34,15 @@ namespace Carbon.CI
             this.log               = eventLog          ?? throw new ArgumentNullException(nameof(eventLog));
         }
 
-        public async Task<ProgramRelease> CreateAsync(PublishProgramRequest request, ISecurityContext context)
+        public async Task<ProgramRelease> CreateAsync(CreateProgramReleaseRequest request, ISecurityContext context)
         {
             #region Preconditions
 
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
+
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
 
             #endregion
 
@@ -87,20 +90,21 @@ namespace Carbon.CI
                 }
             }
 
-            var release = await releaseService.CreateAsync(new CreateProgramReleaseRequest(
+            var release = await releaseService.CreateAsync(new RegisterProgramReleaseRequest(
                 program    : program,
                 version    : version,
                 properties : properties,
+                commitId   : request.Commit?.Id ?? 0L,
                 creatorId  : context.UserId.Value
             ));
 
             #region Logging
 
             await log.CreateAsync(new Event(
-                action   : "publish",
-                resource : "program#" + program.Id, 
-                userId   : context.UserId)
-            );
+                action   : "create",
+                resource : "program#" + program.Id + "@" + release.Version, 
+                userId   : context.UserId
+            ));
 
             #endregion
 

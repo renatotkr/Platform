@@ -4,11 +4,11 @@ using System.Runtime.Serialization;
 using Carbon.Data.Annotations;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.Storage
+namespace Carbon.CI
 {
-    [Dataset("RepositoryBranches", Schema = "Storage")]
+    [Dataset("RepositoryBranches", Schema = CiadDb.Name)]
     [UniqueIndex("repositoryId", "name")]
-    public class RepositoryBranch : IRepositoryBranch
+    public class RepositoryBranch : IRepositoryBranch, IResource
     {
         public RepositoryBranch() { }
 

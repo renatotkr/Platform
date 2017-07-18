@@ -2,7 +2,7 @@
 
 namespace Carbon.CI
 {
-    [Dataset("BuildArtifacts", Schema = "Ciad")]
+    [Dataset("BuildArtifacts", Schema = CiadDb.Name)]
     public class BuildArtifact
     {
         public BuildArtifact() { }

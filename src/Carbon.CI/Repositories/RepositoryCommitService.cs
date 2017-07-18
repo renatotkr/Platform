@@ -1,22 +1,17 @@
 ﻿using System;
 using System.Threading.Tasks;
-
-using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Platform.Resources;
-using Carbon.Platform.Sequences;
 
-using Dapper;
-
-namespace Carbon.Platform.Storage
+namespace Carbon.CI
 {
     using static Expression;
 
     public class RepositoryCommitService : IRepositoryCommitService
     {
-        private readonly RepositoryDb db;
+        private readonly CiadDb db;
 
-        public RepositoryCommitService(RepositoryDb db)
+        public RepositoryCommitService(CiadDb db)
         {
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
@@ -31,50 +26,33 @@ namespace Carbon.Platform.Storage
         {
             return await db.RepositoryCommits.QueryFirstOrDefaultAsync(
                 And(Eq("repositoryId", repositoryId), Eq("sha1", sha1))
-            ).ConfigureAwait(false);
+            );
         }
         
         public async Task<RepositoryCommit> CreateAsync(CreateCommitRequest request)
         {
             #region Preconditions
 
-            Validate.Object(request, nameof(request));
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
 
             #endregion
 
-            var commit = await FindAsync(request.RepositoryId, request.Sha1).ConfigureAwait(false);
+            var commit = await FindAsync(request.RepositoryId, request.Sha1);
 
             if (commit == null)
             { 
                 commit = new RepositoryCommit(
-                    id           : await CommitId.NextAsync(db.Context, request.RepositoryId).ConfigureAwait(false),
+                    id           : await CommitId.NextAsync(db.Context, request.RepositoryId),
                     repositoryId : request.RepositoryId,
                     sha1         : request.Sha1,
                     message      : request.Message
                 );
 
-                await db.RepositoryCommits.InsertAsync(commit).ConfigureAwait(false);
+                await db.RepositoryCommits.InsertAsync(commit);
             }
 
             return commit;
-        }
-    }
-
-    internal static class CommitId
-    {
-        static readonly string sql = SqlHelper.GetCurrentValueAndIncrement<RepositoryInfo>("commitCount");
-
-        public static async Task<long> NextAsync(
-            IDbContext context,
-            long repositoryId)
-        {
-            using (var connection = await context.GetConnectionAsync())
-            {
-                var currentCommitCount = await connection.ExecuteScalarAsync<int>(sql, 
-                    new { id = repositoryId }).ConfigureAwait(false);
-
-                return ScopedId.Create(repositoryId, currentCommitCount + 1);
-            }
         }
     }
 }

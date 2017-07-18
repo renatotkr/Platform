@@ -1,11 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Carbon.Platform.Storage
+namespace Carbon.CI
 {
     public class CreateBranchRequest
     {
-        public CreateBranchRequest() { }
-
         public CreateBranchRequest(long repositoryId, string name, long creatorId)
         {
             #region Preconditions
@@ -23,11 +21,11 @@ namespace Carbon.Platform.Storage
             CreatorId    = creatorId;
         }
 
-        public long RepositoryId { get; set; }
+        public long RepositoryId { get; }
 
         [Required]
-        public string Name { get; set; }
+        public string Name { get; }
 
-        public long CreatorId { get; set; }
+        public long CreatorId { get; }
     }
 }

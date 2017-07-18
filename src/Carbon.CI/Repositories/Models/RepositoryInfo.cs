@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Runtime.Serialization;
-using System.Text;
 
 using Carbon.Data.Annotations;
+using Carbon.Json;
 using Carbon.Platform.Resources;
 
-namespace Carbon.Platform.Storage
+namespace Carbon.CI
 {
-    [Dataset("Repositories", Schema = "Storage")]
-    [UniqueIndex("providerId", "fullName")]
+    [Dataset("Repositories", Schema = CiadDb.Name)]
     [UniqueIndex("ownerId", "name")]
-    public class RepositoryInfo : IRepository
+    public class RepositoryInfo : IRepository, IResource
     {
         public RepositoryInfo() { }
 
@@ -18,8 +16,10 @@ namespace Carbon.Platform.Storage
             long id,
             string name, 
             long ownerId,
-            ManagedResource resource,
-            byte[] encryptedAcessToken = null)
+            string origin,
+            int providerId,
+            byte[] encryptedAcessToken = null,
+            JsonObject properties = null)
         {
             #region Preconditions
 
@@ -36,54 +36,50 @@ namespace Carbon.Platform.Storage
 
             Id                   = id;
             Name                 = name;
-            FullName             = resource.ResourceId;
+            Origin               = origin;
             OwnerId              = ownerId;
-            ProviderId           = resource.ProviderId;
-            LocationId           = resource.LocationId;
+            ProviderId           = providerId;
             EncryptedAccessToken = encryptedAcessToken;
+            Properties           = properties;
         }
 
         [Member("id"), Key(sequenceName: "repositoryId")]
         public long Id { get; }
 
         [Member("ownerId")]
-        [IgnoreDataMember]
         public long OwnerId { get; }
 
         [Member("name")]
         [StringLength(100)]
         public string Name { get; }
 
-        [Member("fullName")] // Key?
+        [Member("providerId")]
+        public int ProviderId { get; }
+
+        [Member("origin"), Indexed]
         [StringLength(160)]
-        public string FullName { get; }
+        public string Origin { get; }
 
         [Member("encryptedAccessToken")]
         [MaxLength(1000)]
         public byte[] EncryptedAccessToken { get; }
 
+        [Member("properties")]
+        [StringLength(1000)]
+        public JsonObject Properties { get; }
+
         #region Statistics
 
+        [Member("branchCount")]
+        public int BranchCount { get; }
+
         // Max ~4M
-        [IgnoreDataMember]
         [Member("commitCount")]
         public int CommitCount { get; }
 
         #endregion
 
         #region IResource
-
-        [IgnoreDataMember]
-        [Member("providerId")]
-        public int ProviderId { get; }
-
-        // // e.g. carbon/cropper
-        // string IManagedResource.ResourceId => FullName;
-        
-        // Used by aws:codecommit
-        [IgnoreDataMember]
-        [Member("locationId")]
-        public int LocationId { get; }
         
         ResourceType IResource.ResourceType => ResourceTypes.Repository;
 
@@ -104,20 +100,7 @@ namespace Carbon.Platform.Storage
 
         public override string ToString()
         {
-            var sb = new StringBuilder();
-            
-            // bitbucket:carbonmade/lefty
-            if (ProviderId != ResourceProvider.GitHub.Id)
-            {
-                var provider = ResourceProvider.Get(ProviderId);
-
-                sb.Append(provider.Name);
-                sb.Append(":");
-            }
-
-            sb.Append(FullName);
-
-            return sb.ToString();
+            return Origin;
         }
     }
 }
