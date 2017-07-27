@@ -29,7 +29,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<ImageInfo> GetAsync(long id)
         {
-            return await db.Images.FindAsync(id).ConfigureAwait(false) 
+            return await db.Images.FindAsync(id) 
                 ?? throw ResourceError.NotFound(ResourceTypes.Image, id);
         }
 
@@ -37,7 +37,7 @@ namespace Carbon.Platform.Computing
         {
             return await db.Images.QueryFirstOrDefaultAsync(
                 And(Eq("ownerId", ownerId), Eq("name", name))
-             ).ConfigureAwait(false) ?? throw ResourceError.NotFound(ResourceTypes.Image, ownerId, name);
+             ) ?? throw ResourceError.NotFound(ResourceTypes.Image, ownerId, name);
         }
 
         public Task<bool> ExistsAsync(ResourceProvider provider, string resourceId)

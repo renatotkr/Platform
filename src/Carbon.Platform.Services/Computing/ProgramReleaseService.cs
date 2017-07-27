@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 using Carbon.Data;
 using Carbon.Data.Expressions;
+using Carbon.Platform.Resources;
 using Carbon.Platform.Sequences;
 using Carbon.Versioning;
-
 using Dapper;
 
 namespace Carbon.Platform.Computing
@@ -30,9 +29,9 @@ namespace Carbon.Platform.Computing
 
             Validate.Object(request, nameof(request));
             
-            if (await ExistsAsync(request.Program.Id, request.Version).ConfigureAwait(false))
+            if (await ExistsAsync(request.Program.Id, request.Version))
             {
-                throw new Exception($"{request.Program.Id}@{request.Version} already exists");
+                throw new ResourceConflictException($"program/{request.Program.Id}@{request.Version}");
             }
 
             #endregion
@@ -45,6 +44,7 @@ namespace Carbon.Platform.Computing
                 version    : request.Version,
                 properties : request.Properties,
                 commitId   : request.CommitId,
+                buildId    : request.BuildId,
                 creatorId  : request.CreatorId
             );
 

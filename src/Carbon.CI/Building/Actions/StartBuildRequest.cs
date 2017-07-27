@@ -1,18 +1,13 @@
 ﻿using System;
-using Carbon.Platform.Storage;
 
 namespace Carbon.CI
 {
     public class StartBuildRequest
     {
-        public StartBuildRequest(
-            IProject project,
-            IRepositoryCommit commit,
-            long initiatorId)
+        public StartBuildRequest(IProject project, IRepositoryCommit commit)
         {
             Project     = project     ?? throw new ArgumentNullException(nameof(project));
             Commit      = commit      ?? throw new ArgumentNullException(nameof(commit));
-            InitiatorId = initiatorId;
         }
         
         public IProject Project { get; }
@@ -20,8 +15,6 @@ namespace Carbon.CI
         public IRepositoryCommit Commit { get; }
 
         public BuildOutput Output { get; set; }
-
-        public long InitiatorId { get; }
     }
 
     public class BuildOutput

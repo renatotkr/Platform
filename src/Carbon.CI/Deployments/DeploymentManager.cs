@@ -1,20 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using Carbon.Cloud.Logging;
 using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Logging;
 using Carbon.Platform.Computing;
 using Carbon.Platform.Environments;
+using Carbon.Platform.Resources;
 using Carbon.Security;
 
 namespace Carbon.CI
 {
+    using static Expression;
+
     public class DeploymentManager : IDeploymentManager
     {
         private readonly HostAgentClient hostAgent;
-        private readonly ILogger log;
         private readonly IHostService hostService;
         private readonly CiadDb db;
         private readonly IProgramReleaseService releaseService;
@@ -29,14 +32,52 @@ namespace Carbon.CI
             ILogger log)
         {
             this.hostAgent       = api           ?? throw new ArgumentNullException(nameof(api));
-            this.log            = log            ?? throw new ArgumentNullException(nameof(log));
             this.releaseService = releaseService ?? throw new ArgumentNullException(nameof(releaseService));
             this.db             = db             ?? throw new ArgumentNullException(nameof(db));
             this.hostService    = hostService    ?? throw new ArgumentNullException(nameof(hostService));
             this.eventLog       = eventLog       ?? throw new ArgumentNullException(nameof(eventLog));
         }
 
-        public async Task<DeployResult> DeployAsync(DeployRequest request, ISecurityContext context)
+        public Task<IReadOnlyList<Deployment>> ListAsync(IEnvironment environment)
+        {
+            #region Preconditions
+
+            if (environment == null)
+                throw new ArgumentNullException(nameof(environment));
+
+            #endregion
+
+            return db.Deployments.QueryAsync(
+                expression : Eq("environmentId", environment.Id),
+                order      : Order.Descending("id")
+            );
+        }
+
+        public Task<IReadOnlyList<Deployment>> ListAsync(IEnvironment environment, long programId)
+        {
+            #region Preconditions
+
+            if (environment == null)
+                throw new ArgumentNullException(nameof(environment));
+
+            #endregion
+
+            return db.Deployments.QueryAsync(
+                And(
+                    Eq("environmentId", environment.Id),
+                    Eq("programId", programId)
+                ),
+                order: Order.Descending("id")
+            );
+        }
+
+        public async Task<Deployment> GetAsync(long id)
+        {
+            return await db.Deployments.FindAsync(id)
+                ?? throw ResourceError.NotFound(ResourceTypes.Deployment, id);
+        }
+
+        public async Task<Deployment> DeployAsync(DeployRequest request, ISecurityContext context)
         {
             #region Preconditions
 
@@ -90,11 +131,11 @@ namespace Carbon.CI
             // Log the action
             await eventLog.CreateAsync(new Event(
                 action   : "deploy",
-                resource : "application#" + release.Id + "@" + release.Version,
+                resource : "program#" + release.Id + "@" + release.Version,
                 userId   : context.UserId
             ));
 
-            return new DeployResult(true);
+            return deployment;
         }
 
         // Activate on a single host
@@ -110,8 +151,6 @@ namespace Carbon.CI
 
             #endregion
 
-            log.Info($"{host.Id} / activating");
-
             DeployResult result;
 
             try
@@ -120,12 +159,8 @@ namespace Carbon.CI
             }
             catch (Exception ex)
             {
-                log.Error($"error activating {host.Id} ({host.Address.ToString()} ... {ex.Message}");
-
                 return new DeployResult(false, ex.Message);
             }
-
-            log.Info(host.Id + " - " + result.Message);
 
             return result;
         }
@@ -152,11 +187,9 @@ namespace Carbon.CI
             return await Task.WhenAll(tasks);
         }
 
-        public async Task RestartAsync(IProgram program, IHost host)
+        public async Task<bool> RestartAsync(IProgram program, IHost host)
         {
-            var text = await hostAgent.RestartAsync(program, host);
-
-            log.Info($"{host} : Reloading -- {text}");
+            return await hostAgent.RestartAsync(program, host);
         }
 
         #region Data Acesss
@@ -167,9 +200,10 @@ namespace Carbon.CI
             long creatorId)
         { 
             var deployment = new Deployment(
-                id        : await db.Deployments.Sequence.NextAsync(),
-                release   : release,
-                creatorId : creatorId
+                id            : await db.Deployments.Sequence.NextAsync(),
+                environmentId : environment.Id,
+                release       : release,
+                creatorId     : creatorId
             );
 
             await db.Deployments.InsertAsync(deployment);
@@ -205,7 +239,7 @@ namespace Carbon.CI
 
             await db.Deployments.PatchAsync(deployment.Id, changes: new[] {
                 Change.Replace("status",    deployment.Status),
-                Change.Replace("completed", Expression.Func("NOW"))
+                Change.Replace("completed", Func("NOW"))
             });
          }
  

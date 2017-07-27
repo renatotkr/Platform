@@ -15,7 +15,7 @@ namespace Carbon.Platform.Computing
 
         Task<HostInfo> RegisterAsync(RegisterHostRequest request);
 
-        Task<IReadOnlyList<HostInfo>> ListAsync();
+        Task<IReadOnlyList<HostInfo>> ListAsync(long ownerId);
 
         Task<IReadOnlyList<HostInfo>> ListAsync(ICluster cluster);
 

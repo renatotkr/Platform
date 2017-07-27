@@ -1,10 +1,11 @@
-﻿using Carbon.Platform.Storage;
+﻿using System.Threading.Tasks;
+
 using Carbon.VersionControl;
 
 namespace Carbon.CI
 {
     public interface IRepositoryClientFactory
     {
-        IRepositoryClient Get(IRepository repository);
+        Task<IRepositoryClient> GetAsync(IRepository repository);
     }
 }

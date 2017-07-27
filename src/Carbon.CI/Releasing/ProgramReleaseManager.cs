@@ -2,36 +2,27 @@
 using System.Threading.Tasks;
 
 using Carbon.Cloud.Logging;
-using Carbon.Data.Protection;
-using Carbon.Json;
-using Carbon.Kms;
-using Carbon.Packaging;
 using Carbon.Platform.Computing;
 using Carbon.Security;
 using Carbon.Storage;
+using Carbon.Versioning;
 
 namespace Carbon.CI
 {
     public class ProgramReleaseManager : IProgramReleaseManager
     {
-        private readonly IPackageStore packageStore;
         private readonly IProgramReleaseService releaseService;
-        private readonly IDataProtectorProvider protectorProvider;
-        private readonly IDataDecryptor dataDecrypter;
-        private readonly IEventLogger log;
+        private readonly IPackageManager packageManager;
+        private readonly IEventLogger eventLog;
 
         public ProgramReleaseManager(
-            IPackageStore packageStore, 
             IProgramReleaseService releaseService,
-            IDataProtectorProvider protectorProvider,
-            IDataDecryptor dataDecrypter,
+            IPackageManager packageManager,
             IEventLogger eventLog)
         {
-            this.packageStore      = packageStore      ?? throw new ArgumentNullException(nameof(packageStore));
-            this.releaseService    = releaseService    ?? throw new ArgumentNullException(nameof(releaseService));
-            this.protectorProvider = protectorProvider ?? throw new ArgumentNullException(nameof(protectorProvider));
-            this.dataDecrypter     = dataDecrypter     ?? throw new ArgumentNullException(nameof(dataDecrypter));
-            this.log               = eventLog          ?? throw new ArgumentNullException(nameof(eventLog));
+            this.releaseService = releaseService ?? throw new ArgumentNullException(nameof(releaseService));
+            this.packageManager = packageManager ?? throw new ArgumentNullException(nameof(packageManager)); 
+            this.eventLog       = eventLog       ?? throw new ArgumentNullException(nameof(eventLog));
         }
 
         public async Task<ProgramRelease> CreateAsync(CreateProgramReleaseRequest request, ISecurityContext context)
@@ -44,65 +35,36 @@ namespace Carbon.CI
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
 
+            if (request.Version == SemanticVersion.Zero)
+                throw new ArgumentException("Must be be 0.0.0", nameof(request.Version));
+
             #endregion
 
-            var program = request.Program;
-            var version = request.Version;
-            var package = request.Package;
+            // Create the package ----------------------
+            var package = await packageManager.CreateAsync(new CreatePackageRequest(
+                programId      : request.Program.Id,
+                programVersion : request.Version,
+                stream         : request.Package.Stream,
+                format         : request.Package.Format,
+                sha256         : request.Package.SHA256,
+                dekId          : request.Package.DekId
+            ), context);
 
-            // 1/1.0.0.zip
-            var key = program.Id + "/" + version.ToString() + ".zip";
-
-            var properties = new JsonObject();
-            
-            byte[] encryptionKey = null;
-
-            if (request.EncryptionKeyId != null)
-            {
-                var protector = await protectorProvider.GetAsync(request.EncryptionKeyId.Value.ToString());
-
-                encryptionKey = Secret.Generate(256 / 8).Value;
-
-                var cek = await protector.EncryptAsync(encryptionKey);
-                
-                properties.Add("encryptionStrategy",  "sse");
-                properties.Add("encryptionAlgorithm", "AES256");
-                properties.Add("cek", cek);
-            }
-
-            var result = await packageStore.PutAsync(key, package, new PutPackageOptions {
-                EncryptionKey = encryptionKey
-            });
-
-            if (result.IV != null)
-            {
-                properties.Add("iv", result.IV);
-            }
-
-            properties.Add("sha256",      result.Sha256);
-            properties.Add("packageName", key);
-
-            if (program.Properties != null)
-            {
-                foreach (var property in program.Properties)
-                {
-                    properties[property.Key] = property.Value;
-                }
-            }
-
+            // Create the release ----------------------
             var release = await releaseService.CreateAsync(new RegisterProgramReleaseRequest(
-                program    : program,
-                version    : version,
-                properties : properties,
+                program    : request.Program,
+                version    : request.Version,
                 commitId   : request.Commit?.Id ?? 0L,
-                creatorId  : context.UserId.Value
+                buildId    : request.Build?.Id,
+                creatorId  : context.UserId.Value,
+                properties : request.Program.Properties
             ));
 
             #region Logging
 
-            await log.CreateAsync(new Event(
+            await eventLog.CreateAsync(new Event(
                 action   : "create",
-                resource : "program#" + program.Id + "@" + release.Version, 
+                resource : "program#" + release.ProgramId + "@" + release.Version, 
                 userId   : context.UserId
             ));
 
@@ -111,31 +73,23 @@ namespace Carbon.CI
             return release;
         }
 
-        // TODO: Download stream... (avoid package allocations)
-
-        public async Task<IPackage> DownloadAsync(ProgramRelease release)
+        public async Task<IPackage> DownloadAsync(IProgram program)
         {
             #region Preconditions
 
-            if (release == null)
-                throw new ArgumentNullException(nameof(release));
+            if (program == null)
+                throw new ArgumentNullException(nameof(program));
 
             #endregion
 
-            byte[] encryptionKey = null;
+            var packages = await packageManager.ListAsync(program);
 
-            if (release.Properties.TryGetValue("cek", out var cek))
+            if (packages.Count == 0)
             {
-                var cekData = Convert.FromBase64String(cek.ToString());
-
-                encryptionKey = await dataDecrypter.DecryptAsync(cekData);
+                throw new Exception($"program#{program.Id}@{program.Version} does not have a package");
             }
-
-            var key = release.ProgramId + "/" + release.Version.ToString() + ".zip";
-
-            return await packageStore.GetAsync(key, new GetPackageOptions {
-                EncryptionKey = encryptionKey
-            });
+            
+            return await packageManager.DownloadAsync(packages[0].Name);
         }
     }
 }

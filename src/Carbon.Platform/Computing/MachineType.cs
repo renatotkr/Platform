@@ -40,15 +40,15 @@ namespace Carbon.Platform.Computing
         [Member("name")]
         [StringLength(63)]
         public string Name { get; }
-        
+
+        [Member("providerId")]
+        public int ProviderId { get; }
+
         [Member("properties")]
         [StringLength(1000)]
         public JsonObject Properties { get; }
 
         #region IResource
-
-        [Member("providerId")]
-        public int ProviderId { get; }
 
         ResourceType IResource.ResourceType => ResourceTypes.MachineType;
 

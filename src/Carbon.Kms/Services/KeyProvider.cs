@@ -58,16 +58,16 @@ namespace Carbon.Kms
             #endregion
 
             var kek = await protectorFactory.GetAsync(
-                keyId: key.KekId.ToString(),
-                aad: key.GetAad()
+                keyId : key.KekId.ToString(),
+                aad   : key.GetAad()
             ).ConfigureAwait(false);
 
             // use the key encryption key to decrypt it
             var result = await kek.DecryptAsync(key.Data).ConfigureAwait(false);
 
             return new CryptoKey(
-                id: key.Id.ToString(),
-                value: result
+                id    : key.Id.ToString(),
+                value : result
             );
         }
     }

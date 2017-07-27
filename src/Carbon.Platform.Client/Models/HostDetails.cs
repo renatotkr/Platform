@@ -11,7 +11,7 @@ namespace Carbon.Platform.Computing
 {
     public class HostDetails : IHost, IResource
     {
-        [DataMember(Name = "id")]
+        [DataMember(Name = "id", EmitDefaultValue = false)]
         public long Id { get; set; }
 
         [DataMember(Name = "type")]
@@ -25,6 +25,9 @@ namespace Carbon.Platform.Computing
 
         [DataMember(Name = "addresses")]
         public string[] Addresses { get; set; }
+        
+        [DataMember(Name = "location", EmitDefaultValue = false)]
+        public LocationDetails Location { get; set; }
 
         [DataMember(Name = "image", EmitDefaultValue = false)]
         public ImageDetails Image { get; set; }
@@ -35,14 +38,11 @@ namespace Carbon.Platform.Computing
         [DataMember(Name = "volumes", EmitDefaultValue = false)]
         public VolumeDetails[] Volumes { get; set; }
 
-        [DataMember(Name = "machineTypeId", EmitDefaultValue = false)]
-        public long MachineTypeId { get; set; }
+        [DataMember(Name = "machineType")]
+        public MachineTypeDetails MachineType { get; set; }
 
         [DataMember(Name = "publicKey", EmitDefaultValue = false)]
         public Jwk PublicKey { get; set; }
-
-        [DataMember(Name = "locationId", EmitDefaultValue = false)]
-        public int LocationId { get; set; }
 
         [DataMember(Name = "resource", EmitDefaultValue = false)]
         public ManagedResource Resource { get; set; }

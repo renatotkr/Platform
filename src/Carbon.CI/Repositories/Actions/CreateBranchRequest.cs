@@ -4,7 +4,9 @@ namespace Carbon.CI
 {
     public class CreateBranchRequest
     {
-        public CreateBranchRequest(long repositoryId, string name, long creatorId)
+        public CreateBranchRequest() { }
+
+        public CreateBranchRequest(long repositoryId, string name)
         {
             #region Preconditions
 
@@ -12,20 +14,17 @@ namespace Carbon.CI
 
             Validate.NotNullOrEmpty(name, nameof(name));
 
-            Validate.Id(creatorId);
-
             #endregion
 
             RepositoryId = repositoryId;
             Name         = name;
-            CreatorId    = creatorId;
         }
 
-        public long RepositoryId { get; }
+        public long RepositoryId { get; set; }
 
         [Required]
-        public string Name { get; }
-
-        public long CreatorId { get; }
+        public string Name { get; set;  }
     }
 }
+
+// NOTE: keep set properties for JSON binding

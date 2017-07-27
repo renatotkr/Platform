@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 using Carbon.Data.Expressions;
 using Carbon.Platform.Resources;
+using Carbon.Security;
 
 namespace Carbon.CI
 {
@@ -18,9 +19,9 @@ namespace Carbon.CI
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public Task<IReadOnlyList<RepositoryBranch>> ListAsync(long repositoryId)
+        public Task<IReadOnlyList<RepositoryBranch>> ListAsync(IRepository repository)
         {
-            return db.RepositoryBranches.QueryAsync(Eq("repositoryId", repositoryId));
+            return db.RepositoryBranches.QueryAsync(Eq("repositoryId", repository.Id));
         }
 
         public async Task<RepositoryBranch> GetAsync(long id)
@@ -36,7 +37,7 @@ namespace Carbon.CI
             ) ?? throw new ResourceNotFoundException($"repository:branch#{repositoryId}/{name}");
         }
 
-        public async Task<RepositoryBranch> CreateAsync(CreateBranchRequest request)
+        public async Task<RepositoryBranch> CreateAsync(CreateBranchRequest request, ISecurityContext context)
         {
             #region Preconditions
 
@@ -51,7 +52,7 @@ namespace Carbon.CI
                 id           : branchId,
                 repositoryId : request.RepositoryId,
                 name         : request.Name,
-                creatorId    : request.CreatorId
+                creatorId    : context.UserId.Value
             );
 
             await db.RepositoryBranches.InsertAsync(branch);

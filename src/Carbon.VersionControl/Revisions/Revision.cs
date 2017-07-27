@@ -21,7 +21,7 @@ namespace Carbon.VersionControl
             get
             {
                 switch (Type)
-                {
+                { 
                     case RevisionType.Commit : return Name;
                     case RevisionType.Tag    : return "tags/" + Name;
                     case RevisionType.Head   : return "heads/" + Name;
@@ -30,69 +30,70 @@ namespace Carbon.VersionControl
             }
         }
 
-        public override string ToString() => Path;
-
-        public static Revision Commit(string sha)
+        public override string ToString()
         {
-            return new Revision(sha, RevisionType.Commit);
+            switch (Type)
+            {
+                case RevisionType.Commit    : return "commit:" + Name;
+                case RevisionType.Tag       : return "tag:"    + Name;
+                case RevisionType.Head      : return "head:"   + Name;
+                default                     : throw new Exception("Unexpected type:" + Type);
+            }
         }
 
-        public static Revision Tag(string name)
-        {
-            return new Revision(name, RevisionType.Tag);
-        }
+        public static Revision Commit(string sha) =>
+            new Revision(sha, RevisionType.Commit);
 
-        public static Revision Head(string name)
-        {
-            return new Revision(name, RevisionType.Head);
-        }
+        public static Revision Tag(string name) =>
+            new Revision(name, RevisionType.Tag);
 
-        private static readonly char[] forwardSlash = { '/' };
+        public static Revision Head(string name) =>
+            new Revision(name, RevisionType.Head);
+    
+        private static readonly char[] seperators = { '/', ':' };
 
         public static Revision Parse(string text)
         {
-            #region Preconditions
-
-            if (text == null) throw new ArgumentNullException(nameof(text));
-
-            #endregion
-
-            var type = RevisionType.Head;
-            string name = null;
-
-            var parts = text.Split(forwardSlash);
+            var parts = text.Split(seperators);
 
             if (parts.Length == 1)
             {
-                name = parts[0];
+                var name = parts[0];
 
-                // sha1 = 40 character hexstring (e.g. dae86e1950b1277e545cee180551750029cfe735)
-                if (name.Length == 40) // sha1
-                {
-                    return Commit(name);
-                }
-                else if (name.Length == 64) // sha3
+                if (name.Length == 40 || name.Length == 64) // sha1 (dae86e1950b1277e545cee180551750029cfe735) |sha3
                 {
                     return Commit(name);
                 }
 
-                // Otherwise, it's a symbolic ref name to a specific revision
+                return Head(name);
             }
             else if (parts.Length == 2)
             {
-                name = parts[1];
+                // head:name | heads/name
 
-                switch (parts[0])
-                {
-                    case "tags"     : type = RevisionType.Tag;  break;
-                    case "branches" : type = RevisionType.Head; break;
-                    case "heads"    : type = RevisionType.Head; break;
+                var name = parts[1];
+                var type = GetType(parts[0]);
 
-                    default: throw new Exception("Unexpected kind:" + parts[0]);
-                }
+                return new Revision(name, type);
             }
 
-            return new Revision(name, type);
+            throw new Exception("Unexpected revision format:" + text);
+
+        }
+
+        private static RevisionType GetType(string typeName)
+        {
+            switch (typeName)
+            {
+                case "tags"     : return RevisionType.Tag;  
+                case "branches" : return RevisionType.Head;
+                case "heads"    : return RevisionType.Head; 
+                case "tag"      : return RevisionType.Tag; 
+                case "branch"   : return RevisionType.Head;
+                case "head"     : return RevisionType.Head;
+                case "commit"   : return RevisionType.Commit; 
+                default         : throw new Exception("Unexpected kind:" + typeName);
+            }
         }
     }
 }

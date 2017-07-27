@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Carbon.CI
 {
@@ -9,5 +10,7 @@ namespace Carbon.CI
         Task<RepositoryCommit> FindAsync(long repositoryId, byte[] sha1);
 
         Task<RepositoryCommit> GetAsync(long id);
+
+        Task<IReadOnlyList<RepositoryCommit>> ListAsync(IRepository repository);
     }
 }

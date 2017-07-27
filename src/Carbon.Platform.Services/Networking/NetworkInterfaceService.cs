@@ -44,7 +44,7 @@ namespace Carbon.Platform.Networking
             #endregion
 
             var nic = new NetworkInterfaceInfo(
-                id               : await db.NetworkInterfaces.GetNextScopedIdAsync(request.NetworkId).ConfigureAwait(false),
+                id               : await db.NetworkInterfaces.GetNextScopedIdAsync(request.NetworkId),
                 ipAddresses      : Array.Empty<IPAddress>(),
                 macAddress       : request.Mac,
                 subnetId         : request.SubnetId,

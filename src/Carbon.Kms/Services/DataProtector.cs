@@ -51,6 +51,8 @@ namespace Carbon.Kms
             if (data == null)
                 throw new ArgumentNullException(nameof(data));
 
+            if (data.Length == 0)
+                throw new ArgumentException("Must not be empty", nameof(data));
             #endregion
 
             var message = Serializer.Deserialize<EncryptedDataMessage>(data);
@@ -64,6 +66,9 @@ namespace Carbon.Kms
 
             if (message == null)
                 throw new ArgumentNullException(nameof(message));
+
+            if (message.Ciphertext == null || message.Ciphertext.Length == 0)
+                throw new ArgumentException("Required", "ciphertext");
 
             if (message.Header.KeyId != key.Id)
                 throw new Exception($"message key '{message.Header.KeyId}' does not match protector");

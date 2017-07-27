@@ -5,6 +5,7 @@ using Carbon.VersionControl;
 
 namespace GitHub
 {
+    [DataContract]
     public class GitObject
     {
         [DataMember(Name = "type")]
@@ -14,13 +15,16 @@ namespace GitHub
         public string Sha { get; set; }
 
         [DataMember(Name = "url")]
-        public Uri Url { get; set; }
+        public string Url { get; set; }
 
         #region Helpers
 
         public ICommit AsCommit()
         {
-            if (Type != "commit") throw new Exception("Not a commit. Was " + Type);
+            if (Type != "commit")
+            {
+                throw new Exception("Not a commit. Was " + Type);
+            }
 
             return new GitCommit(Sha, Url);
         }

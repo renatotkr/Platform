@@ -27,11 +27,11 @@ namespace Carbon.Platform.Computing
 
         public async Task<HostInfo> GetAsync(long id)
         {
-            return await db.Hosts.FindAsync(id).ConfigureAwait(false)
+            return await db.Hosts.FindAsync(id)
                 ?? throw ResourceError.NotFound(ResourceTypes.Host, id);
         }
 
-        // e.g. 1 || aws:i-18342354, gcp:1234123123, azure:1234123
+        // e.g. 1 || aws:i-18342354, gcp:1234123123, azure:1234123, do:???
 
         public Task<HostInfo> GetAsync(string name)
         {
@@ -58,10 +58,10 @@ namespace Carbon.Platform.Computing
             return await db.Hosts.FindAsync(provider, resourceId);
         }
 
-        public Task<IReadOnlyList<HostInfo>> ListAsync()
+        public Task<IReadOnlyList<HostInfo>> ListAsync(long ownerId)
         {
             return db.Hosts.QueryAsync(
-                expression : IsNull("terminated"),
+                expression : And(Eq("ownerId", ownerId), IsNull("terminated")),
                 order      : Order.Descending("id"),
                 take       : 1000
             );
@@ -95,28 +95,12 @@ namespace Carbon.Platform.Computing
             );
         }
 
-        public Task<IReadOnlyList<HostInfo>> ListAsync(IEnvironment environment, ILocation location)
-        {
-            var locationId = LocationId.Create(location.Id);
-
-            var idStart = HostId.Create(locationId.WithZoneNumber(0), sequenceNumber: 0);
-            var idEnd   = HostId.Create(locationId.WithZoneNumber(byte.MaxValue), sequenceNumber: int.MaxValue);
-
-            return db.Hosts.QueryAsync(
-                Conjunction(
-                    Eq("environmentId", environment.Id), // env index...
-                    Between("id", idStart, idEnd),
-                    IsNull("terminated")
-                )
-            );
-        }
-
         public async Task<HostInfo> RegisterAsync(RegisterHostRequest request)
         {
             var regionId = LocationId.Create(request.Resource.LocationId).WithZoneNumber(0);
 
             var host = new HostInfo(
-                id            : await GetNextId(regionId).ConfigureAwait(false),
+                id            : await GetNextId(regionId),
                 type          : request.Type,
                 status        : request.Status,
                 addresses     : request.Addresses,

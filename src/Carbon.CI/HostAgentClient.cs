@@ -84,9 +84,7 @@ namespace Carbon.CI
 
             var url = $"http://{host.Address}:{port}/{path}";
 
-            var request = new HttpRequestMessage(HttpMethod.Post,
-                requestUri: url
-            );
+            var request = new HttpRequestMessage(HttpMethod.Post, url);
 
             request.Headers.Host = host.Id.ToString() + ".carbon.host";
 
@@ -106,7 +104,5 @@ namespace Carbon.CI
         }
 
         #endregion
-    }
-
-    
+    }    
 }

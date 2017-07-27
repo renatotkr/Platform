@@ -11,6 +11,8 @@
         int ProviderId { get; }
 
         string Origin { get; }   // carbon/platform
+
+        byte[] EncryptedAccessToken { get; }
     }
 }
 

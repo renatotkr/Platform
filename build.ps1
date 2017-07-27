@@ -20,7 +20,6 @@ dotnet pack ./src/Carbon.Platform.Metrics       -c Release -o ./../../release/Ca
 dotnet pack ./src/Carbon.VersionControl         -c Release -o ./../../release/Carbon.VersionControl
 dotnet pack ./src/Carbon.Platform.Management    -c Release -o ./../../release/Carbon.Platform.Management
 dotnet pack ./src/Carbon.Platform.Configuration -c Release -o ./../../release/Carbon.Platform.Configuration
-dotnet pack ./src/Carbon.Platform.Security      -c Release -o ./../../release/Carbon.Platform.Security
 dotnet pack ./src/Carbon.Kms                    -c Release -o ./../../release/Carbon.Kms
 dotnet pack ./src/Carbon.Kms.Abstractions       -c Release -o ./../../release/Carbon.Kms.Abstractions
 dotnet pack ./src/Carbon.Rds                    -c Release -o ./../../release/Carbon.Rds

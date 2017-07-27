@@ -13,7 +13,7 @@ namespace Carbon.Data
 
         public override void SetValue(IDbDataParameter parameter, SemanticVersion value)
         {
-            parameter.Value = value.ToAlignedString();
+            parameter.Value  = value.ToAlignedString();
             parameter.DbType = DbType.AnsiString;
         }
     }

@@ -15,6 +15,7 @@ namespace Carbon.CI
 
         public Deployment(
             long id,
+            long environmentId,
             IProgramRelease release,
             long creatorId,
             DeploymentStatus status = DeploymentStatus.Pending,
@@ -22,7 +23,12 @@ namespace Carbon.CI
         {
             #region Preconditions
 
-            Validate.Id(id);
+            if (id <= 0)
+                throw new ArgumentException("Must be > 0", nameof(id));
+
+            if (environmentId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(environmentId));
+
 
             if (release == null)
                 throw new ArgumentNullException(nameof(release));
@@ -33,18 +39,22 @@ namespace Carbon.CI
 
             Id             = id;
             Status         = status;
+            EnvironmentId  = environmentId;
             ProgramId      = release.ProgramId;
             ProgramVersion = release.Version;
             CreatorId      = creatorId;
             Properties     = properties;
         }
-
+        
         [Member("id"), Key("deploymentId")]
         public long Id { get; }
+        
+        [Member("environmentId"), Indexed]
+        public long EnvironmentId { get; }
 
-        [Member("status")]
+        [Member("status"), Mutable]
         public DeploymentStatus Status { get; set; }
-       
+      
         [Member("programId")]
         public long ProgramId { get; }
 
@@ -53,10 +63,6 @@ namespace Carbon.CI
 
         [Member("creatorId")]
         public long CreatorId { get; }
-
-        // 1@1.1.4
-
-        // packageName: 1/1.1.4.tar.gz
 
         [Member("properties")]
         [StringLength(1000)]
@@ -73,11 +79,9 @@ namespace Carbon.CI
         [Member("created"), Timestamp]
         public DateTime Created { get; }
 
-        [Member("completed")]
+        [Member("completed"), Mutable]
         public DateTime? Completed { get; set; }
 
         #endregion
     }
 }
-
-// v2: all programs should be bundled into immutable images

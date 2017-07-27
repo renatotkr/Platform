@@ -27,7 +27,7 @@ namespace Carbon.Platform.Environments
 
         public async Task<EnvironmentInfo> GetAsync(long id)
         {
-            return await db.Environments.FindAsync(id).ConfigureAwait(false)
+            return await db.Environments.FindAsync(id)
                 ?? throw ResourceError.NotFound(ResourceTypes.Environment, id);
         }
 
@@ -35,7 +35,7 @@ namespace Carbon.Platform.Environments
         {
             return await db.Environments.QueryFirstOrDefaultAsync(
                 And(Eq("ownerId", ownerId), Eq("name", name))
-            ).ConfigureAwait(false) ?? throw ResourceError.NotFound(ResourceTypes.Environment, ownerId, name);
+            ) ?? throw ResourceError.NotFound(ResourceTypes.Environment, ownerId, name);
         }
 
         public Task<bool> ExistsAsync(long ownerId, string name)
@@ -47,7 +47,7 @@ namespace Carbon.Platform.Environments
 
         public async Task<EnvironmentInfo> GetAsync(string slug)
         {
-            return await db.Environments.QueryFirstOrDefaultAsync(Eq("slug", slug)).ConfigureAwait(false)
+            return await db.Environments.QueryFirstOrDefaultAsync(Eq("slug", slug))
                 ?? throw new ResourceNotFoundException("environment/" + slug);
         }
 
@@ -62,9 +62,9 @@ namespace Carbon.Platform.Environments
 
             // Ensure an environment with the provided name doesn't already exist...
 
-            if (await ExistsAsync(request.OwnerId, request.Name).ConfigureAwait(false))
+            if (await ExistsAsync(request.OwnerId, request.Name))
             {
-                throw new Exception($"environment named '{request.Name}' already exists by '{request.OwnerId}'");
+                throw new ResourceConflictException($"environment/{request.Name} (ownerId: {request.OwnerId})");
             }
 
             var environment = new EnvironmentInfo(

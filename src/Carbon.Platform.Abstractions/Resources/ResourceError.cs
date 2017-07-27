@@ -4,6 +4,14 @@ namespace Carbon.Platform.Resources
 {
     public static class ResourceError
     {
+        public static ResourceConflictException Conflict(ResourceType type, long id)
+        {
+            // host#1
+            string resource = $"{type}#{id}";
+
+            return new ResourceConflictException(resource);
+        }
+
         public static ResourceNotFoundException NotFound(ResourceType type, long id)
         {
             // host#1
@@ -36,5 +44,11 @@ namespace Carbon.Platform.Resources
     {
         public ResourceNotFoundException(string resource)
             : base(resource + " not found") { }
+    }
+
+    public class ResourceConflictException : Exception
+    {
+        public ResourceConflictException(string resource)
+            : base(resource + " already exists") { }
     }
 }

@@ -9,6 +9,6 @@ namespace Carbon.CI
     {
         Task<ProgramRelease> CreateAsync(CreateProgramReleaseRequest request, ISecurityContext context);
 
-        Task<IPackage> DownloadAsync(ProgramRelease release);
+        Task<IPackage> DownloadAsync(IProgram release);
     }
 }

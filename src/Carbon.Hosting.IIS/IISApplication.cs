@@ -21,6 +21,8 @@ namespace Carbon.Hosting.IIS
         public SemanticVersion Version { get; }
 
         public string Runtime => "net470";
+
+        public long? RepositoryId => null;
         
         public string[] Addresses => Array.Empty<string>();
     }

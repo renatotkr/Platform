@@ -5,19 +5,23 @@ using System.Threading.Tasks;
 using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Platform.Resources;
+using Carbon.Security;
 
 namespace Carbon.CI
 {
+    using Carbon.Cloud.Logging;
     using static Expression;
 
     public class RepositoryService : IRepositoryService
     {
         private readonly CiadDb db;
-        private readonly RepositoryBranchService branchService;
+        private readonly IRepositoryBranchService branchService;
+        private readonly IEventLogger eventLog;
 
-        public RepositoryService(CiadDb db)
+        public RepositoryService(CiadDb db, IEventLogger eventLog)
         {
             this.db            = db ?? throw new ArgumentNullException(nameof(db));
+            this.eventLog      = eventLog ?? throw new ArgumentNullException(nameof(eventLog));
             this.branchService = new RepositoryBranchService(db);
         }
 
@@ -49,12 +53,15 @@ namespace Carbon.CI
                 ?? throw ResourceError.NotFound(ResourceTypes.Repository, ownerId, name);
         }
 
-        public async Task<RepositoryInfo> CreateAsync(CreateRepositoryRequest request)
+        public async Task<RepositoryInfo> CreateAsync(CreateRepositoryRequest request, ISecurityContext context)
         {
             #region Preconditions
 
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
+
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
 
             #endregion
 
@@ -73,9 +80,17 @@ namespace Carbon.CI
             await db.Repositories.InsertAsync(repository);
 
             // Create the master branch
-            await branchService.CreateAsync(
-                new CreateBranchRequest(repository.Id, "master", request.OwnerId)
-            );
+            await branchService.CreateAsync(new CreateBranchRequest(repository.Id, "master"), context);
+
+            #region Logging
+
+            await eventLog.CreateAsync(new Event(
+                action   : "create",
+                resource : "repository#" + repository.Id,
+                userId   : context.UserId.Value
+            ));
+
+            #endregion
 
             return repository;
         }

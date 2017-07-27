@@ -19,12 +19,12 @@ namespace Carbon.Platform.Computing
             string slug, 
             long ownerId,
             SemanticVersion version,
-            JsonObject properties = null,
             string runtime = null,
             string[] addresses = null,
             ProgramType type = ProgramType.App,
             long? repositoryId = null,
-            long? parentId = null
+            long? parentId = null,
+             JsonObject properties = null
         )
         {
             #region Preconditions

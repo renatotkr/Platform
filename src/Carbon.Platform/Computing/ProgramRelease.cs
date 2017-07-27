@@ -3,6 +3,7 @@
 using Carbon.Data.Annotations;
 using Carbon.Versioning;
 using Carbon.Json;
+using Carbon.Platform.Sequences;
 
 namespace Carbon.Platform.Computing
 {
@@ -75,6 +76,7 @@ namespace Carbon.Platform.Computing
         public string ProgramName { get; }
 
         [Member("addresses")]
+        [StringLength(200)]
         public string[] Addresses { get; }
 
         [Member("runtime")]
@@ -85,7 +87,11 @@ namespace Carbon.Platform.Computing
         [StringLength(1000)]
         public JsonObject Properties { get; }
 
+        public long RepositoryId => ScopedId.GetScope(CommitId);
+
         #region IProgram
+
+        long IProgram.Id => ProgramId;
 
         string IProgram.Name => ProgramName;
 

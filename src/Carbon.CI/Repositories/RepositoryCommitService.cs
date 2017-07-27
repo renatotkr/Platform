@@ -5,6 +5,9 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.CI
 {
+    using System.Collections.Generic;
+    using Carbon.Data;
+    using Carbon.Platform.Sequences;
     using static Expression;
 
     public class RepositoryCommitService : IRepositoryCommitService
@@ -28,7 +31,17 @@ namespace Carbon.CI
                 And(Eq("repositoryId", repositoryId), Eq("sha1", sha1))
             );
         }
-        
+
+        public Task<IReadOnlyList<RepositoryCommit>> ListAsync(IRepository repository)
+        {
+            var range = ScopedId.GetRange(repository.Id);
+
+            return db.RepositoryCommits.QueryAsync(
+               Between("id", range.Start, range.End),
+               order: Order.Descending("id")
+            );
+        }
+
         public async Task<RepositoryCommit> CreateAsync(CreateCommitRequest request)
         {
             #region Preconditions
@@ -46,6 +59,7 @@ namespace Carbon.CI
                     id           : await CommitId.NextAsync(db.Context, request.RepositoryId),
                     repositoryId : request.RepositoryId,
                     sha1         : request.Sha1,
+                    authorId     : request.AuthorId,
                     message      : request.Message
                 );
 

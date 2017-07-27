@@ -9,11 +9,14 @@ using Carbon.Data.Expressions;
 using Carbon.Platform;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Sequences;
+using Carbon.Security;
 
 using codebuild = Amazon.CodeBuild;
 
 namespace Carbon.CI
 {
+    using static Expression;
+
     public class BuildManager : IBuildManager
     {
         private readonly codebuild::CodeBuildClient codebuild;
@@ -36,7 +39,7 @@ namespace Carbon.CI
             var range = ScopedId.GetRange(projectId);
 
             var builds = await db.Builds.QueryAsync(
-                expression : Expression.Between("id", range.Start, range.End),
+                expression : Between("id", range.Start, range.End),
                 order      : Order.Descending("id"),
                 take       : 1
             );
@@ -44,14 +47,12 @@ namespace Carbon.CI
             return builds[0];
         }
 
-        public Task<IReadOnlyList<Build>> ListAsync(
-            long projectId, 
-            int take = 1000)
+        public Task<IReadOnlyList<Build>> ListAsync(long projectId, int take = 1000)
         {
             var range = ScopedId.GetRange(projectId);
 
             return db.Builds.QueryAsync(
-                expression : Expression.Between("id", range.Start, range.End),
+                expression : Between("id", range.Start, range.End),
                 order      : Order.Descending("id"),
                 take       : take
             );
@@ -80,12 +81,15 @@ namespace Carbon.CI
             return build;
         }
 
-        public async Task<Build> StartAsync(StartBuildRequest request)
+        public async Task<Build> StartAsync(StartBuildRequest request, ISecurityContext context)
         {
             #region Preconditions
 
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
+
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
 
             #endregion
 
@@ -120,10 +124,10 @@ namespace Carbon.CI
             var externalBuild = await codebuild.StartBuildAsync(startBuildRequest);
 
             var build = new Build(
-                id          : id,
-                creatorId : request.InitiatorId,
-                commitId    : commit.Id,
-                resource    : ManagedResource.Build(codeBuildRegion, externalBuild.Build.Id)
+                id        : id,
+                creatorId : context.UserId.Value,
+                commitId  : commit.Id,
+                resource  : ManagedResource.Build(codeBuildRegion, externalBuild.Build.Id)
             )
             {
                 Status = BuildStatus.Pending
@@ -136,6 +140,13 @@ namespace Carbon.CI
 
         public async Task UpdateAsync(Build build)
         {
+            #region Preconditions
+
+            if (build == null)
+                throw new ArgumentNullException(nameof(build));
+
+            #endregion
+
             await db.Builds.UpdateAsync(build);
         }
     }

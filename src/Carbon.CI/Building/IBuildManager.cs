@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Carbon.Security;
+
 namespace Carbon.CI
 {
     public interface IBuildManager
@@ -13,7 +15,7 @@ namespace Carbon.CI
 
         Task<IReadOnlyList<Build>> ListAsync(long projectId, int take = 1000);
 
-        Task<Build> StartAsync(StartBuildRequest request);
+        Task<Build> StartAsync(StartBuildRequest request, ISecurityContext context);
 
         Task UpdateAsync(Build build);
     }

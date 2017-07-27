@@ -5,7 +5,8 @@
         App     = 1,
         Service = 2,
         Site    = 3,
-        Task    = 4
+        Task    = 4,
+        Library = 5
     }
     
     // /var/apps

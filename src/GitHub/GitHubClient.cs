@@ -96,7 +96,9 @@ namespace GitHub
 
         #region Commits
 
-        public async Task<GitBranch> GetCommitAsync(string accountName, string repoName, string sha)
+        // https://developer.github.com/v3/git/commits/
+
+        public async Task<GitCommit> GetCommitAsync(string accountName, string repoName, string sha)
         {
             #region Preconditions
 
@@ -111,13 +113,13 @@ namespace GitHub
 
             #endregion
 
-            // GET /repos/:owner/:repo/commits/:sha
+            // GET /repos/:owner/:repo/git/commits/:sha
             var result = await SendAsync(
                 method : HttpMethod.Get,
-                path   : $"/{accountName}/{repoName}/commits/{sha}"
+                path   : $"/repos/{accountName}/{repoName}/git/commits/{sha}"
             ).ConfigureAwait(false);
 
-            return result.As<GitBranch>();
+            return result.As<GitCommit>();
         }
 
         #endregion

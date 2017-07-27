@@ -68,9 +68,6 @@ namespace Carbon.Platform.Networking
         [StringLength(1000)]
         public JsonObject Properties { get; }
 
-        [IgnoreDataMember]
-        public long NetworkId => ScopedId.GetScope(SubnetId);
-
         #region IResource
 
         [Member("providerId")]
@@ -97,6 +94,13 @@ namespace Carbon.Platform.Networking
 
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
+
+        #endregion
+
+        #region Helpers
+
+        [IgnoreDataMember]
+        public long NetworkId => ScopedId.GetScope(SubnetId);
 
         #endregion
     }

@@ -8,14 +8,13 @@ namespace Carbon.Platform.Computing
         [DataMember(Name = "id")]
         public long Id { get; set; }
 
-        [DataMember(Name = "name")]
+        [DataMember(Name = "name", EmitDefaultValue = false)]
         public string Name { get; set; }
-        
+
         #region IResource
-        
+
         ResourceType IResource.ResourceType => ResourceTypes.MachineType;
 
         #endregion
-
     }
 }

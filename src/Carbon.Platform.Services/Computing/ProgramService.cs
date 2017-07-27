@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 using Carbon.Data;
 using Carbon.Data.Expressions;
+using Carbon.Platform.Environments;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
@@ -21,7 +22,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<ProgramInfo> GetAsync(long id)
         {
-            return await db.Programs.FindAsync(id).ConfigureAwait(false)
+            return await db.Programs.FindAsync(id)
                 ?? throw ResourceError.NotFound(ResourceTypes.Program, id);
         }
 
@@ -50,6 +51,89 @@ namespace Carbon.Platform.Computing
                 And(Eq("ownerId", ownerId), IsNull("deleted")),
                 Order.Ascending("name")
              );
+        }
+
+        public Task<IReadOnlyList<ProgramInfo>> ListAsync(long ownerId, ProgramType type)
+        {
+            return db.Programs.QueryAsync(
+                Conjunction(Eq("ownerId", ownerId), Eq("type", type), IsNull("deleted")),
+                Order.Ascending("name")
+             );
+        }
+
+        public async Task<IReadOnlyList<ProgramInfo>> ListAsync(IEnvironment environment)
+        {
+            #region Preconditions
+
+            if (environment == null)
+                throw new ArgumentNullException(nameof(environment));
+
+            #endregion
+
+            // TODO: Do a left JOIN on on programs
+
+            var records = await db.EnvironmentPrograms.QueryAsync(
+                And(Eq("environmentId", environment.Id), IsNull("deleted"))
+            );
+
+            var programs = new List<ProgramInfo>(records.Count);
+
+            foreach (var record in records)
+            {
+                var program = await GetAsync(record.ProgramId);
+
+                programs.Add(new ProgramInfo(
+                    id           : program.Id, 
+                    name         : program.Name,
+                    slug         : program.Slug, 
+                    ownerId      : program.OwnerId,
+                    version      : record.ProgramVersion,
+                    properties   : record.Configuration,
+                    type         : program.Type,
+                    repositoryId : program.RepositoryId,
+                    parentId     : program.ParentId
+                ));
+            }
+            
+            return programs;
+        }
+
+        public async Task<IReadOnlyList<ProgramInfo>> ListAsync(IHost host)
+        {
+            #region Preconditions
+
+            if (host == null)
+                throw new ArgumentNullException(nameof(host));
+
+            #endregion
+
+            // TODO: Do a left JOIN on on programs
+
+            var records = await db.HostPrograms.QueryAsync(
+                And(Eq("hostId", host.Id), IsNull("deleted"))
+            );
+
+            var programs = new List<ProgramInfo>(records.Count);
+
+            foreach (var record in records)
+            {
+                var program = await GetAsync(record.ProgramId);
+
+                programs.Add(new ProgramInfo(
+                    id           : program.Id, 
+                    name         : program.Name,
+                    slug         : program.Slug, 
+                    ownerId      : program.OwnerId,
+                    version      : record.ProgramVersion,
+                    runtime      : record.Runtime,
+                    properties   : record.Properties,
+                    type         : program.Type,
+                    repositoryId : program.RepositoryId,
+                    parentId     : program.ParentId
+                ));
+            }
+            
+            return programs;
         }
 
         public async Task<ProgramInfo> CreateAsync(CreateProgramRequest request)

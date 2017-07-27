@@ -25,11 +25,14 @@ namespace Carbon.CI
             Repositories       = new Dataset<RepositoryInfo,   long>(context);
             RepositoryBranches = new Dataset<RepositoryBranch, long>(context);
             RepositoryCommits  = new Dataset<RepositoryCommit, long>(context);
+
+            Packages           = new Dataset<PackageRecord, long>(context);
         }
 
         public IDbContext Context { get; }
 
-        public Dataset<ProjectInfo, long>    Projects { get; }
+        public Dataset<ProjectInfo,   long>  Projects { get; }
+        public Dataset<PackageRecord, long>  Packages { get; }
 
         public Dataset<Build, long>          Builds            { get; }
         public Dataset<BuildArtifact, long>  BuildArtifacts    { get; }

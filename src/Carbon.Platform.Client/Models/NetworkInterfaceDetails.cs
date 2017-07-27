@@ -21,7 +21,7 @@ namespace Carbon.Platform.Networking
         public ManagedResource Resource { get; set; }
 
         #region IResource
-        
+
         ResourceType IResource.ResourceType => ResourceTypes.NetworkInterface;
 
         #endregion

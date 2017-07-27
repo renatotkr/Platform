@@ -23,7 +23,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<HostTemplate> GetAsync(long id)
         {
-            return await db.HostTemplates.FindAsync(id).ConfigureAwait(false) 
+            return await db.HostTemplates.FindAsync(id) 
                 ?? throw ResourceError.NotFound(ResourceTypes.Image, id);
         }
 

@@ -17,10 +17,10 @@ namespace Carbon.VersionControl
 
         public string Domain { get; }
 
-        public static RepositoryProvider CodeCommit = new RepositoryProvider(1,    "aws");
-        public static RepositoryProvider GitHub     = new RepositoryProvider(1000, "github", "github.com");
-        public static RepositoryProvider Bitbucket  = new RepositoryProvider(1001, "bitbucket", "bitbucket.org");
-        public static RepositoryProvider GitLab     = new RepositoryProvider(1002, "gitlab", "gitlab.com");
+        public static readonly RepositoryProvider CodeCommit = new RepositoryProvider(2,    "aws",       "amazonaws.com");
+        public static readonly RepositoryProvider GitHub     = new RepositoryProvider(6000, "github",    "github.com");
+        public static readonly RepositoryProvider Bitbucket  = new RepositoryProvider(6001, "bitbucket", "bitbucket.org");
+        public static readonly RepositoryProvider GitLab     = new RepositoryProvider(6002, "gitlab",    "gitlab.com");
 
         // Code commit urls are region scoped...
 

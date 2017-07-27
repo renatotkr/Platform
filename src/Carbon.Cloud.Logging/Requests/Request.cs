@@ -2,7 +2,6 @@
 
 using Carbon.Data.Annotations;
 using Carbon.Data.Sequences;
-using Carbon.Security;
 
 namespace Carbon.Cloud.Logging
 {
@@ -18,8 +17,9 @@ namespace Carbon.Cloud.Logging
             string path,
             long environmentId,
             long serverId,
-            string referrer,
-            ISecurityContext context = null,
+            Uid clientId,
+            long? sessionId = null,
+            string referrer = null,
             TimeSpan computeTime = default(TimeSpan), // 0
             Uid? parentId = null,
             Uid? exceptionId = null,
@@ -36,12 +36,8 @@ namespace Carbon.Cloud.Logging
             ComputeTime   = computeTime;
             ExceptionId   = exceptionId;
             Referrer      = referrer;
-
-            if (context != null)
-            {
-                SessionId = context.SessionId;
-                ClientId  = Uid.Parse(context.ClientId);
-            }
+            ClientId      = clientId;
+            SessionId     = sessionId;
         }
         
         [Member("id"), Key]

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Carbon.Data;
 using Carbon.Data.Expressions;
-using Carbon.Platform.Storage;
 
 namespace Carbon.Rds.Services
 {

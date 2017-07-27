@@ -6,16 +6,16 @@ using Carbon.Versioning;
 namespace Carbon.Platform.Computing
 {
     [Dataset("HostPrograms")]
-    public class HostProgram
+    public class HostProgram : IProgram
     {
         public HostProgram() { }
 
         public HostProgram(
             long hostId, 
             long programId, 
+            string programName,
             SemanticVersion programVersion, 
-            int? port = null,
-            JsonObject configuration = null,
+            string[] addresses = null,
             JsonObject properties = null)
         {
             #region Preconditions
@@ -28,11 +28,11 @@ namespace Carbon.Platform.Computing
 
             #endregion
 
-            HostId = hostId;
+            HostId         = hostId;
             ProgramId      = programId;
-            ProgramVersion = programVersion.ToString();
-            Port           = port;
-            Configuration  = configuration;
+            ProgramName    = programName;
+            ProgramVersion = programVersion;
+            Addresses      = addresses;
             Properties     = properties;
         }
 
@@ -41,21 +41,40 @@ namespace Carbon.Platform.Computing
         
         [Member("programId"), Key]
         public long ProgramId { get; }
+        
+        [Member("programName")]
+        [StringLength(100)]
+        public string ProgramName { get; }
 
         [Member("programVersion")]
-        [StringLength(100)]
-        public string ProgramVersion { get; }
+        public SemanticVersion ProgramVersion { get; }
 
-        [Member("port")]
-        public int? Port { get; }
+        // e.g. http://*:80
 
-        [Member("configuration")]
-        [StringLength(1000)]
-        public JsonObject Configuration { get; }
+        [Member("addresses")]
+        [StringLength(200)]
+        public string[] Addresses { get; }
+
+        [Member("runtime")]
+        [StringLength(50)]
+        public string Runtime { get; }
 
         [Member("properties")]
         [StringLength(1000)]
         public JsonObject Properties { get; }
+
+        #region Health
+
+        [Member("heartbeat")]
+        public DateTime? Heartbeat { get; }
+
+        [Member("requestCount")]
+        public long RequestCount { get; }
+
+        [Member("errorCount")]
+        public long ErrorCount { get; }
+
+        #endregion
 
         #region Timestamps
 
@@ -67,6 +86,16 @@ namespace Carbon.Platform.Computing
 
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
+
+        #endregion
+
+        #region IProgram
+
+        long IProgram.Id => ProgramId;
+
+        string IProgram.Name => ProgramName;
+
+        SemanticVersion IProgram.Version => ProgramVersion;
 
         #endregion
     }

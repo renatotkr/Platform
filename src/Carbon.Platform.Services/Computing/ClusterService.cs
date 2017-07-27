@@ -31,7 +31,6 @@ namespace Carbon.Platform.Computing
             return db.Clusters.QueryAsync(Eq("environmentId", environment.Id));
         }
 
-      
         public async Task<Cluster> CreateAsync(CreateClusterRequest request)
         {
             #region Preconditions
@@ -58,7 +57,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<Cluster> GetAsync(long id)
         {
-            return await db.Clusters.FindAsync(id).ConfigureAwait(false)
+            return await db.Clusters.FindAsync(id)
                 ?? throw ResourceError.NotFound(ResourceTypes.Cluster, id);
         }
 

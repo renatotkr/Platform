@@ -63,7 +63,7 @@ namespace Carbon.Packaging
             Stream stream,
             bool stripFirstLevel = true, 
             bool leaveStreamOpen = false,
-            bool isCompressed = true)
+            bool isCompressed    = true)
         {
             #region Preconditions
 
@@ -98,7 +98,7 @@ namespace Carbon.Packaging
 
             var archive = TarArchive.Open(targetStream, new ReaderOptions {
                 LeaveStreamOpen = leaveStreamOpen,
-                LookForHeader = true
+                LookForHeader   = true
             });
             
             return new TarPackage(archive, stripFirstLevel);

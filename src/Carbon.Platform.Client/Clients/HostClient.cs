@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using Carbon.Platform.Computing;
 
 namespace Carbon.Platform
 {
+    using System.Text;
+    using Carbon.Data.Expressions;
     using Resources;
 
     public class HostClient
@@ -15,15 +18,9 @@ namespace Carbon.Platform
             this.api = api;
         }
 
-        // hosts/aws:i-0234123
-        public Task<HostDetails> RegisterAsync(HostDetails host)
+        public Task<HostDetails[]> ListAsync(Expression filter = null)
         {
-            var provider = ResourceProvider.Get(host.Resource.ProviderId);
-
-            return api.PostAsync<HostDetails>(
-                path : $"/hosts/{provider.Code}:{host.Resource.ResourceId}",
-                data : host
-            );
+            return api.GetListAsync<HostDetails>($"/hosts" + filter?.ToQueryString());
         }
 
         public Task<HostDetails> GetAsync(long id)
@@ -36,11 +33,6 @@ namespace Carbon.Platform
             var provider = ResourceProvider.Get(resource.ProviderId);
 
             return api.GetAsync<HostDetails>($"/hosts/{provider.Code}:{resource.ResourceId}");
-        }
-
-        public Task<List<ProgramDetails>> ListProgramsAsync(long id)
-        {
-            return api.GetAsync<List<ProgramDetails>>($"/hosts/{id}/programs");
         }
     }
 }

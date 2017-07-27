@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Carbon.Security;
 
 namespace Carbon.CI
 {
@@ -11,7 +12,7 @@ namespace Carbon.CI
 
         Task<RepositoryInfo> FindAsync(long ownerId, string name);
 
-        Task<RepositoryInfo> CreateAsync(CreateRepositoryRequest request);
+        Task<RepositoryInfo> CreateAsync(CreateRepositoryRequest request, ISecurityContext context);
 
         Task<IReadOnlyList<RepositoryInfo>> ListAsync(long ownerId);
     }

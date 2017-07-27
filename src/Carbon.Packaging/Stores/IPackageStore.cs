@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 
 using Carbon.Storage;
 
@@ -13,5 +14,11 @@ namespace Carbon.Packaging
             IPackage package,
             PutPackageOptions? options = null
         );
+
+        Task<PutPackageResult> PutAsync(
+           string key,
+           Stream stream,
+           PutPackageOptions? options = null
+       );
     }
 }

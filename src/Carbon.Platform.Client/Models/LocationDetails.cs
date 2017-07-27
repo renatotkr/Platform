@@ -7,8 +7,10 @@ namespace Carbon.Platform.Computing
         [DataMember(Name = "id")]
         public int Id { get; set; }
 
-        [DataMember(Name = "name")]
+        [DataMember(Name = "name", EmitDefaultValue = false)]
         public string Name { get; set; }
     }
-
 }
+
+// aws:us-east-1
+// aws:us-east-1a

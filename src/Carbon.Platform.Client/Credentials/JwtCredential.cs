@@ -6,7 +6,7 @@ using Carbon.Jwt;
 
 namespace Carbon.Platform.Security
 {
-    public class JwtCredential
+    public class JwtCredential : CloudCredential
     {
         public JwtCredential() { }
 

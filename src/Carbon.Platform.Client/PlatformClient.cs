@@ -1,25 +1,38 @@
 ﻿using System;
 
-using Carbon.Security.Tokens;
-
 namespace Carbon.Platform
 {
+    using Security;
+
     public class PlatformClient : ApiBase
     {
-        public PlatformClient(Uri endpoint, ISecurityToken credential)
+        public PlatformClient(Uri endpoint, CloudCredential credential)
             : base(endpoint, credential)
         {
-            Programs = new ProgramClient(this);
-            Hosts    = new HostClient(this);
+            Clusters     = new ClusterClient(this);
+            Hosts        = new HostClient(this);
+            Programs     = new ProgramClient(this);
+            Repositories = new RepositoryClient(this);
+            Environments = new EnvironmentClient(this);
+            Deployments  = new DeploymentClient(this);
         }
-        
-        public ProgramClient Programs { get; }
+
+        // Builds
+
+        public DeploymentClient Deployments { get; }
+
+        public ClusterClient Clusters { get; }
+
+        public EnvironmentClient Environments { get; }
 
         public HostClient Hosts { get; }
 
-        // Volumes
+        public ProgramClient Programs { get; }
 
-        // Clusters
+        public RepositoryClient Repositories { get; }
+
+
+        // Volumes
 
         // ...
     }

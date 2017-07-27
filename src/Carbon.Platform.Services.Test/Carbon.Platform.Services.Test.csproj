@@ -9,6 +9,7 @@
     <ProjectReference Include="..\Carbon.Hosting\Carbon.Hosting.csproj" />
     <ProjectReference Include="..\Carbon.Kms\Carbon.Kms.csproj" />
     <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj" />
+    <ProjectReference Include="..\Carbon.Platform.Client\Carbon.Platform.Client.csproj" />
     <ProjectReference Include="..\Carbon.Platform.Services\Carbon.Platform.Services.csproj" />
     <ProjectReference Include="..\Carbon.Platform.Web\Carbon.Platform.Web.csproj" />
     <ProjectReference Include="..\Carbon.Platform\Carbon.Platform.csproj" />

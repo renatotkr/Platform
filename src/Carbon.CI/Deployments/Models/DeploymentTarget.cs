@@ -1,10 +1,11 @@
 ﻿using System;
+
 using Carbon.Data.Annotations;
 
 namespace Carbon.CI
 {
     [Dataset("DeploymentTargets", Schema = CiadDb.Name)]
-    public class DeploymentTarget : IDeploymentTarget
+    public class DeploymentTarget
     {
         public DeploymentTarget() { }
 
@@ -16,9 +17,11 @@ namespace Carbon.CI
         {
             #region Preconditions
 
-            Validate.Id(deploymentId, nameof(deploymentId));
+            if (deploymentId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(deploymentId));
 
-            Validate.Id(hostId, nameof(hostId));
+            if (hostId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(hostId));
             
             #endregion
 
@@ -37,7 +40,8 @@ namespace Carbon.CI
         [Member("status")]
         public DeploymentStatus Status { get; set; }
         
-        [Member("message")]
+        [Member("message"), Optional]
+        [StringLength(255)]
         public string Message { get; set; }
     }
 }

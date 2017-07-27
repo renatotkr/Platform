@@ -8,8 +8,7 @@ namespace Carbon.CI
     {
         public DeployRequest(
             IProgram program,
-            IEnvironment environment,
-            long initiatorId)
+            IEnvironment environment)
         {
             Program     = program     ?? throw new ArgumentNullException(nameof(program));
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
@@ -18,6 +17,8 @@ namespace Carbon.CI
         public IProgram Program { get; }
         
         public IEnvironment Environment { get; }
+
+        // TODO: Targets
     }
     
     // Targets (environment, cluster, host)

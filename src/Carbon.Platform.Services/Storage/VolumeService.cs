@@ -16,7 +16,7 @@ namespace Carbon.Platform.Storage
 
         public async Task<VolumeInfo> GetAsync(long id)
         {
-            return await db.Volumes.FindAsync(id).ConfigureAwait(false)
+            return await db.Volumes.FindAsync(id)
                 ?? throw ResourceError.NotFound(ResourceTypes.Volume, id);
         }
 

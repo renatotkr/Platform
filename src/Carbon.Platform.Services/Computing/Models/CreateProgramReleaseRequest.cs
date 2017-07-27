@@ -13,6 +13,7 @@ namespace Carbon.Platform.Computing
             SemanticVersion version,
             long commitId,
             long creatorId,
+            long? buildId = null,
             JsonObject properties = null)
         {
             #region Preconditions
@@ -34,6 +35,8 @@ namespace Carbon.Platform.Computing
         public SemanticVersion Version { get; }
 
         public long CommitId { get; }
+
+        public long? BuildId { get; }
 
         [Range(1, 2_199_023_255_552)]
         public long CreatorId { get; }

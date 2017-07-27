@@ -5,13 +5,13 @@ namespace Carbon.Platform.Computing
 {
     public class ImageDetails : IImage
     {
-        [DataMember(Name = "id")]
+        [DataMember(Name = "id", EmitDefaultValue = false)]
         public long Id { get; set; }
 
-        [DataMember(Name = "type")]
+        [DataMember(Name = "type", EmitDefaultValue = false)]
         public ImageType Type { get; set; }
 
-        [DataMember(Name = "name")]
+        [DataMember(Name = "name", EmitDefaultValue = false)]
         public string Name { get; set; }
 
         [DataMember(Name = "size", EmitDefaultValue = false)]

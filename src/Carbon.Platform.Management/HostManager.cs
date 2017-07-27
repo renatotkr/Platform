@@ -53,6 +53,67 @@ namespace Carbon.Platform.Management
             this.imageService   = new ImageService(db);
         }
 
+        /*
+        public async Task<HostInfo> GetAsync(ResourceProvider provider, string resourceId)
+        {
+            var ec2Instance = await ec2.DescribeInstanceAsync(instanceId)
+             ?? throw ResourceError.NotFound(ResourceProvider.Aws, ResourceTypes.Host, instanceId);
+
+            var request = await GetRegistrationAsync(ec2Instance, cluster);
+
+            return await hostService.RegisterAsync(request); ;
+        }
+        */
+        
+        // TODO: Accept bash script?
+
+        public async Task RunCommandAsync(string commandText, IEnvironment environment, ISecurityContext context)
+        {
+            #region Preconditions
+
+            if (commandText == null)
+                throw new ArgumentNullException(nameof(commandText));
+
+            if (environment == null)
+                throw new ArgumentNullException(nameof(environment));
+
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
+            #endregion
+
+            var commands = CommandHelper.ToLines(commandText);
+
+            var parameters = new JsonObject {
+                { "commands", commands }
+            };
+            
+            // tag: || InstanceIds
+            // if tag: value:WebServer
+
+            var request = new SendCommandRequest {
+                DocumentName = "AWS-RunShellScript",
+                Targets      = new[] { new CommandTarget("tag:envId", values: new[] { environment.Id.ToString() }) },
+                Parameters   = parameters
+            };
+
+            var result = await ssm.SendCommandAsync(request);
+
+            #region Logging
+
+            await eventLog.CreateAsync(new Event(
+                action   : "run:command",
+                resource : "environment#" + environment.Id,
+                userId   : context.UserId.Value,
+                context  : new JsonObject
+                {
+                    {  "commandId", result.Command.CommandId }
+                }
+            ));
+
+            #endregion
+        }
+
         public async Task<HostInfo> RegisterAsync(RegisterHostRequest request)
         {
             #region Preconditions

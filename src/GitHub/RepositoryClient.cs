@@ -66,10 +66,20 @@ namespace GitHub
 
         public async Task<ICommit> GetCommitAsync(Revision revision)
         {
+            if (revision.Type == RevisionType.Commit)
+            {
+                return await GetCommitAsync(revision.Name).ConfigureAwait(false);
+            }
+
             var reference = await GetRefAsync(revision.Path).ConfigureAwait(false)
                 ?? throw new Exception($"The ref '{revision.Path}' was not found in '{AccountName}/{RepositoryName}'");
 
             return reference.Object.AsCommit();
+        }
+
+        public async Task<ICommit> GetCommitAsync(string sha1)
+        {
+            return await client.GetCommitAsync(AccountName, RepositoryName, sha1);
         }
 
         public Task<IList<GitBranch>> GetBranchesAsync()

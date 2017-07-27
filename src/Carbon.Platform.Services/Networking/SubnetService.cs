@@ -31,7 +31,7 @@ namespace Carbon.Platform.Networking
 
         public async Task<SubnetInfo> GetAsync(ResourceProvider provider, string resourceId)
         {
-            return await db.Subnets.FindAsync(provider, resourceId).ConfigureAwait(false)
+            return await db.Subnets.FindAsync(provider, resourceId)
                 ?? throw ResourceError.NotFound(provider, ResourceTypes.Subnet, resourceId);
         }
 
@@ -51,7 +51,7 @@ namespace Carbon.Platform.Networking
             // Open: Get subnetCount from network?
 
             var subnet = new SubnetInfo(
-                id            : await db.Subnets.GetNextScopedIdAsync(request.NetworkId).ConfigureAwait(false),
+                id            : await db.Subnets.GetNextScopedIdAsync(request.NetworkId),
                 addressBlocks : request.AddressBlocks,
                 resource      : request.Resource
             );
