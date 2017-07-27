@@ -5,36 +5,34 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Carbon.Css;
+using Carbon.Logging;
+using Carbon.Storage;
+
 namespace Carbon.Building.Web
 {
-    using Css;
-    using Logging;
-    using Storage;
-
     public class WebBuilder
     {
-        public static string BaseDirectory = "D:/builds";
-
         private readonly string basePath;
         private readonly string buildId;
         private readonly IPackage package;
         private readonly ILogger log;
 
         private readonly CssResolver cssResolver;
-        private readonly IBucket fs;
+        private readonly IBucket bucket;
 
         private readonly TypeScriptProject tsProject;
 
-        public WebBuilder(ILogger log, IPackage package, IBucket fs)
+        public WebBuilder(ILogger log, IPackage package, IBucket bucket, string baseDirectory = "D:/builds")
         {
-            this.log     = log     ?? throw new ArgumentNullException(nameof(log));
-            this.fs      = fs      ?? throw new ArgumentNullException(nameof(fs));
-            this.package = package ?? throw new ArgumentNullException(nameof(package));
+            this.log     = log           ?? throw new ArgumentNullException(nameof(log));
+            this.bucket  = bucket        ?? throw new ArgumentNullException(nameof(bucket));
+            this.package = package       ?? throw new ArgumentNullException(nameof(package));
 
             var unique = Guid.NewGuid().ToString("N");
 
             this.buildId = DateTime.UtcNow.ToString("yyyyMMddHHmmss") + "-" + unique;
-            this.basePath = BaseDirectory + $@"/{buildId}/";
+            this.basePath = baseDirectory + $@"/{buildId}/";
 
             this.tsProject = new TypeScriptProject(package, basePath);
 
@@ -76,7 +74,7 @@ namespace Carbon.Building.Web
                             ContentType = "text/css"
                         });
 
-                        await fs.PutAsync(blob).ConfigureAwait(false);
+                        await bucket.PutAsync(blob).ConfigureAwait(false);
                     }
                 }
                 else if (format == "ts")
@@ -103,7 +101,7 @@ namespace Carbon.Building.Web
 
                     log.Info($"Compiled '{compiledName}'");
 
-                    await fs.PutAsync(blob).ConfigureAwait(false);
+                    await bucket.PutAsync(blob).ConfigureAwait(false);
                 }
                 else if (FormatHelper.IsStaticFormat(format))
                 {
@@ -114,7 +112,7 @@ namespace Carbon.Building.Web
                     
                     // Metadata / ContenType?
 
-                    await fs.PutAsync(blob).ConfigureAwait(false);
+                    await bucket.PutAsync(blob).ConfigureAwait(false);
                 }
             }
 
@@ -165,7 +163,7 @@ namespace Carbon.Building.Web
         }
     }
 
-    public static class StreamExtensions
+    internal static class StreamExtensions
     {
         public static async Task CopyToFileAsync(this Stream stream, string destinationFilePath)
         {

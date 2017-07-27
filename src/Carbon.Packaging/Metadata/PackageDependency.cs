@@ -1,9 +1,9 @@
 ﻿using System;
 
+using Carbon.Versioning;
+
 namespace Carbon.Packaging
 {
-    using Versioning;
-
     public class PackageDependency
     {
         public PackageDependency(string name, string text)

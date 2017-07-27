@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Kms.Abstractions</AssemblyName>
-    <VersionPrefix>0.22.0</VersionPrefix>
+    <VersionPrefix>0.24.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
 
     <!-- Package Details -->
@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="Carbon.Data" Version="0.20.0" />
-    <PackageReference Include="Carbon.Data.Protection" Version="0.13.0" />
+    <PackageReference Include="Carbon.Data.Protection" Version="0.14.0" />
     <PackageReference Include="Carbon.Data.Protection.Primitives" Version="0.14.0" />
   </ItemGroup>
   

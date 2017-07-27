@@ -7,3 +7,10 @@
         Failed     = 3
     }
 }
+
+/*
+Pending    = 1,
+Building   = 2,
+Completed  = 3,
+Failed     = 5
+*/

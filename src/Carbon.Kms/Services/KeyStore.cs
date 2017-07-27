@@ -23,7 +23,7 @@ namespace Carbon.Kms
         public async Task<KeyInfo> GetAsync(Uid id)
         {
             return await db.Keys.FindAsync(id)
-                ?? throw new Exception($"key#{id} not found");
+                ?? throw new KeyNotFoundException(id.ToString());
         }
 
         public async Task<KeyInfo> GetAsync(long ownerId, string name)
@@ -33,8 +33,8 @@ namespace Carbon.Kms
             if (ownerId <= 0)
                 throw new ArgumentException("Must be > 0", nameof(ownerId));
 
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Required", nameof(name));
 
             #endregion
 
@@ -48,7 +48,7 @@ namespace Carbon.Kms
 
             if (keys.Count == 0)
             {
-                throw new Exception($"no active keys exist for '{ownerId}/{name}'");
+                throw new Exception($"no active keys for '{ownerId}/{name}'");
             }
 
             return keys[0];
@@ -61,6 +61,13 @@ namespace Carbon.Kms
 
         public Task<IReadOnlyList<KeyInfo>> ListAsync(long ownerId, string name)
         {
+            #region Preconditions
+
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+
+            #endregion
+
             return db.Keys.QueryAsync(Conjunction(
                 Eq("ownerId", ownerId), 
                 Eq("name", name),

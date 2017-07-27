@@ -20,7 +20,7 @@ namespace Carbon.Platform
 
         public AccessTokenService(HttpClient http, string baseUri)
         {
-            this.http = http;
+            this.http    = http;
             this.baseUri = baseUri;
         }
 

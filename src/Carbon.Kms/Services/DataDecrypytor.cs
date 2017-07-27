@@ -24,8 +24,8 @@ namespace Carbon.Kms
             #endregion
 
             var protector = await protectorProvider.GetAsync(message.Header.KeyId).ConfigureAwait(false) as DataProtector;
-            
-            return await protector.DecryptAsync(message).ConfigureAwait(false);
+
+            return protector.Decrypt(message);
         }
 
         public ValueTask<byte[]> DecryptAsync(byte[] data)

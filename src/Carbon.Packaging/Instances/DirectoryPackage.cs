@@ -29,7 +29,7 @@ namespace Carbon.Packaging
         #region File Helpers
 
         //  // Strip off the root and replace \ with /
-        public string GetKey(FileInfo file)
+        private string GetKey(FileInfo file)
         {
             return file.FullName
                 .Replace(root.FullName, "").Replace(@"\", "/")

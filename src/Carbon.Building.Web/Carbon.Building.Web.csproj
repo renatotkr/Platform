@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Building.Web</AssemblyName>
-    <VersionPrefix>0.13.0</VersionPrefix>
+    <VersionPrefix>0.14.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
 
     <Authors>iamcarbon</Authors>
@@ -12,10 +12,6 @@
     <PackageLicenseUrl>https://github.com/carbon/Platform/blob/master/LICENCE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/carbon/Platform</RepositoryUrl>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Carbon.Building\Carbon.Building.csproj" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Carbon.Css" Version="0.6.0" />
@@ -32,6 +28,10 @@
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
     
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Carbon.Building\Carbon.Building.csproj" />
   </ItemGroup>
 
 </Project>

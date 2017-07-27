@@ -1,10 +1,11 @@
 ﻿using System;
+using Carbon.Data.Sequences;
 
 namespace Carbon.Kms
 {
     public interface ICertificate // : IResource
     {
-        // Uid Id { get; }
+        Uid Id { get; }
 
         string Subject { get; }
         

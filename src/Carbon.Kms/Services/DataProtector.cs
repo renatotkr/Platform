@@ -14,7 +14,7 @@ namespace Carbon.Kms
             this.key = key;
         }
 
-        public ValueTask<byte[]> EncryptAsync(byte[] plaintext)
+        public byte[] Encrypt(byte[] plaintext)
         {
             #region Preconditions
 
@@ -38,13 +38,11 @@ namespace Carbon.Kms
                     ciphertext : ciphertext
                 );
 
-                var messageData = Serializer.Serialize(message);
-
-                return new ValueTask<byte[]>(messageData);
+                return Serializer.Serialize(message);
             }
         }
 
-        public ValueTask<byte[]> DecryptAsync(byte[] data)
+        public byte[] Decrypt(byte[] data)
         {
             #region Preconditions
 
@@ -53,14 +51,15 @@ namespace Carbon.Kms
 
             if (data.Length == 0)
                 throw new ArgumentException("Must not be empty", nameof(data));
+
             #endregion
 
             var message = Serializer.Deserialize<EncryptedDataMessage>(data);
             
-            return DecryptAsync(message);
+            return Decrypt(message);
         }
 
-        public ValueTask<byte[]> DecryptAsync(EncryptedDataMessage message)
+        public byte[] Decrypt(EncryptedDataMessage message)
         {
             #region Preconditions
 
@@ -77,8 +76,22 @@ namespace Carbon.Kms
 
             using (var aes = new AesDataProtector(key.Value, message.IV))
             {
-                return new ValueTask<byte[]>(aes.Decrypt(message.Ciphertext));
+                return aes.Decrypt(message.Ciphertext);
             }
         }
+
+        #region IDataProtector
+
+        ValueTask<byte[]> IDataProtector.DecryptAsync(byte[] ciphertext)
+        {
+            return new ValueTask<byte[]>(Decrypt(ciphertext));
+        }
+
+        ValueTask<byte[]> IDataProtector.EncryptAsync(byte[] plaintext)
+        {
+            return new ValueTask<byte[]>(Encrypt(plaintext));
+        }
+
+        #endregion
     }
 }
