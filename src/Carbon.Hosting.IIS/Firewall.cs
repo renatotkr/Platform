@@ -1,10 +1,37 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Carbon.Hosting.IIS
+namespace Carbon.Hosting
 {
-    public class Firewall
+    public sealed class Firewall
     {
+        public bool Exists(string name, ushort port)
+        {
+            var command = $@"advfirewall firewall show rule name=""{name}""";
+
+            var result = ExecNetSh(command);
+
+            /*
+            netsh>
+            Rule Name:                            appname
+            ----------------------------------------------------------------------
+            Enabled:                              Yes
+            Direction:                            In
+            Profiles:                             Domain,Private,Public
+            Grouping:
+            LocalIP:                              Any
+            RemoteIP:                             Any
+            Protocol:                             TCP
+            LocalPort:                            5000
+            RemotePort:                           Any
+            Edge traversal:                       No
+            Action:                               Allow
+            Ok.
+            */
+
+            return result.Contains(port.ToString());
+        }
+
         public void Open(string name, ushort port)
         {
             var command = $@"advfirewall firewall add rule name=""{name}"" dir=in action=allow localport={port} protocol=tcp";
@@ -19,7 +46,7 @@ namespace Carbon.Hosting.IIS
             ExecNetSh(command);
         }
 
-        private void ExecNetSh(string command)
+        private string ExecNetSh(string command)
         {
             var process = new Process {
                 StartInfo = new ProcessStartInfo("netsh") { 
@@ -32,17 +59,13 @@ namespace Carbon.Hosting.IIS
 
             process.Start();
 
-            // Console.WriteLine("command:" + command);
-            
-            // exec 
             process.StandardInput.WriteLine(command);
             process.StandardInput.Flush();
             process.StandardInput.Dispose();
 
-            // To avoid deadlocks, always read the output stream first and then wait.
-            var output = process.StandardOutput.ReadToEnd();
+            var output = process.StandardOutput.ReadToEnd(); 
 
-            Console.WriteLine("output:" + output);
+            // Console.WriteLine("firewall command result:" + output);
 
             if (!process.WaitForExit(2000))
             {
@@ -51,6 +74,8 @@ namespace Carbon.Hosting.IIS
             }
 
             process.Dispose();
+
+            return output;
         }
     }
 }

@@ -53,14 +53,16 @@ namespace Carbon.Hosting.IIS
         {
             var poolName = GetApplicationPoolName(app);
 
-            if (manager.ApplicationPools[poolName] != null)
+            ApplicationPool pool = manager.ApplicationPools[poolName];
+
+            if (pool != null)
             {
-                log.Info($"Application pool '{poolName}' already exists. Skipping");
+                log.Info($"Application pool '{pool.Name}' already exists. Runtime: {pool.ManagedRuntimeVersion}. Skipping");
 
                 return Task.CompletedTask;
             }
 
-            var pool = manager.ApplicationPools.Add(poolName); // Create a new pool
+            pool = manager.ApplicationPools.Add(poolName); // Create a new pool
 
             LogInfo(app, $"Created pool for {app.Name}");
 
@@ -343,10 +345,14 @@ namespace Carbon.Hosting.IIS
 
                 site.Bindings.Add(binding);
 
-                log.Info("- opening port:" + b.Port);
+                var firewallRuleName = "app" + app.Id;
 
-                firewall.Close("app" + app.Id);
-                firewall.Open("app" + app.Id, (ushort)b.Port);
+                if (!firewall.Exists(firewallRuleName, (ushort)b.Port))
+                {
+                    log.Info("- opening firewall port:" + b.Port);
+
+                    firewall.Open(firewallRuleName, (ushort)b.Port);
+                }
             }
 
             return site;
