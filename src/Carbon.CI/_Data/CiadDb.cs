@@ -22,9 +22,10 @@ namespace Carbon.CI
             Deployments        = new Dataset<Deployment, long>(context);
             DeploymentTargets  = new Dataset<DeploymentTarget, (long, long)>(context);
 
-            Repositories       = new Dataset<RepositoryInfo,   long>(context);
-            RepositoryBranches = new Dataset<RepositoryBranch, long>(context);
-            RepositoryCommits  = new Dataset<RepositoryCommit, long>(context);
+            Repositories       = new Dataset<RepositoryInfo,           long>(context);
+            RepositoryBranches = new Dataset<RepositoryBranch,         long>(context);
+            RepositoryCommits  = new Dataset<RepositoryCommit,         long>(context);
+            RepositoryUsers    = new Dataset<RepositoryUser,   (long, long)>(context);
 
             Packages           = new Dataset<PackageRecord, long>(context);
         }
@@ -44,6 +45,8 @@ namespace Carbon.CI
         public Dataset<RepositoryInfo,   long> Repositories { get; }
         public Dataset<RepositoryBranch, long> RepositoryBranches { get; }
         public Dataset<RepositoryCommit, long> RepositoryCommits { get; }
+        public Dataset<RepositoryUser,   (long repositoryId, long userId)> RepositoryUsers { get; }
+
 
     }
 }
