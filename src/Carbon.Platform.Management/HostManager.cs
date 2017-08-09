@@ -9,6 +9,7 @@ using Amazon.Ssm;
 
 using Carbon.Cloud.Logging;
 using Carbon.Data;
+using Carbon.Data.Expressions;
 using Carbon.Json;
 using Carbon.Net;
 using Carbon.Platform.Computing;
@@ -374,19 +375,34 @@ namespace Carbon.Platform.Management
             {
                 // Degister the instances from the load balancers target group
                 await elb.DeregisterTargetsAsync(new DeregisterTargetsRequest(
-                    targetGroupArn: targetGroupArn, 
-                    targets: new[] {
+                    targetGroupArn : targetGroupArn, 
+                    targets        : new[] {
                         new TargetDescription(host.ResourceId)
                     }
                 ));
-            }
 
-            // Cooldown to allow the connections to drain
-            await Task.Delay(cooldown);
+                await eventLog.CreateAsync(new Event(
+                    action     : "drain",
+                    resource   : "host#" + host.Id,
+                    userId     : context.UserId, 
+                    properties : new JsonObject {
+                        { "duration", cooldown.ToString() }
+                    })
+                );
+
+
+                // Cooldown to allow the connections to drain from the load balancer before issuing the termination command
+                await Task.Delay(cooldown);
+            }
 
             var request = new TerminateInstancesRequest(host.ResourceId);
 
             await ec2.TerminateInstancesAsync(request);;
+            
+            // Mark the host as terminated
+            await db.Hosts.PatchAsync(host.Id, new[] {
+                Change.Replace("terminated", Expression.Func("NOW"))
+            });
 
             #region Logging
 
@@ -394,7 +410,7 @@ namespace Carbon.Platform.Management
                 action   : "terminate",
                 resource : "host#" + host.Id,
                 userId   : context.UserId)
-            );;
+            );
 
             #endregion
         }

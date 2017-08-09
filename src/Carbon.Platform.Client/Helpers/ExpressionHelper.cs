@@ -2,9 +2,9 @@
 
 namespace Carbon.Data.Expressions
 {
-    internal static class ExpressionHelper
+    public static class ExpressionHelper
     {
-        public static string ToQueryString(this Expression expression)
+        internal static string ToQueryString(this Expression expression)
         {
             if (expression == null) return "";
 
@@ -15,11 +15,22 @@ namespace Carbon.Data.Expressions
                 case BinaryExpression binary:
                     sb.Append(binary.Left.ToString());
                     sb.Append("=");
-                    sb.Append(binary.Right.ToString());
+
+                    if (binary.Right is Constant constant)
+                    {
+                        sb.Append(constant.Value.ToString());
+                    }
+                    else
+                    {
+                        sb.Append(binary.Right.ToString());
+                    }
+
                     break;
             }
 
             return sb.ToString();
-        }
+        }        
     }
 }
+
+// $filter=type eq "app" and ...

@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
 using Carbon.Platform.Storage;
 
@@ -49,5 +50,8 @@ namespace Carbon.Platform.Computing
     {
         [DataMember(Name = "version")]
         public SemanticVersion Version { get; set; }
+
+        [DataMember(Name = "created")]
+        public DateTime Created { get; set; }
     }
 }

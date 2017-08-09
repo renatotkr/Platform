@@ -3,13 +3,13 @@ using System.Runtime.Serialization;
 
 namespace Carbon.Platform.Security
 {
-    public class AccessKeyCredential : CloudCredential
+    public class AccessKeyCredential : ICredential
     {
         public AccessKeyCredential(string accessKeyId, string accessKeySecret, long? accountId)
         {
-            AccessKeyId = accessKeyId ?? throw new ArgumentNullException(nameof(accessKeyId));
+            AccessKeyId     = accessKeyId ?? throw new ArgumentNullException(nameof(accessKeyId));
             AccessKeySecret = accessKeySecret ?? throw new ArgumentNullException(nameof(accessKeySecret));
-            AccountId = accountId;
+            AccountId       = accountId;
         }
 
         [DataMember(Name = "accessKeyId")]

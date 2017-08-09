@@ -25,15 +25,16 @@ namespace Carbon.Platform.Diagnostics
             return db.Exceptions.FindAsync(id);
         }
 
-        public async Task<IReadOnlyList<ExceptionInfo>> ListAsync(long environmentId)
+        public async Task<IReadOnlyList<ExceptionInfo>> ListAsync(long environmentId, int skip = 0, int take = 100)
         {
             var start = RequestId.Create(environmentId, DateTime.UtcNow.AddYears(-10), 0);
-            var end   = RequestId.Create(environmentId, DateTime.UtcNow.AddYears(10), 0);
+            var end   = RequestId.Create(environmentId, DateTime.UtcNow.AddYears(10),  0);
             
             var result = await db.Exceptions.QueryAsync(
                 expression  : Between("id", start, end),
                 order       : Order.Descending("id"),
-                take        : 1000
+                skip        : skip,
+                take        : take
             ).ConfigureAwait(false);
 
             return result;

@@ -36,7 +36,7 @@ namespace Carbon.Platform
         {
             var packageStream = await api.DownloadAsync($"/repositories/{id}@{revision}/package.zip");
 
-            return ZipPackage.FromStream(packageStream, true);
+            return ZipPackage.FromStream(packageStream, stripFirstLevel: false);
         }
 
         public Task<RepositoryDetails> CreateAsync(RepositoryDetails repository)

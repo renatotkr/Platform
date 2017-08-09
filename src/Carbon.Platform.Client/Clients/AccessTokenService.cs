@@ -24,7 +24,7 @@ namespace Carbon.Platform
             this.baseUri = baseUri;
         }
 
-        public async Task<ISecurityToken> GetAsync(CloudCredential credential)
+        public async Task<ISecurityToken> GetAsync(ICredential credential)
         {
             switch (credential)
             {

@@ -4,7 +4,7 @@ using Carbon.Json;
 
 namespace Carbon.Platform.Diagnostics
 {
-    [Dataset("Exceptions", Schema = "Diagnostics")]
+    [Dataset("Exceptions", Schema = "Logs")]
     public class ExceptionInfo : IException
     {
         // environmentId | timestamp/ms | sequenceNumber
@@ -14,14 +14,14 @@ namespace Carbon.Platform.Diagnostics
         [Member("requestId")]
         public Uid RequestId { get; set; }
 
-        [Member("programId")]           // Uid?
+        [Member("programId")]
         public long ProgramId { get; set; }
         
         [Member("hostId")]
-        public long? HostId { get; set; } // Uid (could contain environment...)
+        public long? HostId { get; set; }
 
         [Member("type")]
-        [MaxLength(1000)]
+        [MaxLength(200)]
         public string Type { get; set; }
 
         [Member("message")]
@@ -31,7 +31,7 @@ namespace Carbon.Platform.Diagnostics
         // [ { file, line, function } ]
 
         [Member("stackTrace"), Optional]
-        [StringLength(2000)]
+        [StringLength(4000)]
         public string StackTrace { get; set; }
         
         // appVersion, ...

@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
+using Carbon.Data.Expressions;
 using Carbon.Platform.Computing;
+using Carbon.Platform.Environments;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform
 {
-    using System.Text;
-    using Carbon.Data.Expressions;
-    using Resources;
-
     public class HostClient
     {
         private readonly ApiBase api;
@@ -21,6 +19,16 @@ namespace Carbon.Platform
         public Task<HostDetails[]> ListAsync(Expression filter = null)
         {
             return api.GetListAsync<HostDetails>($"/hosts" + filter?.ToQueryString());
+        }
+
+        public Task<HostDetails[]> ListAsync(ICluster cluster)
+        {
+            return api.GetListAsync<HostDetails>($"/clusters/{cluster.Id}/hosts");
+        }
+
+        public Task<HostDetails[]> ListAsync(IEnvironment environment)
+        {
+            return api.GetListAsync<HostDetails>($"/environments/{environment.Id}/hosts");
         }
 
         public Task<HostDetails> GetAsync(long id)

@@ -2,13 +2,12 @@
 using System.Text;
 using System.Threading.Tasks;
 
-using Carbon.CI;
 using Carbon.Kms;
 using Carbon.VersionControl;
 
 using GitHub;
 
-namespace Carbonmade.Platform
+namespace Carbon.CI
 {
     public class RepositoryClientFactory : IRepositoryClientFactory
     {
@@ -25,7 +24,10 @@ namespace Carbonmade.Platform
 
             if (repository == null)
                 throw new ArgumentNullException(nameof(repository));
-            
+
+            if (repository.EncryptedAccessToken == null)
+                throw new ArgumentException("Missing accessToken", nameof(repository));
+
             #endregion
 
             var origin = RevisionSource.Parse(repository.Origin);

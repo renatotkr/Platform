@@ -18,6 +18,8 @@ namespace Carbon.Platform.Diagnostics
 
         public long EnvironmentId { get; set; }
 
+        public long HostId { get; set; }
+
         public long ProgramId { get; set; }
 
         public string ProgramVersion { get; set; }
@@ -27,8 +29,6 @@ namespace Carbon.Platform.Diagnostics
         public string Type { get; set; }
 
         public string Message { get; set; }
-
-        public long HostId { get; set; }
 
         public string StackTrace { get; set; }
 

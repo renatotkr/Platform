@@ -66,7 +66,9 @@ namespace Carbon.Platform
         {
             var stream = await api.DownloadAsync($"/programs/{id}@{version}/package.zip");
 
-            return ZipPackage.FromStream(stream, true);
+            // All zip packages will be rooted...
+
+            return ZipPackage.FromStream(stream, stripFirstLevel: false);
         }
 
         public async Task<ProgramDetails> PublishAsync(ProgramDetails program, Package package)

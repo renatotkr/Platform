@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Carbon.Data.Annotations;
 
 namespace Carbon.Rds
@@ -10,9 +11,16 @@ namespace Carbon.Rds
 
         public DatabaseMigration(long id, string schemaName, string[] commands, string description = null)
         {
+            #region Preconditions
+
+            if (id <= 0)
+                throw new ArgumentException("Must be > 0", nameof(id));
+
+            #endregion
+
             Id          = id;
             SchemaName  = schemaName;
-            Commands    = commands;
+            Commands    = commands ?? throw new ArgumentNullException(nameof(commands));
             Description = description;
         }
 
@@ -28,8 +36,7 @@ namespace Carbon.Rds
         [StringLength(2000)]
         public string Description { get; }
 
-        [Member("commands")]
-        [StringLength(10000)]
+        [Member("commands"), StringLength(10000)]
         public string[] Commands { get; }
 
         [Member("status")]
@@ -48,7 +55,6 @@ namespace Carbon.Rds
         Success = 1,
         Failed  = 2
     }
-
 }
 
 // https://en.wikipedia.org/wiki/Schema_migration

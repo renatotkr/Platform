@@ -18,7 +18,7 @@ namespace Carbon.Platform
     public abstract class ApiBase
     {
         private readonly string baseUri;
-        private readonly CloudCredential credential;
+        private readonly ICredential credential;
         private readonly AccessTokenService accessTokenService;
 
         private readonly HttpClient http = new HttpClient {
@@ -29,7 +29,7 @@ namespace Carbon.Platform
             Timeout = TimeSpan.FromSeconds(15)
         };
 
-        public ApiBase(Uri endpoint, CloudCredential credential)
+        public ApiBase(Uri endpoint, ICredential credential)
         {
             #region Preconditions
 
@@ -217,17 +217,15 @@ namespace Carbon.Platform
 
         private async Task SignRequestAsync(HttpRequestMessage request)
         {
-            // Get a new access token if it expires...
-
-            if (accessToken == null || accessToken.Expires.Value <= DateTime.UtcNow)
+            if (ShouldRenew(accessToken))
             {
                 await gate.WaitAsync();
 
                 try
                 {
-                    if (accessToken == null || accessToken.Expires.Value <= DateTime.UtcNow)
+                    if (ShouldRenew(accessToken))
                     {
-                        await RefreshAccessTokenAsync();
+                        await RenewAccessToken();
                     }
                 }
                 finally
@@ -241,9 +239,22 @@ namespace Carbon.Platform
             request.Headers.Add("Authorization", "Bearer " + accessToken.Value);
         }
 
-        public async Task RefreshAccessTokenAsync()
+        public Action AccessTokenRenewing { get; set; }
+
+        public async Task RenewAccessToken()
         {
+            AccessTokenRenewing?.Invoke();
+
             accessToken = await accessTokenService.GetAsync(credential);       
         }
+
+        #region Helpers
+
+        private static bool ShouldRenew(ISecurityToken token)
+        {
+            return token == null || token.Expires.Value <= DateTime.UtcNow.AddMinutes(-1);
+        }
+
+        #endregion
     }
 }

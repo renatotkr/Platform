@@ -6,7 +6,7 @@ using Carbon.Jwt;
 
 namespace Carbon.Platform.Security
 {
-    public class JwtCredential : CloudCredential
+    public class JwtCredential : ICredential
     {
         public JwtCredential() { }
 
@@ -56,6 +56,9 @@ namespace Carbon.Platform.Security
             if (string.IsNullOrEmpty(Issuer))
                 throw new ArgumentException("Issuer is required");
 
+            if (string.IsNullOrEmpty(KeyId))
+                throw new ArgumentException("KeyId is required");
+
             #endregion
 
             var date = DateTimeOffset.UtcNow;
@@ -82,28 +85,14 @@ namespace Carbon.Platform.Security
             {
                 claims.Add("role", Role);
             }
-
-            JsonObject header;
-
-            if (KeyId != null)
-            {
-                header = new JsonObject {
-                    { "typ", "JWT" },
-                    { "alg", "RS256" },
-                    { "kid",  KeyId }
-                };
-            }
-            else
-            {
-                header = defaultHeader;
-            }
+            
+            var header = new JsonObject {
+                { "typ", "JWT" },
+                { "alg", JwtAlgorithms.RS256 },
+                { "kid", KeyId }
+            };   
 
             return JwtSigner.Default.Sign(header, claims, PrivateKey);
         }
-
-        private static readonly JsonObject defaultHeader = new JsonObject {
-            { "typ", "JWT" },
-            { "alg", "RS256" }
-        };
     }
 }
