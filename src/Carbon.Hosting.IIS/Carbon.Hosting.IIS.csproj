@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.26.1</VersionPrefix>
-    <TargetFrameworks>netstandard1.6</TargetFrameworks>
     <AssemblyName>Carbon.Hosting.IIS</AssemblyName>
+    <VersionPrefix>0.26.2</VersionPrefix>
+    <TargetFrameworks>netstandard1.6</TargetFrameworks>
     
     <!-- Package Details-->
     <Authors>iamcarbon</Authors>
@@ -21,10 +21,10 @@
     <PackageReference Include="Carbon.Logging" Version="1.1.0" />
     <PackageReference Include="Microsoft.Web.Administration" Version="10.0.0" />
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
-    <PackageReference Include="System.IO.FileSystem.AccessControl" Version="4.3.0" />
+    <PackageReference Include="System.IO.FileSystem.AccessControl" Version="4.4.0" />
     
     <!-- don't remove System.Reflection.TypeExtensions: needed by Microsoft.Web.Administration -->
-    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.4.0" />
   </ItemGroup>
 
 </Project>

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Management</AssemblyName>
-    <VersionPrefix>0.19.0</VersionPrefix>
+    <VersionPrefix>0.21.1</VersionPrefix>
     <TargetFrameworks>netstandard1.6</TargetFrameworks>
 
     <!-- Package Info-->
@@ -19,9 +19,9 @@
     <PackageReference Remove="NETStandard.Library" />
     <PackageReference Include="System.Runtime" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
-    <PackageReference Include="Amazon.Ec2" Version="0.8.8" />
-    <PackageReference Include="Amazon.Ssm" Version="0.5.6" />
-    <PackageReference Include="Amazon.Elb" Version="0.5.3" />
+    <PackageReference Include="Amazon.Ec2" Version="0.8.9" />
+    <PackageReference Include="Amazon.Ssm" Version="0.5.7" />
+    <PackageReference Include="Amazon.Elb" Version="0.6.0" />
     <PackageReference Include="Carbon.Logging" Version="1.1.0" />
   </ItemGroup>
 

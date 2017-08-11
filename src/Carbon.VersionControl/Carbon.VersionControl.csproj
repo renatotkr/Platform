@@ -25,6 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Carbon.Storage" Version="1.9.0" />
+    <PackageReference Include="Carbon.Storage" Version="1.9.1" />
   </ItemGroup>
 </Project>

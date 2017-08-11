@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Hosting</AssemblyName>
-    <VersionPrefix>1.11.0</VersionPrefix>
+    <VersionPrefix>1.12.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6</TargetFrameworks>
     
     <!-- Package Details-->
@@ -17,8 +17,8 @@
     <PackageReference Remove="NETStandard.Library" />
     <PackageReference Include="System.AppContext" Version="4.3.0" />
     <PackageReference Include="System.Runtime" Version="4.3.0" />
-    <PackageReference Include="Carbon.Storage" Version="1.9.0" />
-    <PackageReference Include="Carbon.Json" Version="1.4.1" />
+    <PackageReference Include="Carbon.Storage" Version="1.9.1" />
+    <PackageReference Include="Carbon.Json" Version="1.4.2" />
   </ItemGroup>
 
   <ItemGroup>

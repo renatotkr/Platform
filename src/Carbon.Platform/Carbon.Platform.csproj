@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform</AssemblyName>
-    <VersionPrefix>1.68.0</VersionPrefix>
+    <VersionPrefix>1.69.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6</TargetFrameworks>
 
     <!-- Package Info-->
@@ -20,11 +20,11 @@
     <PackageReference Include="System.Runtime" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.3.0" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.0" />
     <PackageReference Include="System.Net.Primitives" Version="4.3.0" />
 
-    <PackageReference Include="Carbon.Data.Annotations" Version="1.5.0" />
-    <PackageReference Include="Carbon.Json" Version="1.4.1" />
+    <PackageReference Include="Carbon.Data.Annotations" Version="1.6.1" />
+    <PackageReference Include="Carbon.Json" Version="1.4.2" />
   </ItemGroup>
 
   <ItemGroup>
