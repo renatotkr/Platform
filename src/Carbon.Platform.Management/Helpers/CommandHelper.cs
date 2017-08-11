@@ -7,6 +7,13 @@ namespace Carbon.Platform.Management
     {
         public static string[] ToLines(string text)
         {
+            #region Preconditions
+
+            if (text == null)
+                throw new ArgumentNullException(nameof(text));
+
+            #endregion
+
             return text.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
                 .Where(line => !line.StartsWith("#"))
                 .ToArray();

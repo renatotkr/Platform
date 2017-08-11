@@ -53,6 +53,11 @@ namespace Carbon.CI
                 throw new ArgumentNullException(nameof(request));
 
             #endregion
+            
+            if (await db.Projects.ExistsAsync(And(Eq("ownerId", request.OwnerId), Eq("name", request.Name))))
+            {
+                throw new ResourceConflictException("project(ownerId:{request.OwnerId},name:{request.Name})");
+            }
 
             var project = new ProjectInfo(
                 id           : await db.Projects.Sequence.NextAsync(),

@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Carbon.Platform.Resources;
 
 namespace Carbon.CI
@@ -9,7 +10,17 @@ namespace Carbon.CI
 
         public CreateProjectRequest(string name, long ownerId, long repositoryId)
         {
-            Name         = name ?? throw new ArgumentNullException(nameof(name));
+            #region Preconditions
+
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Required", nameof(name));
+
+            if (ownerId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(ownerId));
+
+            #endregion
+
+            Name         = name;
             OwnerId      = ownerId;
             RepositoryId = repositoryId;
         }

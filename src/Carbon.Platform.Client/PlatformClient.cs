@@ -14,8 +14,9 @@ namespace Carbon.Platform
             Programs     = new ProgramClient(this);
             Repositories = new RepositoryClient(this);
             Environments = new EnvironmentClient(this);
+            Events       = new EventClient(this);
+            Exceptions = new ExceptionClient(this);
             Deployments  = new DeploymentClient(this);
-            Exceptions   = new ExceptionClient(this);
         }
 
         // Builds
@@ -27,6 +28,8 @@ namespace Carbon.Platform
         public ClusterClient Clusters { get; }
 
         public EnvironmentClient Environments { get; }
+
+        public EventClient Events { get; }
 
         public ExceptionClient Exceptions { get; }
 
