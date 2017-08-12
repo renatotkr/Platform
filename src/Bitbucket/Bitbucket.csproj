@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Bitbucket</AssemblyName>
-    <VersionPrefix>1.6.0</VersionPrefix>
+    <VersionPrefix>1.6.1</VersionPrefix>
 
     <!-- Package Details-->
     <Authors>iamcarbon</Authors>
