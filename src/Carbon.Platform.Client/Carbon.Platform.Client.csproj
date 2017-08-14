@@ -2,26 +2,19 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Client</AssemblyName>
-    <VersionPrefix>0.59.2</VersionPrefix>
-    <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
+    <VersionPrefix>0.60.0</VersionPrefix>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
   
     <!-- Package Details -->
     <Authors>iamcarbon</Authors>
     <Copyright>© Jason Nelson</Copyright>
     <Description>Simple client for the Carbon.Platform.Api.</Description>
     <PackageTags>platform;carbon</PackageTags>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.6|AnyCPU'">
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard1.6|AnyCPU'">
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Carbon.Authentication.Jwt" Version="0.13.0" />
+    <PackageReference Include="Carbon.Authentication.Jwt" Version="0.14.0" />
     <PackageReference Include="Carbon.Data" Version="0.22.2" />
     <PackageReference Include="Carbon.Security.Primitives" Version="0.21.0" />
   </ItemGroup>
@@ -29,12 +22,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj" />
     <ProjectReference Include="..\Carbon.Platform.Abstractions\Carbon.Platform.Abstractions.csproj" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <PackageReference Remove="NETStandard.Library" />
-    <PackageReference Include="System.Runtime" Version="4.3.0" />
-    <PackageReference Include="System.Net.Http" Version="4.3.2" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">

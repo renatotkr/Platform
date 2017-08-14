@@ -2,9 +2,10 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Configuration</AssemblyName>
-    <TargetFrameworks>netstandard1.6</TargetFrameworks>
-    <VersionPrefix>0.6.0</VersionPrefix>
-
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <VersionPrefix>0.7.0</VersionPrefix>
+    <LangVersion>latest</LangVersion>
+    
     <!-- Package Info-->
     <Authors>iamcarbon</Authors>
     <Copyright>© Jason Nelson</Copyright>
@@ -13,11 +14,4 @@
     <RepositoryUrl>https://github.com/carbon/Platform</RepositoryUrl>
     <PackageProjectUrl>https://github.com/carbon/platform</PackageProjectUrl>
   </PropertyGroup>
-  
-  <ItemGroup>
-    <PackageReference Remove="NETStandard.Library" />
-    <PackageReference Include="System.Collections" Version="4.3.0" />
-    <PackageReference Include="System.Linq" Version="4.3.0" />
-    <PackageReference Include="System.Runtime" Version="4.3.0" />
-  </ItemGroup>
 </Project>

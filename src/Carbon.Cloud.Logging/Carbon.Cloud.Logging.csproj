@@ -2,33 +2,21 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Cloud.Logging</AssemblyName>
-    <VersionPrefix>0.16.0</VersionPrefix>
-    <TargetFrameworks>netstandard1.6</TargetFrameworks>
+    <VersionPrefix>0.17.0</VersionPrefix>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
 
     <!-- Package Info-->
     <Authors>iamcarbon</Authors>
     <Copyright>© Jason Nelson</Copyright>
     <Description>Cloud logging services.</Description>
     <PackageTags>cloud;logging;carbon</PackageTags>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.6|AnyCPU'">
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard1.6|AnyCPU'">
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Remove="NETStandard.Library" />
     <PackageReference Include="Carbon.Data.Sql" Version="0.32.1" />
     <PackageReference Include="Carbon.Json" Version="1.4.2" />
     <PackageReference Include="Carbon.Security.Primitives" Version="0.21.0" />
-    <PackageReference Include="System.Runtime" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.0" />
   </ItemGroup>
 
 </Project>

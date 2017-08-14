@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Building.Web</AssemblyName>
-    <VersionPrefix>0.15.0</VersionPrefix>
-    <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
+    <VersionPrefix>0.16.0</VersionPrefix>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
 
     <Authors>iamcarbon</Authors>
     <Description>TypeScript and CSS compiliers.</Description>
@@ -17,13 +17,6 @@
     <PackageReference Include="Carbon.Css" Version="0.6.0" />
     <PackageReference Include="Carbon.Logging" Version="1.1.0" />
     <PackageReference Include="Carbon.Storage" Version="1.9.1" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <PackageReference Remove="NETStandard.Library" />
-    <PackageReference Include="System.Runtime" Version="4.3.0" />
-    <PackageReference Include="System.Threading.Tasks" Version="4.3.0" />
-    <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">

@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Kms.Abstractions</AssemblyName>
-    <VersionPrefix>0.25.1</VersionPrefix>
-    <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <VersionPrefix>0.29.0</VersionPrefix>
 
     <!-- Package Details -->
     <Authors>iamcarbon</Authors>
@@ -17,16 +17,5 @@
     <PackageReference Include="Carbon.Data.Protection" Version="0.14.1" />
     <PackageReference Include="Carbon.Data.Protection.Primitives" Version="0.15.0" />
   </ItemGroup>
-  
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <PackageReference Remove="NETStandard.Library" />
-    <PackageReference Include="System.Runtime" Version="4.3.0" />
-    <PackageReference Include="System.Collections" Version="4.3.0" />
-    <PackageReference Include="System.Threading.Tasks" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
-  </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
- 
-  </ItemGroup>
 </Project>
