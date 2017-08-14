@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Monitoring</AssemblyName>
     <VersionPrefix>0.17.0</VersionPrefix>
-    <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     
     <!-- Package Details-->
     <Authors>iamcarbon</Authors>
@@ -11,20 +11,6 @@
     <Description>Library for monitoring Windows servers.</Description>
     <PackageTags>platform;monitoring;carbon</PackageTags>
   </PropertyGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <PackageReference Remove="NETStandard.Library" />
-    <PackageReference Include="System.Runtime" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
-    <PackageReference Include="System.Linq" Version="4.3.0" />
-    <PackageReference Include="System.IO.FileSystem.DriveInfo" Version="4.3.0" />
-    <PackageReference Include="System.Net.NetworkInformation" Version="4.3.0" />
-    <PackageReference Include="System.Console" Version="4.3.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Carbon.Platform.Abstractions\Carbon.Platform.Abstractions.csproj" />

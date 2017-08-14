@@ -11,7 +11,7 @@ namespace Carbon.CI
     {
         private readonly HttpClient http = new HttpClient {
             DefaultRequestHeaders = {
-                { "User-Agent", "Carbon/1.0.0" },
+                { "User-Agent", "Carbon/1.0" },
                 { "Accept",     "application/json" }
             },
             Timeout = TimeSpan.FromSeconds(30)

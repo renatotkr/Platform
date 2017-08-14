@@ -15,7 +15,7 @@ namespace Carbon.Platform
             Repositories = new RepositoryClient(this);
             Environments = new EnvironmentClient(this);
             Events       = new EventClient(this);
-            Exceptions = new ExceptionClient(this);
+            Exceptions   = new ExceptionClient(this);
             Deployments  = new DeploymentClient(this);
         }
 

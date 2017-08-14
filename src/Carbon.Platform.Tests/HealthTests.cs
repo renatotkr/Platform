@@ -2,8 +2,6 @@
 
 using Xunit;
 
-using Carbon.Platform.Resources;
-
 namespace Carbon.Platform.Computing.Tests
 {
     public class HealthCheckTEsts
@@ -18,7 +16,7 @@ namespace Carbon.Platform.Computing.Tests
                 port     : 80,
                 ownerId  : 1,
                 protocal : Net.NetworkProtocal.TCP,
-                resource : default(ManagedResource)
+                resource : default
             ) {
                 Interval           = TimeSpan.FromSeconds(10),
                 Timeout            = TimeSpan.FromSeconds(10),

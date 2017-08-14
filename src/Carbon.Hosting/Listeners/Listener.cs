@@ -81,7 +81,7 @@ namespace Carbon.Net
 
             sb.Append(Port);
 
-            if (Scheme != default(ApplicationProtocal))
+            if (Scheme != default)
             {
                 sb.Append("/");
                 sb.Append(Scheme.Canonicalize());

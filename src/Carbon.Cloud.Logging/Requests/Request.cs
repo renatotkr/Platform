@@ -20,7 +20,7 @@ namespace Carbon.Cloud.Logging
             Uid clientId,
             long? sessionId = null,
             string referrer = null,
-            TimeSpan computeTime = default(TimeSpan), // 0
+            TimeSpan computeTime = default, // 0
             Uid? parentId = null,
             Uid? exceptionId = null,
             int status = 200)

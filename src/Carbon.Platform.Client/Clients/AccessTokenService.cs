@@ -13,7 +13,7 @@ namespace Carbon.Platform
 {
     using Security;
 
-    internal class AccessTokenService
+    public class AccessTokenService
     {
         private readonly HttpClient http;
         private readonly string baseUri;
@@ -30,7 +30,7 @@ namespace Carbon.Platform
             {
                 case JwtCredential jwk:
                     return await GetAsync(jwk);
-                case AccessKeyCredential accessKey :
+                case AccessKeyCredential accessKey:
                     return await GetAsync(accessKey);
                 default:
                     throw new Exception("Unexpected credential type:" + credential.GetType().ToString());
@@ -51,11 +51,16 @@ namespace Carbon.Platform
             return await SendAsync(message);
         }
 
-        public async Task<ISecurityToken> GetAsync(AccessKeyCredential a)
+        public async Task<ISecurityToken> GetAsync(AccessKeyCredential a, string scope = null)
         {
             var parameters = new Dictionary<string, string> {
                 { "grant_type", "client_credentials" }
             };
+
+            if (scope != null)
+            {
+                parameters.Add(scope, scope);
+            }
 
             if (a.AccountId != null)
             {

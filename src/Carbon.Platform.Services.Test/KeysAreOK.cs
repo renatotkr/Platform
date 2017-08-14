@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.Common;
-using System.Reflection;
 using System.Threading.Tasks;
 
 using Carbon.CI;
@@ -8,7 +7,6 @@ using Carbon.Data;
 using Carbon.Data.Sql;
 using Carbon.Data.Sql.Adapters;
 using Carbon.Kms;
-using Carbon.Platform.Storage;
 using Carbon.Platform.Web;
 using Carbon.Rds;
 
@@ -68,12 +66,11 @@ namespace Carbon.Platform.Services.Test
             {
                 var type = property.PropertyType;
 
-                if (!type.GetTypeInfo().IsGenericType) continue;
+                if (!type.IsGenericType) continue;
 
                 type = type.GetGenericArguments()[0];
 
                 var dataset = DatasetInfo.Get(type);
-
                
                 foreach (var index in dataset.Indexes)
                 {
@@ -90,8 +87,7 @@ namespace Carbon.Platform.Services.Test
                     {
                         throw new Exception($"table index '{index.Name}' on '{dataset.Name}' exceeds 767 bytes");
                     }
-                }
-              
+                }              
 
                 int primaryKeyLength = 0;
 

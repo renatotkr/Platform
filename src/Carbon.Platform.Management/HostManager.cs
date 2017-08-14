@@ -369,30 +369,32 @@ namespace Carbon.Platform.Management
 
             #endregion
 
-            var cluster = await clusterService.GetAsync(host.ClusterId);
-
-            if (cluster.Properties.TryGetValue(ClusterProperties.TargetGroupArn, out var targetGroupArn))
+            if (host.ClusterId > 0)
             {
-                // Degister the instances from the load balancers target group
-                await elb.DeregisterTargetsAsync(new DeregisterTargetsRequest(
-                    targetGroupArn : targetGroupArn, 
-                    targets        : new[] {
+                var cluster = await clusterService.GetAsync(host.ClusterId);
+
+                if (cluster.Properties.TryGetValue(ClusterProperties.TargetGroupArn, out var targetGroupArn))
+                {
+                    // Degister the instances from the load balancers target group
+                    await elb.DeregisterTargetsAsync(new DeregisterTargetsRequest(
+                        targetGroupArn: targetGroupArn,
+                        targets: new[] {
                         new TargetDescription(host.ResourceId)
-                    }
-                ));
+                        }
+                    ));
 
-                await eventLog.CreateAsync(new Event(
-                    action     : "drain",
-                    resource   : "host#" + host.Id,
-                    userId     : context.UserId, 
-                    properties : new JsonObject {
+                    await eventLog.CreateAsync(new Event(
+                        action: "drain",
+                        resource: "host#" + host.Id,
+                        userId: context.UserId,
+                        properties: new JsonObject {
                         { "duration", cooldown.ToString() }
-                    })
-                );
+                        })
+                    );
 
-
-                // Cooldown to allow the connections to drain from the load balancer before issuing the termination command
-                await Task.Delay(cooldown);
+                    // Cooldown to allow the connections to drain from the load balancer before issuing the termination command
+                    await Task.Delay(cooldown);
+                }
             }
 
             var request = new TerminateInstancesRequest(host.ResourceId);

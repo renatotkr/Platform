@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Carbon.Hosting</AssemblyName>
     <VersionPrefix>1.12.0</VersionPrefix>
-    <TargetFrameworks>netstandard1.6</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     
     <!-- Package Details-->
     <Authors>iamcarbon</Authors>
@@ -13,10 +13,23 @@
     <RepositoryUrl>https://github.com/carbon/Platform</RepositoryUrl>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.6|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard1.6|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Remove="NETStandard.Library" />
-    <PackageReference Include="System.AppContext" Version="4.3.0" />
-    <PackageReference Include="System.Runtime" Version="4.3.0" />
     <PackageReference Include="Carbon.Storage" Version="1.9.1" />
     <PackageReference Include="Carbon.Json" Version="1.4.2" />
   </ItemGroup>
