@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Management</AssemblyName>
-    <VersionPrefix>0.22.0</VersionPrefix>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <VersionPrefix>0.23.1</VersionPrefix>
 
     <!-- Package Info-->
     <Authors>iamcarbon</Authors>
@@ -16,10 +16,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Amazon.Ec2" Version="0.8.9" />
-    <PackageReference Include="Amazon.Ssm" Version="0.5.7" />
-    <PackageReference Include="Amazon.Elb" Version="0.6.0" />
-    <PackageReference Include="Carbon.Logging" Version="1.1.0" />
+    <PackageReference Include="Amazon.Ec2" Version="0.9.1" />
+    <PackageReference Include="Amazon.Ssm" Version="0.6.0" />
+    <PackageReference Include="Amazon.Elb" Version="0.7.1" />
+    <PackageReference Include="Carbon.Logging" Version="1.2.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,4 +28,3 @@
   </ItemGroup>
   
 </Project>
-

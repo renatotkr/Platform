@@ -16,4 +16,5 @@
     <ProjectReference Include="..\Carbon.Platform.Abstractions\Carbon.Platform.Abstractions.csproj" />
     <ProjectReference Include="..\Carbon.Platform.Metrics\Carbon.Platform.Metrics.csproj" />
   </ItemGroup>
+  
 </Project>

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Building.Web</AssemblyName>
-    <VersionPrefix>0.16.0</VersionPrefix>
+    <VersionPrefix>0.17.1</VersionPrefix>
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
 
     <Authors>iamcarbon</Authors>
@@ -14,9 +14,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Carbon.Css" Version="0.6.0" />
-    <PackageReference Include="Carbon.Logging" Version="1.1.0" />
-    <PackageReference Include="Carbon.Storage" Version="1.9.1" />
+    <PackageReference Include="Carbon.Css" Version="0.7.0" />
+    <PackageReference Include="Carbon.Logging" Version="1.2.0" />
+    <PackageReference Include="Carbon.Storage" Version="1.10.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">

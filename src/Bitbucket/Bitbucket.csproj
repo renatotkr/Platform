@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <AssemblyName>Bitbucket</AssemblyName>
-    <VersionPrefix>1.7.0</VersionPrefix>
+    <VersionPrefix>1.7.2</VersionPrefix>
 
     <!-- Package Details-->
     <Authors>iamcarbon</Authors>
     <Copyright>© 2016-2017 Jason Nelson</Copyright>
-    <Description>Simple API client for Bitbucket.</Description>
-    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <Description>Simple netstandard client for Bitbucket.</Description>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,11 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Carbon.Json" Version="1.4.2" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Net.Http" />
+    <PackageReference Include="Carbon.Json" Version="1.5.0" />
   </ItemGroup>
 </Project>

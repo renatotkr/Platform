@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Client</AssemblyName>
-    <VersionPrefix>0.60.0</VersionPrefix>
+    <VersionPrefix>0.61.0</VersionPrefix>
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
   
     <!-- Package Details -->
@@ -14,17 +14,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Carbon.Authentication.Jwt" Version="0.14.0" />
-    <PackageReference Include="Carbon.Data" Version="0.22.2" />
-    <PackageReference Include="Carbon.Security.Primitives" Version="0.21.0" />
+    <PackageReference Include="Carbon.Authentication.Jwt" Version="0.15.0" />
+    <PackageReference Include="Carbon.Data" Version="0.23.0" />
+    <PackageReference Include="Carbon.Security.Primitives" Version="0.22.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj" />
     <ProjectReference Include="..\Carbon.Platform.Abstractions\Carbon.Platform.Abstractions.csproj" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <Reference Include="System.Net.Http" />
   </ItemGroup>
 </Project>

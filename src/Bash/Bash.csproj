@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <AssemblyName>Bash</AssemblyName>
-    <VersionPrefix>0.2.0</VersionPrefix>
-    <TargetFrameworks>netstandard1.6</TargetFrameworks>
+    <VersionPrefix>0.3.0</VersionPrefix>
+    <TargetFramework>netstandard2.0</TargetFramework>
 
     <!-- Package Details -->
     <Authors>iamcarbon</Authors>
@@ -11,11 +11,5 @@
     <Description>A library for building strongly typed bash scripts.</Description>
     <PackageTags>bash;</PackageTags>
   </PropertyGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <PackageReference Remove="NETStandard.Library" />
-    <PackageReference Include="System.Collections" Version="4.3.0" />
-    <PackageReference Include="System.Runtime" Version="4.3.0" />
-  </ItemGroup>
-
+  
 </Project>

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform</AssemblyName>
-    <VersionPrefix>1.70.0</VersionPrefix>
+    <VersionPrefix>1.71.0</VersionPrefix>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
 
     <!-- Package Info-->
@@ -16,8 +16,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Carbon.Data.Annotations" Version="1.6.1" />
-    <PackageReference Include="Carbon.Json" Version="1.4.2" />
+    <PackageReference Include="Carbon.Data.Annotations" Version="1.7.0" />
+    <PackageReference Include="Carbon.Json" Version="1.5.0" />
   </ItemGroup>
 
   <ItemGroup>

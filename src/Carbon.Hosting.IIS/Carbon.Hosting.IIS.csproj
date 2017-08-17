@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Hosting.IIS</AssemblyName>
-    <VersionPrefix>0.27.0</VersionPrefix>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <VersionPrefix>0.28.0</VersionPrefix>
+    <TargetFramework>netstandard2.0</TargetFramework>
     
     <!-- Package Details-->
     <Authors>iamcarbon</Authors>
@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Carbon.Logging" Version="1.1.0" />
+    <PackageReference Include="Carbon.Logging" Version="1.2.0" />
     <PackageReference Include="Microsoft.Web.Administration" Version="10.0.0" />
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="4.4.0" />
   </ItemGroup>
