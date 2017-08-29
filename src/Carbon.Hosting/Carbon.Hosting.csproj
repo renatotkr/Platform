@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Hosting</AssemblyName>
-    <VersionPrefix>1.14.0</VersionPrefix>
     <TargetFramework>netstandard2.0</TargetFramework>
-    
+     <VersionPrefix>1.14.0</VersionPrefix>
+   
     <!-- Package Details-->
     <Authors>iamcarbon</Authors>
     <Description>Hosting abstractions for operating a multi-cloud service.</Description>

@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <AssemblyName>Bitbucket</AssemblyName>
-    <VersionPrefix>1.7.2</VersionPrefix>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <VersionPrefix>1.7.3</VersionPrefix>
 
     <!-- Package Details-->
     <Authors>iamcarbon</Authors>
     <Copyright>© 2016-2017 Jason Nelson</Copyright>
     <Description>Simple netstandard client for Bitbucket.</Description>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>

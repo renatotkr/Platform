@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Hosting.IIS</AssemblyName>
-    <VersionPrefix>0.28.0</VersionPrefix>
     <TargetFramework>netstandard2.0</TargetFramework>
-    
+    <VersionPrefix>0.29.0</VersionPrefix>
+
     <!-- Package Details-->
     <Authors>iamcarbon</Authors>
     <Copyright>© Jason Nelson</Copyright>
