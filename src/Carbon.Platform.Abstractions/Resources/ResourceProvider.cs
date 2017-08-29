@@ -12,6 +12,9 @@ namespace Carbon.Platform
         public static readonly ResourceProvider Azure        = new ResourceProvider(4,  "azure", "Azure", "azure.microsoft.com");
         public static readonly ResourceProvider DigitalOcean = new ResourceProvider(10, "do",    "Digital Ocean", "digitalocean.com");
 
+        public static readonly ResourceProvider GCore        = new ResourceProvider(100,  "gcore", "GCore", "gcore.lu");
+        public static readonly ResourceProvider Vultr        = new ResourceProvider(125,  "vultr", "Vultr", "vultr.com");
+        public static readonly ResourceProvider Wasabi       = new ResourceProvider(157,  "wasabi", "Wasabi", "wasabi.com");
 
         // Banks
         public static readonly ResourceProvider Braintree = new ResourceProvider(5001, "braintree", "Braintree", "braintreepayments.com");
