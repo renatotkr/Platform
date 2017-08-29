@@ -50,13 +50,13 @@ namespace Carbon.Platform.Computing
         [Member("port")]
         public ushort Port { get; }
 
-        [Member("properties")]
-        [StringLength(1000)]
-        public JsonObject Properties { get; set; }
-
         // TODO: CertificateId
 
         public long LoadBalancerId => ScopedId.GetScope(Id);
+
+        [Member("properties")]
+        [StringLength(1000)]
+        public JsonObject Properties { get; set; }
 
         #region IResource
 

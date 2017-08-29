@@ -57,7 +57,6 @@ namespace Carbon.Cloud.Logging
         [Member("status")]
         public int Status { get; set; }
         
-        // is the siteId sufficient?
         [Member("environmentId")]
         public long EnvironmentId { get; }
 

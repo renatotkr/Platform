@@ -9,6 +9,8 @@ namespace Carbon.CI
     {
         Task<IReadOnlyList<RepositoryUser>> ListAsync(IRepository repository);
 
+        Task<IReadOnlyList<RepositoryUser>> ListHavingUserIdAsync(long userId);
+
         Task<RepositoryUser> CreateAsync(CreateRepositoryUserRequest request, ISecurityContext context);
     }
 }

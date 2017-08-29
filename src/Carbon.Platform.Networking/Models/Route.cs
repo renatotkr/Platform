@@ -8,12 +8,12 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Networking
 {
-    [Dataset("NetworkRoutes")]
-    public class NetworkRoute : INetworkRoute
+    [Dataset("Route")]
+    public class Route : INetworkRoute
     {
-        public NetworkRoute() { }
+        public Route() { }
 
-        public NetworkRoute(long id, string name)
+        public Route(long id, string name)
         {
             Id = id;
             Name = name;

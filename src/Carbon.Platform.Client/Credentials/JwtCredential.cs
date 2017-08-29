@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Security.Cryptography;
 
+using Carbon.Jose;
 using Carbon.Json;
-using Carbon.Jwt;
 
 namespace Carbon.Platform.Security
 {

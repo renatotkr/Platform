@@ -31,12 +31,16 @@ namespace Carbon.CI
         public long RepositoryId { get; }
         
         [Member("userId"), Key]
+        [Indexed] // Index to lookup by user
         public long UserId { get; }
         
         // machineName.localPath ?
         [Member("properties")]
         [StringLength(1000)]
         public JsonObject Properties { get; }
+
+        // https://help.github.com/articles/repository-permission-levels-for-an-organization/
+        // Permissions ? [ Read, Write, Admin ]
 
         #region Timestamps
 
@@ -51,4 +55,6 @@ namespace Carbon.CI
 
         #endregion
     }
+
+    // Collaborator?
 }

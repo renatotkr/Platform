@@ -52,7 +52,7 @@ namespace Carbon.Platform.Computing
         [Member("environmentId")]
         public long EnvironmentId { get; }
         
-        [Member("locationId")] // global, regional, or zonal
+        [Member("locationId")]  // global, regional, or zonal
         public int LocationId { get; }
 
         [Member("hostTemplateId")]

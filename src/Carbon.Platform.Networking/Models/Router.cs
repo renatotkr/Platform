@@ -7,12 +7,12 @@ using Carbon.Platform.Sequences;
 
 namespace Carbon.Platform.Networking
 {
-    [Dataset("NetworkRouters", Schema = "Networking")]
-    public class NetworkRouter : INetworkRouter
+    [Dataset("Routers", Schema = "Networking")]
+    public class Router : INetworkRouter
     {
-        public NetworkRouter() { }
+        public Router() { }
 
-        public NetworkRouter(long id, string name, ManagedResource resource)
+        public Router(long id, string name, ManagedResource resource)
         {
             Id         = id;
             Name       = name ?? throw new ArgumentNullException(nameof(name));

@@ -189,7 +189,7 @@ namespace Carbon.Platform
             {
                 if (response.StatusCode == HttpStatusCode.NotFound)
                 {
-                    return default(T);
+                    return default;
                 }
 
                 var text = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -217,13 +217,13 @@ namespace Carbon.Platform
 
         private async Task SignRequestAsync(HttpRequestMessage request)
         {
-            if (ShouldRenew(accessToken))
+            if (ShouldRenewToken(accessToken))
             {
                 await gate.WaitAsync();
 
                 try
                 {
-                    if (ShouldRenew(accessToken))
+                    if (ShouldRenewToken(accessToken))
                     {
                         await RenewAccessToken();
                     }
@@ -250,7 +250,7 @@ namespace Carbon.Platform
 
         #region Helpers
 
-        private static bool ShouldRenew(ISecurityToken token)
+        private static bool ShouldRenewToken(ISecurityToken token)
         {
             return token == null || token.Expires.Value <= DateTime.UtcNow.AddMinutes(-1);
         }

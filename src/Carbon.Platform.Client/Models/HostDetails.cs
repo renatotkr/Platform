@@ -2,7 +2,7 @@
 using System.Net;
 using System.Runtime.Serialization;
 
-using Carbon.Jwt;
+using Carbon.Jose;
 using Carbon.Platform.Networking;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Storage;

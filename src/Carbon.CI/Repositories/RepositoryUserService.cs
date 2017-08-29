@@ -35,6 +35,13 @@ namespace Carbon.CI
             );
         }
 
+        public Task<IReadOnlyList<RepositoryUser>> ListHavingUserIdAsync(long userId)
+        {  
+            return db.RepositoryUsers.QueryAsync(
+                expression: And(Eq("userId", userId), IsNull("deleted"))
+            );
+        }
+
         public async Task<RepositoryUser> CreateAsync(CreateRepositoryUserRequest request, ISecurityContext context)
         {
             var user = new RepositoryUser(request.RepositoryId, request.UserId, request.Properties);
