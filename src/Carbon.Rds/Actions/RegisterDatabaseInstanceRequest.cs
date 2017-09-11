@@ -1,4 +1,6 @@
-﻿using Carbon.Platform.Resources;
+﻿using System;
+
+using Carbon.Platform.Resources;
 using Carbon.Platform.Storage;
 
 namespace Carbon.Rds.Services
@@ -8,13 +10,22 @@ namespace Carbon.Rds.Services
         public RegisterDatabaseInstanceRequest() { }
 
         public RegisterDatabaseInstanceRequest(
+            long databaseId,
             ManagedResource resource, 
             int priority = 1,
             DatabaseFlags flags = DatabaseFlags.Primary)
         {
-            Resource = resource;
-            Priority = priority;
-            Flags    = flags;
+            #region Preconditions
+
+            if (databaseId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(databaseId));
+
+            #endregion
+
+            DatabaseId = databaseId;
+            Resource   = resource;
+            Priority   = priority;
+            Flags      = flags;
         }
 
         public long DatabaseId { get; set; }
@@ -23,8 +34,8 @@ namespace Carbon.Rds.Services
 
         public ManagedResource Resource { get; set; }
 
-        public int Priority { get; set; } = 1;
+        public int Priority { get; set; }
 
-        public DatabaseFlags Flags { get; set; } = DatabaseFlags.Primary;
+        public DatabaseFlags Flags { get; set; }
     }
 }

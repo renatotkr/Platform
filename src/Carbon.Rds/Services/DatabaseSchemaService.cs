@@ -33,11 +33,11 @@ namespace Carbon.Rds.Services
             return db.DatabaseBackups.QueryAsync(Between("id", range.Start, range.End), Order.Descending("id"));
         }
 
-        public async Task<DatabaseSchema> CreateAsync(IDatabaseInfo database, string name)
+        public async Task<DatabaseSchema> CreateAsync(CreateDatabaseSchemaRequest request)
         {
-            var schemaId = await DatabaseSchemaId.NextAsync(db.Context, database.Id);
+            var schemaId = await DatabaseSchemaId.NextAsync(db.Context, request.DatabaseId);
 
-            var schema = new DatabaseSchema(schemaId, name);
+            var schema = new DatabaseSchema(schemaId, request.SchemaName);
 
             await db.DatabaseSchemas.InsertAsync(schema);
 

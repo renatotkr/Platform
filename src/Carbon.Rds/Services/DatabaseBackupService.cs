@@ -74,8 +74,5 @@ namespace Carbon.Rds.Services
                 Change.Replace("completed", Func("NOW"))
             });
         }
-
-        // StartAsync
-        // UpdateAsync
     }
 }

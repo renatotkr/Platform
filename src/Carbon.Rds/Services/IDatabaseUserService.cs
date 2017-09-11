@@ -5,12 +5,14 @@ namespace Carbon.Rds.Services
 {
     public interface IDatabaseUserService
     {
-        Task DeleteAsync(DatabaseUser user);
+        Task<DatabaseUser> CreateAsync(CreateDatabaseUserRequest request);
 
         Task<bool> ExistsAsync(long databaseId, long userId);
 
-        Task<IReadOnlyList<DatabaseUser>> ListAsync(IDatabaseInfo database);
+        Task<DatabaseUser> GetAsync(long databaseId, long userId);
 
-        Task<DatabaseUser> CreateAsync(CreateDatabaseUserRequest request);
+        Task DeleteAsync(DatabaseUser user);
+
+        Task<IReadOnlyList<DatabaseUser>> ListAsync(IDatabaseInfo database);
     }
 }

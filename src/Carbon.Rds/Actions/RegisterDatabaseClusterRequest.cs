@@ -5,15 +5,20 @@ namespace Carbon.Rds.Services
 {
     public class RegisterDatabaseClusterRequest
     {
-        public RegisterDatabaseClusterRequest() { }
-
         public RegisterDatabaseClusterRequest(
             string name,
             ManagedResource resource, 
             RegisterDatabaseInstanceRequest[] instances,
             RegisterDatabaseEndpointRequest[] endpoints)
         {
-            Name      = name ?? throw new ArgumentNullException(nameof(name));
+            #region PReconditions
+
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Required", nameof(name));
+
+            #endregion
+
+            Name      = name;
             Resource  = resource;
             Instances = instances;
             Endpoints = endpoints;
@@ -21,12 +26,12 @@ namespace Carbon.Rds.Services
 
         public long DatabaseId { get; set; }
 
-        public string Name { get; set; }
+        public string Name { get; }
 
-        public ManagedResource Resource { get; set; }
+        public ManagedResource Resource { get; }
 
-        public RegisterDatabaseInstanceRequest[] Instances { get; set; }
+        public RegisterDatabaseInstanceRequest[] Instances { get; }
 
-        public RegisterDatabaseEndpointRequest[] Endpoints { get; set; }
+        public RegisterDatabaseEndpointRequest[] Endpoints { get; }
     }
 }

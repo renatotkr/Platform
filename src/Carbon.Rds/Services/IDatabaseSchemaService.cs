@@ -5,7 +5,7 @@ namespace Carbon.Rds.Services
 {
     public interface IDatabaseSchemaService
     {
-        Task<DatabaseSchema> CreateAsync(IDatabaseInfo database, string name);
+        Task<DatabaseSchema> CreateAsync(CreateDatabaseSchemaRequest request);
 
         Task DeleteAsync(IDatabaseSchema schema);
 

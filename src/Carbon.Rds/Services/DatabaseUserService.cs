@@ -31,6 +31,11 @@ namespace Carbon.Rds.Services
             );
         }
 
+        public Task<DatabaseUser> GetAsync(long databaseId, long userId)
+        {
+            return db.DatabaseUsers.FindAsync((databaseId, userId)); // or throw
+        }
+
         public Task<bool> ExistsAsync(long databaseId, long userId)
         {
             return db.DatabaseUsers.ExistsAsync(

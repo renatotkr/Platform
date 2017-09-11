@@ -3,7 +3,6 @@
 using Carbon.Data.Annotations;
 using Carbon.Platform;
 using Carbon.Platform.Sequences;
-using Carbon.Platform.Storage;
 
 namespace Carbon.Rds
 {

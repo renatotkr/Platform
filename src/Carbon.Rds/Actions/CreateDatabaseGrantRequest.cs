@@ -6,13 +6,17 @@ namespace Carbon.Rds.Services
 {
     public class CreateDatabaseGrantRequest
     {
-        public CreateDatabaseGrantRequest(IDatabaseInfo database, DbObject resource, string[] actions, long userId)
-            : this(database.Id, resource, actions, userId) { }
+        public CreateDatabaseGrantRequest(
+            IDatabaseInfo database,
+            DbObject resource, 
+            string[] privileges, 
+            long userId)
+            : this(database.Id, resource, privileges, userId) { }
 
         public CreateDatabaseGrantRequest(
             long databaseId,
             DbObject resource,
-            string[] actions,
+            string[] privileges,
             long userId)
         {
             #region Preconditions
@@ -20,11 +24,11 @@ namespace Carbon.Rds.Services
             if (databaseId <= 0)
                 throw new ArgumentException("Must be > 0", nameof(databaseId));
             
-            if (actions == null)
-                throw new ArgumentNullException(nameof(actions));
+            if (privileges == null)
+                throw new ArgumentNullException(nameof(privileges));
 
-            if (actions.Length == 0)
-                throw new ArgumentException("Required", nameof(actions));
+            if (privileges.Length == 0)
+                throw new ArgumentException("Required", nameof(privileges));
 
             if (userId <= 0)
                 throw new ArgumentException("Must be > 0", nameof(userId));
@@ -34,15 +38,17 @@ namespace Carbon.Rds.Services
             DatabaseId = databaseId;
             UserId     = userId;
             Resource   = resource;
-            Actions    = actions;
+            Privileges    = privileges;
         }
 
         public long DatabaseId { get; }
 
-        public string[] Actions { get; }
+        public string[] Privileges { get; }
 
         public DbObject Resource { get; }
 
         public long UserId { get; }
     }
 }
+
+// GRANT {privileges} on {resource} to {user}

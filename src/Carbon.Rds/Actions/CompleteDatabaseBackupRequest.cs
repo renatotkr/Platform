@@ -1,4 +1,6 @@
-﻿namespace Carbon.Rds.Services
+﻿using System;
+
+namespace Carbon.Rds.Services
 {
     public class CompleteDatabaseBackupRequest
     {
@@ -9,6 +11,13 @@
             byte[] sha256,
             string message = null)
         {
+            #region Preconditions
+
+            if (backupId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(backupId));
+
+            #endregion
+
             BackupId = backupId;
             Status = status;
             Size = size;

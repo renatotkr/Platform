@@ -58,7 +58,7 @@ namespace Carbon.Rds.Services
                 databaseId : request.DatabaseId,
                 userId     : request.UserId,
                 resource   : request.Resource,
-                actions    : request.Actions
+                actions    : request.Privileges
             );
 
             await db.DatabaseGrants.InsertAsync(grant);
