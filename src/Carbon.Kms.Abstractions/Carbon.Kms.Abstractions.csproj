@@ -15,7 +15,7 @@
   <ItemGroup>
     <PackageReference Include="Carbon.Data" Version="0.24.0" />
     <PackageReference Include="Carbon.Data.Protection" Version="0.15.0" />
-    <PackageReference Include="Carbon.Data.Protection.Primitives" Version="0.15.1" />
+    <PackageReference Include="Carbon.Data.Protection.Primitives" Version="0.15.2" />
   </ItemGroup>
 
 </Project>
