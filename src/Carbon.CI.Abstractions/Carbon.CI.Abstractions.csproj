@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.CI.Abstractions</AssemblyName>
-    <VersionPrefix>0.43.0</VersionPrefix>
+    <VersionPrefix>0.44.0</VersionPrefix>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
 
     <!-- Package Info-->

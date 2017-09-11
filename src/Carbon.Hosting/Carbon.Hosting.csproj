@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Carbon.Hosting</AssemblyName>
     <TargetFramework>netstandard2.0</TargetFramework>
-     <VersionPrefix>1.14.0</VersionPrefix>
+     <VersionPrefix>1.15.0</VersionPrefix>
    
     <!-- Package Details-->
     <Authors>iamcarbon</Authors>
@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Carbon.Storage" Version="1.10.0" />
+    <PackageReference Include="Carbon.Storage" Version="1.11.0" />
     <PackageReference Include="Carbon.Json" Version="1.5.0" />
   </ItemGroup>
 
