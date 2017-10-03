@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Carbon.Packaging</AssemblyName>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <VersionPrefix>1.19.0</VersionPrefix>
+    <VersionPrefix>1.20.0</VersionPrefix>
 
     <!-- Package Details -->
     <Authors>iamcarbon</Authors>
@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Carbon.Data.Protection" Version="0.15.0" />
+    <PackageReference Include="Carbon.Data.Protection" Version="0.16.0" />
     <PackageReference Include="Carbon.Json" Version="1.5.0" />
     <PackageReference Include="Carbon.Storage" Version="1.11.0" />
     <PackageReference Include="Carbon.Versioning" Version="1.3.0" />

@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <AssemblyName>GitHub</AssemblyName>
-    <VersionPrefix>1.9.2</VersionPrefix>
+    <VersionPrefix>1.9.3</VersionPrefix>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>7.1</LangVersion>
 
     <!-- Package Details -->
     <Authors>iamcarbon</Authors>
