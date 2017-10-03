@@ -2,8 +2,8 @@
 {
     public class OSNames
     {
-        public static readonly string Debian = "Debian";
-        public static readonly string Ubuntu = "Ubuntu";
-        public static readonly string Windows = "Windows";
+        public const string Debian  = "Debian";
+        public const string Ubuntu  = "Ubuntu";
+        public const string Windows = "Windows";
     }
 }
