@@ -20,10 +20,13 @@ namespace Carbon.Platform.Networking
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
 
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Required", nameof(name));
+
             #endregion
 
-            Id   = id;
-            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Id         = id;
+            Name       = name;
             ProviderId = resource.ProviderId;
             ResourceId = resource.ResourceId;
         }
@@ -33,7 +36,7 @@ namespace Carbon.Platform.Networking
         public long Id { get; }
 
         [Member("name")]
-        [StringLength(63)]
+        [Ascii, StringLength(63)]
         public string Name { get; }
         
         [IgnoreDataMember]

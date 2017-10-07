@@ -78,4 +78,7 @@ namespace Carbon.Platform.Environments
     }
 }
 
-// e.g. image.processor#production
+
+/*
+processor#production
+*/

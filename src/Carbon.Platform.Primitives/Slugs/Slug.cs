@@ -14,7 +14,7 @@ namespace Carbon.Platform
             long id,
             string name,
             long? ownerId = null, 
-            SlugFlags flags = SlugFlags.None)
+            SlugFlags flags = default)
         {
             Id      = id;
             Name    = name ?? throw new ArgumentNullException(nameof(name));

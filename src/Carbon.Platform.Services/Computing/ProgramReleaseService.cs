@@ -4,9 +4,7 @@ using System.Threading.Tasks;
 using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Platform.Resources;
-using Carbon.Platform.Sequences;
 using Carbon.Versioning;
-using Dapper;
 
 namespace Carbon.Platform.Computing
 {
@@ -80,21 +78,6 @@ namespace Carbon.Platform.Computing
                 And(Eq("programId", programId), IsNull("deleted")),
                 Order.Descending("version")
             );
-        }
-    }
-
-    internal class ProgramReleaseId
-    {
-        static readonly string sql = SqlHelper.GetCurrentValueAndIncrement<ProgramInfo>("releaseCount");
-
-        public static async Task<long> NextAsync(IDbContext context, long programId)
-        {
-            using (var connection = await context.GetConnectionAsync())
-            {
-                var currentReleaseCount = await connection.ExecuteScalarAsync<int>(sql, new { id = programId });
-
-                return ScopedId.Create(programId, currentReleaseCount + 1);
-            }
         }
     }
 }

@@ -4,9 +4,10 @@ namespace Carbon.Platform.Computing
 {
     public class RegisterLoadBalancer
     {
-        public RegisterLoadBalancer(string name)
+        public RegisterLoadBalancer(string name, ManagedResource resource)
         {
-            Name = name;
+            Name     = name;
+            Resource = resource;
         }
 
         public string Name { get; }

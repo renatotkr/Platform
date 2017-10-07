@@ -79,7 +79,7 @@ namespace Carbon.Kms
         public long OwnerId { get; }
         
         [Member("name")]
-        [StringLength(100)]
+        [StringLength(100)] // 63?
         public string Name { get; }
 
         // master, public, private, secret

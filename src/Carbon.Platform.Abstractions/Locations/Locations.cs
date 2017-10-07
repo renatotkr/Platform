@@ -263,7 +263,6 @@ namespace Carbon.Platform
         public static readonly Location DigitalOcean_BLR1 = Create(DigitalOcean, 11, "BLR1"); // 2016-05-31 | Bangalore, IN
         public static readonly Location DigitalOcean_SFO2 = Create(DigitalOcean, 12, "SFO2"); // 2017-07-12 | San Francisco
 
-
         // Wasabai
 
         public static readonly Location Wasabi_USEast1 = Create(Wasabi, 1, "us-east-1");

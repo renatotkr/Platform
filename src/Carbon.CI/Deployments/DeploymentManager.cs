@@ -81,11 +81,8 @@ namespace Carbon.CI
         {
             #region Preconditions
 
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
+            if (request == null) throw new ArgumentNullException(nameof(request));
+            if (context == null) throw new ArgumentNullException(nameof(context));
 
             #endregion
             

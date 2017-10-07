@@ -24,7 +24,7 @@ namespace Carbon.Platform
         public long Id { get; set; }
 
         [DataMember(Name = "status", EmitDefaultValue = false)]
-        public string Status { get; set; }
+        public string Status { get; set; } // todo: DeploymentStatus
 
         [DataMember(Name = "program", EmitDefaultValue = false)]
         public DeploymentProgramDetails Program { get; set; }
@@ -37,6 +37,14 @@ namespace Carbon.Platform
 
     public class DeploymentProgramDetails
     {
+        public DeploymentProgramDetails() { }
+
+        public DeploymentProgramDetails(IProgram program)
+        {
+            Id      = program.Id;
+            Version = program.Version;
+        }
+
         [DataMember(Name = "id")]
         public long Id { get; set; }
 
@@ -59,8 +67,8 @@ namespace Carbon.Platform
         [DataMember(Name = "message", EmitDefaultValue = false)]
         public string Message { get; set; }
 
-        // aws:host:i-12345
-        // aws:cluster:i-1235123
+        // borg:host/i-12345
+        // borg:cluster/i-1235123
         [DataMember(Name = "resource", EmitDefaultValue = false)]
         public ManagedResource Resource { get; set; }
     }

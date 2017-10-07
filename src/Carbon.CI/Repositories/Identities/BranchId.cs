@@ -11,7 +11,7 @@ namespace Carbon.CI
     {
         private static readonly string sql = SqlHelper.GetCurrentValueAndIncrement<RepositoryInfo>("branchCount");
 
-        public static async Task<long> NextAsync( IDbContext context, long repositoryId)
+        public static async Task<long> NextAsync(IDbContext context, long repositoryId)
         {
             using (var connection = await context.GetConnectionAsync())
             {

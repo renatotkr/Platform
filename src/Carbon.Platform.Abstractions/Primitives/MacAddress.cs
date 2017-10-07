@@ -45,9 +45,6 @@ namespace Carbon.Net
             return BitConverter.ToString(data).Replace("-", ":").ToLower();
         }
 
-        public byte[] GetAddressBytes()
-        {
-            return data;
-        }
+        public byte[] GetAddressBytes() => data;
     }
 }

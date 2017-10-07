@@ -1,13 +1,13 @@
 ﻿using Carbon.Json;
 using Carbon.Platform;
-using Carbon.Platform.Resources;
-using Xunit;
 using Carbon.Platform.Computing;
+using Carbon.Platform.Resources;
 using Carbon.Versioning;
+
+using Xunit;
 
 namespace Carbon.Deployment.Tests
 {
-
     using static ResourceProvider;
 
     public class DeploymentTargetSerialization
@@ -42,7 +42,6 @@ namespace Carbon.Deployment.Tests
             var d2 = JsonObject.Parse(JsonObject.FromObject(deployment).ToString()).As<DeploymentDetails>();
 
             Assert.Equal("borg:host/1", d2.Targets[0].Resource.ToString());
-
         }
 
         [Fact]
@@ -51,9 +50,9 @@ namespace Carbon.Deployment.Tests
             var program = new ProgramInfo(1, "carbon", "carbon", 1, new SemanticVersion(1, 1, 1));
 
             var deployment = new DeploymentDetails(program, new[] {
-                new ManagedResource(Borg, ResourceTypes.Host,        "1"),
-                new ManagedResource(Borg, ResourceTypes.Cluster,     "2"),
-                new ManagedResource(Borg, ResourceTypes.Environment, "3")
+                ManagedResource.Host(Borg,        id: "1"),
+                ManagedResource.Cluster(Borg,     id: "2"),
+                ManagedResource.Environment(Borg, id: "3")
 
             });
 

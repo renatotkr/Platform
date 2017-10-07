@@ -43,7 +43,7 @@ namespace Carbon.CI
         public BuildStatus Status { get; set; }
 
         [Member("phase"), Mutable]
-        [StringLength(50)]
+        [Ascii, StringLength(50)]
         public string Phase { get; set; }
 
         [Member("commitId")]
