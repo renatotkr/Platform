@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 using Carbon.Data.Annotations;
 using Carbon.Data.Sequences;
@@ -8,99 +7,96 @@ using Carbon.Json;
 namespace Carbon.Kms
 {
     [Dataset("Certificates")]
-    [UniqueIndex("providerId", "resourceId")]
-    public class CertificateInfo : ICertificate
+    // [UniqueIndex("ownerId", "name")]
+    public class CertificateInfo : ICertificate //, IResource
     {
         public CertificateInfo() { }
 
         public CertificateInfo(
-            Uid id,
-            long ownerId,
+            long id,
             string name,
-            string subject,
-            int providerId,
-            string resourceId,
-            long? issuerId = null,
+            long ownerId,
+            long issuerId,
+            byte[] data,
+            CertificateDataFormat format,
+            byte[] chainData = null,
+            string resourceId = null,
             JsonObject properties = null)
         {
             #region Preconditions
-
-            if (subject == null)
-                throw new ArgumentNullException(nameof(subject));
-
-            if (string.IsNullOrEmpty(subject))
-                throw new ArgumentException("Required", nameof(subject));
-
+            
+            if (ownerId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(ownerId));
+            
+            if (format == default)
+                throw new ArgumentException("Required", nameof(format));
+            
             #endregion
 
-            Id         = id;           
-            Subject    = subject;
-            Properties = properties ?? new JsonObject();
+            Id         = id;
+            Name       = name;
+            OwnerId    = ownerId;
             IssuerId   = issuerId;
-            ResourceId = resourceId;
-            ProviderId = providerId;
-
-            // LocationId = resource.LocationId;
+            Format     = format;
+            Data       = data;
+            ChainData  = chainData;
+            Properties = properties ?? new JsonObject();
         }
 
-        [Member("id"), Key]
-        public Uid Id { get; }
+        [Member("id"), Key(sequenceName: "certificateId")]
+        public long Id { get; }
 
-        [Member("subject"), Indexed]
-        [StringLength(100)]
-        public string Subject { get; }
-        
-        /*
-        [Member("subjectAlternateNames")]
-        [StringLength(1000)]
-        public string[] SubjectAlternateNames { get; }
-        */
-        
-        // self issued if null
+        // Uid?
+
+        [Member("name")]
+        [StringLength(63)]
+        public string Name { get; }
+
+        [Member("ownerId"), Indexed]
+        public long OwnerId { get; }
+
         [Member("issuerId")]
-        public long? IssuerId { get; }
+        public long IssuerId { get; }
 
-        #region Key Material
+        #region Data 
 
-        // x509 (PFX | PEM)
-        
-        // public key?
+        // - Subject    
+        // - Issuer     
+        // - Public Key (2048-bit RSA public key)
+        // - Signature
+
+        [Member("format")]
+        public CertificateDataFormat Format { get; } // x509 
+
+        /// <summary>
+        /// x509v3 encoded certificate document (der, .crt extension)
+        /// </summary>
+        [Member("data"), MaxLength(32768)]
+        public byte[] Data { get; }
+
+        // public long ChainId { get; }
+
+        [Member("chainData"), MaxLength(32768 * 4)]
+        public byte[] ChainData { get; }
+
+        [Member("privateKeyId")] 
+        public Uid? PrivateKeyId { get; }
 
         #endregion
 
         [Member("properties")]
-        [StringLength(1000)]
+        [StringLength(2000)]
         public JsonObject Properties { get; }
-
-        #region IResource
-
-        // e.g. Let's Encrypt, Amazon, ...
-        [IgnoreDataMember]
-        [Member("providerId")]
-        public int ProviderId { get; }
-
-        [IgnoreDataMember]
-        [Member("locationId")]
-        public int LocationId { get; }
-
-        [IgnoreDataMember]
-        [Member("resourceId")]
-        [Ascii, StringLength(100)]
-        public string ResourceId { get; }
-
-        #endregion
 
         #region Timestamps
 
         [Member("expires")]
-        public DateTime? Expires { get; }
+        public DateTime Expires { get; }
 
         [Member("issued")]
-        [TimePrecision(TimePrecision.Second)]
-        public DateTime? Issued { get; }
+        public DateTime Issued { get; }
 
         [Member("revoked"), Mutable]
-        [TimePrecision(TimePrecision.Second)]
         public DateTime? Revoked { get; }
 
         [Member("created"), Timestamp]
@@ -114,14 +110,10 @@ namespace Carbon.Kms
 
         #endregion
     }
-
-    public static class CertificateProperties
-    {
-        // RSA_2048 | RSA_1024 | EC_prime256v1
-
-        public const string KeyAlgorithm = "keyAlgorithm";
-    }
-
-    // fingerprint  = x5t#S256
-    // keyAlgorithm = RSA_2048 | RSA_1024 | EC_prime256v1
 }
+
+// https://www.ietf.org/rfc/rfc5280.txt (X.509 Public Key Infrastructure)
+
+// serialNumber = ???
+// fingerprint  = x5t#S256
+// keyAlgorithm = RSA_2048 | RSA_1024 | EC_prime256v1
