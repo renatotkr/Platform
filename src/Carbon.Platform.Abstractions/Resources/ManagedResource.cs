@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using Carbon.Extensions;
 
 namespace Carbon.Platform.Resources
 {
@@ -75,6 +76,9 @@ namespace Carbon.Platform.Resources
         public static ManagedResource Build(ILocation location, string id) =>
             FromLocation(location, ResourceTypes.Build, id);
 
+        public static ManagedResource Cluster(ResourceProvider provider, string id) =>
+            new ManagedResource(provider, ResourceTypes.Cluster, id);
+
         public static ManagedResource DatabaseCluster(ILocation location, string id) => 
             FromLocation(location, ResourceTypes.DatabaseCluster, id);
 
@@ -84,8 +88,14 @@ namespace Carbon.Platform.Resources
         public static ManagedResource EncryptionKey(ILocation location, string id) =>
             FromLocation(location, ResourceTypes.VaultGrant, id);
 
+        public static ManagedResource Environment(ResourceProvider provider, string id) =>
+            new ManagedResource(provider, ResourceTypes.Environment, id);
+
         public static ManagedResource LoadBalancer(ILocation location, string id) =>
             FromLocation(location, ResourceTypes.LoadBalancer, id);
+
+        public static ManagedResource Host(ResourceProvider provider, string id) =>
+            new ManagedResource(provider, ResourceTypes.Host, id);
 
         public static ManagedResource Host(ILocation location, string id) => 
             FromLocation(location, ResourceTypes.Host, id);
@@ -99,10 +109,7 @@ namespace Carbon.Platform.Resources
         public static ManagedResource Volume(ILocation location, string id) => 
             FromLocation(location, ResourceTypes.Volume, id);
 
-        public static ManagedResource Repository(
-            ResourceProvider provider,
-            string accountName, 
-            string repositoryName) =>
+        public static ManagedResource Repository(ResourceProvider provider, string accountName, string repositoryName) =>
             new ManagedResource(provider, ResourceTypes.Repository, $"{accountName}/{repositoryName}");
 
         public static ManagedResource Queue(ILocation location, string id) =>
@@ -129,8 +136,6 @@ namespace Carbon.Platform.Resources
 
         #endregion
 
-        private static readonly char[] colon = { ':' };
-        private static readonly char[] forwardSlash = { '/' };
         // e.g. 
 
         /*
@@ -144,14 +149,14 @@ namespace Carbon.Platform.Resources
 
         public static ManagedResource Parse(string text)
         {
-            var segments = text.Split(forwardSlash); // '/'
+            var segments = text.Split(Seperators.ForwardSlash); // '/'
 
             if (segments.Length != 2)
             {
                 throw new Exception("missing id seperator '/')");
             }
 
-            var parts = segments[0].Split(colon); // ':'
+            var parts = segments[0].Split(Seperators.Colon); // ':'
 
             var provider = ResourceProvider.Parse(parts[0]);
 
