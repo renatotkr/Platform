@@ -3,7 +3,8 @@
   <PropertyGroup>
     <AssemblyName>Carbon.Rds</AssemblyName>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <VersionPrefix>0.13.0</VersionPrefix>
+    <VersionPrefix>0.14.0</VersionPrefix>
+    <LangVersion>7.1</LangVersion>
 
     <!-- Package Details -->
     <Authors>iamcarbon</Authors>
@@ -13,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Carbon.Data.Sql" Version="0.35.0" />
+    <PackageReference Include="Carbon.Data.Sql" Version="0.37.0" />
     <PackageReference Include="Carbon.Json" Version="1.5.0" />
   </ItemGroup>
 

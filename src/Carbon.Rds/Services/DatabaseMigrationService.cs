@@ -41,13 +41,13 @@ namespace Carbon.Rds.Services
 
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
-
+            
             #endregion
 
-            var migrationId = await DatabaseMigrationId.NextAsync(db.Context, request.DatabaseId);
+            var id = await DatabaseMigrationId.NextAsync(db.Context, request.DatabaseId);
 
             var migration = new DatabaseMigration(
-                id          : migrationId,
+                id          : id,
                 schemaName  : request.SchemaName,
                 commands    : request.Commands,
                 description : request.Description

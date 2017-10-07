@@ -9,7 +9,11 @@ namespace Carbon.Rds
     {
         public DatabaseMigration() { }
 
-        public DatabaseMigration(long id, string schemaName, string[] commands, string description = null)
+        public DatabaseMigration(
+            long id,
+            string schemaName,
+            string[] commands, 
+            string description = null)
         {
             #region Preconditions
 
@@ -36,7 +40,8 @@ namespace Carbon.Rds
         [StringLength(2000)]
         public string Description { get; }
 
-        [Member("commands"), StringLength(10000)]
+        [Member("commands")]
+        [StringLength(10000)]
         public string[] Commands { get; }
 
         [Member("status")]

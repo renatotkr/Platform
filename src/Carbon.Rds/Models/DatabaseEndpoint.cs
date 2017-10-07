@@ -16,22 +16,25 @@ namespace Carbon.Rds
             string host,
             ILocation location,
             ushort port = 3306,
-            DatabaseEndpointFlags flags = DatabaseEndpointFlags.None)
+            DatabaseEndpointFlags flags = default)
         {
             #region Preconditions
 
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
 
+            if (string.IsNullOrEmpty(host))
+                throw new ArgumentException("Required", nameof(host));
+
             if (location == null)
                 throw new ArgumentNullException(nameof(location));
 
             #endregion
 
-            Id    = id;
-            Host  = host ?? throw new ArgumentNullException(nameof(host));
-            Port  = port;
-            Flags = flags;
+            Id         = id;
+            Host       = host;
+            Port       = port;
+            Flags      = flags;
             LocationId = location.Id;
         }
 
@@ -40,6 +43,7 @@ namespace Carbon.Rds
         public long Id { get; }
 
         [Member("host")]
+        [Ascii, StringLength(253)]
         public string Host { get; }
 
         [Member("port")]

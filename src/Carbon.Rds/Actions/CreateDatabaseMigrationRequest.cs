@@ -1,9 +1,13 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
 namespace Carbon.Rds.Services
 {
     public class CreateDatabaseMigrationRequest
     {
+        public CreateDatabaseMigrationRequest() { }
+
         public CreateDatabaseMigrationRequest(
             long databaseId, 
             string schemaName, 
@@ -12,16 +16,20 @@ namespace Carbon.Rds.Services
         {
             DatabaseId  = databaseId;
             SchemaName  = schemaName;
-            Commands = commands ?? throw new ArgumentNullException(nameof(commands));
+            Commands    = commands ?? throw new ArgumentNullException(nameof(commands));
             Description = description;
-
         }
-        public long DatabaseId { get; }
 
-        public string SchemaName { get; }
+        [DataMember(Name = "databaseId")]
+        public long DatabaseId { get; set; }
 
-        public string Description { get; }
+        [DataMember(Name = "schemaName")]
+        public string SchemaName { get; set; }
 
-        public string[] Commands { get; }
+        [DataMember(Name = "commands"), Required]
+        public string[] Commands { get; set;  }
+
+        [DataMember(Name = "description")]
+        public string Description { get; set; }
     }
 }
