@@ -7,20 +7,38 @@ namespace Carbon.Kms
 {
     public class GenerateKeyRequest
     {
-        public GenerateKeyRequest() { }
-
-        public GenerateKeyRequest(string name, IEnumerable<KeyValuePair<string, string>> aad)
+        public GenerateKeyRequest(
+            string name = null, 
+            long ownerId = 1,
+            KeyType type = KeyType.Secret, 
+            int size = 256, 
+            IEnumerable<KeyValuePair<string, string>> aad = null)
         {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-            Aad = aad;
+            #region Preconditions
+
+            if (type == default)
+                throw new ArgumentException(nameof(type));
+            
+            if (size <= 0)
+                throw new ArgumentOutOfRangeException(nameof(size), size, "Must be > 0");
+
+            #endregion
+
+            Name    = name;
+            OwnerId = ownerId;
+            Type    = type;
+            Size    = size; 
+            Aad     = aad;
         }
 
-        public string Name { get; set; }
+        public string Name { get; }
 
-        public KeyType Type { get; set; } = KeyType.Secret;
+        public long OwnerId { get; }
 
-        public int Size { get; set; } = 256;
+        public KeyType Type { get; } 
 
-        public IEnumerable<KeyValuePair<string, string>> Aad { get; set; }
+        public int Size { get; }
+
+        public IEnumerable<KeyValuePair<string, string>> Aad { get; }
     }
 }
