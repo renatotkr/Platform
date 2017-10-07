@@ -1,11 +1,12 @@
 ﻿using System;
 
 using Carbon.Data.Annotations;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Hosting
 {
     [Dataset("DomainRegistrations")]
-    public class DomainRegistration
+    public class DomainRegistration : IResource
     {
         public DomainRegistration() { }
 
@@ -62,6 +63,20 @@ namespace Carbon.Platform.Hosting
         public DateTime Modified { get; }
 
         #endregion
+
+        #region IResource
+
+        /// <summary>
+        /// A unique id provided by the register
+        /// </summary>
+        [Member("resourceId")]
+        [StringLength(100)]
+        public string ResourceId { get; }
+
+        ResourceType IResource.ResourceType => ResourceTypes.DomainRegistration;
+
+        #endregion
+
     }
 
     public enum DomainRegistrationFlags
