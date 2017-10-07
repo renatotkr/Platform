@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 
 using Carbon.Data;
+using Carbon.Data.Expressions;
 
 namespace Carbon.Kms
 {
@@ -68,11 +69,9 @@ namespace Carbon.Kms
       
         public async Task DeleteAsync(long id)
         {
-            var certificate = GetAsync(id);
-
             await db.Certificates.PatchAsync(id, new[] {
                 Change.Replace("deleted", DateTime.UtcNow)
-            });
+            }, condition: Expression.IsNull("deleted"));
         }
     }
 }
