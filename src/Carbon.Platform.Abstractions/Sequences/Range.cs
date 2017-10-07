@@ -1,5 +1,8 @@
-﻿namespace Carbon.Platform.Sequences
+﻿using System.Runtime.Serialization;
+
+namespace Carbon.Platform.Sequences
 {
+    [DataContract]
     public struct Range
     {
         public Range(long start, long end)
@@ -8,8 +11,10 @@
             End = end;
         }
 
+        [DataMember(Name = "start", Order = 1)]
         public long Start { get; }
 
+        [DataMember(Name = "end", Order = 2)]
         public long End { get; }
     }
 }

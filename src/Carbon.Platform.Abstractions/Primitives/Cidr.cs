@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Runtime.Serialization;
 
 namespace Carbon.Net
 {
@@ -8,6 +9,7 @@ namespace Carbon.Net
     /// <summary>
     /// Classless Inter-Domain Routing
     /// </summary>
+    [DataContract]
     public struct Cidr
     {
         public Cidr(IPAddress prefix, int suffix)
@@ -16,8 +18,10 @@ namespace Carbon.Net
             Suffix = suffix;
         }
 
-        public IPAddress Prefix { get; } 
+        [DataMember(Name = "prefix", Order = 1)]
+        public IPAddress Prefix { get; }
 
+        [DataMember(Name = "suffix", Order = 2)]
         public int Suffix { get; } // 24
 
         #region Helpers

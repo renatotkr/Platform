@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Carbon.Net
@@ -6,6 +7,7 @@ namespace Carbon.Net
     // http://localhost:60000
     // https://*:5004
 
+    [DataContract]
     public struct Listener : IEquatable<Listener>
     {
         public static readonly Listener SSH   = new Listener(ApplicationProtocal.SSH,   22);
@@ -24,8 +26,8 @@ namespace Carbon.Net
             #endregion
 
             Scheme = protocal;
-            Port     = port;
-            Host     = "*";
+            Port   = port;
+            Host   = "*";
         }
 
         public Listener(ApplicationProtocal protocal, string host, ushort port)
@@ -35,10 +37,13 @@ namespace Carbon.Net
             Port   = port;
         }
 
+        [DataMember(Name = "scheme", Order = 1)]
         public ApplicationProtocal Scheme { get; }
 
+        [DataMember(Name = "host", Order = 2)]
         public string Host { get; }
 
+        [DataMember(Name = "port", Order = 3)]
         public ushort Port { get; }
 
         public static Listener Parse(string text)

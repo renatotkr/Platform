@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Carbon.VersionControl
 {
+    [DataContract]
     public struct Revision
     {
         public static readonly Revision Master = Head("master");
@@ -12,8 +14,10 @@ namespace Carbon.VersionControl
             Type = type;
         }
 
+        [DataMember(Name = "name", Order = 1)]
         public string Name { get; }
 
+        [DataMember(Name = "type", Order = 2)]
         public RevisionType Type { get; }
 
         public string Path

@@ -1,29 +1,31 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform
 {
-    // A location may a multi-region, region, or zone
+    // A location may a multi-region area, region, or zone
 
+    [DataContract]
     public class Location : ILocation, IResource, IEquatable<Location>
     {
-        private readonly LocationId id;
-
-        public Location(LocationId id, string name)
+        public Location(int id, string name)
         {
-            this.id = id;
+            Id = id;
             Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
-        public int Id => id.Value;
+        [DataMember(Name = "id", Order = 1)]
+        public int Id { get; }
 
+        [DataMember(Name = "name", Order = 2)]
         public string Name { get; }
 
         #region Helpers
 
-        public int ProviderId => id.ProviderId;
+        public int ProviderId => LocationId.Create(Id).ProviderId;
 
-        public LocationType Type => id.Type;
+        public LocationType Type => LocationId.Create(Id).Type;
 
         #endregion
 
@@ -49,15 +51,6 @@ namespace Carbon.Platform
 
         public Location WithZone(char zoneName)
         {
-            #region Preconditions
-            
-            if (this.id.ProviderId == ResourceProvider.Azure.Id)
-            {
-                throw new Exception("Azure does not have zones");
-            }
-
-            #endregion
-
             var zoneNumber = ZoneHelper.GetNumber(zoneName);
 
             var newId = LocationId.Create(Id).WithZoneNumber(zoneNumber);
@@ -68,18 +61,18 @@ namespace Carbon.Platform
             gcp | us-central1-b, us-central1-c
             ----------------------------------- */
 
-            var name = Name;
+            var newName = Name;
 
             if (newId.ProviderId == ResourceProvider.Gcp.Id)
             {
-                name += "-" + char.ToLower(zoneName);
+                newName += "-" + char.ToLower(zoneName);
             }
             else
             {
-                name += char.ToLower(zoneName);
+                newName += char.ToLower(zoneName);
             }
 
-            return new Location(newId, name);
+            return new Location(newId, newName);
         }
 
         #endregion
@@ -87,8 +80,8 @@ namespace Carbon.Platform
         #region Equality
 
         public bool Equals(Location other) =>
-            other.Id == Id &&
-            other.Name == Name;
+            Id == other.Id &&
+            Name == other.Name;
 
         #endregion
 

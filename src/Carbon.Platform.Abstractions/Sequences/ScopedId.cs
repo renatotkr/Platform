@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Carbon.Platform.Sequences
 {
+    [DataContract]
     public struct ScopedId
     {
         const int ScopeBits    = 42; // ~4.39trillion       
@@ -18,6 +20,7 @@ namespace Carbon.Platform.Sequences
             Value = value;
         }
 
+        [DataMember(Name = "value", Order = 1)]
         public ulong Value { get; }
 
         public long ScopeId => (long)(Value >> SequenceBits);
