@@ -48,7 +48,9 @@ namespace Carbon.Platform
             Volumes               = new Dataset<VolumeInfo,               long>(context);
 
             // Hosting ------------------------------------------------------------------
-            Domains               = new Dataset<DomainInfo,               long>(context);
+            Domains               = new Dataset<Domain,               long>(context);
+            DomainRecords         = new Dataset<DomainRecord,             long>(context);
+            DomainRegistrations   = new Dataset<DomainRegistration,       long>(context);
 
             // Networks --------------------------------------------------------------
             Networks              = new Dataset<NetworkInfo,              long>(context);
@@ -86,6 +88,11 @@ namespace Carbon.Platform
         public Dataset<ChannelInfo,          long> Channels              { get; }
         public Dataset<QueueInfo,            long> Queues                { get; }
 
+        // Hosting --------------------------------------------------------------
+        public Dataset<Domain,               long> Domains               { get; }
+        public Dataset<DomainRecord,         long> DomainRecords         { get; }
+        public Dataset<DomainRegistration,   long> DomainRegistrations   { get; }
+
         // Networks -------------------------------------------------------------
         public Dataset<NetworkInfo,          long> Networks              { get; }
         public Dataset<NetworkAddress,       long> NetworkAddresses      { get; }
@@ -95,8 +102,5 @@ namespace Carbon.Platform
         public Dataset<LoadBalancerListener, long> LoadBalancerListeners { get; }
         public Dataset<LoadBalancerRule,     long> LoadBalancerRules     { get; }
         public Dataset<SubnetInfo,           long> Subnets               { get; }
-
-        // Hosting --------------------------------------------------------------
-        public Dataset<DomainInfo,           long> Domains               { get; }
     }
 }
