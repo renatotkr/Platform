@@ -51,7 +51,7 @@ namespace Carbon.Hosting.IIS
 
         public Task CreateAsync(IProgram app)
         {
-            var poolName = GetApplicationPoolName(app);
+            string poolName = GetApplicationPoolName(app);
 
             ApplicationPool pool = manager.ApplicationPools[poolName];
 
@@ -79,7 +79,7 @@ namespace Carbon.Hosting.IIS
             pool.ProcessModel.IdleTimeout = TimeSpan.Zero;                  // Never timeout (or unload)
 
             // "IIS AppPool\<AppPoolName>"
-            pool.ProcessModel.IdentityType = ProcessModelIdentityType.ApplicationPoolIdentity;
+            pool.ProcessModel.IdentityType    = ProcessModelIdentityType.ApplicationPoolIdentity;
             pool.ProcessModel.LoadUserProfile = true;                       // Ensure the user profile is loaded
 
             // Limit cpu under load
@@ -98,9 +98,7 @@ namespace Carbon.Hosting.IIS
             return Task.CompletedTask;
         }
 
-        public async Task DeployAsync(
-            IProgram app, 
-            IPackage package)
+        public async Task DeployAsync(IProgram app, IPackage package)
         {
             #region Ensure the app exists
 
@@ -135,18 +133,14 @@ namespace Carbon.Hosting.IIS
 
             log.Info($"Setting ACL for {accountName}");
 
-            var rights = FileSystemRights.ReadData | FileSystemRights.ReadAndExecute;
+            var accessControl = appRoot.GetAccessControl(); // Current settings
 
-            // Current settings
-            var accessControl = appRoot.GetAccessControl();
-
-            // Add the FileSystemAccessRule to the security settings.
             accessControl.AddAccessRule(new FileSystemAccessRule(
-                accountName,
-                rights,
-                InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
-                PropagationFlags.None,
-                AccessControlType.Allow
+                identity         : accountName,
+                fileSystemRights : FileSystemRights.ReadData | FileSystemRights.ReadAndExecute,
+                inheritanceFlags : InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
+                propagationFlags : PropagationFlags.None,
+                type             : AccessControlType.Allow
             ));
 
             try
@@ -206,7 +200,7 @@ namespace Carbon.Hosting.IIS
 
             if (application == null)
             {
-                throw new Exception($"Site #{app.Id} ({app.Name}) does not have a configured application");
+                throw new Exception($"Site#{app.Id} ({app.Name}) does not have a configured application");
             }
 
             var pool = GetApplicationPool(site);
@@ -246,6 +240,13 @@ namespace Carbon.Hosting.IIS
 
         public Task DeleteAsync(IProgram app)
         {
+            #region Preconditions
+
+            if (app == null)
+                throw new ArgumentNullException(nameof(app));
+
+            #endregion
+
             var site = FindSite(app.Id) ?? throw new ArgumentNullException($"No site with id #{app.Id} found");
 
             var pool = GetApplicationPool(site); 
@@ -269,10 +270,7 @@ namespace Carbon.Hosting.IIS
 
         #region Helpers
 
-        private string GetApplicationPoolName(IProgram app)
-        {
-            return app.Name;
-        }
+        private string GetApplicationPoolName(IProgram app) => app.Name;
 
         private ApplicationPool GetApplicationPool(Site site)
         {
@@ -293,8 +291,7 @@ namespace Carbon.Hosting.IIS
         {
             #region Preconditions
 
-            if (app == null)
-                throw new ArgumentNullException(nameof(app));
+            if (app == null) throw new ArgumentNullException(nameof(app));
 
             if (app.Addresses == null || app.Addresses.Length == 0)
                 throw new ArgumentException("Must have at least one address", nameof(app));
@@ -421,7 +418,7 @@ namespace Carbon.Hosting.IIS
             }
             catch
             {
-                throw new Exception($"Unexpected version text: '{versionText}' / {directory.PhysicalPath}");
+                throw new Exception($"Unexpected app version text: '{versionText}' / {directory.PhysicalPath}");
             }
 
             // TODO: Get the name...

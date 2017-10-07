@@ -12,7 +12,9 @@ namespace Carbon.Platform.Environments
         Task<EnvironmentInfo> GetAsync(long ownerId, string name);
 
         Task<EnvironmentInfo> GetAsync(string slug);
-
+        
         Task<EnvironmentInfo> CreateAsync(CreateEnvironmentRequest request);
+
+        Task<bool> ExistsAsync(long ownerId, string name);
     }
 }

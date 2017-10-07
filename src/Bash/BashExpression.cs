@@ -2,7 +2,7 @@
 
 namespace Bash
 {
-    public enum BracketOption
+    public enum BracketOption : byte
     {
         Single = 1,
         Double = 2
@@ -29,21 +29,15 @@ namespace Bash
 
         // -z STRING
 
-        public static BashExpression IsNullOrUnset(string text)
-        {
-            // z= null or unset
-            return new BashExpression($"-z {text}");
-        }
+        // z= null or unset
+        public static BashExpression IsNullOrUnset(string text) => 
+            new BashExpression($"-z {text}");
 
-        public static BashExpression Gt(string variableName, string value)
-        {
-            return new BashExpression($"{variableName} -gt {value}");
-        }
+        public static BashExpression Gt(string variableName, string value) =>
+            new BashExpression($"{variableName} -gt {value}");
 
-        public static BashExpression Lt(string variableName, string value)
-        {
-            return new BashExpression($"{variableName} -lt {value}");
-        }
+        public static BashExpression Lt(string variableName, string value) =>
+            new BashExpression($"{variableName} -lt {value}");
 
         #region Files
 
@@ -129,7 +123,7 @@ namespace Bash
             return new BinaryExpression(lhs, rhs, BinaryExpressionType.Or);
         }
 
-        public enum BinaryExpressionType
+        public enum BinaryExpressionType : byte
         {
             And,
             Or
