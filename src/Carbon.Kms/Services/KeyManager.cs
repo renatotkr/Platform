@@ -30,6 +30,13 @@ namespace Carbon.Kms
 
         public async Task<IKeyInfo> GenerateAsync(GenerateKeyRequest request)
         {
+            #region Preconditions
+
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
+            #endregion
+
             var aes = Aes.Create();
             
             // keying material.
@@ -45,7 +52,7 @@ namespace Carbon.Kms
 
             var key = new KeyInfo(
                 id          : id,
-                ownerId     : 1,
+                ownerId     : request.OwnerId,
                 name        : request.Name ?? id.ToString(),
                 kekId       : masterKeyId,
                 format      : KeyDataFormat.AwsKmsEncryptedData,
