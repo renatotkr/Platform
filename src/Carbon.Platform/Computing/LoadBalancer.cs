@@ -60,7 +60,7 @@ namespace Carbon.Platform.Computing
         public string Name { get; }
 
         [Member("address")]
-        [StringLength(100)]
+        [Ascii, StringLength(253)]
         public string Address { get; }
 
         [Member("networkId")]
