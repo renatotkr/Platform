@@ -107,10 +107,11 @@ namespace Carbon.Platform.Services.Test
         {
             if (member.Size != null)
             {
-                // strings characters may take up-to 4 bytes each
                 if (member.Type == typeof(string))
                 {
-                    return member.Size.Value * 4;
+                    return member.IsAscii 
+                        ? member.Size.Value      // ascii | 1 byte each
+                        : member.Size.Value * 4; // utf8  | 1-4 bytes each (assume worst case)
                 }
 
                 return member.Size.Value;
@@ -141,7 +142,7 @@ namespace Carbon.Platform.Services.Test
 
     internal class MySqlDataContext : IDbContext
     {
-        public ISqlAdapter SqlAdapter => MySqlAdapter.Default;
+        public SqlAdapter SqlAdapter => MySqlAdapter.Default;
 
         public DbTypeMap Types => new DbTypeMap(MySqlAdapter.Default);
 
