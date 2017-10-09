@@ -36,11 +36,10 @@ namespace Carbon.Kms
         public long CertificateId { get; }
 
         [Member("name"), Key]
-        [Indexed] // Index to lookup all subject certificates
         [Ascii, StringLength(253)]
         public string Name { get; }
 
-        [Member("domainId"), Indexed] // fast lookup on domain
+        [Member("domainId"), Indexed]
         public long? DomainId { get; }
 
         [Member("flags")]

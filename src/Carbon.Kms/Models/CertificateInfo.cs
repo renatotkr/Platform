@@ -7,8 +7,8 @@ using Carbon.Json;
 namespace Carbon.Kms
 {
     [Dataset("Certificates")]
-    // [UniqueIndex("ownerId", "name")]
-    public class CertificateInfo : ICertificate //, IResource
+    [UniqueIndex("ownerId", "name")]
+    public class CertificateInfo : ICertificate // , IResource
     {
         public CertificateInfo() { }
 
@@ -16,40 +16,51 @@ namespace Carbon.Kms
             long id,
             string name,
             long ownerId,
-            long issuerId,
             byte[] data,
-            CertificateDataFormat format,
+            long issuerId,
+            DateTime expires,
             byte[] chainData = null,
             string resourceId = null,
             JsonObject properties = null)
         {
             #region Preconditions
-            
+
+            if (id <= 0)
+            {
+                throw new ArgumentException("Must be > 0", nameof(id));
+            }
+
             if (ownerId <= 0)
+            {
                 throw new ArgumentException("Must be > 0", nameof(ownerId));
-            
-            if (format == default)
-                throw new ArgumentException("Required", nameof(format));
-            
+            }
+
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+            else if (data.Length > 32768)
+            {
+                throw new ArgumentException("Must be 32,768 bytes or fewer", nameof(data));
+            }
+
             #endregion
 
             Id         = id;
             Name       = name;
             OwnerId    = ownerId;
             IssuerId   = issuerId;
-            Format     = format;
             Data       = data;
             ChainData  = chainData;
+            Expires    = expires;
             Properties = properties ?? new JsonObject();
         }
 
         [Member("id"), Key(sequenceName: "certificateId")]
         public long Id { get; }
 
-        // Uid?
-
         [Member("name")]
-        [StringLength(63)]
+        [Ascii, StringLength(63)]
         public string Name { get; }
 
         [Member("ownerId"), Indexed]
@@ -65,36 +76,30 @@ namespace Carbon.Kms
         // - Public Key (2048-bit RSA public key)
         // - Signature
 
-        [Member("format")]
-        public CertificateDataFormat Format { get; } // x509 
-
         /// <summary>
         /// x509v3 encoded certificate document (der, .crt extension)
         /// </summary>
         [Member("data"), MaxLength(32768)]
         public byte[] Data { get; }
 
-        // public long ChainId { get; }
-
-        [Member("chainData"), MaxLength(32768 * 4)]
+        [Member("chainData"), MaxLength(32768 * 6)]
         public byte[] ChainData { get; }
 
         [Member("privateKeyId")] 
         public Uid? PrivateKeyId { get; }
 
+        // ParentId?
+
         #endregion
 
         [Member("properties")]
-        [StringLength(2000)]
+        [StringLength(1000)]
         public JsonObject Properties { get; }
 
         #region Timestamps
 
         [Member("expires")]
         public DateTime Expires { get; }
-
-        [Member("issued")]
-        public DateTime Issued { get; }
 
         [Member("revoked"), Mutable]
         public DateTime? Revoked { get; }

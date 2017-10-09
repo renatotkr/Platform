@@ -43,8 +43,8 @@ namespace Carbon.Kms
                 name     : null,
                 issuerId : request.IssuerId,
                 ownerId  : request.OwnerId,
-                format   : CertificateDataFormat.X509v3,
-                data     : request.Data
+                data     : request.Data,
+                expires  : request.Expires
             );
 
             var subjects = new CertificateSubject[request.Subjects.Length];

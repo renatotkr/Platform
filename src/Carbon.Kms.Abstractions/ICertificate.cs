@@ -10,8 +10,6 @@ namespace Carbon.Kms
 
         byte[] Data { get; }
 
-        DateTime Issued { get; }
-
         DateTime Expires { get; }
 
         DateTime? Revoked { get; }
