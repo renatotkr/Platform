@@ -48,7 +48,7 @@ namespace Carbon.Platform.Networking
         public long Id { get; }
 
         [Member("addressBlocks")]
-        [StringLength(100)]
+        [Ascii, StringLength(100)]
         public string[] AddressBlocks { get; }
 
         // Provides WAN access

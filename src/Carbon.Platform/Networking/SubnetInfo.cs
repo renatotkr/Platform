@@ -34,11 +34,11 @@ namespace Carbon.Platform.Networking
         /// A list of CIDR formatted address blocks
         /// </summary>
         [Member("addressBlocks")]
-        [StringLength(100)]
+        [Ascii, StringLength(100)]
         public string[] AddressBlocks { get; }
 
         [Member("name")]
-        [StringLength(63)]
+        [Ascii, StringLength(63)]
         public string Name { get; }
 
         [Member("properties")]
