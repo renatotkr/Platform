@@ -31,6 +31,15 @@ namespace Carbon.Platform.Hosting
 
             #endregion
 
+            #region Normalization
+
+            if (name.EndsWith("."))
+            {
+                name = name.Trim('.');
+            }
+
+            #endregion
+
             Id             = id;
             Name           = name;
             Path           = string.Join("/", name.ToLower().Split('.').Reverse());
@@ -45,6 +54,7 @@ namespace Carbon.Platform.Hosting
         [Member("id"), Key(sequenceName: "domainId")]
         public long Id { get; }
         
+        // byte[] ? 
         [Member("name")]
         [Ascii, StringLength(253)]
         public string Name { get; }
@@ -60,16 +70,13 @@ namespace Carbon.Platform.Hosting
         
         [Member("parentId"), Indexed]
         public long ParentId { get; }
-
+        
         [Member("nameServers")]
         [Ascii, StringLength(500)]
         public string[] NameServers { get; }
 
         [Member("certificateId")]
         public long? CertificateId { get; }
-
-        [Member("flags")]
-        public DomainFlags Flags { get; }
         
         /// <summary>f
         /// If registered through a register
@@ -80,7 +87,11 @@ namespace Carbon.Platform.Hosting
         [Member("ttl")]
         public int? Ttl { get; }
 
+        [Member("flags")]
+        public DomainFlags Flags { get; }
+
         // { whoisServer }
+
         [Member("properties")]
         [StringLength(1000)]
         public JsonObject Properties { get; }

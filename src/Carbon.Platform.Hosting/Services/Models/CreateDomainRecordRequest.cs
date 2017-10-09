@@ -1,19 +1,24 @@
 ﻿using System;
+using Carbon.Net.Dns;
 
 namespace Carbon.Platform.Hosting
 {
     public class CreateDomainRecordRequest
     {
         public CreateDomainRecordRequest(
+            long zoneId,
             string name, 
-            DomainRecordType type, 
+            DnsRecordType type, 
             string value, 
             TimeSpan? ttl)
         {
             #region Preconditions
 
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
+            if (zoneId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(zoneId));
+
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Required", nameof(name));
 
             if (string.IsNullOrEmpty(value))
                 throw new ArgumentException("Required", nameof(value));
@@ -23,15 +28,19 @@ namespace Carbon.Platform.Hosting
 
             #endregion
 
+            DomainId = zoneId;
             Name     = name;
             Type     = type;
             Value    = value;
             Ttl      = ttl;
         }
 
+        public long DomainId { get; }
+
+        // @, subdomain
         public string Name { get; }
 
-        public DomainRecordType Type { get; }
+        public DnsRecordType Type { get; }
 
         public string Value { get; }
         

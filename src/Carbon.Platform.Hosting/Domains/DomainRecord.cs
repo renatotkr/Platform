@@ -2,12 +2,13 @@
 using System.Linq;
 
 using Carbon.Data.Annotations;
+using Carbon.Net.Dns;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Hosting
 {
     [Dataset("DomainRecords")]
-    public class DomainRecord : IDomain
+    public class DomainRecord : IResource
     {
         public DomainRecord() { }
 
@@ -15,8 +16,9 @@ namespace Carbon.Platform.Hosting
             long id,
             long domainId,
             string name,
-            DomainRecordType type, 
-            string value, 
+            string path,
+            DnsRecordType type, 
+            string value,
             int? ttl = null, 
             DomainRecordFlags flags = default)
         {
@@ -30,10 +32,7 @@ namespace Carbon.Platform.Hosting
 
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("Required", nameof(name));
-            
-            if (name != name.ToLower())
-                throw new ArgumentException("Must be lowercase", nameof(name));
-
+           
             if (type == default)
                 throw new ArgumentException("Required", nameof(type));
 
@@ -48,18 +47,28 @@ namespace Carbon.Platform.Hosting
             Id       = id;
             DomainId = domainId;
             Type     = type;
-            Path     = string.Join("/", name.Split('.').Reverse());
+            Name     = name;
+            Path     = path;
             Value    = value;
             Ttl      = ttl;
         }
         
         [Member("id"), Key(sequenceName: "domainRecordId")]
         public long Id { get; }
-        
-        [Member("domainId"), Indexed]
+
+        /// <summary>
+        /// The authoritive domain the record is under (the zoneId)
+        /// </summary>
+        [Member("domainId"), Indexed] 
         public long DomainId { get; }
 
-        public string Name => string.Join(".", Path.Split('/').Reverse());
+        /// <summary>
+        /// The name relative to the domainId
+        /// e.g. @ |  subdomain
+        /// </summary>
+        [Member("name")]
+        [Ascii, StringLength(253)]
+        public string Name { get; }
 
         /// <summary>
         /// Punycoded Domain:ReversedPathNotation
@@ -75,13 +84,14 @@ namespace Carbon.Platform.Hosting
         /// e.g. A, MX, CNAME, AAAA
         /// </summary>
         [Member("type")]
-        public DomainRecordType Type { get; }
+        public DnsRecordType Type { get; }
 
         // A      : 192.0.2.1
         // AAAA   : 2001:0db8:85a3:0:0:8a2e:0370:7334
         // CA     : 0 issue "ca.example.net; account=123456"
         // MX     : 10 mail.example.com \ 20 mail2.example.com
-        // CNAME :  hostname.example.com
+        // CNAME  : hostname.example.com
+        // SOA    : hostname.example.com. hostmaster.a.com. 1 7200 900 1209600 86400
 
         [Member("value")]
         [StringLength(4000)]
@@ -92,10 +102,6 @@ namespace Carbon.Platform.Hosting
         
         [Member("flags")]
         public DomainRecordFlags Flags { get; }
-
-        // AuthoritiveDomain
-
-        // zone / authority
 
         #region Timestamps
 
@@ -117,11 +123,3 @@ namespace Carbon.Platform.Hosting
         #endregion
     }
 }
-
-/*
-{
-    name  : "subdomain",
-    type  : "A",
-    value : "192.168.1.1" 
-}
-*/

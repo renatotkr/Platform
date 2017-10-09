@@ -4,16 +4,17 @@ using System.Threading.Tasks;
 
 using Carbon.Data;
 using Carbon.Data.Expressions;
+using Carbon.Net.Dns;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Hosting
 {
     public class DomainRecordService : IDomainRecordService
     {
-        private readonly PlatformDb db;
+        private readonly HostingDb db;
         private readonly IDomainService domainService;
 
-        public DomainRecordService(PlatformDb db, IDomainService domainService)
+        public DomainRecordService(HostingDb db, IDomainService domainService)
         {
             this.db            = db ?? throw new ArgumentNullException(nameof(db));
             this.domainService = domainService;
@@ -25,20 +26,13 @@ namespace Carbon.Platform.Hosting
                 ?? throw ResourceError.NotFound(ResourceTypes.DomainRecord, id);
         }
 
-        public async Task<IReadOnlyList<DomainRecord>> QueryAsync(string name, DomainRecordType type)
+        public async Task<IReadOnlyList<DomainRecord>> QueryAsync(Fqdn name, DnsRecordType type)
         {
-            #region Preconditions
-
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
-
-            #endregion
-
-            var path = new DomainName(name).Path;
+            var path = name.GetPath();
 
             var result = await db.DomainRecords.QueryAsync(
                 expression: Expression.Conjunction(
-                    Expression.Eq("path", path), 
+                    Expression.Eq("path", name.GetPath()), 
                     Expression.Eq("type", type), 
                     Expression.IsNull("deleted")
                 )
@@ -60,13 +54,12 @@ namespace Carbon.Platform.Hosting
                 throw new ArgumentNullException(nameof(request));
 
             #endregion
+            
+            var domain = await domainService.GetAsync(request.DomainId);
 
-            var name = new DomainName(request.Name);
-
-            var domain = await domainService.FindAsync(request.Name)
-                ?? throw new ArgumentException($"domain {request.Name} not found");
-
-            // TODO: Create a subdomain if it's a new record
+            Fqdn name = request.Name == "@"
+                ? new Fqdn(domain.Name.ToLower())
+                : new Fqdn(request.Name.ToLower() + "." + domain.Name.ToLower());
 
             int? ttl = null;
 
@@ -79,6 +72,7 @@ namespace Carbon.Platform.Hosting
                 id       : await db.DomainRecords.Sequence.NextAsync(),
                 domainId : domain.Id,
                 name     : request.Name,
+                path     : name.GetPath(),
                 type     : request.Type,
                 value    : request.Value,
                 ttl      : ttl

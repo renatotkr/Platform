@@ -5,15 +5,16 @@ using System.Threading.Tasks;
 
 using Carbon.Data;
 using Carbon.Data.Expressions;
+using Carbon.Net.Dns;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Hosting
 {
     public class DomainService : IDomainService
     {
-        private readonly PlatformDb db;
+        private readonly HostingDb db;
 
-        public DomainService(PlatformDb db)
+        public DomainService(HostingDb db)
         {
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
@@ -27,7 +28,7 @@ namespace Carbon.Platform.Hosting
 
             #endregion
             
-            var path = new DomainName(name).Path;
+            var path = new Fqdn(name).GetPath();
 
             return await db.Domains.QueryFirstOrDefaultAsync(
                 Expression.Eq("path", path)
@@ -66,7 +67,7 @@ namespace Carbon.Platform.Hosting
 
             var flags = request.Flags;
 
-            var name = new DomainName(request.Name);
+            var name = new Fqdn(request.Name);
 
             if (name.Labels.Length == 1)
             {
@@ -88,7 +89,7 @@ namespace Carbon.Platform.Hosting
             return domain;
         }
 
-        private async Task<Domain> GetParent(DomainName name)
+        private async Task<Domain> GetParent(Fqdn name)
         {
             // com
             // com/processor
