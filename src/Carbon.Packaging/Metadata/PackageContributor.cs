@@ -4,13 +4,13 @@ namespace Carbon.Packaging
 {
     public class PackageContributor
     {
-        [DataMember(Name = "name")]
+        [DataMember(Name = "name", Order = 1)]
         public string Name { get; set; }
 
-        [DataMember(Name = "email")]
+        [DataMember(Name = "email", Order = 2)]
         public string Email { get; set; }
 
-        [DataMember(Name = "url")]
+        [DataMember(Name = "url", Order = 3)]
         public string Url { get; set; }
 
         public string Text { get; set; }

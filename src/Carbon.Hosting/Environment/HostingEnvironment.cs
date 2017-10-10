@@ -60,7 +60,6 @@ namespace Carbon.Hosting
     }
 }
 
-
 /*
 config.json
 { 

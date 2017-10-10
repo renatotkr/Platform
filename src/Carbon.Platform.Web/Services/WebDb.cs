@@ -16,7 +16,7 @@ namespace Carbon.Platform.Web
 
         public IDbContext Context { get; }
 
-        public Dataset<WebComponent , long> WebComponents  { get; }
-        public Dataset<WebLibrary   , long> WebLibraries   { get; }
+        public Dataset<WebComponent, long> WebComponents  { get; }
+        public Dataset<WebLibrary  , long> WebLibraries   { get; }
     }
 }

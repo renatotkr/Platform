@@ -18,7 +18,7 @@ namespace Carbon.Platform.Resources
             #region Preconditions
 
             if (string.IsNullOrEmpty(id))
-                throw new ArgumentException("Must not be null or empty", nameof(id));
+                throw new ArgumentException("Required", nameof(id));
 
             #endregion
 

@@ -18,7 +18,7 @@ namespace Carbon.VersionControl
         }
 
         public RepositoryProvider Provider { get; }
-
+        
         public string AccountName { get; }
 
         public string RepositoryName { get; }

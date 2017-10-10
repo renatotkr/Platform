@@ -27,6 +27,9 @@ namespace Carbon.Platform.Storage
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("Required", nameof(name));
 
+            if (name.Length > 100)
+                throw new ArgumentException("Must be 100 characters or fewer", nameof(name));
+
             if (ownerId <= 0)
                 throw new ArgumentException("Must be > 0", nameof(ownerId));
 
