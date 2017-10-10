@@ -48,6 +48,7 @@ namespace Carbon.Platform.Hosting
         [Member("registrarId")]
         public long RegistrarId { get; }
        
+        // Note: a registration may be extended
         [Member("expires")]
         public DateTime Expires { get; }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Carbon.Data;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Hosting
@@ -32,6 +33,13 @@ namespace Carbon.Platform.Hosting
             await db.DomainRegistrations.InsertAsync(registration);
 
             return registration;
+        }
+
+        public async Task UpdateAsync(UpdateDomainRegistrationRequest request)
+        {           
+            await db.DomainRegistrations.PatchAsync(request.RegistrationId, new[] {
+                Change.Replace("expires", request.Expires)
+            });
         }
     }
 }
