@@ -9,7 +9,7 @@
     <!-- Package Info-->
     <Authors>iamcarbon</Authors>
     <Copyright>© Jason Nelson</Copyright>
-    <Description>Hosting primitives.</Description>
+    <Description>Domain and domain record models.</Description>
     <PackageTags>platform;carbon</PackageTags>
     <PackageLicenseUrl>https://github.com/carbon/Platform/blob/master/LICENCE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/carbon/Platform</RepositoryUrl>
@@ -19,7 +19,7 @@
   <ItemGroup>
     <PackageReference Include="Carbon.Data.Sql" Version="0.37.0" />
     <PackageReference Include="Carbon.Json" Version="1.5.0" />
-    <PackageReference Include="Carbon.Net" Version="0.10.0" />
+    <PackageReference Include="Carbon.Net" Version="0.11.0" />
   </ItemGroup>
 
   <ItemGroup>

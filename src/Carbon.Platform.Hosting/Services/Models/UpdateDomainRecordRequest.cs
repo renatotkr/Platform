@@ -13,13 +13,10 @@ namespace Carbon.Platform.Hosting
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
 
-            if (string.IsNullOrEmpty(value))
-                throw new ArgumentException("Required", nameof(value));
-
             #endregion
 
             Id = id;
-            Value = value;
+            Value = value ?? throw new ArgumentNullException(nameof(value));
         }
 
         public long Id { get; }

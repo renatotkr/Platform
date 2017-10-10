@@ -57,14 +57,7 @@ namespace Carbon.Platform.Hosting
         }
 
         public async Task<DomainRecord> CreateAsync(CreateDomainRecordRequest request)
-        {
-            #region Preconditions
-
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            #endregion
-            
+        {            
             var domain = await domainService.GetAsync(request.DomainId);
 
             string path = null;
@@ -110,6 +103,7 @@ namespace Carbon.Platform.Hosting
             #endregion
             
             // TODO: Verify value against Type
+            
 
             await db.DomainRecords.PatchAsync(request.Id, new[] {
                 Change.Replace("value", request.Value)

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 using Carbon.Data.Annotations;
 using Carbon.Net.Dns;
@@ -51,6 +50,7 @@ namespace Carbon.Platform.Hosting
             Path     = path;
             Value    = value;
             Ttl      = ttl;
+            Flags    = flags;
         }
         
         [Member("id"), Key(sequenceName: "domainRecordId")]
@@ -100,6 +100,8 @@ namespace Carbon.Platform.Hosting
         [Member("ttl")] // in seconds (defaults to domain TTL if undefined)
         public int? Ttl { get; }
         
+        // Priority / Weight?
+
         [Member("flags")]
         public DomainRecordFlags Flags { get; }
 

@@ -78,12 +78,6 @@ namespace Carbon.Platform.Hosting
         #endregion
 
     }
-
-    public enum DomainRegistrationFlags
-    {
-        None = 0,
-        Private = 1 << 0
-    }
 }
 
 // Registration Stats ---------------------

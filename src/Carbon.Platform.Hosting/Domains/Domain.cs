@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Linq;
 using Carbon.Data.Annotations;
+
 using Carbon.Json;
+using Carbon.Net.Dns;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Hosting
@@ -26,23 +27,11 @@ namespace Carbon.Platform.Hosting
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
 
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("Required", nameof(name));
-
             #endregion
-
-            #region Normalization
-
-            if (name.EndsWith("."))
-            {
-                name = name.Trim('.');
-            }
-
-            #endregion
-
+            
             Id             = id;
             Name           = name;
-            Path           = string.Join("/", name.ToLower().Split('.').Reverse());
+            Path           = new DomainName(name.ToLower()).Path;
             OwnerId        = ownerId;
             NameServers    = nameServers;
             RegistrationId = registrationId;
@@ -54,7 +43,6 @@ namespace Carbon.Platform.Hosting
         [Member("id"), Key(sequenceName: "domainId")]
         public long Id { get; }
         
-        // byte[] ? 
         [Member("name")]
         [Ascii, StringLength(253)]
         public string Name { get; }
@@ -67,10 +55,10 @@ namespace Carbon.Platform.Hosting
 
         [Member("ownerId"), Indexed]
         public long? OwnerId { get; }
-        
+
         [Member("parentId"), Indexed]
         public long ParentId { get; }
-        
+
         [Member("nameServers")]
         [Ascii, StringLength(500)]
         public string[] NameServers { get; }
@@ -89,13 +77,21 @@ namespace Carbon.Platform.Hosting
 
         [Member("flags")]
         public DomainFlags Flags { get; }
-
+        
         // { whoisServer }
 
         [Member("properties")]
         [StringLength(1000)]
         public JsonObject Properties { get; }
+        
+        #region Counts
 
+        // the # of times the domain has been registered
+        // [Member("registrationCount")]
+        // public int RegistrationCount { get; }
+
+        #endregion
+        
         #region IResource
 
         ResourceType IResource.ResourceType => ResourceTypes.Domain;
@@ -118,10 +114,6 @@ namespace Carbon.Platform.Hosting
 }
 
 
-// A domain acts as a Zone
+// A domain may serve as a Zone
 
 // https://en.wikipedia.org/wiki/DNS_zone
-
-// Domain name space (DNS)
-
-// Each node or leaf in the tree has a label and zero or more resource records (RR)

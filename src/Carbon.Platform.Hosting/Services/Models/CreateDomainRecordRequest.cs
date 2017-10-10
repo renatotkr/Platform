@@ -3,10 +3,10 @@ using Carbon.Net.Dns;
 
 namespace Carbon.Platform.Hosting
 {
-    public class CreateDomainRecordRequest
+    public struct CreateDomainRecordRequest
     {
         public CreateDomainRecordRequest(
-            long zoneId,
+            long domainId,
             string name, 
             DnsRecordType type, 
             string value, 
@@ -14,11 +14,14 @@ namespace Carbon.Platform.Hosting
         {
             #region Preconditions
 
-            if (zoneId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(zoneId));
+            if (domainId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(domainId));
 
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("Required", nameof(name));
+
+            if (name.Length > 255)
+                throw new ArgumentException("Must be less than 255 characters", nameof(name));
 
             if (string.IsNullOrEmpty(value))
                 throw new ArgumentException("Required", nameof(value));
@@ -28,7 +31,7 @@ namespace Carbon.Platform.Hosting
 
             #endregion
 
-            DomainId = zoneId;
+            DomainId = domainId;
             Name     = name;
             Type     = type;
             Value    = value;
