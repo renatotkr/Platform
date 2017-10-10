@@ -7,6 +7,8 @@ using Carbon.Data.Expressions;
 
 namespace Carbon.Cloud.Logging
 {
+    using static Expression;
+
     public class EventService : IEventService
     {
         private readonly LogsDb db;
@@ -26,12 +28,17 @@ namespace Carbon.Cloud.Logging
 
             #endregion
 
-            return db.Events.QueryAsync(Expression.Eq("resource", resource), Order.Descending("id"), 0, 1000);
+            return db.Events.QueryAsync(
+                expression : Eq("resource", resource), 
+                order      : Order.Descending("id"),
+                skip       : 0,
+                take       : 1000
+            );
         }
 
         public Task<IReadOnlyList<Event>> ListHavingUserIdAsync(long userId)
         {
-            return db.Events.QueryAsync(Expression.Eq("userId", userId), Order.Descending("id"), 0, 1000);
+            return db.Events.QueryAsync(Eq("userId", userId), Order.Descending("id"), 0, 1000);
         }
     }
 }
