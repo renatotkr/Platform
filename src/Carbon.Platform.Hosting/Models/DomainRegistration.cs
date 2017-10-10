@@ -48,8 +48,7 @@ namespace Carbon.Platform.Hosting
         [Member("registrarId")]
         public long RegistrarId { get; }
        
-        // Note: a registration may be extended
-        [Member("expires")]
+        [Member("expires")] // May be extended
         public DateTime Expires { get; }
 
         [Member("flags")]
@@ -73,6 +72,8 @@ namespace Carbon.Platform.Hosting
         [Member("resourceId")]
         [StringLength(100)]
         public string ResourceId { get; }
+
+        // EncryptedPasswordData?
 
         ResourceType IResource.ResourceType => ResourceTypes.DomainRegistration;
 

@@ -54,13 +54,13 @@ namespace Carbon.Platform.Hosting
         [Member("ownerId"), Indexed]
         public long? OwnerId { get; }
 
+        [Member("certificateId")]
+        public long? CertificateId { get; }
+
         [Member("nameServers")]
         [Ascii, StringLength(500)]
         public string[] NameServers { get; }
 
-        [Member("certificateId")]
-        public long? CertificateId { get; }
-        
         /// <summary>f
         /// If registered through a register
         /// </summary>
@@ -74,7 +74,6 @@ namespace Carbon.Platform.Hosting
         public DomainFlags Flags { get; }
         
         // { whoisServer }
-
         [Member("properties")]
         [StringLength(1000)]
         public JsonObject Properties { get; }

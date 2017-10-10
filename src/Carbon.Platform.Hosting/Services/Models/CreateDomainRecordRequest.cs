@@ -20,7 +20,7 @@ namespace Carbon.Platform.Hosting
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("Required", nameof(name));
 
-            if (name.Length > 255)
+            if (name.Length > 253)
                 throw new ArgumentException("Must be less than 255 characters", nameof(name));
 
             if (string.IsNullOrEmpty(value))
