@@ -4,7 +4,7 @@ using System.Text;
 namespace Carbon.Platform.Metrics
 {
     // A point within a series (possible plotted across mutiple dimensions)
-
+    
     public struct MetricData : IMetricData
     {
         private readonly IMetric metric;
