@@ -20,13 +20,27 @@ namespace Carbon.Kms
             long issuerId,
             DateTime expires)
         {
+            #region Preconditions
+
             if (ownerId <= 0)
+            {
                 throw new ArgumentException("Must be > 0", nameof(ownerId));
+            }
+
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+            else if (data.Length == 0)
+            {
+                throw new ArgumentException("Must not be empty", nameof(data));
+            }
+            #endregion
 
             OwnerId   = ownerId;
-            Data      = data ?? throw new ArgumentNullException(nameof(data));
+            Data      = data;
             ChainData = chainData;
-            Subjects  = subjects ?? throw new ArgumentNullException(nameof(subjects));
+            Subjects  = subjects;
             IssuerId  = issuerId;
             Expires   = expires;
         }

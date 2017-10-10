@@ -40,7 +40,6 @@ namespace Carbon.Kms
 
             var certificate = new CertificateInfo(
                 id       : certificateId,
-                name     : null,
                 issuerId : request.IssuerId,
                 ownerId  : request.OwnerId,
                 data     : request.Data,
@@ -53,7 +52,7 @@ namespace Carbon.Kms
             {
                 subjects[i] = new CertificateSubject(
                     certificateId : certificate.Id, 
-                    name          : request.Subjects[i],
+                    path          : request.Subjects[i],
                     flags         : i == 0 ? CertificateSubjectFlags.Primary : CertificateSubjectFlags.None
                 );
             }

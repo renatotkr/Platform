@@ -7,14 +7,12 @@ using Carbon.Json;
 namespace Carbon.Kms
 {
     [Dataset("Certificates")]
-    [UniqueIndex("ownerId", "name")]
     public class CertificateInfo : ICertificate // , IResource
     {
         public CertificateInfo() { }
 
         public CertificateInfo(
             long id,
-            string name,
             long ownerId,
             byte[] data,
             long issuerId,
@@ -47,7 +45,6 @@ namespace Carbon.Kms
             #endregion
 
             Id         = id;
-            Name       = name;
             OwnerId    = ownerId;
             IssuerId   = issuerId;
             Data       = data;
@@ -59,9 +56,7 @@ namespace Carbon.Kms
         [Member("id"), Key(sequenceName: "certificateId")]
         public long Id { get; }
 
-        [Member("name")]
-        [Ascii, StringLength(63)]
-        public string Name { get; }
+        // UID?
 
         [Member("ownerId"), Indexed]
         public long OwnerId { get; }

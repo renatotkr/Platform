@@ -1,6 +1,7 @@
 using System;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+
 using Xunit;
 
 namespace Carbon.Kms.Tests
@@ -55,7 +56,6 @@ JHyBf3GZNSWTpKY7cD8V+NnBv3UuioOVVo+XAU4LF/bYUjdRpxWADJizNtZrtFo=
 
             var certificate = new CertificateInfo(
                 id       : 1,
-                name     : "name",
                 ownerId  : 1452,
                 issuerId : 93,
                 data     : x509.GetRawCertData(),
@@ -63,7 +63,6 @@ JHyBf3GZNSWTpKY7cD8V+NnBv3UuioOVVo+XAU4LF/bYUjdRpxWADJizNtZrtFo=
             );
             
             Assert.Equal(1,       certificate.Id);
-            Assert.Equal("name",  certificate.Name);
             Assert.Equal(1452,    certificate.OwnerId);
             Assert.Equal(expires, certificate.Expires);
             Assert.Equal(93,      certificate.IssuerId);
