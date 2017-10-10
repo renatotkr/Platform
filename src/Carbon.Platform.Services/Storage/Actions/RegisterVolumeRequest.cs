@@ -4,6 +4,8 @@ namespace Carbon.Platform.Storage
 {
     public class RegisterVolumeRequest
     {
+        public RegisterVolumeRequest() { }
+
         public RegisterVolumeRequest(ByteSize size, long ownerId, ManagedResource resource)
         {
             Size = size;
@@ -11,11 +13,11 @@ namespace Carbon.Platform.Storage
             OwnerId = ownerId;
         }
 
-        public ByteSize Size { get; }
+        public ByteSize Size { get; set; }
        
-        public long OwnerId { get; }
+        public long OwnerId { get; set; }
 
-        public ManagedResource Resource { get; }
+        public ManagedResource Resource { get; set; }
         
         public long? HostId { get; set; }
     }
