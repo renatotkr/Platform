@@ -22,5 +22,3 @@ namespace Carbon.Platform.Security
         public long? AccountId { get; }
     }
 }
-
-// Support self signed JWT tokens from 

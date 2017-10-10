@@ -11,15 +11,6 @@ namespace Carbon.Platform.Services.Test
         [Fact]
         public void X()
         {
-            /*
-            var request = new RegisterHostRequest {
-                Addresses = new[] { "192.168.1.1" },
-                Resource  = ManagedResource.Host(Locations.Aws_USEast1, "i-1")
-            };
-
-            throw new System.Exception(JsonObject.FromObject(request).ToString());
-            */
-
             var json = JsonObject.FromObject(new {
                 addresses = new[] { "192.168.1.1", "54.92.13.4" },
                 resource  = "aws:us-east-1a:host/i-1234567890abcdef0",

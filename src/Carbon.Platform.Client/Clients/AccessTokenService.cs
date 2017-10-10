@@ -20,10 +20,11 @@ namespace Carbon.Platform
 
         public AccessTokenService(HttpClient http, string baseUri)
         {
-            this.http    = http;
-            this.baseUri = baseUri;
+            this.http    = http ?? throw new ArgumentNullException(nameof(http));
+            this.baseUri = baseUri ?? throw new ArgumentNullException(nameof(baseUri));
         }
 
+        // Exchange?
         public async Task<ISecurityToken> GetAsync(ICredential credential)
         {
             switch (credential)

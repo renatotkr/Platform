@@ -12,11 +12,12 @@ dotnet pack ./src/Carbon.Packaging              -c Release -o ./../../release/Ca
 dotnet pack ./src/Carbon.Packaging.Tar          -c Release -o ./../../release/Carbon.Packaging.Tar
 dotnet pack ./src/Carbon.Platform               -c Release -o ./../../release/Carbon.Platform
 dotnet pack ./src/Carbon.Platform.Abstractions  -c Release -o ./../../release/Carbon.Platform.Abstractions
-dotnet pack ./src/Carbon.Platform.Web           -c Release -o ./../../release/Carbon.Platform.Web
 dotnet pack ./src/Carbon.Platform.Services      -c Release -o ./../../release/Carbon.Platform.Services
 dotnet pack ./src/Carbon.Platform.Client        -c Release -o ./../../release/Carbon.Platform.Client
+dotnet pack ./src/Carbon.Platform.Hosting       -c Release -o ./../../release/Carbon.Platform.Hosting
 dotnet pack ./src/Carbon.Platform.Monitoring    -c Release -o ./../../release/Carbon.Platform.Monitoring
 dotnet pack ./src/Carbon.Platform.Metrics       -c Release -o ./../../release/Carbon.Platform.Metrics
+dotnet pack ./src/Carbon.Platform.Web           -c Release -o ./../../release/Carbon.Platform.Web
 dotnet pack ./src/Carbon.VersionControl         -c Release -o ./../../release/Carbon.VersionControl
 dotnet pack ./src/Carbon.Platform.Management    -c Release -o ./../../release/Carbon.Platform.Management
 dotnet pack ./src/Carbon.Platform.Configuration -c Release -o ./../../release/Carbon.Platform.Configuration
