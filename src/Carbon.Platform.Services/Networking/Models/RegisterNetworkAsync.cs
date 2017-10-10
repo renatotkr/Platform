@@ -5,11 +5,9 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Networking
 {
-    public class RegisterNetworkAsync
+    public class RegisterNetworkRequest
     {
-        public RegisterNetworkAsync() { }
-
-        public RegisterNetworkAsync(
+        public RegisterNetworkRequest(
             string[] addressBlocks,
             long ownerId,
             ManagedResource resource)
@@ -19,11 +17,11 @@ namespace Carbon.Platform.Networking
             Resource      = resource;
         }
         
-        public string[] AddressBlocks { get; set; }
+        public string[] AddressBlocks { get; }
 
         [Range(1, 2_199_023_255_552)]
-        public long OwnerId { get; set; }
+        public long OwnerId { get; }
 
-        public ManagedResource Resource { get; set; }
+        public ManagedResource Resource { get; }
     }
 }

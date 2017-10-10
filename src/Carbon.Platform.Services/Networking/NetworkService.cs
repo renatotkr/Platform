@@ -44,7 +44,7 @@ namespace Carbon.Platform.Networking
             return await db.Networks.FindAsync(provider, resourceId);
         }
 
-        public async Task<NetworkInfo> RegisterAsync(RegisterNetworkAsync request)
+        public async Task<NetworkInfo> RegisterAsync(RegisterNetworkRequest request)
         {
             #region Validation
 

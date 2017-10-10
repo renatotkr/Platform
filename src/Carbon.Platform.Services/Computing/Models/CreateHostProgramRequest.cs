@@ -1,8 +1,7 @@
 ﻿namespace Carbon.Platform.Computing
 {
-    public class CreateHostProgramRequest
+    public struct CreateHostProgramRequest
     {
-
         public CreateHostProgramRequest(IHost host, IProgram program)
         {
             HostId  = host.Id;

@@ -4,10 +4,8 @@ using Carbon.Json;
 
 namespace Carbon.Platform.Environments
 {
-    public class CreateEnvironmentProgramRequest
+    public struct CreateEnvironmentProgramRequest
     {
-        public CreateEnvironmentProgramRequest() { }
-
         public CreateEnvironmentProgramRequest(
             IEnvironment environment,
             IProgram program, 

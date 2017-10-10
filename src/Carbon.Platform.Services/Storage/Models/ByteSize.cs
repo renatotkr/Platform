@@ -46,7 +46,6 @@ namespace Carbon.Platform.Storage
         {
             return new ByteSize(long.Parse(text));
         }
-
     }
 }
 

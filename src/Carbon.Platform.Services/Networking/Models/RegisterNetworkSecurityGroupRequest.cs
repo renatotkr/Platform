@@ -7,8 +7,6 @@ namespace Carbon.Platform.Networking
 {
     public class RegisterNetworkSecurityGroupRequest
     {
-        public RegisterNetworkSecurityGroupRequest() { }
-
         public RegisterNetworkSecurityGroupRequest(
             string name,
             long networkId,
@@ -20,11 +18,11 @@ namespace Carbon.Platform.Networking
         }
 
         [Required]
-        public string Name { get; set; }
+        public string Name { get; }
 
         [Range(1, 2_199_023_255_552)]
-        public long NetworkId { get; set; }
+        public long NetworkId { get; }
 
-        public ManagedResource Resource { get; set; }
+        public ManagedResource Resource { get; }
     }
 }

@@ -8,8 +8,6 @@ namespace Carbon.Platform.Networking
 {
     public class RegisterNetworkInterfaceRequest
     {
-        public RegisterNetworkInterfaceRequest() { }
-
         public RegisterNetworkInterfaceRequest(
             MacAddress mac,
             long subnetId,
@@ -23,14 +21,14 @@ namespace Carbon.Platform.Networking
         }
 
         [Required]
-        public MacAddress Mac { get; set; }
+        public MacAddress Mac { get; }
 
-        public long SubnetId { get; set; }
+        public long SubnetId { get; }
         
-        public long[] SecurityGroupIds { get; set; }
+        public long[] SecurityGroupIds { get; }
 
         [Required]
-        public ManagedResource Resource { get; set; }
+        public ManagedResource Resource { get; }
         
         public long? HostId { get; set; }
 

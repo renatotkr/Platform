@@ -21,12 +21,6 @@ namespace Carbon.Platform.Storage
 
         public async Task<BucketInfo> RegisterAsync(RegisterBucketRequest request)
         {
-            #region Validation
-
-            Validate.Object(request, nameof(request));
-
-            #endregion
-
             var bucket = new BucketInfo(
                 id       : await db.Buckets.Sequence.NextAsync(),
                 name     : request.Name,

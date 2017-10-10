@@ -1,12 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Carbon.Platform.Resources;
+﻿using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Storage
 {
     public class RegisterVolumeRequest
     {
-        public RegisterVolumeRequest() { }
-
         public RegisterVolumeRequest(ByteSize size, long ownerId, ManagedResource resource)
         {
             Size = size;
@@ -14,13 +11,12 @@ namespace Carbon.Platform.Storage
             OwnerId = ownerId;
         }
 
-        public ByteSize Size { get; set; }
+        public ByteSize Size { get; }
+       
+        public long OwnerId { get; }
+
+        public ManagedResource Resource { get; }
         
         public long? HostId { get; set; }
-
-        [Range(1, 2_199_023_255_552)]
-        public long OwnerId { get; set; }
-
-        public ManagedResource Resource { get; set; }
     }
 }
