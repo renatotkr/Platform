@@ -12,7 +12,7 @@ namespace Carbon.Platform.Networking
 
     public class NetworkInterfaceManager
     {
-        private readonly INetworkService networks;
+        private readonly INetworkService networkService;
         private readonly INetworkInterfaceService networkInterfaces;
         private readonly ISubnetService subnetService;
         private readonly NetworkSecurityGroupManager nsgManager;
@@ -25,7 +25,7 @@ namespace Carbon.Platform.Networking
             INetworkInterfaceService networkInterfaceService,
             INetworkSecurityGroupService nsgService)
         {
-            this.networks          = networkService          ?? throw new ArgumentNullException(nameof(networkService));
+            this.networkService    = networkService          ?? throw new ArgumentNullException(nameof(networkService));
             this.networkInterfaces = networkInterfaceService ?? throw new ArgumentNullException(nameof(networkInterfaceService));
             this.subnetService     = subnetService           ?? throw new ArgumentNullException(nameof(subnetService));
             this.ec2               = ec2                     ?? throw new ArgumentNullException(nameof(ec2));
@@ -42,7 +42,7 @@ namespace Carbon.Platform.Networking
                 var nic = await ec2.DescribeNetworkInterfaceAsync(resourceId)
                     ?? throw ResourceError.NotFound(Aws, ResourceTypes.NetworkInterface, resourceId);
 
-                var network = await networks.GetAsync(Aws, nic.VpcId);
+                var network = await networkService.GetAsync(Aws, nic.VpcId);
                 var region = Locations.Get(network.LocationId);
 
                 SubnetInfo subnet = nic.SubnetId != null
@@ -64,9 +64,9 @@ namespace Carbon.Platform.Networking
                     mac              : MacAddress.Parse(nic.MacAddress),
                     subnetId         : subnet?.Id ?? 0,
                     securityGroupIds : securityGroupIds,
-                    resource         : new ManagedResource(Aws, ResourceTypes.NetworkInterface, nic.NetworkInterfaceId)
+                    resource         : ManagedResource.NetworkInterface(region, nic.NetworkInterfaceId)
                 );
-
+                
                 record = await networkInterfaces.RegisterAsync(registerRequest);;
             }
 

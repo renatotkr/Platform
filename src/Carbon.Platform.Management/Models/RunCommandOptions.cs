@@ -1,6 +1,6 @@
 ﻿namespace Carbon.Platform.Management
 {
-    public class RunCommandOptions
+    public sealed class RunCommandOptions
     {
         private static readonly RunCommandOptions Default = new RunCommandOptions();
 

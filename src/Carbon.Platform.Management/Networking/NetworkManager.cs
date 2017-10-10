@@ -51,7 +51,7 @@ namespace Carbon.Platform.Networking
 
                 var region = Locations.Get(Aws, ec2Client.Region.Name);
 
-                var registerRequest = new RegisterNetworkAsync(
+                var registerRequest = new RegisterNetworkRequest(
                     addressBlocks : new[] { vpc.CidrBlock },
                     resource      : ManagedResource.Network(region, vpc.VpcId),
                     ownerId       : 1
