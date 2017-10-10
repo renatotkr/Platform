@@ -61,51 +61,17 @@ namespace Carbon.Platform.Hosting
                 flags |= DomainFlags.Tld;
             }
 
-            Domain parent = await GetParent(request.Name);
 
             var domain = new Domain(
                 id       : await db.Domains.Sequence.NextAsync(),
                 name     : request.Name.Name,
                 ownerId  : request.OwnerId,
-                parentId : parent?.Id ?? 0,
                 flags    : flags
             );
 
             await db.Domains.InsertAsync(domain);
 
             return domain;
-        }
-
-        private async Task<Domain> GetParent(DomainName name)
-        {
-            // com
-            // com/processor
-            // com/processor/www
-            var pathBuilder = new StringBuilder();
-
-            Domain parent = null;
-
-            var reversedLabels = name.Labels.Reverse().ToArray();
-
-            if (reversedLabels.Length == 1) return null;
-
-            // skip the last label
-
-            for (var i = 0; i < (reversedLabels.Length - 1); i++)
-            {
-                if (i != 0)
-                {
-                    pathBuilder.Append('/');
-                }
-
-                pathBuilder.Append(reversedLabels[i]);
-                
-                parent = await db.Domains.QueryFirstOrDefaultAsync(
-                    Expression.Eq("path", pathBuilder.ToString())
-                );                
-            }
-
-            return parent;
         }
     }
 }

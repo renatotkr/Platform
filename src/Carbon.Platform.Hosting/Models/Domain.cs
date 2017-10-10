@@ -18,7 +18,6 @@ namespace Carbon.Platform.Hosting
             long? ownerId = null,
             string[] nameServers = null,
             long? registrationId = null,
-            long parentId = 0,
             DomainFlags flags = default,
             JsonObject properties = null)
         {
@@ -35,7 +34,6 @@ namespace Carbon.Platform.Hosting
             OwnerId        = ownerId;
             NameServers    = nameServers;
             RegistrationId = registrationId;
-            ParentId       = parentId;
             Flags          = flags;
             Properties     = properties ?? new JsonObject();
         }
@@ -55,9 +53,6 @@ namespace Carbon.Platform.Hosting
 
         [Member("ownerId"), Indexed]
         public long? OwnerId { get; }
-
-        [Member("parentId"), Indexed]
-        public long ParentId { get; }
 
         [Member("nameServers")]
         [Ascii, StringLength(500)]
