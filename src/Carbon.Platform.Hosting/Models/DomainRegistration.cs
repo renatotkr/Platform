@@ -42,7 +42,7 @@ namespace Carbon.Platform.Hosting
         [Member("domainId"), Indexed]
         public long DomainId { get; }
 
-        [Member("ownerId")]
+        [Member("ownerId"), Indexed]
         public long OwnerId { get; }
 
         [Member("registrarId")]
