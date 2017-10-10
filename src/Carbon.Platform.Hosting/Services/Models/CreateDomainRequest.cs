@@ -1,17 +1,20 @@
-﻿using System;
+﻿using Carbon.Net.Dns;
 
 namespace Carbon.Platform.Hosting
 {
-    public class CreateDomainRequest
+    public struct CreateDomainRequest
     {
-        public CreateDomainRequest(string name, long? ownerId = null, DomainFlags flags = DomainFlags.None)
+        public CreateDomainRequest(
+            DomainName name, 
+            long? ownerId = null, 
+            DomainFlags flags = DomainFlags.None)
         {
-            Name    = name ?? throw new ArgumentNullException(nameof(name));
+            Name    = name;
             OwnerId = ownerId;
             Flags   = flags;
         }
 
-        public string Name { get; }
+        public DomainName Name { get; }
         
         public long? OwnerId { get;  }
 

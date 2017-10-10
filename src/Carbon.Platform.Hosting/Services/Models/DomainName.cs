@@ -1,14 +1,28 @@
-﻿using System.Linq;
+﻿using System.Text;
+
 using Carbon.Net.Dns;
 
 namespace Carbon.Platform
 {
-    public static class FqdnExtensions
+    public static class DomainNameExtensions
     {
-        // com/domain/superawesome
-        public static string GetPath(this Fqdn fqdn)
+        public static string GetPath(this DomainName name, int level)
         {
-            return string.Join("/", fqdn.Labels.Reverse());
+            if (level == 1) return name.Tld;
+
+            var sb = new StringBuilder();
+
+            // enumerate the array backwards
+            for (var i = name.Labels.Length - 1; i >= name.Labels.Length - level; i--)
+            {
+                var label = name.Labels[i];
+
+                if (sb.Length > 0) sb.Append("/");
+
+                sb.Append(name.Labels[i]);
+            }
+
+            return sb.ToString();
         }
     }
 }

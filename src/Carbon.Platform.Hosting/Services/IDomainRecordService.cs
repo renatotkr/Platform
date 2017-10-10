@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using Carbon.Net.Dns;
 
 namespace Carbon.Platform.Hosting
 {
     public interface IDomainRecordService
     {
-        Task<IReadOnlyList<DomainRecord>> QueryAsync(/*in */ Fqdn name, DnsRecordType type);
+        Task<IReadOnlyList<DomainRecord>> QueryAsync(/*in*/ DomainName name, DnsRecordType type);
 
         Task<DomainRecord> CreateAsync(CreateDomainRecordRequest request);
 

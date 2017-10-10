@@ -19,19 +19,10 @@ namespace Carbon.Platform.Hosting
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public async Task<Domain> FindAsync(string name)
-        {
-            #region Preconditions
-
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
-
-            #endregion
-            
-            var path = new Fqdn(name).GetPath();
-
+        public async Task<Domain> FindAsync(DomainName name)
+        {            
             return await db.Domains.QueryFirstOrDefaultAsync(
-                Expression.Eq("path", path)
+                Expression.Eq("path", name.Path)
             );
         }
 
@@ -50,6 +41,11 @@ namespace Carbon.Platform.Hosting
 
             #endregion
 
+            if (request.RegistrationId != null)
+            {
+                // Ensure the registration exists
+            }
+
             await db.Domains.PatchAsync(request.Id, new[] {
                 Change.Replace("registrationId", request.RegistrationId),
                 Change.Replace("certificateId",  request.CertificateId)
@@ -58,27 +54,18 @@ namespace Carbon.Platform.Hosting
 
         public async Task<Domain> CreateAsync(CreateDomainRequest request)
         {
-            #region Preconditions
-
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            #endregion
-
             var flags = request.Flags;
-
-            var name = new Fqdn(request.Name);
-
-            if (name.Labels.Length == 1)
+            
+            if (request.Name.Labels.Length == 1)
             {
                 flags |= DomainFlags.Tld;
             }
 
-            Domain parent = await GetParent(name);
+            Domain parent = await GetParent(request.Name);
 
             var domain = new Domain(
                 id       : await db.Domains.Sequence.NextAsync(),
-                name     : request.Name,
+                name     : request.Name.Name,
                 ownerId  : request.OwnerId,
                 parentId : parent?.Id ?? 0,
                 flags    : flags
@@ -89,7 +76,7 @@ namespace Carbon.Platform.Hosting
             return domain;
         }
 
-        private async Task<Domain> GetParent(Fqdn name)
+        private async Task<Domain> GetParent(DomainName name)
         {
             // com
             // com/processor

@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Carbon.Net.Dns;
 
 namespace Carbon.Platform.Hosting
 {
@@ -6,7 +7,7 @@ namespace Carbon.Platform.Hosting
     {
         Task<Domain> GetAsync(long id);
 
-        Task<Domain> FindAsync(string name);
+        Task<Domain> FindAsync(DomainName name);
 
         Task<Domain> CreateAsync(CreateDomainRequest request);
 

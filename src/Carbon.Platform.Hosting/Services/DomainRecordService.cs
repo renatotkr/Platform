@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Carbon.Data;
@@ -9,15 +10,17 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Hosting
 {
-    public class DomainRecordService : IDomainRecordService
+    using static Expression;
+
+    public sealed class DomainRecordService : IDomainRecordService
     {
         private readonly HostingDb db;
         private readonly IDomainService domainService;
 
         public DomainRecordService(HostingDb db, IDomainService domainService)
         {
-            this.db            = db ?? throw new ArgumentNullException(nameof(db));
-            this.domainService = domainService;
+            this.db            = db            ?? throw new ArgumentNullException(nameof(db));
+            this.domainService = domainService ?? throw new ArgumentNullException(nameof(domainService));
         }
         
         public async Task<DomainRecord> GetAsync(long id)
@@ -26,21 +29,28 @@ namespace Carbon.Platform.Hosting
                 ?? throw ResourceError.NotFound(ResourceTypes.DomainRecord, id);
         }
 
-        public async Task<IReadOnlyList<DomainRecord>> QueryAsync(Fqdn name, DnsRecordType type)
+        public async Task<IReadOnlyList<DomainRecord>> QueryAsync(DomainName name, DnsRecordType type)
         {
-            var path = name.GetPath();
-
             var result = await db.DomainRecords.QueryAsync(
-                expression: Expression.Conjunction(
-                    Expression.Eq("path", name.GetPath()), 
-                    Expression.Eq("type", type), 
-                    Expression.IsNull("deleted")
+                Conjunction(
+                    Eq("path", name.Path),
+                    Eq("type", type), 
+                    IsNull("deleted")
                 )
             );
 
             if (result.Count == 0)
             {
-                // TODO: replace last label & check wildcard
+                // Lookup wildcard records
+                var path = name.GetPath(level: name.Labels.Length - 1) + "/*";
+
+                result = await db.DomainRecords.QueryAsync(
+                    Conjunction(
+                        Eq("path", path),
+                        Eq("type", type),
+                        IsNull("deleted")
+                    )
+                );
             }
 
             return result;
@@ -57,9 +67,16 @@ namespace Carbon.Platform.Hosting
             
             var domain = await domainService.GetAsync(request.DomainId);
 
-            Fqdn name = request.Name == "@"
-                ? new Fqdn(domain.Name.ToLower())
-                : new Fqdn(request.Name.ToLower() + "." + domain.Name.ToLower());
+            string path = null;
+
+            if (request.Name == "@")
+            {
+                path = domain.Path;
+            }
+            else
+            {
+                path = domain.Path + "/" + string.Join("/", request.Name.ToLower().Split('.').Reverse());
+            }
 
             int? ttl = null;
 
@@ -72,7 +89,7 @@ namespace Carbon.Platform.Hosting
                 id       : await db.DomainRecords.Sequence.NextAsync(),
                 domainId : domain.Id,
                 name     : request.Name,
-                path     : name.GetPath(),
+                path     : path,
                 type     : request.Type,
                 value    : request.Value,
                 ttl      : ttl
@@ -92,16 +109,18 @@ namespace Carbon.Platform.Hosting
 
             #endregion
             
+            // TODO: Verify value against Type
+
             await db.DomainRecords.PatchAsync(request.Id, new[] {
                 Change.Replace("value", request.Value)
-            }, condition: Expression.IsNull("deleted"));
+            }, condition: IsNull("deleted"));
         }
 
         public async Task DeleteAsync(long id)
         {
             await db.DomainRecords.PatchAsync(id, new[] {
-                Change.Replace("deleted", Expression.Func("NOW"))
-            }, condition: Expression.IsNull("deleted"));
+                Change.Replace("deleted", Func("NOW"))
+            }, condition: IsNull("deleted"));
         }
     }
 }
