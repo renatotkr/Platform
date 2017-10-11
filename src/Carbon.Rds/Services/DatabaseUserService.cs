@@ -72,9 +72,18 @@ namespace Carbon.Rds.Services
 
         public async Task DeleteAsync(DatabaseUser user)
         {
+            #region Preconditions
+
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            #endregion
+
             await db.DatabaseUsers.PatchAsync((user.DatabaseId, user.UserId), new[] {
                 Change.Replace("deleted", Func("NOW"))
-            });
+            }, condition: IsNull("deleted"));
         }
     }
 }

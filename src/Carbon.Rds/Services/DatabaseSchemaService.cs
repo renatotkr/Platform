@@ -48,7 +48,7 @@ namespace Carbon.Rds.Services
         {
             await db.DatabaseSchemas.PatchAsync(schema.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))
-            });
+            }, condition: IsNull("deleted"));
         }
     }
 }

@@ -69,7 +69,7 @@ namespace Carbon.Kms
         public async Task DeleteAsync(long id)
         {
             await db.Certificates.PatchAsync(id, new[] {
-                Change.Replace("deleted", DateTime.UtcNow)
+                Change.Replace("deleted", Expression.Func("NOW"))
             }, condition: Expression.IsNull("deleted"));
         }
     }

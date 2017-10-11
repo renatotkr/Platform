@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 using Carbon.Data;
 using Carbon.Data.Expressions;
+using Carbon.Data.Sql;
 using Carbon.Platform.Sequences;
 using Carbon.Security;
 
@@ -79,6 +80,36 @@ namespace Carbon.Rds.Services
             );
         }
 
+        public Task<IReadOnlyList<DatabaseGrant>> ListAsync(IDatabaseInfo database, IUser user, DbObject resource)
+        {
+            #region Preconditions
+
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            if (database == null)
+            {
+                throw new ArgumentNullException(nameof(database));
+            }
+
+            #endregion
+
+            var range = ScopedId.GetRange(database.Id);
+
+            return db.DatabaseGrants.QueryAsync(
+                Conjunction(
+                    Between("id", range.Start, range.End),
+                    Eq("userId", user.Id),
+                    Eq("schemaName", resource.SchemaName),
+                    Eq("objectType", resource.Type),
+                    Eq("objectName", resource.ObjectName),
+                    IsNull("deleted")
+                )
+            );
+        }
+
         public async Task<DatabaseGrant> CreateAsync(CreateDatabaseGrantRequest request)
         {
             #region Preconditions
@@ -103,7 +134,7 @@ namespace Carbon.Rds.Services
             return grant;
         }
 
-        public async Task DeleteAsync(IDatabaseGrant grant)
+        public async Task<bool> DeleteAsync(IDatabaseGrant grant)
         {
             #region Preconditions
 
@@ -112,9 +143,9 @@ namespace Carbon.Rds.Services
 
             #endregion
 
-            await db.DatabaseGrants.PatchAsync(grant.Id, new[] {
+            return await db.DatabaseGrants.PatchAsync(grant.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))
-            });
+            }, condition: IsNull("deleted")) > 0;
         }
     }
 }

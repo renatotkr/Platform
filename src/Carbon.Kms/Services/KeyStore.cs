@@ -100,7 +100,7 @@ namespace Carbon.Kms
             await db.Keys.PatchAsync(id, changes: new[] {
                 Change.Remove("data"),
                 Change.Replace("deleted", Func("NOW"))
-            }).ConfigureAwait(false);
+            }, condition: IsNull("deleted"));
         }
     }
 }
