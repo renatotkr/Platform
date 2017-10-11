@@ -23,22 +23,35 @@ namespace Carbon.Rds.Services
 
             if (databaseId <= 0)
                 throw new ArgumentException("Must be > 0", nameof(databaseId));
-            
-            if (privileges == null)
-                throw new ArgumentNullException(nameof(privileges));
 
-            if (privileges.Length == 0)
-                throw new ArgumentException("Required", nameof(privileges));
+            if (privileges == null)
+            {
+                throw new ArgumentNullException(nameof(privileges));
+            }
+            else if (privileges.Length == 0)
+            {
+                throw new ArgumentException("Must not be empty", nameof(privileges));
+            }
+            
+            foreach (var privilege in privileges)
+            {
+                if (privilege == null || privilege.Length == 0 || privilege.Length > 63)
+                {
+                    throw new ArgumentException("Invalid", nameof(privileges));
+                }
+            }
 
             if (userId <= 0)
+            {
                 throw new ArgumentException("Must be > 0", nameof(userId));
+            }
 
             #endregion
 
-            DatabaseId = databaseId;
-            UserId     = userId;
-            Resource   = resource;
-            Privileges    = privileges;
+            DatabaseId  = databaseId;
+            UserId      = userId;
+            Resource    = resource;
+            Privileges  = privileges;
         }
 
         public long DatabaseId { get; }

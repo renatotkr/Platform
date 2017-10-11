@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Platform.Sequences;
-using Carbon.Platform.Storage;
 
 namespace Carbon.Rds.Services
 {

@@ -2,7 +2,7 @@
 
 namespace Carbon.Rds.Services
 {
-    public class CreateDatabaseUserRequest
+    public struct CreateDatabaseUserRequest
     {
         public CreateDatabaseUserRequest(IDatabaseInfo database, long userId, string name)
             : this(database.Id, userId, name) { }

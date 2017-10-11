@@ -11,7 +11,7 @@ namespace Carbon.Rds.Services
 
         Task<DatabaseUser> GetAsync(long databaseId, long userId);
 
-        Task<DatabaseUser> FindAsync(long databaseId, long name);
+        Task<DatabaseUser> FindAsync(long databaseId, string name);
 
         Task DeleteAsync(DatabaseUser user);
 
