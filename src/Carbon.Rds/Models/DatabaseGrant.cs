@@ -68,7 +68,7 @@ namespace Carbon.Rds
         [Member("schemaName")]
         [StringLength(63)]
         public string SchemaName { get; }
-
+        
         [Member("objectType")]
         public DbObjectType ObjectType { get; }
 

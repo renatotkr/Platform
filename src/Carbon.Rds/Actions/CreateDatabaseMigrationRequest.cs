@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
 namespace Carbon.Rds.Services
@@ -26,7 +25,7 @@ namespace Carbon.Rds.Services
         [DataMember(Name = "schemaName")]
         public string SchemaName { get; set; }
 
-        [DataMember(Name = "commands"), Required]
+        [DataMember(Name = "commands")]
         public string[] Commands { get; set;  }
 
         [DataMember(Name = "description")]

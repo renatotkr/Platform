@@ -11,14 +11,7 @@ namespace Carbon.Rds.Services
             RegisterDatabaseInstanceRequest[] instances,
             RegisterDatabaseEndpointRequest[] endpoints)
         {
-            #region PReconditions
-
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("Required", nameof(name));
-
-            #endregion
-
-            Name      = name;
+            Name      = name ?? throw new ArgumentNullException(nameof(name));
             Resource  = resource;
             Instances = instances;
             Endpoints = endpoints;

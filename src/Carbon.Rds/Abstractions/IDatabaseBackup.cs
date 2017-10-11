@@ -18,6 +18,6 @@ namespace Carbon.Rds
 
         DatabaseBackupStatus Status { get; }
 
-        DateTime? Completed { get; set; }
+        DateTime? Completed { get; }
     }
 }
