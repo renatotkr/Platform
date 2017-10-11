@@ -17,6 +17,8 @@ namespace Carbon.Platform.Hosting
 
         public IDbContext Context { get; }
 
+        public const string Name = "Hosting";
+
         public Dataset<Domain,             long> Domains             { get; }
         public Dataset<DomainRecord,       long> DomainRecords       { get; }
         public Dataset<DomainRegistration, long> DomainRegistrations { get; }
