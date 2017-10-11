@@ -33,7 +33,7 @@ namespace Carbon.Rds
         public long Id { get; }
         
         [Member("schemaName")]
-        [StringLength(100)]
+        [StringLength(63)]
         public string SchemaName { get; }
 
         [Member("description")]

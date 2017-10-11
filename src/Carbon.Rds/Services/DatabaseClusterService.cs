@@ -46,8 +46,11 @@ namespace Carbon.Rds.Services
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
 
+            if (request.Name == null)
+                throw new ArgumentNullException(nameof(request.Name));
+
             if (request.DatabaseId <= 0)
-                throw new ArgumentException("Must be > 0", "databaseId");
+                throw new ArgumentException("Must be > 0", nameof(request.DatabaseId));
 
             if (request.Resource.LocationId <= 0)
                 throw new ArgumentException("Must be > 0", "locationId");

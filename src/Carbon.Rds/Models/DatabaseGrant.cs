@@ -59,7 +59,7 @@ namespace Carbon.Rds
         [Member("id"), Key]
         public long Id { get; }
 
-        [Member("databaseId")]
+        [Member("databaseId")] 
         public long DatabaseId { get; }
 
         [Member("userId"), Indexed]
@@ -80,10 +80,9 @@ namespace Carbon.Rds
         [StringLength(200)]
         public string[] ColumnNames { get; }
 
-        // aka privileges
         [Member("actions")]
         [StringLength(1000)]
-        public string[] Actions { get; set; }
+        public string[] Actions { get; }
         
         #region Timestamps
 
@@ -99,3 +98,7 @@ namespace Carbon.Rds
         #endregion
     }
 }
+
+// TODO:
+// [ ] Rename Actions to Privileges
+// [ ] Remove databaseId column

@@ -1,10 +1,11 @@
 ﻿using System;
 using Carbon.Data.Annotations;
+using Carbon.Security;
 
 namespace Carbon.Rds
 {
     [Dataset("DatabaseUsers", Schema = "Rds")]
-    public class DatabaseUser
+    public class DatabaseUser : IUser
     {
         public DatabaseUser() { }
 
@@ -34,8 +35,11 @@ namespace Carbon.Rds
         [Member("userId"), Key]
         public long UserId { get; }
 
+        // MySQL    : 32 characters
+        // Postgres : 63 characters
+
         [Member("name")]
-        [StringLength(100)]
+        [StringLength(63)]
         public string Name { get; }
         
         #region Timestamps
@@ -48,6 +52,12 @@ namespace Carbon.Rds
         
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
+
+        #endregion
+        
+        #region IUser
+
+        long IUser.Id => UserId;
 
         #endregion
     }

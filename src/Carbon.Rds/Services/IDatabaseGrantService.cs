@@ -12,9 +12,9 @@ namespace Carbon.Rds.Services
         Task DeleteAsync(IDatabaseGrant grant);
 
         Task<IReadOnlyList<DatabaseGrant>> ListAsync(IDatabaseInfo database);
-        
-        Task<IReadOnlyList<DatabaseGrant>> ListAsync(IUser user);
 
-        Task<IReadOnlyList<DatabaseGrant>> ListAsync(IUser user, IDatabaseInfo database);
+        Task<IReadOnlyList<DatabaseGrant>> ListAsync(IDatabaseInfo database, IUser user);
+
+        Task<IReadOnlyList<DatabaseGrant>> ListAsync(IUser user);
     }
 }

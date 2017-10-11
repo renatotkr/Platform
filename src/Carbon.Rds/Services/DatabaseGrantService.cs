@@ -52,7 +52,7 @@ namespace Carbon.Rds.Services
             );
         }
 
-        public Task<IReadOnlyList<DatabaseGrant>> ListAsync(IUser user, IDatabaseInfo database)
+        public Task<IReadOnlyList<DatabaseGrant>> ListAsync(IDatabaseInfo database, IUser user)
         {
             #region Preconditions
 
@@ -72,8 +72,8 @@ namespace Carbon.Rds.Services
 
             return db.DatabaseGrants.QueryAsync(
                 Conjunction(
-                    Eq("userId", user.Id),
                     Between("id", range.Start, range.End),
+                    Eq("userId", user.Id),
                     IsNull("deleted")
                 )
             );
@@ -87,7 +87,6 @@ namespace Carbon.Rds.Services
                 throw new ArgumentNullException(nameof(request));
 
             #endregion
-
 
             var grantId = await DatabaseGrantId.NextAsync(db.Context, request.DatabaseId);
 
