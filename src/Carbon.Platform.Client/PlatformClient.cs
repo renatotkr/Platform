@@ -10,6 +10,7 @@ namespace Carbon.Platform
             : base(endpoint, credential)
         {
             Clusters     = new ClusterClient(this);
+            Domains      = new DomainClient(this);
             Hosts        = new HostClient(this);
             Programs     = new ProgramClient(this);
             Repositories = new RepositoryClient(this);
@@ -24,6 +25,8 @@ namespace Carbon.Platform
         // Buckets
 
         public DeploymentClient Deployments { get; }
+
+        public DomainClient Domains { get; }
 
         public ClusterClient Clusters { get; }
 
