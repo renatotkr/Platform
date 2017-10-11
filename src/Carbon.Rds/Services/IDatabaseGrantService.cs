@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Carbon.Security;
+
 namespace Carbon.Rds.Services
 {
     public interface IDatabaseGrantService
@@ -10,5 +12,9 @@ namespace Carbon.Rds.Services
         Task DeleteAsync(IDatabaseGrant grant);
 
         Task<IReadOnlyList<DatabaseGrant>> ListAsync(IDatabaseInfo database);
+        
+        Task<IReadOnlyList<DatabaseGrant>> ListAsync(IUser user);
+
+        Task<IReadOnlyList<DatabaseGrant>> ListAsync(IUser user, IDatabaseInfo database);
     }
 }

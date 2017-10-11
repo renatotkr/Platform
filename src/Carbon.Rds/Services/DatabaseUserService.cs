@@ -36,22 +36,33 @@ namespace Carbon.Rds.Services
             return db.DatabaseUsers.FindAsync((databaseId, userId)); // or throw
         }
 
+        public async Task<DatabaseUser> FindAsync(long databaseId, string name)
+        {
+            return await db.DatabaseUsers.QueryFirstOrDefaultAsync(
+                Conjunction(
+                    Eq("databaseId", databaseId),
+                    Eq("name", name),
+                    IsNull("deleted")
+                )
+            );
+        }
+
         public Task<bool> ExistsAsync(long databaseId, long userId)
         {
             return db.DatabaseUsers.ExistsAsync(
                 And(Eq("databaseId", databaseId), Eq("userId", userId))
             );
         }
+        
+        public async Task RestoreAsync(long databaseId, long userId)
+        {
+            await db.DatabaseUsers.PatchAsync((databaseId, userId), new[] {
+                Change.Remove("deleted")
+            });
+        }
 
         public async Task<DatabaseUser> CreateAsync(CreateDatabaseUserRequest request)
         {
-            #region Preconditions
-
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            #endregion
-
             var dbUser = new DatabaseUser(request.DatabaseId, request.UserId, request.Name);
             
             await db.DatabaseUsers.InsertAsync(dbUser);

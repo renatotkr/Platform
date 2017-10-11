@@ -11,7 +11,11 @@ namespace Carbon.Rds.Services
 
         Task<DatabaseUser> GetAsync(long databaseId, long userId);
 
+        Task<DatabaseUser> FindAsync(long databaseId, long name);
+
         Task DeleteAsync(DatabaseUser user);
+
+        Task RestoreAsync(long databaseId, long userId);
 
         Task<IReadOnlyList<DatabaseUser>> ListAsync(IDatabaseInfo database);
     }

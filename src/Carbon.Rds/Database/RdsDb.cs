@@ -10,9 +10,6 @@ namespace Carbon.Rds
         {
             Context = context ?? throw new ArgumentNullException(nameof(context));
 
-            // context.Types.TryAdd(new JsonObjectHandler());
-            // context.Types.TryAdd(new StringArrayHandler());
-
             Databases          = new Dataset<DatabaseInfo,         long>(context);
             DatabaseBackups    = new Dataset<DatabaseBackup,       long>(context);
             DatabaseClusters   = new Dataset<DatabaseCluster,      long>(context);
@@ -23,6 +20,8 @@ namespace Carbon.Rds
             DatabaseGrants     = new Dataset<DatabaseGrant,        long>(context);
             DatabaseUsers      = new Dataset<DatabaseUser, (long, long)>(context);
         }
+
+        public const string Name = "Rds";
 
         public IDbContext Context { get; }
         
@@ -36,6 +35,5 @@ namespace Carbon.Rds
         public Dataset<DatabaseGrant,     long> DatabaseGrants     { get; }
 
         public Dataset<DatabaseUser, (long databaseId, long userId)> DatabaseUsers { get; }
-
     }
 }

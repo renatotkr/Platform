@@ -20,13 +20,28 @@ namespace Carbon.Rds
             #region Preconditions
 
             if (id <= 0)
+            {
                 throw new ArgumentException("Must be > 0", nameof(id));
+            }
 
             if (databaseId <= 0)
+            {
                 throw new ArgumentException("Must be > 0", nameof(databaseId));
+            }
 
             if (userId <= 0)
+            {
                 throw new ArgumentException("Must be > 0", nameof(userId));
+            }
+
+            if (actions == null)
+            {
+                throw new ArgumentNullException(nameof(actions));
+            }
+            else if (actions.Length == 0)
+            {
+                throw new ArgumentException("Must not be empty", nameof(actions));
+            }
 
             #endregion
 
@@ -36,7 +51,7 @@ namespace Carbon.Rds
             SchemaName  = resource.SchemaName;
             ObjectType  = resource.Type;
             ObjectName  = resource.ObjectName;
-            Actions     = actions ?? throw new ArgumentNullException(nameof(actions));
+            Actions     = actions;
             ColumnNames = columnNames;
         }
 

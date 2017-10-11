@@ -3,6 +3,6 @@
     public enum DatabaseBackupStatus
     {
         Success = 1,
-        Fail    = 2
+        Fail    = 5
     }
 }
