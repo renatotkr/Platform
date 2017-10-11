@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Carbon.Json;
+using Xunit;
 
 namespace Carbon.Platform.Hosting.Tests
 {
@@ -24,6 +25,19 @@ namespace Carbon.Platform.Hosting.Tests
             Assert.Equal(1,                   domain.OwnerId);
             Assert.Equal(2,                   domain.NameServers.Length);
             Assert.Equal(DomainFlags.Managed, domain.Flags);
-        }     
+        }
+
+
+        [Fact]
+        public void DeserializeCreateDomainRequestFromJson()
+        {
+            var request = JsonObject.Parse(
+                @"{ ""name"": ""www.processor.ai"", ""ownerId"": 1 }"
+            ).As<CreateDomainRequest>();
+
+        
+            Assert.Equal("www.processor.ai", request.Name);
+            Assert.Equal(1, request.OwnerId);
+        }
     }
 }
