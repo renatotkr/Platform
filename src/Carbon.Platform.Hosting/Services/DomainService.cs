@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 using Carbon.Data;
@@ -54,17 +52,27 @@ namespace Carbon.Platform.Hosting
 
         public async Task<Domain> CreateAsync(CreateDomainRequest request)
         {
-            var flags = request.Flags;
+            #region Preconditions
+
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            #endregion
             
-            if (request.Name.Labels.Length == 1)
+            var name = new DomainName(request.Name);
+
+            var flags = DomainFlags.None;
+
+            if (name.Labels.Length == 1)
             {
                 flags |= DomainFlags.Tld;
             }
 
-
             var domain = new Domain(
                 id       : await db.Domains.Sequence.NextAsync(),
-                name     : request.Name.Name,
+                name     : name.Name,
                 ownerId  : request.OwnerId,
                 flags    : flags
             );

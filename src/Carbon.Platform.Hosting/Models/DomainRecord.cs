@@ -1,8 +1,9 @@
 ﻿using System;
-
+using System.Runtime.Serialization;
 using Carbon.Data.Annotations;
 using Carbon.Net.Dns;
 using Carbon.Platform.Resources;
+using Carbon.Platform.Sequences;
 
 namespace Carbon.Platform.Hosting
 {
@@ -13,7 +14,6 @@ namespace Carbon.Platform.Hosting
 
         public DomainRecord(
             long id,
-            long domainId,
             string name,
             string path,
             DnsRecordType type, 
@@ -25,9 +25,6 @@ namespace Carbon.Platform.Hosting
 
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
-
-            if (domainId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(domainId));
 
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("Required", nameof(name));
@@ -43,25 +40,18 @@ namespace Carbon.Platform.Hosting
 
             #endregion
 
-            Id       = id;
-            DomainId = domainId;
-            Type     = type;
-            Name     = name;
-            Path     = path;
-            Value    = value;
-            Ttl      = ttl;
-            Flags    = flags;
+            Id    = id;
+            Type  = type;
+            Name  = name;
+            Path  = path;
+            Value = value;
+            Ttl   = ttl;
+            Flags = flags;
         }
         
-        [Member("id"), Key(sequenceName: "domainRecordId")]
+        [Member("id"), Key] // domainId | #
         public long Id { get; }
-
-        /// <summary>
-        /// The authoritive domain the record is under (the zoneId)
-        /// </summary>
-        [Member("domainId"), Indexed] 
-        public long DomainId { get; }
-
+        
         /// <summary>
         /// The name relative to the domainId
         /// e.g. @ |  subdomain
@@ -104,6 +94,12 @@ namespace Carbon.Platform.Hosting
 
         [Member("flags")]
         public DomainRecordFlags Flags { get; }
+        
+        /// <summary>
+        /// The authoritive domain the record is under (the zoneId)
+        /// </summary>
+        [IgnoreDataMember]
+        public long DomainId => ScopedId.GetScope(Id);
 
         #region Timestamps
 

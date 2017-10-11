@@ -1,4 +1,5 @@
 ﻿using Carbon.Net.Dns;
+using Carbon.Platform.Sequences;
 using Xunit;
 
 namespace Carbon.Platform.Hosting.Tests
@@ -23,8 +24,7 @@ namespace Carbon.Platform.Hosting.Tests
             var name = new DomainName("www.processor.ai");
 
             var record = new DomainRecord(
-                id          : 1,
-                domainId    : 456,
+                id          : ScopedId.Create(456, 1),
                 name        : "www",
                 path        : name.Path,
                 type        : DnsRecordType.A,
@@ -33,12 +33,15 @@ namespace Carbon.Platform.Hosting.Tests
                 flags       : DomainRecordFlags.None
             );
 
+            Assert.Equal(1912602625,         record.Id);
             Assert.Equal("www",              record.Name);
             Assert.Equal("ai/processor/www", record.Path);
             Assert.Equal(456,                record.DomainId);
             Assert.Equal(1,                 (int)record.Type);
             Assert.Equal("192.168.1.1",      record.Value);
             Assert.Equal(600,                record.Ttl);
+
+
         }
 
         [Fact]
@@ -46,7 +49,6 @@ namespace Carbon.Platform.Hosting.Tests
         {
             var record = new DomainRecord(
                 id       : 19345,
-                domainId : 1,
                 name     : "*",
                 path     : "ai/processor/*",
                 type     : DnsRecordType.CNAME,
@@ -58,7 +60,6 @@ namespace Carbon.Platform.Hosting.Tests
             Assert.Equal(19345,                    record.Id);
             Assert.Equal("*",                      record.Name);
             Assert.Equal("ai/processor/*",         record.Path);
-            Assert.Equal(1,                        record.DomainId);
             Assert.Equal(5,                        (int)record.Type);
             Assert.Equal("hosted.accelerator.net", record.Value);
             Assert.Equal(DomainRecordFlags.Alias,  record.Flags);

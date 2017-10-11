@@ -26,8 +26,14 @@ namespace Carbon.Platform.Hosting
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
 
+            if (ownerId != null && ownerId.Value <= 0)
+                throw new ArgumentException("Must be > 0", nameof(ownerId));
+
+            if (registrationId != null && registrationId.Value <= 0)
+                throw new ArgumentException("Must be > 0", nameof(registrationId));
+
             #endregion
-            
+
             Id             = id;
             Name           = name;
             Path           = new DomainName(name.ToLower()).Path;
@@ -77,15 +83,18 @@ namespace Carbon.Platform.Hosting
         [Member("properties")]
         [StringLength(1000)]
         public JsonObject Properties { get; }
-        
+
         #region Counts
 
         // the # of times the domain has been registered
         // [Member("registrationCount")]
         // public int RegistrationCount { get; }
 
+        [Member("recordCount")]
+        public int RecordCount { get; }
+
         #endregion
-        
+
         #region IResource
 
         ResourceType IResource.ResourceType => ResourceTypes.Domain;

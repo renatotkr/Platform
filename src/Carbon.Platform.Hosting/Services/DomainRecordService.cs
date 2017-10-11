@@ -7,6 +7,7 @@ using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Net.Dns;
 using Carbon.Platform.Resources;
+using Carbon.Platform.Sequences;
 
 namespace Carbon.Platform.Hosting
 {
@@ -27,6 +28,18 @@ namespace Carbon.Platform.Hosting
         {
             return await db.DomainRecords.FindAsync(id) 
                 ?? throw ResourceError.NotFound(ResourceTypes.DomainRecord, id);
+        }
+
+        public async Task<IReadOnlyList<DomainRecord>> ListAsync(IDomain domain)
+        {
+            var range = ScopedId.GetRange(domain.Id);
+
+            return await db.DomainRecords.QueryAsync(
+                And(
+                    Between("id", range.Start, range.End),
+                    IsNull("deleted")
+                )
+            );
         }
 
         public async Task<IReadOnlyList<DomainRecord>> QueryAsync(DomainName name, DnsRecordType type)
@@ -78,14 +91,15 @@ namespace Carbon.Platform.Hosting
                 ttl = (int)request.Ttl.Value.TotalSeconds;
             }
 
+            var recordId = await DomainRecordId.NextAsync(db.Context, domain.Id);
+
             var record = new DomainRecord(
-                id       : await db.DomainRecords.Sequence.NextAsync(),
-                domainId : domain.Id,
-                name     : request.Name,
-                path     : path,
-                type     : request.Type,
-                value    : request.Value,
-                ttl      : ttl
+                id    : recordId,
+                name  : request.Name,
+                path  : path,
+                type  : request.Type,
+                value : request.Value,
+                ttl   : ttl
             );
             
             await db.DomainRecords.InsertAsync(record);
@@ -103,7 +117,6 @@ namespace Carbon.Platform.Hosting
             #endregion
             
             // TODO: Verify value against Type
-            
 
             await db.DomainRecords.PatchAsync(request.Id, new[] {
                 Change.Replace("value", request.Value)
