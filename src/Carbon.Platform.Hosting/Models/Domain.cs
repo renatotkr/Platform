@@ -16,6 +16,7 @@ namespace Carbon.Platform.Hosting
             long id,
             string name,
             long? ownerId = null,
+            long? environmentId = null,
             string[] nameServers = null,
             long? registrationId = null,
             DomainFlags flags = default,
@@ -32,6 +33,9 @@ namespace Carbon.Platform.Hosting
             if (registrationId != null && registrationId.Value <= 0)
                 throw new ArgumentException("Must be > 0", nameof(registrationId));
 
+            if (environmentId != null && environmentId.Value <= 0)
+                throw new ArgumentException("Must be > 0", nameof(environmentId));
+
             #endregion
 
             Id             = id;
@@ -40,6 +44,7 @@ namespace Carbon.Platform.Hosting
             OwnerId        = ownerId;
             NameServers    = nameServers;
             RegistrationId = registrationId;
+            EnvironmentId  = environmentId;
             Flags          = flags;
             Properties     = properties ?? new JsonObject();
         }
@@ -59,6 +64,9 @@ namespace Carbon.Platform.Hosting
 
         [Member("ownerId"), Indexed]
         public long? OwnerId { get; }
+
+        [Member("environmentId"), Indexed]
+        public long? EnvironmentId { get; }
 
         [Member("certificateId")]
         public long? CertificateId { get; }
@@ -115,7 +123,6 @@ namespace Carbon.Platform.Hosting
         #endregion
     }
 }
-
 
 // A domain may serve as a Zone
 
