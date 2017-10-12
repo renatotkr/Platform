@@ -70,20 +70,32 @@ namespace Carbon.Platform.Hosting
         }
 
         public async Task<DomainRecord> CreateAsync(CreateDomainRecordRequest request)
-        {            
+        {
+            #region Validation
+
+            if (request.DomainId <= 0)
+                throw new ArgumentException("Must be > 0", nameof(request.DomainId));
+
+            if (string.IsNullOrEmpty(request.Name))
+                throw new ArgumentException("Required", nameof(request.Name));
+
+            if (request.Name.Length > 253)
+                throw new ArgumentException("Must be 253 characters or fewer", nameof(request.Name));
+
+            if (string.IsNullOrEmpty(request.Value))
+                throw new ArgumentException("Required", nameof(request.Value));
+
+            if (request.Ttl != null && request.Ttl.Value < TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException(nameof(request.Ttl), request.Ttl.Value.TotalSeconds, "Must be >= 0");
+
+            #endregion
+
             var domain = await domainService.GetAsync(request.DomainId);
 
-            string path = null;
-
-            if (request.Name == "@")
-            {
-                path = domain.Path;
-            }
-            else
-            {
-                path = domain.Path + "/" + string.Join("/", request.Name.ToLower().Split('.').Reverse());
-            }
-
+            string path = request.Name == "@"
+                ? domain.Path
+                : domain.Path + "/" + string.Join("/", request.Name.ToLower().Split('.').Reverse());
+           
             int? ttl = null;
 
             if (request.Ttl != null)
@@ -113,12 +125,17 @@ namespace Carbon.Platform.Hosting
 
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
+            
+            if (request.Value == null)
+                throw new ArgumentException(nameof(request.Value));
 
             #endregion
+
+            var record = GetAsync(request.Id);
             
             // TODO: Verify value against Type
 
-            await db.DomainRecords.PatchAsync(request.Id, new[] {
+            await db.DomainRecords.PatchAsync(record.Id, new[] {
                 Change.Replace("value", request.Value)
             }, condition: IsNull("deleted"));
         }

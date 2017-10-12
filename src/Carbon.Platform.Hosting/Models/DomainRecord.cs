@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+
 using Carbon.Data.Annotations;
 using Carbon.Net.Dns;
 using Carbon.Platform.Resources;
@@ -28,7 +29,10 @@ namespace Carbon.Platform.Hosting
 
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("Required", nameof(name));
-           
+
+            if (name.Length > 253)
+                throw new ArgumentOutOfRangeException(nameof(name), name.Length, "Must be 253 characters or fewer");
+
             if (type == default)
                 throw new ArgumentException("Required", nameof(type));
 
@@ -96,7 +100,7 @@ namespace Carbon.Platform.Hosting
         public DomainRecordFlags Flags { get; }
         
         /// <summary>
-        /// The authoritive domain the record is under (the zoneId)
+        /// The authoritive domain the record is under (DNS Zone)
         /// </summary>
         [IgnoreDataMember]
         public long DomainId => ScopedId.GetScope(Id);

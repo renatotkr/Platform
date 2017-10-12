@@ -4,6 +4,8 @@ namespace Carbon.Platform.Hosting
 {
     public class UpdateDomainRecordRequest
     {
+        public UpdateDomainRecordRequest() { }
+
         public UpdateDomainRecordRequest(
             long id, 
             string value)
@@ -19,8 +21,8 @@ namespace Carbon.Platform.Hosting
             Value = value ?? throw new ArgumentNullException(nameof(value));
         }
 
-        public long Id { get; }
+        public long Id { get; set; } // RecordId
         
-        public string Value { get; }        
+        public string Value { get; set; } 
     }
 }

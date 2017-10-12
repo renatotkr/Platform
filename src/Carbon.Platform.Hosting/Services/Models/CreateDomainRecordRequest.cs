@@ -1,10 +1,14 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+
 using Carbon.Net.Dns;
 
 namespace Carbon.Platform.Hosting
 {
-    public struct CreateDomainRecordRequest
+    public class CreateDomainRecordRequest
     {
+        public CreateDomainRecordRequest() { }
+
         public CreateDomainRecordRequest(
             long domainId,
             string name, 
@@ -12,41 +16,23 @@ namespace Carbon.Platform.Hosting
             string value, 
             TimeSpan? ttl)
         {
-            #region Preconditions
-
-            if (domainId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(domainId));
-
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("Required", nameof(name));
-
-            if (name.Length > 253)
-                throw new ArgumentException("Must be less than 255 characters", nameof(name));
-
-            if (string.IsNullOrEmpty(value))
-                throw new ArgumentException("Required", nameof(value));
-
-            if (ttl != null && ttl.Value < TimeSpan.Zero)
-                throw new ArgumentOutOfRangeException(nameof(ttl), ttl.Value.TotalSeconds, "Must be >= 0");
-
-            #endregion
-
             DomainId = domainId;
-            Name     = name;
+            Name     = name ?? throw new ArgumentNullException(nameof(name));
             Type     = type;
-            Value    = value;
+            Value    = value ?? throw new ArgumentNullException(nameof(value));
             Ttl      = ttl;
         }
 
-        public long DomainId { get; }
+        public long DomainId { get; set; }
 
-        // @, subdomain
-        public string Name { get; }
+        [Required] // examples: @, www
+        public string Name { get; set; }
 
-        public DnsRecordType Type { get; }
+        public DnsRecordType Type { get; set; }
 
-        public string Value { get; }
+        [Required]
+        public string Value { get; set; }
         
-        public TimeSpan? Ttl { get; }
+        public TimeSpan? Ttl { get; set; }
     }
 }
