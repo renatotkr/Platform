@@ -2,11 +2,15 @@
 using System.Net;
 using System.Threading.Tasks;
 
+using Carbon.Data;
+using Carbon.Data.Expressions;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Services;
 
 namespace Carbon.Platform.Networking
 {
+    using static Expression;
+
     public class NetworkInterfaceService : INetworkInterfaceService
     {
         private readonly PlatformDb db;
@@ -18,7 +22,8 @@ namespace Carbon.Platform.Networking
 
         public Task<NetworkInterfaceInfo> GetAsync(long id)
         {
-            return db.NetworkInterfaces.FindAsync(id) ?? throw ResourceError.NotFound(ResourceTypes.NetworkInterface, id);
+            return db.NetworkInterfaces.FindAsync(id) 
+                ?? throw ResourceError.NotFound(ResourceTypes.NetworkInterface, id);
         }
 
         public Task<NetworkInterfaceInfo> GetAsync(string name)
@@ -27,7 +32,8 @@ namespace Carbon.Platform.Networking
  
             (var provider, var resourceId) = ResourceName.Parse(name);
 
-            return FindAsync(provider, resourceId) ?? throw ResourceError.NotFound(provider, ResourceTypes.NetworkInterface, name);
+            return FindAsync(provider, resourceId) 
+                ?? throw ResourceError.NotFound(provider, ResourceTypes.NetworkInterface, name);
         }
 
         public async Task<NetworkInterfaceInfo> FindAsync(ResourceProvider provider, string id)
@@ -55,6 +61,20 @@ namespace Carbon.Platform.Networking
             await db.NetworkInterfaces.InsertAsync(nic);
 
             return nic;
+        }
+
+        public async Task<bool> DeleteAsync(INetworkInterface networkInterface)
+        {
+            #region Preconditions
+
+            if (networkInterface == null)
+                throw new ArgumentNullException(nameof(networkInterface));
+
+            #endregion
+
+            return await db.NetworkInterfaces.PatchAsync(networkInterface.Id, new[] {
+                Change.Replace("deleted", Func("NOW"))
+            }, condition: IsNull("deleted")) > 0;
         }
     }
 }

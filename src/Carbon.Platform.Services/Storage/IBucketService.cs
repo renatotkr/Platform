@@ -7,5 +7,7 @@ namespace Carbon.Platform.Storage
         Task<BucketInfo> GetAsync(long id);
 
         Task<BucketInfo> RegisterAsync(RegisterBucketRequest request);
+
+        Task<bool> DeleteAsync(IBucketInfo bucket);
     }
 }

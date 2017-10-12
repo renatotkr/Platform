@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
+using Carbon.Data;
 using Carbon.Data.Expressions;
+using Carbon.Platform.Resources;
 
 namespace Carbon.Rds.Services
 {
@@ -18,6 +21,12 @@ namespace Carbon.Rds.Services
             this.db = db ?? throw new ArgumentNullException(nameof(db));
 
             this.clusterService = new DatabaseClusterService(db);
+        }
+
+        public async Task<DatabaseInfo> GetAsync(long id)
+        {
+            return await db.Databases.FindAsync(id)
+                ?? throw ResourceError.NotFound(ResourceTypes.Database, id);
         }
 
         public Task<IReadOnlyList<DatabaseInfo>> ListAsync(long ownerId)
@@ -53,6 +62,13 @@ namespace Carbon.Rds.Services
             }
 
             return database;
+        }
+
+        public async Task<bool> DeleteAsync(IDatabaseInfo database)
+        {
+            return await db.Databases.PatchAsync(database.Id, new[] {
+                Change.Replace("deleted", Func("NOW"))
+            }, condition: IsNull("deleted")) > 0;
         }
     }
 }

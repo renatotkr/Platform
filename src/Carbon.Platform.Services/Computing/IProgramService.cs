@@ -20,5 +20,7 @@ namespace Carbon.Platform.Computing
         Task<IReadOnlyList<ProgramInfo>> ListAsync(IHost host);
 
         Task<ProgramInfo> CreateAsync(CreateProgramRequest request);
+
+        Task<bool> DeleteAsync(IProgram program);
     }
 }

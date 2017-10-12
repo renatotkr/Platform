@@ -13,5 +13,7 @@ namespace Carbon.Platform.Networking
         Task<SubnetInfo> GetAsync(string name);
 
         Task<SubnetInfo> RegisterAsync(RegisterSubnetRequest request);
+
+        Task<bool> DeleteAsync(ISubnet subnet);
     }
 }

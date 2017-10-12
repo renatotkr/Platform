@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
+using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Platform.Resources;
 
@@ -97,6 +99,20 @@ namespace Carbon.Platform.Computing
             await db.Images.InsertAsync(image);
 
             return image;
+        }
+        
+        public async Task<bool> DeleteAsync(IImage image)
+        {
+            #region Preconditions
+
+            if (image == null)
+                throw new ArgumentNullException(nameof(image));
+
+            #endregion
+
+            return await db.Images.PatchAsync(image.Id, new[] {
+                Change.Replace("deleted", Func("NOW"))
+            }, condition: IsNull("deleted")) > 0;
         }
     }
 }

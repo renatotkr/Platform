@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Platform.Resources;
 using Carbon.Security;
@@ -21,7 +22,9 @@ namespace Carbon.CI
 
         public Task<IReadOnlyList<RepositoryBranch>> ListAsync(IRepository repository)
         {
-            return db.RepositoryBranches.QueryAsync(Eq("repositoryId", repository.Id));
+            return db.RepositoryBranches.QueryAsync(
+                And(Eq("repositoryId", repository.Id), IsNull("deleted"))
+            );
         }
 
         public async Task<RepositoryBranch> GetAsync(long id)
@@ -58,6 +61,21 @@ namespace Carbon.CI
             await db.RepositoryBranches.InsertAsync(branch);
 
             return branch;
+        }
+
+
+        public async Task<bool> DeleteAsync(IRepositoryBranch branch)
+        {
+            #region Preconditions
+
+            if (branch == null)
+                throw new ArgumentNullException(nameof(branch));
+
+            #endregion
+
+            return await db.RepositoryBranches.PatchAsync(branch.Id, new[] {
+                Change.Replace("deleted", Func("NOW"))
+            }, condition: IsNull("deleted")) > 0;
         }
     }
 }

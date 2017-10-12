@@ -14,5 +14,7 @@ namespace Carbon.Platform.Computing
         Task<Cluster> GetAsync(IEnvironment env, ILocation location);
 
         Task<Cluster> GetAsync(long id);
+
+        Task<bool> DeleteAsync(ICluster cluster);
     }
 }

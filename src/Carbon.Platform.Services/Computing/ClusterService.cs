@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Platform.Environments;
 using Carbon.Platform.Resources;
@@ -28,7 +29,9 @@ namespace Carbon.Platform.Computing
 
             #endregion
 
-            return db.Clusters.QueryAsync(Eq("environmentId", environment.Id));
+            return db.Clusters.QueryAsync(
+                And(Eq("environmentId", environment.Id), IsNull("deleted"))
+            );
         }
 
         public async Task<Cluster> CreateAsync(CreateClusterRequest request)
@@ -83,6 +86,13 @@ namespace Carbon.Platform.Computing
             }
             
             return group;
+        }
+
+        public async Task<bool> DeleteAsync(ICluster cluster)
+        {
+            return await db.Clusters.PatchAsync(cluster.Id, new[] {
+                Change.Replace("deleted", Func("NOW"))
+            }, condition: IsNull("deleted")) > 0;
         }
     }
 }

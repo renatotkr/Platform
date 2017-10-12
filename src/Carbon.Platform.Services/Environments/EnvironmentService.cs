@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Platform.Resources;
 
@@ -33,8 +34,17 @@ namespace Carbon.Platform.Environments
 
         public async Task<EnvironmentInfo> GetAsync(long ownerId, string name)
         {
+            #region Preconditions
+
+            if (name == null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            #endregion
+
             return await db.Environments.QueryFirstOrDefaultAsync(
-                And(Eq("ownerId", ownerId), Eq("name", name))
+                Conjunction(Eq("ownerId", ownerId), Eq("name", name), IsNull("deleted"))
             ) ?? throw ResourceError.NotFound(ResourceTypes.Environment, ownerId, name);
         }
 
@@ -76,6 +86,20 @@ namespace Carbon.Platform.Environments
             await db.Environments.InsertAsync(environment);
 
             return environment;
+        }
+        
+        public async Task<bool> DeleteAsync(IEnvironment environment)
+        {
+            #region Preconditions
+
+            if (environment == null)
+                throw new ArgumentNullException(nameof(environment));
+
+            #endregion
+
+            return await db.Environments.PatchAsync(environment.Id, new[] {
+                Change.Replace("deleted", Func("NOW"))
+            }, condition: IsNull("deleted")) > 0;
         }
     }
 }

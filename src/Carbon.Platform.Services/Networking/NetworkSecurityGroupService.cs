@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using Carbon.Data;
+using Carbon.Data.Expressions;
+
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Networking
 {
+    using static Expression;
+
     public class NetworkSecurityGroupService : INetworkSecurityGroupService
     {
         private readonly PlatformDb db;
@@ -22,6 +27,13 @@ namespace Carbon.Platform.Networking
 
         public async Task<NetworkSecurityGroup> FindAsync(ResourceProvider provider, string resourceId)
         {
+            #region Preconditions
+
+            if (resourceId == null)
+                throw new ArgumentNullException(nameof(resourceId));
+
+            #endregion
+
             return await db.NetworkSecurityGroups.FindAsync(provider, resourceId);
         }
 
@@ -44,6 +56,20 @@ namespace Carbon.Platform.Networking
             await db.NetworkSecurityGroups.InsertAsync(nsg);
 
             return nsg;
+        }
+
+        public async Task<bool> DeleteAsync(INetworkSecurityGroup group)
+        {
+            #region Preconditions
+
+            if (group == null)
+                throw new ArgumentNullException(nameof(group));
+
+            #endregion
+
+            return await db.NetworkSecurityGroups.PatchAsync(group.Id, new[] {
+                Change.Replace("deleted", Func("NOW"))
+            }, condition: IsNull("deleted")) > 0;
         }
     }
 }

@@ -9,5 +9,7 @@ namespace Carbon.Platform.Networking
         Task<NetworkInterfaceInfo> GetAsync(long id);
 
         Task<NetworkInterfaceInfo> RegisterAsync(RegisterNetworkInterfaceRequest request);
+
+        Task<bool> DeleteAsync(INetworkInterface networkInterface);
     }
 }

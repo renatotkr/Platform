@@ -15,6 +15,6 @@ namespace Carbon.CI
 
         Task<ProjectInfo> GetAsync(long ownerId, string name);
 
-        Task DeleteAsync(ProjectInfo project, ISecurityContext context);
+        Task<bool> DeleteAsync(ProjectInfo project, ISecurityContext context);
     }
 }

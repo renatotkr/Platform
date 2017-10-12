@@ -33,13 +33,6 @@ namespace Carbon.CI
 
         public async Task<ProjectInfo> GetAsync(long ownerId, string name)
         {
-            #region Preconditions
-
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
-
-            #endregion
-
             return await db.Projects.QueryFirstOrDefaultAsync(
                 And(Eq("ownerId", ownerId), Eq("name", name))  
             ) ?? throw ResourceError.NotFound(ResourceTypes.Project, ownerId, name);
@@ -72,21 +65,11 @@ namespace Carbon.CI
             return project;
         }
 
-        public async Task DeleteAsync(ProjectInfo project, ISecurityContext context)
+        public async Task<bool> DeleteAsync(ProjectInfo project, ISecurityContext context)
         {
-            #region Preconditions
-
-            if (project == null)
-                throw new ArgumentNullException(nameof(project));
-
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
-            #endregion
-
-            await db.Projects.PatchAsync(project.Id, new[] {
+            return await db.Projects.PatchAsync(project.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))
-            });
+            }, condition: IsNull("deleted")) > 0;
         }
     }
 }

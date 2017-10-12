@@ -165,6 +165,20 @@ namespace Carbon.Platform.Computing
             
             return program;
         }
+
+        public async Task<bool> DeleteAsync(IProgram program)
+        {
+            #region Preconditions
+
+            if (program == null)
+                throw new ArgumentNullException(nameof(program));
+
+            #endregion
+
+            return await db.Programs.PatchAsync(program.Id, new[] {
+                Change.Replace("deleted", Func("NOW"))
+            }, condition: IsNull("deleted")) > 0;
+        }
     }
 }
 

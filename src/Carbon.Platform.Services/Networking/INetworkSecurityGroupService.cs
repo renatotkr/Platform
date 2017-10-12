@@ -9,5 +9,7 @@ namespace Carbon.Platform.Networking
         Task<NetworkSecurityGroup> GetAsync(long id);
 
         Task<NetworkSecurityGroup> RegisterAsync(RegisterNetworkSecurityGroupRequest request);
+
+        Task<bool> DeleteAsync(INetworkSecurityGroup group);
     }
 }

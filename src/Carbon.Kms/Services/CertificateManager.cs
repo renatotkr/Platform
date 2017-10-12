@@ -66,9 +66,9 @@ namespace Carbon.Kms
             return certificate;
         }
       
-        public async Task DeleteAsync(long id)
+        public async Task DeleteAsync(ICertificate certificate)
         {
-            await db.Certificates.PatchAsync(id, new[] {
+            await db.Certificates.PatchAsync(certificate.Id, new[] {
                 Change.Replace("deleted", Expression.Func("NOW"))
             }, condition: Expression.IsNull("deleted"));
         }

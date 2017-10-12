@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using Carbon.Data;
+using Carbon.Data.Expressions;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Services;
 
 namespace Carbon.Platform.Networking
 {
+    using static Expression;
+
     public class SubnetService : ISubnetService
     {
         private readonly PlatformDb db;
@@ -59,6 +63,13 @@ namespace Carbon.Platform.Networking
             await db.Subnets.InsertAsync(subnet);
 
             return subnet;
+        }
+
+        public async Task<bool> DeleteAsync(ISubnet subnet)
+        {
+            return await db.Subnets.PatchAsync(subnet.Id, new[] {
+                Change.Replace("deleted", Func("NOW"))
+            }, condition: IsNull("deleted")) > 0;
         }
     }
 }

@@ -16,5 +16,7 @@ namespace Carbon.Platform.Environments
         Task<EnvironmentInfo> CreateAsync(CreateEnvironmentRequest request);
 
         Task<bool> ExistsAsync(long ownerId, string name);
+
+        Task<bool> DeleteAsync(IEnvironment environment);
     }
 }

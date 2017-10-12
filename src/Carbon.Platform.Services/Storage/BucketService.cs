@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
+
+using Carbon.Data;
+using Carbon.Data.Expressions;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Storage
 {
+    using static Expression;
+
     public class BucketService : IBucketService
     {
         private readonly PlatformDb db;
@@ -31,6 +36,13 @@ namespace Carbon.Platform.Storage
             await db.Buckets.InsertAsync(bucket);
 
             return bucket;
+        }
+
+        public async Task<bool> DeleteAsync(IBucketInfo bucket)
+        {
+            return await db.Buckets.PatchAsync(bucket.Id, new[] {
+                Change.Replace("deleted", Func("NOW"))
+            }, condition: IsNull("deleted")) > 0;
         }
     }
 }

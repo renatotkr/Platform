@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Carbon.Cloud.Logging;
 using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Platform.Resources;
@@ -9,7 +10,6 @@ using Carbon.Security;
 
 namespace Carbon.CI
 {
-    using Carbon.Cloud.Logging;
     using static Expression;
 
     public class RepositoryService : IRepositoryService
@@ -93,6 +93,20 @@ namespace Carbon.CI
             #endregion
 
             return repository;
+        }
+
+        public async Task<bool> DeleteAsync(IRepository repository)
+        {
+            #region Preconditions
+
+            if (repository == null)
+                throw new ArgumentNullException(nameof(repository));
+
+            #endregion
+
+            return await db.Repositories.PatchAsync(repository.Id, new[] {
+                Change.Replace("deleted", Func("NOW"))
+            }, condition: IsNull("deleted")) > 0;
         }
     }
 }

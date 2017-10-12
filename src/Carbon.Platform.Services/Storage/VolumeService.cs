@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using Carbon.Data;
+using Carbon.Data.Expressions;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Services;
 
 namespace Carbon.Platform.Storage
 {
+    using static Expression;
+
     public class VolumeService : IVolumeService
     {
         private readonly PlatformDb db;
@@ -55,6 +59,13 @@ namespace Carbon.Platform.Storage
             await db.Volumes.InsertAsync(volume);
 
             return volume;
+        }
+
+        public async Task<bool> DeleteAsync(IVolume volume)
+        {
+            return await db.Volumes.PatchAsync(volume.Id, new[] {
+                Change.Replace("deleted", Func("NOW"))
+            }, condition: IsNull("deleted")) > 0;
         }
     }
 }

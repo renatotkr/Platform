@@ -15,5 +15,7 @@ namespace Carbon.CI
         Task<RepositoryInfo> CreateAsync(CreateRepositoryRequest request, ISecurityContext context);
 
         Task<IReadOnlyList<RepositoryInfo>> ListAsync(long ownerId);
+
+        Task<bool> DeleteAsync(IRepository repository);
     }
 }

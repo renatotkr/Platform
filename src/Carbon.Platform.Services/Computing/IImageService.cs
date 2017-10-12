@@ -16,5 +16,7 @@ namespace Carbon.Platform.Computing
         Task<bool> ExistsAsync(ResourceProvider provider, string resourceId);
 
         Task<ImageInfo> RegisterAsync(RegisterImageRequest request);
+
+        Task<bool> DeleteAsync(IImage image);
     }
 }
