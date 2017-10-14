@@ -13,7 +13,7 @@ namespace Carbon.Platform.Hosting
         public DomainRegistration(
             long id,
             long domainId,
-            long ownerId,
+            long? ownerId,
             long registrarId,
             DateTime expires,
             DomainRegistrationFlags flags = default)
@@ -36,14 +36,14 @@ namespace Carbon.Platform.Hosting
             Flags       = flags;
         }
 
-        [Member("id"), Key("domainRegistrationId")]
+        [Member("id"), Key] // domainId | #
         public long Id { get; }
 
         [Member("domainId"), Indexed]
         public long DomainId { get; }
 
         [Member("ownerId"), Indexed]
-        public long OwnerId { get; }
+        public long? OwnerId { get; }
 
         [Member("registrarId")]
         public long RegistrarId { get; }
@@ -53,6 +53,8 @@ namespace Carbon.Platform.Hosting
 
         [Member("flags")]
         public DomainRegistrationFlags Flags { get; }
+
+        // Properties ?
 
         #region Timestaps
 
