@@ -50,11 +50,7 @@ namespace Carbon.Platform.Networking
 
         public async Task<NetworkInfo> RegisterAsync(RegisterNetworkRequest request)
         {
-            #region Validation
-
-            Validate.Object(request, nameof(request));
-
-            #endregion
+            Validate.Object(request, nameof(request)); // Validate the request
 
             var network = new NetworkInfo(
                 id            : await db.Networks.Sequence.NextAsync(),

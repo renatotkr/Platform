@@ -12,6 +12,6 @@ namespace Carbon.Platform.Storage
 
         Task<VolumeInfo> RegisterAsync(RegisterVolumeRequest request);
 
-        Task<bool> DeleteAsync(IVolume volume)
+        Task<bool> DeleteAsync(IVolume volume);
     }
 }

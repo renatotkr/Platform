@@ -103,13 +103,6 @@ namespace Carbon.Platform.Computing
         
         public async Task<bool> DeleteAsync(IImage image)
         {
-            #region Preconditions
-
-            if (image == null)
-                throw new ArgumentNullException(nameof(image));
-
-            #endregion
-
             return await db.Images.PatchAsync(image.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))
             }, condition: IsNull("deleted")) > 0;

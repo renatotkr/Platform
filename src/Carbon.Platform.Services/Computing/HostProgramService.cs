@@ -13,12 +13,8 @@ namespace Carbon.Platform.Computing
         }
         
         public async Task<HostProgram> CreateAsync(CreateHostProgramRequest request)
-        {
-            #region Preconditions
-            
-            Validate.Object(request, nameof(request));
-
-            #endregion
+        {            
+            Validate.Object(request, nameof(request)); // Validate the request
             
             var hostProgram = new HostProgram(
                 hostId         : request.HostId,

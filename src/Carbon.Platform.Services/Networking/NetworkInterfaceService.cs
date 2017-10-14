@@ -43,12 +43,8 @@ namespace Carbon.Platform.Networking
 
         public async Task<NetworkInterfaceInfo> RegisterAsync(RegisterNetworkInterfaceRequest request)
         {
-            #region Preconditions
-
-            Validate.Object(request, nameof(request));
-
-            #endregion
-
+            Validate.Object(request, nameof(request)); // Validate the request
+            
             var nic = new NetworkInterfaceInfo(
                 id               : await db.NetworkInterfaces.GetNextScopedIdAsync(request.NetworkId),
                 ipAddresses      : Array.Empty<IPAddress>(),
@@ -65,13 +61,6 @@ namespace Carbon.Platform.Networking
 
         public async Task<bool> DeleteAsync(INetworkInterface networkInterface)
         {
-            #region Preconditions
-
-            if (networkInterface == null)
-                throw new ArgumentNullException(nameof(networkInterface));
-
-            #endregion
-
             return await db.NetworkInterfaces.PatchAsync(networkInterface.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))
             }, condition: IsNull("deleted")) > 0;

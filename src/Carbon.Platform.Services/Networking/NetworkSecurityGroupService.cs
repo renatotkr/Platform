@@ -39,11 +39,7 @@ namespace Carbon.Platform.Networking
 
         public async Task<NetworkSecurityGroup> RegisterAsync(RegisterNetworkSecurityGroupRequest request)
         {
-            #region Preconditions
-
-            Validate.Object(request, nameof(request));
-
-            #endregion
+            Validate.Object(request, nameof(request)); // Validate the request
 
             var id = await db.NetworkSecurityGroups.GetNextScopedIdAsync(request.NetworkId);
 
