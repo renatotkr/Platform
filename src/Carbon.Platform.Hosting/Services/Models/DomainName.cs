@@ -1,4 +1,4 @@
-﻿using System.Text;
+﻿using System;
 
 using Carbon.Net.Dns;
 
@@ -10,19 +10,13 @@ namespace Carbon.Platform
         {
             if (level == 1) return name.Tld;
 
-            var sb = new StringBuilder();
+            if (level == 2) return name.Tld + "/" + name.Sld;
+            
+            var labels = new string[level];
 
-            // enumerate the array backwards
-            for (var i = name.Labels.Length - 1; i >= name.Labels.Length - level; i--)
-            {
-                var label = name.Labels[i];
+            Array.Copy(name.Labels, name.Labels.Length - level, labels, 0, labels.Length);
 
-                if (sb.Length > 0) sb.Append("/");
-
-                sb.Append(name.Labels[i]);
-            }
-
-            return sb.ToString();
+            return new DomainName(labels).Path;
         }
     }
 }

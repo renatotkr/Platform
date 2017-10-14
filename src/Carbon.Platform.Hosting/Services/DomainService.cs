@@ -61,7 +61,7 @@ namespace Carbon.Platform.Hosting
 
             #endregion
             
-            var name = new DomainName(request.Name);
+            var name = DomainName.Parse(request.Name);
 
             var flags = DomainFlags.None;
 

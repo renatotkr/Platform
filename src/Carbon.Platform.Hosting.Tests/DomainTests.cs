@@ -1,4 +1,5 @@
 ﻿using Carbon.Json;
+using Carbon.Net.Dns;
 using Xunit;
 
 namespace Carbon.Platform.Hosting.Tests
@@ -9,24 +10,20 @@ namespace Carbon.Platform.Hosting.Tests
 		public void A()
 		{
             var domain = new Domain(
-                id: 1,
-                name: "processor.ai",
-                ownerId: 1, 
-                nameServers: new[] {
-                    "1.dns.host",
-                    "2.dns.host"
-                },
-                flags: DomainFlags.Managed
+                id      : 1,
+                name    : "processor.ai",
+                ownerId : 1, 
+                flags   : DomainFlags.Managed | DomainFlags.Authoritative
             );
+
+            var flags = DomainFlags.Managed | DomainFlags.Authoritative;
 
             Assert.Equal(1,                   domain.Id);
             Assert.Equal("ai/processor",      domain.Path);
             Assert.Equal("processor.ai",      domain.Name);
             Assert.Equal(1,                   domain.OwnerId);
-            Assert.Equal(2,                   domain.NameServers.Length);
-            Assert.Equal(DomainFlags.Managed, domain.Flags);
+            Assert.Equal(flags,               domain.Flags);
         }
-
 
         [Fact]
         public void DeserializeCreateDomainRequestFromJson()
@@ -38,6 +35,18 @@ namespace Carbon.Platform.Hosting.Tests
         
             Assert.Equal("www.processor.ai", request.Name);
             Assert.Equal(1, request.OwnerId);
+        }
+
+        [Fact]
+        public void DeserializeCreateDomainRecordRequestFromJson()
+        {
+            var request = JsonObject.Parse(
+                @"{ ""name"": ""www.processor.ai"", type: ""CNAME"", ""domainId"": 1 }"
+            ).As<CreateDomainRecordRequest>();
+            
+            Assert.Equal("www.processor.ai",    request.Name);
+            Assert.Equal(DnsRecordType.CNAME,   request.Type);
+            Assert.Equal(1,                     request.DomainId);
         }
     }
 }

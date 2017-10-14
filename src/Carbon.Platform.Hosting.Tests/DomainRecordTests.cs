@@ -9,19 +9,21 @@ namespace Carbon.Platform.Hosting.Tests
         [Fact]
         public void DomainPathTests()
         {
-            Assert.Equal("ai/processor",     new DomainName("processor.ai").Path);
-            Assert.Equal("ai/processor/www", new DomainName("www.processor.ai").Path);
+            Assert.Equal("ai/processor",     DomainName.Parse("processor.ai").Path);
+            Assert.Equal("ai/processor/www", DomainName.Parse("www.processor.ai").Path);
 
             // Level overloads
-            Assert.Equal("ai/processor",     new DomainName("another.www.processor.ai").GetPath(level: 2));
-            Assert.Equal("ai/processor",     new DomainName("www.processor.ai").GetPath(level: 2));
-            Assert.Equal("ai",               new DomainName("www.processor.ai").GetPath(level: 1));
+            Assert.Equal("ai/processor/www", DomainName.Parse("yetanother.another.www.processor.ai").GetPath(level: 3));
+            Assert.Equal("ai/processor",     DomainName.Parse("yetanother.another.www.processor.ai").GetPath(level: 2));
+            Assert.Equal("ai/processor",     DomainName.Parse("another.www.processor.ai").GetPath(level: 2));
+            Assert.Equal("ai/processor",     DomainName.Parse("www.processor.ai").GetPath(level: 2));
+            Assert.Equal("ai",               DomainName.Parse("www.processor.ai").GetPath(level: 1));
         }
 
         [Fact]
         public void B()
         {
-            var name = new DomainName("www.processor.ai");
+            var name = DomainName.Parse("www.processor.ai");
 
             var record = new DomainRecord(
                 id          : ScopedId.Create(456, 1),
