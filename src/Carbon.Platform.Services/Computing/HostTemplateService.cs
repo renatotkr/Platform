@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
+    using static Expression;
+
     public class HostTemplateService : IHostTemplateService
     {
         private readonly PlatformDb db;
@@ -18,7 +21,14 @@ namespace Carbon.Platform.Computing
 
         public Task<IReadOnlyList<HostTemplate>> ListAsync()
         {
-            return db.HostTemplates.QueryAsync(Expression.IsNull("deleted"));
+            return db.HostTemplates.QueryAsync(IsNull("deleted"));
+        }
+
+        public Task<IReadOnlyList<HostTemplate>> ListAsync(long ownerId)
+        {
+            return db.HostTemplates.QueryAsync(
+                And(Eq("ownerId", ownerId), IsNull("deleted"))
+            );
         }
 
         public async Task<HostTemplate> GetAsync(long id)
@@ -28,13 +38,9 @@ namespace Carbon.Platform.Computing
         }
 
         public async Task<HostTemplate> CreateAsync(CreateHostTemplateRequest request)
-        {
-            #region Preconditions
-            
-            Validate.Object(request, nameof(request));
+        {            
+            Validate.Object(request, nameof(request)); // Validate the request
 
-            #endregion
-            
             var templateId = await db.HostTemplates.Sequence.NextAsync();
 
             var template = new HostTemplate(
@@ -51,6 +57,14 @@ namespace Carbon.Platform.Computing
             await db.HostTemplates.InsertAsync(template);
 
             return template;
+        }
+
+
+        public async Task<bool> DeleteAsync(IHostTemplate template)
+        {
+            return await db.HostTemplates.PatchAsync(template.Id, new[] {
+                Change.Replace("deleted", Func("NOW"))
+            }, condition: IsNull("deleted")) > 0;
         }
     }
 }
