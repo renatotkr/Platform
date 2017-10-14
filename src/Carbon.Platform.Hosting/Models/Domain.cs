@@ -15,11 +15,10 @@ namespace Carbon.Platform.Hosting
         public Domain(
             long id,
             string name,
-            long? ownerId = null,
-            long? environmentId = null,
-            string[] nameServers = null,
-            long? registrationId = null,
-            DomainFlags flags = default,
+            long? ownerId         = null,
+            long? environmentId   = null,
+            long? registrationId  = null,
+            DomainFlags flags     = default,
             JsonObject properties = null)
         {
             #region Preconditions
@@ -40,9 +39,8 @@ namespace Carbon.Platform.Hosting
 
             Id             = id;
             Name           = name;
-            Path           = new DomainName(name.ToLower()).Path;
+            Path           = DomainName.Parse(name.ToLower()).Path;
             OwnerId        = ownerId;
-            NameServers    = nameServers;
             RegistrationId = registrationId;
             EnvironmentId  = environmentId;
             Flags          = flags;
@@ -71,18 +69,8 @@ namespace Carbon.Platform.Hosting
         [Member("certificateId")]
         public long? CertificateId { get; }
 
-        [Member("nameServers")]
-        [Ascii, StringLength(500)]
-        public string[] NameServers { get; }
-
-        /// <summary>f
-        /// If registered through a register
-        /// </summary>
         [Member("registrationId")]
         public long? RegistrationId { get; }
-
-        [Member("ttl")]
-        public int? Ttl { get; }
 
         [Member("flags")]
         public DomainFlags Flags { get; }
@@ -94,12 +82,11 @@ namespace Carbon.Platform.Hosting
 
         #region Counts
 
-        // the # of times the domain has been registered
-        // [Member("registrationCount")]
-        // public int RegistrationCount { get; }
-
         [Member("recordCount")]
         public int RecordCount { get; }
+
+        [Member("registrationCount")]
+        public int RegistrationCount { get; }
 
         #endregion
 
@@ -124,6 +111,8 @@ namespace Carbon.Platform.Hosting
     }
 }
 
-// A domain may serve as a Zone
+// A domain may serve as a Zone by answering authoritatively to DNS requests
+
+// THE SOA record is responsible for defining the domains minimium TTL
 
 // https://en.wikipedia.org/wiki/DNS_zone
