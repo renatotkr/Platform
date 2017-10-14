@@ -17,7 +17,7 @@ namespace Carbon.Platform.Computing
 
         [DataMember(Name = "ownerId", EmitDefaultValue = false)]
         public long OwnerId { get; set; }
-
+        
         [DataMember(Name = "registration", EmitDefaultValue = false)]
         public DomainRegistrationDetails Registration { get; set; }
 
