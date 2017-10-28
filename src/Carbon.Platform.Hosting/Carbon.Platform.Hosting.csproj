@@ -3,7 +3,7 @@
  <PropertyGroup>
     <AssemblyName>Carbon.Platform.Hosting</AssemblyName>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <VersionPrefix>0.2.0</VersionPrefix>
+    <VersionPrefix>0.10.0</VersionPrefix>
     <LangVersion>7.1</LangVersion>
 
     <!-- Package Info-->
@@ -19,7 +19,7 @@
   <ItemGroup>
     <PackageReference Include="Carbon.Data.Sql" Version="0.37.0" />
     <PackageReference Include="Carbon.Json" Version="1.5.0" />
-    <PackageReference Include="Carbon.Net" Version="0.11.0" />
+    <PackageReference Include="Carbon.Net" Version="0.14.0" />
   </ItemGroup>
 
   <ItemGroup>
