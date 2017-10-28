@@ -5,6 +5,23 @@ using Xunit;
 
 namespace Carbon.Cloud.Logging
 {
+    public class RequestTests
+    {
+        [Fact]
+        public void ConstructorSetsCorrectProperties()
+        {
+            var a = new Request(default(Uid), 1, 2, "/", "GET", 1, default(Uid), 3, originId: 10);
+
+            Assert.Equal(1,     a.EnvironmentId);
+            Assert.Equal(2,     a.DomainId);
+            Assert.Equal("GET", a.Method);
+            Assert.Equal("/",   a.Path);
+            Assert.Equal(1,     a.ServerId);
+            Assert.Equal(3,     a.ProgramId);
+            Assert.Equal(10,    a.OriginId);
+        }
+    }
+
     public class RequestIdTests
     {
         [Fact]
