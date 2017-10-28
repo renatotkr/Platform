@@ -29,12 +29,13 @@ namespace Carbon.Platform.Hosting.Tests
         public void DeserializeCreateDomainRequestFromJson()
         {
             var request = JsonObject.Parse(
-                @"{ ""name"": ""www.processor.ai"", ""ownerId"": 1 }"
+                @"{ ""name"": ""www.processor.ai"", ""environmentId"": 5, ""ownerId"": 1 }"
             ).As<CreateDomainRequest>();
 
         
             Assert.Equal("www.processor.ai", request.Name);
             Assert.Equal(1, request.OwnerId);
+            Assert.Equal(5, request.EnvironmentId);
         }
 
         [Fact]

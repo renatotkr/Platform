@@ -9,7 +9,7 @@ using Carbon.Platform.Sequences;
 namespace Carbon.Platform.Hosting
 {
     [Dataset("DomainRecords")]
-    public class DomainRecord : IResource
+    public class DomainRecord : IResource, IDomainRecord
     {
         public DomainRecord() { }
 

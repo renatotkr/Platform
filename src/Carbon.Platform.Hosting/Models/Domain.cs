@@ -18,8 +18,9 @@ namespace Carbon.Platform.Hosting
             long? ownerId         = null,
             long? environmentId   = null,
             long? registrationId  = null,
+            long? originId        = null,
             DomainFlags flags     = default,
-            JsonObject properties = null)
+            JsonObject properties = null) 
         {
             #region Preconditions
 
@@ -43,6 +44,7 @@ namespace Carbon.Platform.Hosting
             OwnerId        = ownerId;
             RegistrationId = registrationId;
             EnvironmentId  = environmentId;
+            OriginId       = originId;
             Flags          = flags;
             Properties     = properties ?? new JsonObject();
         }
@@ -71,7 +73,13 @@ namespace Carbon.Platform.Hosting
 
         [Member("registrationId")]
         public long? RegistrationId { get; }
+        
+        // if null, will forward to the environment for processing
+        [Member("originId")]
+        public long? OriginId { get; }
 
+        // DefaultRoute?
+        
         [Member("flags")]
         public DomainFlags Flags { get; }
         
@@ -81,7 +89,7 @@ namespace Carbon.Platform.Hosting
         public JsonObject Properties { get; }
 
         #region Counts
-
+        
         [Member("recordCount")]
         public int RecordCount { get; }
 
@@ -109,6 +117,24 @@ namespace Carbon.Platform.Hosting
 
         #endregion
     }
+
+    // OriginType (container, program, ...?)
+
+    public class EnvironmentRule
+    {
+        public long Id { get; set; } // environmentId | #
+        
+        public long? DomainId { get; set; }
+
+        public string Path { get; set; }
+
+        
+        
+        // Condition
+
+        // OriginId
+    }
+
 }
 
 // A domain may serve as a Zone by answering authoritatively to DNS requests

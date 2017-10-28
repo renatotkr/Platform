@@ -1,14 +1,12 @@
 ﻿using System;
 
+using Carbon.Net.Dns;
+
 namespace Carbon.Platform.Hosting
 {
     public class UpdateDomainRecordRequest
     {
-        public UpdateDomainRecordRequest() { }
-
-        public UpdateDomainRecordRequest(
-            long id, 
-            string value)
+        public UpdateDomainRecordRequest(long id, IRecord value)
         {
             #region Preconditions
 
@@ -21,8 +19,8 @@ namespace Carbon.Platform.Hosting
             Value = value ?? throw new ArgumentNullException(nameof(value));
         }
 
-        public long Id { get; set; } // RecordId
+        public long Id { get; } // RecordId
         
-        public string Value { get; set; } 
+        public IRecord Value { get; } 
     }
 }

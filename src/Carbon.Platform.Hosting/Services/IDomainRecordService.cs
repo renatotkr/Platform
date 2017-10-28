@@ -13,10 +13,12 @@ namespace Carbon.Platform.Hosting
 
         Task<IReadOnlyList<DomainRecord>> QueryAsync(/*in*/ DomainName name, DnsRecordType type);
 
+        Task<SyncDomainRecordsResult> SyncAsync(IDomain domain);
+
         Task<DomainRecord> CreateAsync(CreateDomainRecordRequest request);
 
         Task UpdateAsync(UpdateDomainRecordRequest request);
 
-        Task DeleteAsync(long id);
+        Task<bool> DeleteAsync(IDomainRecord id);
     }
 }

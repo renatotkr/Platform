@@ -34,11 +34,10 @@ namespace Carbon.Platform.Hosting
         {
             var range = ScopedId.GetRange(domain.Id);
 
+            // order?
+
             return await db.DomainRecords.QueryAsync(
-                And(
-                    Between("id", range.Start, range.End),
-                    IsNull("deleted")
-                )
+                And(Between("id", range.Start, range.End), IsNull("deleted"))
             );
         }
 
@@ -119,32 +118,75 @@ namespace Carbon.Platform.Hosting
             return record;
         }
 
+        public async Task<SyncDomainRecordsResult> SyncAsync(IDomain domain)
+        {
+            var added = new List<DomainRecord>();
+
+            var name = DomainName.Parse(domain.Name);
+
+            var records = await ListAsync(domain);
+
+            if (!records.Any(r => r.Type == DnsRecordType.SOA))
+            {
+                added.AddRange(await SyncSet<SoaRecord>(domain, DnsRecordType.SOA));
+            }
+
+            if (!records.Any(r => r.Type == DnsRecordType.NS))
+            {
+                added.AddRange(await SyncSet<NSRecord>(domain, DnsRecordType.NS));
+            }
+
+            if (!records.Any(r => r.Type == DnsRecordType.MX))
+            {
+                added.AddRange(await SyncSet<MXRecord>(domain, DnsRecordType.MX));
+            }
+
+            return new SyncDomainRecordsResult(added, Array.Empty<DomainRecord>());
+        }
+
         public async Task UpdateAsync(UpdateDomainRecordRequest request)
         {
-            #region Preconditions
-
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-            
-            if (request.Value == null)
-                throw new ArgumentException(nameof(request.Value));
-
-            #endregion
-
             var record = GetAsync(request.Id);
             
-            // TODO: Verify value against Type
-
             await db.DomainRecords.PatchAsync(record.Id, new[] {
-                Change.Replace("value", request.Value)
+                Change.Replace("value", request.Value.ToString())
             }, condition: IsNull("deleted"));
         }
 
-        public async Task DeleteAsync(long id)
+        public async Task<bool> DeleteAsync(IDomainRecord record)
         {
-            await db.DomainRecords.PatchAsync(id, new[] {
+            return await db.DomainRecords.PatchAsync(record.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))
-            }, condition: IsNull("deleted"));
+            }, condition: IsNull("deleted")) > 0;
+        }
+
+        private static readonly DnsClient dns = new DnsClient();
+
+        private async Task<IReadOnlyList<DomainRecord>> SyncSet<T>(IDomain domain, DnsRecordType type)
+        {
+            var response = await dns.QueryAsync(NameServer.Google, domain.Name, type);
+
+            var added = new List<DomainRecord>();
+
+            foreach (var record in response.Answers)
+            {
+                if (record.Data is T recordData)
+                {
+                    var newRecord = await CreateAsync(
+                        new CreateDomainRecordRequest(
+                            domainId : domain.Id,
+                            name     : "@",
+                            type     : record.Type,
+                            value    : recordData.ToString(),
+                            ttl      : TimeSpan.FromSeconds(record.Ttl)
+                        )
+                    );
+
+                    added.Add(newRecord);
+                }
+            }
+
+            return added;
         }
     }
 }

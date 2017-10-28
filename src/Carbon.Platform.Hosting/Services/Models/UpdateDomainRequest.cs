@@ -5,16 +5,20 @@
         public UpdateDomainRequest(
             long id, 
             long? registrationId = null, 
-            long? certificateId = null)
+            long? certificateId = null,
+            long? environmentId = null)
         {
             Id             = id;
             RegistrationId = registrationId;
             CertificateId  = certificateId;
+            EnvironmentId  = environmentId;
         }
 
         public long Id { get; }
 
         public long? CertificateId { get; }
+        
+        public long? EnvironmentId { get; }
 
         public long? RegistrationId { get; }
     }
