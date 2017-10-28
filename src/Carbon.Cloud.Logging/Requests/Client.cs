@@ -23,7 +23,8 @@ namespace Carbon.Cloud.Logging
         [Member("id"), Key]
         public Uid Id { get; }
         
-        [Member("hash"), Key, FixedSize(ClientHash.Length)]
+        [Member("hash"), Key]
+        [FixedSize(ClientHash.Length)]
         public byte[] Hash { get; }
         
         [Member("ip")]

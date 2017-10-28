@@ -48,7 +48,7 @@ namespace Carbon.Cloud.Logging
             return new RequestIdLower(id.Lower).SequenceNumber;
         }
 
-        public static DateTime GetTimestamp(Uid id) // ts/ms
+        public static DateTime GetTimestamp(Uid id) // timestamp in ms
         {
             return DateTimeOffset.FromUnixTimeMilliseconds(
                 Timestamp.Combine(GetHours(id), GetMilliseconds(id))
@@ -75,7 +75,7 @@ namespace Carbon.Cloud.Logging
         // Epoch = 2000
         public static (long hours, long milliseconds) Split(long timestamp) // ts/ms
         {
-            var hours = timestamp / msInHour;
+            var hours        = timestamp / msInHour;
             var milliseconds = (timestamp % msInHour);
 
             return (hours, milliseconds);

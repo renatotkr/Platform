@@ -3,10 +3,12 @@ using System.Data.Common;
 using System.Threading.Tasks;
 
 using Carbon.CI;
+using Carbon.Cloud.Logging;
 using Carbon.Data;
 using Carbon.Data.Sql;
 using Carbon.Data.Sql.Adapters;
 using Carbon.Kms;
+using Carbon.Platform.Metrics;
 using Carbon.Platform.Web;
 using Carbon.Rds;
 
@@ -17,6 +19,11 @@ namespace Carbon.Platform.Services.Test
     public class KeyLengthsAreUnderXBytes
     {
         private static readonly MySqlDataContext dbContext = new MySqlDataContext();
+        
+        static KeyLengthsAreUnderXBytes()
+        {
+            dbContext.Types.TryAdd(new UidHandler());
+        }
 
         [Fact]
         public void KmsDbIsOk()
@@ -24,6 +31,23 @@ namespace Carbon.Platform.Services.Test
             var database = new KmsDb(dbContext);
 
             KeysAndIndexesAreUnder767Bytes(database);
+        }
+        
+        [Fact]
+        public void MetricsDbIsOk()
+        {
+            var database = new MetricsDb(dbContext);
+
+            KeysAndIndexesAreUnder767Bytes(database);
+        }
+
+
+        [Fact]
+        public void A()
+        {
+            var a = GetCreateTableCommand<Request>();
+
+            // throw new Exception(a);
         }
 
         [Fact]
@@ -33,7 +57,6 @@ namespace Carbon.Platform.Services.Test
 
             KeysAndIndexesAreUnder767Bytes(database);
         }
-
 
         [Fact]
         public void CiadDbKeysAndIndexesAreUnder767Bytes()
@@ -60,7 +83,7 @@ namespace Carbon.Platform.Services.Test
         }
 
         private void KeysAndIndexesAreUnder767Bytes(object database)
-        {           
+        {
 
             foreach (var property in database.GetType().GetProperties())
             {
@@ -71,7 +94,7 @@ namespace Carbon.Platform.Services.Test
                 type = type.GetGenericArguments()[0];
 
                 var dataset = DatasetInfo.Get(type);
-               
+
                 foreach (var index in dataset.Indexes)
                 {
                     var indexLength = 0;
@@ -87,7 +110,7 @@ namespace Carbon.Platform.Services.Test
                     {
                         throw new Exception($"table index '{index.Name}' on '{dataset.Name}' exceeds 767 bytes");
                     }
-                }              
+                }
 
                 int primaryKeyLength = 0;
 
@@ -109,7 +132,7 @@ namespace Carbon.Platform.Services.Test
             {
                 if (member.Type == typeof(string))
                 {
-                    return member.IsAscii 
+                    return member.IsAscii
                         ? member.Size.Value      // ascii | 1 byte each
                         : member.Size.Value * 4; // utf8  | 1-4 bytes each (assume worst case)
                 }
@@ -128,23 +151,22 @@ namespace Carbon.Platform.Services.Test
             throw new Exception($"unknown type '{member.Type.Name}' for {dataset.Name}/{member.Name}");
         }
 
-
-        /*
         private string GetCreateTableCommand<T>()
         {
-
-            var command = CreateTableCommand.For(typeof(T), context);
+            var command = CreateTableCommand.For(typeof(T), null, dbContext);
 
             return command.CommandText;
         }
-        */
+
     }
 
     internal class MySqlDataContext : IDbContext
     {
+        private readonly DbTypeMap types = new DbTypeMap(MySqlAdapter.Default);
+
         public SqlAdapter SqlAdapter => MySqlAdapter.Default;
 
-        public DbTypeMap Types => new DbTypeMap(MySqlAdapter.Default);
+        public DbTypeMap Types => types;
 
         public Task<DbConnection> GetConnectionAsync() => null;
     }

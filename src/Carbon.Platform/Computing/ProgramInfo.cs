@@ -34,7 +34,10 @@ namespace Carbon.Platform.Computing
 
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("Required", nameof(name));
-             
+
+            if (name.Length > 63)
+                throw new ArgumentException("Must be 63 characters or fewer", nameof(name));
+
             if (ownerId <= 0)
                 throw new ArgumentException("Must be > 0", nameof(ownerId));
 
@@ -63,7 +66,7 @@ namespace Carbon.Platform.Computing
         public long OwnerId { get; }
 
         [Member("name")]
-        [StringLength(100)]
+        [StringLength(63)]
         public string Name { get; }
         
         // e.g. accelerator | ngnix | caddy

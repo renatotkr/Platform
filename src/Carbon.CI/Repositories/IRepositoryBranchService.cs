@@ -13,5 +13,7 @@ namespace Carbon.CI
         Task<RepositoryBranch> GetAsync(long repositoryId, string name);
 
         Task<IReadOnlyList<RepositoryBranch>> ListAsync(IRepository repository);
+
+        Task<bool> DeleteAsync(IRepositoryBranch branch);
     }
 }

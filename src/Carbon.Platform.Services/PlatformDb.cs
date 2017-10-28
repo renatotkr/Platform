@@ -29,6 +29,7 @@ namespace Carbon.Platform
             Environments         = new Dataset<EnvironmentInfo,           long>(context);
             Locations            = new Dataset<LocationInfo,              long>(context);
 
+            EnvironmentUsers    = new Dataset<EnvironmentUser,    (long, long)>(context);
             EnvironmentPrograms = new Dataset<EnvironmentProgram, (long, long)>(context);
 
             // Computing ----------------------------------------------------------------
@@ -60,9 +61,11 @@ namespace Carbon.Platform
 
         public IDbContext Context { get; }
 
-        // Environment ----------------------------------------------------------
-        public Dataset<EnvironmentInfo,      long> Environments          { get; }
-        public Dataset<LocationInfo,         long> Locations             { get; }
+        // Environments ---------------------------------------------------------
+        public Dataset<EnvironmentInfo,         long> Environments       { get; }
+        public Dataset<EnvironmentUser, (long, long)> EnvironmentUsers   { get; }
+
+        public Dataset<LocationInfo,            long> Locations          { get; }
 
         public Dataset<EnvironmentProgram, (long environmentId, long programId)> EnvironmentPrograms { get; }
 

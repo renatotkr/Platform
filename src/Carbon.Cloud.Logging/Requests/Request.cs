@@ -12,82 +12,73 @@ namespace Carbon.Cloud.Logging
 
         public Request(
             Uid id,
-            long siteId,
-            string method,
-            string path,
             long environmentId,
+            long domainId,
+            string path,
+            string method,
             long serverId,
             Uid clientId,
+            long programId,
+            string programVersion = null,
             long? sessionId = null,
+            long? originId = null,
             string referrer = null,
             TimeSpan computeTime = default, // 0
             Uid? parentId = null,
-            Uid? exceptionId = null,
             int status = 200)
         {
-            Id            = id;
-            SiteId        = siteId;
-            Method        = method;
-            Path          = path ?? throw new ArgumentNullException(nameof(path));
-            ServerId      = serverId;
-            ParentId      = parentId;
-            Status        = status;
-            EnvironmentId = environmentId;
-            ComputeTime   = computeTime;
-            ExceptionId   = exceptionId;
-            Referrer      = referrer;
-            ClientId      = clientId;
-            SessionId     = sessionId;
+            Id             = id;
+            EnvironmentId  = environmentId;
+            DomainId       = domainId;
+            Path           = path ?? throw new ArgumentNullException(nameof(path));
+            Method         = method;
+            ServerId       = serverId;
+            ProgramId      = programId;
+            ProgramVersion = programVersion;
+            ParentId       = parentId;
+            Status         = status;
+            ComputeTime    = computeTime;
+            Referrer       = referrer;
+            ClientId       = clientId;
+            OriginId       = originId;
+            SessionId      = sessionId;
         }
         
         [Member("id"), Key]
         public Uid Id { get; }
 
-        [Member("siteId")] 
-        public long SiteId { get; }
-        
-        [Member("method")]
-        [StringLength(10)]
-        public string Method { get; }
-
-        [Member("path")]
-        [StringLength(2000)]
-        public string Path { get; }
-
-        [Member("status")]
-        public int Status { get; set; }
-        
         [Member("environmentId")]
         public long EnvironmentId { get; }
 
-        [Member("blobId")] // if the response was a blob
-        public Uid? BlobId { get; set; }
+        [Member("domainId")] 
+        public long DomainId { get; }
 
+        [Member("path")]
+        [StringLength(2083)]
+        public string Path { get; }
+        
+        [Member("method")]
+        [Ascii, StringLength(20)]
+        public string Method { get; }
+        
+        [Member("status")]
+        public int Status { get; set; }
+        
         [Member("parentId")]
         public Uid? ParentId { get; }
+
+        [Member("programId")]
+        public long ProgramId { get; set; }
+
+        [Member("programVersion")]
+        [StringLength(100)]
+        public string ProgramVersion { get; set; }
         
-        [Member("exceptionId")]
-        public Uid? ExceptionId { get; }
-
-        #region Resource Usage (Compute & Data Transfer)
-
-        [Member("computeUnits")]
-        public long ComputeUnits { get; set; }
-
-        [Member("receivedBytes")]
-        public long ReceivedBytes { get; set; }
-
-        [Member("sentBytes")]
-        public long SentBytes { get; set; }
-
-        #endregion
-
-        #region Server
-
         [Member("serverId")]
         public long? ServerId { get; }
 
-        #endregion
+        [Member("originId")]
+        public long? OriginId { get; }
 
         #region Context
 
@@ -101,23 +92,42 @@ namespace Carbon.Cloud.Logging
         public Uid ClientId { get; }
         
         [Member("referrer")]
-        [StringLength(1000)]
+        [StringLength(2083)]
         public string Referrer { get; }
 
-        [Member("origin")]
-        [StringLength(1000)]
+        [Member("origin")] // protocol + hostName + : + port
+        [Ascii, StringLength(8  + 253 + 6)]
         public string Origin { get; }
+
+        #endregion
+
+        #region Resource Usage
+
+        [Member("computeUnits")] // luna?
+        public long ComputeUnits { get; set; }
+
+        [Member("receivedBytes")]
+        public long ReceivedBytes { get; set; }
+
+        [Member("sentBytes")]
+        public long SentBytes { get; set; }
 
         #endregion
 
         #region Timings
 
+        // WaitTime?
+
+        /// <summary>
+        /// The time the CPU was spent processing the request
+        /// </summary>
         [Member("computeTime")]
-        [TimePrecision(TimePrecision.Millisecond)]
         public TimeSpan ComputeTime { get; set; }
 
+        /// <summary>
+        /// The total time spent servicing the request
+        /// </summary>
         [Member("responseTime")]
-        [TimePrecision(TimePrecision.Millisecond)]
         public TimeSpan ResponseTime { get; set; }
 
         #endregion
@@ -130,4 +140,6 @@ namespace Carbon.Cloud.Logging
 
         #endregion
     }
+
+    // BlobHits (BlobId, RequestId)
 }

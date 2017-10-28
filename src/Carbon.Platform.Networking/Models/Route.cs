@@ -24,10 +24,11 @@ namespace Carbon.Platform.Networking
         public long Id { get; }
 
         [Member("name")]
-        [StringLength(63)]
+        [Ascii, StringLength(63)]
         public string Name { get; }
 
         [Member("destinationRange")]
+        [Ascii, StringLength(100)]
         public string DestinationRange { get; set; }
 
         [Member("nextHop")]

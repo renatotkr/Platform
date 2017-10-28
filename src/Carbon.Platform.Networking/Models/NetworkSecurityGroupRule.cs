@@ -37,15 +37,15 @@ namespace Carbon.Platform.Networking
         public NetworkProtocal Protocal { get; }
         
         [Member("source")]
-        [StringLength(63)]
+        [Ascii, StringLength(63)]
         public string Source { get; set; }         // e.g. 0.0.0.0/0	
         
         [Member("sourcePorts")]                    // e.g. 80, 8000-9000
-        [StringLength(50)]
+        [Ascii, StringLength(50)]
         public string SourcePorts { get; set; }  
 
         [Member("destination")]
-        [StringLength(63)]
+        [Ascii, StringLength(63)]
         public string Destination { get; set; } // e.g. *
 
         [Member("destinationPorts")]

@@ -34,7 +34,7 @@ namespace Carbon.Cloud.Logging
 
         [Member("action")]
         [Ascii, StringLength(100)]
-        public string Action { get; }
+        public string Action { get; } // View, Invoke, ...
 
         [Member("resource"), Indexed]
         [StringLength(150)]

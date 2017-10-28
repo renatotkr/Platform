@@ -12,5 +12,10 @@ namespace Carbon.CI
         Task<IReadOnlyList<RepositoryUser>> ListHavingUserIdAsync(long userId);
 
         Task<RepositoryUser> CreateAsync(CreateRepositoryUserRequest request, ISecurityContext context);
+
+        // DeleteAsync
     }
+
+    // RepositoryGrants?
+
 }
