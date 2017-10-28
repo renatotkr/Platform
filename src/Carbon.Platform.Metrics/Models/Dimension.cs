@@ -14,6 +14,19 @@
         public string Name { get; }
 
         public string Value { get; }
+        
+        public override string ToString()
+        {
+            return Name + "=" + Value;
+        }
+
+        // a=b
+        public static Dimension Parse(string text)
+        {
+            var segments = text.Split('=');
+
+            return new Dimension(segments[0], segments[1]);
+        }
     }
 }
 
