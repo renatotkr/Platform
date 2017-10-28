@@ -9,11 +9,11 @@ namespace Carbon.Platform.Monitoring
     {
         private readonly Dimension[] dimensions;
         private Func<double> action;
-        private readonly IMetric metric;
+        private readonly string metricName;
 
-        public DeltaValueMonitor(IMetric metric, Dimension[] dimensions, Func<double> action)
+        public DeltaValueMonitor(string metricName, Dimension[] dimensions, Func<double> action)
         {
-            this.metric     = metric     ?? throw new ArgumentNullException(nameof(metric));
+            this.metricName = metricName ?? throw new ArgumentNullException(nameof(metricName));
             this.dimensions = dimensions ?? throw new ArgumentNullException(nameof(dimensions));
             this.action     = action     ?? throw new ArgumentNullException(nameof(action));
 
@@ -30,7 +30,7 @@ namespace Carbon.Platform.Monitoring
 
             last = next;
 
-            yield return new MetricData(metric, dimensions, delta, DateTime.UtcNow);
+            yield return new MetricData(metricName, dimensions, "count", delta, TimestampHelper.Get(DateTime.Now));
         }
         
         public void Dispose() { }

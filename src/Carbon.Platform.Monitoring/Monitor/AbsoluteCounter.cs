@@ -20,7 +20,7 @@ namespace Carbon.Platform.Monitoring
 
         public IEnumerable<MetricData> Observe()
         {
-            yield return new MetricData(metric, dimensions, action(), DateTime.UtcNow);
+            yield return new MetricData(metric.Name, dimensions, "count", action(), TimestampHelper.Get(DateTime.UtcNow));
         }
 
         public void Dispose() { }

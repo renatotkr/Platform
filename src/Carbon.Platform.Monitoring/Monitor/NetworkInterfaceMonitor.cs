@@ -24,13 +24,14 @@ namespace Carbon.Platform.Monitoring
         public IEnumerable<MetricData> Observe()
         {
             var next = nic.GetIPStatistics();
-            var now = DateTime.UtcNow;
 
-            yield return new MetricData(KnownMetrics.NetworkSentBytes,       tags, next.BytesSent - last.BytesSent,                                 now);
-            yield return new MetricData(KnownMetrics.NetworkReceivedBytes,   tags, next.BytesReceived - last.BytesReceived,                         now);
-            yield return new MetricData(KnownMetrics.NetworkReceivedPackets, tags, next.NonUnicastPacketsReceived - last.NonUnicastPacketsReceived, now);
-            yield return new MetricData(KnownMetrics.NetworkSentPackets,     tags, next.NonUnicastPacketsSent - last.NonUnicastPacketsSent,         now);
-            yield return new MetricData(KnownMetrics.NetworkDroppedPackets,  tags, next.IncomingPacketsDiscarded - last.IncomingPacketsDiscarded,   now);
+            var timestamp = TimestampHelper.Get(DateTime.Now);
+
+            yield return new MetricData(MetricNames.NetworkSentBytes.Name,       tags, "byte",  next.BytesSent - last.BytesSent,                                 timestamp);
+            yield return new MetricData(MetricNames.NetworkReceivedBytes.Name,   tags, "byte",  next.BytesReceived - last.BytesReceived,                         timestamp);
+            yield return new MetricData(MetricNames.NetworkReceivedPackets.Name, tags, "count", next.NonUnicastPacketsReceived - last.NonUnicastPacketsReceived, timestamp);
+            yield return new MetricData(MetricNames.NetworkSentPackets.Name,     tags, "count", next.NonUnicastPacketsSent - last.NonUnicastPacketsSent,         timestamp);
+            yield return new MetricData(MetricNames.NetworkDroppedPackets.Name,  tags, "count", next.IncomingPacketsDiscarded - last.IncomingPacketsDiscarded,   timestamp);
 
             last = next;
         }
