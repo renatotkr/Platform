@@ -1,18 +1,17 @@
 using System;
+using Carbon.Time;
 using Xunit;
 
 namespace Carbon.Platform.Metrics.Tests
 {
-
     public class MetricDataTests
     {
-
         [Fact]
         public void SerializeIsCorrect()
         {
-            var date = new DateTime(2000, 01, 01, 05, 15, 32);
+            var timestamp = new Timestamp(new DateTime(2000, 01, 01, 05, 15, 32)).Value;
 
-            var data = new MetricData("compute", new[] { new Dimension("hostId", "1") }, null, 1000, TimestampHelper.Get(date));
+            var data = new MetricData("compute", new[] { new Dimension("hostId", "1") }, null, 1000, timestamp);
             
             Assert.Equal("compute,hostId=1 value=1000 946732532000000", data.ToString());
         }

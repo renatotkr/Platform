@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Carbon.Platform.Metrics;
+using Carbon.Time;
 
 namespace Carbon.Platform.Monitoring
 {
@@ -30,7 +31,7 @@ namespace Carbon.Platform.Monitoring
 
             last = next;
 
-            yield return new MetricData(metricName, dimensions, "count", delta, TimestampHelper.Get(DateTime.Now));
+            yield return new MetricData(metricName, dimensions, "count", delta, new Timestamp(DateTimeOffset.UtcNow).Value);
         }
         
         public void Dispose() { }

@@ -27,7 +27,7 @@ namespace Carbon.Platform.Metrics
                 ?? throw ResourceError.NotFound(ResourceTypes.Metric, id);
         }
 
-        public async Task<Series> GetAsync(string name, string granularity = "P1M")
+        public async Task<Series> GetAsync(string name, string granularity = "PT1M")
         {
             if (!cache.TryGetValue((name, granularity), out var series))
             {

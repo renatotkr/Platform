@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.NetworkInformation;
 
 using Carbon.Platform.Metrics;
+using Carbon.Time;
 
 namespace Carbon.Platform.Monitoring
 {
@@ -25,7 +26,7 @@ namespace Carbon.Platform.Monitoring
         {
             var next = nic.GetIPStatistics();
 
-            var timestamp = TimestampHelper.Get(DateTime.Now);
+            var timestamp = new Timestamp(DateTimeOffset.UtcNow).Value;
 
             yield return new MetricData(MetricNames.NetworkSentBytes.Name,       tags, "byte",  next.BytesSent - last.BytesSent,                                 timestamp);
             yield return new MetricData(MetricNames.NetworkReceivedBytes.Name,   tags, "byte",  next.BytesReceived - last.BytesReceived,                         timestamp);

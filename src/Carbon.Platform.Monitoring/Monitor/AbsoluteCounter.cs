@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Carbon.Platform.Metrics;
+using Carbon.Time;
 
 namespace Carbon.Platform.Monitoring
 {
@@ -13,14 +14,14 @@ namespace Carbon.Platform.Monitoring
 
         public AbsoluteValueMonitor(IMetric metric, Dimension[] dimensions, Func<double> action)
         {
-            this.metric = metric;
+            this.metric = metric ?? throw new ArgumentNullException(nameof(metric));
             this.dimensions = dimensions;
-            this.action = action;
+            this.action     = action;
         }
 
         public IEnumerable<MetricData> Observe()
         {
-            yield return new MetricData(metric.Name, dimensions, "count", action(), TimestampHelper.Get(DateTime.UtcNow));
+            yield return new MetricData(metric.Name, dimensions, "count", action(), new Timestamp(DateTimeOffset.UtcNow).Value);
         }
 
         public void Dispose() { }
