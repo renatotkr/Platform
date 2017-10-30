@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Carbon.Platform.Metrics
 {
-    public class MetricDataProcessor
+    public class MetricDataProcessor : IMetricDataProcessor
     {
         private readonly IMetricService metricService;
         private readonly ISeriesService seriesService;
@@ -22,7 +22,7 @@ namespace Carbon.Platform.Metrics
 
         public async Task ProcessAsync(MetricData data)
         {
-            // TODO: Get the metric & normalize the value.
+            // TODO: Get the metric & normalize the value if its not the base unit...
 
             var seriesNames = Aggregates.GetPermutations(data);
 
