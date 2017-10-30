@@ -103,7 +103,7 @@ namespace Carbon.Cloud.Logging
 
         #region Resource Usage
 
-        [Member("computeUnits")] // luna?
+        [Member("computeUnits")]
         public long ComputeUnits { get; set; }
 
         [Member("receivedBytes")]

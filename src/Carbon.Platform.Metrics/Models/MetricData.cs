@@ -116,16 +116,6 @@ namespace Carbon.Platform.Metrics
 
             return sb.ToString();
         }
-        
-      
-    }
-
-    public static class TimestampHelper
-    {
-        public static long Get(DateTime timestamp)
-        {
-            return new DateTimeOffset(timestamp).ToUnixTimeMilliseconds() * 1000;
-        }
     }
 }
 

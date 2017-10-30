@@ -23,6 +23,8 @@ namespace Carbon.Platform.Metrics
         public string Unit { get; }
 
         public string[] Dimensions { get; }
+        
+        public long OwnerId { get; set; }
     }
 }
 

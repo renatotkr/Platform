@@ -15,7 +15,7 @@ namespace Carbon.Platform.Metrics
         [Member("metricId"), Key]
         public long MetricId { get; }
 
-        [Member("granularity"), Key]         // e.g. P1D, P1W, P1M, P1Y
+        [Member("granularity"), Key]  // e.g. P1D, P1W, P1M, P1Y
         public string Granularity { get; }
 
         [Member("duration")]

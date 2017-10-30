@@ -23,10 +23,11 @@ namespace Carbon.Platform.Metrics
 
             #endregion
 
-            Id    = id;
-            Type  = type;
-            Name  = name;
-            Unit  = unit;
+            Id      = id;
+            Type    = type;
+            Name    = name;
+            Unit    = unit;
+            OwnerId = 1;
         }
 
         [Member("id"), Key("metricId")]
@@ -49,6 +50,7 @@ namespace Carbon.Platform.Metrics
         [Member("deleted")]
         public DateTime? Deleted { get;  }
 
-        // OwnerId?
+        [Member("ownerId")]
+        public long OwnerId { get; }
     }
 }

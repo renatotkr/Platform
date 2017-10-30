@@ -40,7 +40,7 @@ namespace Carbon.Platform.Metrics
                 // create on the fly
                 if (metric == null)
                 {
-                    metric = await CreateAsync(new CreateMetricRequest(name, MetricType.Cumulative, "count", null));
+                    metric = await CreateAsync(new CreateMetricRequest(name, MetricType.Delta, "count", null));
                 }
 
                 cache.TryAdd(name, metric);

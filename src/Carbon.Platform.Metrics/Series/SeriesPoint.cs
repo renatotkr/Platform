@@ -23,8 +23,4 @@ namespace Carbon.Platform.Metrics
     }
 }
 
-
-// 50GB transfer
-// 45629 operations
-// 5mbs
-// 50%
+// minute resolution: 1440 datapoints (34.56 kilobytes per day, 1MB/month, 12M/year)
