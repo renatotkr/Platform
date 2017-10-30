@@ -54,8 +54,8 @@ namespace Carbon.Platform.Metrics
 
         public async Task<IReadOnlyList<SeriesPoint>> GetDataPoints(long id, DateRange range)
         {
-            var start = TimestampHelper.Get(range.Start);
-            var end   = TimestampHelper.Get(range.End);
+            long start = new Timestamp(range.Start).Value;
+            long end   = new Timestamp(range.End).Value;
 
             return await db.SeriesPoints.QueryAsync(
                 And(Eq("seriesId", id), Between("timestamp", start, end))
