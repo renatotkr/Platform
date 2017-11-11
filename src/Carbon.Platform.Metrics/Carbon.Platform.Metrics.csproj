@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Metrics</AssemblyName>
-    <VersionPrefix>0.10.0</VersionPrefix>
+    <VersionPrefix>0.14.0</VersionPrefix>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
 
     <!-- Package Info-->
@@ -16,11 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="Carbon.Data.Sql" Version="0.37.0" />
-    <PackageReference Include="Carbon.Time" Version="1.4.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Carbon.Platform.Abstractions\Carbon.Platform.Abstractions.csproj" />
+    <PackageReference Include="Carbon.Time" Version="1.5.0" />
   </ItemGroup>
 
 </Project>

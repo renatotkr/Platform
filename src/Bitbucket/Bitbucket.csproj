@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Bitbucket</AssemblyName>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <VersionPrefix>1.7.5</VersionPrefix>
+    <VersionPrefix>1.7.6</VersionPrefix>
 
     <!-- Package Details-->
     <Authors>iamcarbon</Authors>
