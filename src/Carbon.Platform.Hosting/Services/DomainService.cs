@@ -12,8 +12,6 @@ namespace Carbon.Platform.Hosting
 {
     public sealed class DomainService : IDomainService
     {
-        private static readonly DnsClient dns = new DnsClient();
-
         private readonly HostingDb db;
 
         public DomainService(HostingDb db)
@@ -23,6 +21,8 @@ namespace Carbon.Platform.Hosting
 
         public Task<IReadOnlyList<Domain>> ListAsync(IEnvironment environment)
         {
+            Validate.NotNull(environment, nameof(environment));
+
             return db.Domains.QueryAsync(
                 Expression.Eq("environmentId", environment.Id)
             );
@@ -41,20 +41,23 @@ namespace Carbon.Platform.Hosting
 
             if (domain == null)
             {
-                try
+                var flags = DomainFlags.None;
+
+                if (await HasSoaRecordAsync(name))
                 {
-                    var response = await dns.QueryAsync(NameServer.Google, name.Name, DnsRecordType.SOA);
-
-                    // Create it if there's an SOA record
-
+                    flags |= DomainFlags.Authoritative; // it has an SOA record
+                }
+                else
+                {
+                    var response = await dns.QueryAsync(NameServer.Google, name.Name, DnsRecordType.A);
+                        
                     if (response.Answers.Length == 0)
                     {
-                        throw new Exception($"Domain {name} does not have a SOA record");
+                        throw new Exception($"{name.Name} did not return any answer to a DNS query");
                     }
-
-                    domain = await CreateAsync(new CreateDomainRequest(name.Name));
                 }
-                catch { }
+
+                domain = await CreateAsync(new CreateDomainRequest(name.Name, flags: flags));
             }
 
             return domain;
@@ -83,8 +86,35 @@ namespace Carbon.Platform.Hosting
             });
         }
 
-        public async Task ReleaseAsync(IDomain domain)
+        /// <summary>
+        /// Binds a domain to an environment
+        /// </summary>
+        public async Task BindAsync(IDomain domain, IEnvironment environment)
         {
+            #region Preconditions
+
+            if (domain == null)
+                throw new ArgumentNullException(nameof(domain));
+
+            #endregion
+            
+            await db.Domains.PatchAsync(domain.Id, new[] {
+                Change.Replace("environmentId", environment.Id),
+                Change.Replace("ownerId",       environment.OwnerId)
+            });            
+        }
+
+        public async Task UnbindAsync(IDomain domain)
+        {
+            #region Preconditions
+
+            if (domain == null)
+                throw new ArgumentNullException(nameof(domain));
+
+            #endregion
+
+            // TODO: Ensure the domain isn't managed...
+
             await db.Domains.PatchAsync(domain.Id, new[] {
                 Change.Remove("environmentId"),
                 Change.Remove("originId"),
@@ -93,7 +123,14 @@ namespace Carbon.Platform.Hosting
         }
 
         public async Task<Domain> CreateAsync(CreateDomainRequest request)
-        {            
+        {
+            #region Preconditions
+
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
+            #endregion
+
             var name = DomainName.Parse(request.Name);
 
             var flags = DomainFlags.None;
@@ -116,5 +153,20 @@ namespace Carbon.Platform.Hosting
 
             return domain;
         }
+
+        #region Helpers
+
+        private static readonly DnsClient dns = new DnsClient();
+
+        private async Task<bool> HasSoaRecordAsync(DomainName domainName)
+        {
+            // Check if there's an SOA record (start of authority)
+            var response = await dns.QueryAsync(NameServer.Google, domainName.Name, DnsRecordType.SOA);
+
+            return response.Answers.Length > 0;
+        }
+
+        #endregion
+
     }
 }

@@ -16,6 +16,8 @@ namespace Carbon.Platform.Hosting
             string name,
             JsonObject properties = null)
         {
+            Validate.Id(id);
+
             Id         = id;
             DomainId   = domainId;
             Name       = name;

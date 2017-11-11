@@ -18,15 +18,8 @@ namespace Carbon.Platform.Hosting
             DateTime expires,
             DomainRegistrationFlags flags = default)
         {
-            #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            if (domainId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(domainId));
-
-            #endregion
+            Validate.Id(id);
+            Validate.Id(domainId, nameof(domainId));
 
             Id          = id;
             DomainId    = domainId;

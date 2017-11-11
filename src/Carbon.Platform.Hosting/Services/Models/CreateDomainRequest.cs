@@ -10,9 +10,12 @@ namespace Carbon.Platform.Hosting
         public CreateDomainRequest(
             string name, 
             long? ownerId = null,
-            long? environmentId = null)
+            long? environmentId = null,
+            DomainFlags flags = default)
         {
-            Name          = name ?? throw new ArgumentNullException(nameof(name));
+            Validate.NotNullOrEmpty(name, nameof(name));
+
+            Name          = name;
             OwnerId       = ownerId;
             EnvironmentId = environmentId;
         }
@@ -26,5 +29,8 @@ namespace Carbon.Platform.Hosting
         public long? EnvironmentId { get; set; } 
         
         public long? OriginId { get; set; }
+
+
+        public DomainFlags Flags { get; set; }
     }
 }

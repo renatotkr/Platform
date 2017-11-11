@@ -10,6 +10,10 @@ namespace Carbon.Platform.Hosting
             long registrarId,
             DateTime expires)
         {
+            Validate.Id(domainId, nameof(domainId));
+            Validate.Id(ownerId, nameof(ownerId));
+            Validate.Id(registrarId, nameof(registrarId));
+
             DomainId    = domainId;
             OwnerId     = ownerId;
             RegistrarId = registrarId;

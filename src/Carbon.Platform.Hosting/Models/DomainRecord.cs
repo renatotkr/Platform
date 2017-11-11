@@ -22,22 +22,17 @@ namespace Carbon.Platform.Hosting
             int? ttl = null, 
             DomainRecordFlags flags = default)
         {
+            Validate.Id(id);
+            Validate.NotNullOrEmpty(name, nameof(name));
+            Validate.NotNullOrEmpty(value, nameof(value));
+
             #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("Required", nameof(name));
 
             if (name.Length > 253)
                 throw new ArgumentOutOfRangeException(nameof(name), name.Length, "Must be 253 characters or fewer");
 
             if (type == default)
                 throw new ArgumentException("Required", nameof(type));
-
-            if (string.IsNullOrEmpty(value))
-                throw new ArgumentException("Required", nameof(value));
 
             if (ttl != null && ttl.Value < 0)
                 throw new ArgumentOutOfRangeException(nameof(ttl), ttl.Value, "Must be >=0");

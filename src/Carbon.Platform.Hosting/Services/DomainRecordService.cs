@@ -13,7 +13,7 @@ namespace Carbon.Platform.Hosting
 {
     using static Expression;
 
-    public sealed class DomainRecordService : IDomainRecordService
+    public class DomainRecordService : IDomainRecordService
     {
         private readonly HostingDb db;
         private readonly IDomainService domainService;

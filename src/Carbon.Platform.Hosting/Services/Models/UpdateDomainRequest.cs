@@ -8,6 +8,8 @@
             long? certificateId = null,
             long? environmentId = null)
         {
+            Validate.Id(id);
+
             Id             = id;
             RegistrationId = registrationId;
             CertificateId  = certificateId;

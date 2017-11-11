@@ -16,10 +16,14 @@ namespace Carbon.Platform.Hosting
             string value, 
             TimeSpan? ttl)
         {
+            Validate.Id(domainId, nameof(domainId));
+            Validate.NotNullOrEmpty(name, nameof(name));
+            Validate.NotNullOrEmpty(value, nameof(value));
+
             DomainId = domainId;
-            Name     = name ?? throw new ArgumentNullException(nameof(name));
+            Name     = name;
             Type     = type;
-            Value    = value ?? throw new ArgumentNullException(nameof(value));
+            Value    = value;
             Ttl      = ttl;
         }
 

@@ -8,12 +8,7 @@ namespace Carbon.Platform.Hosting
     {
         public UpdateDomainRecordRequest(long id, IRecord value)
         {
-            #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            #endregion
+            Validate.Id(id);
 
             Id = id;
             Value = value ?? throw new ArgumentNullException(nameof(value));

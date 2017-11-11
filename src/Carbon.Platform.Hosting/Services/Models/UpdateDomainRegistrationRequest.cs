@@ -8,6 +8,8 @@ namespace Carbon.Platform.Hosting
             long registrationId,
             DateTime expires)
         {
+            Validate.Id(registrationId, nameof(registrationId));
+
             RegistrationId = registrationId;
             Expires = expires;
         }
