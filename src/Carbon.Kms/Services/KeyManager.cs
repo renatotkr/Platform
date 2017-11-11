@@ -7,7 +7,7 @@ using Carbon.Data.Sequences;
 using Carbon.Json;
 using Carbon.Time;
 
-namespace Carbon.Kms
+namespace Carbon.Kms.Services
 {
     public class KeyManager : IKeyManager
     {

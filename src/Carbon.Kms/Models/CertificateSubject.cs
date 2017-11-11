@@ -35,11 +35,17 @@ namespace Carbon.Kms
         public long CertificateId { get; }
 
         // ai/processor
-        // ai/processor:user/charlotte
+        // ai/processor@charlotte
 
         [Member("path"), Key]
         [Ascii, StringLength(500)]
         public string Path { get; }
+
+        // CN=a
+        // DNS=a
+        [Member("name")]
+        [StringLength(1000)]
+        public string Name { get; set; }
 
         [Member("flags")]
         public CertificateSubjectFlags Flags { get; }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+
 using Carbon.Data.Annotations;
 using Carbon.Data.Sequences;
 using Carbon.Json;
@@ -29,6 +30,9 @@ namespace Carbon.Kms
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("Required", nameof(name));
 
+            if (name.Length > 100)
+                throw new ArgumentException("Must be 100 characters or fewer", nameof(name));
+
             if (actions == null)
                 throw new ArgumentNullException(nameof(actions));
 
@@ -56,12 +60,11 @@ namespace Carbon.Kms
         [Member("name")]
         [StringLength(100)]
         public string Name { get; }
-
-        // principal / subject?
+        
         [Member("userId"), Indexed]
         public long UserId { get; }
         
-        // encrypt, decrypt, ...
+        // e.g. encrypt, decrypt, ...
         [Member("actions")]
         public string[] Actions { get; }
 
@@ -98,5 +101,11 @@ namespace Carbon.Kms
         public DateTime Modified { get; }
 
         #endregion
+    }
+
+    public enum ConstraintsMatchPolicy : byte
+    {
+        Exact  = 1,
+        Subset = 2
     }
 }

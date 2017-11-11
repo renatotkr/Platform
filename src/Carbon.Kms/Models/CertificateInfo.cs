@@ -1,37 +1,28 @@
 ﻿using System;
-
+using System.Security.Cryptography;
 using Carbon.Data.Annotations;
-using Carbon.Data.Sequences;
 using Carbon.Json;
 
 namespace Carbon.Kms
 {
     [Dataset("Certificates")]
-    public class CertificateInfo : ICertificate // , IResource
+    public class CertificateInfo : ICertificate
     {
         public CertificateInfo() { }
 
         public CertificateInfo(
             long id,
             long ownerId,
-            byte[] data,
-            long issuerId,
+            byte[] data, // der encoded
+            long? parentId,
             DateTime expires,
-            byte[] chainData = null,
-            string resourceId = null,
+            byte[] encryptedPrivateKey = null,
             JsonObject properties = null)
         {
             #region Preconditions
 
             if (id <= 0)
-            {
                 throw new ArgumentException("Must be > 0", nameof(id));
-            }
-
-            if (ownerId <= 0)
-            {
-                throw new ArgumentException("Must be > 0", nameof(ownerId));
-            }
 
             if (data == null)
             {
@@ -41,51 +32,50 @@ namespace Carbon.Kms
             {
                 throw new ArgumentException("Must be 32,768 bytes or fewer", nameof(data));
             }
-
+            
+            if (encryptedPrivateKey != null && encryptedPrivateKey.Length > 2500)
+            {
+                throw new ArgumentException("Must be less than 2,500 bytes", nameof(encryptedPrivateKey));
+            }
+            
             #endregion
 
-            Id         = id;
-            OwnerId    = ownerId;
-            IssuerId   = issuerId;
-            Data       = data;
-            ChainData  = chainData;
-            Expires    = expires;
-            Properties = properties ?? new JsonObject();
+            Id                  = id;
+            Data                = data;
+            ParentId            = parentId;
+            EncryptedPrivateKey = encryptedPrivateKey;
+            Expires             = expires;
+            IssuerId            = ownerId;
+            Properties          = properties;
+            
+            using (var hash = SHA256.Create()) // x5t#S256
+            {
+                Fingerprint = hash.ComputeHash(data);
+            }
         }
 
         [Member("id"), Key(sequenceName: "certificateId")]
         public long Id { get; }
 
-        // UID?
-
-        [Member("ownerId"), Indexed]
-        public long OwnerId { get; }
-
-        [Member("issuerId")]
-        public long IssuerId { get; }
-
-        #region Data 
-
-        // - Subject    
-        // - Issuer     
-        // - Public Key (2048-bit RSA public key)
-        // - Signature
-
         /// <summary>
-        /// x509v3 encoded certificate document (der, .crt extension)
+        /// x509v3 encoded certificate document (der)
         /// </summary>
-        [Member("data"), MaxLength(32768)]
+        [Member("data"), MaxLength(32768)] // Blob?
         public byte[] Data { get; }
+        
+        [Member("parentId"), Indexed]
+        public long? ParentId { get; }
+        
+        // every certificate has it's own private key
+        [Member("encryptedPrivateKey"), MaxLength(2500)]
+        public byte[] EncryptedPrivateKey { get; }
 
-        [Member("chainData"), MaxLength(32768 * 6)]
-        public byte[] ChainData { get; }
+        [Member("fingerprint"), Unique]  // sha256(data)
+        [FixedSize(32)]
+        public byte[] Fingerprint { get; }
 
-        [Member("privateKeyId")] 
-        public Uid? PrivateKeyId { get; }
-
-        // ParentId?
-
-        #endregion
+        [Member("issuerId")] // TODO: Rename ownerId
+        public long IssuerId { get; }
 
         [Member("properties")]
         [StringLength(1000)]
@@ -112,8 +102,6 @@ namespace Carbon.Kms
     }
 }
 
-// https://www.ietf.org/rfc/rfc5280.txt (X.509 Public Key Infrastructure)
+// NOTE: Max row size is 65535
 
-// serialNumber = ???
-// fingerprint  = x5t#S256
-// keyAlgorithm = RSA_2048 | RSA_1024 | EC_prime256v1
+// https://www.ietf.org/rfc/rfc5280.txt (X.509 Public Key Infrastructure)

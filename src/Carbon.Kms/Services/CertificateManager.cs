@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 using Carbon.Data;
 using Carbon.Data.Expressions;
+using Carbon.Data.Protection;
 
-namespace Carbon.Kms
+namespace Carbon.Kms.Services
 {
     public partial class CertificateManager : ICertificateManager
     {
@@ -21,10 +23,22 @@ namespace Carbon.Kms
 
             if (certificate == null || certificate.Deleted != null)
             {
-                throw new Exception($"certificate#{id} not found");
+                throw new CertificateNotFoundException(id);
             }
 
             return certificate;
+        }
+        
+        public async Task<ICertificate> FindAsync(Hash fingerprint)
+        {
+            if (fingerprint.Type != HashType.SHA256)
+            {
+                throw new ArgumentException($"Must be SHA256. Was {fingerprint.Type}", "fingerprint");
+            }
+            
+            return await db.Certificates.QueryFirstOrDefaultAsync(
+                Expression.Eq("fingerprint", fingerprint.Data)
+            );
         }
 
         public async Task<ICertificate> CreateAsync(CreateCertificateRequest request)
@@ -35,15 +49,24 @@ namespace Carbon.Kms
                 throw new ArgumentNullException(nameof(request));
 
             #endregion
+            
+            var cert = new X509Certificate2(request.Data);
 
             var certificateId = await db.Certificates.Sequence.NextAsync();
 
+            if (request.ParentId != null)
+            {
+                // Ensure the parent exist...
+                var parent = await GetAsync(request.ParentId.Value);
+            }
+
             var certificate = new CertificateInfo(
-                id       : certificateId,
-                issuerId : request.IssuerId,
-                ownerId  : request.OwnerId,
-                data     : request.Data,
-                expires  : request.Expires
+                id                  : certificateId,
+                ownerId             : request.OwnerId,
+                data                : request.Data,
+                parentId            : request.ParentId,
+                encryptedPrivateKey : request.EncryptedPrivateKey,
+                expires             : cert.NotAfter.ToUniversalTime()
             );
 
             var subjects = new CertificateSubject[request.Subjects.Length];
@@ -71,6 +94,13 @@ namespace Carbon.Kms
             await db.Certificates.PatchAsync(certificate.Id, new[] {
                 Change.Replace("deleted", Expression.Func("NOW"))
             }, condition: Expression.IsNull("deleted"));
+        }
+
+        public async Task RevokeAsync(ICertificate certificate)
+        {
+            await db.Certificates.PatchAsync(certificate.Id, new[] {
+                Change.Replace("revoked", Expression.Func("NOW"))
+            }, condition: Expression.IsNull("revoked"));
         }
     }
 }

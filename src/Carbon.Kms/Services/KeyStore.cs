@@ -7,7 +7,7 @@ using Carbon.Data.Expressions;
 using Carbon.Data.Protection;
 using Carbon.Data.Sequences;
 
-namespace Carbon.Kms
+namespace Carbon.Kms.Services
 {
     using static Expression;
 

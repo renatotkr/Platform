@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 using Carbon.Data.Sequences;
 
-namespace Carbon.Kms
+namespace Carbon.Kms.Services
 {
     public interface IKeyStore
     {

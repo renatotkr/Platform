@@ -89,7 +89,8 @@ namespace Carbon.Kms
         [Member("format")]
         public KeyDataFormat Format { get; }
 
-        [Member("data"), MaxLength(2500)]
+        [Member("data")]
+        [MaxLength(2500)]
         public byte[] Data { get; }
         
         [Member("kekId")]

@@ -23,8 +23,8 @@ namespace Carbon.Kms
 
         public IDbContext Context { get; }
 
-        public Dataset<CertificateInfo, long>              Certificates        { get; }
-        public Dataset<CertificateSubject, (long, string)> CertificateSubjects { get; }
+        public Dataset<CertificateInfo, long>              Certificates               { get; }
+        public Dataset<CertificateSubject, (long, string)> CertificateSubjects        { get; }
 
         public Dataset<KeyInfo,  Uid> Keys      { get; }
         public Dataset<KeyGrant, Uid> KeyGrants { get; }
