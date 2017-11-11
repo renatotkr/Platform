@@ -3,11 +3,11 @@ using System.Data.Common;
 using System.Threading.Tasks;
 
 using Carbon.CI;
-using Carbon.Cloud.Logging;
 using Carbon.Data;
 using Carbon.Data.Sql;
 using Carbon.Data.Sql.Adapters;
 using Carbon.Kms;
+using Carbon.Platform.Hosting;
 using Carbon.Platform.Metrics;
 using Carbon.Platform.Web;
 using Carbon.Rds;
@@ -43,12 +43,23 @@ namespace Carbon.Platform.Services.Test
 
 
         [Fact]
+        public void HostingsDbIsOk()
+        {
+            var database = new HostingDb(dbContext);
+
+            KeysAndIndexesAreUnder767Bytes(database);
+        }
+
+        /*
+
+        [Fact]
         public void A()
         {
-            var a = GetCreateTableCommand<Request>();
+            var a = GetCreateTableCommand<DomainAuthorization>();
 
-            // throw new Exception(a);
+            throw new Exception(a);
         }
+        */
 
         [Fact]
         public void RdsDbIsOk()
@@ -164,10 +175,16 @@ namespace Carbon.Platform.Services.Test
     {
         private readonly DbTypeMap types = new DbTypeMap(MySqlAdapter.Default);
 
+        public MySqlDataContext()
+        {
+            new PlatformDb(this); // register the types
+        }
+
         public SqlAdapter SqlAdapter => MySqlAdapter.Default;
 
         public DbTypeMap Types => types;
 
         public Task<DbConnection> GetConnectionAsync() => null;
     }
+
 }

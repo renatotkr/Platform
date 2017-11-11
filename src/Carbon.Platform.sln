@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+VisualStudioVersion = 15.0.27004.2008
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{99657337-0EDE-4049-B666-2D0A679E1FE2}"
 EndProject
@@ -92,6 +92,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Platform.Hosting", "Carbon.Platform.Hosting\Carbon.Platform.Hosting.csproj", "{B6CD3FFA-BFFF-4DDD-A871-54C7652E42EF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carbon.Platform.Hosting.Tests", "Carbon.Platform.Hosting.Tests\Carbon.Platform.Hosting.Tests.csproj", "{4FEFC2CD-43EC-4ED4-BA27-19FEF5FCA83E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carbon.Cloud.Logging.Services", "Carbon.Cloud.Logging.Services\Carbon.Cloud.Logging.Services.csproj", "{0B7DD21F-838E-4444-97C6-76B95CDD8E71}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -271,6 +273,10 @@ Global
 		{4FEFC2CD-43EC-4ED4-BA27-19FEF5FCA83E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FEFC2CD-43EC-4ED4-BA27-19FEF5FCA83E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FEFC2CD-43EC-4ED4-BA27-19FEF5FCA83E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B7DD21F-838E-4444-97C6-76B95CDD8E71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B7DD21F-838E-4444-97C6-76B95CDD8E71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B7DD21F-838E-4444-97C6-76B95CDD8E71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B7DD21F-838E-4444-97C6-76B95CDD8E71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

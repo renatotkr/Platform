@@ -5,23 +5,6 @@ using Xunit;
 
 namespace Carbon.Cloud.Logging
 {
-    public class RequestTests
-    {
-        [Fact]
-        public void ConstructorSetsCorrectProperties()
-        {
-            var a = new Request(default(Uid), 1, 2, "/", "GET", 1, default(Uid), 3, originId: 10);
-
-            Assert.Equal(1,     a.EnvironmentId);
-            Assert.Equal(2,     a.DomainId);
-            Assert.Equal("GET", a.Method);
-            Assert.Equal("/",   a.Path);
-            Assert.Equal(1,     a.ServerId);
-            Assert.Equal(3,     a.ProgramId);
-            Assert.Equal(10,    a.OriginId);
-        }
-    }
-
     public class RequestIdTests
     {
         [Fact]
@@ -42,18 +25,6 @@ namespace Carbon.Cloud.Logging
             Assert.Equal(date, RequestId.GetTimestamp(a));
             Assert.Equal(3, RequestId.GetSequenceNumber(a));
         }
-
-        /*
-        [Fact]
-        public void Base62Encode()
-        {
-            for (var i = 0ul; i < 1_000_000; i++)
-            {
-                Assert.Equal(i, Base62.Decode(Base62.Encode(i)));
-            }
-        }
-        */
-        
 
         [Fact]
         public void Limits()

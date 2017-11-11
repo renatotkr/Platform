@@ -16,7 +16,7 @@ namespace Carbon.Platform.Services.Test
             Assert.Equal(1, request.OwnerId);
 
             Assert.Throws<ArgumentException>(() => new CreateEnvironmentRequest("",  1));
-            Assert.Throws<ArgumentException>(() => new CreateEnvironmentRequest("a", -1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new CreateEnvironmentRequest("a", -1));
         }
     }
 }

@@ -2,6 +2,7 @@ dotnet pack ./src/Bash                          -c Release -o ./../../release/Ba
 dotnet pack ./src/Carbon.CI                     -c Release -o ./../../release/Carbon.CI
 dotnet pack ./src/Carbon.CI.Abstractions        -c Release -o ./../../release/Carbon.CI.Abstractions
 dotnet pack ./src/Carbon.Cloud.Logging          -c Release -o ./../../release/Carbon.Cloud.Logging
+dotnet pack ./src/Carbon.Cloud.Logging.Services -c Release -o ./../../release/Carbon.Cloud.Logging.Services
 dotnet pack ./src/GitHub                        -c Release -o ./../../release/GitHub
 dotnet pack ./src/Bitbucket                     -c Release -o ./../../release/Bitbucket
 dotnet pack ./src/Carbon.Building               -c Release -o ./../../release/Carbon.Building

@@ -31,7 +31,7 @@ namespace Carbon.Platform.Web
         public string Name { get; }
         
         [Member("version"), Mutable]
-        [StringLength(40)]
+        [Ascii, StringLength(50)]
         public string Version { get; set; }
 
         [Member("style")]

@@ -5,6 +5,8 @@ namespace Carbon.Platform.Environments
     public interface IEnvironment : IResource
     {
         string Name { get; }
+
+        long OwnerId { get; }
     }
 }
 

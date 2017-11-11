@@ -20,27 +20,30 @@ namespace Carbon.Platform.Computing
         [DataMember(Name = "status", EmitDefaultValue = false)]
         public HostStatus Status { get; set; }
 
+        [DataMember(Name = "environmentId", EmitDefaultValue = false)]
+        public long EnvironmentId { get; set; }
+        
+        [DataMember(Name = "addresses")]
+        public string[] Addresses { get; set; }
+
         [DataMember(Name = "clusterId", EmitDefaultValue = false)]
         public long ClusterId { get; set; }
 
-        [DataMember(Name = "addresses")]
-        public string[] Addresses { get; set; }
-        
         [DataMember(Name = "location", EmitDefaultValue = false)]
         public LocationDetails Location { get; set; }
 
         [DataMember(Name = "image", EmitDefaultValue = false)]
         public ImageDetails Image { get; set; }
 
+        [DataMember(Name = "machineType")]
+        public MachineTypeDetails MachineType { get; set; }
+
         [DataMember(Name = "networkInterfaces", EmitDefaultValue = false)]
         public NetworkInterfaceDetails[] NetworkInterfaces { get; set; }
 
         [DataMember(Name = "volumes", EmitDefaultValue = false)]
         public VolumeDetails[] Volumes { get; set; }
-
-        [DataMember(Name = "machineType")]
-        public MachineTypeDetails MachineType { get; set; }
-
+        
         [DataMember(Name = "publicKey", EmitDefaultValue = false)]
         public Jwk PublicKey { get; set; }
 

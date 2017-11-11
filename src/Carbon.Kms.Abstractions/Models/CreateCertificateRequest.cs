@@ -1,32 +1,18 @@
 ﻿using System;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Carbon.Kms
 {
     public class CreateCertificateRequest
     {
-        public CreateCertificateRequest(X509Certificate2 certificate, long ownerId)
-        {
-            Data    = certificate.GetRawCertData();
-            Expires = certificate.NotAfter;
-            OwnerId = ownerId;
-        }
-
         public CreateCertificateRequest(
             long ownerId,
-            byte[] data,
-            byte[] chainData,
             string[] subjects,
-            long issuerId,
-            DateTime expires)
+            byte[] data, // TODO: Get subjects from data?
+            byte[] encryptedPrivateKey = null,
+            long? parentId = null)
         {
             #region Preconditions
-
-            if (ownerId <= 0)
-            {
-                throw new ArgumentException("Must be > 0", nameof(ownerId));
-            }
-
+            
             if (data == null)
             {
                 throw new ArgumentNullException(nameof(data));
@@ -35,26 +21,29 @@ namespace Carbon.Kms
             {
                 throw new ArgumentException("Must not be empty", nameof(data));
             }
+
+            if (parentId != null && parentId <= 0)
+            {
+                throw new ArgumentException("Must be > 0", nameof(parentId));
+            }
+
             #endregion
 
-            OwnerId   = ownerId;
-            Data      = data;
-            ChainData = chainData;
-            Subjects  = subjects;
-            IssuerId  = issuerId;
-            Expires   = expires;
+            OwnerId             = ownerId;
+            Subjects            = subjects;
+            Data                = data;
+            ParentId            = parentId;
+            EncryptedPrivateKey = encryptedPrivateKey;
         }
 
         public long OwnerId { get; }
 
         public byte[] Data { get; }
 
-        public byte[] ChainData { get; }
+        public long? ParentId { get; }
 
         public string[] Subjects { get;  }
-        
-        public long IssuerId { get; }
 
-        public DateTime Expires { get; }
+        public byte[] EncryptedPrivateKey { get; }
     }
 }

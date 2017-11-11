@@ -41,7 +41,7 @@ namespace Carbon.Platform.Computing
         public string Condition { get; }
 
         [Member("action")]
-        [StringLength(100)]
+        [Ascii, StringLength(100)]
         public string Action { get; }
 
         [Member("priority")]

@@ -6,7 +6,6 @@ namespace Carbon.Cloud.Logging.Tests
 {
     public class ClientTests
     {
-
         [Fact]
         public void A()
         {

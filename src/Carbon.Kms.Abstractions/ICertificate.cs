@@ -6,9 +6,11 @@ namespace Carbon.Kms
     {
         long Id { get; }
 
-        long OwnerId { get; }
-
         byte[] Data { get; }
+
+        long? ParentId { get; }
+
+        byte[] Fingerprint { get; } // sha256(data)
 
         DateTime Expires { get; }
 

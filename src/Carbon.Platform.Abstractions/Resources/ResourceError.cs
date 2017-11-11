@@ -20,6 +20,11 @@ namespace Carbon.Platform.Resources
             return new ResourceNotFoundException(resource);
         }
 
+        public static ResourceNotFoundException NotFound(ManagedResource resource)
+        {
+            return new ResourceNotFoundException(resource);
+        }
+
         public static ResourceNotFoundException NotFound(ResourceType type, long ownerId, string name)
         {
             // host:1:#1
@@ -44,11 +49,17 @@ namespace Carbon.Platform.Resources
     {
         public ResourceNotFoundException(string resource)
             : base(resource + " not found") { }
+
+        public ResourceNotFoundException(ManagedResource resource)
+           : base(resource.ToString() + " not found") { }
     }
 
     public class ResourceConflictException : Exception
     {
         public ResourceConflictException(string resource)
             : base(resource + " already exists") { }
+
+        public ResourceConflictException(ManagedResource resource)
+            : base(resource.ToString() + " already exists") { }
     }
 }

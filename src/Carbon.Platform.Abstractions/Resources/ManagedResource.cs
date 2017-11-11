@@ -76,6 +76,12 @@ namespace Carbon.Platform.Resources
         public static ManagedResource Build(ILocation location, string id) =>
             FromLocation(location, ResourceTypes.Build, id);
 
+        public static ManagedResource Channel(ILocation location, string id) =>
+            FromLocation(location, ResourceTypes.Channel, id);
+
+        public static ManagedResource Channel(ResourceProvider provider, string id) =>
+            new ManagedResource(provider, ResourceTypes.Channel, id);
+
         public static ManagedResource Cluster(ResourceProvider provider, string id) =>
             new ManagedResource(provider, ResourceTypes.Cluster, id);
 
@@ -91,32 +97,38 @@ namespace Carbon.Platform.Resources
         public static ManagedResource Environment(ResourceProvider provider, string id) =>
             new ManagedResource(provider, ResourceTypes.Environment, id);
 
-        public static ManagedResource LoadBalancer(ILocation location, string id) =>
-            FromLocation(location, ResourceTypes.LoadBalancer, id);
-
         public static ManagedResource Host(ResourceProvider provider, string id) =>
-            new ManagedResource(provider, ResourceTypes.Host, id);
+           new ManagedResource(provider, ResourceTypes.Host, id);
 
-        public static ManagedResource Host(ILocation location, string id) => 
+        public static ManagedResource Host(ILocation location, string id) =>
             FromLocation(location, ResourceTypes.Host, id);
 
         public static ManagedResource HostTemplate(ResourceProvider provider, string id) =>
             new ManagedResource(provider, ResourceTypes.HostTemplate, id);
 
+        public static ManagedResource LoadBalancer(ILocation location, string id) =>
+            FromLocation(location, ResourceTypes.LoadBalancer, id);
+
+        public static ManagedResource MachineType(ResourceProvider provider, string id) =>
+            new ManagedResource(provider, ResourceTypes.MachineType, id);
+
         public static ManagedResource Image(ILocation location, string id) =>
            FromLocation(location, ResourceTypes.Image, id);
-
-        public static ManagedResource Volume(ILocation location, string id) => 
-            FromLocation(location, ResourceTypes.Volume, id);
-
-        public static ManagedResource Repository(ResourceProvider provider, string accountName, string repositoryName) =>
-            new ManagedResource(provider, ResourceTypes.Repository, $"{accountName}/{repositoryName}");
 
         public static ManagedResource Queue(ILocation location, string id) =>
             FromLocation(location, ResourceTypes.Queue, id);
 
-        public static ManagedResource Channel(ILocation location, string id) =>
-            FromLocation(location, ResourceTypes.Channel, id);
+        public static ManagedResource Queue(ResourceProvider provider, string id) =>
+            new ManagedResource(provider, ResourceTypes.Queue, id);
+
+        public static ManagedResource Repository(ResourceProvider provider, string accountName, string repositoryName) =>
+            new ManagedResource(provider, ResourceTypes.Repository, $"{accountName}/{repositoryName}");
+
+        public static ManagedResource Volume(ILocation location, string id) =>
+            FromLocation(location, ResourceTypes.Volume, id);
+
+        public static ManagedResource Volume(ResourceProvider provider, string id) =>
+            new ManagedResource(provider, ResourceTypes.Volume, id);
 
         #endregion
         
@@ -125,14 +137,23 @@ namespace Carbon.Platform.Resources
         public static ManagedResource Network(ILocation location, string id) =>
             FromLocation(location, ResourceTypes.Network, id);
 
+        public static ManagedResource Network(ResourceProvider provider, string id) =>
+           new ManagedResource(provider, ResourceTypes.Network, id);
+
         public static ManagedResource NetworkInterface(ILocation location, string id) =>
             FromLocation(location, ResourceTypes.NetworkInterface, id);
+
+        public static ManagedResource NetworkInterface(ResourceProvider provider, string id) =>
+            new ManagedResource(provider, ResourceTypes.NetworkInterface, id);
 
         public static ManagedResource NetworkSecurityGroup(ILocation location, string id) =>
             FromLocation(location, ResourceTypes.NetworkSecurityGroup, id);
 
         public static ManagedResource Subnet(ILocation location, string id) =>
             FromLocation(location, ResourceTypes.Subnet, id);
+
+        public static ManagedResource Subnet(ResourceProvider provider, string id) =>
+            new ManagedResource(provider, ResourceTypes.Subnet, id);
 
         #endregion
 

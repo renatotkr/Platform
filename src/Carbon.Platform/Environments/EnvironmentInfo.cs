@@ -26,7 +26,7 @@ namespace Carbon.Platform.Environments
             
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("Required", nameof(name));
-
+            
             if (name.Length > 63)
                 throw new ArgumentException("Must be 63 characters or fewer", nameof(name));
 

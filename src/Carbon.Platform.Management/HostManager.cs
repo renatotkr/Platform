@@ -21,6 +21,8 @@ using Carbon.Security;
 
 namespace Carbon.Platform.Management
 {
+    using static Expression;
+
     public class HostManager
     {
         private readonly Ec2Client ec2;
@@ -28,6 +30,7 @@ namespace Carbon.Platform.Management
         private readonly ElbClient elb;
 
         private readonly IHostService hostService;
+        private readonly IHostTemplateService hostTemplateService;
         private readonly IClusterService clusterService;
         private readonly IImageService imageService;
         private readonly IEventLogger eventLog;
@@ -35,23 +38,22 @@ namespace Carbon.Platform.Management
 
         public HostManager(IAwsCredential credential, PlatformDb db, IEventLogger eventLog)
         {
-            #region Precondtions
-
             if (credential == null)
                 throw new ArgumentNullException(nameof(credential));
 
-            #endregion
-
-            this.db  = db  ?? throw new ArgumentNullException(nameof(db));
+            this.db = db ?? throw new ArgumentNullException(nameof(db));
             this.eventLog = eventLog ?? throw new ArgumentNullException(nameof(eventLog));
 
-            ec2 = new Ec2Client(AwsRegion.USEast1, credential);
-            ssm = new SsmClient(AwsRegion.USEast1, credential);
-            elb = new ElbClient(AwsRegion.USEast1, credential);
+            var region = AwsRegion.USEast1; // TODO: Configurable
 
-            this.hostService    = new HostService(db);
-            this.clusterService = new ClusterService(db);
-            this.imageService   = new ImageService(db);
+            ec2 = new Ec2Client(region, credential);
+            ssm = new SsmClient(region, credential);
+            elb = new ElbClient(region, credential);
+
+            this.hostService         = new HostService(db);
+            this.clusterService      = new ClusterService(db);
+            this.imageService        = new ImageService(db);
+            this.hostTemplateService = new HostTemplateService(db);
         }
 
         /*
@@ -127,14 +129,15 @@ namespace Carbon.Platform.Management
             var provider = ResourceProvider.Get(request.Resource.ProviderId);
 
             var host = await hostService.FindAsync(provider, request.Resource.ResourceId);;
-
-            ICluster cluster = request.ClusterId != 0
-                ? await clusterService.GetAsync(request.ClusterId)
-                : null;
-           
+            
             if (host == null)
             {
-                host = await hostService.RegisterAsync(request);;
+                // Ensure the cluster exists
+                var cluster = request.ClusterId != 0
+                    ? await clusterService.GetAsync(request.ClusterId)
+                    : null;
+
+                host = await hostService.RegisterAsync(request);
             }
             else
             {
@@ -146,28 +149,26 @@ namespace Carbon.Platform.Management
 
         public async Task<IHost[]> LaunchAsync(Cluster cluster, ISecurityContext context)
         {
-            #region Preconditions
-
             if (cluster == null)
                 throw new ArgumentNullException(nameof(cluster));
-
-            #endregion
 
             var zoneId = LocationId.Create(cluster.LocationId).WithZoneNumber(1);
 
             var zone = Locations.Get(zoneId);
 
             // TODO:
-            // if the location is a region, select the avaiability zone with the least hosts
+            // if the location is a region, balance hosts within available zones
 
-            var template = await db.HostTemplates.FindAsync(cluster.HostTemplateId);
+            var template = await hostTemplateService.GetAsync(cluster.HostTemplateId);
 
             var request = new LaunchHostRequest(cluster, zone, template);
 
             return await LaunchAsync(request, context);;
         }
 
-        public async Task<IHost[]> LaunchAsync(LaunchHostRequest launchRequest, ISecurityContext context)
+        public async Task<IHost[]> LaunchAsync(
+            LaunchHostRequest launchRequest,
+            ISecurityContext context)
         {
             #region Preconditions
 
@@ -215,9 +216,7 @@ namespace Carbon.Platform.Management
 
             if (startupScript != null)
             {
-                // Can we use UTF8?
-
-                request.UserData = Convert.ToBase64String(Encoding.ASCII.GetBytes(startupScript));
+                request.UserData = Convert.ToBase64String(Encoding.UTF8.GetBytes(startupScript));
             }
 
             #region AWS Specific Properties
@@ -282,11 +281,12 @@ namespace Carbon.Platform.Management
             for (var i = 0; i < hosts.Length; i++)
             {
                 var registerRequest = await GetRegistrationAsync(
-                    instance     : runInstancesResponse.Instances[i],
-                    cluster      : cluster,
-                    image        : image, 
-                    machineType  : machineType, 
-                    location     : zone);
+                    instance    : runInstancesResponse.Instances[i],
+                    cluster     : cluster,
+                    image       : image, 
+                    machineType : machineType, 
+                    location    : zone
+                );
 
                 hosts[i] = await hostService.RegisterAsync(registerRequest);;
             }
@@ -306,13 +306,9 @@ namespace Carbon.Platform.Management
 
         public async Task TransitionStateAsync(HostInfo host, HostStatus newStatus)
         {
-            #region Preconditions
-
             if (host == null)
                 throw new ArgumentNullException(nameof(host));
-
-            #endregion
-
+            
             if (host.Status == HostStatus.Pending && newStatus == HostStatus.Running)
             {
                 var cluster = await clusterService.GetAsync(host.ClusterId);;
@@ -321,7 +317,7 @@ namespace Carbon.Platform.Management
                 {
                     await RegisterWithTargetGroupAsync(host, cluster);;
                 }
-
+                
                 await db.Hosts.PatchAsync(host.Id, new[] {
                     Change.Replace("status", newStatus)
                 });;
@@ -343,13 +339,24 @@ namespace Carbon.Platform.Management
 
         public async Task RegisterWithTargetGroupAsync(HostInfo host, Cluster group)
         {
-            var targetRegistration = new RegisterTargetsRequest(
+            #region Preconditions
+
+            if (host == null)
+                throw new ArgumentNullException(nameof(host));
+
+            if (group == null)
+                throw new ArgumentNullException(nameof(group));
+
+            #endregion
+
+
+            var registration = new RegisterTargetsRequest(
                 targetGroupArn : group.Properties[ClusterProperties.TargetGroupArn],
                 targets        : new[] { new TargetDescription(id: host.ResourceId) }
             );
             
             // Register the instances with the lb's target group
-            await elb.RegisterTargetsAsync(targetRegistration);
+            await elb.RegisterTargetsAsync(registration);
 
             await eventLog.CreateAsync(new Event(
                 action   : "addToLoadBalancerTargetGroup",
@@ -357,7 +364,7 @@ namespace Carbon.Platform.Management
             ));;
         }
 
-        public async Task TerminateHostAsync(HostInfo host, TimeSpan cooldown, ISecurityContext context)
+        public async Task TerminateAsync(HostInfo host, TimeSpan cooldown, ISecurityContext context)
         {
             #region Preconditions
 
@@ -373,22 +380,23 @@ namespace Carbon.Platform.Management
             {
                 var cluster = await clusterService.GetAsync(host.ClusterId);
 
-                if (cluster.Properties.TryGetValue(ClusterProperties.TargetGroupArn, out var targetGroupArn))
+                if (cluster.Properties != null && 
+                    cluster.Properties.TryGetValue(ClusterProperties.TargetGroupArn, out var targetGroupArn))
                 {
                     // Degister the instances from the load balancers target group
                     await elb.DeregisterTargetsAsync(new DeregisterTargetsRequest(
                         targetGroupArn: targetGroupArn,
                         targets: new[] {
-                        new TargetDescription(host.ResourceId)
+                            new TargetDescription(host.ResourceId)
                         }
                     ));
 
                     await eventLog.CreateAsync(new Event(
-                        action: "drain",
-                        resource: "host#" + host.Id,
-                        userId: context.UserId,
-                        properties: new JsonObject {
-                        { "duration", cooldown.ToString() }
+                        action     : "drain",
+                        resource   : "host#" + host.Id,
+                        userId     : context.UserId,
+                        properties : new JsonObject {
+                            { "duration", cooldown.ToString() }
                         })
                     );
 
@@ -403,8 +411,8 @@ namespace Carbon.Platform.Management
             
             // Mark the host as terminated
             await db.Hosts.PatchAsync(host.Id, new[] {
-                Change.Replace("terminated", Expression.Func("NOW"))
-            });
+                Change.Replace("terminated", Func("NOW"))
+            }, IsNull("terminated"));
 
             #region Logging
 
