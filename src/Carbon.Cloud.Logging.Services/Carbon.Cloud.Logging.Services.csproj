@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Carbon.Cloud.Logging.Services</AssemblyName>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <VersionPrefix>0.2.1</VersionPrefix>
+
+    <!-- Package Properties -->
+    <Authors>iamcarbon</Authors>
+    <Copyright>© Jason Nelson</Copyright>
+    <Description>Cloud logging services.</Description>
+    <PackageTags>cloud;logging;carbon</PackageTags>
+    <LangVersion>7.1</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Carbon.Data.Sql" Version="0.37.0" />
+    <PackageReference Include="protobuf-net" Version="2.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Carbon.Cloud.Logging\Carbon.Cloud.Logging.csproj" />
+  </ItemGroup>
+
+</Project>
