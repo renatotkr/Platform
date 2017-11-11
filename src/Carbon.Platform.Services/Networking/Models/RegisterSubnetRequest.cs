@@ -11,6 +11,8 @@ namespace Carbon.Platform.Networking
             long networkId,
             ManagedResource resource)
         {
+            Validate.Id(networkId, nameof(networkId));
+
             AddressBlocks = addressBlocks ?? throw new ArgumentNullException(nameof(addressBlocks));
             NetworkId     = networkId;
             Resource      = resource;
@@ -18,7 +20,6 @@ namespace Carbon.Platform.Networking
 
         public string[] AddressBlocks { get; }
 
-        [Range(1, 2_199_023_255_552)]
         public long NetworkId { get; }
 
         public ManagedResource Resource { get; }

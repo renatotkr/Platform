@@ -20,20 +20,23 @@ namespace Carbon.Platform.Networking
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public Task<NetworkInterfaceInfo> GetAsync(long id)
+        public async Task<NetworkInterfaceInfo> GetAsync(long id)
         {
-            return db.NetworkInterfaces.FindAsync(id) 
+            return await db.NetworkInterfaces.FindAsync(id) 
                 ?? throw ResourceError.NotFound(ResourceTypes.NetworkInterface, id);
         }
 
-        public Task<NetworkInterfaceInfo> GetAsync(string name)
+        public async Task<NetworkInterfaceInfo> GetAsync(string name)
         {
-            if (long.TryParse(name, out var id)) return GetAsync(id);
- 
-            (var provider, var resourceId) = ResourceName.Parse(name);
+            if (long.TryParse(name, out var id))
+            {
+                return await GetAsync(id);
+            }
 
-            return FindAsync(provider, resourceId) 
-                ?? throw ResourceError.NotFound(provider, ResourceTypes.NetworkInterface, name);
+            var (provider, resourceId) = ResourceName.Parse(name);
+            
+            return await FindAsync(provider, resourceId) 
+                ?? throw ResourceError.NotFound(ManagedResource.NetworkInterface(provider, name));
         }
 
         public async Task<NetworkInterfaceInfo> FindAsync(ResourceProvider provider, string id)

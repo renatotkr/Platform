@@ -28,12 +28,7 @@ namespace Carbon.Platform.Computing
 
         public Task<ProgramInfo> FindAsync(string name)
         {
-            #region Preconditions
-
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
-
-            #endregion
+            Validate.NotNull(name, nameof(name));
 
             if (long.TryParse(name, out var id))
             {
@@ -63,12 +58,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<IReadOnlyList<ProgramInfo>> ListAsync(IEnvironment environment)
         {
-            #region Preconditions
-
-            if (environment == null)
-                throw new ArgumentNullException(nameof(environment));
-
-            #endregion
+            Validate.NotNull(environment, nameof(environment));
 
             // TODO: Do a left JOIN on on programs
 

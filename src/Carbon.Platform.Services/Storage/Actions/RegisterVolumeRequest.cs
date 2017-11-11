@@ -8,9 +8,9 @@ namespace Carbon.Platform.Storage
 
         public RegisterVolumeRequest(ByteSize size, long ownerId, ManagedResource resource)
         {
-            Size = size;
+            Size     = size;
             Resource = resource;
-            OwnerId = ownerId;
+            OwnerId  = ownerId;
         }
 
         public ByteSize Size { get; set; }

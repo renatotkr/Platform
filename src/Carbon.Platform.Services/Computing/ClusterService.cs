@@ -22,13 +22,8 @@ namespace Carbon.Platform.Computing
 
         public Task<IReadOnlyList<Cluster>> ListAsync(IEnvironment environment)
         {
-            #region Preconditions
-
-            if (environment == null)
-                throw new ArgumentNullException(nameof(environment));
-
-            #endregion
-
+            Validate.NotNull(environment, nameof(environment));
+            
             return db.Clusters.QueryAsync(
                 And(Eq("environmentId", environment.Id), IsNull("deleted"))
             );
@@ -36,12 +31,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<Cluster> CreateAsync(CreateClusterRequest request)
         {
-            #region Preconditions
-
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            #endregion
+            Validate.NotNull(request, nameof(request));
 
             var cluster = new Cluster(
                id             : await db.Clusters.Sequence.NextAsync(),

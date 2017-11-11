@@ -51,12 +51,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<ImageInfo> GetAsync(ResourceProvider provider, string resourceId)
         {
-            #region Preconditions
-
-            if (resourceId == null)
-                throw new ArgumentNullException(nameof(resourceId));
-
-            #endregion
+            Validate.NotNull(resourceId, nameof(resourceId));
 
             var image = await db.Images.FindAsync(provider, resourceId);
 

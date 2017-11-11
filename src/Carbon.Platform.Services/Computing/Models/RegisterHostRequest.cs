@@ -21,16 +21,25 @@ namespace Carbon.Platform.Computing
             HostStatus status = HostStatus.Pending,
             HostType type = HostType.Virtual)
         {
+            Validate.NotNull(cluster,  nameof(cluster));
+            Validate.NotNull(location, nameof(location));
+            Validate.NotNull(image,    nameof(image));
+
+            Addresses = addresses;
             LocationId    = location.Id;
-            Addresses     = addresses;
             EnvironmentId = cluster.EnvironmentId;
             ClusterId     = cluster.Id;
             ImageId       = image.Id;
-            MachineTypeId = machineType.Id;
-            Status        = status;
-            Resource      = resource;
-            Type          = type;
-            OwnerId       = ownerId;
+
+            MachineType = machineType != null ? new MachineTypeDescriptor {
+                Id = machineType.Id,
+                Name = machineType.Name
+            } : null;
+
+            Status = status;
+            Resource = resource;
+            Type = type;
+            OwnerId = ownerId;
         }
 
         public ManagedResource Resource { get; set; }
@@ -45,8 +54,8 @@ namespace Carbon.Platform.Computing
         public long EnvironmentId { get; set; }
 
         public int LocationId { get; set; }
-
-        public long MachineTypeId { get; set; }
+        
+        public MachineTypeDescriptor MachineType { get; set; }
 
         public long ImageId { get; set; }
 
@@ -58,5 +67,12 @@ namespace Carbon.Platform.Computing
         public RegisterVolumeRequest[] Volumes { get; set; }
 
         public RegisterNetworkInterfaceRequest[] NetworkInterfaces { get; set; }
+    }
+
+    public class MachineTypeDescriptor
+    {
+        public long? Id { get; set; }
+
+        public string Name { get; set; }
     }
 }

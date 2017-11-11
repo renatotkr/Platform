@@ -16,7 +16,9 @@ namespace Carbon.Platform.Computing
             string startupScript = null,
             JsonObject properties = null)
         {
-            Name          = name        ?? throw new ArgumentNullException(nameof(name));
+            Validate.NotNullOrEmpty(name, nameof(name));
+
+            Name          = name  ;
             OwnerId       = ownerId;
             LocationId    = locationId;
             Image         = image       ?? throw new ArgumentNullException(nameof(image));

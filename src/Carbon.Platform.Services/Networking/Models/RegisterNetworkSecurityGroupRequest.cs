@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 using Carbon.Platform.Resources;
 
@@ -12,7 +11,10 @@ namespace Carbon.Platform.Networking
             long networkId,
             ManagedResource resource)
         {
-            Name      = name ?? throw new ArgumentNullException(nameof(name));
+            Validate.NotNull(name, nameof(name));
+            Validate.Id(networkId, nameof(networkId));
+
+            Name      = name;
             NetworkId = networkId;
             Resource  = resource;
         }

@@ -6,6 +6,9 @@ namespace Carbon.Platform.Computing
     {
         public RegisterLoadBalancer(string name, long ownerId, ManagedResource resource)
         {
+            Validate.NotNullOrEmpty(nameof(name), name);
+            Validate.Id(ownerId, nameof(ownerId));
+
             Name     = name;
             OwnerId  = ownerId;
             Resource = resource;

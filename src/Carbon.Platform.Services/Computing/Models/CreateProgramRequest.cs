@@ -18,14 +18,9 @@ namespace Carbon.Platform.Computing
             long? repositoryId = null,
             long? parentId = null)
         {
-            #region Preconditions
-
-            Validate.Id(ownerId, nameof(ownerId));
-
             Validate.NotNullOrEmpty(name, nameof(name));
-
-            #endregion
-
+            Validate.Id(ownerId, nameof(ownerId));
+            
             Name         = name;
             OwnerId      = ownerId;
             Addresses    = addresses;

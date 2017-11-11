@@ -13,15 +13,8 @@ namespace Carbon.Platform.Computing
             ImageType type = ImageType.Machine,
             JsonObject properties = null)
         {
-            #region Preconditions
-
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("Required", nameof(name));
-
-            if (ownerId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(ownerId));
-
-            #endregion
+            Validate.NotNullOrEmpty(name, nameof(name));
+            Validate.Id(ownerId, nameof(ownerId));
 
             Name       = name;
             OwnerId    = ownerId;

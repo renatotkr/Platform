@@ -33,7 +33,7 @@ namespace Carbon.Platform.Computing
 
         // e.g. 1 || aws:i-18342354, gcp:1234123123, azure:1234123, do:???
 
-        public Task<HostInfo> GetAsync(string name)
+        public async Task<HostInfo> GetAsync(string name)
         {
             #region Preconditions
 
@@ -44,13 +44,13 @@ namespace Carbon.Platform.Computing
 
             if (long.TryParse(name, out var id))
             {
-                return GetAsync(id);
+                return await GetAsync(id);
             }
 
-            (var provider, var resourceId) = ResourceName.Parse(name);
+            var (provider, resourceId) = ResourceName.Parse(name);
 
-            return FindAsync(provider, resourceId) 
-                ?? throw ResourceError.NotFound(provider, ResourceTypes.Host, name);
+            return await FindAsync(provider, resourceId) 
+                ?? throw ResourceError.NotFound(ManagedResource.Host(provider, name));
         }
 
         public async Task<HostInfo> FindAsync(ResourceProvider provider, string resourceId)
@@ -94,11 +94,38 @@ namespace Carbon.Platform.Computing
                 And(Eq("environmentId", environment.Id), IsNull("terminated"))
             );
         }
-
+        
         public async Task<HostInfo> RegisterAsync(RegisterHostRequest request)
         {
-            var regionId = LocationId.Create(request.Resource.LocationId).WithZoneNumber(0);
+            var location = LocationId.Create(request.Resource.LocationId);
+            var regionId = location.WithZoneNumber(0);
 
+            long machineTypeId = 0;
+
+            if (request.MachineType != null)
+            {
+                if (request.MachineType.Id != null)
+                {
+                    machineTypeId = request.MachineType.Id.Value;
+                }
+                else
+                {
+                    switch (location.ProviderId)
+                    {
+                        case 2:
+                            // AWS
+                            machineTypeId = AwsInstanceType.Get(request.MachineType.Name).Id;
+                            break;
+                       
+                        default:
+                            var machineType = await GetMachineTypeAsync(location.ProviderId, request.MachineType.Name);
+
+                            machineTypeId = machineType.Id;
+                            break;
+                    }   
+                }
+            }
+            
             var host = new HostInfo(
                 id            : await GetNextId(regionId),
                 type          : request.Type,
@@ -109,7 +136,7 @@ namespace Carbon.Platform.Computing
                 locationId    : request.LocationId,
                 resource      : request.Resource,
                 environmentId : request.EnvironmentId,
-                machineTypeId : request.MachineTypeId,
+                machineTypeId : machineTypeId,
                 ownerId       : request.OwnerId
             );
         
@@ -120,7 +147,7 @@ namespace Carbon.Platform.Computing
 
         #region Network Interfaces
 
-            public Task<IReadOnlyList<NetworkInterfaceInfo>> GetNetworkInterfacesAsync(long hostId)
+        public Task<IReadOnlyList<NetworkInterfaceInfo>> GetNetworkInterfacesAsync(long hostId)
         {
             return db.NetworkInterfaces.QueryAsync(Eq("hostId", hostId));
         }
@@ -136,7 +163,23 @@ namespace Carbon.Platform.Computing
 
         #endregion
 
-        static readonly string nextIdSql = SqlHelper.GetCurrentValueAndIncrement<LocationInfo>("hostCount");
+        private async Task<MachineType> GetMachineTypeAsync(int providerId, string name)
+        {
+            var model = await db.MachineTypes.QueryFirstOrDefaultAsync(
+                And(Eq("providerId", providerId), Eq("name", name))
+            );
+
+            if (model == null)
+            {
+                throw new ResourceNotFoundException(
+                    resource: ManagedResource.MachineType(ResourceProvider.Get(providerId), name)
+                );
+            }
+
+            return model;
+        }
+
+        private static readonly string nextIdSql = SqlHelper.GetCurrentValueAndIncrement<LocationInfo>("hostCount");
 
         // 4B per zone per region
         private async Task<HostId> GetNextId(LocationId locationId)

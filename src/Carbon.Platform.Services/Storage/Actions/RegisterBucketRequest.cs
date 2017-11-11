@@ -9,9 +9,8 @@ namespace Carbon.Platform.Storage
         public RegisterBucketRequest(string name, long ownerId, ManagedResource resource)
         {
             #region Validation
-            
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
+
+            Validate.NotNullOrEmpty(name, nameof(name));
 
             if (name.Length > 63)
                 throw new ArgumentException("Must be 63 characters or fewer", nameof(name));

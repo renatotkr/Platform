@@ -16,13 +16,10 @@ namespace Carbon.Platform.Computing
             long? buildId = null,
             JsonObject properties = null)
         {
-            #region Preconditions
-
+            Validate.NotNull(program, nameof(program));
             Validate.Id(creatorId, nameof(creatorId));
 
-            #endregion
-
-            Program    = program ?? throw new ArgumentNullException(nameof(program));
+            Program    = program;
             Version    = version;
             CreatorId  = creatorId;
             CommitId   = commitId;

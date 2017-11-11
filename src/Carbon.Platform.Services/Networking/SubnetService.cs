@@ -19,18 +19,23 @@ namespace Carbon.Platform.Networking
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public Task<SubnetInfo> GetAsync(long id)
+        public async Task<SubnetInfo> GetAsync(long id)
         {
-            return db.Subnets.FindAsync(id) ?? throw ResourceError.NotFound(ResourceTypes.Subnet, id);
+            return await db.Subnets.FindAsync(id)
+                ?? throw ResourceError.NotFound(ResourceTypes.Subnet, id);
         }
         
-        public Task<SubnetInfo> GetAsync(string name)
+        public async Task<SubnetInfo> GetAsync(string name)
         {
-            if (long.TryParse(name, out var id)) return GetAsync(id);
+            if (long.TryParse(name, out var id))
+            {
+                return await GetAsync(id);
+            }
 
-            (var provider, var resourceId) = ResourceName.Parse(name);
+            var (provider, resourceId) = ResourceName.Parse(name);
 
-            return FindAsync(provider, resourceId) ?? throw ResourceError.NotFound(provider, ResourceTypes.Network, name);            
+            return await FindAsync(provider, resourceId)
+                ?? throw ResourceError.NotFound(ManagedResource.Subnet(provider, name));            
         }
 
         public async Task<SubnetInfo> GetAsync(ResourceProvider provider, string resourceId)

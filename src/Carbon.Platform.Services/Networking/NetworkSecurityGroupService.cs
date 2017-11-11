@@ -19,9 +19,9 @@ namespace Carbon.Platform.Networking
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public Task<NetworkSecurityGroup> GetAsync(long id)
+        public async Task<NetworkSecurityGroup> GetAsync(long id)
         {
-            return db.NetworkSecurityGroups.FindAsync(id) 
+            return await db.NetworkSecurityGroups.FindAsync(id) 
                 ?? throw ResourceError.NotFound(ResourceTypes.NetworkSecurityGroup, id);
         }
 

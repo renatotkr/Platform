@@ -59,7 +59,6 @@ namespace Carbon.Platform.Computing
             return template;
         }
 
-
         public async Task<bool> DeleteAsync(IHostTemplate template)
         {
             return await db.HostTemplates.PatchAsync(template.Id, new[] {

@@ -19,22 +19,25 @@ namespace Carbon.Platform.Networking
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public Task<NetworkInfo> GetAsync(long id)
+        public async Task<NetworkInfo> GetAsync(long id)
         {
-            return db.Networks.FindAsync(id) 
+            return await db.Networks.FindAsync(id) 
                 ?? throw ResourceError.NotFound(ResourceTypes.Network, id);
         }
 
         // 1 | aws:vpc1
 
-        public Task<NetworkInfo> GetAsync(string name)
+        public async Task<NetworkInfo> GetAsync(string name)
         {
-            if (long.TryParse(name, out var id)) return GetAsync(id);
-            
-            (var provider, var resourceId) = ResourceName.Parse(name);
+            if (long.TryParse(name, out var id))
+            {
+                return await GetAsync(id);
+            }
 
-            return FindAsync(provider, resourceId)
-                ?? throw ResourceError.NotFound(provider, ResourceTypes.Network, name);            
+            var (provider, resourceId) = ResourceName.Parse(name);
+
+            return await FindAsync(provider, resourceId)
+                ?? throw ResourceError.NotFound(ManagedResource.Network(provider, name));            
         }
 
         public async Task<NetworkInfo> GetAsync(ResourceProvider provider, string resourceId)

@@ -34,14 +34,7 @@ namespace Carbon.Platform.Environments
 
         public async Task<EnvironmentInfo> GetAsync(long ownerId, string name)
         {
-            #region Preconditions
-
-            if (name == null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
-
-            #endregion
+            Validate.NotNull(name, nameof(name));
 
             return await db.Environments.QueryFirstOrDefaultAsync(
                 Conjunction(Eq("ownerId", ownerId), Eq("name", name), IsNull("deleted"))
@@ -63,24 +56,18 @@ namespace Carbon.Platform.Environments
 
         public async Task<EnvironmentInfo> CreateAsync(CreateEnvironmentRequest request)
         {
-            #region Preconditions
-
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            #endregion
-
-            // Ensure an environment with the provided name doesn't already exist...
+            Validate.Object(request, nameof(request));
 
             if (await ExistsAsync(request.OwnerId, request.Name))
             {
-                throw new ResourceConflictException($"environment/{request.Name} (ownerId: {request.OwnerId})");
+                throw new ResourceConflictException($"environment/{request.Name}");
             }
-
+            
             var environment = new EnvironmentInfo(
-                id      : await db.Environments.Sequence.NextAsync(),
-                name    : request.Name,
-                ownerId : request.OwnerId
+                id         : await db.Environments.Sequence.NextAsync(),
+                name       : request.Name,
+                ownerId    : request.OwnerId,
+                properties : request.Properties
             );
             
             await db.Environments.InsertAsync(environment);
@@ -90,13 +77,8 @@ namespace Carbon.Platform.Environments
         
         public async Task<bool> DeleteAsync(IEnvironment environment)
         {
-            #region Preconditions
-
-            if (environment == null)
-                throw new ArgumentNullException(nameof(environment));
-
-            #endregion
-
+            Validate.NotNull(environment, nameof(environment));
+            
             return await db.Environments.PatchAsync(environment.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))
             }, condition: IsNull("deleted")) > 0;

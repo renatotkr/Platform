@@ -1,6 +1,4 @@
-﻿using System;
-
-using Carbon.Json;
+﻿using Carbon.Json;
 using Carbon.Platform.Environments;
 
 namespace Carbon.Platform.Computing
@@ -13,16 +11,9 @@ namespace Carbon.Platform.Computing
             IHostTemplate hostTemplate,
             JsonObject properties = null)
         {
-            #region Preconditions
-
-            if (environment == null)
-                throw new ArgumentNullException(nameof(environment));
-
-            if (location == null)
-                throw new ArgumentNullException(nameof(location));
+            Validate.NotNull(environment, nameof(environment));
+            Validate.NotNull(location, nameof(location));
             
-            #endregion
-
             EnvironmentId = environment.Id;
             LocationId    = location.Id;
             Name          = environment.Name + "/" + location.Name;
