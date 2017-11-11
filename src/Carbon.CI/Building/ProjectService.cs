@@ -30,12 +30,19 @@ namespace Carbon.CI
             return await db.Projects.FindAsync(id) 
                 ?? throw ResourceError.NotFound(ResourceTypes.Project, id);
         }
-
+        
         public async Task<ProjectInfo> GetAsync(long ownerId, string name)
         {
             return await db.Projects.QueryFirstOrDefaultAsync(
                 And(Eq("ownerId", ownerId), Eq("name", name))  
             ) ?? throw ResourceError.NotFound(ResourceTypes.Project, ownerId, name);
+        }
+        
+        public async Task<ProjectInfo> GetAsync(IRepository repository)
+        {
+            return await db.Projects.QueryFirstOrDefaultAsync(
+                And(Eq("repositoryId", repository.Id), IsNull("deleted"))
+            );
         }
 
         public async Task<ProjectInfo> CreateAsync(CreateProjectRequest request)

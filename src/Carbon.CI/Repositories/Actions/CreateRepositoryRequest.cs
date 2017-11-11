@@ -17,18 +17,9 @@ namespace Carbon.CI
             byte[] encryptedAccessToken = null,
             JsonObject properties = null)
         {
-            #region Preconditions
-
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("Required", nameof(name));
-
-            if (string.IsNullOrEmpty(origin))
-                throw new ArgumentException("Required", nameof(origin));
-
-            if (ownerId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(ownerId));
-
-            #endregion
+            Validate.NotNullOrEmpty(name, nameof(name));
+            Validate.NotNullOrEmpty(origin, nameof(origin));
+            Validate.Id(ownerId, nameof(ownerId));
 
             Name                 = name;
             OwnerId              = ownerId;

@@ -15,15 +15,8 @@ namespace Carbon.CI
             DeploymentStatus status = DeploymentStatus.Pending,
             string message = null)
         {
-            #region Preconditions
-
-            if (deploymentId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(deploymentId));
-
-            if (hostId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(hostId));
-            
-            #endregion
+            Validate.Id(deploymentId, nameof(deploymentId));
+            Validate.Id(hostId, nameof(hostId));
 
             DeploymentId = deploymentId;
             HostId       = hostId;

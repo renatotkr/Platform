@@ -19,22 +19,10 @@ namespace Carbon.CI
             long creatorId,
             long? containerId = null)
         {
-            #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            if (repositoryId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(repositoryId));
-
-            if (string.IsNullOrEmpty(nameof(name)))
-                throw new ArgumentException("Required", nameof(name));
-
-
-            if (creatorId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(creatorId));
-
-            #endregion
+            Validate.Id(id);
+            Validate.Id(repositoryId, nameof(repositoryId));
+            Validate.NotNullOrEmpty(name, nameof(name));
+            Validate.Id(creatorId, nameof(creatorId));
 
             Id           = id;
             RepositoryId = repositoryId;

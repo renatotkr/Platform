@@ -21,17 +21,10 @@ namespace Carbon.CI
             long imageId = 0,
             JsonObject properties = null)
         {
-            #region Preconditions
-
             Validate.Id(id);
-
             Validate.Id(repositoryId, nameof(repositoryId));
-
             Validate.NotNullOrEmpty(name, nameof(name));
-
             Validate.Id(ownerId, nameof(ownerId));
-
-            #endregion
 
             Id           = id;
             Name         = name;
@@ -51,10 +44,12 @@ namespace Carbon.CI
         public long OwnerId { get; }
 
         [Member("name")]
-        [StringLength(100)]
+        [Ascii, StringLength(100)]
         public string Name { get; }
+        
+        // Codebuild: [A-Za-z0-9][A-Za-z0-9\-_]{1,254}
 
-        [Member("repositoryId")]
+        [Member("repositoryId"), Indexed]
         public long RepositoryId { get; }
 
         [Member("imageId")]
@@ -77,6 +72,7 @@ namespace Carbon.CI
         public int ProviderId { get; }
 
         [Member("resourceId")]
+        [Ascii, StringLength(255)]
         public string ResourceId { get; }
 
         [Member("locationId")]

@@ -21,21 +21,12 @@ namespace Carbon.CI
             DeploymentStatus status = DeploymentStatus.Pending,
             JsonObject properties = null)
         {
-            #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            if (environmentId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(environmentId));
-
+            Validate.Id(id);
+            Validate.Id(environmentId, nameof(environmentId));
+            Validate.Id(creatorId, nameof(creatorId));
 
             if (release == null)
                 throw new ArgumentNullException(nameof(release));
-            
-            Validate.Id(creatorId, nameof(creatorId));
-
-            #endregion
 
             Id             = id;
             Status         = status;

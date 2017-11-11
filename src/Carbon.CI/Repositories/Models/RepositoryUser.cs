@@ -12,15 +12,8 @@ namespace Carbon.CI
 
         public RepositoryUser(long repositoryId, long userId, JsonObject properties = null)
         {
-            #region Preconditions
-
-            if (repositoryId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(repositoryId));
-
-            if (userId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(userId));
-
-            #endregion
+            Validate.Id(repositoryId, nameof(repositoryId));
+            Validate.Id(userId, nameof(userId));
 
             RepositoryId = repositoryId;
             UserId       = userId;

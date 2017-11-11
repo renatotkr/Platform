@@ -1,23 +1,24 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace Carbon.CI
 {
     public class CreateCommitRequest
     {
-        public CreateCommitRequest(long repositoryId, byte[] sha1, string message, long authorId, DateTime created)
+        public CreateCommitRequest(
+            long repositoryId, 
+            byte[] sha1, 
+            string message,
+            long authorId, 
+            long commiterId,
+            DateTime created)
         {
-            #region Preconditions
-
-            if (repositoryId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(repositoryId));
-
-            #endregion
+            Validate.Id(repositoryId, nameof(repositoryId));
 
             RepositoryId = repositoryId;
             Sha1         = sha1 ?? throw new ArgumentNullException(nameof(sha1));
             Message      = message;
             AuthorId     = authorId;
+            CommiterId   = commiterId;
             Created      = created;
         }
 
@@ -26,6 +27,8 @@ namespace Carbon.CI
         public byte[] Sha1 { get; }
 
         public long AuthorId { get; }
+
+        public long CommiterId { get; }
 
         public string Message { get; }
 

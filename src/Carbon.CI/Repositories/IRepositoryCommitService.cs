@@ -7,9 +7,9 @@ namespace Carbon.CI
     {
         Task<RepositoryCommit> CreateAsync(CreateCommitRequest request);
 
-        Task<RepositoryCommit> FindAsync(long repositoryId, byte[] sha1);
-
         Task<RepositoryCommit> GetAsync(long id);
+
+        Task<RepositoryCommit> FindAsync(long repositoryId, byte[] sha1);
 
         Task<IReadOnlyList<RepositoryCommit>> ListAsync(IRepository repository);
     }

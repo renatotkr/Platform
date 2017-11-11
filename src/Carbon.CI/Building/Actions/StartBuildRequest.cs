@@ -6,10 +6,10 @@ namespace Carbon.CI
     {
         public StartBuildRequest(IProject project, IRepositoryCommit commit)
         {
-            Project     = project     ?? throw new ArgumentNullException(nameof(project));
-            Commit      = commit      ?? throw new ArgumentNullException(nameof(commit));
+            Project = project ?? throw new ArgumentNullException(nameof(project));
+            Commit = commit ?? throw new ArgumentNullException(nameof(commit));
         }
-        
+
         public IProject Project { get; }
 
         public IRepositoryCommit Commit { get; }
@@ -22,8 +22,8 @@ namespace Carbon.CI
         public BuildOutput(string bucketName, string path, string name = null)
         {
             BucketName = bucketName;
-            Path       = path;
-            Name       = name;
+            Path = path;
+            Name = name;
         }
 
         public string BucketName { get; }

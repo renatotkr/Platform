@@ -9,13 +9,8 @@ namespace Carbon.CI
 
         public BuildArtifact(long id, string name, byte[] sha256 = null)
         {
-            #region Preconditions
-
             Validate.Id(id);
-
             Validate.NotNullOrEmpty(name, nameof(name));
-
-            #endregion
 
             Id     = id;
             Name   = name;

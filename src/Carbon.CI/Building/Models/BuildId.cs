@@ -11,9 +11,7 @@ namespace Carbon.CI
     {
         private static readonly string sql = SqlHelper.GetCurrentValueAndIncrement<ProjectInfo>("buildCount");
 
-        public static async Task<long> NextAsync(
-            IDbContext context,
-            long projectId)
+        public static async Task<long> NextAsync(IDbContext context, long projectId)
         {
             using (var connection = await context.GetConnectionAsync())
             {

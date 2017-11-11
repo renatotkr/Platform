@@ -31,7 +31,7 @@ namespace Carbon.CI
             IEventLogger eventLog,
             ILogger log)
         {
-            this.hostAgent       = api           ?? throw new ArgumentNullException(nameof(api));
+            this.hostAgent      = api            ?? throw new ArgumentNullException(nameof(api));
             this.releaseService = releaseService ?? throw new ArgumentNullException(nameof(releaseService));
             this.db             = db             ?? throw new ArgumentNullException(nameof(db));
             this.hostService    = hostService    ?? throw new ArgumentNullException(nameof(hostService));

@@ -18,13 +18,9 @@ namespace Carbon.CI
             ManagedResource resource,
             JsonObject properties = null)
         {
-            #region Preconditions
-
             Validate.Id(id);
-            
+            Validate.Id(commitId, nameof(commitId));
             Validate.Id(creatorId, nameof(creatorId));
-
-            #endregion
 
             Id         = id;
             CommitId   = commitId;
@@ -53,7 +49,7 @@ namespace Carbon.CI
         public long CreatorId { get; }
 
         [Member("message"), Mutable]
-        [StringLength(200)]
+        [StringLength(255)]
         public string Message { get; set; }
 
         [Member("properties")]
@@ -66,6 +62,7 @@ namespace Carbon.CI
         public int ProviderId { get; }
 
         [Member("resourceId")]
+        [Ascii, StringLength(255)]
         public string ResourceId { get; }
 
         [Member("locationId")]
