@@ -6,7 +6,7 @@ namespace Carbon.Platform.Metrics
 {
     [Dataset("Series")]
     [UniqueIndex("name", "granularity")]
-    public class Series
+    public class Series : ISeries
     {
         public Series() { }
 
@@ -15,8 +15,11 @@ namespace Carbon.Platform.Metrics
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
 
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Required", nameof(name));
+
             Id          = id;
-            Name        = name        ?? throw new ArgumentNullException(nameof(name));
+            Name        = name;
             Granularity = granularity ?? throw new ArgumentNullException(nameof(granularity));
         }
 
@@ -28,7 +31,7 @@ namespace Carbon.Platform.Metrics
         [Ascii, StringLength(500)]
         public string Name { get; }
 
-        // e.g. P1M, P5M, P1H, P1D
+        // e.g. PT1M, PT5M, PT1H, P1D
         [Member("granularity")]
         [Ascii, StringLength(20)] // resolution (in seconds)
         public string Granularity { get; }

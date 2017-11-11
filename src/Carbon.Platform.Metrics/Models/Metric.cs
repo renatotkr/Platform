@@ -4,6 +4,7 @@ using Carbon.Data.Annotations;
 namespace Carbon.Platform.Metrics
 {
     [Dataset("Metrics")]
+    [UniqueIndex("ownerId", "name")]
     public class Metric : IMetric
     {
         public Metric() { }
@@ -33,7 +34,7 @@ namespace Carbon.Platform.Metrics
         [Member("id"), Key("metricId")]
         public long Id { get; }
 
-        [Member("name"), Unique]
+        [Member("name")]
         [Ascii, StringLength(100)]
         public string Name { get; }
         
@@ -44,13 +45,13 @@ namespace Carbon.Platform.Metrics
         [StringLength(50)]
         public string Unit { get; }
 
+        [Member("ownerId")]
+        public long OwnerId { get; }
+
         [Member("created")]
         public DateTime Created { get; }
 
         [Member("deleted")]
-        public DateTime? Deleted { get;  }
-
-        [Member("ownerId")]
-        public long OwnerId { get; }
+        public DateTime? Deleted { get; }     
     }
 }

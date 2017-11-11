@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Carbon.Time;
+
 namespace Carbon.Platform.Metrics
 {
     public class MetricDataProcessor : IMetricDataProcessor
@@ -32,10 +34,37 @@ namespace Carbon.Platform.Metrics
             {
                 var series = await seriesService.GetAsync(name);
 
-                points.Add(new SeriesPoint(series.Id, data.Timestamp, data.Value));
+                points.Add(new SeriesPoint(series.Id, AlignToNearestMinute(data.Timestamp), data.Value));
             }
             
             await pointStore.IncrementAsync(points);
+        }
+
+        public async Task ProcessAsync(MetricData[] datas)
+        {
+            var points = new List<SeriesPoint>();
+
+            foreach (var data in datas)
+            {
+                var seriesNames = Aggregates.GetPermutations(data);
+                
+                foreach (var name in seriesNames)
+                {
+                    var series = await seriesService.GetAsync(name);
+
+                    points.Add(new SeriesPoint(series.Id, AlignToNearestMinute(data.Timestamp), data.Value));
+                }
+            }
+
+            await pointStore.IncrementAsync(points);
+        }
+
+
+        public long AlignToNearestMinute(long timestamp)
+        {
+            // align to nearest minute
+
+            return new Timestamp(new Timestamp(timestamp).DateTime.UtcDateTime.ToPrecision(TimeUnit.Minute)).Value;
         }
     }
 }

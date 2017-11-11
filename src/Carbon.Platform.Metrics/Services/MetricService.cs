@@ -4,8 +4,6 @@ using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
 using Carbon.Data.Expressions;
-
-using Carbon.Platform.Resources;
 using Carbon.Platform.Sequences;
 
 namespace Carbon.Platform.Metrics
@@ -25,12 +23,14 @@ namespace Carbon.Platform.Metrics
 
         public async Task<Metric> GetAsync(long id)
         {
-            return await db.Metrics.FindAsync(id) 
-                ?? throw ResourceError.NotFound(ResourceTypes.Metric, id);
+            return await db.Metrics.FindAsync(id);
+            // ?? throw ResourceError.NotFound(ResourceTypes.Metric, id);
         }
 
         public async Task<Metric> GetAsync(string name)
         {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+
             if (!cache.TryGetValue(name, out var metric))
             {
                 metric = await db.Metrics.QueryFirstOrDefaultAsync(
@@ -57,7 +57,10 @@ namespace Carbon.Platform.Metrics
                 id   : id,
                 name : request.Name,
                 type : request.Type,
-                unit : request.Unit);
+                unit : request.Unit
+            );
+
+            await db.Metrics.InsertAsync(metric);
 
             if (request.Dimensions != null)
             {
@@ -73,6 +76,7 @@ namespace Carbon.Platform.Metrics
                 
                 await db.MetricDimensions.InsertAsync(dimensions);
             }
+            
 
             return metric;
         }

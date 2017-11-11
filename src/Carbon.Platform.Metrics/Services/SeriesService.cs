@@ -2,8 +2,8 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using Carbon.Data.Expressions;
-using Carbon.Platform.Resources;
 using Carbon.Time;
 
 namespace Carbon.Platform.Metrics
@@ -23,8 +23,8 @@ namespace Carbon.Platform.Metrics
 
         public async Task<Series> GetAsync(long id)
         {
-            return await db.Series.FindAsync(id) 
-                ?? throw ResourceError.NotFound(ResourceTypes.Metric, id);
+            return await db.Series.FindAsync(id);
+               // ?? throw ResourceError.NotFound(ResourceTypes.Metric, id);
         }
 
         public async Task<Series> GetAsync(string name, string granularity = "PT1M")
@@ -37,17 +37,24 @@ namespace Carbon.Platform.Metrics
 
                 if (series == null)
                 {
-                    series = new Series(
-                        id          : await db.Series.Sequence.NextAsync(),
-                        name        : name,
-                        granularity : granularity
-                    );
-
-                    await db.Series.InsertAsync(series);
+                    series = await CreateAsync(name, granularity);
                 }
 
                 cache.TryAdd((name, granularity), series);
             }
+
+            return series;
+        }
+
+        private async Task<Series> CreateAsync(string name, string granularity)
+        {
+            var series = new Series(
+                id          : await db.Series.Sequence.NextAsync(),
+                name        : name,
+                granularity : granularity
+            );
+
+            await db.Series.InsertAsync(series);
 
             return series;
         }

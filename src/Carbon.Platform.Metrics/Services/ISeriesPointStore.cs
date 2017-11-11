@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Carbon.Time;
 
 namespace Carbon.Platform.Metrics
 {
     public interface ISeriesPointStore
     {
+        Task<IReadOnlyList<DataPoint>> ListAsync(ISeries series, DateRange range);
+
         Task IncrementAsync(IReadOnlyList<SeriesPoint> points);
 
         Task IncrementAsync(SeriesPoint point);
