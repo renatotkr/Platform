@@ -7,27 +7,17 @@ namespace Carbon.Platform.Computing.Tests
         [Theory]
         [InlineData(4395827203, "c3.2xlarge")]
         [InlineData(4429381635, "c3.8xlarge")]
-        [InlineData(4395958275, "c5.2xlarge")]
         [InlineData(4429255432, "hs1.8xlarge")]
         [InlineData(4831903768, "x1.32xlarge")]
+        [InlineData(4362403843, "c5.large")]
+        [InlineData(4395958275, "c5.2xlarge")]
+        [InlineData(4446289923, "c5.9xlarge")]
+        [InlineData(4597284867, "c5.18xlarge")]
         public void NameToIds(long id, string name)
         {
-            Assert.Equal(id, AwsInstanceType.GetId(name).Value);
+            Assert.Equal(id,   AwsInstanceType.GetId(name).Value);
             Assert.Equal(name, AwsInstanceType.GetName(id));
         }
-
-        /*
-        [Fact]
-        public void A()
-        {
-            
-            var q = AwsInstanceTypeHelper.GetId("x1.32xlarge");
-
-            q.ProviderId = 2;
-            
-            Assert.Equal(9126871064, q.Value);
-        }
-        */
     }
 }
 

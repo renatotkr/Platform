@@ -138,7 +138,7 @@ namespace Carbon.Platform.Computing
 
         private static byte GetSizeId(string name)
         {
-            switch(name)
+            switch (name)
             {
                 case "nano"     : return 0; // 0.25
                 case "micro"    : return 1; // 0.5
@@ -149,9 +149,11 @@ namespace Carbon.Platform.Computing
                 case "2xlarge"  : return 6;
                 case "4xlarge"  : return 7;
                 case "8xlarge"  : return 8;
+                case "9xlarge"  : return 9;
                 case "16xlarge" : return 16;
+                case "18xlarge" : return 18;
                 case "32xlarge" : return 32;
-                default         : throw new Exception("unknown name: " + name);
+                default         : throw new Exception("unknown size: " + name);
             }
         }
 
@@ -159,7 +161,6 @@ namespace Carbon.Platform.Computing
         {
             switch (id)
             {
-
                 case 0  : return "nano";
                 case 1  : return "micro"; 
                 case 2  : return "small";
@@ -168,10 +169,7 @@ namespace Carbon.Platform.Computing
                 case 5  : return "xlarge";
                 case 6  : return "2xlarge";
                 case 7  : return "4xlarge";
-                case 8  : return "8xlarge";
-                case 16 : return "16xlarge";
-                case 32 : return "32xlarge";
-                default : throw new Exception("unknown id:" + id);
+                default : return id.ToString() + "xlarge";
             }
         }
     }
