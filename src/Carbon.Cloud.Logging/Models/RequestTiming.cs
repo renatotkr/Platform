@@ -8,6 +8,11 @@ namespace Carbon.Cloud.Logging
     [Dataset("RequestTimings", Schema = "Logs")]
     public class RequestTiming
     {
+        public RequestTiming() { }
+
+        public RequestTiming(Uid requestId, Timing timing)
+            : this(requestId, timing.Name, timing.Start, timing.Duration) { }
+
         public RequestTiming(
             Uid requestId,
             string name,
@@ -27,7 +32,7 @@ namespace Carbon.Cloud.Logging
         [Member("name"), Key]
         [StringLength(50)]
         public string Name { get; }
-
+        
         [Member("start")]
         [TimePrecision(TimePrecision.Millisecond)]
         public TimeSpan Start { get; }
@@ -37,6 +42,8 @@ namespace Carbon.Cloud.Logging
         public TimeSpan Duration { get; }
     }
 }
+
+// TODO: Update start & duration to nanoseconds
 
 // Modeled after the Performance API
 // https://w3c.github.io/user-timing/#dom-performance-measure

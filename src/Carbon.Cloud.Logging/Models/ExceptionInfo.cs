@@ -17,7 +17,8 @@ namespace Carbon.Platform.Diagnostics
         [Member("programId")]
         public long ProgramId { get; set; }
 
-        // Member
+        // [Member("programVersion")]
+        [Ascii, StringLength(1000)]
         public string ProgramVersion { get; set; }
         
         [Member("hostId")]
@@ -45,8 +46,8 @@ namespace Carbon.Platform.Diagnostics
         [Member("context")]
         [StringLength(1000)]
         public JsonObject Context { get; set; }
-
         [Member("issueId"), Indexed]
         public long? IssueId { get; set; }
+
     }
 }

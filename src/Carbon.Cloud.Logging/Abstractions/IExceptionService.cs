@@ -11,6 +11,9 @@ namespace Carbon.Platform.Diagnostics
 
         Task<ExceptionInfo> GetAsync(Uid id);
 
-        Task<IReadOnlyList<ExceptionInfo>> ListAsync(long environmentId, int skip = 0, int take = 100);
+        Task<IReadOnlyList<ExceptionInfo>> ListAsync(
+            long environmentId, 
+            int skip = 0,
+            int take = 100);
     }
 }
