@@ -22,11 +22,11 @@ namespace Carbon.Platform.Hosting
             DomainFlags flags     = default,
             JsonObject properties = null) 
         {
+            Validate.Id(id);
+            Validate.NotNullOrEmpty(name, nameof(name));
+
             #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
+            
             if (ownerId != null && ownerId.Value <= 0)
                 throw new ArgumentException("Must be > 0", nameof(ownerId));
 
@@ -77,8 +77,6 @@ namespace Carbon.Platform.Hosting
         // if null, will forward to the environment for processing
         [Member("originId")]
         public long? OriginId { get; }
-
-        // DefaultRoute?
         
         [Member("flags")]
         public DomainFlags Flags { get; }
@@ -89,7 +87,10 @@ namespace Carbon.Platform.Hosting
         public JsonObject Properties { get; }
 
         #region Counts
-        
+
+        [Member("authorizationCount")]
+        public int AuthorizationCount { get; }
+
         [Member("recordCount")]
         public int RecordCount { get; }
 
@@ -98,6 +99,14 @@ namespace Carbon.Platform.Hosting
 
         #endregion
 
+        #region Flags
+        
+        public bool IsAuthoritative => Flags.HasFlag(DomainFlags.Authoritative);
+
+        public bool IsManaged => Flags.HasFlag(DomainFlags.Managed);
+        
+        #endregion
+        
         #region IResource
 
         ResourceType IResource.ResourceType => ResourceTypes.Domain;
@@ -118,8 +127,7 @@ namespace Carbon.Platform.Hosting
         #endregion
     }
 
-    // OriginType (container, program, ...?)
-
+    /*
     public class EnvironmentRule
     {
         public long Id { get; set; } // environmentId | #
@@ -128,13 +136,11 @@ namespace Carbon.Platform.Hosting
 
         public string Path { get; set; }
 
-        
-        
         // Condition
 
         // OriginId
     }
-
+    */
 }
 
 // A domain may serve as a Zone by answering authoritatively to DNS requests
