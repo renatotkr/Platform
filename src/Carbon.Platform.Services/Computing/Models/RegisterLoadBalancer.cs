@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Computing
 {
-    public struct RegisterLoadBalancer
+    public readonly struct RegisterLoadBalancer
     {
         public RegisterLoadBalancer(string name, long ownerId, ManagedResource resource)
         {

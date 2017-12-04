@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Configuration.Systemd
 {
-    public struct Directive
+    public readonly struct Directive
     {
         public Directive(string name, string value, int order)
         {

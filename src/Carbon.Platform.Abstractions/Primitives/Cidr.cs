@@ -10,7 +10,7 @@ namespace Carbon.Net
     /// Classless Inter-Domain Routing
     /// </summary>
     [DataContract]
-    public struct Cidr
+    public readonly struct Cidr
     {
         public Cidr(IPAddress prefix, int suffix)
         {

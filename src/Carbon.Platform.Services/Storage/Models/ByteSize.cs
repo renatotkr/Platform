@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Storage
 {
-    public struct ByteSize
+    public readonly struct ByteSize
     {
         public static readonly ByteSize Zero = new ByteSize(0);
 

@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Carbon.Platform.Configuration.Docker
 {
-    public struct Command
+    public readonly struct Command
     {
         private Command(CommandType type, string text)
         {
@@ -63,7 +63,7 @@ namespace Carbon.Platform.Configuration.Docker
 
             foreach (var var in vars)
             {
-                if (i > 0) sb.Append(" ");
+                if (i > 0) sb.Append(' ');
 
                 sb.Append(var.Key + "=" + var.Value);
 
@@ -125,30 +125,30 @@ namespace Carbon.Platform.Configuration.Docker
         {
             var sb = new StringBuilder();
 
-            sb.Append("[");
+            sb.Append('[');
 
             int i = 0;
 
             foreach (var p in paramaters)
             {
-                if (i != 0) sb.Append(",");
+                if (i != 0) sb.Append(',');
 
                 if (p is string)
                 {
-                    sb.Append("\"");
+                    sb.Append('"');
                 }
 
                 sb.Append(p);
 
                 if (p is string)
                 {
-                    sb.Append("\"");
+                    sb.Append('"');
                 }
 
                 i++;
             }
 
-            sb.Append("]");
+            sb.Append(']');
 
             return sb.ToString();
         }

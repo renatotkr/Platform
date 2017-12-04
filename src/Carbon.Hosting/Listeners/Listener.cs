@@ -8,7 +8,7 @@ namespace Carbon.Net
     // https://*:5004
 
     [DataContract]
-    public struct Listener : IEquatable<Listener>
+    public readonly struct Listener : IEquatable<Listener>
     {
         public static readonly Listener SSH   = new Listener(ApplicationProtocal.SSH,   22);
         public static readonly Listener HTTP  = new Listener(ApplicationProtocal.HTTP,  80);
@@ -88,7 +88,7 @@ namespace Carbon.Net
 
             if (Scheme != default)
             {
-                sb.Append("/");
+                sb.Append('/');
                 sb.Append(Scheme.Canonicalize());
             }
 

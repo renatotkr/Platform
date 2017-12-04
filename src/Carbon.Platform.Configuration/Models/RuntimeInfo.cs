@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Configuration
 {
-    public struct RuntimeInfo
+    public readonly struct RuntimeInfo
     {
         public RuntimeInfo(string name, string version)
         {

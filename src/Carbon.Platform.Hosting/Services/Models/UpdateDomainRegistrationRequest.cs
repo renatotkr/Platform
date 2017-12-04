@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Hosting
 {
-    public struct UpdateDomainRegistrationRequest
+    public readonly struct UpdateDomainRegistrationRequest
     {
         public UpdateDomainRegistrationRequest(
             long registrationId,

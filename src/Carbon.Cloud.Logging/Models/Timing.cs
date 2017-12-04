@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace Carbon.Cloud.Logging
 {
-    public struct Timing
+    public readonly struct Timing
     {
         public Timing(string name, TimeSpan start, TimeSpan duration)
         {

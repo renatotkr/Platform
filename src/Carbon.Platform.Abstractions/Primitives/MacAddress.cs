@@ -3,7 +3,7 @@ using System;
 
 namespace Carbon.Net
 {
-    public struct MacAddress
+    public readonly struct MacAddress
     {
         private readonly byte[] data;
 
@@ -42,7 +42,7 @@ namespace Carbon.Net
         public override string ToString()
         {
             // TODO: Eliminate allocations here
-            return BitConverter.ToString(data).Replace("-", ":").ToLower();
+            return BitConverter.ToString(data).Replace('-', ':').ToLower();
         }
 
         public byte[] GetAddressBytes() => data;

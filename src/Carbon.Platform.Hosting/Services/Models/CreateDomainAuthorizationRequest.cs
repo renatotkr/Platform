@@ -2,9 +2,12 @@
 
 namespace Carbon.Platform.Hosting
 {
-    public class CreateDomainAuthorizationRequest
+    public readonly struct CreateDomainAuthorizationRequest
     {
-        public CreateDomainAuthorizationRequest(long domainId, DomainAuthorizationType type, JsonObject properties)
+        public CreateDomainAuthorizationRequest(
+            long domainId,
+            DomainAuthorizationType type, 
+            JsonObject properties)
         {
             Validate.Id(domainId, nameof(domainId));
 

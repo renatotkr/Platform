@@ -1,6 +1,6 @@
 ﻿namespace Carbon.CI
 {
-    public struct DeployResult
+    public readonly struct DeployResult
     {
         public DeployResult(bool succeeded, string message = null)
         {

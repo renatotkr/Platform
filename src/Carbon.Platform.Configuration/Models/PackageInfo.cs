@@ -1,6 +1,6 @@
 ﻿namespace Carbon.Platform.Configuration
 {
-    public struct PackageInfo
+    public readonly struct PackageInfo
     {
         public PackageInfo(string name, string version = null)
         {

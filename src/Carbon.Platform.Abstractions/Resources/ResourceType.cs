@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Carbon.Platform.Resources
 {
     [DataContract]
-    public struct ResourceType : IEquatable<ResourceType>
+    public readonly struct ResourceType : IEquatable<ResourceType>
     {
         public ResourceType(string name)
         {
@@ -25,7 +25,7 @@ namespace Carbon.Platform.Resources
 
         public bool Equals(ResourceType other)
         {
-            return this.Name == other.Name;
+            return Name == other.Name;
         }
 
         #endregion

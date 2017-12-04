@@ -3,7 +3,7 @@ using System.Net.Http.Headers;
 
 namespace GitHub
 {
-    public struct OAuth2Token
+    public readonly struct OAuth2Token
     {
         public OAuth2Token(string value)
         {

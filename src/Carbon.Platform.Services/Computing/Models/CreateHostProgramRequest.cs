@@ -1,6 +1,6 @@
 ﻿namespace Carbon.Platform.Computing
 {
-    public struct CreateHostProgramRequest
+    public readonly struct CreateHostProgramRequest
     {
         public CreateHostProgramRequest(IHost host, IProgram program)
         {
@@ -10,6 +10,6 @@
 
         public long HostId { get; }
 
-        public IProgram Program { get; } 
+        public IProgram Program { get; }
     }
 }

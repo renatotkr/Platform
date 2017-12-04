@@ -2,11 +2,11 @@
 
 namespace Carbon.Platform.Configuration
 {
-    public struct OSInfo
+    public readonly struct OSInfo
     {
         public OSInfo(string name, string version)
         {
-            Name    = name ?? throw new ArgumentNullException(nameof(name));
+            Name    = name    ?? throw new ArgumentNullException(nameof(name));
             Version = version ?? throw new ArgumentNullException(nameof(version));
         }
 

@@ -4,7 +4,7 @@ using Carbon.Extensions;
 
 namespace Carbon.Platform.Resources
 {
-    public struct ManagedResource : IEquatable<ManagedResource>
+    public readonly struct ManagedResource : IEquatable<ManagedResource>
     {
         public ManagedResource(ResourceProvider provider, ResourceType type, string id)
             : this(provider, Locations.Global, type, id) { }

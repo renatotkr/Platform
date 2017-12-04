@@ -2,7 +2,7 @@
 
 namespace Carbon.Packaging
 {
-    public struct PutPackageResult
+    public readonly struct PutPackageResult
     {
         public PutPackageResult(
             string name, 

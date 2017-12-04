@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Carbon.Platform.Sequences
 {
     [DataContract]
-    public struct ScopedId
+    public readonly struct ScopedId
     {
         const int ScopeBits    = 42; // ~4.39trillion       
         const int SequenceBits = 22; // 4,194,303 
