@@ -69,23 +69,6 @@ namespace Carbon.Platform.Hosting
                 ?? throw ResourceError.NotFound(ResourceTypes.Domain, id);
         }
 
-        public async Task UpdateAsync(UpdateDomainRequest request)
-        {
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            if (request.RegistrationId != null)
-            {
-                // Ensure the registration exists?
-            }
-
-            await db.Domains.PatchAsync(request.Id, new[] {
-                Change.Replace("registrationId", request.RegistrationId),
-                Change.Replace("environmentId",  request.EnvironmentId),
-                Change.Replace("certificateId",  request.CertificateId)
-            });
-        }
-
         /// <summary>
         /// Binds a domain to an environment
         /// </summary>
@@ -117,6 +100,7 @@ namespace Carbon.Platform.Hosting
 
             await db.Domains.PatchAsync(domain.Id, new[] {
                 Change.Remove("environmentId"),
+                Change.Remove("certificateId"),
                 Change.Remove("originId"),
                 Change.Remove("ownerId")
             });

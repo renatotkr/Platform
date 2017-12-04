@@ -16,8 +16,6 @@ namespace Carbon.Platform.Hosting
 
         Task<Domain> CreateAsync(CreateDomainRequest request);
 
-        Task UpdateAsync(UpdateDomainRequest request);
-
         Task BindAsync(IDomain domain, IEnvironment environment);
 
         Task UnbindAsync(IDomain domain);
