@@ -27,13 +27,13 @@ namespace Carbon.Platform.Management
     {
         private readonly Ec2Client ec2;
         private readonly SsmClient ssm;
-        private readonly ElbClient elb;
 
         private readonly IHostService hostService;
         private readonly IHostTemplateService hostTemplateService;
         private readonly IClusterService clusterService;
         private readonly IImageService imageService;
         private readonly IEventLogger eventLog;
+        private readonly IClusterManager clusterManager;
         private readonly PlatformDb db;
 
         public HostManager(IAwsCredential credential, PlatformDb db, IEventLogger eventLog)
@@ -48,25 +48,29 @@ namespace Carbon.Platform.Management
 
             ec2 = new Ec2Client(region, credential);
             ssm = new SsmClient(region, credential);
-            elb = new ElbClient(region, credential);
 
-            this.hostService         = new HostService(db);
+            var elb = new ElbClient(region, credential);
+
             this.clusterService      = new ClusterService(db);
+            this.clusterManager      = new ClusterManager(clusterService, elb, eventLog);
+            this.hostService         = new HostService(db);
             this.imageService        = new ImageService(db);
             this.hostTemplateService = new HostTemplateService(db);
         }
 
+     
         /*
         public async Task<HostInfo> GetAsync(ResourceProvider provider, string resourceId)
         {
-            var ec2Instance = await ec2.DescribeInstanceAsync(instanceId)
-             ?? throw ResourceError.NotFound(ResourceProvider.Aws, ResourceTypes.Host, instanceId);
+            var ec2Instance = await ec2.DescribeInstanceAsync(resourceId)
+                ?? throw ResourceError.NotFound(ResourceProvider.Aws, ResourceTypes.Host, instanceId);
 
             var request = await GetRegistrationAsync(ec2Instance, cluster);
 
-            return await hostService.RegisterAsync(request); ;
+            return await hostService.RegisterAsync(request);
         }
         */
+
         
         // TODO: Accept bash script?
 
@@ -116,7 +120,7 @@ namespace Carbon.Platform.Management
 
             #endregion
         }
-
+        
         public async Task<HostInfo> RegisterAsync(RegisterHostRequest request)
         {
             #region Preconditions
@@ -149,8 +153,12 @@ namespace Carbon.Platform.Management
 
         public async Task<IHost[]> LaunchAsync(Cluster cluster, ISecurityContext context)
         {
+            #region Preconditions
+
             if (cluster == null)
                 throw new ArgumentNullException(nameof(cluster));
+
+            #endregion
 
             var zoneId = LocationId.Create(cluster.LocationId).WithZoneNumber(1);
 
@@ -166,9 +174,7 @@ namespace Carbon.Platform.Management
             return await LaunchAsync(request, context);;
         }
 
-        public async Task<IHost[]> LaunchAsync(
-            LaunchHostRequest launchRequest,
-            ISecurityContext context)
+        public async Task<IHost[]> LaunchAsync(LaunchHostRequest launchRequest, ISecurityContext context)
         {
             #region Preconditions
 
@@ -306,70 +312,103 @@ namespace Carbon.Platform.Management
 
         public async Task TransitionStateAsync(HostInfo host, HostStatus newStatus)
         {
-            if (host == null)
-                throw new ArgumentNullException(nameof(host));
-            
-            if (host.Status == HostStatus.Pending && newStatus == HostStatus.Running)
-            {
-                var cluster = await clusterService.GetAsync(host.ClusterId);;
-
-                if (cluster.Properties.ContainsKey(ClusterProperties.TargetGroupArn))
-                {
-                    await RegisterWithTargetGroupAsync(host, cluster);;
-                }
-                
-                await db.Hosts.PatchAsync(host.Id, new[] {
-                    Change.Replace("status", newStatus)
-                });;
-
-                await eventLog.CreateAsync(new Event(
-                    action   : "update",
-                    resource : "host#" + host.Id,
-                    properties: JsonObject.FromObject(new {
-                        changes = new {
-                            status = new {
-                                oldValue = host.Status.ToString(),
-                                newValue = newStatus.ToString()
-                            }
-                        }
-                    })
-                ));;
-            }
-        }
-
-        public async Task RegisterWithTargetGroupAsync(HostInfo host, Cluster group)
-        {
             #region Preconditions
 
             if (host == null)
                 throw new ArgumentNullException(nameof(host));
 
-            if (group == null)
-                throw new ArgumentNullException(nameof(group));
+            if (newStatus == default)
+                throw new ArgumentException("Required", nameof(newStatus));
 
             #endregion
 
+            if (host.Status == newStatus) return; // no change
 
-            var registration = new RegisterTargetsRequest(
-                targetGroupArn : group.Properties[ClusterProperties.TargetGroupArn],
-                targets        : new[] { new TargetDescription(id: host.ResourceId) }
-            );
-            
-            // Register the instances with the lb's target group
-            await elb.RegisterTargetsAsync(registration);
+            var cluster = await clusterService.GetAsync(host.ClusterId); ;
+
+            // from pending | suspended
+            if (newStatus == HostStatus.Running)
+            {                
+                // register the host with the cluster
+                await clusterManager.RegisterHostAsync(cluster, host);                 
+            }
+
+            await db.Hosts.PatchAsync(host.Id, new[] {
+                Change.Replace("status", newStatus)
+            });
+
+            #region Logging
 
             await eventLog.CreateAsync(new Event(
-                action   : "addToLoadBalancerTargetGroup",
-                resource : "host#" + host.Id
-            ));;
-        }
+                action      : "update",
+                resource    : "host#" + host.Id,
+                properties  : JsonObject.FromObject(new {
+                    changes = new {
+                        status = new {
+                            oldValue = host.Status.ToString(),
+                            newValue = newStatus.ToString()
+                        }
+                    }
+                })
+            ));
 
-        public async Task TerminateAsync(HostInfo host, TimeSpan cooldown, ISecurityContext context)
+            #endregion
+        }
+        
+        public async Task StartAsync(HostInfo host, TimeSpan cooldown)
         {
             #region Preconditions
 
             if (host == null)
                 throw new ArgumentNullException(nameof(host));
+
+            if (host.IsTerminated)
+                throw new ArgumentException("Must not be terminated", nameof(host));
+
+            #endregion
+
+            await ec2.StartInstancesAsync(new StartInstancesRequest(new[] { host.ResourceId }));
+
+            await TransitionStateAsync(host, HostStatus.Pending); // back to pending...
+
+            // the host will register with the cluster again on boot
+        }
+
+        public async Task StopAsync(HostInfo host, TimeSpan cooldown)
+        {
+            #region Preconditions
+
+            if (host == null)
+                throw new ArgumentNullException(nameof(host));
+
+            #endregion
+
+            if (host.ClusterId > 0)
+            {
+                var cluster = await clusterService.GetAsync(host.ClusterId);
+
+                await clusterManager.DeregisterHostAsync(cluster, host);
+
+                await Task.Delay(cooldown); // wait to allow the connections to drain from the load balancer
+            }
+
+            await ec2.StopInstancesAsync(new StopInstancesRequest(new[] { host.ResourceId }));
+
+            await TransitionStateAsync(host, HostStatus.Suspended);
+        }
+
+        public async Task TerminateAsync(
+            HostInfo host, 
+            TimeSpan cooldown,
+            ISecurityContext context)
+        {
+            #region Preconditions
+
+            if (host == null)
+                throw new ArgumentNullException(nameof(host));
+
+            if (cooldown > TimeSpan.FromMinutes(10))
+                throw new ArgumentException("Must be 10 minutes or less", nameof(cooldown));
 
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
@@ -380,38 +419,19 @@ namespace Carbon.Platform.Management
             {
                 var cluster = await clusterService.GetAsync(host.ClusterId);
 
-                if (cluster.Properties != null && 
-                    cluster.Properties.TryGetValue(ClusterProperties.TargetGroupArn, out var targetGroupArn))
-                {
-                    // Degister the instances from the load balancers target group
-                    await elb.DeregisterTargetsAsync(new DeregisterTargetsRequest(
-                        targetGroupArn: targetGroupArn,
-                        targets: new[] {
-                            new TargetDescription(host.ResourceId)
-                        }
-                    ));
-
-                    await eventLog.CreateAsync(new Event(
-                        action     : "drain",
-                        resource   : "host#" + host.Id,
-                        userId     : context.UserId,
-                        properties : new JsonObject {
-                            { "duration", cooldown.ToString() }
-                        })
-                    );
-
-                    // Cooldown to allow the connections to drain from the load balancer before issuing the termination command
-                    await Task.Delay(cooldown);
-                }
+                await clusterManager.DeregisterHostAsync(cluster, host);
+                
+                await Task.Delay(cooldown); // allow any active connections to drain before issuing a termination command
             }
 
-            var request = new TerminateInstancesRequest(host.ResourceId);
-
-            await ec2.TerminateInstancesAsync(request);;
+            await ec2.TerminateInstancesAsync(
+                new TerminateInstancesRequest(host.ResourceId)
+            );
             
             // Mark the host as terminated
             await db.Hosts.PatchAsync(host.Id, new[] {
-                Change.Replace("terminated", Func("NOW"))
+                Change.Replace("terminated", Func("NOW")),
+                Change.Replace("status", HostStatus.Terminated)
             }, IsNull("terminated"));
 
             #region Logging
@@ -469,7 +489,7 @@ namespace Carbon.Platform.Management
 
             var request = await GetRegistrationAsync(ec2Instance, cluster);
 
-            return await hostService.RegisterAsync(request);;
+            return await hostService.RegisterAsync(request);
         }
 
         private static readonly ResourceProvider aws = ResourceProvider.Aws;
