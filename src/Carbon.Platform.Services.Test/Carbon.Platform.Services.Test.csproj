@@ -11,7 +11,7 @@
     <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj" />
     <ProjectReference Include="..\Carbon.Platform.Client\Carbon.Platform.Client.csproj" />
     <ProjectReference Include="..\Carbon.Platform.Hosting\Carbon.Platform.Hosting.csproj" />
-    <ProjectReference Include="..\Carbon.Platform.Metrics\Carbon.Platform.Metrics.csproj" />
+    <ProjectReference Include="..\Carbon.Platform.Metrics.Services\Carbon.Platform.Metrics.Services.csproj" />
     <ProjectReference Include="..\Carbon.Platform.Services\Carbon.Platform.Services.csproj" />
     <ProjectReference Include="..\Carbon.Platform.Web\Carbon.Platform.Web.csproj" />
     <ProjectReference Include="..\Carbon.Platform\Carbon.Platform.csproj" />

@@ -3,14 +3,14 @@
   <PropertyGroup>
     <AssemblyName>Carbon.Cloud.Logging</AssemblyName>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <VersionPrefix>0.28.1</VersionPrefix>
+    <VersionPrefix>0.29.0</VersionPrefix>
+    <LangVersion>7.2</LangVersion>
 
     <!-- Package Properties -->
     <Authors>iamcarbon</Authors>
     <Copyright>© Jason Nelson</Copyright>
     <Description>Cloud logging services.</Description>
     <PackageTags>cloud;logging;carbon</PackageTags>
-    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

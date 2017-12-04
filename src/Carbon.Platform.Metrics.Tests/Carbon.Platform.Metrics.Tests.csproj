@@ -2,15 +2,18 @@
 
   <PropertyGroup>    
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Carbon.Time" Version="1.5.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Carbon.Platform.Metrics.Services\Carbon.Platform.Metrics.Services.csproj" />
     <ProjectReference Include="..\Carbon.Platform.Metrics\Carbon.Platform.Metrics.csproj" />
   </ItemGroup>
 

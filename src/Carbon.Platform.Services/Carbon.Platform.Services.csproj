@@ -2,8 +2,9 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Services</AssemblyName>
-    <VersionPrefix>0.85.1</VersionPrefix>
+    <VersionPrefix>0.87.0</VersionPrefix>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>7.2</LangVersion>
 
     <!-- Package Details -->
     <Authors>iamcarbon</Authors>
@@ -19,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Carbon.Data.Sql" Version="0.37.0" />
+    <PackageReference Include="Carbon.Data.Sql" Version="0.38.0" />
   </ItemGroup>
 
 </Project>
