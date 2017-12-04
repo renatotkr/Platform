@@ -12,7 +12,7 @@ namespace Carbon.Platform.Tests
         {
             var mac = "0a:7f:32:34:91:94";
 
-            var addr = mac.Replace(":", "-").ToUpper();
+            var addr = mac.Replace(':', '-').ToUpper();
 
             var r1 = PhysicalAddress.Parse(addr);
             var r2 = MacAddress.Parse(mac);

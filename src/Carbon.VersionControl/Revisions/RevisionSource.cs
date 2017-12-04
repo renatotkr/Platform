@@ -32,16 +32,16 @@ namespace Carbon.VersionControl
             if (Provider.Name != "github")
             {
                 sb.Append(Provider.Name);
-                sb.Append(":");
+                sb.Append(':');
             }
 
             sb.Append(AccountName);
-            sb.Append("/");
+            sb.Append('/');
             sb.Append(RepositoryName);
 
             if (Revision != null)
             {
-                sb.Append("#");
+                sb.Append('#');
                 sb.Append(Revision.Value.Name);
             }
 

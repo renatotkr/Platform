@@ -43,7 +43,9 @@ namespace Carbon.Platform.Configuration.Systemd
                 sb.AppendLine();
             }
 
-            sb.Append("[" + name + "]");
+            sb.Append('[');
+            sb.Append(name);
+            sb.Append(']');
 
             foreach (var directive in section.GetDirectives())
             {

@@ -2,7 +2,7 @@
 
 namespace Carbon.Data.Sequences
 {
-    internal struct ScopedId
+    internal readonly struct ScopedId
     {
         const int ScopeBits = 42; // ~4.39trillion [139 years in milliseconds]    
         const int SequenceBits = 22; // 4,194,303 

@@ -141,7 +141,6 @@ namespace Carbon.Cloud.Logging
 
             Serializer.Serialize(ms, request);
 
-
             ms.Position = 0;
      
             var b = Serializer.Deserialize<Request>(ms);

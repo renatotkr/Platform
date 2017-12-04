@@ -12,7 +12,7 @@ namespace Carbon.Building.Web
 
         public static string GetFormat(IBlob file)
         {
-            var formatIndex = file.Name.LastIndexOf(".");
+            var formatIndex = file.Name.LastIndexOf('.');
 
             var format = formatIndex > -1 ? file.Name.Substring(formatIndex + 1) : "";
 

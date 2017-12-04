@@ -77,11 +77,11 @@ namespace TypeScript
         {
             if (sb.Length > 0)
             {
-                sb.Append(" ");
+                sb.Append(' ');
             }
 
             sb.Append(name);
-            sb.Append(" ");
+            sb.Append(' ');
             sb.Append(value);
         }
     }

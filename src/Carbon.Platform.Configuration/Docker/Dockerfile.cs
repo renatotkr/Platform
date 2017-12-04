@@ -84,16 +84,15 @@ namespace Carbon.Platform.Configuration.Docker
 
             if (Tag != null)
             {
-                sb.Append(":");
+                sb.Append(':');
                 sb.Append(Tag);
             }
 
             if (Digest != null)
             {
-                sb.Append(":");
+                sb.Append(':');
                 sb.Append(Digest);
             }
-
 
             sb.AppendLine();
 
@@ -117,18 +116,17 @@ namespace Carbon.Platform.Configuration.Docker
             if (DefaultCommand != null)
             {
                 sb.Append(DefaultCommand.ToString());
-
             }
 
             return sb.ToString();
         }
     }
 
-    public struct Comment
+    public readonly struct Comment
     {
         public Comment(string text)
         {
-            Text = text;
+            Text = text ?? throw new ArgumentNullException(nameof(text));
         }
 
         public string Text { get; }
@@ -142,9 +140,9 @@ namespace Carbon.Platform.Configuration.Docker
 
     public enum Stream
     {
-        STDIN,
-        STDOUT,
-        STDERR
+        STDIN  = 1,
+        STDOUT = 2,
+        STDERR = 3
     }
 }
 

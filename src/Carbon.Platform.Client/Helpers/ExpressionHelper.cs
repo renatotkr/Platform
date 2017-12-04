@@ -14,7 +14,7 @@ namespace Carbon.Data.Expressions
             {
                 case BinaryExpression binary:
                     sb.Append(binary.Left.ToString());
-                    sb.Append("=");
+                    sb.Append('=');
 
                     if (binary.Right is Constant constant)
                     {

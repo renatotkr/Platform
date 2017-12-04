@@ -37,7 +37,7 @@ namespace Carbon.Data
 
             if (version.IsPrerelease)
             {
-                sb.Append("-");
+                sb.Append('-');
                 sb.Append(version.Prerelease);
             }
 
