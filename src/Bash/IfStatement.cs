@@ -43,7 +43,6 @@ namespace Bash
                 WriteBlock(sb, Else);
             }
 
-
             sb.Append("fi");
 
             return sb.ToString();
@@ -55,7 +54,9 @@ namespace Bash
         {
             if (commands.Length == 1)
             {
-                sb.Append(" " + commands[0].ToString() + "; ");
+                sb.Append(' ');
+                sb.Append(commands[0].ToString());
+                sb.Append("; ");
 
                 return false;
             }

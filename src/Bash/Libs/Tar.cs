@@ -32,7 +32,7 @@ namespace Bash.Commands
 
             sb.Append(GetOptionText(options));
 
-            sb.Append(" ");
+            sb.Append(' ');
 
             sb.Append(file);
 
@@ -43,7 +43,8 @@ namespace Bash.Commands
 
             if (directory != null)
             {
-                sb.Append(" -C " + directory);
+                sb.Append(" -C ");
+                sb.Append(directory);
             }
             
             return new Command(sb.ToString(), sudo);
@@ -56,34 +57,33 @@ namespace Bash.Commands
 
             if (options.HasFlag(TarOptions.Extract))
             {
-                sb.Append("x");
+                sb.Append('x');
             }
 
             if (options.HasFlag(TarOptions.Gzip))
             {
-                sb.Append("z");
+                sb.Append('z');
             }
 
             if (options.HasFlag(TarOptions.Create))
             {
-                sb.Append("c");
+                sb.Append('c');
             }
 
             if (options.HasFlag(TarOptions.File))
             {
-                sb.Append("f");
+                sb.Append('f');
             }
 
             if (options.HasFlag(TarOptions.Verbose))
             {
-                sb.Append("v");
+                sb.Append('v');
             }
 
             if (options.HasFlag(TarOptions.PerservePermissions))
             {
-                sb.Append("p");
+                sb.Append('p');
             }
-          
 
             return sb.ToString();
         }

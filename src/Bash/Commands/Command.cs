@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Bash.Commands
 {
-    public struct Command
+    public readonly struct Command
     {
         public static Command Empty = new Command(null);
 
@@ -71,12 +71,12 @@ namespace Bash.Commands
 
             if (options.HasFlag(SymbolicLinkOptions.Force))
             {
-                sb.Append("f");
+                sb.Append('f');
             }
 
-            sb.Append(" ");
+            sb.Append(' ');
             sb.Append(target);
-            sb.Append(" ");
+            sb.Append(' ');
             sb.Append(link);
 
             // -s = symbolic
@@ -106,7 +106,7 @@ namespace Bash.Commands
             }
 
             sb.Append(owner);
-            sb.Append(" ");
+            sb.Append(' ');
             sb.Append(path);
 
             return new Command(sb.ToString(), sudo);

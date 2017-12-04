@@ -33,7 +33,8 @@ namespace Bash.Commands
 
                 if (target != null)
                 {
-                    sb.Append(" " + target);
+                    sb.Append(' ');
+                    sb.Append(target);
                 }
                     
                 return new Command(sb.ToString(), sudo);

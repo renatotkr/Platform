@@ -46,7 +46,7 @@ namespace Bash.Commands
 
             if (args != null)
             {
-                sb.Append(" ");
+                sb.Append(' ');
                 sb.Append(args);
             }
 

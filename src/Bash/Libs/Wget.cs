@@ -40,8 +40,8 @@ namespace Bash.Commands
              return new Command(sb.ToString(), sudo);            
         }
     }
-
-
+    
+    [Flags]
     public enum WgetOptions
     {
         None      = 1,
