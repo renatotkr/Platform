@@ -42,8 +42,7 @@ namespace Carbon.Platform.Computing
             OwnerId       = ownerId;
         }
 
-        // locationId | #
-        [Member("id"), Key]
+        [Member("id"), Key]  // locationId | #
         public long Id { get; }
 
         [Member("type")]
@@ -114,10 +113,20 @@ namespace Carbon.Platform.Computing
 
         #endregion
 
-        #region Helpers
+        #region States
 
         [IgnoreDataMember]
         public bool IsTerminated => Terminated != null;
+
+        [IgnoreDataMember]
+        public bool IsRunning => Status == HostStatus.Running;
+
+        [IgnoreDataMember]
+        public bool IsSuspended => Status == HostStatus.Suspended;
+
+        #endregion
+
+        #region Helpers
 
         private IPAddress publicIp;
         private IPAddress privateIp;
