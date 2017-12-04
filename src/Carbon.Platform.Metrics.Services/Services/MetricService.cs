@@ -40,7 +40,7 @@ namespace Carbon.Platform.Metrics
                 // create on the fly
                 if (metric == null)
                 {
-                    metric = await CreateAsync(new CreateMetricRequest(name, MetricType.Delta, "count", null));
+                    metric = await CreateAsync(new CreateMetricRequest(name, 1, MetricType.Delta, "count", null));
                 }
 
                 cache.TryAdd(name, metric);
@@ -76,7 +76,6 @@ namespace Carbon.Platform.Metrics
                 
                 await db.MetricDimensions.InsertAsync(dimensions);
             }
-            
 
             return metric;
         }

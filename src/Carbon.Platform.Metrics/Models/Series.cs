@@ -6,7 +6,7 @@ namespace Carbon.Platform.Metrics
 {
     [Dataset("Series")]
     [UniqueIndex("name", "granularity")]
-    public class Series : ISeries
+    public class Series : ITimeSeries
     {
         public Series() { }
 
@@ -18,9 +18,12 @@ namespace Carbon.Platform.Metrics
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("Required", nameof(name));
 
+            if (string.IsNullOrEmpty(granularity))
+                throw new ArgumentException("Required", nameof(granularity));
+
             Id          = id;
             Name        = name;
-            Granularity = granularity ?? throw new ArgumentNullException(nameof(granularity));
+            Granularity = granularity;
         }
 
         [Member("id"), Key("seriesId", cacheSize: 100)]
@@ -33,7 +36,7 @@ namespace Carbon.Platform.Metrics
 
         // e.g. PT1M, PT5M, PT1H, P1D
         [Member("granularity")]
-        [Ascii, StringLength(20)] // resolution (in seconds)
+        [Ascii, StringLength(20)]
         public string Granularity { get; }
 
         // 31,536,000 seconds in a year
@@ -61,6 +64,7 @@ namespace Carbon.Platform.Metrics
     // acceleration     | ???
 }
 
+// resolution (in seconds)
 
 /*
 A time series is a series of data points indexed (or listed or graphed) in time order. 

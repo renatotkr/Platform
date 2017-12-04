@@ -3,7 +3,7 @@
 namespace Carbon.Platform.Sequences
 {
     [DataContract]
-    internal struct Range
+    internal readonly struct Range
     {
         public Range(long start, long end)
         {

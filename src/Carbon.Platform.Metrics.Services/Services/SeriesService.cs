@@ -21,29 +21,41 @@ namespace Carbon.Platform.Metrics
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public async Task<Series> GetAsync(long id)
+        // Series objects are immutable -- consider caching here.
+
+        public async ValueTask<Series> GetAsync(long id)
         {
             return await db.Series.FindAsync(id);
                // ?? throw ResourceError.NotFound(ResourceTypes.Metric, id);
         }
 
-        public async Task<Series> GetAsync(string name, string granularity = "PT1M")
+        public async ValueTask<Series> GetAsync(string name, string granularity = "PT1M")
         {
+            #region Preconditions
+
+            if (name == null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            #endregion
+
             if (!cache.TryGetValue((name, granularity), out var series))
             {
-                series = await db.Series.QueryFirstOrDefaultAsync(
-                    And(Eq("name", name), Eq("granularity", granularity))
-                );
-
-                if (series == null)
-                {
-                    series = await CreateAsync(name, granularity);
-                }
-
+                series = await FindAsync(name, granularity) 
+                      ?? await CreateAsync(name, granularity);
+                
                 cache.TryAdd((name, granularity), series);
             }
 
             return series;
+        }
+
+        public Task<Series> FindAsync(string name, string granularity = "PT1M")
+        {
+             return db.Series.QueryFirstOrDefaultAsync(
+                And(Eq("name", name), Eq("granularity", granularity))
+            );
         }
 
         private async Task<Series> CreateAsync(string name, string granularity)
@@ -76,7 +88,5 @@ namespace Carbon.Platform.Metrics
             // change from 1m Granularity to 5 minute Granularity
         }
         */
-
-      
     }
 }

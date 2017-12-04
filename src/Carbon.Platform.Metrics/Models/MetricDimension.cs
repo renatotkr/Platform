@@ -10,11 +10,15 @@ namespace Carbon.Platform.Metrics
 
         public MetricDimension(long id, string name)
         {
+            #region Preconditions
+
             if (id <= 0)
                 throw new ArgumentException("Must be > 0", nameof(id));
 
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("Required", nameof(name));
+
+            #endregion
 
             Id       = id;
             Name     = name;

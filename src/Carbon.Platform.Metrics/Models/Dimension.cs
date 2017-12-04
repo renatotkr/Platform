@@ -1,13 +1,15 @@
-﻿namespace Carbon.Platform.Metrics
+﻿using Carbon.Extensions;
+
+namespace Carbon.Platform.Metrics
 {
-    public struct Dimension
+    public readonly struct Dimension
     {
         public Dimension(string name, long value)
             : this(name, value.ToString()) { }
 
         public Dimension(string name, string value)
         {
-            Name = name;
+            Name  = name;
             Value = value;
         }
 
@@ -23,12 +25,11 @@
         // a=b
         public static Dimension Parse(string text)
         {
-            var segments = text.Split('=');
+            var segments = text.Split(Seperators.Equal);
 
             return new Dimension(segments[0], segments[1]);
         }
     }
 }
 
-// Google calls these labels
-// Time series db calls them tags
+// AKA labels or tags

@@ -3,7 +3,7 @@
 namespace Carbon.Platform.Metrics
 {
     [Dataset("SeriesPoints")]
-    public struct SeriesPoint
+    public readonly struct SeriesPoint
     {
         public SeriesPoint(long seriesId, long timestamp, double value)
         {

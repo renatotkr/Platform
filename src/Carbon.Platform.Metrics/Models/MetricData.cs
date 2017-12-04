@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Text;
 
+using Carbon.Extensions;
+
 namespace Carbon.Platform.Metrics
 {
-    public struct MetricData
+    public readonly struct MetricData
     {
         public MetricData(
             string name,
@@ -12,7 +14,7 @@ namespace Carbon.Platform.Metrics
             double value,
             long timestamp)
         {
-            Name       = name;
+            Name       = name ?? throw new ArgumentNullException(nameof(name));
             Dimensions = dimensions;
             Unit       = unit;
             Value      = value;
@@ -31,17 +33,17 @@ namespace Carbon.Platform.Metrics
         
         public static MetricData Parse(string text)
         {
-            var segments = text.Split(' ');
+            var segments = text.Split(Seperators.Space);
 
-            var labels     = segments[0].Split(',');
-            var dimensions = ParseLabels(labels);
-            var fields     = ParseFields(segments[1].Split(','));
+            var labels        = segments[0].Split(Seperators.Comma);
+            var dimensions    = ParseLabels(labels);
+            var (unit, value) = ParseFields(segments[1].Split(Seperators.Comma));
           
             return new MetricData(
                 name        : labels[0],
-                dimensions  : ParseLabels(segments[0].Split(',')),
-                unit        : fields.unit,
-                value       : fields.value,
+                dimensions  : ParseLabels(segments[0].Split(Seperators.Comma)),
+                unit        : unit,
+                value       : value,
                 timestamp   : long.Parse(segments[2]));
         }
 
@@ -89,10 +91,10 @@ namespace Carbon.Platform.Metrics
             {
                 foreach (var dimension in Dimensions)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
 
                     sb.Append(dimension.Name);
-                    sb.Append("=");
+                    sb.Append('=');
                     sb.Append(dimension.Value);
                 }
             }
@@ -101,7 +103,7 @@ namespace Carbon.Platform.Metrics
 
             sb.Append(Value);
 
-            sb.Append(" ");
+            sb.Append(' ');
 
             sb.Append(Timestamp); // in nanos
 

@@ -18,9 +18,9 @@ namespace Carbon.Platform.Metrics
 
         public IDbContext Context { get; }
 
-        public Dataset<Metric, long>                    Metrics          { get; }
-        public Dataset<MetricDimension, (long, string)> MetricDimensions { get; }
-        public Dataset<Series, long>                    Series           { get; }
-        public Dataset<SeriesPoint, (long, long)>       SeriesPoints     { get; }
+        public Dataset<Metric, long>                                  Metrics          { get; }
+        public Dataset<MetricDimension, (long metricId, string name)> MetricDimensions { get; }
+        public Dataset<Series, long>                                  Series           { get; }
+        public Dataset<SeriesPoint, (long seriesId, long timestamp)>  SeriesPoints     { get; }
     }
 }

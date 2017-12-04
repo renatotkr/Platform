@@ -2,15 +2,31 @@
 
 namespace Carbon.Platform.Metrics
 {
-    public class CreateMetricRequest
+    public readonly struct CreateMetricRequest
     {
         public CreateMetricRequest(
             string name,
+            long ownerId,
             MetricType type,
             string unit,
-            string[] dimensions)
+            string[] dimensions = null)
         {
-            Name       = name ?? throw new ArgumentNullException(nameof(name));
+            #region Preconditions
+
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentException("Required", nameof(name));
+            }
+
+            if (string.IsNullOrEmpty(unit))
+            {
+                throw new ArgumentException("Required", nameof(unit));
+            }
+
+            #endregion
+
+            Name       = name ;
+            OwnerId    = ownerId;
             Type       = type;
             Unit       = unit ?? throw new ArgumentNullException(nameof(unit));
             Dimensions = dimensions;
@@ -24,7 +40,7 @@ namespace Carbon.Platform.Metrics
 
         public string[] Dimensions { get; }
         
-        public long OwnerId { get; set; }
+        public long OwnerId { get; }
     }
 }
 

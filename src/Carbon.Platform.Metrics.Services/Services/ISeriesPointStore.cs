@@ -6,7 +6,7 @@ namespace Carbon.Platform.Metrics
 {
     public interface ISeriesPointStore
     {
-        Task<IReadOnlyList<DataPoint>> ListAsync(ISeries series, DateRange range);
+        Task<IReadOnlyList<DataPoint>> ListAsync(ITimeSeries series, DateRange range);
 
         Task IncrementAsync(IReadOnlyList<SeriesPoint> points);
 

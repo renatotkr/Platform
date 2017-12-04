@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Carbon.Platform.Metrics.Services</AssemblyName>
+    <VersionPrefix>0.2.0</VersionPrefix>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <LangVersion>7.2</LangVersion>
+    
+    <!-- Package Info-->
+    <Authors>iamcarbon</Authors>
+    <Copyright>© Jason Nelson</Copyright>
+    <Description>Metric primitives.</Description>
+    <PackageTags>platform;metrics;carbon</PackageTags>
+    <PackageLicenseUrl>https://github.com/carbon/Platform/blob/master/LICENCE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/carbon/platform</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Carbon.Data.Sql" Version="0.38.0" />
+    <PackageReference Include="Carbon.Time" Version="1.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Carbon.Platform.Metrics\Carbon.Platform.Metrics.csproj" />
+  </ItemGroup>
+
+</Project>

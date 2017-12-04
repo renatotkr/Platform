@@ -5,8 +5,6 @@ namespace Carbon.Platform.Metrics
 {
     public static class Aggregates
     {
-        // Cube
-
         public static IEnumerable<string> GetPermutations(MetricData data, int skip = 0)
         {
             var sb = new StringBuilder();
@@ -22,7 +20,7 @@ namespace Carbon.Platform.Metrics
             {
                 if (i >= skip)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
 
                     sb.Append(data.Dimensions[i].ToString());
 
@@ -36,23 +34,25 @@ namespace Carbon.Platform.Metrics
                 {
                     yield return permutation;
                 }
-            }            
+            }
         }
     }
-
-    // Stats (Mean, Median, Minimum, Maximum, Average)
-    //  The number of possible aggregations is determined by every possible combination of dimension granularities. 
-
-    // https://en.wikipedia.org/wiki/Aggregate_(data_warehouse)
-
-    // rollup
-
-    // get
-
-    // https://en.wikipedia.org/wiki/Aggregate_(data_warehouse)
-
-    // a, b, c
-    // a, b
-    // a
-    // a, c
 }
+
+// Cube
+
+
+//  The number of possible aggregations is determined by every possible combination of dimension granularities. 
+
+// https://en.wikipedia.org/wiki/Aggregate_(data_warehouse)
+
+// rollup
+
+// get
+
+// https://en.wikipedia.org/wiki/Aggregate_(data_warehouse)
+
+// a, b, c
+// a, b
+// a
+// a, c

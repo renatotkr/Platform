@@ -34,7 +34,7 @@ namespace Carbon.Platform.Metrics
             {
                 var series = await seriesService.GetAsync(name);
 
-                points.Add(new SeriesPoint(series.Id, AlignToNearestMinute(data.Timestamp), data.Value));
+                points.Add(new SeriesPoint(series.Id, AlignToGranularity(data.Timestamp), data.Value));
             }
             
             await pointStore.IncrementAsync(points);
@@ -52,19 +52,18 @@ namespace Carbon.Platform.Metrics
                 {
                     var series = await seriesService.GetAsync(name);
 
-                    points.Add(new SeriesPoint(series.Id, AlignToNearestMinute(data.Timestamp), data.Value));
+                    points.Add(new SeriesPoint(series.Id, AlignToGranularity(data.Timestamp), data.Value));
                 }
             }
 
             await pointStore.IncrementAsync(points);
         }
-
-
-        public long AlignToNearestMinute(long timestamp)
+        
+        private static long AlignToGranularity(long timestamp, TimeUnit unit = TimeUnit.Minute)
         {
-            // align to nearest minute
-
-            return new Timestamp(new Timestamp(timestamp).DateTime.UtcDateTime.ToPrecision(TimeUnit.Minute)).Value;
+            return new Timestamp(new Timestamp(timestamp).DateTime.UtcDateTime.ToPrecision(unit)).Value;
         }
     }
 }
+
+// Granularity: the scale or level of detail present in a set of data or other phenomenon.

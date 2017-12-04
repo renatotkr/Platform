@@ -19,6 +19,9 @@ namespace Carbon.Platform.Metrics
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("Required", nameof(name));
 
+            if (name.Length > 100)
+                throw new ArgumentException("May not exceed 100 characters", nameof(name));
+
             if (string.IsNullOrEmpty(unit))
                 throw new ArgumentException("Required", nameof(unit));
 
@@ -45,7 +48,7 @@ namespace Carbon.Platform.Metrics
         [StringLength(50)]
         public string Unit { get; }
 
-        [Member("ownerId")]
+        [Member("ownerId"), Indexed]
         public long OwnerId { get; }
 
         [Member("created")]

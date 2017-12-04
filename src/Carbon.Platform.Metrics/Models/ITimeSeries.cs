@@ -1,6 +1,6 @@
 ﻿namespace Carbon.Platform.Metrics
 {
-    public interface ISeries
+    public interface ITimeSeries
     {
         long Id { get; }
 

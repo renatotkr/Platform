@@ -27,7 +27,7 @@ transfer,type=egress".Trim(), string.Join(Environment.NewLine, a));
         }
 
 
-        public static string GetA(MetricData data)
+        public static string GetA(in MetricData data)
         {
             var sb = new StringBuilder();
 
@@ -37,10 +37,10 @@ transfer,type=egress".Trim(), string.Join(Environment.NewLine, a));
             {
                 foreach (var dimension in data.Dimensions)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
 
                     sb.Append(dimension.Name);
-                    sb.Append("=");
+                    sb.Append('=');
                     sb.Append(dimension.Value);
                 }
             }

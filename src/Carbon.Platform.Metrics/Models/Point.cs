@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Metrics
 {
-    public struct DataPoint
+    public readonly struct DataPoint
     {
         public DataPoint(long timestamp, double value)
         {
