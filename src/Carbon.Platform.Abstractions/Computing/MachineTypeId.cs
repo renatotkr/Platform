@@ -89,7 +89,7 @@ namespace Carbon.Platform.Computing
                 sb.Append(a.Generation);
             }
 
-            sb.Append(".");
+            sb.Append('.');
 
             sb.Append(GetSizeName(a.MachineSize));
 

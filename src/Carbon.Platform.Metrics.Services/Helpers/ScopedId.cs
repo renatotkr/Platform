@@ -21,7 +21,7 @@ namespace Carbon.Platform.Sequences
         }
 
         [DataMember(Name = "value", Order = 1)]
-        public ulong Value { get; }
+        public readonly ulong Value;
 
         public long ScopeId => (long)(Value >> SequenceBits);
 

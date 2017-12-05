@@ -46,7 +46,7 @@ namespace Carbon.CI
                 programVersion : request.Version,
                 stream         : request.Package.Stream,
                 format         : request.Package.Format,
-                sha256         : request.Package.SHA256,
+                sha256         : request.Package.Sha256,
                 dekId          : request.Package.DekId
             ), context);
 

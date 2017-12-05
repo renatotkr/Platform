@@ -44,7 +44,7 @@ namespace Carbon.CI
         {
             Stream = stream ?? throw new ArgumentNullException(nameof(stream));
             Format = format;
-            SHA256 = sha256 ?? throw new ArgumentNullException(nameof(sha256));
+            Sha256 = sha256 ?? throw new ArgumentNullException(nameof(sha256));
             DekId  = dekId;
         }
 
@@ -53,7 +53,7 @@ namespace Carbon.CI
         // zip || tar.gz
         public ArchiveFormat Format { get; }
 
-        public byte[] SHA256 { get; }
+        public byte[] Sha256 { get; }
 
         public Uid? DekId { get; }
     }

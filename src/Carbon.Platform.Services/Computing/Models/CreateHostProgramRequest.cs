@@ -1,6 +1,6 @@
 ﻿namespace Carbon.Platform.Computing
 {
-    public readonly struct CreateHostProgramRequest
+    public class CreateHostProgramRequest
     {
         public CreateHostProgramRequest(IHost host, IProgram program)
         {

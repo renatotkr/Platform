@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace Carbon.Platform
 {
-    public struct MemoryInfo
+    public readonly struct MemoryInfo
     {
         public MemoryInfo(long total, long available)
         {

@@ -4,9 +4,7 @@ namespace Carbon.Platform.Hosting
 {
     public readonly struct UpdateDomainRegistrationRequest
     {
-        public UpdateDomainRegistrationRequest(
-            long registrationId,
-            DateTime expires)
+        public UpdateDomainRegistrationRequest(long registrationId, DateTime expires)
         {
             Validate.Id(registrationId, nameof(registrationId));
 

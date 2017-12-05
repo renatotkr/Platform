@@ -214,10 +214,10 @@ namespace Carbon.Platform.Resources
 
         #region IEquatable
 
-        bool IEquatable<ManagedResource>.Equals(ManagedResource other) => 
-            LocationId == other.LocationId
-            && Type.Name == other.Type.Name
-            && ResourceId == other.ResourceId;
+        public bool Equals(ManagedResource other) => 
+            LocationId == other.LocationId && 
+            Type.Name == other.Type.Name && 
+            ResourceId == other.ResourceId;
 
         #endregion
     }

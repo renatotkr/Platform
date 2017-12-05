@@ -10,8 +10,10 @@ namespace Carbon.Platform
         public static readonly ResourceProvider Aws          = new ResourceProvider(2,  "aws",   "AWS",   "amazonaws.com");
         public static readonly ResourceProvider Gcp          = new ResourceProvider(3,  "gcp",   "GCP",   "cloud.google.com");
         public static readonly ResourceProvider Azure        = new ResourceProvider(4,  "azure", "Azure", "azure.microsoft.com");
-        public static readonly ResourceProvider DigitalOcean = new ResourceProvider(10, "do",    "Digital Ocean", "digitalocean.com");
+        // 5 = softlayer
 
+        public static readonly ResourceProvider DigitalOcean = new ResourceProvider(10, "do",    "Digital Ocean", "digitalocean.com");
+        
         public static readonly ResourceProvider GCore        = new ResourceProvider(105,  "gcore",  "GCore",  "gcore.lu");
         public static readonly ResourceProvider Vultr        = new ResourceProvider(106,  "vultr",  "Vultr",  "vultr.com");
         public static readonly ResourceProvider Wasabi       = new ResourceProvider(107,  "wasabi", "Wasabi", "wasabi.com");

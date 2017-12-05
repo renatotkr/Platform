@@ -14,8 +14,8 @@ namespace Carbon.Platform.Hosting
             Value = value ?? throw new ArgumentNullException(nameof(value));
         }
 
-        public long Id { get; } // RecordId
-        
-        public IRecord Value { get; } 
+        public long Id { get; }
+
+        public IRecord Value { get; }
     }
 }

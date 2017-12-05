@@ -3,7 +3,7 @@
 namespace Carbon.Platform.Metrics
 {
     [Dataset("MetricRetentionPolicies")]
-    public readonly struct MetricRetentionPolicy
+    public class MetricRetentionPolicy
     {
         public MetricRetentionPolicy(long metricId, string granularity, string duration)
         {

@@ -1,10 +1,12 @@
-﻿namespace Carbon.Platform.Configuration
+﻿using System;
+
+namespace Carbon.Platform.Configuration
 {
     public readonly struct PackageInfo
     {
         public PackageInfo(string name, string version = null)
         {
-            Name    = name;
+            Name = name ?? throw new ArgumentNullException(nameof(name));
             Version = version;
         }
 
