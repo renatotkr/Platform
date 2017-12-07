@@ -37,7 +37,7 @@ namespace Bash.Commands
                 sb.Append(destination);
             }
 
-             return new Command(sb.ToString(), sudo);            
+            return new Command(sb.ToString(), sudo);            
         }
     }
     

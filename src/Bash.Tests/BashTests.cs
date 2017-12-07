@@ -14,8 +14,7 @@ namespace Bash.Tests
         [Fact]
         public void CreateScript()
         {
-            var script = new BashScript
-            {                
+            var script = new BashScript {                
                 Comment("Setup environment"),
 
                 Set("INSTANCE_ID", "$(curl -s http://169.254.169.254/latest/meta-data/instance-id)"),
@@ -59,7 +58,6 @@ namespace Bash.Tests
                     sudo: true
                 ),
 
-                
                 Nginx.Reload(),
 
                 // Setup program directories

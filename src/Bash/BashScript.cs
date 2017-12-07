@@ -43,15 +43,9 @@ namespace Bash
 
         #region IEnumerable
 
-        IEnumerator<Command> IEnumerable<Command>.GetEnumerator()
-        {
-            return commands.GetEnumerator();
-        }
+        IEnumerator<Command> IEnumerable<Command>.GetEnumerator() => commands.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return commands.GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => commands.GetEnumerator();
 
         #endregion
     }

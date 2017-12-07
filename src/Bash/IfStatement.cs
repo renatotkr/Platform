@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace Bash
 {
@@ -6,7 +7,10 @@ namespace Bash
 
     public class IfStatement
     {
-        public IfStatement(BashExpression condition, Command[] then, Command[] elseThen = null)
+        public IfStatement(
+            BashExpression condition, 
+            Command[] then, 
+            Command[] elseThen = null)
         {
             Condition = condition;
             Then      = then;
@@ -81,7 +85,7 @@ namespace Bash
     {
         public ElIfStatement(BashExpression condition, Command then)
         {
-            Condition = condition;
+            Condition = condition ?? throw new ArgumentNullException(nameof(condition));
             Then = then;
         }
 

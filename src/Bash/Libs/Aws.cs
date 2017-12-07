@@ -10,7 +10,7 @@ namespace Bash.Commands
             public static Command Copy(
                 string source, 
                 string target, 
-                AwsOptions options = AwsOptions.None, 
+                AwsOptions options = default, 
                 bool sudo = false)
             {
                 #region Preconditions

@@ -1,20 +1,17 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace Bash.Commands
 {
     public static class Apt
     {
-        public static Command Update() =>
-            Command("update");
+        public static Command Update() => Command("update");
 
-        public static Command Upgrade() =>
-            Command("upgrade");
+        public static Command Upgrade() => Command("upgrade");
 
-        public static Command Check() =>
-            Command("check");
+        public static Command Check() => Command("check");
 
-        public static Command Clean() => 
-            Command("clean");
+        public static Command Clean() => Command("clean");
 
         public static Command Install(params string[] packageNames)
         {
@@ -25,7 +22,7 @@ namespace Bash.Commands
 
         public static Command Remove(string packageName)
         {
-            return Command($"remove", packageName, options: AptOptions.Yes);
+            return Command("remove", packageName, options: AptOptions.Yes);
         }
 
         #region Helpers
@@ -33,7 +30,8 @@ namespace Bash.Commands
         private static Command Command(
             string commandName, 
             string args = null, 
-            bool sudo = true, AptOptions options = AptOptions.None)
+            bool sudo = true, 
+            AptOptions options = default)
         {
             var sb = new StringBuilder("apt ");
 
@@ -56,6 +54,7 @@ namespace Bash.Commands
         #endregion
     }
 
+    [Flags]
     public enum AptOptions
     {
         None          = 0,
