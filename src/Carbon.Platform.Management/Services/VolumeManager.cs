@@ -25,6 +25,8 @@ namespace Carbon.Platform.Services
             string resourceId,
             IHost host = null)
         {
+            Validate.NotNull(resourceId, nameof(resourceId));
+
             var volume = await volumeService.FindAsync(provider, resourceId);;
             
             // If the volume isn't register, register it now...

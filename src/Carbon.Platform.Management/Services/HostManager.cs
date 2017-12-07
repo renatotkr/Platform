@@ -23,7 +23,7 @@ namespace Carbon.Platform.Management
 {
     using static Expression;
 
-    public class HostManager
+    public class HostManager : IHostManager
     {
         private readonly Ec2Client ec2;
         private readonly SsmClient ssm;
@@ -36,20 +36,19 @@ namespace Carbon.Platform.Management
         private readonly IClusterManager clusterManager;
         private readonly PlatformDb db;
 
-        public HostManager(IAwsCredential credential, PlatformDb db, IEventLogger eventLog)
+        public HostManager(IAwsCredential awsCredential, PlatformDb db, IEventLogger eventLog)
         {
-            if (credential == null)
-                throw new ArgumentNullException(nameof(credential));
-
+            Validate.NotNull(awsCredential, nameof(awsCredential));
+            
             this.db = db ?? throw new ArgumentNullException(nameof(db));
             this.eventLog = eventLog ?? throw new ArgumentNullException(nameof(eventLog));
 
             var region = AwsRegion.USEast1; // TODO: Configurable
 
-            ec2 = new Ec2Client(region, credential);
-            ssm = new SsmClient(region, credential);
+            ec2 = new Ec2Client(region, awsCredential);
+            ssm = new SsmClient(region, awsCredential);
 
-            var elb = new ElbClient(region, credential);
+            var elb = new ElbClient(region, awsCredential);
 
             this.clusterService      = new ClusterService(db);
             this.clusterManager      = new ClusterManager(clusterService, elb, eventLog);
@@ -57,37 +56,14 @@ namespace Carbon.Platform.Management
             this.imageService        = new ImageService(db);
             this.hostTemplateService = new HostTemplateService(db);
         }
-
-     
-        /*
-        public async Task<HostInfo> GetAsync(ResourceProvider provider, string resourceId)
-        {
-            var ec2Instance = await ec2.DescribeInstanceAsync(resourceId)
-                ?? throw ResourceError.NotFound(ResourceProvider.Aws, ResourceTypes.Host, instanceId);
-
-            var request = await GetRegistrationAsync(ec2Instance, cluster);
-
-            return await hostService.RegisterAsync(request);
-        }
-        */
-
         
         // TODO: Accept bash script?
 
         public async Task RunCommandAsync(string commandText, IEnvironment environment, ISecurityContext context)
         {
-            #region Preconditions
-
-            if (commandText == null)
-                throw new ArgumentNullException(nameof(commandText));
-
-            if (environment == null)
-                throw new ArgumentNullException(nameof(environment));
-
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
-            #endregion
+            Validate.NotNullOrEmpty(commandText, nameof(commandText));
+            Validate.NotNull(environment,        nameof(environment));
+            Validate.NotNull(context,            nameof(context));
 
             var commands = CommandHelper.ToLines(commandText);
 
@@ -100,7 +76,9 @@ namespace Carbon.Platform.Management
 
             var request = new SendCommandRequest {
                 DocumentName = "AWS-RunShellScript",
-                Targets      = new[] { new CommandTarget("tag:envId", values: new[] { environment.Id.ToString() }) },
+                Targets      = new[] {
+                                    new CommandTarget("tag:envId", values: new[] { environment.Id.ToString() })
+                               },
                 Parameters   = parameters
             };
 
@@ -123,12 +101,7 @@ namespace Carbon.Platform.Management
         
         public async Task<HostInfo> RegisterAsync(RegisterHostRequest request)
         {
-            #region Preconditions
-
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            #endregion
+            Validate.NotNull(request, nameof(request));
 
             var provider = ResourceProvider.Get(request.Resource.ProviderId);
 
@@ -136,11 +109,6 @@ namespace Carbon.Platform.Management
             
             if (host == null)
             {
-                // Ensure the cluster exists
-                var cluster = request.ClusterId != 0
-                    ? await clusterService.GetAsync(request.ClusterId)
-                    : null;
-
                 host = await hostService.RegisterAsync(request);
             }
             else
@@ -153,12 +121,8 @@ namespace Carbon.Platform.Management
 
         public async Task<IHost[]> LaunchAsync(Cluster cluster, ISecurityContext context)
         {
-            #region Preconditions
-
-            if (cluster == null)
-                throw new ArgumentNullException(nameof(cluster));
-
-            #endregion
+            Validate.NotNull(cluster, nameof(cluster));
+            Validate.NotNull(context, nameof(context));
 
             var zoneId = LocationId.Create(cluster.LocationId).WithZoneNumber(1);
 
@@ -176,15 +140,8 @@ namespace Carbon.Platform.Management
 
         public async Task<IHost[]> LaunchAsync(LaunchHostRequest launchRequest, ISecurityContext context)
         {
-            #region Preconditions
-
-            if (launchRequest == null)
-                throw new ArgumentNullException(nameof(launchRequest));
-
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
-            #endregion
+            Validate.NotNull(launchRequest, nameof(launchRequest));
+            Validate.NotNull(context, nameof(context));
 
             var zoneId = LocationId.Create(launchRequest.Location.Id);
 
@@ -314,8 +271,7 @@ namespace Carbon.Platform.Management
         {
             #region Preconditions
 
-            if (host == null)
-                throw new ArgumentNullException(nameof(host));
+            Validate.NotNull(host, nameof(host));
 
             if (newStatus == default)
                 throw new ArgumentException("Required", nameof(newStatus));
@@ -336,38 +292,20 @@ namespace Carbon.Platform.Management
             await db.Hosts.PatchAsync(host.Id, new[] {
                 Change.Replace("status", newStatus)
             });
-
-            #region Logging
-
-            await eventLog.CreateAsync(new Event(
-                action      : "update",
-                resource    : "host#" + host.Id,
-                properties  : JsonObject.FromObject(new {
-                    changes = new {
-                        status = new {
-                            oldValue = host.Status.ToString(),
-                            newValue = newStatus.ToString()
-                        }
-                    }
-                })
-            ));
-
-            #endregion
         }
         
         public async Task StartAsync(HostInfo host, TimeSpan cooldown)
         {
             #region Preconditions
 
-            if (host == null)
-                throw new ArgumentNullException(nameof(host));
+            Validate.NotNull(host, nameof(host));
 
             if (host.IsTerminated)
                 throw new ArgumentException("Must not be terminated", nameof(host));
 
             #endregion
 
-            await ec2.StartInstancesAsync(new StartInstancesRequest(new[] { host.ResourceId }));
+            await ec2.StartInstancesAsync(new StartInstancesRequest(host.ResourceId));
 
             await TransitionStateAsync(host, HostStatus.Pending); // back to pending...
 
@@ -376,12 +314,7 @@ namespace Carbon.Platform.Management
 
         public async Task StopAsync(HostInfo host, TimeSpan cooldown)
         {
-            #region Preconditions
-
-            if (host == null)
-                throw new ArgumentNullException(nameof(host));
-
-            #endregion
+            Validate.NotNull(host, nameof(host));
 
             if (host.ClusterId > 0)
             {
@@ -392,9 +325,29 @@ namespace Carbon.Platform.Management
                 await Task.Delay(cooldown); // wait to allow the connections to drain from the load balancer
             }
 
-            await ec2.StopInstancesAsync(new StopInstancesRequest(new[] { host.ResourceId }));
+            await ec2.StopInstancesAsync(new StopInstancesRequest(host.ResourceId));
 
-            await TransitionStateAsync(host, HostStatus.Suspended);
+            await TransitionStateAsync(host, HostStatus.Stopped);
+        }
+
+        public async Task RebootAsync(HostInfo host, TimeSpan cooldown)
+        {
+            Validate.NotNull(host, nameof(host));
+
+            if (host.ClusterId > 0)
+            {
+                var cluster = await clusterService.GetAsync(host.ClusterId);
+
+                await clusterManager.DeregisterHostAsync(cluster, host);
+
+                await Task.Delay(cooldown); // wait to allow the connections to drain from the load balancer
+            }
+
+            await ec2.RebootInstancesAsync(new RebootInstancesRequest(host.ResourceId));
+
+            await TransitionStateAsync(host, HostStatus.Pending); // waiting to come back online
+
+            // TODO: Log reboot
         }
 
         public async Task TerminateAsync(
@@ -402,18 +355,8 @@ namespace Carbon.Platform.Management
             TimeSpan cooldown,
             ISecurityContext context)
         {
-            #region Preconditions
-
-            if (host == null)
-                throw new ArgumentNullException(nameof(host));
-
-            if (cooldown > TimeSpan.FromMinutes(10))
-                throw new ArgumentException("Must be 10 minutes or less", nameof(cooldown));
-
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
-            #endregion
+            Validate.NotNull(host,    nameof(host));
+            Validate.NotNull(context, nameof(context));
 
             if (host.ClusterId > 0)
             {
@@ -438,9 +381,9 @@ namespace Carbon.Platform.Management
 
             await eventLog.CreateAsync(new Event(
                 action   : "terminate",
-                resource : "host#" + host.Id,
-                userId   : context.UserId)
-            );
+                resource : "borg:host/" + host.Id,
+                userId   : context.UserId
+            ));
 
             #endregion
         }
@@ -451,15 +394,8 @@ namespace Carbon.Platform.Management
             JsonObject parameters,
             RunCommandOptions options)
         {
-            #region Preconditions
-
-            if (documentName == null)
-                throw new ArgumentNullException(nameof(documentName));
-
-            if (environment == null)
-                throw new ArgumentNullException(nameof(environment));
-
-            #endregion
+            Validate.NotNull(documentName, nameof(documentName));
+            Validate.NotNull(environment, nameof(environment));
 
             return ssm.SendCommandAsync(new SendCommandRequest(
                documentName : documentName,
@@ -472,17 +408,11 @@ namespace Carbon.Platform.Management
 
         // arn:aws:elasticloadbalancing:{region}:{accountId}:targetgroup/{groupName}/{groupId}
         
+        /*
         private async Task<IHost> RegisterAsync(string instanceId, Cluster cluster)
         {
-            #region Preconditions
-
-            if (instanceId == null)
-                throw new ArgumentNullException(nameof(instanceId));
-
-            if (cluster == null)
-                throw new ArgumentNullException(nameof(cluster));
-
-            #endregion
+            Validate.NotNullOrEmpty(instanceId, nameof(instanceId));
+            Validate.NotNull(cluster, nameof(cluster));
 
             var ec2Instance = await ec2.DescribeInstanceAsync(instanceId)
                 ?? throw ResourceError.NotFound(ResourceProvider.Aws, ResourceTypes.Host, instanceId);
@@ -491,6 +421,7 @@ namespace Carbon.Platform.Management
 
             return await hostService.RegisterAsync(request);
         }
+        */
 
         private static readonly ResourceProvider aws = ResourceProvider.Aws;
 
@@ -501,16 +432,13 @@ namespace Carbon.Platform.Management
             ILocation location = null,
             IMachineType machineType = null)
         {
-            #region Preconditions
+            Validate.NotNull(instance, nameof(instance));
 
-            if (instance == null)
-                throw new ArgumentNullException(nameof(instance));
-
-            // Forbid classic instances by ensuring we're inside of a VPC
+            // Ensure the instance is inside a VPC (no classic instances)
             if (instance.VpcId == null)
+            {
                 throw new ArgumentException("Must belong to a VPC", nameof(instance));
-
-            #endregion
+            }
 
             #region Data Binding / Mappings
 
@@ -578,7 +506,7 @@ namespace Carbon.Platform.Management
 
                     nics[nicIndex] = new RegisterNetworkInterfaceRequest(
                         mac: MacAddress.Parse(ec2Nic.MacAddress),
-                        subnetId: 0,                   // TODO: lookup subnet
+                        subnetId: 0,                           // TODO: lookup subnet
                         securityGroupIds: Array.Empty<long>(), // TODO: lookup security groupds
                         resource: ManagedResource.NetworkInterface(location, ec2Nic.NetworkInterfaceId)
                     );
@@ -607,9 +535,10 @@ namespace Carbon.Platform.Management
                         : ByteSize.Zero;
 
                     volumes[volumeIndex] = new RegisterVolumeRequest(
-                        size: volumeSize,
-                        resource: ManagedResource.Volume(location, device.Ebs.VolumeId),
-                        ownerId: 1
+                        ownerId  : 1,
+                        size     : volumeSize,
+                        resource : ManagedResource.Volume(location, device.Ebs.VolumeId)
+                        
                     );
                 }
 

@@ -16,28 +16,23 @@ namespace Carbon.Platform.Networking
             this.nsgService = nsgService ?? throw new ArgumentNullException(nameof(nsgService));
         }
 
-        public async Task<NetworkSecurityGroup> GetAsync(NetworkInfo network, NetworkInterfaceSecurityGroup group)
+        public async Task<NetworkSecurityGroup> GetAsync(
+            NetworkInfo network, 
+            NetworkInterfaceSecurityGroup networkSecurityGroup)
         {
-            #region Preconditions
-
-            if (network == null)
-                throw new ArgumentNullException(nameof(network));
-
-            if (group == null)
-                throw new ArgumentNullException(nameof(group));
-
-            #endregion
+            Validate.NotNull(network, nameof(network));
+            Validate.NotNull(networkSecurityGroup, nameof(networkSecurityGroup));
 
             var region = Locations.Get(network.LocationId);
 
-            var nsg = await nsgService.FindAsync(ResourceProvider.Aws, group.GroupId);;
+            var nsg = await nsgService.FindAsync(ResourceProvider.Aws, networkSecurityGroup.GroupId);;
 
             if (nsg == null)
             {
                 var registerRequest = new RegisterNetworkSecurityGroupRequest(
-                    name      : group.GroupName,
+                    name      : networkSecurityGroup.GroupName,
                     networkId : network.Id,
-                    resource  : ManagedResource.NetworkSecurityGroup(region, group.GroupId)
+                    resource  : ManagedResource.NetworkSecurityGroup(region, networkSecurityGroup.GroupId)
                 );
 
                 nsg = await nsgService.RegisterAsync(registerRequest);;

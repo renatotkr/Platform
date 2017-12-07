@@ -16,8 +16,8 @@ namespace Carbon.Platform.Computing
                 case "running"       : return Running;
                 case "shutting-down" : return Terminating;
                 case "terminated"    : return Terminated;
-                case "stopping"      : return Suspending;
-                case "stopped"       : return Suspended;
+                case "stopping"      : return Stopping;
+                case "stopped"       : return Stopped;
 
                 default: throw new Exception("unexpected state:" + state.Name);
             }

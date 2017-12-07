@@ -23,37 +23,33 @@ namespace Carbon.Platform.Management
 
         public async Task RegisterHostAsync(Cluster cluster, HostInfo host)
         {
-            #region Preconditions
-
-            if (cluster == null)
-                throw new ArgumentNullException(nameof(cluster));
-
-            if (host == null)
-                throw new ArgumentNullException(nameof(host));
-
-            #endregion
+            Validate.NotNull(cluster, nameof(cluster));
+            Validate.NotNull(host,    nameof(host));
             
             // - Register to any attached load balancers
 
-            if (cluster.Properties.ContainsKey(ClusterProperties.TargetGroupArn))
+            if (cluster.Properties.TryGetValue(ClusterProperties.TargetGroupArn, out var targetGroupArnNode))
             {
                 var registration = new RegisterTargetsRequest(
-                    targetGroupArn  : cluster.Properties[ClusterProperties.TargetGroupArn],
-                    targets         : new[] { new TargetDescription(id: host.ResourceId) }
+                    targetGroupArn : targetGroupArnNode,
+                    targets        : new[] { new TargetDescription(id: host.ResourceId) }
                 );
 
                 // Register the instances with the lb's target group
                 await elbClient.RegisterTargetsAsync(registration);
 
                 await eventLog.CreateAsync(new Event(
-                    action: "addToLoadBalancerTargetGroup",
-                    resource: "host#" + host.Id
+                    action   : "c",
+                    resource : "borg:host/" + host.Id
                 ));
             }
         }
 
         public async Task DeregisterHostAsync(Cluster cluster, HostInfo host)
         {
+            Validate.NotNull(cluster, nameof(cluster));
+            Validate.NotNull(host, nameof(host));
+
             // - Deregister from any attached load balancers
 
             if (cluster.Properties != null &&
@@ -69,7 +65,7 @@ namespace Carbon.Platform.Management
                 // cluster / remove...
                 await eventLog.CreateAsync(new Event(
                     action  : "drain",
-                    resource: "host#" + host.Id
+                    resource: "borg:host/" + host.Id
                 ));
             }
         }
