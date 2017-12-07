@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Carbon.Platform.Configuration.Docker
@@ -8,7 +9,7 @@ namespace Carbon.Platform.Configuration.Docker
         private Command(CommandType type, string text)
         {
             Type = type;
-            Text = text;
+            Text = text ?? throw new ArgumentNullException(nameof(type));
         }
 
         public CommandType Type { get; }

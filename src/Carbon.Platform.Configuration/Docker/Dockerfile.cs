@@ -121,29 +121,6 @@ namespace Carbon.Platform.Configuration.Docker
             return sb.ToString();
         }
     }
-
-    public readonly struct Comment
-    {
-        public Comment(string text)
-        {
-            Text = text ?? throw new ArgumentNullException(nameof(text));
-        }
-
-        public string Text { get; }
-    }
-
-    public enum RunMode
-    {
-        Forground = 0,  // Default
-        Background = 1
-    }
-
-    public enum Stream
-    {
-        STDIN  = 1,
-        STDOUT = 2,
-        STDERR = 3
-    }
 }
 
 // https://docs.docker.com/engine/reference/builder/

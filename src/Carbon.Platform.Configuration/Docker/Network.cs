@@ -1,6 +1,6 @@
 ﻿namespace Carbon.Platform.Configuration.Docker
 {
-    public struct Network
+    public class Network
     {
         public NetworkMode Mode { get; set; }
 

@@ -39,6 +39,13 @@ namespace Carbon.Platform.Configuration.Docker
         {
             var sb = new StringBuilder();
 
+            WriteTo(sb);
+
+            return sb.ToString();
+        }
+
+        public void WriteTo(StringBuilder sb)
+        {
             if (Mode == RunMode.Background)
             {
                 // When running in 'detached mode', IO is no longer forwarded to the command prompt
@@ -58,8 +65,6 @@ namespace Carbon.Platform.Configuration.Docker
             {
                 sb.Append(" --rm");
             }
-
-            return sb.ToString();
         }
     }
 }
