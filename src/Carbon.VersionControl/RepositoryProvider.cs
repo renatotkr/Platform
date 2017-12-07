@@ -6,7 +6,7 @@ namespace Carbon.VersionControl
     {
         public RepositoryProvider(int id, string name, string domain = null)
         {
-            Id    = id;
+            Id     = id;
             Name   = name ?? throw new ArgumentNullException(nameof(name));
             Domain = domain;
         }
@@ -28,14 +28,13 @@ namespace Carbon.VersionControl
 
         #region Equality
 
-        public bool Equals(RepositoryProvider other)
-        {
-            return Name == other?.Name && Domain == other?.Domain;
-        }
+        public bool Equals(RepositoryProvider other) =>
+            Name == other.Name && 
+            Domain  == other.Domain;
 
         public override bool Equals(object obj)
         {
-            return obj is RepositoryProvider lhs && lhs.Equals(this);
+            return obj is RepositoryProvider other && Equals(other);
         }
 
         public static bool operator ==(RepositoryProvider rhs, RepositoryProvider b)

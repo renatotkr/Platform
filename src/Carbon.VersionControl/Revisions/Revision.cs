@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Carbon.VersionControl
 {
     [DataContract]
-    public struct Revision
+    public readonly struct Revision : IEquatable<Revision>
     {
         public static readonly Revision Master = Head("master");
 
@@ -99,5 +99,13 @@ namespace Carbon.VersionControl
                 default         : throw new Exception("Unexpected kind:" + typeName);
             }
         }
+
+        #region Equality
+
+        public bool Equals(Revision other) =>
+            Name == other.Name &&
+            Type == other.Type;
+
+        #endregion
     }
 }
