@@ -21,18 +21,9 @@ namespace Carbon.Platform.Computing
             JsonObject properties = null,
             long? healthCheckId = null)
         {
-            #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            if (name == null || string.IsNullOrEmpty(name))
-                throw new ArgumentException("Required", nameof(name));
-
-            if (locationId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(locationId));
-
-            #endregion
+            Validate.Id(id);
+            Validate.NotNullOrEmpty(name, nameof(name));
+            Validate.Id(locationId, nameof(locationId));
 
             Id             = id;
             Name           = name;
@@ -83,11 +74,5 @@ namespace Carbon.Platform.Computing
         public DateTime Modified { get; }
 
         #endregion
-    }
-
-    public static class ClusterProperties
-    {
-        // When used with an application load balancer target group
-        public const string TargetGroupArn = "targetGroupArn";
     }
 }

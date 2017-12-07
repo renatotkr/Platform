@@ -13,44 +13,40 @@ namespace Carbon.Platform.Computing
         public HealthCheck() { }
 
         public HealthCheck(
-           long id,
-           Uri url,
+           long id,  
            long ownerId,
+           Uri url,
            ManagedResource resource)
-            : this(id, url.Host, url.AbsolutePath, url.Port, NetworkProtocal.TCP, ownerId, resource) { }
+            : this(id, ownerId, url.Host, url.AbsolutePath, url.Port, NetworkProtocal.TCP, resource) { }
 
         public HealthCheck(
-            long id,
+            long id, 
+            long ownerId,
             string host,
             string path,
             int port,
             NetworkProtocal protocal,
-            long ownerId,
             ManagedResource resource)
         {
-            #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            if (ownerId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(ownerId));
-
-            #endregion
-
-            Id = id;
+            Validate.Id(id);
+            Validate.Id(ownerId, nameof(ownerId));
+            
+            Id         = id;
+            OwnerId    = ownerId;
             Host       = host;
             Path       = path;
             Port       = port;
             Protocal   = protocal;
-            OwnerId    = ownerId;
             ProviderId = resource.ProviderId;
             ResourceId = resource.ResourceId;
             LocationId = resource.LocationId;
         }
         
-        [Member("id"), Key(sequenceName: "healthCheckId")]
+        [Member("id"), Key(sequenceName: "healthCheckId")] // environmentId | #
         public long Id { get; }
+
+        [Member("ownerId"), Indexed]
+        public long OwnerId { get; }
 
         [Member("host"), Optional]
         [Ascii, StringLength(253)]
@@ -76,10 +72,7 @@ namespace Carbon.Platform.Computing
         public int HealthyThreshold { get; set; }
 
         [Member("unhealtyThreshold")]
-        public int UnhealthyThreshold { get; set; }
-
-        [Member("ownerId"), Indexed]
-        public long OwnerId { get; }
+        public int UnhealthyThreshold { get; set; }       
 
         #region IResource
 

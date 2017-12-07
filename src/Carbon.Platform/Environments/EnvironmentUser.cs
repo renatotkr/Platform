@@ -14,19 +14,13 @@ namespace Carbon.Platform.Environments
             long userId, 
             string[] roles)
         {
-            #region Preconditions
-
-            if (environmentId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(environmentId));
-
-            if (userId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(userId));
-
-            #endregion
+            Validate.Id(environmentId, nameof(environmentId));
+            Validate.Id(userId,        nameof(userId));
+            Validate.NotNull(roles,    nameof(roles));
 
             EnvironmentId = environmentId;
             UserId        = userId;
-            Roles         = roles ?? throw new ArgumentNullException(nameof(roles));
+            Roles         = roles;
         }
 
         [Member("environmentId"), Key]

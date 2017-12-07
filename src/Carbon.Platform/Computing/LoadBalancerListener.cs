@@ -19,20 +19,13 @@ namespace Carbon.Platform.Computing
             ApplicationProtocal protocal,
             ushort port,
             ManagedResource resource,
-            JsonObject properties
-        )
+            JsonObject properties)
         {
-            #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            #endregion
+            Validate.Id(id);
 
             Id         = id;
             Protocal   = protocal;
             Port       = port;
-
             ProviderId = resource.ProviderId;
             ResourceId = resource.ResourceId;
             LocationId = resource.LocationId;

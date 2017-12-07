@@ -14,19 +14,12 @@ namespace Carbon.Platform.Computing
             long hostId, 
             long programId, 
             string programName,
-            SemanticVersion programVersion, 
+            SemanticVersion programVersion,
             string[] addresses = null,
             JsonObject properties = null)
         {
-            #region Preconditions
-
-            if (hostId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(hostId));
-
-            if (programId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(programId));
-
-            #endregion
+            Validate.Id(hostId,    nameof(hostId));
+            Validate.Id(programId, nameof(programId));
 
             HostId         = hostId;
             ProgramId      = programId;

@@ -22,24 +22,11 @@ namespace Carbon.Platform.Computing
             string startupScript = null,
             JsonObject properties = null)
         {
-            #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentNullException("Must be > 0", nameof(id));
-
-            if (ownerId <= 0)
-                throw new ArgumentNullException("Must be > 0", nameof(ownerId));
-
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("Required", nameof(name));
-
-            if (machineType == null)
-                throw new ArgumentNullException(nameof(machineType));
-
-            if (image == null)
-                throw new ArgumentNullException(nameof(image));
-
-            #endregion
+            Validate.Id(id);
+            Validate.Id(ownerId,          nameof(ownerId));
+            Validate.NotNullOrEmpty(name, nameof(name));
+            Validate.NotNull(machineType, nameof(machineType));
+            Validate.NotNull(image,       nameof(image));
 
             Id            = id;
             OwnerId       = ownerId;

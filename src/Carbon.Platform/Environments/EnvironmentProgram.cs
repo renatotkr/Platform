@@ -18,15 +18,8 @@ namespace Carbon.Platform.Environments
             JsonObject configuration,
             long? userId = null)
         {
-            #region Preconditions
-
-            if (environment == null)
-                throw new ArgumentNullException(nameof(environment));
-
-            if (program == null)
-                throw new ArgumentNullException(nameof(program));
-
-            #endregion
+            Validate.NotNull(environment, nameof(environment));
+            Validate.NotNull(program,     nameof(program));
 
             EnvironmentId = environment.Id;
             ProgramId      = program.Id;

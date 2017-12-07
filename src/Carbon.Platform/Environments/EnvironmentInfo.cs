@@ -14,26 +14,17 @@ namespace Carbon.Platform.Environments
 
         public EnvironmentInfo(
             long id, 
-            string name,
             long ownerId,
+            string name,
             string slug = null,
             JsonObject properties = null)
         {
-            #region Preconditions
+            Validate.Id(id);
+            Validate.Id(ownerId, nameof(ownerId));
+            Validate.NotNullOrEmpty(name, nameof(name));
 
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-            
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("Required", nameof(name));
-            
             if (name.Length > 63)
                 throw new ArgumentException("Must be 63 characters or fewer", nameof(name));
-
-            if (ownerId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(ownerId));
-
-            #endregion
 
             Id         = id;
             OwnerId    = ownerId;

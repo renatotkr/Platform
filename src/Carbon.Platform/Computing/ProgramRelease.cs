@@ -24,15 +24,12 @@ namespace Carbon.Platform.Computing
             string[] addresses = null,
             JsonObject properties = null)
         {
+            Validate.Id(id);
+            Validate.NotNull(program, nameof(program));
+            
             #region Preconditions
 
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            if (program == null)
-                throw new ArgumentNullException(nameof(program));
-
-            if (version == SemanticVersion.Zero)
+            if (version == default)
                 throw new ArgumentException("May not be 0.0.0", nameof(version));
 
             if (creatorId <= 0)

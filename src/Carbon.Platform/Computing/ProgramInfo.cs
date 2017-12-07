@@ -14,42 +14,32 @@ namespace Carbon.Platform.Computing
         public ProgramInfo() { }
 
         public ProgramInfo(
-            long id, 
+            long id,   
+            long ownerId,
             string name,
             string slug, 
-            long ownerId,
             SemanticVersion version,
             string runtime = null,
             string[] addresses = null,
             ProgramType type = ProgramType.App,
             long? repositoryId = null,
             long? parentId = null,
-             JsonObject properties = null
-        )
+            JsonObject properties = null)
         {
-            #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("Required", nameof(name));
+            Validate.Id(id);
+            Validate.Id(ownerId, nameof(ownerId));
+            Validate.NotNullOrEmpty(name, nameof(name));
 
             if (name.Length > 63)
                 throw new ArgumentException("Must be 63 characters or fewer", nameof(name));
 
-            if (ownerId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(ownerId));
-
-            #endregion
-
             Id           = id;
+            OwnerId      = ownerId;
             Name         = name;
             Slug         = slug;
             Type         = type;
             Runtime      = runtime;
             Addresses    = addresses;
-            OwnerId      = ownerId;
             Version      = version;
             RepositoryId = repositoryId;
             ParentId     = parentId;
@@ -59,11 +49,11 @@ namespace Carbon.Platform.Computing
         [Member("id"), Key(sequenceName: "programId")]
         public long Id { get; }
 
-        [Member("type")]
-        public ProgramType Type { get; }
-
         [Member("ownerId")]
         public long OwnerId { get; }
+
+        [Member("type")]
+        public ProgramType Type { get; }
 
         [Member("name")]
         [StringLength(63)]

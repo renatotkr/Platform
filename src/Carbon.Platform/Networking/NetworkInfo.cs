@@ -15,37 +15,34 @@ namespace Carbon.Platform.Networking
         public NetworkInfo() { }
 
         public NetworkInfo(
-            long id, 
-            string[] addressBlocks,
+            long id,  
             long ownerId,
+            string[] addressBlocks,
             ManagedResource resource, 
             IPAddress gatewayAddress = null,
             int? asn = null,
             JsonObject properties = null)
         {
-            #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            if (ownerId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(ownerId));
-
-            #endregion
+            Validate.Id(id);
+            Validate.Id(ownerId,            nameof(ownerId));
+            Validate.NotNull(addressBlocks, nameof(addressBlocks));
 
             Id             = id;
-            AddressBlocks  = addressBlocks ?? throw new ArgumentNullException(nameof(addressBlocks));
+            OwnerId        = ownerId;
+            AddressBlocks  = addressBlocks;
             GatewayAddress = gatewayAddress;
             Asn            = asn;
             ProviderId     = resource.ProviderId;
             LocationId     = resource.LocationId;
             ResourceId     = resource.ResourceId;
-            OwnerId        = ownerId;
             Properties     = properties;
         }
         
         [Member("id"), Key(sequenceName: "networkId")]
         public long Id { get; }
+
+        [Member("ownerId"), Indexed]
+        public long OwnerId { get; }
 
         [Member("addressBlocks")]
         [Ascii, StringLength(100)]
@@ -63,9 +60,6 @@ namespace Carbon.Platform.Networking
         [Member("asn")]
         [DataMember(Name = "asn", EmitDefaultValue = false)]
         public int? Asn { get; }
-
-        [Member("ownerId"), Indexed]
-        public long OwnerId { get; }
 
         [Member("properties")]
         [StringLength(1000)]

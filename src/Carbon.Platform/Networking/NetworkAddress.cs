@@ -19,8 +19,11 @@ namespace Carbon.Platform.Networking
             long? hostId = null, 
             long? networkInterfaceId = null)
         {
+            Validate.Id(id);
+            Validate.NotNull(address, nameof(address));
+
             Id                 = id;
-            Address            = address ?? throw new ArgumentNullException(nameof(address));
+            Address            = address;
             ProviderId         = resource.ProviderId;
             ResourceId         = resource.ResourceId;
             HostId             = hostId;

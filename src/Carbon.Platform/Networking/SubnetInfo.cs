@@ -19,8 +19,11 @@ namespace Carbon.Platform.Networking
             string[] addressBlocks,
             ManagedResource resource)
         {
+            Validate.Id(id);
+            Validate.NotNull(addressBlocks, nameof(addressBlocks));
+
             Id            = id;
-            AddressBlocks = addressBlocks ?? throw new ArgumentNullException(nameof(addressBlocks));
+            AddressBlocks = addressBlocks;
             ProviderId    = resource.ProviderId;
             LocationId    = resource.LocationId;
             ResourceId    = resource.ResourceId;

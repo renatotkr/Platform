@@ -13,6 +13,9 @@ namespace Carbon.Platform.Networking
             DateTime created, 
             DateTime? deleted = null)
         {
+            Validate.Id(networkInterfaceId, nameof(networkInterfaceId));
+            Validate.Id(hostId,             nameof(hostId));
+
             NetworkInterfaceId = networkInterfaceId;
             HostId = hostId;
             Created = created;

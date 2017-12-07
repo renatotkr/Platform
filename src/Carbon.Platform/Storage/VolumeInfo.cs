@@ -15,15 +15,18 @@ namespace Carbon.Platform.Storage
 
         public VolumeInfo(
             long id, 
-            long size,
             long ownerId,
+            long size,
             ManagedResource resource,
             JsonObject properties = null,
             long? hostId = null)
         {
+            Validate.Id(id);
+            Validate.Id(ownerId, nameof(ownerId));
+
             Id         = id;
-            Size       = size;
             OwnerId    = ownerId;
+            Size       = size;
             HostId     = hostId;
             Properties = properties;
             ProviderId = resource.ProviderId;
@@ -34,14 +37,14 @@ namespace Carbon.Platform.Storage
         [Member("id"), Key(sequenceName: "volumeId")]
         public long Id { get; }
 
+        [Member("ownerId"), Indexed]
+        public long OwnerId { get; }
+
         [Member("size")] // in bytes
         public long Size { get; }
 
         [Member("hostId"), Indexed]
         public long? HostId { get; }
-
-        [Member("ownerId"), Indexed]
-        public long OwnerId { get; }
 
         [Member("properties")]
         [StringLength(1000)]

@@ -15,34 +15,23 @@ namespace Carbon.Platform.Computing
 
         public LoadBalancer(
             long id, 
+            long ownerId, 
             string name,
-            long ownerId,
             string address,
             ManagedResource resource,
             long networkId = 0,
             JsonObject properties = null)
         {
-            #region Preconditions
+            Validate.Id(id);
+            Validate.Id(ownerId,             nameof(ownerId));
+            Validate.NotNullOrEmpty(name,    nameof(name));
+            Validate.NotNullOrEmpty(address, nameof(address));
 
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("Required", nameof(name));
-
-            if (string.IsNullOrEmpty(address))
-                throw new ArgumentException("Required", nameof(address));
-
-            if (ownerId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(ownerId));
-
-            #endregion
-
-            Id = id;
+            Id         = id;
+            OwnerId    = ownerId;
             Name       = name;
             Address    = address;
             NetworkId  = networkId;
-            OwnerId    = ownerId;
             ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
             ResourceId = resource.ResourceId;
@@ -51,7 +40,7 @@ namespace Carbon.Platform.Computing
         
         [Member("id"), Key(sequenceName: "loadBalancerId")]
         public long Id { get; }
-
+       
         [Member("ownerId")]
         public long OwnerId { get; }
 
@@ -65,6 +54,8 @@ namespace Carbon.Platform.Computing
 
         [Member("networkId")]
         public long NetworkId { get; }
+
+        // EnvironmentId?
 
         [Member("properties")]
         [StringLength(1000)]

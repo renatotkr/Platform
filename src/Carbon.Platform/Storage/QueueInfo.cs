@@ -14,23 +14,14 @@ namespace Carbon.Platform.Storage
 
         public QueueInfo(
             long id, 
-            string name,
             long ownerId,
+            string name,
             ManagedResource resource,
             JsonObject properties = null)
         {
-            #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("Required", nameof(name));
-
-            if (ownerId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(ownerId));
-
-            #endregion
+            Validate.Id(id);
+            Validate.Id(ownerId, nameof(ownerId));
+            Validate.NotNullOrEmpty(name, nameof(name));
 
             Id         = id;
             Name       = name;

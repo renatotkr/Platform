@@ -17,18 +17,22 @@ namespace Carbon.Platform.Computing
 
         public HostInfo(
             long id,
+            long ownerId,
             int locationId,
             string[] addresses,
             long environmentId,
             long clusterId,
             long imageId,
             long machineTypeId,
-            long ownerId,
             ManagedResource resource,
             HostType type     = HostType.Virtual,
             HostStatus status = HostStatus.Running)
         {
+            Validate.Id(id);
+            Validate.Id(ownerId, nameof(ownerId));
+            
             Id            = id;
+            OwnerId       = ownerId;
             Type          = type;
             Status        = status;
             Addresses     = addresses;
@@ -39,11 +43,13 @@ namespace Carbon.Platform.Computing
             MachineTypeId = machineTypeId;
             ProviderId    = resource.ProviderId;
             ResourceId    = resource.ResourceId;
-            OwnerId       = ownerId;
         }
 
         [Member("id"), Key]  // locationId | #
         public long Id { get; }
+
+        [Member("ownerId"), Indexed]
+        public long OwnerId { get; }
 
         [Member("type")]
         public HostType Type { get; }
@@ -62,9 +68,6 @@ namespace Carbon.Platform.Computing
 
         [Member("addresses")]
         public string[] Addresses { get; }
-
-        [Member("ownerId"), Indexed]
-        public long OwnerId { get; }
 
         [Member("parentId"), Indexed]
         public long? ParentId { get; }
@@ -122,7 +125,7 @@ namespace Carbon.Platform.Computing
         public bool IsRunning => Status == HostStatus.Running;
 
         [IgnoreDataMember]
-        public bool IsSuspended => Status == HostStatus.Suspended;
+        public bool IsStopped => Status == HostStatus.Stopped;
 
         #endregion
 

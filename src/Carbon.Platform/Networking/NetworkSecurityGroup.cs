@@ -15,15 +15,8 @@ namespace Carbon.Platform.Networking
 
         public NetworkSecurityGroup(long id, string name, ManagedResource resource)
         {
-            #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("Required", nameof(name));
-
-            #endregion
+            Validate.Id(id);
+            Validate.NotNullOrEmpty(name, nameof(name));
 
             Id         = id;
             Name       = name;

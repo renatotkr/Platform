@@ -68,6 +68,8 @@ namespace Carbon.Platform.Networking
         [StringLength(1000)]
         public JsonObject Properties { get; }
 
+        // ownerId?
+
         #region IResource
 
         [Member("providerId")]

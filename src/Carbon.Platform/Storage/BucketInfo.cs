@@ -14,30 +14,21 @@ namespace Carbon.Platform.Storage
 
         public BucketInfo(
             long id, 
-            string name,
             long ownerId,
+            string name,
             ManagedResource resource,
             JsonObject properties = null)
         {
-            #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("Required", nameof(name));
+            Validate.Id(id);
+            Validate.Id(ownerId, nameof(ownerId));
+            Validate.NotNullOrEmpty(name, nameof(name));
 
             if (name.Length > 100)
                 throw new ArgumentException("Must be 100 characters or fewer", nameof(name));
 
-            if (ownerId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(ownerId));
-
-            #endregion
-
             Id         = id;
-            Name       = name;
             OwnerId    = ownerId;
+            Name       = name;
             ProviderId = resource.ProviderId;
             LocationId = resource.LocationId;
             ResourceId = resource.ResourceId;

@@ -18,16 +18,13 @@ namespace Carbon.Platform.Computing
             int priority,
             string resourceId = null)
         {
-            #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-            
-            #endregion
-
-            Id = id;
-            Condition  = condition ?? throw new ArgumentNullException(nameof(condition));
-            Action     = action    ?? throw new ArgumentNullException(nameof(action));
+            Validate.Id(id);
+            Validate.NotNullOrEmpty(condition, nameof(condition));
+            Validate.NotNullOrEmpty(action, nameof(action));
+          
+            Id         = id;
+            Condition  = condition ;
+            Action     = action;
             Priority   = priority;
             ResourceId = resourceId;
         }
