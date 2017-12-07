@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using Carbon.Platform.Computing;
 
 namespace Carbon.Platform.Networking
 {
@@ -7,6 +10,8 @@ namespace Carbon.Platform.Networking
         Task<NetworkInterfaceInfo> FindAsync(ResourceProvider provider, string resourceId);
 
         Task<NetworkInterfaceInfo> GetAsync(long id);
+
+        Task<IReadOnlyList<NetworkInterfaceInfo>> ListAsync(IHost host);
 
         Task<NetworkInterfaceInfo> RegisterAsync(RegisterNetworkInterfaceRequest request);
 

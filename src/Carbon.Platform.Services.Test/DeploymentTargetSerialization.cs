@@ -47,7 +47,7 @@ namespace Carbon.Deployment.Tests
         [Fact]
         public void RoundtripSerialization2()
         {
-            var program = new ProgramInfo(1, "carbon", "carbon", 1, new SemanticVersion(1, 1, 1));
+            var program = new ProgramInfo(1, 1, "carbon", "carbon", new SemanticVersion(1, 1, 1));
 
             var deployment = new DeploymentDetails(program, new[] {
                 ManagedResource.Host(Borg,        id: "1"),

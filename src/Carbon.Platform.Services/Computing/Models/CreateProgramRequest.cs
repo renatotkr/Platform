@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Carbon.Json;
 using Carbon.Versioning;
 
@@ -10,25 +9,28 @@ namespace Carbon.Platform.Computing
         public CreateProgramRequest() { }
 
         public CreateProgramRequest(
+            long ownerId,
             string name, 
-            long ownerId, 
             string runtime,
             string[] addresses,
             ProgramType type = ProgramType.App,
             long? repositoryId = null,
             long? parentId = null)
         {
-            Validate.NotNullOrEmpty(name, nameof(name));
             Validate.Id(ownerId, nameof(ownerId));
-            
-            Name         = name;
+            Validate.NotNullOrEmpty(name, nameof(name));
+
             OwnerId      = ownerId;
+            Name         = name;
             Addresses    = addresses;
             Runtime      = runtime;
             Type         = type;
             RepositoryId = repositoryId;
             ParentId     = parentId;
         }
+
+        [Range(1, 2_199_023_255_552)]
+        public long OwnerId { get; set; }
 
         [Required, StringLength(100)]
         public string Name { get; set; }
@@ -47,9 +49,6 @@ namespace Carbon.Platform.Computing
         public long? ParentId { get; set; }
 
         public long? RepositoryId { get; set; }
-        
-        [Range(1, 2_199_023_255_552)]
-        public long OwnerId { get; set; }
 
         public JsonObject Properties { get; set; }
     }

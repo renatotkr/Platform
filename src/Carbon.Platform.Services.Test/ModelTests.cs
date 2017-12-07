@@ -10,13 +10,13 @@ namespace Carbon.Platform.Services.Test
         [Fact]
         public void CreateEnvironmentRequestModel()
         {
-            var request = new CreateEnvironmentRequest("a", 1);
+            var request = new CreateEnvironmentRequest(1, "a");
 
             Assert.Equal("a", request.Name);
             Assert.Equal(1, request.OwnerId);
 
-            Assert.Throws<ArgumentException>(() => new CreateEnvironmentRequest("",  1));
-            Assert.Throws<ArgumentOutOfRangeException>(() => new CreateEnvironmentRequest("a", -1));
+            Assert.Throws<ArgumentException>(() => new CreateEnvironmentRequest(1, ""));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new CreateEnvironmentRequest(-1, "a"));
         }
     }
 }

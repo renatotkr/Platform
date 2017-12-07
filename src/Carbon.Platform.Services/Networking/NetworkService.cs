@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Carbon.Data;
@@ -38,6 +39,13 @@ namespace Carbon.Platform.Networking
 
             return await FindAsync(provider, resourceId)
                 ?? throw ResourceError.NotFound(ManagedResource.Network(provider, name));            
+        }
+
+        public Task<IReadOnlyList<NetworkInfo>> ListAsync(long ownerId)
+        {
+            return db.Networks.QueryAsync(
+                And(Eq("ownerId", ownerId), IsNull("deleted")
+            ));
         }
 
         public async Task<NetworkInfo> GetAsync(ResourceProvider provider, string resourceId)

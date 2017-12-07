@@ -10,22 +10,22 @@ namespace Carbon.Platform.Environments
     {
         public CreateEnvironmentRequest() { }
 
-        public CreateEnvironmentRequest(string name, long ownerId, JsonObject properties = null)
+        public CreateEnvironmentRequest(long ownerId, string name, JsonObject properties = null)
         {
-            Validate.NotNullOrEmpty(name, nameof(name));
             Validate.Id(ownerId, nameof(ownerId));
+            Validate.NotNullOrEmpty(name, nameof(name));
 
-            Name       = name;
             OwnerId    = ownerId;
+            Name      = name;
             Properties = properties;
         }
 
-        [DataMember(Name = "name", Order = 1)]
+        [DataMember(Name = "ownerId", Order = 1)]
+        public long OwnerId { get; set; }
+
+        [DataMember(Name = "name", Order = 2)]
         [MinLength(1), StringLength(63)]
         public string Name { get; set; }
-
-        [DataMember(Name = "ownerId", Order = 2)]
-        public long OwnerId { get; set; }
 
         [DataMember(Name = "properties", Order = 3)]
         public JsonObject Properties { get; set; }

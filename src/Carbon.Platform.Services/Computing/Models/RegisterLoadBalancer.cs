@@ -4,19 +4,19 @@ namespace Carbon.Platform.Computing
 {
     public class RegisterLoadBalancer
     {
-        public RegisterLoadBalancer(string name, long ownerId, ManagedResource resource)
+        public RegisterLoadBalancer(long ownerId, string name, ManagedResource resource)
         {
-            Validate.NotNullOrEmpty(nameof(name), name);
             Validate.Id(ownerId, nameof(ownerId));
-
+            Validate.NotNullOrEmpty(nameof(name), name);
+            
             Name     = name;
             OwnerId  = ownerId;
             Resource = resource;
         }
+        
+        public long OwnerId { get; }
 
         public string Name { get; }
-
-        public long OwnerId { get; }
 
         public ManagedResource Resource { get; }
     }

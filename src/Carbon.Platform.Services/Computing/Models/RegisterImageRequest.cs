@@ -7,25 +7,25 @@ namespace Carbon.Platform.Computing
     public class RegisterImageRequest
     {
         public RegisterImageRequest(
-            string name,
             long ownerId,
+            string name,
             ManagedResource resource,
             ImageType type = ImageType.Machine,
             JsonObject properties = null)
         {
-            Validate.NotNullOrEmpty(name, nameof(name));
             Validate.Id(ownerId, nameof(ownerId));
-
+            Validate.NotNullOrEmpty(name, nameof(name));
+ 
             Name       = name;
             OwnerId    = ownerId;
             Resource   = resource;
             Type       = type;
             Properties = properties;
         }
-        
-        public string Name { get; }
 
         public long OwnerId { get; }
+
+        public string Name { get; }
 
         public long Size { get; }
 

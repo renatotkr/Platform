@@ -8,39 +8,44 @@ namespace Carbon.Platform.Computing
     public class RegisterHostRequest
     {
         public RegisterHostRequest() { }
-
+   
         public RegisterHostRequest(
+            long ownerId,
             string[] addresses,
             ILocation location,
             ICluster cluster,
             IImage image,
             IProgram program,
             IMachineType machineType,
-            long ownerId,
             ManagedResource resource,
             HostStatus status = HostStatus.Pending,
             HostType type = HostType.Virtual)
         {
-            Validate.NotNull(cluster,  nameof(cluster));
-            Validate.NotNull(location, nameof(location));
-            Validate.NotNull(image,    nameof(image));
+            Validate.Id(ownerId,          nameof(ownerId));
+            Validate.NotNull(cluster,     nameof(cluster));
+            Validate.NotNull(location,    nameof(location));
+            Validate.NotNull(image,       nameof(image));
+            Validate.NotNull(machineType, nameof(machineType));
 
-            Addresses = addresses;
+            OwnerId       = ownerId;
+            Addresses     = addresses;
             LocationId    = location.Id;
             EnvironmentId = cluster.EnvironmentId;
             ClusterId     = cluster.Id;
             ImageId       = image.Id;
 
-            MachineType = machineType != null ? new MachineTypeDescriptor {
-                Id = machineType.Id,
+            MachineType = new MachineTypeDescriptor {
+                Id   = machineType.Id,
                 Name = machineType.Name
-            } : null;
+            };
 
             Status = status;
             Resource = resource;
             Type = type;
-            OwnerId = ownerId;
         }
+
+        [Range(1, 2_199_023_255_552)]
+        public long OwnerId { get; set; }
 
         public ManagedResource Resource { get; set; }
 
@@ -61,15 +66,12 @@ namespace Carbon.Platform.Computing
 
         public long ClusterId { get; set; }
 
-        [Range(1, 2_199_023_255_552)]
-        public long OwnerId { get; set; }
-
         public RegisterVolumeRequest[] Volumes { get; set; }
 
         public RegisterNetworkInterfaceRequest[] NetworkInterfaces { get; set; }
     }
 
-    public class MachineTypeDescriptor
+    public struct MachineTypeDescriptor
     {
         public long? Id { get; set; }
 

@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Platform.Environments;
-using Carbon.Platform.Networking;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Services;
-using Carbon.Platform.Storage;
 
 using Dapper;
 
@@ -35,12 +33,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<HostInfo> GetAsync(string name)
         {
-            #region Preconditions
-
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
-
-            #endregion
+            Validate.NotNullOrEmpty(name, nameof(name));
 
             if (long.TryParse(name, out var id))
             {
@@ -69,62 +62,48 @@ namespace Carbon.Platform.Computing
 
         public Task<IReadOnlyList<HostInfo>> ListAsync(ICluster cluster)
         {
-            #region Preconditions
-
-            if (cluster == null)
-                throw new ArgumentNullException(nameof(cluster));
-
-            #endregion
+            Validate.NotNull(cluster, nameof(cluster));
 
             return db.Hosts.QueryAsync(
                 And(Eq("clusterId", cluster.Id), IsNull("terminated"))
             );
         }
 
+        public Task<IReadOnlyList<HostInfo>> ListAsync(ICluster cluster, HostStatus status)
+        {
+            Validate.NotNull(cluster, nameof(cluster));
+
+            return db.Hosts.QueryAsync(
+                And(Eq("clusterId", cluster.Id), Eq("status", status))
+            );
+        }
+
         public Task<IReadOnlyList<HostInfo>> ListAsync(IEnvironment environment)
         {
-            #region Preconditions
-
-            if (environment == null)
-                throw new ArgumentNullException(nameof(environment));
-
-            #endregion
+            Validate.NotNull(environment, nameof(environment));
 
             return db.Hosts.QueryAsync(
                 And(Eq("environmentId", environment.Id), IsNull("terminated"))
             );
         }
-        
+
+        public Task<IReadOnlyList<HostInfo>> ListAsync(IEnvironment environment, HostStatus status)
+        {
+            Validate.NotNull(environment, nameof(environment));
+
+            return db.Hosts.QueryAsync(
+                And(Eq("environmentId", environment.Id), Eq("status", status))
+            );
+        }
+
         public async Task<HostInfo> RegisterAsync(RegisterHostRequest request)
         {
+            Validate.NotNull(request, nameof(request));
+
             var location = LocationId.Create(request.Resource.LocationId);
             var regionId = location.WithZoneNumber(0);
-
-            long machineTypeId = 0;
-
-            if (request.MachineType != null)
-            {
-                if (request.MachineType.Id != null)
-                {
-                    machineTypeId = request.MachineType.Id.Value;
-                }
-                else
-                {
-                    switch (location.ProviderId)
-                    {
-                        case 2:
-                            // AWS
-                            machineTypeId = AwsInstanceType.Get(request.MachineType.Name).Id;
-                            break;
-                       
-                        default:
-                            var machineType = await GetMachineTypeAsync(location.ProviderId, request.MachineType.Name);
-
-                            machineTypeId = machineType.Id;
-                            break;
-                    }   
-                }
-            }
+            
+            var machineTypeId = request.MachineType.Id ?? await GetMachineTypeIdAsync(request.MachineType, location);
             
             var host = new HostInfo(
                 id            : await GetNextId(regionId),
@@ -145,26 +124,32 @@ namespace Carbon.Platform.Computing
             return host;
         }
 
-        #region Network Interfaces
+        #region Machine Type Helpers
 
-        public Task<IReadOnlyList<NetworkInterfaceInfo>> GetNetworkInterfacesAsync(long hostId)
+        private async ValueTask<long> GetMachineTypeIdAsync(MachineTypeDescriptor type, LocationId location)
         {
-            return db.NetworkInterfaces.QueryAsync(Eq("hostId", hostId));
+            if (type.Id != null)
+            {
+                return type.Id.Value;
+            }
+
+            if (type.Name == null) return 0;
+               
+            if (location.ProviderId == 2)
+            {
+                // AWS
+                return AwsInstanceType.Get(type.Name).Id;  // AWS
+            }
+           
+            var machineType = await GetMachineTypeAsync(location.ProviderId, type.Name);
+
+            return machineType.Id;
         }
-
-        #endregion
-
-        #region Volumes
-
-        public Task<IReadOnlyList<VolumeInfo>> GetVolumesAsync(long hostId)
-        {
-            return db.Volumes.QueryAsync(Eq("hostId", hostId));
-        }
-
-        #endregion
 
         private async Task<MachineType> GetMachineTypeAsync(int providerId, string name)
         {
+            Validate.NotNullOrEmpty(name, nameof(name));
+
             var model = await db.MachineTypes.QueryFirstOrDefaultAsync(
                 And(Eq("providerId", providerId), Eq("name", name))
             );
@@ -178,6 +163,8 @@ namespace Carbon.Platform.Computing
 
             return model;
         }
+
+        #endregion
 
         private static readonly string nextIdSql = SqlHelper.GetCurrentValueAndIncrement<LocationInfo>("hostCount");
 

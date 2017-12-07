@@ -7,30 +7,31 @@ namespace Carbon.Platform.Computing
 {
     public class CreateHostTemplateRequest
     {
-        public CreateHostTemplateRequest(
-            string name,
+        public CreateHostTemplateRequest( 
             long ownerId,
+            string name,
             IImage image,
             IMachineType machineType,
             int locationId,
             string startupScript = null,
             JsonObject properties = null)
         {
+            Validate.Id(ownerId);
             Validate.NotNullOrEmpty(name, nameof(name));
 
-            Name          = name  ;
             OwnerId       = ownerId;
+            Name          = name;
             LocationId    = locationId;
             Image         = image       ?? throw new ArgumentNullException(nameof(image));
             MachineType   = machineType ?? throw new ArgumentNullException(nameof(machineType));
             StartupScript = startupScript;
             Properties    = properties;
         }
-        
-        [Required]
-        public string Name { get; }
 
         public long OwnerId { get; }
+
+        [Required]
+        public string Name { get; }
 
         [Required]
         public IImage Image { get; }

@@ -24,7 +24,7 @@ namespace Carbon.Platform.Storage
             TotalBytes = totalBytes;
         }
 
-        public long TotalBytes { get; }
+        public readonly long TotalBytes;
 
         private const long _1KiB = 1024;
         private const long _1MiB = _1KiB * 1024;

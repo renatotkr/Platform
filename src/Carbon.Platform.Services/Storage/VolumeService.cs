@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Carbon.Data;
 using Carbon.Data.Expressions;
+using Carbon.Platform.Computing;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Services;
 
@@ -27,6 +29,8 @@ namespace Carbon.Platform.Storage
 
         public async Task<VolumeInfo> GetAsync(string name)
         {
+            Validate.NotNullOrEmpty(name, nameof(name));
+
             if (long.TryParse(name, out var id))
             {
                 return await GetAsync(id);
@@ -60,8 +64,24 @@ namespace Carbon.Platform.Storage
             return volume;
         }
 
+        public Task<IReadOnlyList<VolumeInfo>> ListAsync(IHost host)
+        {
+            Validate.NotNull(host, nameof(host));
+
+            return db.Volumes.QueryAsync(Eq("hostId", host.Id));
+        }
+
+        public Task<IReadOnlyList<VolumeInfo>> ListAsync(long ownerId)
+        {
+            return db.Volumes.QueryAsync(
+                And(Eq("ownerId", ownerId), IsNotNull("deleted"))
+            );
+        }
+
         public async Task<bool> DeleteAsync(IVolume volume)
         {
+            Validate.NotNull(volume, nameof(volume));
+
             return await db.Volumes.PatchAsync(volume.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))
             }, condition: IsNull("deleted")) > 0;

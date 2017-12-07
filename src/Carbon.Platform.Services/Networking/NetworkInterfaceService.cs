@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
 using Carbon.Data;
 using Carbon.Data.Expressions;
+using Carbon.Platform.Computing;
 using Carbon.Platform.Resources;
 using Carbon.Platform.Services;
 
@@ -28,6 +30,8 @@ namespace Carbon.Platform.Networking
 
         public async Task<NetworkInterfaceInfo> GetAsync(string name)
         {
+            Validate.NotNullOrEmpty(name, nameof(name));
+
             if (long.TryParse(name, out var id))
             {
                 return await GetAsync(id);
@@ -42,6 +46,13 @@ namespace Carbon.Platform.Networking
         public async Task<NetworkInterfaceInfo> FindAsync(ResourceProvider provider, string id)
         {
             return await db.NetworkInterfaces.FindAsync(provider, id);
+        }
+
+        public Task<IReadOnlyList<NetworkInterfaceInfo>> ListAsync(IHost host)
+        {
+            Validate.NotNull(host, nameof(host));
+
+            return db.NetworkInterfaces.QueryAsync(Eq("hostId", host.Id));
         }
 
         public async Task<NetworkInterfaceInfo> RegisterAsync(RegisterNetworkInterfaceRequest request)
@@ -64,6 +75,8 @@ namespace Carbon.Platform.Networking
 
         public async Task<bool> DeleteAsync(INetworkInterface networkInterface)
         {
+            Validate.NotNull(networkInterface, nameof(networkInterface));
+
             return await db.NetworkInterfaces.PatchAsync(networkInterface.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))
             }, condition: IsNull("deleted")) > 0;

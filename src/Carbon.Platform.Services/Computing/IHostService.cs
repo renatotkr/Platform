@@ -19,6 +19,10 @@ namespace Carbon.Platform.Computing
 
         Task<IReadOnlyList<HostInfo>> ListAsync(ICluster cluster);
 
+        Task<IReadOnlyList<HostInfo>> ListAsync(ICluster cluster, HostStatus status);
+
         Task<IReadOnlyList<HostInfo>> ListAsync(IEnvironment environment);
+
+        Task<IReadOnlyList<HostInfo>> ListAsync(IEnvironment environment, HostStatus status);
     }
 }

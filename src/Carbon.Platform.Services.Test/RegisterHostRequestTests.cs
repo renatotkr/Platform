@@ -19,7 +19,22 @@ namespace Carbon.Platform.Services.Test
         }
 
         [Fact]
-        public void X()
+        public void B()
+        {
+            var json = @"{ status: ""Running"", ownerId: 1, environmentId: 1 }";
+
+            var model = JsonObject.Parse(json).As<RegisterHostRequest>();
+
+            Assert.Equal(1,                  model.EnvironmentId);
+            Assert.Equal(1,                  model.OwnerId);
+            Assert.Equal(HostStatus.Running, model.Status);
+
+            Assert.Null(model.Resource.ResourceId);
+            Assert.Null(model.MachineType.Name);
+        }
+
+        [Fact]
+        public void C()
         {
             var json = JsonObject.FromObject(new {
                 addresses = new[] { "192.168.1.1", "54.92.13.4" },
