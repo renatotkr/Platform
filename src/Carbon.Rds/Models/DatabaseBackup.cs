@@ -20,15 +20,9 @@ namespace Carbon.Rds
             Uid? encryptionKeyId = null,
             JsonObject properties = null)
         {
-            #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("Required", nameof(name));
-
-            #endregion
+            Validate.Id(id,               nameof(id));
+            Validate.Id(bucketId,         nameof(bucketId));
+            Validate.NotNullOrEmpty(name, nameof(name));
 
             Id         = id;
             BucketId   = bucketId;

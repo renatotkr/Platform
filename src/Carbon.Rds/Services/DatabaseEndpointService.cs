@@ -20,12 +20,7 @@ namespace Carbon.Rds.Services
 
         public Task<IReadOnlyList<DatabaseEndpoint>> ListAsync(IDatabaseInfo database)
         {
-            #region Preconditions
-
-            if (database == null)
-                throw new ArgumentNullException(nameof(database));
-
-            #endregion
+            Validate.NotNull(database, nameof(database));
 
             var range = ScopedId.GetRange(database.Id);
 

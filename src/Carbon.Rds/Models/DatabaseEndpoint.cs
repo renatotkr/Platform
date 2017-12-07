@@ -1,6 +1,4 @@
-﻿using System;
-
-using Carbon.Data.Annotations;
+﻿using Carbon.Data.Annotations;
 using Carbon.Platform;
 using Carbon.Platform.Sequences;
 
@@ -18,18 +16,9 @@ namespace Carbon.Rds
             ushort port = 3306,
             DatabaseEndpointFlags flags = default)
         {
-            #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            if (string.IsNullOrEmpty(host))
-                throw new ArgumentException("Required", nameof(host));
-
-            if (location == null)
-                throw new ArgumentNullException(nameof(location));
-
-            #endregion
+            Validate.Id(id);
+            Validate.NotNull(host, nameof(host));
+            Validate.NotNull(location, nameof(location));
 
             Id         = id;
             Host       = host;

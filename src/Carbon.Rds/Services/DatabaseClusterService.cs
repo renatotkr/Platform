@@ -25,12 +25,7 @@ namespace Carbon.Rds.Services
 
         public Task<IReadOnlyList<DatabaseCluster>> ListAsync(IDatabaseInfo database)
         {
-            #region Preconditions
-
-            if (database == null)
-                throw new ArgumentNullException(nameof(database));
-
-            #endregion
+            Validate.NotNull(database, nameof(database));
 
             var range = ScopedId.GetRange(database.Id);
 
@@ -41,11 +36,10 @@ namespace Carbon.Rds.Services
 
         public async Task<DatabaseCluster> RegisterAsync(RegisterDatabaseClusterRequest request)
         {
+            Validate.NotNull(request, nameof(request));
+            
             #region Preconditions
-
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
+            
             if (request.Name == null)
                 throw new ArgumentNullException(nameof(request.Name));
 

@@ -13,34 +13,20 @@ namespace Carbon.Rds
             long id,
             long databaseId,
             DbObject resource,
-            string[] actions,
+            string[] privileges,
             long userId,
             string[] columnNames = null)
         {
+            Validate.Id(id);
+            Validate.Id(databaseId, nameof(databaseId));
+            Validate.Id(userId, nameof(userId));
+            Validate.NotNull(privileges, nameof(privileges));
+
             #region Preconditions
-
-            if (id <= 0)
+            
+            if (privileges.Length == 0)
             {
-                throw new ArgumentException("Must be > 0", nameof(id));
-            }
-
-            if (databaseId <= 0)
-            {
-                throw new ArgumentException("Must be > 0", nameof(databaseId));
-            }
-
-            if (userId <= 0)
-            {
-                throw new ArgumentException("Must be > 0", nameof(userId));
-            }
-
-            if (actions == null)
-            {
-                throw new ArgumentNullException(nameof(actions));
-            }
-            else if (actions.Length == 0)
-            {
-                throw new ArgumentException("Must not be empty", nameof(actions));
+                throw new ArgumentException("Must not be empty", nameof(privileges));
             }
 
             #endregion
@@ -51,7 +37,7 @@ namespace Carbon.Rds
             SchemaName  = resource.SchemaName;
             ObjectType  = resource.Type;
             ObjectName  = resource.ObjectName;
-            Actions     = actions;
+            Actions     = privileges;
             ColumnNames = columnNames;
         }
 

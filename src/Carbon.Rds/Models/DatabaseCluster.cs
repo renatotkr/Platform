@@ -13,12 +13,8 @@ namespace Carbon.Rds
 
         public DatabaseCluster(long id, string name, ManagedResource resource, JsonObject properties = null)
         {
-            #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            #endregion
+            Validate.Id(id, nameof(id));
+            Validate.NotNullOrEmpty(name, nameof(name));
 
             Id         = id;
             Name       = name;

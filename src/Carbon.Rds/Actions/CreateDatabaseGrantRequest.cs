@@ -19,16 +19,13 @@ namespace Carbon.Rds.Services
             string[] privileges,
             long userId)
         {
+            Validate.Id(databaseId, nameof(databaseId));
+            Validate.NotNull(privileges, nameof(privileges));
+            Validate.Id(userId, nameof(userId));
+
             #region Preconditions
 
-            if (databaseId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(databaseId));
-
-            if (privileges == null)
-            {
-                throw new ArgumentNullException(nameof(privileges));
-            }
-            else if (privileges.Length == 0)
+            if (privileges.Length == 0)
             {
                 throw new ArgumentException("Must not be empty", nameof(privileges));
             }
@@ -39,11 +36,6 @@ namespace Carbon.Rds.Services
                 {
                     throw new ArgumentException("Invalid", nameof(privileges));
                 }
-            }
-
-            if (userId <= 0)
-            {
-                throw new ArgumentException("Must be > 0", nameof(userId));
             }
 
             #endregion

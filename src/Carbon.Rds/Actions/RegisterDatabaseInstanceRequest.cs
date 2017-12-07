@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 using Carbon.Platform.Resources;
 using Carbon.Platform.Storage;
 
@@ -15,12 +14,7 @@ namespace Carbon.Rds.Services
             int priority = 1,
             DatabaseFlags flags = DatabaseFlags.Primary)
         {
-            #region Preconditions
-
-            if (databaseId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(databaseId));
-
-            #endregion
+            Validate.Id(databaseId, nameof(databaseId));
 
             DatabaseId = databaseId;
             Resource   = resource;

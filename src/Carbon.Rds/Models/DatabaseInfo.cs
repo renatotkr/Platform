@@ -18,18 +18,9 @@ namespace Carbon.Rds
             long ownerId,
             JsonObject properties = null)
         {
-            #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("Required", nameof(name));
-
-            if (ownerId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(ownerId));
-
-            #endregion
+            Validate.Id(id);
+            Validate.NotNullOrEmpty(name, nameof(name));
+            Validate.Id(ownerId, nameof(ownerId));
 
             Id = id;
             Name       = name;

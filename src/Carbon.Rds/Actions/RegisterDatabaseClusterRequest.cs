@@ -11,7 +11,9 @@ namespace Carbon.Rds.Services
             RegisterDatabaseInstanceRequest[] instances,
             RegisterDatabaseEndpointRequest[] endpoints)
         {
-            Name      = name ?? throw new ArgumentNullException(nameof(name));
+            Validate.NotNullOrEmpty(name, nameof(name));
+
+            Name      = name;
             Resource  = resource;
             Instances = instances;
             Endpoints = endpoints;

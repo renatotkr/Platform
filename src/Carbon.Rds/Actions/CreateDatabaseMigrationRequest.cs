@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace Carbon.Rds.Services
 {
@@ -13,9 +12,11 @@ namespace Carbon.Rds.Services
             string[] commands, 
             string description = null)
         {
+            Validate.NotNull(commands, nameof(commands));
+
             DatabaseId  = databaseId;
             SchemaName  = schemaName;
-            Commands    = commands ?? throw new ArgumentNullException(nameof(commands));
+            Commands    = commands;
             Description = description;
         }
 

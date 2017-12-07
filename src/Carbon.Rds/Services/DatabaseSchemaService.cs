@@ -21,12 +21,7 @@ namespace Carbon.Rds.Services
 
         public Task<IReadOnlyList<DatabaseBackup>> ListAsync(IDatabaseInfo database)
         {
-            #region Preconditions
-
-            if (database == null)
-                throw new ArgumentNullException(nameof(database));
-
-            #endregion
+            Validate.NotNull(database, nameof(database));
 
             var range = ScopedId.GetRange(database.Id);
 
@@ -46,6 +41,8 @@ namespace Carbon.Rds.Services
 
         public async Task DeleteAsync(IDatabaseSchema schema)
         {
+            Validate.NotNull(schema, nameof(schema));
+
             await db.DatabaseSchemas.PatchAsync(schema.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))
             }, condition: IsNull("deleted"));

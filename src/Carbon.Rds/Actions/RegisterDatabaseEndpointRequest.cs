@@ -9,12 +9,15 @@ namespace Carbon.Rds.Services
     {
         public RegisterDatabaseEndpointRequest() { }
 
-        public RegisterDatabaseEndpointRequest(string host, int port, DatabaseEndpointFlags flags, ILocation location = null)
+        public RegisterDatabaseEndpointRequest(
+            string host,
+            int port, 
+            DatabaseEndpointFlags flags,
+            ILocation location = null)
         {
-            #region Preconditions
+            Validate.NotNullOrEmpty(host, nameof(host));
 
-            if (string.IsNullOrEmpty(host))
-                throw new ArgumentException("Required", nameof(host));
+            #region Preconditions
 
             if (port <= 0)
                 throw new ArgumentException("Must be > 0", nameof(port));

@@ -23,12 +23,7 @@ namespace Carbon.Rds.Services
 
         public Task<IReadOnlyList<DatabaseGrant>> ListAsync(IDatabaseInfo database)
         {
-            #region Preconditions
-
-            if (database == null)
-                throw new ArgumentNullException(nameof(database));
-
-            #endregion
+            Validate.NotNull(database, nameof(database));
 
             var range = ScopedId.GetRange(database.Id);
 
@@ -39,14 +34,7 @@ namespace Carbon.Rds.Services
 
         public Task<IReadOnlyList<DatabaseGrant>> ListAsync(IUser user)
         {
-            #region Preconditions
-
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-
-            #endregion
+            Validate.NotNull(user, nameof(user));
 
             return db.DatabaseGrants.QueryAsync(
                 And(Eq("userId", user.Id), IsNull("deleted"))
@@ -55,19 +43,8 @@ namespace Carbon.Rds.Services
 
         public Task<IReadOnlyList<DatabaseGrant>> ListAsync(IDatabaseInfo database, IUser user)
         {
-            #region Preconditions
-
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-
-            if (database == null)
-            {
-                throw new ArgumentNullException(nameof(database));
-            }
-
-            #endregion
+            Validate.NotNull(database, nameof(database));
+            Validate.NotNull(user, nameof(user));
 
             var range = ScopedId.GetRange(database.Id);
 
@@ -82,19 +59,8 @@ namespace Carbon.Rds.Services
 
         public Task<IReadOnlyList<DatabaseGrant>> ListAsync(IDatabaseInfo database, IUser user, DbObject resource)
         {
-            #region Preconditions
-
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-
-            if (database == null)
-            {
-                throw new ArgumentNullException(nameof(database));
-            }
-
-            #endregion
+            Validate.NotNull(database, nameof(database));
+            Validate.NotNull(user, nameof(user));
 
             var range = ScopedId.GetRange(database.Id);
 
@@ -112,12 +78,7 @@ namespace Carbon.Rds.Services
 
         public async Task<DatabaseGrant> CreateAsync(CreateDatabaseGrantRequest request)
         {
-            #region Preconditions
-
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            #endregion
+            Validate.NotNull(request, nameof(request));
 
             var grantId = await DatabaseGrantId.NextAsync(db.Context, request.DatabaseId);
 
@@ -126,7 +87,7 @@ namespace Carbon.Rds.Services
                 databaseId : request.DatabaseId,
                 userId     : request.UserId,
                 resource   : request.Resource,
-                actions    : request.Privileges
+                privileges : request.Privileges
             );
 
             await db.DatabaseGrants.InsertAsync(grant);
@@ -136,12 +97,7 @@ namespace Carbon.Rds.Services
 
         public async Task<bool> DeleteAsync(IDatabaseGrant grant)
         {
-            #region Preconditions
-
-            if (grant == null)
-                throw new ArgumentNullException(nameof(grant));
-
-            #endregion
+            Validate.NotNull(grant, nameof(grant));
 
             return await db.DatabaseGrants.PatchAsync(grant.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))

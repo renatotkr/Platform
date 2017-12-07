@@ -21,12 +21,7 @@ namespace Carbon.Rds.Services
 
         public Task<IReadOnlyList<DatabaseInstance>> ListAsync(IDatabaseInfo database)
         {
-            #region Preconditions
-
-            if (database == null)
-                throw new ArgumentNullException(nameof(database));
-
-            #endregion
+            Validate.NotNull(database, nameof(database));
 
             var range = ScopedId.GetRange(database.Id);
 
@@ -37,12 +32,7 @@ namespace Carbon.Rds.Services
 
         public async Task<DatabaseInstance> RegisterAsync(RegisterDatabaseInstanceRequest request)
         {
-            #region Preconditions
-
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            #endregion
+            Validate.NotNull(request, nameof(request));
 
             var instanceId = await DatabaseInstanceId.NextAsync(db.Context, request.DatabaseId);
 
@@ -61,13 +51,8 @@ namespace Carbon.Rds.Services
 
         public async Task DeleteAsync(DatabaseInstance instance)
         {
-            #region Preconditions
-
-            if (instance == null)
-                throw new ArgumentNullException(nameof(instance));
-
-            #endregion
-
+            Validate.NotNull(instance, nameof(instance));
+            
             await db.DatabaseInstances.PatchAsync(instance.Id, new[] {
                 Change.Replace("terminated", Func("NOW"))
             });

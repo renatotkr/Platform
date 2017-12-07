@@ -15,16 +15,12 @@ namespace Carbon.Rds
             string[] commands, 
             string description = null)
         {
-            #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            #endregion
+            Validate.Id(id);
+            Validate.NotNull(commands, nameof(commands));
 
             Id          = id;
             SchemaName  = schemaName;
-            Commands    = commands ?? throw new ArgumentNullException(nameof(commands));
+            Commands    = commands;
             Description = description;
         }
 

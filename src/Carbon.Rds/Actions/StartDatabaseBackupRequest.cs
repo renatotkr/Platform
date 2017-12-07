@@ -8,6 +8,8 @@
             long bucketId, 
             string name)
         {
+            Validate.Id(databaseId, nameof(databaseId));
+
             DatabaseId = databaseId;
             SchemaName = schemaName;
             BucketId   = bucketId;
