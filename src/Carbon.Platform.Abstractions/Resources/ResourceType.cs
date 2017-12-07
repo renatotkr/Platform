@@ -28,6 +28,11 @@ namespace Carbon.Platform.Resources
             return Name == other.Name;
         }
 
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
+        }
+
         #endregion
     }
 

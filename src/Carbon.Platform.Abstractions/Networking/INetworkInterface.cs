@@ -10,7 +10,14 @@ namespace Carbon.Platform.Networking
         MacAddress MacAddress { get; }
 
         IPAddress[] Addresses { get; }
+    
+        // NetworkId
+        // SubnetId
     }
 }
+
+//       NAME
+// GPC | compute#networkInterface
+
 
 // Network interfaces may be attached to hosts, load balancers, db instances, etc.

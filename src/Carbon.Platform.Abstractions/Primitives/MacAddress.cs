@@ -5,6 +5,8 @@ namespace Carbon.Net
 {
     public readonly struct MacAddress
     {
+        // TODO: Eliminate this array...
+
         private readonly byte[] data;
 
         public MacAddress(byte[] data)
@@ -23,14 +25,14 @@ namespace Carbon.Net
             var seperator = text[2];
 
             var parts = text.Split(seperator == '-' ? Seperators.Dash : Seperators.Colon);
-
-            var buffer = new byte[6];
-
+            
             if (parts.Length != 6)
             {
-                throw new Exception("Mac address must have 6 parts");
+                throw new Exception("Mac address must have 6 parts. Had " + parts.Length + " parts");
             }
 
+            var buffer = new byte[6];
+            
             for (var i = 0; i < 6; i++)
             {
                 buffer[i] = Convert.ToByte(parts[i], 16);

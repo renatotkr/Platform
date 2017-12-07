@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Abstractions</AssemblyName>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <VersionPrefix>1.48.0</VersionPrefix>
+    <VersionPrefix>1.50.0</VersionPrefix>
     <LangVersion>7.2</LangVersion>
 
     <!-- Package Info-->

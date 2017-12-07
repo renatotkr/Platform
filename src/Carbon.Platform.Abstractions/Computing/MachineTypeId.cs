@@ -44,7 +44,7 @@ namespace Carbon.Platform.Computing
         }
 
         [DataMember(Name = "id")]
-        public long Id { get; }
+        public long Id { get; } 
 
         [DataMember(Name = "name")]
         public string Name { get; }

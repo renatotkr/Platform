@@ -218,10 +218,9 @@ namespace Carbon.Platform.Resources
             LocationId == other.LocationId && 
             Type.Name == other.Type.Name && 
             ResourceId == other.ResourceId;
-
+        
         #endregion
     }
-
 }
 
 /*
