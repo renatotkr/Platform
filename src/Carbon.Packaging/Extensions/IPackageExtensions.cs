@@ -11,11 +11,11 @@ namespace Carbon.Packaging
 {
     public static class IPackageExtensions
     {
-        public static IBlob Find(this IPackage package, string absolutePath)
+        public static IBlob Find(this IPackage package, string absolutePath) // key?
         {
             foreach (var file in package)
             {
-                if (file.Name == absolutePath)
+                if (file.Key == absolutePath)
                 {
                     return file;
                 }
@@ -28,7 +28,7 @@ namespace Carbon.Packaging
         {
             foreach (var blob in package)
             {
-                if (blob.Name.StartsWith(prefix))
+                if (blob.Key.StartsWith(prefix))
                 {
                     yield return blob;
                 }
@@ -51,7 +51,7 @@ namespace Carbon.Packaging
 
             foreach (var item in package)
             {
-                var filePath = Path.Combine(targetDirectory.FullName, item.Name.Replace('/', Path.DirectorySeparatorChar));
+                var filePath = Path.Combine(targetDirectory.FullName, item.Key.Replace('/', Path.DirectorySeparatorChar));
 
                 var file = new FileInfo(filePath);
 
@@ -83,21 +83,19 @@ namespace Carbon.Packaging
             {
                 foreach (var packageEntry in package)
                 {
-                    var format = Path.GetExtension(packageEntry.Name).Trim(Seperators.Period);
+                    var format = Path.GetExtension(packageEntry.Key).Trim(Seperators.Period);
 
                     var compressionLevel = FileFormat.IsText(format)
                         ? CompressionLevel.Optimal
                         : CompressionLevel.Fastest;
 
-                    var archiveEntry = archive.CreateEntry(packageEntry.Name, compressionLevel);
+                    var archiveEntry = archive.CreateEntry(packageEntry.Key, compressionLevel);
                     
                     using (var targetStream = archiveEntry.Open())
                     using (var sourceStream = await packageEntry.OpenAsync().ConfigureAwait(false))
                     {
                         await sourceStream.CopyToAsync(targetStream).ConfigureAwait(false);
-
                     }
-                   
                 }
             }
         }

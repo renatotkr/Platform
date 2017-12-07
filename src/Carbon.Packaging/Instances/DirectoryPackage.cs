@@ -32,7 +32,8 @@ namespace Carbon.Packaging
         private string GetKey(FileInfo file)
         {
             return file.FullName
-                .Replace(root.FullName, "").Replace(@"\", "/")
+                .Replace(root.FullName, "")
+                .Replace('\\', '/')
                 .TrimStart(Seperators.ForwardSlash);
         }
 
@@ -40,23 +41,22 @@ namespace Carbon.Packaging
         {
             foreach (var directory in rootDirectory.EnumerateDirectories())
             {
-                if (directory.Name.StartsWith("_"))
+                if (directory.Name[0] == '_')
                 {
                     continue;
                 }
 
                 foreach (var file in GetFilesRecursive(directory))
                 {
-                    if (!file.Name.StartsWith("_"))
-                    {
-                        yield return file;
-                    }
+                    if (file.Name[0] == '_') continue;
+
+                    yield return file;
                 }
             }
 
             foreach (var file in rootDirectory.EnumerateFiles())
             {
-                if (file.Name.StartsWith("_")) continue;
+                if (file.Name[0] == '_') continue;
 
                 yield return file;
             }

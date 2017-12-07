@@ -1,6 +1,6 @@
 ﻿namespace Carbon.Packaging
 {
-    public struct PutPackageOptions
+    public class PutPackageOptions
     {
         public byte[] EncryptionKey { get; set; }
     }

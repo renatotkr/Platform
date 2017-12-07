@@ -13,7 +13,7 @@ namespace Carbon.Packaging
         {
             foreach (var blob in blobs)
             {
-                Add(blob.Name, ManifestEntry.FromBlob(blob));
+                Add(blob.Key, ManifestEntry.FromBlob(blob));
             }
         }
 
@@ -48,7 +48,7 @@ namespace Carbon.Packaging
             return TryGetValue(key, out item);
         }
 
-        public bool Contains(string name) => ContainsKey(name);
+        public bool Contains(string key) => ContainsKey(key);
 
         public static Manifest FromPackage(Package package)
         {

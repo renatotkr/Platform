@@ -2,14 +2,15 @@
 
 namespace Carbon.Packaging
 {
+    [DataContract]
     public class PackageRepository
     {
-        [DataMember(Name = "url")]
-        public string Url { get; set; }
-
-        [DataMember(Name = "type")]
+        [DataMember(Name = "type", Order = 1, EmitDefaultValue = false)]
         public string Type { get; set; }
-
+        
+        [DataMember(Name = "url", Order = 2)]
+        public string Url { get; set; }
+        
         [IgnoreDataMember]
         public string Text { get; set; }
 

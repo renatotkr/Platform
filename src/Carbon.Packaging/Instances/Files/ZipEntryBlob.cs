@@ -12,20 +12,20 @@ namespace Carbon.Packaging
     {
         private readonly ZipArchiveEntry entry;
 
-        public ZipEntryBlob(string name, ZipArchiveEntry entry)
+        public ZipEntryBlob(string key, ZipArchiveEntry entry)
         {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Key = key ?? throw new ArgumentNullException(nameof(key));
 
             this.entry = entry ?? throw new ArgumentNullException(nameof(entry));
         }
 
-        public string Name { get; }
+        public string Key { get; }
 
         public long Size => entry.Length;
 
         public DateTime Modified => entry.LastWriteTime.UtcDateTime;
 
-        public IReadOnlyDictionary<string, string> Metadata => null;
+        public IReadOnlyDictionary<string, string> Properties => BlobProperties.Empty;
 
         public ValueTask<Stream> OpenAsync() => new ValueTask<Stream>(entry.Open());
 

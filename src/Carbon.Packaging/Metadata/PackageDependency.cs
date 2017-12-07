@@ -1,10 +1,11 @@
 ﻿using System;
-
+using System.Runtime.Serialization;
 using Carbon.Versioning;
 
 namespace Carbon.Packaging
 {
-    public class PackageDependency
+    [DataContract]
+    public readonly struct PackageDependency
     {
         public PackageDependency(string name, string text)
         {
@@ -12,12 +13,16 @@ namespace Carbon.Packaging
             Value = text ?? throw new ArgumentNullException(nameof(text));
         }
 
+        [DataMember(Name = "name", Order = 1)]
         public string Name { get; }
 
+        [DataMember(Name = "value", Order = 2)]
         public string Value { get; }
 
+        [IgnoreDataMember]
         public bool IsFile => !char.IsDigit(Value[0]);
 
+        [IgnoreDataMember]
         public SemanticVersionRange VersionRange => SemanticVersionRange.Parse(Value);
     }
 }

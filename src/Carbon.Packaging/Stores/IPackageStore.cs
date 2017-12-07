@@ -12,13 +12,13 @@ namespace Carbon.Packaging
         Task<PutPackageResult> PutAsync(
             string key,
             IPackage package,
-            PutPackageOptions? options = null
+            PutPackageOptions options = null
         );
 
         Task<PutPackageResult> PutAsync(
            string key,
            Stream stream,
-           PutPackageOptions? options = null
+           PutPackageOptions options = null
        );
     }
 }

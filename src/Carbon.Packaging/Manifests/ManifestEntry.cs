@@ -5,7 +5,7 @@ using Carbon.Storage;
 
 namespace Carbon.Packaging
 {
-    public class ManifestEntry : IManifestEntry
+    public sealed class ManifestEntry : IManifestEntry
     {
         public ManifestEntry(string key, Hash hash, DateTime modified)
         {
@@ -19,8 +19,8 @@ namespace Carbon.Packaging
 
             #endregion
 
-            Key = key;
-            Hash = hash;
+            Key      = key;
+            Hash     = hash;
             Modified = modified;
         }
 
@@ -35,7 +35,7 @@ namespace Carbon.Packaging
             var hash = Hash.Compute(HashType.SHA256, blob.OpenAsync().Result, leaveOpen: false);
 
             return new ManifestEntry(
-                key      : blob.Name,
+                key      : blob.Key,
                 modified : blob.Modified,
                 hash     : hash
             );

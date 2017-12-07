@@ -9,7 +9,7 @@ namespace Carbon.Extensions
     {
         public static bool IsStatic(this IBlob blob)
         {
-            var format = Path.GetExtension(blob.Name).TrimStart(Seperators.Period);
+            var format = Path.GetExtension(blob.Key).TrimStart(Seperators.Period);
 
             return FileFormat.IsStatic(format);
         }
@@ -21,7 +21,7 @@ namespace Carbon.Extensions
             // .something.jpeg
             // /.git
 
-            foreach (var part in blob.Name.Split(Seperators.ForwardSlash))
+            foreach (var part in blob.Key.Split(Seperators.ForwardSlash))
             {
                 if (part.Length > 0 && part[0] == '.') return true;
             }

@@ -16,15 +16,15 @@ namespace Carbon.Packaging
             this.basePackage = basePackage ?? throw new ArgumentNullException(nameof(basePackage));
         }
 
-        public void Add(string name, Stream stream)
+        public void Add(string key, Stream stream)
         {
             #region Preconditions
 
-            if (name == null) throw new ArgumentNullException(nameof(name));
+            if (key == null) throw new ArgumentNullException(nameof(key));
 
             #endregion
 
-            var blob = new Blob(name, stream);
+            var blob = new Blob(key, stream);
 
             files.Add(blob);
         }

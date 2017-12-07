@@ -2,8 +2,21 @@
 
 namespace Carbon.Packaging
 {
+    [DataContract]
     public class PackageContributor
     {
+        public PackageContributor() { }
+
+        public PackageContributor(
+            string name, 
+            string email = null,
+            string url = null)
+        {
+            Name = name;
+            Email = email;
+            Url = url;
+        }
+
         [DataMember(Name = "name", Order = 1)]
         public string Name { get; set; }
 

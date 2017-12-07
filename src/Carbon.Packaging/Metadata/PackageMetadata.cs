@@ -1,13 +1,12 @@
-﻿using System.Runtime.Serialization;
-using System.IO;
-using System.Collections.Generic;
+﻿using System.IO;
+using System.Runtime.Serialization;
+using System.Threading.Tasks;
+using Carbon.Json;
+using Carbon.Storage;
+using Carbon.Versioning;
 
 namespace Carbon.Packaging
 {
-    using Json;
-    using Storage;
-    using Versioning;
-
     public class PackageMetadata
     {
         [DataMember(Name = "name")]
@@ -16,23 +15,24 @@ namespace Carbon.Packaging
         [DataMember(Name = "version")]
         public SemanticVersion Version { get; set; }
 
-        [DataMember(Name = "description")]
+        [DataMember(Name = "description", EmitDefaultValue = false)]
         public string Description { get; set; }
 
-        [DataMember(Name = "author")]
+        [DataMember(Name = "author", EmitDefaultValue = false)]
         public PackageContributor Author { get; set; }
 
-        [DataMember(Name = "contributors")]
+        [DataMember(Name = "contributors", EmitDefaultValue = false)]
         public PackageContributor[] Contributors { get; set; }
 
-        [DataMember(Name = "main")]
+        [DataMember(Name = "main", EmitDefaultValue = false)]
         public string Main { get; set; }
 
+        // [DataMember(Name = "license", EmitDefaultValue = false)]
         public string License { get; set; }
 
-        public List<PackageDependency> Dependencies { get; } = new List<PackageDependency>();
+        public PackageDependency[] Dependencies { get; private set; }
 
-        [DataMember(Name = "repository")]
+        [DataMember(Name = "repository", EmitDefaultValue = false)]
         public PackageRepository Repository { get; set; }
     
         public string[] Files { get; set; }
@@ -45,21 +45,19 @@ namespace Carbon.Packaging
                 Name = json["name"]
             };
 
-            if (json.ContainsKey("version"))
+            if (json.TryGetValue("version", out var versionNode))
             {
-                metadata.Version = SemanticVersion.Parse(json["version"]);
+                metadata.Version = SemanticVersion.Parse(versionNode);
             }
 
-            if (json.ContainsKey("main"))
+            if (json.TryGetValue("main", out var mainNode))
             {
-                metadata.Main = json["main"];
+                metadata.Main = mainNode;
             }
 
-            if (json.ContainsKey("repository"))
+            if (json.TryGetValue("repository", out var repositoryNode))
             {
-                var repository = json["repository"];
-
-                if (repository is JsonObject)
+                if (repositoryNode is JsonObject)
                 {
                     /*
                     { 
@@ -68,46 +66,53 @@ namespace Carbon.Packaging
                     }
                     */
 
-                    metadata.Repository = repository.As<PackageRepository>();
+                    metadata.Repository = repositoryNode.As<PackageRepository>();
                 }
                 else
                 {
-                    metadata.Repository = PackageRepository.Parse(repository);
+                    metadata.Repository = PackageRepository.Parse(repositoryNode);
                 }
             }
 
-            if (json.ContainsKey("dependencies"))
+            if (json.TryGetValue("dependencies", out var dependenciesNode) 
+                && dependenciesNode is JsonObject dependenciesObject)
             {
-                foreach (var pair in (JsonObject)json["dependencies"])
-                {
-                    var dep = new PackageDependency(pair.Key, pair.Value);
+                var deps = new PackageDependency[dependenciesObject.Values.Count];
 
-                    metadata.Dependencies.Add(dep);
+                var i = 0;
+
+                foreach (var pair in dependenciesObject)
+                {
+                    deps[i] = new PackageDependency(pair.Key, pair.Value);
+
+                    i++;
                 }
+
+                metadata.Dependencies = deps;
             }
    
-            if (json.ContainsKey("files"))
+            if (json.TryGetValue("files", out var filesNode))
             {
-                metadata.Files = json["files"].ToArrayOf<string>();
+                metadata.Files = filesNode.ToArrayOf<string>();
             }
 
-            if (json.ContainsKey("author"))
+            if (json.TryGetValue("author", out var authorNode))
             {
                 // Your Name <you.name@example.org>
 
-                if (json["author"] is JsonString)
+                if (authorNode is JsonString)
                 {
-                    metadata.Author = new PackageContributor { Text = json["author"] };
+                    metadata.Author = new PackageContributor { Text = authorNode };
                 }
                 else
                 {
-                    metadata.Author = json["author"].As<PackageContributor>();
+                    metadata.Author = authorNode.As<PackageContributor>();
                 }
             }
 
-            if (json.ContainsKey("contributors"))
+            if (json.TryGetValue("contributors", out var contributorsNode))
             {
-                metadata.Contributors = json["contributors"].ToArrayOf<PackageContributor>();
+                metadata.Contributors = contributorsNode.ToArrayOf<PackageContributor>();
             }
 
             return metadata;
@@ -121,14 +126,16 @@ namespace Carbon.Packaging
             }
         }
 
-        public static PackageMetadata FromBlob(IBlob file)
+        public static async Task<PackageMetadata> ParseAsync(IBlob file)
         {
-            return Parse(file.OpenAsync().Result);
+            var stream = await file.OpenAsync().ConfigureAwait(false);
+
+            // dispose?
+
+            return Parse(stream);
         }
     }
 }
-
-
 
 /*
 NPM Description:
