@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <AssemblyName>GitHub</AssemblyName>
-    <VersionPrefix>1.9.4</VersionPrefix>
+    <VersionPrefix>1.11.0</VersionPrefix>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <LangVersion>7.2</LangVersion>
 
     <!-- Package Details -->
     <Authors>iamcarbon</Authors>
     <Copyright>© Jason Nelson</Copyright>
-    <Description>Simple API for GitHub.</Description>
+    <Description>Modern .NET Standard library for GitHub.</Description>
   </PropertyGroup>
 
   <ItemGroup>

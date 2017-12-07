@@ -41,7 +41,7 @@ namespace GitHub
 
     public enum GitArchiveFormat
     {
-        Tarball,
-        Zipball
+        Tarball = 1,
+        Zipball = 2
     }
 }
