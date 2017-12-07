@@ -30,11 +30,11 @@ namespace Carbon.Cloud.Logging
 
             #endregion
 
-            var parts = Timestamp.Split(timestamp.ToUnixTimeMilliseconds());
+            var (hours, milliseconds) = Timestamp.Split(timestamp.ToUnixTimeMilliseconds());
 
             return new Uid(
-                upper: (ulong)ScopedId.Create(accountId, (int)parts.hours),
-                lower: RequestIdLower.Create((ulong)parts.milliseconds, (ulong)sequenceNumber)
+                upper: (ulong)ScopedId.Create(accountId, (int)hours),
+                lower: RequestIdLower.Create((ulong)milliseconds, (ulong)sequenceNumber)
             );
         }
 

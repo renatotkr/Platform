@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Carbon.Cloud.Logging.Services</AssemblyName>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <VersionPrefix>0.3.0</VersionPrefix>
+    <VersionPrefix>0.5.0</VersionPrefix>
     <LangVersion>7.2</LangVersion>
 
     <!-- Package Properties -->
@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="Carbon.Data.Sql" Version="0.38.0" />
-    <PackageReference Include="protobuf-net" Version="2.3.2" />
+    <PackageReference Include="protobuf-net" Version="2.3.3" />
   </ItemGroup>
 
   <ItemGroup>
