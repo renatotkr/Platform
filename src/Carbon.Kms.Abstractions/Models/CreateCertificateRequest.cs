@@ -6,8 +6,8 @@ namespace Carbon.Kms
     {
         public CreateCertificateRequest(
             long ownerId,
-            string[] subjects,
-            byte[] data, // TODO: Get subjects from data?
+            string[] subjects, // get subjects from the certificate data?
+            byte[] data,
             byte[] encryptedPrivateKey = null,
             long? parentId = null)
         {

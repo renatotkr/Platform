@@ -8,7 +8,7 @@ using Carbon.Data.Protection;
 
 namespace Carbon.Kms.Services
 {
-    public partial class CertificateManager : ICertificateManager
+    public class CertificateManager : ICertificateManager
     {
         private readonly KmsDb db;
 

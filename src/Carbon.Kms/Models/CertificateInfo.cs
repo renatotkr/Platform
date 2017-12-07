@@ -70,7 +70,7 @@ namespace Carbon.Kms
         [Member("encryptedPrivateKey"), MaxLength(2500)]
         public byte[] EncryptedPrivateKey { get; }
 
-        [Member("fingerprint"), Unique]  // sha256(data)
+        [Member("fingerprint"), Unique] // sha256(data)
         [FixedSize(32)]
         public byte[] Fingerprint { get; }
 

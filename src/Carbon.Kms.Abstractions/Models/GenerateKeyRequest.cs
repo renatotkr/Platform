@@ -8,8 +8,8 @@ namespace Carbon.Kms
     public class GenerateKeyRequest
     {
         public GenerateKeyRequest(
-            string name = null, 
-            long ownerId = 1,
+            long ownerId,
+            string name, 
             KeyType type = KeyType.Secret, 
             int size = 256, 
             IEnumerable<KeyValuePair<string, string>> aad = null)
@@ -24,16 +24,16 @@ namespace Carbon.Kms
 
             #endregion
 
-            Name    = name;
             OwnerId = ownerId;
+            Name    = name;
             Type    = type;
             Size    = size; 
             Aad     = aad;
         }
 
-        public string Name { get; }
-
         public long OwnerId { get; }
+
+        public string Name { get; }
 
         public KeyType Type { get; } 
 
