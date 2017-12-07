@@ -10,7 +10,7 @@ namespace Carbon.Platform.Metrics
         {
             Context = context ?? throw new ArgumentNullException(nameof(context));
             
-            Metrics          = new Dataset<Metric,           long>(context);
+            Metrics          = new Dataset<Metric,          long>(context);
             MetricDimensions = new Dataset<MetricDimension, (long, string)>(context);
             Series           = new Dataset<Series,          long>(context);
             SeriesPoints     = new Dataset<SeriesPoint,     (long, long)>(context);

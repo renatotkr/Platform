@@ -2,7 +2,7 @@
 
 namespace Carbon.Platform.Metrics
 {
-    public readonly struct CreateMetricRequest
+    public class CreateMetricRequest
     {
         public CreateMetricRequest(
             string name,

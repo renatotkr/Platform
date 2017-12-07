@@ -9,29 +9,21 @@ namespace Carbon.Platform.Metrics
     {
         public Metric() { }
 
-        public Metric(long id, string name, MetricType type, string unit)
+        public Metric(long id, long ownerId, string name, MetricType type, string unit)
         {
-            #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("Required", nameof(name));
+            Validate.Id(id);
+            Validate.Id(ownerId, nameof(ownerId));
+            Validate.NotNullOrEmpty(name, nameof(name));
+            Validate.NotNull(unit, nameof(unit));
 
             if (name.Length > 100)
                 throw new ArgumentException("May not exceed 100 characters", nameof(name));
 
-            if (string.IsNullOrEmpty(unit))
-                throw new ArgumentException("Required", nameof(unit));
-
-            #endregion
-
             Id      = id;
+            OwnerId = ownerId;
             Type    = type;
             Name    = name;
             Unit    = unit;
-            OwnerId = 1;
         }
 
         [Member("id"), Key("metricId")]
@@ -40,7 +32,7 @@ namespace Carbon.Platform.Metrics
         [Member("name")]
         [Ascii, StringLength(100)]
         public string Name { get; }
-        
+
         [Member("type")]
         public MetricType Type { get; }
 
@@ -55,6 +47,6 @@ namespace Carbon.Platform.Metrics
         public DateTime Created { get; }
 
         [Member("deleted")]
-        public DateTime? Deleted { get; }     
+        public DateTime? Deleted { get; }
     }
 }

@@ -54,10 +54,11 @@ namespace Carbon.Platform.Metrics
             var id = await db.Metrics.Sequence.NextAsync();
 
             var metric = new Metric(
-                id   : id,
-                name : request.Name,
-                type : request.Type,
-                unit : request.Unit
+                id      : id,
+                ownerId : request.OwnerId,
+                name    : request.Name,
+                type    : request.Type,
+                unit    : request.Unit
             );
 
             await db.Metrics.InsertAsync(metric);

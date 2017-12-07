@@ -22,6 +22,12 @@ namespace Carbon.Platform.Metrics
             return Name + "=" + Value;
         }
 
+        public void Deconstruct(out string name, out string value)
+        {
+            name  = Name;
+            value = Value;
+        }
+
         // a=b
         public static Dimension Parse(string text)
         {

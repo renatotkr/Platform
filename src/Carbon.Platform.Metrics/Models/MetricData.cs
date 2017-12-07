@@ -76,12 +76,10 @@ namespace Carbon.Platform.Metrics
                     case "unit"  : unit = field.Value; break;
                     case "value" : value = double.Parse(field.Value); break;
                 }
-
             }
 
             return (unit, value);
         }
-
 
         public void WriteTo(StringBuilder sb)
         {

@@ -12,14 +12,9 @@ namespace Carbon.Platform.Metrics
 
         public Series(long id, string name, string granularity)
         {
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("Required", nameof(name));
-
-            if (string.IsNullOrEmpty(granularity))
-                throw new ArgumentException("Required", nameof(granularity));
+            Validate.Id(id);
+            Validate.NotNullOrEmpty(name, nameof(name));
+            Validate.NotNullOrEmpty(granularity, nameof(granularity));
 
             Id          = id;
             Name        = name;
@@ -38,6 +33,8 @@ namespace Carbon.Platform.Metrics
         [Member("granularity")]
         [Ascii, StringLength(20)]
         public string Granularity { get; }
+
+        // Dimensions?
 
         // 31,536,000 seconds in a year
 
