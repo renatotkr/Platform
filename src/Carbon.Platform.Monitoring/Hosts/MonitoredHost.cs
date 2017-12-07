@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-
-using Carbon.Platform.Storage;
+﻿
 using Carbon.Platform.Networking;
+using Carbon.Platform.Storage;
 
 namespace Carbon.Platform.Monitoring
 {
@@ -9,18 +8,18 @@ namespace Carbon.Platform.Monitoring
     {
         public MonitoredHost(
             long id, 
-            IReadOnlyList<INetworkInterface> networkInterfaces,
-            IReadOnlyList<IVolume> volumes)
+            INetworkInterface[] networkInterfaces,
+            IVolume[] volumes)
         {
-            Id = id;
+            Id                = id;
             NetworkInterfaces = networkInterfaces;
-            Volumes = volumes;
+            Volumes           = volumes;
         }
 
         public long Id { get; }
 
-        public IReadOnlyList<INetworkInterface> NetworkInterfaces { get; }
+        public INetworkInterface[] NetworkInterfaces { get; }
 
-        public IReadOnlyList<IVolume> Volumes { get; }
+        public IVolume[] Volumes { get; }
     }
 }

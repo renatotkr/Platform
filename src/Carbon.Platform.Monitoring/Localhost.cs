@@ -8,18 +8,15 @@ namespace Carbon.Platform.Monitoring
 {
     internal class Localhost
     {
-        public Localhost(
-            IReadOnlyList<DriveInfo> drives, 
-            IReadOnlyList<NetworkInterface> networkInterfaces
-        )
+        public Localhost(DriveInfo[] drives, NetworkInterface[] networkInterfaces)
         {
             Drives            = drives            ?? throw new ArgumentNullException(nameof(drives));
             NetworkInterfaces = networkInterfaces ?? throw new ArgumentNullException(nameof(networkInterfaces));
         }
 
-        public IReadOnlyList<DriveInfo> Drives { get; }
+        public DriveInfo[] Drives { get; }
 
-        public IReadOnlyList<NetworkInterface> NetworkInterfaces { get; }
+        public NetworkInterface[] NetworkInterfaces { get; }
 
         private static Localhost current;
 
@@ -36,8 +33,8 @@ namespace Carbon.Platform.Monitoring
             {
                 if (current != null) return current;
 
-                IReadOnlyList<DriveInfo> drives = Array.Empty<DriveInfo>();
-                IReadOnlyList<NetworkInterface> networkInterfaces = Array.Empty<NetworkInterface>();
+                var drives            = Array.Empty<DriveInfo>();
+                var networkInterfaces = Array.Empty<NetworkInterface>();
 
                 try
                 {

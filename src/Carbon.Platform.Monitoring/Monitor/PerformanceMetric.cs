@@ -7,7 +7,7 @@ using Carbon.Platform.Metrics;
 
 namespace Carbon.Platform.Monitoring
 {
-    public class WindowsMonitor : IMonitor
+    public sealed class WindowsMonitor : ResourceMonitor
     {
         private readonly IMetric metric;
         private readonly Dimension[] dimensions;
@@ -31,7 +31,7 @@ namespace Carbon.Platform.Monitoring
             }
         }
 
-        public IEnumerable<MetricData> Observe()
+        public override MetricData[] Observe()
         {
             float result = 0;
 
@@ -48,7 +48,7 @@ namespace Carbon.Platform.Monitoring
                 ThrowSampleError(ex);
             }
 
-            yield return new MetricData(metric, dimensions, result, DateTime.UtcNow);
+            return new[] { new MetricData(metric, dimensions, result, DateTime.UtcNow) };
         }
 
         public void ThrowSampleError(Exception ex)
@@ -58,7 +58,7 @@ namespace Carbon.Platform.Monitoring
             throw new Exception($"Error sampling {metric.Name} | {counterDescription}", ex);
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             this.counter.Dispose();
         }

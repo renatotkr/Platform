@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
-#if NET461
-using System.Diagnostics;
-#endif
-
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,34 +8,37 @@ using Carbon.Platform.Metrics;
 
 namespace Carbon.Platform.Monitoring
 {
-
-   
     public class HostMonitor
     {
         private readonly TimeSpan interval;
 
-        private readonly List<IMonitor> counters = new List<IMonitor>();
+        private readonly List<ResourceMonitor> monitors = new List<ResourceMonitor>();
 
-        private readonly Action<IReadOnlyList<MetricData>> action;
+        private readonly Action<IReadOnlyList<MetricData>> reportAction;
 
         private readonly AutoResetEvent stopEvent = new AutoResetEvent(false);
 
         public HostMonitor(
             MonitoredHost host,
             TimeSpan interval, 
-            Action<IReadOnlyList<MetricData>> action)
+            Action<IReadOnlyList<MetricData>> reportAction)
         {
             var localhost = Localhost.Get();
 
-#if NET461
-            var pTags = new[] { new Dimension("hostId", host.Id) };
+            // Coming in 4.5 release
+
+            var hostDimension = new Dimension("hostId", host.Id);
+
+            /*
 
             // Processor Counters https://technet.microsoft.com/en-us/library/cc938593.aspx
 
-            counters.Add(new WindowsMonitor(KnownMetrics.ProcessorUserTime,   pTags, new PerformanceCounter("Processor", "% User Time",           "_Total")));
-            counters.Add(new WindowsMonitor(KnownMetrics.ProcessorSystemTime, pTags, new PerformanceCounter("Processor", "% Privileged Time",     "_Total")));
+            counters.Add(new WindowsMonitor(KnownMetrics.ProcessorUserTime,   new[] { hostDimension }, new PerformanceCounter("Processor", "% User Time",           "_Total")));
+            counters.Add(new WindowsMonitor(KnownMetrics.ProcessorSystemTime, new[] { hostDimension }, new PerformanceCounter("Processor", "% Privileged Time",     "_Total")));
+            */
 
-            for (int i = 0; i < localhost.Drives.Count; i++)
+            /*
+            for (int i = 0; i < localhost.Drives.Length; i++)
             {
                 var drive = localhost.Drives[i];
 
@@ -48,28 +46,28 @@ namespace Carbon.Platform.Monitoring
 
                 Dimension[] tags;
 
-                if (host.Volumes.Count > 0)
+                if (host.Volumes.Length > 0)
                 {
                     var volume = host.Volumes[i];
 
-                    tags = new[] { new Dimension("hostId", host.Id), new Dimension("volumeId", volume.Id) };
+                    tags = new[] { hostDimension, new Dimension("volumeId", volume.Id) };
                 }
                 else
                 {
-                    tags = new[] { new Dimension("hostId", host.Id), };
+                    tags = new[] { hostDimension };
                 }
 
-                counters.Add(new WindowsMonitor(KnownMetrics.VolumeReadTime,        tags, new PerformanceCounter("LogicalDisk", "% Disk Read Time",     instanceName)));
-                counters.Add(new WindowsMonitor(KnownMetrics.VolumeWriteTime,       tags, new PerformanceCounter("LogicalDisk", "% Disk Write Time",    instanceName)));
-                counters.Add(new WindowsMonitor(KnownMetrics.VolumeReadOperations,  tags, new PerformanceCounter("LogicalDisk", "Disk Read Bytes/sec",  instanceName)));
-                counters.Add(new WindowsMonitor(KnownMetrics.VolumeWriteOperations, tags, new PerformanceCounter("LogicalDisk", "Disk Write Bytes/sec", instanceName)));
-                
-                counters.Add(new AbsoluteValueMonitor(KnownMetrics.VolumeAvailableBytes, tags, () => drive.AvailableFreeSpace));
-                counters.Add(new AbsoluteValueMonitor(KnownMetrics.VolumeTotalBytes, tags, () => drive.TotalSize));
-            }
+                // counters.Add(new WindowsMonitor(KnownMetrics.VolumeReadTime, tags, new PerformanceCounter("LogicalDisk", "% Disk Read Time", instanceName)));
+                // counters.Add(new WindowsMonitor(KnownMetrics.VolumeWriteTime, tags, new PerformanceCounter("LogicalDisk", "% Disk Write Time", instanceName)));
+                // counters.Add(new WindowsMonitor(KnownMetrics.VolumeReadOperations, tags, new PerformanceCounter("LogicalDisk", "Disk Read Bytes/sec", instanceName)));
+                // counters.Add(new WindowsMonitor(KnownMetrics.VolumeWriteOperations, tags, new PerformanceCounter("LogicalDisk", "Disk Write Bytes/sec", instanceName)));
 
-#endif
-            for (int i = 0; i < localhost.NetworkInterfaces.Count; i++)
+                monitors.Add(new AbsoluteValueMonitor(MetricNames.VolumeAvailableBytes, tags, () => drive.AvailableFreeSpace));
+                monitors.Add(new AbsoluteValueMonitor(MetricNames.VolumeTotalBytes,     tags, () => drive.TotalSize));
+            }
+            */
+            
+            for (int i = 0; i < localhost.NetworkInterfaces.Length; i++)
             {
                 var nic = localhost.NetworkInterfaces[i];
 
@@ -79,23 +77,25 @@ namespace Carbon.Platform.Monitoring
                     Enumerable.SequenceEqual(ni.MacAddress.GetAddressBytes(), nic.GetPhysicalAddress().GetAddressBytes())
                 );
 
+                if (netResource == null) continue;
+
                 if (netResource != null)
                 {
-                    tags = new[] { new Dimension("hostId", host.Id), new Dimension("interfaceId", netResource.Id) };
+                    tags = new[] { hostDimension, new Dimension("interfaceId", netResource.Id) };
                 }
                 else
                 {
-                    tags = new[] { new Dimension("hostId", host.Id), };
+                    tags = new[] { hostDimension };
                 }
 
                 // TODO: Map by MacAddress
 
-                counters.Add(new NetworkInterfaceMonitor(tags, nic));
+                monitors.Add(new NetworkInterfaceMonitor(tags, nic));
             }
+            
 
             this.interval = interval;
-            this.action = action;
-
+            this.reportAction = reportAction;
         }
 
         private Task task;
@@ -120,16 +120,14 @@ namespace Carbon.Platform.Monitoring
         
         private void Next()
         {
-            var batch = new List<MetricData>();
+            // TODO: Observe simultaneously
+            var batch = new List<MetricData>(monitors.Count);
 
-            foreach (var counter in counters)
+            foreach (var counter in monitors)
             {
                 try
                 {
-                    foreach (var result in counter.Observe())
-                    {
-                        batch.Add(result);
-                    }
+                    batch.AddRange(counter.Observe());   
                 }
                 catch (Exception ex)
                 {
@@ -137,12 +135,12 @@ namespace Carbon.Platform.Monitoring
                 }
             }
             
-            action(batch);
+            reportAction(batch);
         }
 
-        public void Stop()
+        public async Task StopAsync()
         {
-            foreach (var counter in counters)
+            foreach (var counter in monitors)
             {
                 counter.Dispose();
             }
@@ -151,10 +149,9 @@ namespace Carbon.Platform.Monitoring
 
             stopEvent.Set();
 
-            task.Wait();
+            await task.ConfigureAwait(false);
 
             stopEvent.Dispose();
-
         }
     }
 }

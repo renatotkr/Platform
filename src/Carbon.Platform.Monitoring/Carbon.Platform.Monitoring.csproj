@@ -3,13 +3,13 @@
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Monitoring</AssemblyName>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <VersionPrefix>0.20.0</VersionPrefix>
+    <Version>0.23.0</Version>
     <LangVersion>7.2</LangVersion>
     
     <!-- Package Details-->
     <Authors>iamcarbon</Authors>
     <Copyright>© Jason Nelson</Copyright>
-    <Description>Library for monitoring Windows servers.</Description>
+    <Description>A .NET Standard library for monitoring servers.</Description>
     <PackageTags>platform;monitoring;carbon</PackageTags>
   </PropertyGroup>
 

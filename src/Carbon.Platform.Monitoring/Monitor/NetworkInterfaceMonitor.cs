@@ -7,7 +7,7 @@ using Carbon.Time;
 
 namespace Carbon.Platform.Monitoring
 {
-    internal class NetworkInterfaceMonitor : IMonitor
+    internal sealed class NetworkInterfaceMonitor : ResourceMonitor
     {
         private readonly NetworkInterface nic;
         private readonly Dimension[] tags;
@@ -22,24 +22,23 @@ namespace Carbon.Platform.Monitoring
 
         private IPInterfaceStatistics last;
 
-        public IEnumerable<MetricData> Observe()
+        public override MetricData[] Observe()
         {
-            var next = nic.GetIPStatistics();
+            var current = nic.GetIPStatistics();
 
-            var timestamp = new Timestamp(DateTimeOffset.UtcNow).Value;
+            var ts = new Timestamp(DateTimeOffset.UtcNow).Value;
 
-            yield return new MetricData(MetricNames.NetworkSentBytes.Name,       tags, "byte",  next.BytesSent - last.BytesSent,                                 timestamp);
-            yield return new MetricData(MetricNames.NetworkReceivedBytes.Name,   tags, "byte",  next.BytesReceived - last.BytesReceived,                         timestamp);
-            yield return new MetricData(MetricNames.NetworkReceivedPackets.Name, tags, "count", next.NonUnicastPacketsReceived - last.NonUnicastPacketsReceived, timestamp);
-            yield return new MetricData(MetricNames.NetworkSentPackets.Name,     tags, "count", next.NonUnicastPacketsSent - last.NonUnicastPacketsSent,         timestamp);
-            yield return new MetricData(MetricNames.NetworkDroppedPackets.Name,  tags, "count", next.IncomingPacketsDiscarded - last.IncomingPacketsDiscarded,   timestamp);
+            var result = new[] {
+                new MetricData(MetricNames.NetworkSentBytes.Name,       tags, "byte",  current.BytesSent - last.BytesSent,                                 ts),
+                new MetricData(MetricNames.NetworkReceivedBytes.Name,   tags, "byte",  current.BytesReceived - last.BytesReceived,                         ts),
+                new MetricData(MetricNames.NetworkReceivedPackets.Name, tags, "count", current.NonUnicastPacketsReceived - last.NonUnicastPacketsReceived, ts),
+                new MetricData(MetricNames.NetworkSentPackets.Name,     tags, "count", current.NonUnicastPacketsSent - last.NonUnicastPacketsSent,         ts),
+                new MetricData(MetricNames.NetworkDroppedPackets.Name,  tags, "count", current.IncomingPacketsDiscarded - last.IncomingPacketsDiscarded,   ts),
+            };
 
-            last = next;
-        }
+            last = current;
 
-        public void Dispose()
-        {
-            
+            return result;
         }
     }
 }

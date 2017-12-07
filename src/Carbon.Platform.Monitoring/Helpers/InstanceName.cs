@@ -6,7 +6,11 @@
         {
             if (description == null) return null;
 
-            return description.Replace("/", "_").Replace("(", "[").Replace(")", "]").Replace("#", "_");
+            return description
+                .Replace('/', '_')
+                .Replace('(', '[')
+                .Replace(')', ']')
+                .Replace('#', '_');
         }
     }
 }

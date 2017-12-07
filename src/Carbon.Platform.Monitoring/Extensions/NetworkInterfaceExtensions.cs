@@ -23,6 +23,5 @@ namespace Carbon.Platform.Extensions
                 yield return ip.Address;
             }
         }
-
     }
 }

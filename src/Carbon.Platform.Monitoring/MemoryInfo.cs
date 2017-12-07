@@ -7,13 +7,13 @@ namespace Carbon.Platform
     {
         public MemoryInfo(long total, long available)
         {
-            Total = total;
+            Total     = total;
             Available = available;
         }
 
-        public long Total { get; }
+        public readonly long Total;
 
-        public long Available { get; }
+        public readonly long Available;
         
         public long Used => Total - Available;
 

@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using Carbon.Platform.Metrics;
 using Carbon.Time;
 
 namespace Carbon.Platform.Monitoring
 {
-    internal class DeltaValueMonitor : IMonitor
+    internal sealed class DeltaValueMonitor : ResourceMonitor
     {
         private readonly Dimension[] dimensions;
         private Func<double> action;
@@ -23,17 +22,17 @@ namespace Carbon.Platform.Monitoring
 
         double last;
 
-        public IEnumerable<MetricData> Observe()
+        public override MetricData[] Observe()
         {
-            var next = action();
+            var current = action();
 
-            var delta = last - next;
+            var delta = last - current;
 
-            last = next;
+            last = current;
 
-            yield return new MetricData(metricName, dimensions, "count", delta, new Timestamp(DateTimeOffset.UtcNow).Value);
-        }
-        
-        public void Dispose() { }
+            return new[] {
+                new MetricData(metricName, dimensions, "count", delta, new Timestamp(DateTimeOffset.UtcNow).Value)
+            };
+        }        
     }
 }

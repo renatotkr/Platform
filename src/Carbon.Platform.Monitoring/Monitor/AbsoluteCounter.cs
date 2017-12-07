@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using Carbon.Platform.Metrics;
 using Carbon.Time;
 
 namespace Carbon.Platform.Monitoring
 {
-    internal class AbsoluteValueMonitor : IMonitor
+    internal class AbsoluteValueMonitor : ResourceMonitor
     {
         private readonly IMetric metric;
         private readonly Dimension[] dimensions;
@@ -14,16 +13,18 @@ namespace Carbon.Platform.Monitoring
 
         public AbsoluteValueMonitor(IMetric metric, Dimension[] dimensions, Func<double> action)
         {
-            this.metric = metric ?? throw new ArgumentNullException(nameof(metric));
+            this.metric     = metric ?? throw new ArgumentNullException(nameof(metric));
             this.dimensions = dimensions;
             this.action     = action;
         }
 
-        public IEnumerable<MetricData> Observe()
+        public override MetricData[] Observe()
         {
-            yield return new MetricData(metric.Name, dimensions, "count", action(), new Timestamp(DateTimeOffset.UtcNow).Value);
-        }
+            var value = action();
 
-        public void Dispose() { }
+            return new[] {
+                new MetricData(metric.Name, dimensions, "count", value, new Timestamp(DateTimeOffset.UtcNow).Value)
+            };
+        }
     }
 }
