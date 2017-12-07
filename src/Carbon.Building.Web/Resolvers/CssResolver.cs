@@ -23,7 +23,7 @@ namespace Carbon.Building.Web
 
         public Stream Open(string absolutePath)
         {
-            if (absolutePath.StartsWith("/"))
+            if (absolutePath[0] == '/')
             {
                 absolutePath = absolutePath.TrimStart(ForwardSlash);
             }
@@ -39,7 +39,7 @@ namespace Carbon.Building.Web
         {
             foreach (var file in package)
             {
-                if (file.Name == absolutePath)
+                if (file.Key == absolutePath)
                 {
                     return file;
                 }

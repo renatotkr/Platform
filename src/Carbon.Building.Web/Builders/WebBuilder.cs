@@ -25,9 +25,9 @@ namespace Carbon.Building.Web
 
         public WebBuilder(ILogger log, IPackage package, IBucket bucket, string baseDirectory = "D:/builds")
         {
-            this.log     = log           ?? throw new ArgumentNullException(nameof(log));
-            this.bucket  = bucket        ?? throw new ArgumentNullException(nameof(bucket));
-            this.package = package       ?? throw new ArgumentNullException(nameof(package));
+            this.log     = log     ?? throw new ArgumentNullException(nameof(log));
+            this.bucket  = bucket  ?? throw new ArgumentNullException(nameof(bucket));
+            this.package = package ?? throw new ArgumentNullException(nameof(package));
 
             var unique = Guid.NewGuid().ToString("N");
 
@@ -59,7 +59,7 @@ namespace Carbon.Building.Web
                 {
                     using (var compiledCss = await CompileCssAsync(file).ConfigureAwait(false))
                     {
-                        var compiledName = file.Name.Replace(".scss", ".css");
+                        var compiledName = file.Key.Replace(".scss", ".css");
 
                         if (compiledCss == null)
                         {
@@ -70,7 +70,7 @@ namespace Carbon.Building.Web
 
                         log.Info($"Compiled '{compiledName}'");
 
-                        var blob = new Blob(compiledName, compiledCss, new BlobMetadata {
+                        var blob = new Blob(compiledName, compiledCss, new BlobProperties {
                             ContentType = "text/css"
                         });
 
@@ -89,13 +89,13 @@ namespace Carbon.Building.Web
                         compiledTs = true;
                     }
 
-                    var compiledName = file.Name.Replace(".ts", ".js");
+                    var compiledName = file.Key.Replace(".ts", ".js");
 
                     var outputPath = basePath + compiledName;
 
                     var fileStream = File.Open(outputPath, FileMode.Open, FileAccess.Read);
-
-                    var blob = new Blob(compiledName, fileStream, new BlobMetadata {
+                    
+                    var blob = new Blob(compiledName, fileStream, new BlobProperties {
                         ContentType = "application/javascript"
                     });
 
@@ -106,11 +106,11 @@ namespace Carbon.Building.Web
                 else if (FormatHelper.IsStaticFormat(format))
                 {
                     var blob = new Blob(
-                        key    : file.Name,
+                        key    : file.Key,
                         stream : await file.ToMemoryStreamAsync().ConfigureAwait(false)
                     );
                     
-                    // Metadata / ContenType?
+                    // include content type?
 
                     await bucket.PutAsync(blob).ConfigureAwait(false);
                 }
@@ -134,7 +134,7 @@ namespace Carbon.Building.Web
 
             if (sourceText.StartsWith("//= partial")) return null;
 
-            var basePath = "/" + file.Name.Replace(Path.GetFileName(file.Name), "");
+            var basePath = "/" + file.Key.Replace(Path.GetFileName(file.Key), "");
 
             var output = new MemoryStream();
 

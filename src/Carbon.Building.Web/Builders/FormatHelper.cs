@@ -10,11 +10,11 @@ namespace Carbon.Building.Web
             "css", "eot", "gif", "html", "ico", "jpeg", "jpg", "js", "png", "svg", "swf", "ttf", "webm", "webp", "woff", "woff2"
         };
 
-        public static string GetFormat(IBlob file)
+        public static string GetFormat(IBlob blob)
         {
-            var formatIndex = file.Name.LastIndexOf('.');
+            var formatIndex = blob.Key.LastIndexOf('.');
 
-            var format = formatIndex > -1 ? file.Name.Substring(formatIndex + 1) : "";
+            var format = formatIndex > -1 ? blob.Key.Substring(formatIndex + 1) : "";
 
             return format;
         }

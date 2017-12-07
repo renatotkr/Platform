@@ -6,13 +6,15 @@ namespace TypeScript
 {
     public class TypeScriptDiagonstic : Diagnostic
     {
+        private static readonly string[] splitOn = new[] { ": " };
+
         public static TypeScriptDiagonstic Parse(string text)
         {
             // D:/builds/93ef00b2abe44ca8858603bef9fa0c78/5e31664ea2831739542b0607c0183b74f38dbdee78221b5ac944edc52f70a95b.d.ts(103,5)
             // : error TS2300
             // : Duplicate identifier 'jsonp'.
 
-            var parts = text.Split(new[] { ": " }, StringSplitOptions.RemoveEmptyEntries);
+            var parts = text.Split(splitOn, StringSplitOptions.RemoveEmptyEntries);
 
             var error = new TypeScriptDiagonstic();
 

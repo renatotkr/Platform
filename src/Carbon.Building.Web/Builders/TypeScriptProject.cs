@@ -57,9 +57,9 @@ namespace Carbon.Building.Web
             {
                 // including .d.ts
 
-                if (file.Name.EndsWith(".ts") || file.Name == "tsconfig.json")
+                if (file.Key.EndsWith(".ts") || file.Key == "tsconfig.json")
                 {
-                    var tempSourcePath = Path.Combine(ProjectPath, file.Name);
+                    var tempSourcePath = Path.Combine(ProjectPath, file.Key);
 
                     using (var stream = await file.OpenAsync().ConfigureAwait(false))
                     {
