@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Carbon.Platform.Hosting
 {
@@ -20,8 +19,7 @@ namespace Carbon.Platform.Hosting
             EnvironmentId = environmentId;
         }
         
-        [Required]
-        [StringLength(253)]
+        [Required, StringLength(253)]
         public string Name { get; set; }
         
         public long? OwnerId { get; set; }
@@ -29,7 +27,6 @@ namespace Carbon.Platform.Hosting
         public long? EnvironmentId { get; set; } 
         
         public long? OriginId { get; set; }
-
 
         public DomainFlags Flags { get; set; }
     }

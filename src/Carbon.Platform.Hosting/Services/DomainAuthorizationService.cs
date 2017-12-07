@@ -44,6 +44,8 @@ namespace Carbon.Platform.Hosting
 
         public async Task<DomainAuthorization> CreateAsync(CreateDomainAuthorizationRequest request)
         {
+            Validate.NotNull(request, nameof(request));
+
             var id = await DomainAuthorizationId.NextAsync(db.Context, request.DomainId);
             
             var authorization = new DomainAuthorization(id, request.Type, request.Properties);

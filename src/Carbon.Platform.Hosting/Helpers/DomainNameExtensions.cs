@@ -6,7 +6,7 @@ namespace Carbon.Platform
 {
     public static class DomainNameExtensions
     {
-        public static string GetPath(in this DomainName name, int level)
+        public static string GetPath(this DomainName name, int level)
         {
             if (level == 1) return name.Tld;
 

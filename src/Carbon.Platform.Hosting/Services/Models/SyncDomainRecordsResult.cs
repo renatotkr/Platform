@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Carbon.Platform.Hosting
 {
-    public readonly struct SyncDomainRecordsResult
+    public class SyncDomainRecordsResult
     {
         public SyncDomainRecordsResult(
             IReadOnlyList<DomainRecord> added, 

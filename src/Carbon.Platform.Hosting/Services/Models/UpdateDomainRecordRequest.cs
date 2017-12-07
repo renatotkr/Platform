@@ -4,7 +4,7 @@ using Carbon.Net.Dns;
 
 namespace Carbon.Platform.Hosting
 {
-    public readonly struct UpdateDomainRecordRequest
+    public class UpdateDomainRecordRequest
     {
         public UpdateDomainRecordRequest(long id, IRecord value)
         {
