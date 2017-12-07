@@ -3,14 +3,14 @@
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Client</AssemblyName>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <VersionPrefix>0.67.1</VersionPrefix>
+    <VersionPrefix>0.68.0</VersionPrefix>
 
     <!-- Package Details -->
     <Authors>iamcarbon</Authors>
     <Copyright>© Jason Nelson</Copyright>
     <Description>Simple client for the Carbon.Platform.Api.</Description>
     <PackageTags>platform;carbon</PackageTags>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

@@ -4,7 +4,7 @@ namespace Carbon.Platform.Computing
 {
     public class LocationDetails
     {
-        [DataMember(Name = "id")]
+        [DataMember(Name = "id", EmitDefaultValue = false)]
         public int Id { get; set; }
 
         [DataMember(Name = "name", EmitDefaultValue = false)]

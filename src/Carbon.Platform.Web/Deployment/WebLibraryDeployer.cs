@@ -102,9 +102,9 @@ namespace Carbon.CI
             }
 
             var mainBlob = new Blob(
-                key         : $"libs/{metadata.Name}/{version}/{mainName}",
-                stream      : mainBlobStream,
-                metadata    : new BlobMetadata {
+                key        : $"libs/{metadata.Name}/{version}/{mainName}",
+                stream     : mainBlobStream,
+                properties : new BlobProperties {
                     ContentType = "application/javascript"
                 }
             );
@@ -120,7 +120,7 @@ namespace Carbon.CI
                 foreach (var fileName in metadata.Files)
                 {
                     var fn = fileName;
-
+                    
                     if (fn.StartsWith("./"))
                     {
                         fn = fileName.Substring(2);
@@ -130,9 +130,9 @@ namespace Carbon.CI
 
                     var asset = package.Find(fn);
 
-                    var format = asset.Name.Split('.').Last();
+                    var format = asset.Key.Split('.').Last();
                    
-                    var n = asset.Name.Split('/').Last();
+                    var n = asset.Key.Split('/').Last();
 
                     var ms = new MemoryStream();
 
@@ -144,9 +144,9 @@ namespace Carbon.CI
                     }
 
                     var blob = new Blob(
-                        key      : $"libs/{metadata.Name}/{version}/{n}",
-                        stream   : ms,
-                        metadata : new BlobMetadata {
+                        key        : $"libs/{metadata.Name}/{version}/{n}",
+                        stream     : ms,
+                        properties : new BlobProperties {
                             ContentType = GetMime(format)
                         }
                     );

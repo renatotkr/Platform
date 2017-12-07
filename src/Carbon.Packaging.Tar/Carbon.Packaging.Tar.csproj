@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Carbon.Packaging.Tar</AssemblyName>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <VersionPrefix>0.14.0</VersionPrefix>
+    <VersionPrefix>0.16.0</VersionPrefix>
 
     <!-- Package Details -->
     <Authors>iamcarbon</Authors>
@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Carbon.Storage" Version="1.11.0" />
+    <PackageReference Include="Carbon.Storage" Version="1.13.0" />
     <PackageReference Include="SharpCompress" Version="0.18.2" />
   </ItemGroup>
   

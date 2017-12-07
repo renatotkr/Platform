@@ -3,19 +3,19 @@
   <PropertyGroup>
     <AssemblyName>Carbon.Hosting</AssemblyName>
     <TargetFramework>netstandard2.0</TargetFramework>
-     <VersionPrefix>1.16.2</VersionPrefix>
-   
+    <VersionPrefix>1.17.0</VersionPrefix>
+    <LangVersion>7.2</LangVersion>
+    
     <!-- Package Details-->
     <Authors>iamcarbon</Authors>
     <Description>Hosting abstractions for operating a multi-cloud service.</Description>
     <PackageTags>cloud;carbon</PackageTags>
     <PackageLicenseUrl>https://github.com/carbon/Platform/blob/master/LICENCE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/carbon/Platform</RepositoryUrl>
-    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Carbon.Storage" Version="1.11.0" />
+    <PackageReference Include="Carbon.Storage" Version="1.13.0" />
     <PackageReference Include="Carbon.Json" Version="1.5.0" />
   </ItemGroup>
 

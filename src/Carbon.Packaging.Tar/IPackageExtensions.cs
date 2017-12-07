@@ -31,7 +31,7 @@ namespace Carbon.Packaging
             {
                 foreach (var item in package)
                 {
-                    var format = Path.GetExtension(item.Name).Trim('.');
+                    var format = Path.GetExtension(item.Key).Trim('.');
 
                     var ms = new MemoryStream();
 
@@ -55,9 +55,9 @@ namespace Carbon.Packaging
                         using (tempStream)
                         {
                             writer.Write(
-                                filename: item.Name,
-                                source: tempStream,
-                                modificationTime: item.Modified
+                                filename         : item.Key,
+                                source           : tempStream,
+                                modificationTime : item.Modified
                             );
                         }
                     }

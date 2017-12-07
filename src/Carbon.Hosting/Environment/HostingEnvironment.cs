@@ -17,14 +17,14 @@ namespace Carbon.Hosting
                 
                 var config = JsonObject.Parse(text);
 
-                if (config.ContainsKey("appsRoot"))
+                if (config.TryGetValue("appsRoot", out var appsRootNode))
                 {
-                    AppsRoot = new DirectoryInfo(config["appsRoot"]);
+                    AppsRoot = new DirectoryInfo(appsRootNode);
                 }
 
-                if (config.ContainsKey("sitesRoot"))
+                if (config.TryGetValue("sitesRoot", out var sitesRootNode))
                 {
-                    SitesRoot = new DirectoryInfo(config["sitesRoot"]);
+                    SitesRoot = new DirectoryInfo(sitesRootNode);
                 }
             }
 

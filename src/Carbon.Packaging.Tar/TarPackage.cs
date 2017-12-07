@@ -106,15 +106,9 @@ namespace Carbon.Packaging
 
         #region IPackage
 
-        public IEnumerator<IBlob> GetEnumerator()
-        {
-            return Enumerate().GetEnumerator();
-        }
+        public IEnumerator<IBlob> GetEnumerator() => Enumerate().GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return Enumerate().GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => Enumerate().GetEnumerator();
 
         #endregion
 
