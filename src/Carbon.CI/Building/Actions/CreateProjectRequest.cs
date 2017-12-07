@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 using Carbon.Platform.Resources;
 
 namespace Carbon.CI
@@ -8,10 +7,10 @@ namespace Carbon.CI
     {
         public CreateProjectRequest() { }
 
-        public CreateProjectRequest(string name, long ownerId, long repositoryId)
+        public CreateProjectRequest(long ownerId, string name, long repositoryId)
         {
-            Validate.NotNullOrEmpty(name, nameof(name));
             Validate.Id(ownerId, nameof(ownerId));
+            Validate.NotNullOrEmpty(name, nameof(name));
             Validate.Id(repositoryId, nameof(repositoryId));
 
             Name         = name;
