@@ -4,6 +4,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Storage
 {
+    [DataContract]
     public class VolumeDetails : IVolume
     {
         [DataMember(Name = "id")]

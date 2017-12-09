@@ -5,7 +5,6 @@ namespace Carbon.Platform
     using Computing;
     using Data;
     using Environments;
-    using Hosting;
     using Networking;
     using Storage;
 
@@ -27,13 +26,13 @@ namespace Carbon.Platform
 
             // Environments -------------------------------------------------------------
             Environments         = new Dataset<EnvironmentInfo,           long>(context);
-            Locations            = new Dataset<LocationInfo,              long>(context);
+            EnvironmentPrograms  = new Dataset<EnvironmentProgram, (long, long)>(context);
+            EnvironmentUsers     = new Dataset<EnvironmentUser, (long, long)>(context);
 
-            EnvironmentUsers    = new Dataset<EnvironmentUser,    (long, long)>(context);
-            EnvironmentPrograms = new Dataset<EnvironmentProgram, (long, long)>(context);
+            Locations            = new Dataset<LocationInfo, long>(context);
 
             // Computing ----------------------------------------------------------------
-            Clusters              = new Dataset<Cluster,                  long>(context);
+            Clusters = new Dataset<Cluster,                  long>(context);
             Hosts                 = new Dataset<HostInfo,                 long>(context);
             HostTemplates         = new Dataset<HostTemplate,             long>(context);
             HostPrograms          = new Dataset<HostProgram,       (long, long)>(context);
@@ -63,16 +62,16 @@ namespace Carbon.Platform
 
         // Environments ---------------------------------------------------------
         public Dataset<EnvironmentInfo,         long> Environments       { get; }
-        public Dataset<EnvironmentUser, (long, long)> EnvironmentUsers   { get; }
-
-        public Dataset<LocationInfo,            long> Locations          { get; }
 
         public Dataset<EnvironmentProgram, (long environmentId, long programId)> EnvironmentPrograms { get; }
+        public Dataset<EnvironmentUser,    (long environmentID, long userId)>    EnvironmentUsers { get; }
+
+        public Dataset<LocationInfo, long> Locations { get; }
 
         // Computing ------------------------------------------------------------
         public Dataset<HostInfo,             long> Hosts                 { get; }
         public Dataset<Cluster,              long> Clusters              { get; }
-        public Dataset<HostProgram,  (long hostId, long programId)> HostPrograms { get; }
+        public Dataset<HostProgram, (long hostId, long programId)> HostPrograms { get; }
         public Dataset<HostTemplate,         long> HostTemplates         { get; }
         public Dataset<HealthCheck,          long> HealthChecks          { get; }
         public Dataset<ImageInfo,            long> Images                { get; }
