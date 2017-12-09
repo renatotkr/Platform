@@ -40,8 +40,15 @@ namespace Carbon.Platform.Metrics
             await pointStore.IncrementAsync(points);
         }
 
-        public async Task ProcessAsync(MetricData[] datas)
+        public async Task ProcessAsync(IList<MetricData> datas)
         {
+            if (datas == null)
+            {
+                throw new ArgumentNullException(nameof(datas));
+            }
+
+            if (datas.Count == 0) return;
+
             var points = new List<SeriesPoint>();
 
             foreach (var data in datas)

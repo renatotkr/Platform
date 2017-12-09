@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Carbon.Platform.Metrics
 {
@@ -6,6 +7,6 @@ namespace Carbon.Platform.Metrics
     {
         Task ProcessAsync(MetricData data);
 
-        Task ProcessAsync(MetricData[] datas);
+        Task ProcessAsync(IList<MetricData> datas);
     }
 }
