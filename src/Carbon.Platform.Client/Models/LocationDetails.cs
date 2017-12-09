@@ -2,6 +2,7 @@
 
 namespace Carbon.Platform.Computing
 {
+    [DataContract]
     public class LocationDetails
     {
         [DataMember(Name = "id", EmitDefaultValue = false)]

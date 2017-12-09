@@ -3,6 +3,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
+    [DataContract]
     public class ImageDetails : IImage
     {
         [DataMember(Name = "id", EmitDefaultValue = false)]

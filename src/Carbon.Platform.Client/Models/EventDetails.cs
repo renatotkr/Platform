@@ -5,6 +5,7 @@ using Carbon.Json;
 
 namespace Carbon.Platform
 {
+    [DataContract]
     public class EventDetails
     {
         [DataMember(Name = "properties", EmitDefaultValue = false)]

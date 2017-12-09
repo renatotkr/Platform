@@ -36,12 +36,6 @@ namespace Carbon.Platform.Environments
 
         [Member("programVersion")]
         public SemanticVersion ProgramVersion { get; }
-       
-        // ProgramName
-
-        // Runtime
-
-        // Addresses
 
         [Member("configuration")]
         [StringLength(1000)]

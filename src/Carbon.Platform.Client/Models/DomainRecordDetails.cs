@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 
 namespace Carbon.Platform
 {
+    [DataContract]
     public class DomainRecordDetails
     {
         public DomainRecordDetails() { }

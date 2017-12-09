@@ -25,7 +25,7 @@ namespace Carbon.Platform.Metrics
 
             #endregion
 
-            Name       = name ;
+            Name       = name;
             OwnerId    = ownerId;
             Type       = type;
             Unit       = unit ?? throw new ArgumentNullException(nameof(unit));

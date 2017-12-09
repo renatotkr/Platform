@@ -9,6 +9,7 @@ using Carbon.Platform.Storage;
 
 namespace Carbon.Platform.Computing
 {
+    [DataContract]
     public class HostDetails : IHost, IResource
     {
         [DataMember(Name = "id", EmitDefaultValue = false)]

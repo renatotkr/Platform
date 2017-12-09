@@ -6,6 +6,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Networking
 {
+    [DataContract]
     public class NetworkInterfaceDetails : INetworkInterface
     {
         [DataMember(Name = "id")]

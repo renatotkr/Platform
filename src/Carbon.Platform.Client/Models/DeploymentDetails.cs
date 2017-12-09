@@ -5,6 +5,7 @@ using Carbon.Versioning;
 
 namespace Carbon.Platform
 {
+    [DataContract]
     public class DeploymentDetails
     {
         public DeploymentDetails() { }
@@ -35,6 +36,7 @@ namespace Carbon.Platform
 
     // { status: "Pending", resource: "host:1" }
 
+    [DataContract]
     public class DeploymentProgramDetails
     {
         public DeploymentProgramDetails() { }
@@ -52,6 +54,7 @@ namespace Carbon.Platform
         public SemanticVersion Version { get; set; }
     }
 
+    [DataContract]
     public class DeploymentTargetDetails
     {
         public DeploymentTargetDetails() { }

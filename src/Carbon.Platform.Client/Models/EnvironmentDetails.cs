@@ -5,6 +5,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform
 {
+    [DataContract]
     public class EnvironmentDetails : IEnvironment
     {
         [DataMember(Name = "id", EmitDefaultValue = false)]
@@ -22,6 +23,9 @@ namespace Carbon.Platform
         [DataMember(Name = "programs", EmitDefaultValue = false)]
         public ProgramDetails[] Programs { get; set; }
 
+        [DataMember(Name = "users", EmitDefaultValue = false)]
+        public UserDetails[] Users { get; set; }
+        
         #region IResource
 
         ResourceType IResource.ResourceType => ResourceTypes.Environment;

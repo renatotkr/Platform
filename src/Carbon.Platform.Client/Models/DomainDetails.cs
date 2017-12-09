@@ -4,6 +4,7 @@ using Carbon.Platform.Resources;
 
 namespace Carbon.Platform.Computing
 {
+    [DataContract]
     public class DomainDetails : IDomain, IResource
     {
         [DataMember(Name = "id", EmitDefaultValue = false)]

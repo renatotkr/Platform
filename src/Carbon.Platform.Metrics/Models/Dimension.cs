@@ -13,9 +13,9 @@ namespace Carbon.Platform.Metrics
             Value = value;
         }
 
-        public string Name { get; }
+        public readonly string Name;
 
-        public string Value { get; }
+        public readonly string Value;
         
         public override string ToString()
         {

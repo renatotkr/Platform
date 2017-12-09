@@ -6,6 +6,7 @@ using Carbon.Json;
 
 namespace Carbon.Platform.Diagnostics
 {
+    [DataContract]
     public class ExceptionDetails
     {
         [DataMember(Name = "id")]

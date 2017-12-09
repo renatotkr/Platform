@@ -1,8 +1,8 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace Carbon.Platform.Storage
 {
+    [DataContract]
     public class RepositoryDetails // : IRepository
     {
         [DataMember(Name = "id", EmitDefaultValue = false)]
@@ -25,33 +25,5 @@ namespace Carbon.Platform.Storage
 
         [DataMember(Name = "ownerId", EmitDefaultValue = false)]
         public long OwnerId { get; set; }
-    }
-
-    public class RepositoryBranchDetails
-    {
-        [DataMember(Name = "name")]
-        public string Name { get; set; }
-
-        [DataMember(Name = "commit", EmitDefaultValue = false)]
-        public RepositoryCommitDetails Commit { get; set; }
-
-        [DataMember(Name = "modified", EmitDefaultValue = false)]
-        public DateTime Modified { get; set; }
-    }
-
-
-    public class RepositoryCommitDetails
-    {
-        [DataMember(Name = "id")]
-        public long Id { get; set; }
-
-        [DataMember(Name = "sha1", EmitDefaultValue = false)]
-        public byte[] Sha1 { get; set; }
-
-        [DataMember(Name = "message", EmitDefaultValue = false)]
-        public string Message { get; set; }
-
-        [DataMember(Name = "created", EmitDefaultValue = false)]
-        public DateTime? Created { get; set; }
     }
 }

@@ -16,7 +16,7 @@ namespace Carbon.Platform.Environments
             Validate.NotNullOrEmpty(name, nameof(name));
 
             OwnerId    = ownerId;
-            Name      = name;
+            Name       = name;
             Properties = properties;
         }
 

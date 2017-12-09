@@ -7,6 +7,7 @@ using Carbon.Versioning;
 
 namespace Carbon.Platform.Computing
 {
+    [DataContract]
     public class ProgramDetails : IProgram
     {
         [DataMember(Name = "id", EmitDefaultValue = false)]
