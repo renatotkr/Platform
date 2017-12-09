@@ -12,9 +12,9 @@ namespace Carbon.Platform.Configuration.Docker
             Text = text ?? throw new ArgumentNullException(nameof(type));
         }
 
-        public CommandType Type { get; }
+        public readonly CommandType Type;
 
-        public string Text { get; }
+        public readonly string Text;
 
         public override string ToString()
         {

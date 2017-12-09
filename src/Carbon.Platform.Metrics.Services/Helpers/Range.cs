@@ -12,9 +12,9 @@ namespace Carbon.Platform.Sequences
         }
 
         [DataMember(Name = "start", Order = 1)]
-        public long Start { get; }
+        public readonly long Start;
 
         [DataMember(Name = "end", Order = 2)]
-        public long End { get; }
+        public readonly long End;
     }
 }

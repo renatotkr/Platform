@@ -15,7 +15,7 @@ namespace Carbon.Cloud.Logging
             Value = value;
         }
 
-        public ulong Value { get; }
+        public readonly ulong Value;
 
         public long Milliseconds => (long)(Value >> SequenceBits);
 

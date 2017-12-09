@@ -10,9 +10,9 @@ namespace Carbon.Platform.Configuration
             Version = version ?? throw new ArgumentNullException(nameof(version));
         }
 
-        public string Name { get; }
+        public readonly string Name;
 
-        public string Version { get; }
+        public readonly string Version;
 
         public override string ToString() => Name + "/" + Version;
 

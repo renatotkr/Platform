@@ -18,7 +18,7 @@ namespace Carbon.Data.Sequences
             Value = value;
         }
 
-        public ulong Value { get; }
+        public readonly ulong Value;
 
         public long ScopeId => (long)(Value >> SequenceBits);
 

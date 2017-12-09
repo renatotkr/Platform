@@ -38,13 +38,13 @@ namespace Carbon.Net
         }
 
         [DataMember(Name = "scheme", Order = 1)]
-        public ApplicationProtocal Scheme { get; }
+        public readonly ApplicationProtocal Scheme;
 
         [DataMember(Name = "host", Order = 2)]
-        public string Host { get; }
+        public readonly string Host;
 
         [DataMember(Name = "port", Order = 3)]
-        public ushort Port { get; }
+        public readonly ushort Port;
 
         public static Listener Parse(string text)
         {
@@ -97,10 +97,10 @@ namespace Carbon.Net
 
         #region IEquatable<NetworkPort>
 
-        public bool Equals(Listener other)
-        {
-            return Host == other.Host && Port == other.Port && Scheme == other.Scheme;
-        }
+        public bool Equals(Listener other) =>
+            Host == other.Host && 
+            Port == other.Port && 
+            Scheme == other.Scheme;
 
         #endregion
     }

@@ -9,6 +9,6 @@ namespace Carbon.Platform.Configuration.Docker
             Text = text ?? throw new ArgumentNullException(nameof(text));
         }
 
-        public string Text { get; }
+        public readonly string Text;
     }
 }

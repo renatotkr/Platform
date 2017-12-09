@@ -11,10 +11,10 @@ namespace Carbon.Platform.Configuration.Systemd
             Order = order;
         }
 
-        public string Name { get; }
+        public readonly string Name;
 
-        public string Value { get; }
+        public readonly string Value;
 
-        public int Order { get; }
+        public readonly int Order;
     }
 }

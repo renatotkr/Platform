@@ -13,12 +13,12 @@ namespace Carbon.Cloud.Logging
         }
 
         [DataMember(Name = "name", Order = 1)]
-        public string Name { get; }
+        public readonly string Name;
 
         [DataMember(Name = "start", Order = 2, EmitDefaultValue = false)]
-        public TimeSpan Start { get; }
+        public readonly TimeSpan Start;
 
         [DataMember(Name = "duration", Order = 3, EmitDefaultValue = false)]
-        public TimeSpan Duration { get; }
+        public readonly TimeSpan Duration;
     }
 }

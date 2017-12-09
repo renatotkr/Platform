@@ -21,15 +21,15 @@ namespace Carbon.Platform.Metrics
             Timestamp  = timestamp;
         }
 
-        public string Name { get; }
-        
-        public Dimension[] Dimensions { get; } // aka labels
-       
-        public string Unit { get; }
+        public readonly string Name;
 
-        public double Value { get; }
-        
-        public long Timestamp { get; } // nanos since 1970
+        public readonly Dimension[] Dimensions; // aka labels
+
+        public readonly string Unit;
+
+        public readonly double Value;
+
+        public readonly long Timestamp; // nanos since 1970
         
         public static MetricData Parse(string text)
         {

@@ -4,11 +4,11 @@
     {
         // CPU Share (Relative weight)
 
-        public int Share { get; set; }
+        public int Share;
 
-        public int Period { get; set; }
+        public int Period;
 
-        public int Quota { get; set; }
+        public int Quota;
 
         // Memory Mode
     }

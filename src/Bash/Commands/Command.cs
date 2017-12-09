@@ -13,9 +13,9 @@ namespace Bash.Commands
             Sudo = sudo;
         }
 
-        public string Text { get; }
+        public readonly string Text;
 
-        public bool Sudo { get; }
+        public readonly bool Sudo;
 
         public override string ToString()
         {

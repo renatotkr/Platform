@@ -11,7 +11,7 @@
             MaxFailures = maxFailures;
         }
 
-        public int? MaxFailures { get; }
+        public readonly int? MaxFailures;
 
         public static RestartPolicy OnFailure(int maxRetries)
         {

@@ -5,7 +5,7 @@ namespace Carbon.Platform.Metrics
 {
     public static class Aggregates
     {
-        public static IEnumerable<string> GetPermutations(MetricData data, int skip = 0)
+        public static IEnumerable<string> GetPermutations(/*in*/ MetricData data, int skip = 0)
         {
             var sb = new StringBuilder();
 

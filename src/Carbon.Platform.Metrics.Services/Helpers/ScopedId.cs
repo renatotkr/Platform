@@ -20,6 +20,11 @@ namespace Carbon.Platform.Sequences
             Value = value;
         }
 
+        public ScopedId(long value)
+        {
+            Value = (ulong)value;
+        }
+
         [DataMember(Name = "value", Order = 1)]
         public readonly ulong Value;
 
@@ -59,11 +64,6 @@ namespace Carbon.Platform.Sequences
         public static long GetScope(long value)
         {
             return (long)((ulong)value >> SequenceBits);
-        }
-
-        public static ScopedId Get(long value)
-        {
-            return new ScopedId((ulong)value);
         }
     }
 }

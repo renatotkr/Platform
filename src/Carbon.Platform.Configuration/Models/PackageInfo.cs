@@ -10,9 +10,9 @@ namespace Carbon.Platform.Configuration
             Version = version;
         }
 
-        public string Name { get; }
+        public readonly string Name;
 
-        public string Version { get; }
+        public readonly string Version;
 
         // e.g. nodejs | nodejs@8.0.0 || nodejs/8.0.0
         public static PackageInfo Parse(string text)
