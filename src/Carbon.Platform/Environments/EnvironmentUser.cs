@@ -30,9 +30,8 @@ namespace Carbon.Platform.Environments
         public long UserId { get; }
         
         [Member("roles")]
+        [StringLength(500)]
         public string[] Roles { get; }
-
-        #region Timestamps
 
         [Member("created"), Timestamp]
         public DateTime Created { get; }
@@ -42,7 +41,5 @@ namespace Carbon.Platform.Environments
 
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
-
-        #endregion
     }
 }
