@@ -18,6 +18,7 @@ namespace Carbon.Platform
             Events       = new EventClient(this);
             Exceptions   = new ExceptionClient(this);
             Deployments  = new DeploymentClient(this);
+            Users        = new UsersClient(this);
         }
 
         // Builds
@@ -41,6 +42,8 @@ namespace Carbon.Platform
         public ProgramClient Programs { get; }
 
         public RepositoryClient Repositories { get; }
+        
+        public UsersClient Users { get; }
 
         // Volumes
 
