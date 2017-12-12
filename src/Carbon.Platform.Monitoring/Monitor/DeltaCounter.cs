@@ -31,7 +31,7 @@ namespace Carbon.Platform.Monitoring
             last = current;
 
             return new[] {
-                new MetricData(metricName, dimensions, "count", delta, new Timestamp(DateTimeOffset.UtcNow).Value)
+                new MetricData(metricName, dimensions, "count", delta, new Timestamp(DateTime.UtcNow))
             };
         }        
     }

@@ -34,8 +34,6 @@ namespace Carbon.Platform.Metrics
         [Ascii, StringLength(20)]
         public string Granularity { get; }
 
-        // Dimensions?
-
         // 31,536,000 seconds in a year
 
         [Member("created"), Timestamp]

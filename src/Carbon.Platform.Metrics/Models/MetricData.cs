@@ -44,7 +44,8 @@ namespace Carbon.Platform.Metrics
                 dimensions  : ParseLabels(segments[0].Split(Seperators.Comma)),
                 unit        : unit,
                 value       : value,
-                timestamp   : long.Parse(segments[2]));
+                timestamp   : long.Parse(segments[2])
+            );
         }
 
         private static Dimension[] ParseLabels(string[] labels)

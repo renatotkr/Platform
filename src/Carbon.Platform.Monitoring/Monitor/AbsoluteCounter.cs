@@ -23,7 +23,7 @@ namespace Carbon.Platform.Monitoring
             var value = action();
 
             return new[] {
-                new MetricData(metric.Name, dimensions, "count", value, new Timestamp(DateTimeOffset.UtcNow).Value)
+                new MetricData(metric.Name, dimensions, "count", value, new Timestamp(DateTime.UtcNow))
             };
         }
     }

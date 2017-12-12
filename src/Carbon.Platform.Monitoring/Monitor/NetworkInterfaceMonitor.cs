@@ -26,7 +26,7 @@ namespace Carbon.Platform.Monitoring
         {
             var current = nic.GetIPStatistics();
 
-            var ts = new Timestamp(DateTimeOffset.UtcNow).Value;
+            var ts = new Timestamp(DateTime.UtcNow);
 
             var result = new[] {
                 new MetricData(MetricNames.NetworkSentBytes.Name,       tags, "byte",  current.BytesSent - last.BytesSent,                                 ts),

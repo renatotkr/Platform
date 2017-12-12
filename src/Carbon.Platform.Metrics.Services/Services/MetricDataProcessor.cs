@@ -26,6 +26,8 @@ namespace Carbon.Platform.Metrics
         {
             // TODO: Get the metric & normalize the value if its not the base unit...
 
+            var alignedTimestamp = AlignToGranularity(data.Timestamp);
+
             var seriesNames = Aggregates.GetPermutations(data);
 
             var points = new List<SeriesPoint>();
@@ -34,7 +36,7 @@ namespace Carbon.Platform.Metrics
             {
                 var series = await seriesService.GetAsync(name);
 
-                points.Add(new SeriesPoint(series.Id, AlignToGranularity(data.Timestamp), data.Value));
+                points.Add(new SeriesPoint(series.Id, alignedTimestamp, data.Value));
             }
             
             await pointStore.IncrementAsync(points);
@@ -53,13 +55,13 @@ namespace Carbon.Platform.Metrics
 
             foreach (var data in datas)
             {
-                var seriesNames = Aggregates.GetPermutations(data);
+                var alignedTimestamp = AlignToGranularity(data.Timestamp);
                 
-                foreach (var name in seriesNames)
+                foreach (var seriesName in Aggregates.GetPermutations(data))
                 {
-                    var series = await seriesService.GetAsync(name);
+                    var series = await seriesService.GetAsync(seriesName);
 
-                    points.Add(new SeriesPoint(series.Id, AlignToGranularity(data.Timestamp), data.Value));
+                    points.Add(new SeriesPoint(series.Id, alignedTimestamp, data.Value));
                 }
             }
 
@@ -68,7 +70,7 @@ namespace Carbon.Platform.Metrics
         
         private static long AlignToGranularity(long timestamp, TimeUnit unit = TimeUnit.Minute)
         {
-            return new Timestamp(new Timestamp(timestamp).DateTime.UtcDateTime.ToPrecision(unit)).Value;
+            return new Timestamp(new Timestamp(timestamp).DateTime.ToPrecision(unit)).Value;
         }
     }
 }
