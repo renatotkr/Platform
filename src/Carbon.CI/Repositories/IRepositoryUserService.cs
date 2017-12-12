@@ -13,9 +13,6 @@ namespace Carbon.CI
 
         Task<RepositoryUser> CreateAsync(CreateRepositoryUserRequest request, ISecurityContext context);
 
-        // DeleteAsync
+        Task<bool> DeleteAsync(RepositoryUser repositoryUser);
     }
-
-    // RepositoryGrants?
-
 }

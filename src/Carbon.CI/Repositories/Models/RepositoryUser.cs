@@ -32,8 +32,8 @@ namespace Carbon.CI
         [StringLength(1000)]
         public JsonObject Properties { get; }
 
-        // https://help.github.com/articles/repository-permission-levels-for-an-organization/
-        // Permissions ? [ Read, Write, Admin ]
+        // TODO (e.g. read, write, admin)
+        public string[] Roles { get; set; }
 
         #region Timestamps
 
@@ -48,6 +48,4 @@ namespace Carbon.CI
 
         #endregion
     }
-
-    // Collaborator?
 }

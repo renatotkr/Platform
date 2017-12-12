@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Carbon.Cloud.Logging;
+using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Security;
 
@@ -49,6 +50,13 @@ namespace Carbon.CI
             await db.RepositoryUsers.InsertAsync(user);
 
             return user;
+        }
+        
+        public async Task<bool> DeleteAsync(RepositoryUser repositoryUser)
+        {
+            return await db.RepositoryUsers.PatchAsync((repositoryUser.RepositoryId, repositoryUser.UserId), new[] {
+                Change.Replace("deleted", Func("NOW"))
+            }, condition: IsNull("deleted")) > 0;
         }
     }
 }
