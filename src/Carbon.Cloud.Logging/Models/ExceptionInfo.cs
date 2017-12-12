@@ -38,6 +38,8 @@ namespace Carbon.Platform.Diagnostics
         [StringLength(4000)]
         public string StackTrace { get; set; }
         
+        // Url?
+
         // appVersion, ...
         [Member("properties")]
         [StringLength(1000)]
@@ -46,6 +48,7 @@ namespace Carbon.Platform.Diagnostics
         [Member("context")]
         [StringLength(1000)]
         public JsonObject Context { get; set; }
+
         [Member("issueId"), Indexed]
         public long? IssueId { get; set; }
 

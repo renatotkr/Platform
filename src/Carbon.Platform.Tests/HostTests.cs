@@ -1,7 +1,5 @@
 ﻿using System.Net;
 
-using Carbon.Platform.Resources;
-
 using Xunit;
 
 namespace Carbon.Platform.Computing.Tests
