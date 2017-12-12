@@ -20,8 +20,7 @@ namespace Carbon.Platform.Metrics.Tests
         public void Parse()
         {
             var a = MetricData.Parse("requestCount,appId=1,appVersion=5.1.1 value=1000 1422568543702900257");
-
-
+            
             Assert.Equal("requestCount", a.Name);
 
             Assert.Equal("appId",      a.Dimensions[0].Name);

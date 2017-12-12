@@ -21,9 +21,11 @@ namespace Carbon.Platform.Metrics
             using (var connection = await db.Context.GetConnectionAsync())
             {
                 var result = await connection.QueryAsync<DataPoint>(
-                    @"SELECT `timestamp`, `value` FROM `SeriesPoints`
-                      WHERE seriesId = @seriesId
-                        AND timestamp BETWEEN @start AND @end", new {
+                    @"SELECT `timestamp`, `value` 
+                      FROM `SeriesPoints`
+                      WHERE `seriesId` = @seriesId
+                        AND `timestamp` BETWEEN @start AND @end", new
+                    {
                         seriesId = series.Id,
                         start = new Timestamp(period.Start).Value,
                         end = new Timestamp(period.End).Value
@@ -39,8 +41,8 @@ namespace Carbon.Platform.Metrics
             using (var connection = await db.Context.GetConnectionAsync())
             {
                 await connection.ExecuteAsync(
-                    @"INSERT INTO `SeriesPoints`(seriesId, timestamp, value) VALUES (@seriesId, @timestamp, @value)
-                      ON DUPLICATE KEY UPDATE value = value + @value;", points
+                    @"INSERT INTO `SeriesPoints`(`seriesId`, `timestamp`, `value`) VALUES (@seriesId, @timestamp, @value)
+                      ON DUPLICATE KEY UPDATE `value` = `value` + @value;", points
                 );
             }
         }

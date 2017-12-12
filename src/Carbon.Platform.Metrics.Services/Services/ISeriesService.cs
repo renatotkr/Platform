@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Carbon.Time;
+﻿using System.Threading.Tasks;
 
 namespace Carbon.Platform.Metrics
 {
@@ -11,7 +9,5 @@ namespace Carbon.Platform.Metrics
         ValueTask<Series> GetAsync(string name, string granularity = "PT1M");
 
         Task<Series> FindAsync(string name, string granularity = "PT1M");
-
-        Task<IReadOnlyList<SeriesPoint>> GetDataPoints(long id, DateRange range);
     }
 }

@@ -14,14 +14,15 @@ namespace Carbon.Platform.Metrics
     {
         private readonly MetricsDb db;
 
-        private readonly ConcurrentDictionary<(string, string), Series> cache = new ConcurrentDictionary<(string, string), Series>();
+        private readonly ConcurrentDictionary<(string, string), Series> cache
+            = new ConcurrentDictionary<(string, string), Series>();
         
         public SeriesService(MetricsDb db)
         {
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        // Series objects are immutable -- consider caching here.
+        // Series objects are immutable -- consider caching here too.
 
         public async ValueTask<Series> GetAsync(long id)
         {
@@ -40,12 +41,14 @@ namespace Carbon.Platform.Metrics
 
             #endregion
 
-            if (!cache.TryGetValue((name, granularity), out var series))
+            var key = (name, granularity);
+
+            if (!cache.TryGetValue(key, out var series))
             {
                 series = await FindAsync(name, granularity) 
                       ?? await CreateAsync(name, granularity);
                 
-                cache.TryAdd((name, granularity), series);
+                cache.TryAdd(key, series);
             }
 
             return series;
@@ -69,16 +72,6 @@ namespace Carbon.Platform.Metrics
             await db.Series.InsertAsync(series);
 
             return series;
-        }
-
-        public async Task<IReadOnlyList<SeriesPoint>> GetDataPoints(long id, DateRange range)
-        {
-            long start = new Timestamp(range.Start).Value;
-            long end   = new Timestamp(range.End).Value;
-
-            return await db.SeriesPoints.QueryAsync(
-                And(Eq("seriesId", id), Between("timestamp", start, end))
-            );
         }
 
         /*
