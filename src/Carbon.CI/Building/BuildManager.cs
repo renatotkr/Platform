@@ -36,6 +36,8 @@ namespace Carbon.CI
 
         public async Task<Build> GetLatestAsync(long projectId)
         {
+            Validate.Id(projectId, nameof(projectId));
+
             var range = ScopedId.GetRange(projectId);
 
             var builds = await db.Builds.QueryAsync(
@@ -60,6 +62,8 @@ namespace Carbon.CI
 
         public async Task<Build> SyncAsync(Build build)
         {
+            Validate.NotNull(build, nameof(build));
+
             if (build.Status != BuildStatus.Pending)
             {
                 return build;
@@ -68,6 +72,11 @@ namespace Carbon.CI
             var result = await codebuild.BatchGetBuildsAsync(
                 new codebuild::BatchGetBuildsRequest(build.ResourceId)
             );
+
+            if (result.Builds.Length == 0)
+            {
+                throw new ResourceNotFoundException("aws:build/" + build.ResourceId);
+            }
 
             var external = result.Builds[0];
             
@@ -83,15 +92,8 @@ namespace Carbon.CI
 
         public async Task<Build> StartAsync(StartBuildRequest request, ISecurityContext context)
         {
-            #region Preconditions
-
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
-            #endregion
+            Validate.NotNull(request, nameof(request));
+            Validate.NotNull(context, nameof(context));
 
             var project = request.Project;
             var commit  = request.Commit;
@@ -140,12 +142,7 @@ namespace Carbon.CI
 
         public async Task UpdateAsync(Build build)
         {
-            #region Preconditions
-
-            if (build == null)
-                throw new ArgumentNullException(nameof(build));
-
-            #endregion
+            Validate.NotNull(build, nameof(build));
 
             await db.Builds.UpdateAsync(build);
         }

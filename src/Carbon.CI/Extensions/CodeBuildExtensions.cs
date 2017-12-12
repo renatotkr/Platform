@@ -6,7 +6,7 @@ namespace Carbon.CI
 {
     using static BuildStatus;
 
-    public static class CodeBuildExtensions
+    internal static class CodeBuildExtensions
     {
         public static BuildStatus GetStatus(this codebuild::Build build)
         {

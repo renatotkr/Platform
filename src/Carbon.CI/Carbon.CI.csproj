@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.CI</AssemblyName>
-    <VersionPrefix>0.52.2</VersionPrefix>
+    <VersionPrefix>0.52.3</VersionPrefix>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <LangVersion>7.2</LangVersion>
 

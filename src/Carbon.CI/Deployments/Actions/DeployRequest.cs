@@ -6,12 +6,13 @@ namespace Carbon.CI
 {
     public class DeployRequest
     {
-        public DeployRequest(
-            IProgram program,
-            IEnvironment environment)
+        public DeployRequest(IProgram program, IEnvironment environment)
         {
-            Program     = program     ?? throw new ArgumentNullException(nameof(program));
-            Environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            Validate.NotNull(program,     nameof(program));
+            Validate.NotNull(environment, nameof(environment));
+
+            Program = program;
+            Environment = environment;
         }
 
         public IProgram Program { get; }

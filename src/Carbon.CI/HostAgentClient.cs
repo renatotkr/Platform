@@ -56,15 +56,7 @@ namespace Carbon.CI
 
         public async Task<bool> RestartAsync(IProgram program, IHost host)
         {
-            #region Preconditions
-
-            if (program == null)
-                throw new ArgumentNullException(nameof(program));
-
-            if (host == null)
-                throw new ArgumentNullException(nameof(host));
-
-            #endregion
+            Validate.NotNull(program, nameof(program));
 
             var path = $"/programs/{program.Id}@{program.Version}/restart";
 
@@ -77,7 +69,9 @@ namespace Carbon.CI
 
         private async Task<string> SendAsync(IHost host, string path)
         {
-            if (path.StartsWith("/"))
+            Validate.NotNull(host, nameof(host));
+
+            if (path[0] == '/')
             {
                 path = path.Trim('/');
             }

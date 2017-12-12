@@ -23,12 +23,10 @@ namespace Carbon.CI
         {
             Validate.Id(id);
             Validate.Id(environmentId, nameof(environmentId));
-            Validate.Id(creatorId, nameof(creatorId));
+            Validate.NotNull(release,  nameof(release));
+            Validate.Id(creatorId,     nameof(creatorId));
 
-            if (release == null)
-                throw new ArgumentNullException(nameof(release));
-
-            Id             = id;
+            Id = id;
             Status         = status;
             EnvironmentId  = environmentId;
             ProgramId      = release.ProgramId;
