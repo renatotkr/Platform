@@ -29,7 +29,7 @@ namespace Carbon.Platform.Metrics
 
         public async Task<Metric> GetAsync(string name)
         {
-            if (name == null) throw new ArgumentNullException(nameof(name));
+            Validate.NotNullOrEmpty(name, nameof(name));
 
             if (!cache.TryGetValue(name, out var metric))
             {
@@ -51,6 +51,8 @@ namespace Carbon.Platform.Metrics
 
         public async Task<Metric> CreateAsync(CreateMetricRequest request)
         {
+            Validate.NotNull(request, nameof(request));
+
             var id = await db.Metrics.Sequence.NextAsync();
 
             var metric = new Metric(

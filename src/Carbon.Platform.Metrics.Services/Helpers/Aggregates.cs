@@ -5,7 +5,7 @@ namespace Carbon.Platform.Metrics
 {
     public static class Aggregates
     {
-        public static IEnumerable<string> GetPermutations(/*in*/ MetricData data, int skip = 0)
+        public static IEnumerable<string> GetSeriesPermutations(MetricData data, int skip = 0)
         {
             var sb = new StringBuilder();
 
@@ -30,7 +30,7 @@ namespace Carbon.Platform.Metrics
 
             if (skip != data.Dimensions.Length)
             {
-                foreach (var permutation in GetPermutations(data, skip + 1))
+                foreach (var permutation in GetSeriesPermutations(data, skip + 1))
                 {
                     yield return permutation;
                 }
