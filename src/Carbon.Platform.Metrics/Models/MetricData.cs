@@ -12,7 +12,7 @@ namespace Carbon.Platform.Metrics
             Dimension[] dimensions,
             string unit,
             double value,
-            long timestamp)
+            long? timestamp)
         {
             Name       = name ?? throw new ArgumentNullException(nameof(name));
             Dimensions = dimensions;
@@ -25,11 +25,13 @@ namespace Carbon.Platform.Metrics
 
         public readonly Dimension[] Dimensions; // aka labels
 
+        // Fields/ Properties?
+
         public readonly string Unit;
 
         public readonly double Value;
 
-        public readonly long Timestamp; // nanos since 1970
+        public readonly long? Timestamp; // nanos since 1970
         
         public static MetricData Parse(string text)
         {
@@ -38,13 +40,24 @@ namespace Carbon.Platform.Metrics
             var labels        = segments[0].Split(Seperators.Comma);
             var dimensions    = ParseLabels(labels);
             var (unit, value) = ParseFields(segments[1].Split(Seperators.Comma));
-          
+
+            long? timestamp;
+
+            if (segments.Length == 3)
+            {
+                timestamp = long.Parse(segments[2]);
+            }
+            else
+            {
+                timestamp = null;
+            }
+
             return new MetricData(
-                name        : labels[0],
-                dimensions  : ParseLabels(segments[0].Split(Seperators.Comma)),
-                unit        : unit,
-                value       : value,
-                timestamp   : long.Parse(segments[2])
+                name       : labels[0],
+                dimensions : ParseLabels(segments[0].Split(Seperators.Comma)),
+                unit       : unit,
+                value      : value,
+                timestamp  : timestamp
             );
         }
 
@@ -62,7 +75,7 @@ namespace Carbon.Platform.Metrics
             return dimensions;
         }
 
-        // Values
+        // values
         private static (string unit, double value) ParseFields(string[] fields)
         {
             string unit = null;
@@ -74,8 +87,8 @@ namespace Carbon.Platform.Metrics
 
                 switch (field.Name)
                 {
-                    case "unit"  : unit = field.Value; break;
-                    case "value" : value = double.Parse(field.Value); break;
+                    case "unit"  : unit = field.Value.ToString();         break;
+                    case "value" : value = Convert.ToDouble(field.Value); break;
                 }
             }
 
@@ -102,9 +115,12 @@ namespace Carbon.Platform.Metrics
 
             sb.Append(Value);
 
-            sb.Append(' ');
+            if (Timestamp != null)
+            {
+                sb.Append(' ');
 
-            sb.Append(Timestamp); // in nanos
+                sb.Append((long)Timestamp.Value); // in nanos
+            }
 
             // requestCount,appId=1,appVersion=5.1.1 value=1000 1422568543702900257
         }

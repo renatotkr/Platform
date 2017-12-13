@@ -25,10 +25,11 @@ namespace Carbon.Platform.Metrics
         public async Task ProcessAsync(MetricData data)
         {
             // TODO: Get the metric & normalize the value if its not the base unit...
+            
 
-            var alignedTimestamp = AlignToGranularity(data.Timestamp);
+            var alignedTimestamp = AlignToGranularity(data.Timestamp ?? new Timestamp(DateTime.UtcNow));
 
-            var seriesNames = Aggregates.GetPermutations(data);
+            var seriesNames = Aggregates.GetSeriesPermutations(data);
 
             var points = new List<SeriesPoint>();
 
@@ -44,10 +45,7 @@ namespace Carbon.Platform.Metrics
 
         public async Task ProcessAsync(IList<MetricData> datas)
         {
-            if (datas == null)
-            {
-                throw new ArgumentNullException(nameof(datas));
-            }
+            Validate.NotNull(datas, nameof(datas));
 
             if (datas.Count == 0) return;
 
@@ -55,9 +53,9 @@ namespace Carbon.Platform.Metrics
 
             foreach (var data in datas)
             {
-                var alignedTimestamp = AlignToGranularity(data.Timestamp);
-                
-                foreach (var seriesName in Aggregates.GetPermutations(data))
+                var alignedTimestamp = AlignToGranularity(data.Timestamp ?? new Timestamp(DateTime.UtcNow));
+
+                foreach (var seriesName in Aggregates.GetSeriesPermutations(data))
                 {
                     var series = await seriesService.GetAsync(seriesName);
 
@@ -68,9 +66,9 @@ namespace Carbon.Platform.Metrics
             await pointStore.IncrementAsync(points);
         }
         
-        private static long AlignToGranularity(long timestamp, TimeUnit unit = TimeUnit.Minute)
+        private static long AlignToGranularity(long ts, TimeUnit unit = TimeUnit.Minute)
         {
-            return new Timestamp(new Timestamp(timestamp).DateTime.ToPrecision(unit)).Value;
+            return new Timestamp(new Timestamp(ts).DateTime.ToPrecision(unit)).Value;
         }
     }
 }
