@@ -14,7 +14,7 @@ namespace Carbon.Platform.Metrics.Tests
 
             Assert.Equal(3, point.Dimensions.Length);
 
-            var a = Aggregates.GetPermutations(point).ToArray();
+            var a = Aggregates.GetSeriesPermutations(point).ToArray();
 
             Assert.Equal(@"
 transfer
@@ -53,13 +53,11 @@ transfer,type=egress".Trim(), string.Join(Environment.NewLine, a));
         {
             var point = MetricData.Parse("bandwidth,accountId=1 value=1 1");
 
-
-            var a = Aggregates.GetPermutations(point).ToArray();
+            var a = Aggregates.GetSeriesPermutations(point).ToArray();
 
             Assert.Equal(@"
 bandwidth
 bandwidth,accountId=1".Trim(), string.Join(Environment.NewLine, a));
-
         }
 
         [Fact]
@@ -67,7 +65,7 @@ bandwidth,accountId=1".Trim(), string.Join(Environment.NewLine, a));
         {
             var point = MetricData.Parse("compute,accountId=1,country=AU,hostId=18,type=egress value=100 1");
 
-            var a = Aggregates.GetPermutations(point).ToArray();
+            var a = Aggregates.GetSeriesPermutations(point).ToArray();
 
             // 20 bytes vs 8 bytes
 
