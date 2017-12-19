@@ -8,28 +8,30 @@ namespace Carbon.Platform.Metrics
     public readonly struct MetricData
     {
         public MetricData(
+          string name,
+          Dimension[] dimensions,
+          double value,
+          long? timestamp) :
+            this(name, dimensions, new[] { new MetricDataProperty("value", value) }, timestamp)
+        { }
+
+        public MetricData(
             string name,
             Dimension[] dimensions,
-            string unit,
-            double value,
+            MetricDataProperty[] properties,
             long? timestamp)
         {
             Name       = name ?? throw new ArgumentNullException(nameof(name));
             Dimensions = dimensions;
-            Unit       = unit;
-            Value      = value;
+            Properties = properties ?? throw new ArgumentNullException(nameof(properties));
             Timestamp  = timestamp;
         }
-
+        
         public readonly string Name;
 
         public readonly Dimension[] Dimensions; // aka labels
 
-        // Fields/ Properties?
-
-        public readonly string Unit;
-
-        public readonly double Value;
+        public readonly MetricDataProperty[] Properties;
 
         public readonly long? Timestamp; // nanos since 1970
         
@@ -37,9 +39,7 @@ namespace Carbon.Platform.Metrics
         {
             var segments = text.Split(Seperators.Space);
 
-            var labels        = segments[0].Split(Seperators.Comma);
-            var dimensions    = ParseLabels(labels);
-            var (unit, value) = ParseFields(segments[1].Split(Seperators.Comma));
+            var keyValues = segments[0].Split(Seperators.Comma);
 
             long? timestamp;
 
@@ -53,46 +53,38 @@ namespace Carbon.Platform.Metrics
             }
 
             return new MetricData(
-                name       : labels[0],
-                dimensions : ParseLabels(segments[0].Split(Seperators.Comma)),
-                unit       : unit,
-                value      : value,
+                name       : keyValues[0],
+                dimensions : ParseDimensions(keyValues),
+                properties : ParseProperties(segments[1].Split(Seperators.Comma)),
                 timestamp  : timestamp
             );
         }
 
-        private static Dimension[] ParseLabels(string[] labels)
+        private static Dimension[] ParseDimensions(string[] dimensionSegments)
         {
-            if (labels.Length == 1) return Array.Empty<Dimension>();
+            if (dimensionSegments.Length == 1) return Array.Empty<Dimension>();
 
-            var dimensions = new Dimension[labels.Length - 1];
+            var dimensions = new Dimension[dimensionSegments.Length - 1];
 
             for (var i = 0; i < dimensions.Length; i++)
             {
-                dimensions[i] = Dimension.Parse(labels[i + 1]);
+                dimensions[i] = Dimension.Parse(dimensionSegments[i + 1]);
             }
 
             return dimensions;
         }
 
         // values
-        private static (string unit, double value) ParseFields(string[] fields)
+        private static MetricDataProperty[] ParseProperties(string[] propertySegments)
         {
-            string unit = null;
-            double value = 0;
+            var properties = new MetricDataProperty[propertySegments.Length];
 
-            for (var i = 0; i < fields.Length; i++)
+            for (var i = 0; i < propertySegments.Length; i++)
             {
-                var field = Dimension.Parse(fields[i]);
-
-                switch (field.Name)
-                {
-                    case "unit"  : unit = field.Value.ToString();         break;
-                    case "value" : value = Convert.ToDouble(field.Value); break;
-                }
+                properties[i] = MetricDataProperty.Parse(propertySegments[i]);
             }
 
-            return (unit, value);
+            return properties;
         }
 
         public void WriteTo(StringBuilder sb)
@@ -108,18 +100,27 @@ namespace Carbon.Platform.Metrics
                     sb.Append(dimension.Name);
                     sb.Append('=');
                     sb.Append(dimension.Value);
-                }
+                }    
             }
-            
-            sb.Append(" value=");
 
-            sb.Append(Value);
+            sb.Append(' ');
+
+            for(var i = 0; i < Properties.Length; i++)
+            {
+                var property = Properties[i];
+
+                if (i > 0) sb.Append(',');
+                
+                sb.Append(property.Name);
+                sb.Append('=');
+                sb.Append(MetricValue.Format(property.Value));
+            }
 
             if (Timestamp != null)
             {
                 sb.Append(' ');
 
-                sb.Append((long)Timestamp.Value); // in nanos
+                sb.Append(Timestamp.Value); // in nanos
             }
 
             // requestCount,appId=1,appVersion=5.1.1 value=1000 1422568543702900257
@@ -135,16 +136,3 @@ namespace Carbon.Platform.Metrics
         }
     }
 }
-
-// storage:bytes
-// storage:object
-// storage:byte/hours
-// transfer:bytes
- 
-// A point within a series (possible plotted across mutiple dimensions)
-
-// we report the delta
-
-// computeUnits accountId=1 value=100 1235234
-
-// figure out what bucket it belongs in... 

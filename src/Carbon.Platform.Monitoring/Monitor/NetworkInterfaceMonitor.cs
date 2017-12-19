@@ -28,12 +28,15 @@ namespace Carbon.Platform.Monitoring
 
             var ts = new Timestamp(DateTime.UtcNow);
 
+            // network interfaceId=1 sent`bytes=100,recieved`bytes=100,packets`recieved=100
+
+
             var result = new[] {
-                new MetricData(MetricNames.NetworkSentBytes.Name,       tags, "byte",  current.BytesSent - last.BytesSent,                                 ts),
-                new MetricData(MetricNames.NetworkReceivedBytes.Name,   tags, "byte",  current.BytesReceived - last.BytesReceived,                         ts),
-                new MetricData(MetricNames.NetworkReceivedPackets.Name, tags, "count", current.NonUnicastPacketsReceived - last.NonUnicastPacketsReceived, ts),
-                new MetricData(MetricNames.NetworkSentPackets.Name,     tags, "count", current.NonUnicastPacketsSent - last.NonUnicastPacketsSent,         ts),
-                new MetricData(MetricNames.NetworkDroppedPackets.Name,  tags, "count", current.IncomingPacketsDiscarded - last.IncomingPacketsDiscarded,   ts),
+                new MetricData(MetricNames.NetworkSentBytes.Name,       tags, current.BytesSent - last.BytesSent,                                 ts),
+                new MetricData(MetricNames.NetworkReceivedBytes.Name,   tags, current.BytesReceived - last.BytesReceived,                         ts),
+                new MetricData(MetricNames.NetworkReceivedPackets.Name, tags, current.NonUnicastPacketsReceived - last.NonUnicastPacketsReceived, ts),
+                new MetricData(MetricNames.NetworkSentPackets.Name,     tags, current.NonUnicastPacketsSent - last.NonUnicastPacketsSent,         ts),
+                new MetricData(MetricNames.NetworkDroppedPackets.Name,  tags, current.IncomingPacketsDiscarded - last.IncomingPacketsDiscarded,   ts),
             };
 
             last = current;
