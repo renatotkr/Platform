@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Metrics</AssemblyName>
-    <VersionPrefix>0.21.0</VersionPrefix>
+    <VersionPrefix>0.22.1</VersionPrefix>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <LangVersion>7.2</LangVersion>
 
@@ -17,6 +17,10 @@
 
   <ItemGroup>
     <PackageReference Include="Carbon.Data.Annotations" Version="1.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Values\" />
   </ItemGroup>
 
 </Project>
