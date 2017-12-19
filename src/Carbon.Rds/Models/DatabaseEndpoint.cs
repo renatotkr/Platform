@@ -43,10 +43,10 @@ namespace Carbon.Rds
 
         [Member("locationId")]
         public int LocationId { get; }
-        
+
         #region Helpers
 
-        public bool IsReadOnly => Flags.HasFlag(DatabaseEndpointFlags.ReadOnly);
+        public bool IsReadOnly => (Flags & DatabaseEndpointFlags.ReadOnly) != 0;
 
         public long DatabaseId => ScopedId.GetScope(Id);
 

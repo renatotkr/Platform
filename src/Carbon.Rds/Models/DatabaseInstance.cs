@@ -87,10 +87,10 @@ namespace Carbon.Rds
         public bool IsTerminated => Terminated != null;
 
         [IgnoreDataMember]
-        public bool IsPrimary => Flags.HasFlag(DatabaseFlags.Primary);
+        public bool IsPrimary => (Flags & DatabaseFlags.Primary) != 0;
 
         [IgnoreDataMember]
-        public bool IsReadOnly => Flags.HasFlag(DatabaseFlags.ReadOnly);
+        public bool IsReadOnly => (Flags & DatabaseFlags.ReadOnly) != 0;
 
         #endregion
 
