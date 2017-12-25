@@ -9,7 +9,7 @@ namespace Carbon.Platform.Computing.Tests
         [Fact]
         public void Ids()
         {
-            Assert.Equal(1L, HostId.Create(LocationId.Zero, 1));
+            Assert.Equal(1L, HostId.Create(0, 1));
         }
 
         [Fact]
