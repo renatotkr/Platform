@@ -20,26 +20,29 @@ namespace Carbon.Cloud.Logging
             HttpMethod method               = HttpMethod.Get,
             HttpProtocol protocol           = HttpProtocol.Http1,
             int status                      = 200,
-            long? serverId                  = null,
+            string referrer                 = null,
+            long requestSize                = 0,
+            long responseSize               = 0,
             Uid? clientId                   = null,
             string clientLocation           = null,
             EdgeCacheStatus edgeCacheStatus = default,
-            string edgeLocation             = null,
+            int? edgeLocationId             = null,
             long? sessionId                 = null,
             long? securityTokenId           = null,
             long? programId                 = null,
             string programVersion           = null,
+            long? serverId                  = null,
+
             long? originId                  = null,
-            string referrer                 = null,
-            long sentBytes                  = 0,
-            long receivedBytes              = 0,
             TimeSpan responseTime           = default, // 0
             Uid? parentId                   = null)
         {
-            Id              = id;
+            // TODO: Verify id & path
+            
+            Id              = id;     
             EnvironmentId   = environmentId;
             DomainId        = domainId;
-            Path            = path ?? throw new ArgumentNullException(nameof(path));
+            Path            = path;
             Method          = method;
             Protocol        = protocol;
             ResponseTime    = responseTime;
@@ -49,15 +52,15 @@ namespace Carbon.Cloud.Logging
             ClientId        = clientId;
             ClientLocation  = clientLocation;
             EdgeCacheStatus = edgeCacheStatus;
-            EdgeLocation    = edgeLocation;
+            EdgeLocationId  = edgeLocationId;
             OriginId        = originId;
             SessionId       = sessionId;
             SecurityTokenId = securityTokenId;
             ServerId        = serverId;
             ProgramId       = programId;
             ProgramVersion  = programVersion;
-            SentBytes       = sentBytes;
-            ReceivedBytes   = receivedBytes;
+            ResponseSize    = responseSize;
+            RequestSize     = requestSize;
         }
         
         [Member("id"), Key]
@@ -93,13 +96,7 @@ namespace Carbon.Cloud.Logging
         [DataMember(Order = 7, EmitDefaultValue = false)]
         public string Referrer { get; }
 
-        [Member("originDomainId")]
-        [DataMember(Order = 9, EmitDefaultValue = false)]
-        public long? OriginDomainId { get; } // protocol + hostName + : + port
-        
-        // CipherId
-    
-        #region Client / Session / SecurityToken / Location (10-20)
+        #region Client (Id, Location, SessionId, SecurityTokenId) [10-20]
 
         [Member("clientId")]
         [DataMember(Order = 10)]
@@ -126,53 +123,64 @@ namespace Carbon.Cloud.Logging
         [DataMember(Order = 20)]
         public long ComputeUnits { get; set; }
 
-        [Member("receivedBytes")]
+        /// <summary>
+        ///  Total bytes received (header + body)
+        /// </summary>
+        [Member("requestSize")]
         [DataMember(Order = 21)]
-        public long ReceivedBytes { get; set; }
-
-        [Member("sentBytes")]
+        public long RequestSize { get; set; }
+        
+        /// <summary>
+        /// Total bytes sent (header + body)
+        /// </summary>
+        [Member("responseSize")]
         [DataMember(Order = 22)]
-        public long SentBytes { get; set; }
+        public long ResponseSize { get; set; }
 
         #endregion
 
-        #region Edge / Origin (30 - 32)
-        
+        #region Edge (30 - 32)
+
         // dc11-up-a227
         // ch1-up-a240
-        
-        [Member("edgeLocation")]
-        [DataMember(Order = 30, EmitDefaultValue = false)]
-        [StringLength(100)]
-        public string EdgeLocation { get; }
+
+        // EdgeLocation was 30
 
         [Member("edgeCacheStatus")]
         [DataMember(Order = 31, EmitDefaultValue = false)]
         public EdgeCacheStatus EdgeCacheStatus { get; }
 
-        [Member("originId")]
+        [Member("edgeLocationId")] // take over 30 and break existing logs
         [DataMember(Order = 32, EmitDefaultValue = false)]
-        public long? OriginId { get; }
-
+        public int? EdgeLocationId { get; }
+        
         #endregion
 
-        #region Server, Origin, & Program (33-39)
+        #region Server (33)
 
         [Member("serverId")] // null if served by the edge
         [DataMember(Order = 33, EmitDefaultValue = false)]
         public long? ServerId { get; }
         
+        #endregion
+
+        #region Program (34 & 35)
+
         [Member("programId")]
         [DataMember(Order = 34)]
         public long? ProgramId { get; }
 
         [Member("programVersion")]
-        [Ascii, StringLength(100)]
+        [Ascii, StringLength(50)]
         [DataMember(Order = 35, EmitDefaultValue = false)]
         public string ProgramVersion { get; }
 
         #endregion
         
+        [Member("originId")] // the upstream origin
+        [DataMember(Order = 36, EmitDefaultValue = false)] // was 31
+        public long? OriginId { get; }
+
         /// <summary>
         /// The total time spent servicing the request
         /// </summary>
@@ -186,8 +194,22 @@ namespace Carbon.Cloud.Logging
         [Member("parentId")]
         [DataMember(Order = 50)]
         public Uid? ParentId { get; }
-     
+        
+        #region Helpers
+
         [IgnoreDataMember]
         public DateTime Timestamp => RequestId.GetTimestamp(Id);
+
+        // Used to mark a request as "processed" before storing, so it's not processed again
+        [DataMember(Name = "flags", Order = 51, EmitDefaultValue = false)]
+        public RequestFlags Flags { get; set; }
+
+        #endregion
+    }
+
+    public enum RequestFlags
+    {
+        None      = 0,
+        Processed = 1 << 0
     }
 }
