@@ -53,6 +53,8 @@ namespace Carbon.VersionControl
             return Parse(url.ToString());
         }
 
+        private static readonly char[] revisionSegmentSeperators = { ':', '/', '#' };
+
         public static RevisionSource Parse(string text)
         {
             #region Preconditions
@@ -76,7 +78,7 @@ namespace Carbon.VersionControl
 
             var i = 0;
 
-            foreach (var part in text.Split(':', '/', '#'))
+            foreach (var part in text.Split(revisionSegmentSeperators)) // | : | / | # |
             {
                 if (i == 0)
                 {

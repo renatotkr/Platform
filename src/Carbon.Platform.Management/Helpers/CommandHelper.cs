@@ -1,5 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.IO;
 
 namespace Carbon.Platform.Management
 {
@@ -7,16 +7,23 @@ namespace Carbon.Platform.Management
     {
         public static string[] ToLines(string text)
         {
-            #region Preconditions
+            Validate.NotNullOrEmpty(text, nameof(text));
 
-            if (text == null)
-                throw new ArgumentNullException(nameof(text));
+            string line;
+            var lines = new List<string>();
 
-            #endregion
+            using (var reader = new StringReader(text))
+            {
+                while ((line = reader.ReadLine()) != null)
+                {
+                    // skip empty lines and comments
+                    if (line.Length == 0 || line[0] == '#') continue;
 
-            return text.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
-                .Where(line => !line.StartsWith("#"))
-                .ToArray();
+                    lines.Add(line);
+                }
+            }
+
+            return lines.ToArray();
         }
     }
 }
