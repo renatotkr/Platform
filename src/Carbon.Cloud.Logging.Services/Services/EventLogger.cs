@@ -14,12 +14,8 @@ namespace Carbon.Cloud.Logging
 
         public async Task CreateAsync(Event @event)
         {
-            #region Preconditions
-
             if (@event == null)
                 throw new ArgumentNullException(nameof(@event));
-
-            #endregion
 
             if (@event.Id.Lower == 0 || @event.Id.Upper == 0)
             {
@@ -31,12 +27,8 @@ namespace Carbon.Cloud.Logging
 
         public async Task CreateAsync(Event[] @events)
         {
-            #region Preconditions
-
             if (@events == null)
                 throw new ArgumentNullException(nameof(@events));
-
-            #endregion
 
             if (events.Length == 0) return;
 

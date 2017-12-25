@@ -22,7 +22,7 @@ namespace Carbon.Cloud.Logging
                 throw new ArgumentNullException(nameof(request));
 
             if (!stream.CanWrite)
-                throw new Exception("Stream is readonly");
+                throw new ArgumentException("Must be writable", nameof(stream));
 
             #endregion
 

@@ -42,12 +42,7 @@ namespace Carbon.Platform.Diagnostics
 
         public async Task<ExceptionInfo> CreateAsync(CreateExceptionRequest request)
         {
-            #region Preconditions
-
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            #endregion
+            if (request == null) throw new ArgumentNullException(nameof(request));
 
             // 1 per millisecond for now...
 

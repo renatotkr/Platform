@@ -22,13 +22,8 @@ namespace Carbon.Cloud.Logging
         // e.g. host#500
         public Task<IReadOnlyList<Event>> ListHavingResourceAsync(string resource)
         {
-            #region Preconditions
-
-            if (resource == null)
-                throw new ArgumentNullException(nameof(resource));
-
-            #endregion
-
+            if (resource == null) throw new ArgumentNullException(nameof(resource));
+            
             return db.Events.QueryAsync(
                 expression : Eq("resource", resource), 
                 order      : Order.Descending("id"),
@@ -39,6 +34,8 @@ namespace Carbon.Cloud.Logging
 
         public Task<IReadOnlyList<Event>> ListAsync(IUser user)
         {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+
             return db.Events.QueryAsync(Eq("userId", user.Id), Order.Descending("id"), 0, 1000);
         }
     }

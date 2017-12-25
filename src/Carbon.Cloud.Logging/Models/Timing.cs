@@ -7,7 +7,7 @@ namespace Carbon.Cloud.Logging
     {
         public Timing(string name, TimeSpan start, TimeSpan duration)
         {
-            Name     = name ?? throw new ArgumentNullException(nameof(name));
+            Name     = name; // not null?
             Start    = start;
             Duration = duration;
         }

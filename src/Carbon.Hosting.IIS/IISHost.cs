@@ -240,12 +240,8 @@ namespace Carbon.Hosting.IIS
 
         public Task DeleteAsync(IProgram app)
         {
-            #region Preconditions
-
             if (app == null)
                 throw new ArgumentNullException(nameof(app));
-
-            #endregion
 
             var site = FindSite(app.Id) ?? throw new ArgumentNullException($"No site with id #{app.Id} found");
 

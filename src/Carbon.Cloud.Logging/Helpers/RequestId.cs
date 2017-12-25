@@ -23,10 +23,10 @@ namespace Carbon.Cloud.Logging
             #region Preconditions
 
             if (accountId < 0)
-                throw new ArgumentException("Must be positive", nameof(accountId));
+                throw new ArgumentException("Must be >= 0", nameof(accountId));
 
             if (sequenceNumber < 0)
-                throw new ArgumentException("Must be positive", nameof(sequenceNumber));
+                throw new ArgumentException("Must be >= 0", nameof(sequenceNumber));
 
             #endregion
 

@@ -11,14 +11,10 @@ namespace Carbon.Hosting.IIS
 
         public IISBinding(int port, string hostName = null, string ip = null)
         {
-            #region Preconditions
-
             if (port < 80)
             {
                 throw new ArgumentException(paramName: nameof(port), message: "Must be 80 or greater");
             }
-
-            #endregion
 
             HostName = hostName;
             Port = port;

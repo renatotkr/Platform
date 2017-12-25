@@ -6,7 +6,7 @@ namespace Carbon.Platform.Configuration
     {
         public PackageInfo(string name, string version = null)
         {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Name    = name ?? throw new ArgumentNullException(nameof(name));
             Version = version;
         }
 
