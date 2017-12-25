@@ -24,18 +24,19 @@ namespace Carbon.Platform
 
             Context = context ?? throw new ArgumentNullException(nameof(context));
 
-            // Environments -------------------------------------------------------------
-            Environments         = new Dataset<EnvironmentInfo,           long>(context);
+            // Environments --------------------------------------------------------------
+            Environments         = new Dataset<EnvironmentInfo,            long>(context);
+            EnvironmentEdges     = new Dataset<EnvironmentEdge,    (long, long)>(context);
             EnvironmentPrograms  = new Dataset<EnvironmentProgram, (long, long)>(context);
-            EnvironmentUsers     = new Dataset<EnvironmentUser, (long, long)>(context);
+            EnvironmentUsers     = new Dataset<EnvironmentUser,    (long, long)>(context);
 
             Locations            = new Dataset<LocationInfo, long>(context);
 
             // Computing ----------------------------------------------------------------
-            Clusters = new Dataset<Cluster,                  long>(context);
+            Clusters              = new Dataset<Cluster,                  long>(context);
             Hosts                 = new Dataset<HostInfo,                 long>(context);
             HostTemplates         = new Dataset<HostTemplate,             long>(context);
-            HostPrograms          = new Dataset<HostProgram,       (long, long)>(context);
+            HostPrograms          = new Dataset<HostProgram,      (long, long)>(context);
             Images                = new Dataset<ImageInfo,                long>(context);
             MachineTypes          = new Dataset<MachineType,              long>(context);
             Programs              = new Dataset<ProgramInfo,              long>(context);
@@ -47,7 +48,8 @@ namespace Carbon.Platform
             Queues                = new Dataset<QueueInfo,                long>(context);
             Volumes               = new Dataset<VolumeInfo,               long>(context);
 
-            // Networks --------------------------------------------------------------
+            // Networking ---------------------------------------------------------------
+            Distributions         = new Dataset<Distribution,             long>(context);
             Networks              = new Dataset<NetworkInfo,              long>(context);
             NetworkAddresses      = new Dataset<NetworkAddress,           long>(context);
             NetworkInterfaces     = new Dataset<NetworkInterfaceInfo,     long>(context);
@@ -63,8 +65,9 @@ namespace Carbon.Platform
         // Environments ---------------------------------------------------------
         public Dataset<EnvironmentInfo,         long> Environments       { get; }
 
-        public Dataset<EnvironmentProgram, (long environmentId, long programId)> EnvironmentPrograms { get; }
-        public Dataset<EnvironmentUser,    (long environmentID, long userId)>    EnvironmentUsers { get; }
+        public Dataset<EnvironmentProgram, (long environmentId, long programId)>  EnvironmentPrograms { get; }
+        public Dataset<EnvironmentEdge,    (long environmentId, long locationId)> EnvironmentEdges { get; }
+        public Dataset<EnvironmentUser,    (long environmentId, long userId)>     EnvironmentUsers { get; }
 
         public Dataset<LocationInfo, long> Locations { get; }
 
@@ -85,7 +88,8 @@ namespace Carbon.Platform
         public Dataset<ChannelInfo,          long> Channels              { get; }
         public Dataset<QueueInfo,            long> Queues                { get; }
 
-        // Networks -------------------------------------------------------------
+        // Networking -----------------------------------------------------------
+        public Dataset<Distribution,         long> Distributions         { get; }
         public Dataset<NetworkInfo,          long> Networks              { get; }
         public Dataset<NetworkAddress,       long> NetworkAddresses      { get; }
         public Dataset<NetworkInterfaceInfo, long> NetworkInterfaces     { get; }
