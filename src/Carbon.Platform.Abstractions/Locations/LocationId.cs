@@ -6,8 +6,6 @@ namespace Carbon.Platform
     [StructLayout(LayoutKind.Explicit, Size = 4)]
     public struct LocationId
     {
-        public static readonly LocationId Zero = new LocationId { value = 0 };
-
         [FieldOffset(0)] // 255 zones
         private byte zoneNumber;
 
@@ -47,16 +45,22 @@ namespace Carbon.Platform
         {
             get
             {
-                if (regionNumber == 0)
+                if (value == 0)
                 {
-                    return zoneNumber == 0
-                        ? LocationType.Global
-                        : LocationType.MultiRegion;
+                    return LocationType.Global;
                 }
-
-                return zoneNumber == 0
-                    ? LocationType.Region
-                    : LocationType.Zone;
+                else if (regionNumber == 0)
+                {
+                    return LocationType.MultiRegion;
+                }
+                else if (zoneNumber == 0)
+                {
+                    return LocationType.Region;
+                }
+                else
+                {
+                    return LocationType.Zone;
+                }
             }
         }
 
@@ -64,10 +68,7 @@ namespace Carbon.Platform
 
         public static implicit operator int (LocationId id) => id.Value;
 
-        public static LocationId Create(int id)
-        {
-            return new LocationId { value = id };
-        }      
+        public static LocationId Create(int id) => new LocationId { value = id };
 
         public static LocationId Create(
             ResourceProvider provider,
@@ -77,20 +78,14 @@ namespace Carbon.Platform
             return Create(provider.Id, regionNumber, zoneNumber);
         }
 
-        public static LocationId Create(
-            int providerId,
-            ushort regionNumber,
-            byte zoneNumber = 0
-        )
+        public static LocationId Create(int providerId, ushort regionNumber, byte zoneNumber = 0)
         {
-            #region Preconditions
+            // We allow 0 for providerId
 
             if (providerId < 0 || providerId >= 128)
             {
                 throw new ArgumentOutOfRangeException("providerId", providerId, "Must be between 0 and 127");
             }
-
-            #endregion
 
             return new LocationId {
                 providerId   = (byte)providerId,
