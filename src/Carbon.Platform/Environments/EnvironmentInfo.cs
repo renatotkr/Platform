@@ -59,16 +59,26 @@ namespace Carbon.Platform.Environments
 
         #region Timestamps
 
+        [Member("activated")]
+        public DateTime? Activated { get; }
+
         [Member("created"), Timestamp]
         public DateTime Created { get; }
 
         [Member("deleted")]
         public DateTime? Deleted { get; }
-
+        
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
 
         #endregion
+
+        #region Helpers
+
+        public bool IsActivated => Activated != null;
+
+        #endregion
+
     }
 }
 
