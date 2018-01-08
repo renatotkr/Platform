@@ -3,9 +3,6 @@ using System.Text;
 
 namespace TypeScript
 {
-
-    // https://github.com/Microsoft/TypeScript/wiki/Compiler-Options
-
     public class CompilerOptions
     {
         public CompilerOptions(string projectPath)
@@ -13,7 +10,7 @@ namespace TypeScript
             ProjectPath = projectPath ?? throw new ArgumentNullException(nameof(projectPath));
         }
 
-        public string ProjectPath { get;  }
+        public string ProjectPath { get; }
 
         public bool EmitComments { get; set; }
 
@@ -25,6 +22,10 @@ namespace TypeScript
 
         public JavaScriptVersion? TargetVersion { get; set; }
 
+        public bool AllowJs { get; set; }
+
+        public bool AlwaysStrict { get; set; }
+        
         public override string ToString()
         {
             var sb = new StringBuilder();
@@ -33,7 +34,17 @@ namespace TypeScript
             // that specifies the path of a directory containing a tsconfig.json file.
 
             sb.WriteOption("-p", ProjectPath);
- 
+
+            if (AllowJs)
+            {
+                sb.Append(" --allowJs");
+            }
+
+            if (AlwaysStrict)
+            {
+                sb.Append(" --alwaysStrict");
+            }
+
             if (EmitComments == false)
             {
                 sb.Append(" --removeComments");
@@ -49,10 +60,12 @@ namespace TypeScript
                 sb.Append(" --sourcemap");
             }
 
+            // outDir?
             if (!string.IsNullOrEmpty(OutPath))
             {
                 sb.WriteOption("--out", OutPath);
             }
+
 
             if (TargetVersion != null)
             {
@@ -60,9 +73,7 @@ namespace TypeScript
             }
 
             return sb.ToString();
-        }
-
-       
+        }       
     }
 
     internal static class SbExtensions
@@ -80,3 +91,6 @@ namespace TypeScript
         }
     }
 }
+
+
+// http://www.typescriptlang.org/docs/handbook/compiler-options.html
