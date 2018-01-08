@@ -16,15 +16,8 @@ namespace Carbon.Kms
             JsonObject claims = null,
             CertificateSubjectFlags flags = default)
         {
-            #region Preconditions
-
-            if (certificateId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(certificateId));
-
-            if (string.IsNullOrEmpty(path))
-                throw new ArgumentException("Required", nameof(path));
-
-            #endregion
+            Validate.Id(certificateId, nameof(certificateId));
+            Validate.NotNullOrEmpty(path, nameof(path));
 
             CertificateId = certificateId;
             Path          = path;

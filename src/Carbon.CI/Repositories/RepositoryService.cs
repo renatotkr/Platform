@@ -55,15 +55,8 @@ namespace Carbon.CI
 
         public async Task<RepositoryInfo> CreateAsync(CreateRepositoryRequest request, ISecurityContext context)
         {
-            #region Preconditions
-
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
-            #endregion
+            Validate.NotNull(request, nameof(request));
+            Validate.NotNull(context, nameof(context));
 
             var repository = new RepositoryInfo(
                 id                  : await db.Repositories.Sequence.NextAsync(),
@@ -97,12 +90,7 @@ namespace Carbon.CI
 
         public async Task<bool> DeleteAsync(IRepository repository)
         {
-            #region Preconditions
-
-            if (repository == null)
-                throw new ArgumentNullException(nameof(repository));
-
-            #endregion
+            Validate.NotNull(repository, nameof(repository));
 
             return await db.Repositories.PatchAsync(repository.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))

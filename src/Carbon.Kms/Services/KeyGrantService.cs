@@ -31,19 +31,7 @@ namespace Carbon.Kms.Services
 
         public async Task<KeyGrant> CreateAsync(CreateKeyGrantRequest request)
         {
-            #region Preconditions
-
-            if (request == null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
-
-            if (request.Actions == null || request.Actions.Length == 0)
-            {
-                throw new ArgumentException("Missing actions");
-            }
-
-            #endregion
+            Validate.NotNull(request, nameof(request));
 
             var grant = new KeyGrant(
                 grantId     : Guid.NewGuid(),
@@ -63,6 +51,8 @@ namespace Carbon.Kms.Services
 
         public async Task<bool> DeleteAsync(KeyGrant grant)
         {
+            Validate.NotNull(grant, nameof(grant));
+
             return await db.KeyGrants.PatchAsync(grant.Id, new[] {
                 Change.Replace("deleted", Expression.Func("NOW"))
             }, Expression.IsNull("deleted")) > 0;

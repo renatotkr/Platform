@@ -16,15 +16,7 @@ namespace Carbon.Kms
 
         public byte[] Encrypt(byte[] plaintext)
         {
-            #region Preconditions
-
-            if (plaintext == null)
-                throw new ArgumentNullException(nameof(plaintext));
-
-            if (plaintext.Length == 0)
-                throw new ArgumentException("May not be empty", nameof(plaintext));
-
-            #endregion
+            Validate.NotNullOrEmpty(plaintext, nameof(plaintext));
 
             var iv = Secret.Generate(16); // 128 bit iv
 
@@ -44,15 +36,7 @@ namespace Carbon.Kms
 
         public byte[] Decrypt(byte[] data)
         {
-            #region Preconditions
-
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
-
-            if (data.Length == 0)
-                throw new ArgumentException("Must not be empty", nameof(data));
-
-            #endregion
+            Validate.NotNullOrEmpty(data, nameof(data));
 
             var message = Serializer.Deserialize<EncryptedDataMessage>(data);
             
@@ -61,18 +45,13 @@ namespace Carbon.Kms
 
         public byte[] Decrypt(EncryptedDataMessage message)
         {
-            #region Preconditions
-
-            if (message == null)
-                throw new ArgumentNullException(nameof(message));
-
+            Validate.NotNull(message, nameof(message));
+            
             if (message.Ciphertext == null || message.Ciphertext.Length == 0)
                 throw new ArgumentException("Required", "ciphertext");
 
             if (message.Header.KeyId != key.Id)
                 throw new Exception($"message key '{message.Header.KeyId}' does not match protector");
-
-            #endregion
 
             using (var aes = new AesDataProtector(key.Value, message.IV))
             {

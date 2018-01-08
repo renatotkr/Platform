@@ -40,12 +40,7 @@ namespace Carbon.CI
 
         public Task<IReadOnlyList<Deployment>> ListAsync(IEnvironment environment)
         {
-            #region Preconditions
-
-            if (environment == null)
-                throw new ArgumentNullException(nameof(environment));
-
-            #endregion
+            Validate.NotNull(environment, nameof(environment));
 
             return db.Deployments.QueryAsync(
                 expression : Eq("environmentId", environment.Id),
@@ -55,12 +50,7 @@ namespace Carbon.CI
 
         public Task<IReadOnlyList<Deployment>> ListAsync(IEnvironment environment, long programId)
         {
-            #region Preconditions
-
-            if (environment == null)
-                throw new ArgumentNullException(nameof(environment));
-
-            #endregion
+            Validate.NotNull(environment, nameof(environment));
 
             return db.Deployments.QueryAsync(
                 And(
@@ -79,12 +69,8 @@ namespace Carbon.CI
 
         public async Task<Deployment> DeployAsync(DeployRequest request, ISecurityContext context)
         {
-            #region Preconditions
-
-            if (request == null) throw new ArgumentNullException(nameof(request));
-            if (context == null) throw new ArgumentNullException(nameof(context));
-
-            #endregion
+            Validate.NotNull(request, nameof(request));
+            Validate.NotNull(context, nameof(context));
             
             var environment = request.Environment;
             var program     = request.Program;
@@ -138,15 +124,8 @@ namespace Carbon.CI
         // Activate on a single host
         public async Task<DeployResult> DeployAsync(IProgram program, IHost host)
         {
-            #region Preconditions
-
-            if (program == null)
-                throw new ArgumentNullException(nameof(program));
-
-            if (host == null)
-                throw new ArgumentNullException(nameof(host));
-
-            #endregion
+            Validate.NotNull(program, nameof(program));
+            Validate.NotNull(host, nameof(host));
 
             DeployResult result;
 
@@ -164,15 +143,8 @@ namespace Carbon.CI
 
         private async Task<DeployResult[]> ActivateAsync(IProgram program, IReadOnlyList<IHost> hosts)
         {
-            #region Preconditions
-
-            if (program == null)
-                throw new ArgumentNullException(nameof(program));
-
-            if (hosts == null)
-                throw new ArgumentNullException(nameof(hosts));
-
-            #endregion
+            Validate.NotNull(program, nameof(program));
+            Validate.NotNull(hosts,   nameof(hosts));
 
             var tasks = new Task<DeployResult>[hosts.Count];
 
@@ -195,7 +167,9 @@ namespace Carbon.CI
             IEnvironment environment, 
             IProgramRelease release, 
             long creatorId)
-        { 
+        {
+            Validate.NotNull(environment, nameof(environment));
+
             var deployment = new Deployment(
                 id            : await db.Deployments.Sequence.NextAsync(),
                 environmentId : environment.Id,
@@ -213,15 +187,8 @@ namespace Carbon.CI
             DeploymentTarget[] targets,
             bool succceded)
         {
-            #region Preconditions
-
-            if (deployment == null)
-                throw new ArgumentNullException(nameof(deployment));
-
-            if (targets == null)
-                throw new ArgumentNullException(nameof(targets));
-            
-            #endregion
+            Validate.NotNull(deployment, nameof(deployment));
+            Validate.NotNull(targets, nameof(targets));
  
             deployment.Status = succceded
                 ? DeploymentStatus.Succeeded

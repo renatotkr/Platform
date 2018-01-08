@@ -26,12 +26,7 @@ namespace Carbon.Platform.Networking
             long? hostId = null,
             JsonObject properties = null)
         {
-            #region Preconditions
-            
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            #endregion
+            Validate.Id(id, nameof(id));
 
             Id               = id;
             Addresses        = ipAddresses;

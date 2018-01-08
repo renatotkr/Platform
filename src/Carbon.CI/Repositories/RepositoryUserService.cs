@@ -24,12 +24,7 @@ namespace Carbon.CI
 
         public Task<IReadOnlyList<RepositoryUser>> ListAsync(IRepository repository)
         {
-            #region Preconditions
-
-            if (repository == null)
-                throw new ArgumentNullException(nameof(repository));
-
-            #endregion 
+            Validate.NotNull(repository, nameof(repository));
 
             return db.RepositoryUsers.QueryAsync(
                 expression: And(Eq("repositoryId", repository.Id), IsNull("deleted"))
@@ -45,18 +40,36 @@ namespace Carbon.CI
 
         public async Task<RepositoryUser> CreateAsync(CreateRepositoryUserRequest request, ISecurityContext context)
         {
-            var user = new RepositoryUser(request.RepositoryId, request.UserId, request.Properties);
+            Validate.NotNull(request, nameof(request));
+            Validate.NotNull(context, nameof(context));
 
-            await db.RepositoryUsers.InsertAsync(user);
+            var record = new RepositoryUser(
+                repositoryId : request.RepositoryId,
+                userId       : request.UserId,
+                privileges   : request.Privileges, 
+                path         : request.Path
+            );
 
-            return user;
+            await db.RepositoryUsers.InsertAsync(record);
+
+            return record;
         }
         
-        public async Task<bool> DeleteAsync(RepositoryUser repositoryUser)
+        public async Task<bool> DeleteAsync(RepositoryUser record, ISecurityContext context)
         {
-            return await db.RepositoryUsers.PatchAsync((repositoryUser.RepositoryId, repositoryUser.UserId), new[] {
+            Validate.NotNull(record, nameof(record));
+            Validate.NotNull(context, nameof(context));
+
+            var result = await db.RepositoryUsers.PatchAsync((record.RepositoryId, record.UserId), new[] {
                 Change.Replace("deleted", Func("NOW"))
             }, condition: IsNull("deleted")) > 0;
+
+            if (result)
+            {
+                await eventLog.CreateAsync(new Event("delete", $"borg:repository/{record.RepositoryId}/user/{record.UserId}"));
+            }
+
+            return result;
         }
     }
 }

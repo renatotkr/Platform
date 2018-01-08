@@ -32,14 +32,7 @@ namespace Carbon.Platform.Metrics
 
         public async ValueTask<Series> GetAsync(string name, string granularity = "PT1M")
         {
-            #region Preconditions
-
-            if (name == null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
-
-            #endregion
+            Validate.NotNullOrEmpty(name, nameof(name));
 
             var key = (name, granularity);
 

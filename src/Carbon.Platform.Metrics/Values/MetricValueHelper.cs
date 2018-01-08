@@ -6,14 +6,10 @@ namespace Carbon.Platform.Metrics
     {
         public static object Parse(string text)
         {
-            #region Preconditions
-
             if (text == null)
             {
                 throw new ArgumentNullException(nameof(text));
             }
-
-            #endregion
 
             if (text[text.Length - 1] == 'i')
             {
@@ -49,7 +45,7 @@ namespace Carbon.Platform.Metrics
                 case string s : return "\"" + value.ToString() + "\"";
             }
 
-            throw new Exception("unsupported data type:" + value.GetType().Name);
+            throw new Exception("Invalid data type:" + value.GetType().Name);
         }
     }
 }

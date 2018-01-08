@@ -47,12 +47,7 @@ namespace Carbon.CI
 
         public async Task<ProjectInfo> CreateAsync(CreateProjectRequest request)
         {
-            #region Preconditions
-
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            #endregion
+            Validate.NotNull(request, nameof(request));
             
             if (await db.Projects.ExistsAsync(And(Eq("ownerId", request.OwnerId), Eq("name", request.Name))))
             {

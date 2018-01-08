@@ -26,16 +26,12 @@ namespace Carbon.Platform.Computing
         {
             Validate.Id(id);
             Validate.NotNull(program, nameof(program));
-            
-            #region Preconditions
+            Validate.Id(creatorId,    nameof(creatorId));
 
             if (version == default)
-                throw new ArgumentException("May not be 0.0.0", nameof(version));
-
-            if (creatorId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(creatorId));
-
-            #endregion
+            {
+                throw new ArgumentException("Must not be 0.0.0", nameof(version));
+            }
 
             Id          = id;
             ProgramId   = program.Id;

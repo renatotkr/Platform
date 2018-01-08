@@ -42,12 +42,7 @@ namespace Carbon.CI
 
         public async Task<RepositoryBranch> CreateAsync(CreateBranchRequest request, ISecurityContext context)
         {
-            #region Preconditions
-
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            #endregion
+            Validate.NotNull(request, nameof(request));
 
             var branchId = await BranchId.NextAsync(db.Context, request.RepositoryId);
 
@@ -66,12 +61,7 @@ namespace Carbon.CI
 
         public async Task<bool> DeleteAsync(IRepositoryBranch branch)
         {
-            #region Preconditions
-
-            if (branch == null)
-                throw new ArgumentNullException(nameof(branch));
-
-            #endregion
+            Validate.NotNull(branch, nameof(branch));
 
             return await db.RepositoryBranches.PatchAsync(branch.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))

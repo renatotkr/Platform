@@ -43,13 +43,8 @@ namespace Carbon.Kms.Services
 
         public async Task<ICertificate> CreateAsync(CreateCertificateRequest request)
         {
-            #region Preconditions
+            Validate.NotNull(request, nameof(request));
 
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            #endregion
-            
             var cert = new X509Certificate2(request.Data);
 
             var certificateId = await db.Certificates.Sequence.NextAsync();
@@ -91,6 +86,8 @@ namespace Carbon.Kms.Services
       
         public async Task DeleteAsync(ICertificate certificate)
         {
+            Validate.NotNull(certificate, nameof(certificate));
+
             await db.Certificates.PatchAsync(certificate.Id, new[] {
                 Change.Replace("deleted", Expression.Func("NOW"))
             }, condition: Expression.IsNull("deleted"));
@@ -98,6 +95,8 @@ namespace Carbon.Kms.Services
 
         public async Task RevokeAsync(ICertificate certificate)
         {
+            Validate.NotNull(certificate, nameof(certificate));
+
             await db.Certificates.PatchAsync(certificate.Id, new[] {
                 Change.Replace("revoked", Expression.Func("NOW"))
             }, condition: Expression.IsNull("revoked"));

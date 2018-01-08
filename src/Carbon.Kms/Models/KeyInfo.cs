@@ -48,18 +48,9 @@ namespace Carbon.Kms
             KeyType type = KeyType.Secret,
             KeyStatus status = KeyStatus.Active)
         {
-            #region Preconditions
-
-            if (ownerId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(ownerId));
-
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("Required", nameof(name));
-
-            if (data == null || data.Length == 0)
-                throw new ArgumentException("Required", nameof(data));
-
-            #endregion
+            Validate.Id(ownerId, nameof(ownerId));
+            Validate.NotNullOrEmpty(name, nameof(name));
+            Validate.NotNullOrEmpty(data, nameof(data));
 
             Id        = id;
             OwnerId   = ownerId;

@@ -31,11 +31,7 @@ namespace Carbon.Hosting.IIS
 
         public static IISBinding Parse(string text)
         {
-            #region Preconditions
-
             if (text == null) throw new ArgumentNullException(nameof(text));
-
-            #endregion
 
             var parts = text.Split(':');
 

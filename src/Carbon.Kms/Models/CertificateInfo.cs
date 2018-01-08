@@ -19,27 +19,21 @@ namespace Carbon.Kms
             byte[] encryptedPrivateKey = null,
             JsonObject properties = null)
         {
-            #region Preconditions
-
-            if (id <= 0)
-                throw new ArgumentException("Must be > 0", nameof(id));
-
-            if (data == null)
-            {
-                throw new ArgumentNullException(nameof(data));
-            }
-            else if (data.Length > 32768)
+            Validate.Id(id);
+            Validate.Id(ownerId, nameof(ownerId));
+            Validate.NotNull(data, nameof(data));
+            
+            if (data.Length > 32768)
             {
                 throw new ArgumentException("Must be 32,768 bytes or fewer", nameof(data));
             }
             
-            if (encryptedPrivateKey != null && encryptedPrivateKey.Length > 2500)
+            if (encryptedPrivateKey != null &&
+                encryptedPrivateKey.Length > 2500)
             {
                 throw new ArgumentException("Must be less than 2,500 bytes", nameof(encryptedPrivateKey));
             }
-            
-            #endregion
-
+           
             Id                  = id;
             Data                = data;
             ParentId            = parentId;

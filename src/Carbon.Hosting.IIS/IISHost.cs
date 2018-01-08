@@ -285,14 +285,11 @@ namespace Carbon.Hosting.IIS
 
         private Site GetConfigureSite(IProgram app)
         {
-            #region Preconditions
-
-            if (app == null) throw new ArgumentNullException(nameof(app));
+            if (app == null)
+                throw new ArgumentNullException(nameof(app));
 
             if (app.Addresses == null || app.Addresses.Length == 0)
                 throw new ArgumentException("Must have at least one address", nameof(app));
-
-            #endregion
 
             var physicalPath = GetAppPath(app);
 

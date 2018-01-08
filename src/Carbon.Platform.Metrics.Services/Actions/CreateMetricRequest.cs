@@ -11,24 +11,13 @@ namespace Carbon.Platform.Metrics
             string unit,
             string[] dimensions = null)
         {
-            #region Preconditions
-
-            if (string.IsNullOrEmpty(name))
-            {
-                throw new ArgumentException("Required", nameof(name));
-            }
-
-            if (string.IsNullOrEmpty(unit))
-            {
-                throw new ArgumentException("Required", nameof(unit));
-            }
-
-            #endregion
+            Validate.NotNullOrEmpty(name, nameof(name));
+            Validate.NotNullOrEmpty(unit, nameof(unit));
 
             Name       = name;
             OwnerId    = ownerId;
             Type       = type;
-            Unit       = unit ?? throw new ArgumentNullException(nameof(unit));
+            Unit       = unit;
             Dimensions = dimensions;
         }
 

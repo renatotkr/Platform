@@ -30,12 +30,7 @@ namespace Carbon.Kms.Services
 
         public async Task<IKeyInfo> GenerateAsync(GenerateKeyRequest request)
         {
-            #region Preconditions
-
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            #endregion
+            Validate.NotNull(request, nameof(request));
 
             var aes = Aes.Create();
             

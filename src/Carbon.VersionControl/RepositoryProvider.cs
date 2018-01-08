@@ -56,11 +56,10 @@ namespace Carbon.VersionControl
 
         public static RepositoryProvider Parse(string text)
         {
-            #region Preconditions
-
-            if (text == null) throw new ArgumentNullException(nameof(text));
-
-            #endregion
+            if (text == null)
+            {
+                throw new ArgumentNullException(nameof(text));
+            }
 
             switch (text.ToLower())
             {
@@ -73,9 +72,9 @@ namespace Carbon.VersionControl
                 case "gitlab": return GitLab;
 
                 case "codecommit": return CodeCommit;
-
-                default: throw new Exception("Unsupported git provider: " + text);
             }
+
+            throw new Exception("Unsupported provider: " + text);
         }
     }
 }

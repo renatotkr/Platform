@@ -16,12 +16,7 @@ namespace Carbon.Kms
 
         public async ValueTask<byte[]> DecryptAsync(EncryptedDataMessage message)
         {
-            #region Preconditions
-
-            if (message == null)
-                throw new ArgumentNullException(nameof(message));
-            
-            #endregion
+            Validate.NotNull(message, nameof(message));
 
             var protector = await protectorProvider.GetAsync(message.Header.KeyId).ConfigureAwait(false) as DataProtector;
 
@@ -30,12 +25,7 @@ namespace Carbon.Kms
 
         public ValueTask<byte[]> DecryptAsync(byte[] data)
         {
-            #region Preconditions
-
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
-
-            #endregion
+            Validate.NotNullOrEmpty(data, nameof(data));
 
             var message = Serializer.Deserialize<EncryptedDataMessage>(data);
 

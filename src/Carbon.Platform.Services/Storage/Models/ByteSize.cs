@@ -2,14 +2,14 @@
 
 namespace Carbon.Platform.Storage
 {
+    // Consider using from Carbon.Storage
+
     public readonly struct ByteSize
     {
         public static readonly ByteSize Zero = new ByteSize(0);
 
         public ByteSize(long totalBytes)
         {
-            #region Preconditions
-
             if (totalBytes < 0)
             {
                 throw new ArgumentOutOfRangeException(
@@ -18,9 +18,7 @@ namespace Carbon.Platform.Storage
                     message     : "Must be 0 or greater"
                 );
             }
-
-            #endregion
-
+            
             TotalBytes = totalBytes;
         }
 

@@ -5,7 +5,6 @@ using Carbon.Cloud.Logging;
 using Carbon.Platform.Computing;
 using Carbon.Security;
 using Carbon.Storage;
-using Carbon.Versioning;
 
 namespace Carbon.CI
 {
@@ -27,18 +26,13 @@ namespace Carbon.CI
 
         public async Task<ProgramRelease> CreateAsync(CreateProgramReleaseRequest request, ISecurityContext context)
         {
-            #region Preconditions
+            Validate.NotNull(request, nameof(request));
+            Validate.NotNull(context, nameof(request));
 
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
-            if (request.Version == SemanticVersion.Zero)
-                throw new ArgumentException("Must be be 0.0.0", nameof(request.Version));
-
-            #endregion
+            if (request.Version == default)
+            {
+                throw new ArgumentException("Must be be default", nameof(request.Version));
+            }
 
             // Create the package ----------------------
             var package = await packageManager.CreateAsync(new CreatePackageRequest(
@@ -75,12 +69,7 @@ namespace Carbon.CI
 
         public async Task<IPackage> DownloadAsync(IProgram program)
         {
-            #region Preconditions
-
-            if (program == null)
-                throw new ArgumentNullException(nameof(program));
-
-            #endregion
+            Validate.NotNull(program, nameof(program));
 
             var packages = await packageManager.ListAsync(program);
 

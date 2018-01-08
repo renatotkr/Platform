@@ -74,12 +74,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<ImageInfo> RegisterAsync(RegisterImageRequest request)
         {
-            #region Preconditions
-            
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            #endregion
+            Validate.NotNull(request, nameof(request));
 
             var image = new ImageInfo(
                 id         : await db.Images.Sequence.NextAsync(),
@@ -96,9 +91,11 @@ namespace Carbon.Platform.Computing
             return image;
         }
         
-        public async Task<bool> DeleteAsync(IImage image)
+        public async Task<bool> DeleteAsync(IImage record)
         {
-            return await db.Images.PatchAsync(image.Id, new[] {
+            Validate.NotNull(record, nameof(record));
+
+            return await db.Images.PatchAsync(record.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))
             }, condition: IsNull("deleted")) > 0;
         }

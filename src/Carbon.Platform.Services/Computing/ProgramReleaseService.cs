@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using Carbon.Data;
 using Carbon.Data.Expressions;
 using Carbon.Platform.Resources;
@@ -23,17 +24,13 @@ namespace Carbon.Platform.Computing
 
         public async Task<ProgramRelease> CreateAsync(RegisterProgramReleaseRequest request)
         {
-            #region Preconditions
-
             Validate.Object(request, nameof(request));
             
             if (await ExistsAsync(request.Program.Id, request.Version))
             {
                 throw new ResourceConflictException($"program/{request.Program.Id}@{request.Version}");
             }
-
-            #endregion
-
+            
             var program = request.Program;
 
             var release = new ProgramRelease(

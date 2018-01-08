@@ -90,12 +90,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<IReadOnlyList<ProgramInfo>> ListAsync(IHost host)
         {
-            #region Preconditions
-
-            if (host == null)
-                throw new ArgumentNullException(nameof(host));
-
-            #endregion
+            Validate.NotNull(host, nameof(host));
 
             // TODO: Do a left JOIN on on programs
 
@@ -128,14 +123,13 @@ namespace Carbon.Platform.Computing
 
         public async Task<ProgramInfo> CreateAsync(CreateProgramRequest request)
         {
-            #region Preconditions
-
             Validate.Object(request, nameof(request));
 
             if (request.Type != ProgramType.Site && ProgramName.Validate(request.Name) == false)
+            {
                 throw new ArgumentException($"Not a valid program name '{request.Name}", nameof(request.Name));
+            }
 
-            #endregion
 
             var program = new ProgramInfo(
                 id           : await db.Programs.Sequence.NextAsync(),
@@ -158,12 +152,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<bool> DeleteAsync(IProgram program)
         {
-            #region Preconditions
-
-            if (program == null)
-                throw new ArgumentNullException(nameof(program));
-
-            #endregion
+            Validate.NotNull(program, nameof(program));
 
             return await db.Programs.PatchAsync(program.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))

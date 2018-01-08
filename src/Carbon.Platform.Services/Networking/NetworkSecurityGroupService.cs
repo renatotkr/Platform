@@ -27,12 +27,7 @@ namespace Carbon.Platform.Networking
 
         public async Task<NetworkSecurityGroup> FindAsync(ResourceProvider provider, string resourceId)
         {
-            #region Preconditions
-
-            if (resourceId == null)
-                throw new ArgumentNullException(nameof(resourceId));
-
-            #endregion
+            Validate.NotNullOrEmpty(resourceId, nameof(resourceId));
 
             return await db.NetworkSecurityGroups.FindAsync(provider, resourceId);
         }
@@ -54,16 +49,11 @@ namespace Carbon.Platform.Networking
             return nsg;
         }
 
-        public async Task<bool> DeleteAsync(INetworkSecurityGroup group)
+        public async Task<bool> DeleteAsync(INetworkSecurityGroup record)
         {
-            #region Preconditions
+            Validate.NotNull(record, nameof(record));
 
-            if (group == null)
-                throw new ArgumentNullException(nameof(group));
-
-            #endregion
-
-            return await db.NetworkSecurityGroups.PatchAsync(group.Id, new[] {
+            return await db.NetworkSecurityGroups.PatchAsync(record.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))
             }, condition: IsNull("deleted")) > 0;
         }

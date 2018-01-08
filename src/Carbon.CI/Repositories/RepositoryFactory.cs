@@ -20,15 +20,12 @@ namespace Carbon.CI
 
         public async Task<IRepositoryClient> GetAsync(IRepository repository)
         {
-            #region Preconditions
-
-            if (repository == null)
-                throw new ArgumentNullException(nameof(repository));
+            Validate.NotNull(repository, nameof(repository));
 
             if (repository.EncryptedAccessToken == null)
+            {
                 throw new ArgumentException("Missing accessToken", nameof(repository));
-
-            #endregion
+            }
 
             var origin = RevisionSource.Parse(repository.Origin);
 

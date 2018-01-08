@@ -28,15 +28,8 @@ namespace Carbon.Kms.Services
 
         public async Task<KeyInfo> GetAsync(long ownerId, string name)
         {
-            #region Preconditions
-
-            if (ownerId <= 0)
-                throw new ArgumentException("Must be > 0", nameof(ownerId));
-
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("Required", nameof(name));
-
-            #endregion
+            Validate.Id(ownerId, nameof(ownerId));
+            Validate.NotNullOrEmpty(name, nameof(name));
 
             var keys = await db.Keys.QueryAsync(Conjunction(
                 Eq("ownerId", ownerId),
@@ -61,12 +54,7 @@ namespace Carbon.Kms.Services
 
         public Task<IReadOnlyList<KeyInfo>> ListAsync(long ownerId, string name)
         {
-            #region Preconditions
-
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
-
-            #endregion
+            Validate.NotNullOrEmpty(name, nameof(name));
 
             return db.Keys.QueryAsync(Conjunction(
                 Eq("ownerId", ownerId), 
@@ -77,12 +65,7 @@ namespace Carbon.Kms.Services
 
         public async Task CreateAsync(KeyInfo key)
         {
-            #region Preconditions
-
-            if (key == null)
-                throw new ArgumentNullException(nameof(key));
-
-            #endregion
+            Validate.NotNull(key, nameof(key));
 
             await db.Keys.InsertAsync(key).ConfigureAwait(false);
         }

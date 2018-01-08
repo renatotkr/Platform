@@ -171,12 +171,10 @@ namespace Carbon.Platform.Computing
         // 4B per zone per region
         private async Task<HostId> GetNextId(LocationId locationId)
         {
-            #region Preconditions
-
-            if (locationId.Value == 0)
-                throw new ArgumentException("Must not be 0", nameof(locationId));
-
-            #endregion
+            if (locationId.Value <= 0)
+            {
+                throw new ArgumentException("Must not >= 0", nameof(locationId));
+            }
 
             ILocation location = await db.Locations.FindAsync(locationId.Value);
 

@@ -18,12 +18,10 @@ namespace Carbon.Net
 
         public Listener(ApplicationProtocal protocal, ushort port)
         {
-            #region Preconditions
-
             if (port == 0)
+            {
                 throw new ArgumentException("May not be 0", nameof(port));
-
-            #endregion
+            }
 
             Scheme = protocal;
             Port   = port;
@@ -48,12 +46,10 @@ namespace Carbon.Net
 
         public static Listener Parse(string text)
         {
-            #region Preconditions
-
             if (text == null)
+            {
                 throw new ArgumentNullException(nameof(text));
-
-            #endregion
+            }
 
             if (text.Contains("://"))
             {
@@ -69,7 +65,7 @@ namespace Carbon.Net
                 );
             }
 
-            throw new Exception("Unsupported format:" + text);
+            throw new Exception("Invalid format:" + text);
         }
         
         public override string ToString()

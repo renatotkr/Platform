@@ -56,15 +56,8 @@ namespace Carbon.Platform.Computing
 
         public async Task<Cluster> GetAsync(IEnvironment environment, ILocation location)
         {
-            #region Preconditions
-
-            if (environment == null)
-                throw new ArgumentNullException(nameof(environment));
-
-            if (location == null)
-                throw new ArgumentNullException(nameof(location));
-
-            #endregion
+            Validate.NotNull(environment, nameof(environment));
+            Validate.NotNull(location, nameof(location));
 
             var group = await db.Clusters.QueryFirstOrDefaultAsync(
                 And(Eq("environmentId", environment.Id), Eq("locationId", location.Id))

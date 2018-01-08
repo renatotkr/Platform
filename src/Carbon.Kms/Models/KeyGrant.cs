@@ -22,24 +22,12 @@ namespace Carbon.Kms
             JsonObject properties = null,
             string externalId = null)
         {
-            #region Preconditions
-
-            if (userId <= 0)
-                throw new ArgumentException("Invalid", nameof(userId));
-
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("Required", nameof(name));
+            Validate.NotNullOrEmpty(name, nameof(name));
+            Validate.NotNullOrEmpty(actions, nameof(actions));
+            Validate.Id(userId, nameof(userId));
 
             if (name.Length > 100)
                 throw new ArgumentException("Must be 100 characters or fewer", nameof(name));
-
-            if (actions == null)
-                throw new ArgumentNullException(nameof(actions));
-
-            if (actions.Length == 0)
-                throw new ArgumentException("Required", nameof(actions));
-
-            #endregion
 
             Id          = grantId;
             KeyId       = keyId;
