@@ -8,15 +8,15 @@
 
         public static class Azure
         {
-            public static readonly Location USNorthCentral = Create( 1, "North Central US");    // | US | IL       | ~ 2010
-            public static readonly Location USSouthCentral = Create( 2, "South Central US");    // | US | TX       | ~ 2010
-            public static readonly Location EUNorth        = Create( 3, "North Europe");        // | Ireland       | ?
-            public static readonly Location EUWest         = Create( 4, "West Europe");         // | Netherlands   | ? 
-            public static readonly Location APEast         = Create( 5, "East Asia");           // | Hong Kong     | ? < 2010-05-01
-            public static readonly Location APSouthEast    = Create( 6, "Southeast Asia");      // | Singapore     | ? < 2010-05-01 
-            public static readonly Location USEast         = Create( 7, "East US");             // | US | Virginia | ? < 2011-06-06
-            public static readonly Location USWest         = Create( 8, "West US");             // | US | CA       | ? < 2011-06-06
-            public static readonly Location JPEast         = Create( 9, "Japan East");          // | Saitama       | 2014-02-25 GA
+            public static readonly Location USNorthCentral = Create(01, "North Central US");    // | US | IL       | ~ 2010
+            public static readonly Location USSouthCentral = Create(02, "South Central US");    // | US | TX       | ~ 2010
+            public static readonly Location EUNorth        = Create(03, "North Europe");        // | Ireland       | ?
+            public static readonly Location EUWest         = Create(04, "West Europe");         // | Netherlands   | ? 
+            public static readonly Location APEast         = Create(05, "East Asia");           // | Hong Kong     | ? < 2010-05-01
+            public static readonly Location APSouthEast    = Create(06, "Southeast Asia");      // | Singapore     | ? < 2010-05-01 
+            public static readonly Location USEast         = Create(07, "East US");             // | US | Virginia | ? < 2011-06-06
+            public static readonly Location USWest         = Create(08, "West US");             // | US | CA       | ? < 2011-06-06
+            public static readonly Location JPEast         = Create(09, "Japan East");          // | Saitama       | 2014-02-25 GA
             public static readonly Location JPWest         = Create(10, "Japan West");          // | Osaka         | 2014-02-25 GA    
             public static readonly Location CNEast         = Create(11, "China East");          // | Shanghai      | 2014-03-27
             public static readonly Location CNNorth        = Create(12, "China North");         // | Beijing       | 2014-03-27      
@@ -53,6 +53,8 @@
                                                        
             // South Africa West
             // South Africa North
+            // Australia Central
+
             public static Location Create(ushort regionNumber, string name)
             {
                 return new Location(LocationId.Create(ResourceProvider.Azure, regionNumber), name);

@@ -4,6 +4,6 @@
     {
         Unknown   = 0,
         Healthy   = 1,
-        Unhealthy = 2   // One or more services are distrupted
+        Unhealthy = 2   // One or more services are disrupted
     }
 }

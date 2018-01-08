@@ -18,7 +18,7 @@ namespace Carbon.Platform
             public static readonly Location Stockholm       = Create(9,  "ts");
             public static readonly Location Warsaw          = Create(10, "pl1");                // PL
             // public static readonly Location Barnaul      = Create(11, "?");                  // RU
-            public static readonly Location Ekaterinburg    = Create(12, "dh");                 // RU
+            public static readonly Location Ekaterinburg    = Create(12, "dh");                 // RU (aka Yekaterinburg)
             public static readonly Location Kazan           = Create(13, "bl");                 // RU
             public static readonly Location Khabarovsk      = Create(14, "rc");                 // RU
             public static readonly Location Kiev            = Create(15, "gn");                 // _
@@ -40,8 +40,8 @@ namespace Carbon.Platform
             public static readonly Location Ashburn         = Create(27, "dc3");                // US
             public static readonly Location Dallas          = Create(28, "td");                 // US
             public static readonly Location Miami           = Create(29, "mi1");                // US
-            public static readonly Location SanJose         = Create(30, "sv5");                // US
-            public static readonly Location Sunnyvale       = Create(31, "sv4");                // US
+            public static readonly Location SanJose         = Create(30, "sv4");                // US
+            public static readonly Location Sunnyvale       = Create(31, "sv5");                // US
             public static readonly Location Chicago         = Create(32, "ch1");                // US
             public static readonly Location Seattle         = Create(33, "tse");                // US
             public static readonly Location HongKong        = Create(34, "hk2"); // 2017-06-22
@@ -57,6 +57,11 @@ namespace Carbon.Platform
             // - Toronto
             // - São Paulo
             // - Vienna
+
+            // tii (TR/Istanbul)
+            // ttkb (RU/Yekaterinburg)
+
+            // tde (Omaha?)
 
             public static Location Get(int id)
             {
@@ -78,7 +83,7 @@ namespace Carbon.Platform
                     case "bl"   : return Kazan;
                     case "blt"  : return Minsk;
                     case "bzi"  : return TelAviv;
-                    case "cc1"  : return Tokyo;    
+                    case "cc1"  : return Tokyo;
                     case "cec"  : return Prague;    
                     case "ch1"  : return Chicago;
                     case "cm"   : return Madrid;  
@@ -98,18 +103,21 @@ namespace Carbon.Platform
                     case "kx"   : return Seoul;
                     case "ky"   : return Bishkek;
                     case "m9"   : return Moscow;
+                    case "mts"  : return Moscow; // ???
                     case "mi1"  : return Miami;
+                    case "nkf"  : return Amsterdam;
                     case "pl1"  : return Warsaw;
                     case "rc"   : return Khabarovsk;
                     case "sg1"  : return Singapore;
                     case "sg2"  : return Singapore;
-                    case "sv4"  : return Sunnyvale;   // need to double check Sunnyvale & San Jose
-                    case "sv5"  : return SanJose;
+                    case "sv4"  : return SanJose;    // San Jose
+                    case "sv5"  : return Sunnyvale;  
                     case "sy4"  : return Sydney;
                     case "td"   : return Dallas;
                     case "tl"   : return London;
                     case "ts"   : return Stockholm;
                     case "tse"  : return Seattle;
+                    case "ttkb" : return Ekaterinburg;
                     case "ufn"  : return Ufa;                   
                 }
 

@@ -6,15 +6,15 @@ namespace Carbon.Platform
     {
         public static class Aws
         {
-            public static readonly Location USEast1      = Create(1, "us-east-1");       // | US    | N. Virginia   | 2006-08-25
-            public static readonly Location EUWest1      = Create(2, "eu-west-1");       // | EU    | Ireland       | 2008-12-10
-            public static readonly Location USWest1      = Create(3, "us-west-1");       // | US    | N. California | 2009-12-03
-            public static readonly Location APSouthEast1 = Create(4, "ap-southeast-1");  // | AP    | Singapore     | 2010-04-29
-            public static readonly Location APNorthEast1 = Create(5, "ap-northeast-1");  // | AP    | Tokyo         | 2011-03-02
-            public static readonly Location USGovWest1   = Create(6, "us-gov-west-1");   // | US    | AWS GovCloud  | 2011-08-16
-            public static readonly Location USWest2      = Create(7, "us-west-2");       // | US    | Oregon        | 2011-11-09
-            public static readonly Location SAEast1      = Create(8, "sa-east-1");       // | SA    | São Paulo     | 2011-12-14
-            public static readonly Location APSouthEast2 = Create(9, "ap-southeast-2");  // | AP    | Sydney        | 2012-11-12
+            public static readonly Location USEast1      = Create(01, "us-east-1");      // | US    | N. Virginia   | 2006-08-25
+            public static readonly Location EUWest1      = Create(02, "eu-west-1");      // | EU    | Ireland       | 2008-12-10
+            public static readonly Location USWest1      = Create(03, "us-west-1");      // | US    | N. California | 2009-12-03
+            public static readonly Location APSouthEast1 = Create(04, "ap-southeast-1"); // | AP    | Singapore     | 2010-04-29
+            public static readonly Location APNorthEast1 = Create(05, "ap-northeast-1"); // | AP    | Tokyo         | 2011-03-02
+            public static readonly Location USGovWest1   = Create(06, "us-gov-west-1");  // | US    | AWS GovCloud  | 2011-08-16
+            public static readonly Location USWest2      = Create(07, "us-west-2");      // | US    | Oregon        | 2011-11-09
+            public static readonly Location SAEast1      = Create(08, "sa-east-1");      // | SA    | São Paulo     | 2011-12-14
+            public static readonly Location APSouthEast2 = Create(09, "ap-southeast-2"); // | AP    | Sydney        | 2012-11-12
             public static readonly Location CNNorth1     = Create(10, "cn-north-1");     // | China | Beijing       | 2013-12-18
             public static readonly Location EUCentral1   = Create(11, "eu-central-1");   // | EU    | Frankfurt     | 2014-10-23
             public static readonly Location APNortheast2 = Create(12, "ap-northeast-2"); // | AP    | Seoul	        | 2016-01-06
@@ -29,15 +29,15 @@ namespace Carbon.Platform
             {
                 switch (regionNumber)
                 {
-                    case 1  : return USEast1;
-                    case 2  : return EUWest1;
-                    case 3  : return USWest1;
-                    case 4  : return APSouthEast1;
-                    case 5  : return APNorthEast1;
-                    case 6  : return USGovWest1;
-                    case 7  : return USWest2;
-                    case 8  : return SAEast1;
-                    case 9  : return APSouthEast2;
+                    case 01 : return USEast1;
+                    case 02 : return EUWest1;
+                    case 03 : return USWest1;
+                    case 04 : return APSouthEast1;
+                    case 05 : return APNorthEast1;
+                    case 06 : return USGovWest1;
+                    case 07 : return USWest2;
+                    case 08 : return SAEast1;
+                    case 09 : return APSouthEast2;
                     case 10 : return CNNorth1;
                     case 11 : return EUCentral1;
                     case 12 : return APNortheast2;

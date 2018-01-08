@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Carbon.Platform.Resources;
 
 namespace Carbon.Platform
@@ -28,7 +29,6 @@ namespace Carbon.Platform
             public static readonly Location SouthAmerica_East1   = Create(12, "southamerica-east1");   // | BR | São Paulo     | 2017-09-19
             public static readonly Location Asia_South1          = Create(13, "asia-south1");          // | IN | Mumbai        | 2017-10-31
             
-
             public static Location Get(string name)
             {
                 if (name == null)
@@ -63,15 +63,15 @@ namespace Carbon.Platform
             {
                 switch (regionNumber)
                 {
-                    case 1  : return US_Central1;
-                    case 2  : return Europe_West1;
-                    case 3  : return Asia_East1;
-                    case 4  : return US_East1;
-                    case 5  : return US_West1;
-                    case 6  : return Asia_NorthEast1;
-                    case 7  : return Asia_NorthEast1;
-                    case 8  : return Asia_SouthEast1;
-                    case 9  : return US_East4;
+                    case 01 : return US_Central1;
+                    case 02 : return Europe_West1;
+                    case 03 : return Asia_East1;
+                    case 04 : return US_East1;
+                    case 05 : return US_West1;
+                    case 06 : return Asia_NorthEast1;
+                    case 07 : return Asia_NorthEast1;
+                    case 08 : return Asia_SouthEast1;
+                    case 09 : return US_East4;
                     case 10 : return Europe_West2;
                     case 11 : return Europe_West3;
                     case 12 : return SouthAmerica_East1;
