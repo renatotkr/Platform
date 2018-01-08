@@ -2,10 +2,10 @@
 using System.Net;
 using System.Runtime.Serialization;
 
+using Carbon.Extensions;
+
 namespace Carbon.Net
 {
-    using Extensions;
-
     /// <summary>
     /// Classless Inter-Domain Routing
     /// </summary>
@@ -26,8 +26,7 @@ namespace Carbon.Net
 
         #region Helpers
 
-        public long Netmask 
-            => ~((1 << (32 - Suffix)) - 1);  // 255.255.255.0
+        public long Netmask => ~((1 << (32 - Suffix)) - 1);  // 255.255.255.0
 
         public IPAddress Broadcast => null;
 
@@ -37,8 +36,8 @@ namespace Carbon.Net
         public IPAddress End => 
             new IPAddress((IP4Number(Prefix) & Netmask) | ~Netmask);    // 10.1.1.254
 
-        private static int IP4Number(IPAddress ip) => 
-            BitConverter.ToInt32(ip.GetAddressBytes(), 0);
+        private static uint IP4Number(IPAddress ip) => 
+            BitConverter.ToUInt32(ip.GetAddressBytes(), 0);
 
         #endregion
 
@@ -57,10 +56,7 @@ namespace Carbon.Net
             );
         }
 
-        public override string ToString()
-        {
-            return Prefix.ToString() + "/" + Suffix.ToString();
-        }
+        public override string ToString() => Prefix.ToString() + "/" + Suffix.ToString();
     }
 }
 
