@@ -16,9 +16,11 @@ namespace Bitbucket
     {
         const string baseUri = "https://bitbucket.org/api/2.0";
 
-        private static readonly ProductInfoHeaderValue userAgent = new ProductInfoHeaderValue("Carbon", "1.2.0");
-
-        private readonly HttpClient httpClient = new HttpClient();
+        private readonly HttpClient httpClient = new HttpClient {
+            DefaultRequestHeaders = {
+                { "User-Agent", "Carbon/2.0" }
+            }
+        };
 
         private readonly NetworkCredential credential;
 
@@ -66,8 +68,6 @@ namespace Bitbucket
 
             var httpRequest = new HttpRequestMessage(HttpMethod.Get, url);
 
-            httpRequest.Headers.UserAgent.Add(userAgent);
-
             httpRequest.Headers.Authorization = new AuthenticationHeaderValue(
                 scheme      : "Basic",
                 parameter   : Convert.ToBase64String(Encoding.ASCII.GetBytes($"{credential.UserName}:{credential.Password}"))
@@ -97,8 +97,6 @@ namespace Bitbucket
 
         private async Task<JsonObject> SendAsync(HttpRequestMessage httpRequest)
         {
-            httpRequest.Headers.UserAgent.Add(new ProductInfoHeaderValue("Carbon", "1.1.0"));
-
             httpRequest.Headers.Authorization = new AuthenticationHeaderValue(
                 scheme: "Basic",
                 parameter: Convert.ToBase64String(Encoding.ASCII.GetBytes($"{credential.UserName}:{credential.Password}"))

@@ -12,11 +12,13 @@ namespace GitHub
 {
     public class GitHubClient : IDisposable
     {
-        private static readonly ProductInfoHeaderValue userAgent = new ProductInfoHeaderValue("Carbon", "1.3.0");
-
         private readonly HttpClient httpClient = new HttpClient(new HttpClientHandler {
             AllowAutoRedirect = false
-        });
+        }) {
+            DefaultRequestHeaders = {
+                { "User-Agent", "Carbon/2.0" }
+            }
+        };
 
         public static readonly int Version = 3;
 
@@ -50,8 +52,6 @@ namespace GitHub
             var httpRequest = new HttpRequestMessage(HttpMethod.Post, baseUri + "/authorizations") {
                 Content = new StringContent(postData, Encoding.UTF8, "application/json")
             };
-
-            httpRequest.Headers.UserAgent.Add(userAgent);
 
             httpRequest.Headers.Authorization = new AuthenticationHeaderValue(
                 scheme    : "Basic",
@@ -254,7 +254,6 @@ namespace GitHub
             );
 
             httpRequest.Headers.Authorization = accessToken.ToHeader();
-            httpRequest.Headers.UserAgent.Add(userAgent);
 
             using (var response = await httpClient.SendAsync(httpRequest).ConfigureAwait(false))
             {
@@ -293,9 +292,6 @@ namespace GitHub
             {
                 request.Headers.Authorization = accessToken.ToHeader();
             }
-
-            request.Headers.UserAgent.Add(userAgent);
-
 
             using (var response = await httpClient.SendAsync(request).ConfigureAwait(false))
             {
