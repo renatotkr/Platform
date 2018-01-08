@@ -20,7 +20,7 @@ namespace Carbon.Platform
         private readonly string baseUri;
         private readonly ICredential credential;
         private readonly AccessTokenService accessTokenService;
-
+        
         private readonly HttpClient http = new HttpClient {
             DefaultRequestHeaders = {
                 { "User-Agent", "Carbon/1.0" },
@@ -31,15 +31,15 @@ namespace Carbon.Platform
 
         public ApiBase(Uri endpoint, ICredential credential)
         {
-            #region Preconditions
-
             if (endpoint == null)
+            {
                 throw new ArgumentNullException(nameof(endpoint));
+            }
 
             if (endpoint.Scheme != "https")
+            {
                 throw new ArgumentException("scheme must be https", nameof(endpoint));
-
-            #endregion
+            }
 
             this.baseUri            = endpoint.ToString().TrimEnd('/');
             this.credential         = credential ?? throw new ArgumentNullException(nameof(credential));
@@ -48,7 +48,9 @@ namespace Carbon.Platform
 
         internal async Task<MemoryStream> DownloadAsync(string path)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, baseUri + path);
+            var request = new HttpRequestMessage(HttpMethod.Get, baseUri + path) {
+                Version = new Version(2, 0)
+            };
 
             await SignRequestAsync(request);
 
@@ -88,6 +90,7 @@ namespace Carbon.Platform
             stream.Position = 0;
 
             var request = new HttpRequestMessage(HttpMethod.Put, baseUri + path) {
+                Version = new Version(2, 0),
                 Content = new StreamContent(stream) {
                     Headers = {
                         ContentType = new MediaTypeHeaderValue(contentType)
@@ -105,16 +108,15 @@ namespace Carbon.Platform
         internal Task<T> PostAsync<T>(string path, object data)
              where T : new()
         {
-            #region Preconditions
-
             if (data == null)
+            {
                 throw new ArgumentNullException(nameof(data));
-
-            #endregion
+            }
 
             var jsonText = JsonObject.FromObject(data).ToString(pretty: false);
 
             var request = new HttpRequestMessage(HttpMethod.Post, baseUri + path) {
+                Version = new Version(2, 0),
                 Content = new StringContent(jsonText, Encoding.UTF8, "application/json")
             };
 
@@ -124,16 +126,15 @@ namespace Carbon.Platform
         internal Task<T> PatchAsync<T>(string path, object data)
              where T : new()
         {
-            #region Preconditions
-
             if (data == null)
+            {
                 throw new ArgumentNullException(nameof(data));
-
-            #endregion
+            }
 
             var jsonText = JsonObject.FromObject(data).ToString(pretty: false);
 
             var request = new HttpRequestMessage(new HttpMethod("PATCH"), baseUri + path) {
+                Version = new Version(2, 0),
                 Content = new StringContent(jsonText, Encoding.UTF8, "application/json")
             };
 
@@ -143,19 +144,19 @@ namespace Carbon.Platform
         internal Task<T> GetAsync<T>(string path)
             where T : new()
         {
-            return SendAsync<T>(new HttpRequestMessage(
-                method     : HttpMethod.Get, 
-                requestUri : baseUri + path
-            ));
+            var request = new HttpRequestMessage(HttpMethod.Get, baseUri + path) {
+                Version = new Version(2, 0)
+            };
+
+            return SendAsync<T>(request);
         }
 
         internal async Task<T[]> GetListAsync<T>(string path)
             where T : new()
         {
-            var request = new HttpRequestMessage(
-                method     : HttpMethod.Get,
-                requestUri : baseUri + path
-            );
+            var request = new HttpRequestMessage(HttpMethod.Get, baseUri + path) {
+                Version = new Version(2, 0)
+            };
 
             await SignRequestAsync(request);
 
@@ -194,10 +195,16 @@ namespace Carbon.Platform
 
                 var text = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
+
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new UnauthorizedException("unauthorized:" + text);
+                }
+
                 // TODO: standarize error response and return a message message
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new Exception(text);
+                    throw new Exception(response.StatusCode.ToString() + ":" + text);
                 }
 
                 try
@@ -210,7 +217,6 @@ namespace Carbon.Platform
                 }
             }
         }
-
       
         private ISecurityToken accessToken;
         private readonly SemaphoreSlim gate = new SemaphoreSlim(1);
