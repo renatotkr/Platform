@@ -16,11 +16,13 @@ namespace Carbon.Platform.Hosting
 
         Task<Domain> CreateAsync(CreateDomainRequest request);
 
-        Task BindAsync(IDomain domain, IEnvironment environment);
+        Task BindAsync(BindDomainRequest request);
 
         Task UnbindAsync(IDomain domain);
 
         Task<IReadOnlyList<Domain>> ListAsync(IEnvironment environment);
+
+        Task<int> CountAsync(IEnvironment environment);
 
         // Task<IReadOnlyList<Domain>> ListAsync(IAgent owner);
     }

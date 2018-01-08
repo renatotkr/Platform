@@ -1,6 +1,4 @@
-﻿using System;
-
-using Carbon.Net.Dns;
+﻿using Carbon.Net.Dns;
 
 namespace Carbon.Platform.Hosting
 {
@@ -9,9 +7,10 @@ namespace Carbon.Platform.Hosting
         public UpdateDomainRecordRequest(long id, IRecord value)
         {
             Validate.Id(id);
+            Validate.NotNull(value, nameof(value));
 
             Id = id;
-            Value = value ?? throw new ArgumentNullException(nameof(value));
+            Value = value;
         }
 
         public long Id { get; }

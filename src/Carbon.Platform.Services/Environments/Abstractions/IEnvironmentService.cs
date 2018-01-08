@@ -7,6 +7,8 @@ namespace Carbon.Platform.Environments
     {
         Task<IReadOnlyList<EnvironmentInfo>> ListAsync(long ownerId);
 
+        Task<int> CountAsync(long ownerId);
+
         Task<EnvironmentInfo> GetAsync(long id);
 
         Task<EnvironmentInfo> GetAsync(long ownerId, string name);

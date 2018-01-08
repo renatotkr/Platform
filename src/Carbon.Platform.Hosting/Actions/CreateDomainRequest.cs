@@ -10,13 +10,18 @@ namespace Carbon.Platform.Hosting
             string name, 
             long? ownerId = null,
             long? environmentId = null,
+            long? originId = null,
             DomainFlags flags = default)
         {
             Validate.NotNullOrEmpty(name, nameof(name));
 
+            // Domains may be added without owners...
+
             Name          = name;
             OwnerId       = ownerId;
             EnvironmentId = environmentId;
+            OriginId      = originId;
+            Flags         = flags;
         }
         
         [Required, StringLength(253)]
