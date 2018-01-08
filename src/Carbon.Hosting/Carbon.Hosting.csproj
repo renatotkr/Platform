@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Carbon.Hosting</AssemblyName>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <VersionPrefix>1.18.0</VersionPrefix>
+    <VersionPrefix>1.18.2</VersionPrefix>
     <LangVersion>7.2</LangVersion>
     
     <!-- Package Details-->

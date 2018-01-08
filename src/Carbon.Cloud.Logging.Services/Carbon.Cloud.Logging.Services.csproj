@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Carbon.Cloud.Logging.Services</AssemblyName>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <VersionPrefix>0.6.1</VersionPrefix>
+    <VersionPrefix>0.7.0</VersionPrefix>
     <LangVersion>7.2</LangVersion>
 
     <!-- Package Properties -->

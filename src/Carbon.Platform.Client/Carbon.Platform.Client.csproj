@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Client</AssemblyName>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <VersionPrefix>0.69.0</VersionPrefix>
+    <VersionPrefix>0.72.1</VersionPrefix>
 
     <!-- Package Details -->
     <Authors>iamcarbon</Authors>
@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="Carbon.Data" Version="0.26.0" />
-    <PackageReference Include="Carbon.Jose" Version="0.3.0" />
+    <PackageReference Include="Carbon.Jose" Version="0.4.0" />
     <PackageReference Include="Carbon.Security.Primitives" Version="0.23.0" />
   </ItemGroup>
 
@@ -23,4 +23,9 @@
     <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj" />
     <ProjectReference Include="..\Carbon.Platform.Abstractions\Carbon.Platform.Abstractions.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
+  </ItemGroup>
+
 </Project>
