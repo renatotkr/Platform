@@ -12,6 +12,9 @@ namespace Carbon.Platform.Storage
         [DataMember(Name = "commit", EmitDefaultValue = false)]
         public RepositoryCommitDetails Commit { get; set; }
 
+        [DataMember(Name = "containerId", EmitDefaultValue = false)]
+        public long? ContainerId { get; set; }
+
         [DataMember(Name = "modified", EmitDefaultValue = false)]
         public DateTime Modified { get; set; }
     }
