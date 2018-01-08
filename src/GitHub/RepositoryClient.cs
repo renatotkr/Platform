@@ -98,7 +98,7 @@ namespace GitHub
 
             var link = await client.GetArchiveLinkAsync(request).ConfigureAwait(false);
 
-            return await ZipPackage.FetchAsync(link, stripFirstLevel: true).ConfigureAwait(false);
+            return await ZipPackage.DownloadAsync(link, stripFirstLevel: true).ConfigureAwait(false);
         }
     }
 }

@@ -56,13 +56,9 @@ namespace Carbon.Packaging
             archive.Dispose();
         }
 
-        public static async Task<ZipPackage> FetchAsync(Uri url, bool stripFirstLevel = true)
+        public static async Task<ZipPackage> DownloadAsync(Uri url, bool stripFirstLevel = true)
         {
-            #region Preconditions
-
             if (url == null) throw new ArgumentNullException(nameof(url));
-
-            #endregion
 
             using (var httpClient = new HttpClient())
             using (var httpStream = await httpClient.GetStreamAsync(url).ConfigureAwait(false))
@@ -71,7 +67,7 @@ namespace Carbon.Packaging
 
                 await httpStream.CopyToAsync(ms).ConfigureAwait(false);
 
-                return FromStream(ms);
+                return FromStream(ms, stripFirstLevel);
             }
         }
 
@@ -80,15 +76,15 @@ namespace Carbon.Packaging
             bool stripFirstLevel = true, 
             bool leaveStreamOpen = false)
         {
-            #region Preconditions
-
             if (stream == null)
+            {
                 throw new ArgumentNullException(nameof(stream));
+            }
 
             if (!stream.CanSeek)
+            {
                 throw new ArgumentException("Must be seekable", nameof(stream));
-
-            #endregion
+            }
 
             var archive = new ZipArchive(stream, ZipArchiveMode.Read, leaveStreamOpen);
 
