@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Client</AssemblyName>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <VersionPrefix>0.72.1</VersionPrefix>
+    <Version>0.72.3</Version>
 
     <!-- Package Details -->
     <Authors>iamcarbon</Authors>
@@ -23,9 +23,4 @@
     <ProjectReference Include="..\Carbon.Packaging\Carbon.Packaging.csproj" />
     <ProjectReference Include="..\Carbon.Platform.Abstractions\Carbon.Platform.Abstractions.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Exceptions\" />
-  </ItemGroup>
-
 </Project>

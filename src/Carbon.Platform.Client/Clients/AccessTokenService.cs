@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
+using Carbon.Jose;
 using Carbon.Json;
 using Carbon.Security.Tokens;
 
@@ -13,46 +15,67 @@ namespace Carbon.Platform
 {
     using Security;
 
+    // Replace with OAuthClient?
+
     public class AccessTokenService
     {
-        private readonly HttpClient http;
-        private readonly string baseUri;
+        private readonly HttpClient httpClient;
+        private readonly string oauthHost;
 
-        public AccessTokenService(HttpClient http, string baseUri)
+        private OpenIdConfiguration directory;
+
+        public AccessTokenService(HttpClient httpClient, string oauthHost)
         {
-            this.http    = http ?? throw new ArgumentNullException(nameof(http));
-            this.baseUri = baseUri ?? throw new ArgumentNullException(nameof(baseUri));
+            this.oauthHost  = oauthHost  ?? throw new ArgumentNullException(nameof(oauthHost));
+            this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
-        // Exchange?
         public async Task<ISecurityToken> GetAsync(ICredential credential)
         {
+            if (directory == null)
+            {
+                await EnsureDirectoryIsSetAsync();
+            }
+
             switch (credential)
             {
-                case JwtCredential jwk:
-                    return await GetAsync(jwk);
-                case AccessKeyCredential accessKey:
-                    return await GetAsync(accessKey);
-                default:
-                    throw new Exception("Unexpected credential type:" + credential.GetType().ToString());
+                case JwtCredential jwk              : return await GetAsync(jwk);
+                case AccessKeyCredential accessKey  : return await GetAsync(accessKey);
+                case RefreshTokenCredential token   : return await GetAsync(credential);
             }
+
+            throw new Exception("Invalid credential. Was " + credential.GetType().ToString());
         }
 
-        public async Task<ISecurityToken> GetAsync(JwtCredential jwk)
+        private async Task<ISecurityToken> GetAsync(JwtCredential jwk)
         {
             var parameters = new Dictionary<string, string> {
                 { "grant_type", "urn:ietf:params:oauth:grant-type:jwt-bearer" },
                 { "assertion",  jwk.Encode().ToString() }
             };
 
-            var message = new HttpRequestMessage(HttpMethod.Post, baseUri + "/tokens") {
+            var message = new HttpRequestMessage(HttpMethod.Post, directory.TokenEndpoint) {
                 Content = new FormUrlEncodedContent(parameters)
             };
 
             return await SendAsync(message);
         }
 
-        public async Task<ISecurityToken> GetAsync(AccessKeyCredential a, string scope = null)
+        private async Task<ISecurityToken> GetAsync(RefreshTokenCredential refreshToken)
+        {
+            var parameters = new Dictionary<string, string> {
+                { "grant_type",    "refresh_token" },
+                { "refresh_token",  refreshToken.Value }
+            };
+
+            var message = new HttpRequestMessage(HttpMethod.Post, directory.TokenEndpoint) {
+                Content = new FormUrlEncodedContent(parameters)
+            };
+
+            return await SendAsync(message);
+        }
+
+        private async Task<ISecurityToken> GetAsync(AccessKeyCredential accessKey, string scope = null)
         {
             var parameters = new Dictionary<string, string> {
                 { "grant_type", "client_credentials" }
@@ -63,18 +86,17 @@ namespace Carbon.Platform
                 parameters.Add(scope, scope);
             }
 
-            if (a.AccountId != null)
+            if (accessKey.AccountId is long accountId)
             {
-                parameters.Add("accountId", a.AccountId.Value.ToString());
+                parameters.Add("accountId", accountId.ToString());
             }
 
-            var message = new HttpRequestMessage(HttpMethod.Post, baseUri + "/tokens")
-            {
+            var message = new HttpRequestMessage(HttpMethod.Post, directory.TokenEndpoint) {
                 Headers = {
                     Authorization = new AuthenticationHeaderValue(
                         scheme    : "Basic",
                         parameter : Convert.ToBase64String(
-                            Encoding.ASCII.GetBytes(a.AccessKeyId + ":" + a.AccessKeySecret)
+                            Encoding.ASCII.GetBytes(accessKey.AccessKeyId + ":" + accessKey.AccessKeySecret)
                         )
                     )
                 },
@@ -84,30 +106,50 @@ namespace Carbon.Platform
             return await SendAsync(message);
         }
 
-        private async Task<SecurityToken> SendAsync(HttpRequestMessage message)
+        private async Task EnsureDirectoryIsSetAsync()
         {
-            using (var response = await http.SendAsync(message))
+            if (directory == null)
+            {
+                directory = JsonObject.Parse(
+                    text: await httpClient.GetStringAsync($"https://{oauthHost}/.well-known/openid-configuration")
+                ).As<OpenIdConfiguration>();
+            }
+        }
+
+        private async Task<SecurityToken> SendAsync(HttpRequestMessage request)
+        {
+            request.Version = new Version(2, 0);
+
+            using (var response = await httpClient.SendAsync(request))
             {
                 var responseText = await response.Content.ReadAsStringAsync();
 
-                if (!response.IsSuccessStatusCode) throw new Exception(responseText);
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new UnauthorizedException(responseText);
+                }
 
-                var result = JsonObject.Parse(responseText).As<OauthTokenInfo>();
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception(response.StatusCode + ":" + responseText);
+                }
+
+                var result = JsonObject.Parse(responseText).As<OAuthTokenDetails>();
 
                 return new SecurityToken("JWT", result.AccessToken, DateTime.UtcNow.AddSeconds(result.ExpiresIn));
             }
         }
+    }
 
-        public class OauthTokenInfo
-        {
-            [DataMember(Name = "type")]
-            public string Type { get; set; }
+    public class OAuthTokenDetails
+    {
+        [DataMember(Name = "type")]
+        public string Type { get; set; }
 
-            [DataMember(Name = "access_token")]
-            public string AccessToken { get; set; }
+        [DataMember(Name = "access_token")]
+        public string AccessToken { get; set; }
 
-            [DataMember(Name = "expires_in")]
-            public int ExpiresIn { get; set; }
-        }
+        [DataMember(Name = "expires_in")]
+        public int ExpiresIn { get; set; }
     }
 }

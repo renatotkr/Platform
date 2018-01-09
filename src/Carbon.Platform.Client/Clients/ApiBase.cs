@@ -43,7 +43,7 @@ namespace Carbon.Platform
 
             this.baseUri            = endpoint.ToString().TrimEnd('/');
             this.credential         = credential ?? throw new ArgumentNullException(nameof(credential));
-            this.accessTokenService = new AccessTokenService(http, baseUri);
+            this.accessTokenService = new AccessTokenService(http, oauthHost: endpoint.Host);
         }
 
         internal async Task<MemoryStream> DownloadAsync(string path)
@@ -52,7 +52,7 @@ namespace Carbon.Platform
                 Version = new Version(2, 0)
             };
 
-            await SignRequestAsync(request);
+            await SignAsync(request);
 
             var ms = new MemoryStream();
 
@@ -158,7 +158,7 @@ namespace Carbon.Platform
                 Version = new Version(2, 0)
             };
 
-            await SignRequestAsync(request);
+            await SignAsync(request);
 
             using (var response = await http.SendAsync(request).ConfigureAwait(false))
             {
@@ -184,7 +184,7 @@ namespace Carbon.Platform
         private async Task<T> SendAsync<T>(HttpRequestMessage request)
             where T : new()
         {
-            await SignRequestAsync(request);
+            await SignAsync(request);
 
             using (var response = await http.SendAsync(request).ConfigureAwait(false))
             {
@@ -221,15 +221,15 @@ namespace Carbon.Platform
         private ISecurityToken accessToken;
         private readonly SemaphoreSlim gate = new SemaphoreSlim(1);
 
-        private async Task SignRequestAsync(HttpRequestMessage request)
+        private async Task SignAsync(HttpRequestMessage request)
         {
-            if (ShouldRenewToken(accessToken))
+            if (accessToken.ShouldRenew())
             {
                 await gate.WaitAsync();
 
                 try
                 {
-                    if (ShouldRenewToken(accessToken))
+                    if (accessToken.ShouldRenew())
                     {
                         await RenewAccessToken();
                     }
@@ -253,14 +253,5 @@ namespace Carbon.Platform
 
             accessToken = await accessTokenService.GetAsync(credential);       
         }
-
-        #region Helpers
-
-        private static bool ShouldRenewToken(ISecurityToken token)
-        {
-            return token == null || token.Expires.Value <= DateTime.UtcNow.AddMinutes(-1);
-        }
-
-        #endregion
     }
 }

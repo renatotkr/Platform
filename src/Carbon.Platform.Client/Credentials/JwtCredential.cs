@@ -43,23 +43,19 @@ namespace Carbon.Platform.Security
         // { url, headers, body }
         public JsonObject VerificationParameters { get; set; }
 
-        public EncodedJwtToken Encode()
+        public JwtEncodedToken Encode()
         {
-            #region Preconditions
-
             if (string.IsNullOrEmpty(Subject))
-                throw new ArgumentException("Subject is required");
+                throw new ArgumentException("Required", nameof(Subject));
 
             if (string.IsNullOrEmpty(Audience))
-                throw new ArgumentException("Audience is required");
+                throw new ArgumentException("Required", nameof(Audience));
 
             if (string.IsNullOrEmpty(Issuer))
-                throw new ArgumentException("Issuer is required");
+                throw new ArgumentException("Required", nameof(Issuer));
 
             if (string.IsNullOrEmpty(KeyId))
-                throw new ArgumentException("KeyId is required");
-
-            #endregion
+                throw new ArgumentException("Required", nameof(KeyId));
 
             var date = DateTimeOffset.UtcNow;
 
