@@ -26,6 +26,13 @@ namespace Carbon.Platform.Environments
             );
         }
 
+        public Task<int> CountAsync(long ownerId)
+        {
+            return db.Environments.CountAsync(
+                And(Eq("ownerId", ownerId), IsNull("deleted"))
+            );
+        }
+
         public async Task<EnvironmentInfo> GetAsync(long id)
         {
             return await db.Environments.FindAsync(id)
