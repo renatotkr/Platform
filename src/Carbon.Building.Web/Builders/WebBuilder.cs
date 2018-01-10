@@ -47,8 +47,6 @@ namespace Carbon.Building.Web
 
             var sw = Stopwatch.StartNew();
 
-            var result = new BuildResult();
-
             bool compiledTs = false;
 
             foreach (var file in package)
@@ -116,9 +114,7 @@ namespace Carbon.Building.Web
                 }
             }
 
-            result.Elapsed = sw.Elapsed;
-
-            return result;
+            return new BuildResult(BuildStatus.Completed, sw.Elapsed);
         }
 
         #region Compilers
@@ -160,35 +156,6 @@ namespace Carbon.Building.Web
         public void Dispose()
         {
             Directory.Delete(basePath, recursive: true);  // Delete the build folder
-        }
-    }
-
-    internal static class StreamExtensions
-    {
-        public static async Task CopyToFileAsync(this Stream stream, string destinationFilePath)
-        {
-            #region Preconditions
-
-            if (stream == null)
-                throw new ArgumentNullException(nameof(stream));
-
-            if (destinationFilePath == null)
-                throw new ArgumentNullException(nameof(destinationFilePath));
-
-            #endregion
-
-            #region Ensure the directory exists
-
-            var di = new DirectoryInfo(Path.GetDirectoryName(destinationFilePath));
-
-            if (!di.Exists) di.Create();
-
-            #endregion
-
-            using (var writeStream = new FileStream(destinationFilePath, FileMode.CreateNew))
-            {
-                await stream.CopyToAsync(writeStream).ConfigureAwait(false);
-            }
         }
     }
 }
