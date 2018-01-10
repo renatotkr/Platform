@@ -101,6 +101,8 @@ namespace Carbon.Platform.Resources
 
         // Web -----------------------------------------------------------------------------------------------
 
+        public static readonly ResourceType Distribution         = "distribution";
+
         public static readonly ResourceType Domain               = "domain";
         public static readonly ResourceType DomainRecord         = "domain:record";
         public static readonly ResourceType DomainRegistration   = "domain:registration";
