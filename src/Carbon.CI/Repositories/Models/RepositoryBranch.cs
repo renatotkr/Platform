@@ -51,7 +51,7 @@ namespace Carbon.CI
 
         [Member("containerId")]
         public long? ContainerId { get; }
-
+        
         #region Timestamps
 
         [IgnoreDataMember]

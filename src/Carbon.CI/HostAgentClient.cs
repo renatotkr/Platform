@@ -90,7 +90,7 @@ namespace Carbon.CI
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new Exception("ERROR:" + url + "|" + Environment.NewLine + text);
+                    throw new Exception("ERROR:" + url + "|" + '\n' + text);
                 }
 
                 return text;

@@ -1,7 +1,6 @@
 ﻿using System;
 
 using Carbon.Data.Annotations;
-using Carbon.Json;
 
 namespace Carbon.CI
 {
@@ -10,32 +9,37 @@ namespace Carbon.CI
     {
         public RepositoryUser() { }
 
-        public RepositoryUser(long repositoryId, long userId, JsonObject properties = null)
+        public RepositoryUser(
+            long repositoryId,
+            long userId, 
+            string[] privileges,
+            string path = null)
         {
             Validate.Id(repositoryId, nameof(repositoryId));
             Validate.Id(userId, nameof(userId));
 
             RepositoryId = repositoryId;
             UserId       = userId;
-            Properties   = properties;
+            Privileges   = privileges;
+            Path         = path;
         }
 
-        [Member("repositoyId"), Key]
+        [Member("repositoryId"), Key]
         public long RepositoryId { get; }
         
         [Member("userId"), Key]
         [Indexed] // Index to lookup by user
         public long UserId { get; }
-        
-        // machineName.localPath ?
-        [Member("properties")]
-        [StringLength(1000)]
-        public JsonObject Properties { get; }
+      
+        // specific privileges granted to the user
+        // e.g. read, write
+        [Member("privileges")]
+        public string[] Privileges { get; }
 
-        // TODO (e.g. read, write, admin)
-        public string[] Roles { get; set; }
-
-        #region Timestamps
+        // The path relative to their working directory
+        // e.g. /carbonmade/lefty
+        [Member("path")]
+        public string Path { get; }
 
         [Member("created"), Timestamp]
         public DateTime Created { get; }
@@ -45,7 +49,8 @@ namespace Carbon.CI
 
         [Member("modified"), Timestamp(true)]
         public DateTime Modified { get; }
-
-        #endregion
     }
+
+    // A permission is a property of an object, such as a file.
+    // A privilege is a property of an agent, such as a user.
 }
