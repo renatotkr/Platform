@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Client</AssemblyName>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <Version>0.72.3</Version>
+    <Version>0.73.3</Version>
 
     <!-- Package Details -->
     <Authors>iamcarbon</Authors>

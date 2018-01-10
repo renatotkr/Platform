@@ -32,6 +32,11 @@ namespace Carbon.Platform
 
         public async Task<ISecurityToken> GetAsync(ICredential credential)
         {
+            if (credential == null)
+            {
+                throw new ArgumentNullException(nameof(credential));
+            }
+
             if (directory == null)
             {
                 await EnsureDirectoryIsSetAsync();
@@ -39,15 +44,15 @@ namespace Carbon.Platform
 
             switch (credential)
             {
-                case JwtCredential jwk              : return await GetAsync(jwk);
-                case AccessKeyCredential accessKey  : return await GetAsync(accessKey);
-                case RefreshTokenCredential token   : return await GetAsync(credential);
+                case JwtCredential jwk                   : return await GetFromJwtAsync(jwk);
+                case AccessKeyCredential accessKey       : return await GetFromAccessKeyAsync(accessKey);
+                case RefreshTokenCredential refreshToken : return await GetFromRefreshTokenAsync(refreshToken);
             }
 
             throw new Exception("Invalid credential. Was " + credential.GetType().ToString());
         }
 
-        private async Task<ISecurityToken> GetAsync(JwtCredential jwk)
+        private async Task<ISecurityToken> GetFromJwtAsync(JwtCredential jwk)
         {
             var parameters = new Dictionary<string, string> {
                 { "grant_type", "urn:ietf:params:oauth:grant-type:jwt-bearer" },
@@ -61,7 +66,7 @@ namespace Carbon.Platform
             return await SendAsync(message);
         }
 
-        private async Task<ISecurityToken> GetAsync(RefreshTokenCredential refreshToken)
+        private async Task<ISecurityToken> GetFromRefreshTokenAsync(RefreshTokenCredential refreshToken)
         {
             var parameters = new Dictionary<string, string> {
                 { "grant_type",    "refresh_token" },
@@ -75,15 +80,15 @@ namespace Carbon.Platform
             return await SendAsync(message);
         }
 
-        private async Task<ISecurityToken> GetAsync(AccessKeyCredential accessKey, string scope = null)
+        private async Task<ISecurityToken> GetFromAccessKeyAsync(AccessKeyCredential accessKey)
         {
             var parameters = new Dictionary<string, string> {
                 { "grant_type", "client_credentials" }
             };
 
-            if (scope != null)
+            if (accessKey.Scope != null)
             {
-                parameters.Add(scope, scope);
+                parameters.Add("scope", accessKey.Scope);
             }
 
             if (accessKey.AccountId is long accountId)
