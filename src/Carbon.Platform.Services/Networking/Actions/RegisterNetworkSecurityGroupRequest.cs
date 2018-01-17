@@ -11,8 +11,8 @@ namespace Carbon.Platform.Networking
             long networkId,
             ManagedResource resource)
         {
-            Validate.NotNull(name, nameof(name));
-            Validate.Id(networkId, nameof(networkId));
+            Ensure.NotNull(name, nameof(name));
+            Ensure.Id(networkId, nameof(networkId));
 
             Name      = name;
             NetworkId = networkId;

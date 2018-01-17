@@ -16,7 +16,7 @@ namespace Carbon.Kms
 
         public async ValueTask<byte[]> DecryptAsync(EncryptedDataMessage message)
         {
-            Validate.NotNull(message, nameof(message));
+            Ensure.NotNull(message, nameof(message));
 
             var protector = await protectorProvider.GetAsync(message.Header.KeyId).ConfigureAwait(false) as DataProtector;
 
@@ -25,7 +25,7 @@ namespace Carbon.Kms
 
         public ValueTask<byte[]> DecryptAsync(byte[] data)
         {
-            Validate.NotNullOrEmpty(data, nameof(data));
+            Ensure.NotNullOrEmpty(data, nameof(data));
 
             var message = Serializer.Deserialize<EncryptedDataMessage>(data);
 

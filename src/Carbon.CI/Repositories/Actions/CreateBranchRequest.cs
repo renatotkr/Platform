@@ -8,8 +8,8 @@ namespace Carbon.CI
 
         public CreateBranchRequest(long repositoryId, string name)
         {
-            Validate.Id(repositoryId, nameof(repositoryId));
-            Validate.NotNullOrEmpty(name, nameof(name));
+            Ensure.IsValidId(repositoryId, nameof(repositoryId));
+            Ensure.NotNullOrEmpty(name, nameof(name));
 
             RepositoryId = repositoryId;
             Name         = name;

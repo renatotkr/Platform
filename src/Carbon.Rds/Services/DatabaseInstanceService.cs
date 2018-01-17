@@ -21,7 +21,7 @@ namespace Carbon.Rds.Services
 
         public Task<IReadOnlyList<DatabaseInstance>> ListAsync(IDatabaseInfo database)
         {
-            Validate.NotNull(database, nameof(database));
+            Ensure.NotNull(database, nameof(database));
 
             var range = ScopedId.GetRange(database.Id);
 
@@ -32,7 +32,7 @@ namespace Carbon.Rds.Services
 
         public async Task<DatabaseInstance> RegisterAsync(RegisterDatabaseInstanceRequest request)
         {
-            Validate.NotNull(request, nameof(request));
+            Ensure.NotNull(request, nameof(request));
 
             var instanceId = await DatabaseInstanceId.NextAsync(db.Context, request.DatabaseId);
 
@@ -51,7 +51,7 @@ namespace Carbon.Rds.Services
 
         public async Task DeleteAsync(DatabaseInstance instance)
         {
-            Validate.NotNull(instance, nameof(instance));
+            Ensure.NotNull(instance, nameof(instance));
             
             await db.DatabaseInstances.PatchAsync(instance.Id, new[] {
                 Change.Replace("terminated", Func("NOW"))

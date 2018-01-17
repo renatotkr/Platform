@@ -27,14 +27,14 @@ namespace Carbon.Platform.Networking
 
         public async Task<NetworkSecurityGroup> FindAsync(ResourceProvider provider, string resourceId)
         {
-            Validate.NotNullOrEmpty(resourceId, nameof(resourceId));
+            Ensure.NotNullOrEmpty(resourceId, nameof(resourceId));
 
             return await db.NetworkSecurityGroups.FindAsync(provider, resourceId);
         }
 
         public async Task<NetworkSecurityGroup> RegisterAsync(RegisterNetworkSecurityGroupRequest request)
         {
-            Validate.Object(request, nameof(request)); // Validate the request
+            Ensure.Object(request, nameof(request)); // Validate the request
 
             var id = await db.NetworkSecurityGroups.GetNextScopedIdAsync(request.NetworkId);
 
@@ -51,7 +51,7 @@ namespace Carbon.Platform.Networking
 
         public async Task<bool> DeleteAsync(INetworkSecurityGroup record)
         {
-            Validate.NotNull(record, nameof(record));
+            Ensure.NotNull(record, nameof(record));
 
             return await db.NetworkSecurityGroups.PatchAsync(record.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))

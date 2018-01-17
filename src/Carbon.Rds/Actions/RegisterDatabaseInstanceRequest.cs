@@ -14,7 +14,7 @@ namespace Carbon.Rds.Services
             int priority = 1,
             DatabaseFlags flags = DatabaseFlags.Primary)
         {
-            Validate.Id(databaseId, nameof(databaseId));
+            Ensure.IsValidId(databaseId, nameof(databaseId));
 
             DatabaseId = databaseId;
             Resource   = resource;

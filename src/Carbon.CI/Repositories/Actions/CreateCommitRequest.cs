@@ -12,7 +12,7 @@ namespace Carbon.CI
             long commiterId,
             DateTime created)
         {
-            Validate.Id(repositoryId, nameof(repositoryId));
+            Ensure.IsValidId(repositoryId, nameof(repositoryId));
 
             RepositoryId = repositoryId;
             Sha1         = sha1 ?? throw new ArgumentNullException(nameof(sha1));

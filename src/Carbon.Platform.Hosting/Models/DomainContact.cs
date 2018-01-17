@@ -19,10 +19,10 @@ namespace Carbon.Platform.Hosting
             PhysicalAddress address,
             JsonObject properties = null)
         {
-            Validate.Id(id);
-            Validate.NotNullOrEmpty(firstName, nameof(firstName));
-            Validate.NotNullOrEmpty(lastName, nameof(lastName));
-            Validate.NotNull(address, nameof(address));
+            Ensure.IsValidId(id);
+            Ensure.NotNullOrEmpty(firstName, nameof(firstName));
+            Ensure.NotNullOrEmpty(lastName, nameof(lastName));
+            Ensure.NotNull(address, nameof(address));
 
             Id         = id;
             Type       = type;

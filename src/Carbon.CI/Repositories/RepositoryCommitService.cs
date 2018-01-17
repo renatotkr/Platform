@@ -44,7 +44,7 @@ namespace Carbon.CI
 
         public async Task<RepositoryCommit> CreateAsync(CreateCommitRequest request)
         {
-            Validate.NotNull(request, nameof(request));
+            Ensure.NotNull(request, nameof(request));
 
             var commit = await FindAsync(request.RepositoryId, request.Sha1);
 

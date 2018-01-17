@@ -7,7 +7,7 @@ namespace Carbon.Platform.Management
     {
         public static string[] ToLines(string text)
         {
-            Validate.NotNullOrEmpty(text, nameof(text));
+            Ensure.NotNullOrEmpty(text, nameof(text));
 
             string line;
             var lines = new List<string>();

@@ -12,7 +12,7 @@ namespace Carbon.Rds.Services
             string[] commands, 
             string description = null)
         {
-            Validate.NotNull(commands, nameof(commands));
+            Ensure.NotNull(commands, nameof(commands));
 
             DatabaseId  = databaseId;
             SchemaName  = schemaName;

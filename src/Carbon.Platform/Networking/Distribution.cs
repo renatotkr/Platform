@@ -20,11 +20,11 @@ namespace Carbon.Platform.Networking
             string resourceId,
             JsonObject properties = null)
         {
-            Validate.Id(id);
-            Validate.Id(ownerId,                nameof(ownerId));
-            Validate.Id(environmentId,          nameof(environmentId));
-            Validate.Id(providerId,             nameof(providerId));
-            Validate.NotNullOrEmpty(resourceId, nameof(resourceId));
+            Ensure.IsValidId(id);
+            Ensure.IsValidId(ownerId,                nameof(ownerId));
+            Ensure.IsValidId(environmentId,          nameof(environmentId));
+            Ensure.IsValidId(providerId,             nameof(providerId));
+            Ensure.NotNullOrEmpty(resourceId, nameof(resourceId));
 
             Id            = id;
             OwnerId       = ownerId;

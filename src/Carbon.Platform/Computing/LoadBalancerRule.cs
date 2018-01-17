@@ -18,9 +18,9 @@ namespace Carbon.Platform.Computing
             int priority,
             string resourceId = null)
         {
-            Validate.Id(id);
-            Validate.NotNullOrEmpty(condition, nameof(condition));
-            Validate.NotNullOrEmpty(action, nameof(action));
+            Ensure.IsValidId(id);
+            Ensure.NotNullOrEmpty(condition, nameof(condition));
+            Ensure.NotNullOrEmpty(action, nameof(action));
           
             Id         = id;
             Condition  = condition ;

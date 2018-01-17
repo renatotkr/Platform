@@ -19,7 +19,7 @@ namespace Carbon.Rds.Services
 
         public Task<IReadOnlyList<DatabaseUser>> ListAsync(IDatabaseInfo database)
         {
-            Validate.NotNull(database, nameof(database));
+            Ensure.NotNull(database, nameof(database));
 
             return db.DatabaseUsers.QueryAsync(
                 And(Eq("databaseId", database.Id), IsNull("deleted"))
@@ -58,7 +58,7 @@ namespace Carbon.Rds.Services
 
         public async Task<DatabaseUser> CreateAsync(CreateDatabaseUserRequest request)
         {
-            Validate.NotNull(request, nameof(request));
+            Ensure.NotNull(request, nameof(request));
 
             var dbUser = new DatabaseUser(request.DatabaseId, request.UserId, request.Name);
             
@@ -69,7 +69,7 @@ namespace Carbon.Rds.Services
 
         public async Task DeleteAsync(DatabaseUser user)
         {
-            Validate.NotNull(user, nameof(user));
+            Ensure.NotNull(user, nameof(user));
 
             await db.DatabaseUsers.PatchAsync((user.DatabaseId, user.UserId), new[] {
                 Change.Replace("deleted", Func("NOW"))

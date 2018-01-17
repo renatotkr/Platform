@@ -40,7 +40,7 @@ namespace Carbon.CI
 
         public Task<IReadOnlyList<Deployment>> ListAsync(IEnvironment environment)
         {
-            Validate.NotNull(environment, nameof(environment));
+            Ensure.NotNull(environment, nameof(environment));
 
             return db.Deployments.QueryAsync(
                 expression : Eq("environmentId", environment.Id),
@@ -50,7 +50,7 @@ namespace Carbon.CI
 
         public Task<IReadOnlyList<Deployment>> ListAsync(IEnvironment environment, long programId)
         {
-            Validate.NotNull(environment, nameof(environment));
+            Ensure.NotNull(environment, nameof(environment));
 
             return db.Deployments.QueryAsync(
                 And(
@@ -69,8 +69,8 @@ namespace Carbon.CI
 
         public async Task<Deployment> DeployAsync(DeployRequest request, ISecurityContext context)
         {
-            Validate.NotNull(request, nameof(request));
-            Validate.NotNull(context, nameof(context));
+            Ensure.NotNull(request, nameof(request));
+            Ensure.NotNull(context, nameof(context));
             
             var environment = request.Environment;
             var program     = request.Program;
@@ -124,8 +124,8 @@ namespace Carbon.CI
         // Activate on a single host
         public async Task<DeployResult> DeployAsync(IProgram program, IHost host)
         {
-            Validate.NotNull(program, nameof(program));
-            Validate.NotNull(host, nameof(host));
+            Ensure.NotNull(program, nameof(program));
+            Ensure.NotNull(host, nameof(host));
 
             DeployResult result;
 
@@ -143,8 +143,8 @@ namespace Carbon.CI
 
         private async Task<DeployResult[]> ActivateAsync(IProgram program, IReadOnlyList<IHost> hosts)
         {
-            Validate.NotNull(program, nameof(program));
-            Validate.NotNull(hosts,   nameof(hosts));
+            Ensure.NotNull(program, nameof(program));
+            Ensure.NotNull(hosts,   nameof(hosts));
 
             var tasks = new Task<DeployResult>[hosts.Count];
 
@@ -168,7 +168,7 @@ namespace Carbon.CI
             IProgramRelease release, 
             long creatorId)
         {
-            Validate.NotNull(environment, nameof(environment));
+            Ensure.NotNull(environment, nameof(environment));
 
             var deployment = new Deployment(
                 id            : await db.Deployments.Sequence.NextAsync(),
@@ -187,8 +187,8 @@ namespace Carbon.CI
             DeploymentTarget[] targets,
             bool succceded)
         {
-            Validate.NotNull(deployment, nameof(deployment));
-            Validate.NotNull(targets, nameof(targets));
+            Ensure.NotNull(deployment, nameof(deployment));
+            Ensure.NotNull(targets, nameof(targets));
  
             deployment.Status = succceded
                 ? DeploymentStatus.Succeeded

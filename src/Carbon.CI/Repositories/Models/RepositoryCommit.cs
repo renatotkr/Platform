@@ -19,8 +19,8 @@ namespace Carbon.CI
             long? authorId = null,
             long? commiterId = null)
         {
-            Validate.Id(id);
-            Validate.Id(repositoryId, nameof(repositoryId));
+            Ensure.IsValidId(id);
+            Ensure.IsValidId(repositoryId, nameof(repositoryId));
             
             Id           = id;
             RepositoryId = repositoryId;

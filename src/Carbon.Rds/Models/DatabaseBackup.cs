@@ -20,9 +20,9 @@ namespace Carbon.Rds
             Uid? encryptionKeyId = null,
             JsonObject properties = null)
         {
-            Validate.Id(id,               nameof(id));
-            Validate.Id(bucketId,         nameof(bucketId));
-            Validate.NotNullOrEmpty(name, nameof(name));
+            Ensure.IsValidId(id,               nameof(id));
+            Ensure.IsValidId(bucketId,         nameof(bucketId));
+            Ensure.NotNullOrEmpty(name, nameof(name));
 
             Id         = id;
             BucketId   = bucketId;

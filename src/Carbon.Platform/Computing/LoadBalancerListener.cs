@@ -21,7 +21,7 @@ namespace Carbon.Platform.Computing
             ManagedResource resource,
             JsonObject properties)
         {
-            Validate.Id(id);
+            Ensure.IsValidId(id);
 
             Id         = id;
             Protocal   = protocal;

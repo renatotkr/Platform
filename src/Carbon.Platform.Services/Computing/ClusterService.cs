@@ -22,7 +22,7 @@ namespace Carbon.Platform.Computing
 
         public Task<IReadOnlyList<Cluster>> ListAsync(IEnvironment environment)
         {
-            Validate.NotNull(environment, nameof(environment));
+            Ensure.NotNull(environment, nameof(environment));
             
             return db.Clusters.QueryAsync(
                 And(Eq("environmentId", environment.Id), IsNull("deleted"))
@@ -31,7 +31,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<Cluster> CreateAsync(CreateClusterRequest request)
         {
-            Validate.NotNull(request, nameof(request));
+            Ensure.NotNull(request, nameof(request));
 
             var cluster = new Cluster(
                id             : await db.Clusters.Sequence.NextAsync(),
@@ -56,8 +56,8 @@ namespace Carbon.Platform.Computing
 
         public async Task<Cluster> GetAsync(IEnvironment environment, ILocation location)
         {
-            Validate.NotNull(environment, nameof(environment));
-            Validate.NotNull(location, nameof(location));
+            Ensure.NotNull(environment, nameof(environment));
+            Ensure.NotNull(location, nameof(location));
 
             var group = await db.Clusters.QueryFirstOrDefaultAsync(
                 And(Eq("environmentId", environment.Id), Eq("locationId", location.Id))

@@ -36,7 +36,7 @@ namespace Carbon.CI
 
         public async Task<Build> GetLatestAsync(long projectId)
         {
-            Validate.Id(projectId, nameof(projectId));
+            Ensure.IsValidId(projectId, nameof(projectId));
 
             var range = ScopedId.GetRange(projectId);
 
@@ -62,7 +62,7 @@ namespace Carbon.CI
 
         public async Task<Build> SyncAsync(Build build)
         {
-            Validate.NotNull(build, nameof(build));
+            Ensure.NotNull(build, nameof(build));
 
             if (build.Status != BuildStatus.Pending)
             {
@@ -92,8 +92,8 @@ namespace Carbon.CI
 
         public async Task<Build> StartAsync(StartBuildRequest request, ISecurityContext context)
         {
-            Validate.NotNull(request, nameof(request));
-            Validate.NotNull(context, nameof(context));
+            Ensure.NotNull(request, nameof(request));
+            Ensure.NotNull(context, nameof(context));
 
             var project = request.Project;
             var commit  = request.Commit;
@@ -142,7 +142,7 @@ namespace Carbon.CI
 
         public async Task UpdateAsync(Build build)
         {
-            Validate.NotNull(build, nameof(build));
+            Ensure.NotNull(build, nameof(build));
 
             await db.Builds.UpdateAsync(build);
         }

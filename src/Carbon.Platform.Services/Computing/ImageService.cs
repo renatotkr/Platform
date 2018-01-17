@@ -51,7 +51,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<ImageInfo> GetAsync(ResourceProvider provider, string resourceId)
         {
-            Validate.NotNull(resourceId, nameof(resourceId));
+            Ensure.NotNull(resourceId, nameof(resourceId));
 
             var image = await db.Images.FindAsync(provider, resourceId);
 
@@ -74,7 +74,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<ImageInfo> RegisterAsync(RegisterImageRequest request)
         {
-            Validate.NotNull(request, nameof(request));
+            Ensure.NotNull(request, nameof(request));
 
             var image = new ImageInfo(
                 id         : await db.Images.Sequence.NextAsync(),
@@ -93,7 +93,7 @@ namespace Carbon.Platform.Computing
         
         public async Task<bool> DeleteAsync(IImage record)
         {
-            Validate.NotNull(record, nameof(record));
+            Ensure.NotNull(record, nameof(record));
 
             return await db.Images.PatchAsync(record.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))

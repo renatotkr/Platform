@@ -9,7 +9,7 @@
             byte[] sha256,
             string message = null)
         {
-            Validate.Id(backupId, nameof(backupId));
+            Ensure.IsValidId(backupId, nameof(backupId));
 
             BackupId = backupId;
             Status = status;

@@ -6,8 +6,8 @@ namespace Carbon.Platform.Hosting
     {
         public UpdateDomainRecordRequest(long id, IRecord value)
         {
-            Validate.Id(id);
-            Validate.NotNull(value, nameof(value));
+            Ensure.IsValidId(id);
+            Ensure.NotNull(value, nameof(value));
 
             Id = id;
             Value = value;

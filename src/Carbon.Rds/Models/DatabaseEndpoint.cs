@@ -16,9 +16,9 @@ namespace Carbon.Rds
             ushort port = 3306,
             DatabaseEndpointFlags flags = default)
         {
-            Validate.Id(id);
-            Validate.NotNull(host, nameof(host));
-            Validate.NotNull(location, nameof(location));
+            Ensure.IsValidId(id);
+            Ensure.NotNull(host, nameof(host));
+            Ensure.NotNull(location, nameof(location));
 
             Id         = id;
             Host       = host;

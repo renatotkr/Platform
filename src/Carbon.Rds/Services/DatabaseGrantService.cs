@@ -23,7 +23,7 @@ namespace Carbon.Rds.Services
 
         public Task<IReadOnlyList<DatabaseGrant>> ListAsync(IDatabaseInfo database)
         {
-            Validate.NotNull(database, nameof(database));
+            Ensure.NotNull(database, nameof(database));
 
             var range = ScopedId.GetRange(database.Id);
 
@@ -34,7 +34,7 @@ namespace Carbon.Rds.Services
 
         public Task<IReadOnlyList<DatabaseGrant>> ListAsync(IUser user)
         {
-            Validate.NotNull(user, nameof(user));
+            Ensure.NotNull(user, nameof(user));
 
             return db.DatabaseGrants.QueryAsync(
                 And(Eq("userId", user.Id), IsNull("deleted"))
@@ -43,8 +43,8 @@ namespace Carbon.Rds.Services
 
         public Task<IReadOnlyList<DatabaseGrant>> ListAsync(IDatabaseInfo database, IUser user)
         {
-            Validate.NotNull(database, nameof(database));
-            Validate.NotNull(user, nameof(user));
+            Ensure.NotNull(database, nameof(database));
+            Ensure.NotNull(user, nameof(user));
 
             var range = ScopedId.GetRange(database.Id);
 
@@ -59,8 +59,8 @@ namespace Carbon.Rds.Services
 
         public Task<IReadOnlyList<DatabaseGrant>> ListAsync(IDatabaseInfo database, IUser user, DbObject resource)
         {
-            Validate.NotNull(database, nameof(database));
-            Validate.NotNull(user, nameof(user));
+            Ensure.NotNull(database, nameof(database));
+            Ensure.NotNull(user, nameof(user));
 
             var range = ScopedId.GetRange(database.Id);
 
@@ -78,7 +78,7 @@ namespace Carbon.Rds.Services
 
         public async Task<DatabaseGrant> CreateAsync(CreateDatabaseGrantRequest request)
         {
-            Validate.NotNull(request, nameof(request));
+            Ensure.NotNull(request, nameof(request));
 
             var grantId = await DatabaseGrantId.NextAsync(db.Context, request.DatabaseId);
 
@@ -97,7 +97,7 @@ namespace Carbon.Rds.Services
 
         public async Task<bool> DeleteAsync(IDatabaseGrant grant)
         {
-            Validate.NotNull(grant, nameof(grant));
+            Ensure.NotNull(grant, nameof(grant));
 
             return await db.DatabaseGrants.PatchAsync(grant.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))

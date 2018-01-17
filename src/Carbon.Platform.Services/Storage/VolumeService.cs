@@ -29,7 +29,7 @@ namespace Carbon.Platform.Storage
 
         public async Task<VolumeInfo> GetAsync(string name)
         {
-            Validate.NotNullOrEmpty(name, nameof(name));
+            Ensure.NotNullOrEmpty(name, nameof(name));
 
             if (long.TryParse(name, out var id))
             {
@@ -49,7 +49,7 @@ namespace Carbon.Platform.Storage
 
         public async Task<VolumeInfo> RegisterAsync(RegisterVolumeRequest request)
         {
-            Validate.Object(request, nameof(request)); // Validate the request
+            Ensure.Object(request, nameof(request)); // Validate the request
 
             var volume = new VolumeInfo(
                 id       : await db.Volumes.Sequence.NextAsync(),
@@ -66,7 +66,7 @@ namespace Carbon.Platform.Storage
 
         public Task<IReadOnlyList<VolumeInfo>> ListAsync(IHost host)
         {
-            Validate.NotNull(host, nameof(host));
+            Ensure.NotNull(host, nameof(host));
 
             return db.Volumes.QueryAsync(Eq("hostId", host.Id));
         }
@@ -80,7 +80,7 @@ namespace Carbon.Platform.Storage
 
         public async Task<bool> DeleteAsync(IVolume volume)
         {
-            Validate.NotNull(volume, nameof(volume));
+            Ensure.NotNull(volume, nameof(volume));
 
             return await db.Volumes.PatchAsync(volume.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))

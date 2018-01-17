@@ -20,7 +20,7 @@ namespace Carbon.CI
 
         public async Task<IRepositoryClient> GetAsync(IRepository repository)
         {
-            Validate.NotNull(repository, nameof(repository));
+            Ensure.NotNull(repository, nameof(repository));
 
             if (repository.EncryptedAccessToken == null)
             {

@@ -23,7 +23,7 @@ namespace Carbon.Platform.Storage
 
         public async Task<IBlobResult> GetAsync(string key, GetBlobOptions options)
         {
-            Validate.NotNullOrEmpty(key, nameof(key));
+            Ensure.NotNullOrEmpty(key, nameof(key));
             
             // TODO: Support blob options
 
@@ -32,7 +32,7 @@ namespace Carbon.Platform.Storage
 
         public Task<IReadOnlyDictionary<string, string>> GetPropertiesAsync(string key)
         {
-            Validate.NotNullOrEmpty(key, nameof(key));
+            Ensure.NotNullOrEmpty(key, nameof(key));
 
             return client.GetObjectPropertiesAsync(new GetObjectPropertiesRequest(name, key));
         }
@@ -44,7 +44,7 @@ namespace Carbon.Platform.Storage
 
         public async Task PutAsync(IBlob blob, PutBlobOptions options)
         {
-            Validate.NotNull(blob, nameof(blob));
+            Ensure.NotNull(blob, nameof(blob));
 
             if (options?.EncryptionKey != null)
             {
@@ -58,7 +58,7 @@ namespace Carbon.Platform.Storage
 
         public Task DeleteAsync(string key)
         {
-            Validate.NotNullOrEmpty(key, nameof(key));
+            Ensure.NotNullOrEmpty(key, nameof(key));
 
             return client.DeleteObjectAsync(new DeleteObjectRequest(name, key));
         }

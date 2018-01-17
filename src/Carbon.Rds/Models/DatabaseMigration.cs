@@ -15,8 +15,8 @@ namespace Carbon.Rds
             string[] commands, 
             string description = null)
         {
-            Validate.Id(id);
-            Validate.NotNull(commands, nameof(commands));
+            Ensure.IsValidId(id);
+            Ensure.NotNull(commands, nameof(commands));
 
             Id          = id;
             SchemaName  = schemaName;

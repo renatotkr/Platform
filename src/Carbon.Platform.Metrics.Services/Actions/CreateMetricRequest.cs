@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Carbon.Platform.Metrics
+﻿namespace Carbon.Platform.Metrics
 {
     public class CreateMetricRequest
     {
@@ -11,8 +9,8 @@ namespace Carbon.Platform.Metrics
             string unit,
             string[] dimensions = null)
         {
-            Validate.NotNullOrEmpty(name, nameof(name));
-            Validate.NotNullOrEmpty(unit, nameof(unit));
+            Ensure.NotNullOrEmpty(name, nameof(name));
+            Ensure.NotNullOrEmpty(unit, nameof(unit));
 
             Name       = name;
             OwnerId    = ownerId;

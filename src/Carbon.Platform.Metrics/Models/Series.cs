@@ -12,9 +12,9 @@ namespace Carbon.Platform.Metrics
 
         public Series(long id, string name, string granularity)
         {
-            Validate.Id(id);
-            Validate.NotNullOrEmpty(name, nameof(name));
-            Validate.NotNullOrEmpty(granularity, nameof(granularity));
+            Ensure.IsValidId(id);
+            Ensure.NotNullOrEmpty(name, nameof(name));
+            Ensure.NotNullOrEmpty(granularity, nameof(granularity));
 
             Id          = id;
             Name        = name;

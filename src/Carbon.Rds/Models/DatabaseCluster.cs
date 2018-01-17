@@ -13,8 +13,8 @@ namespace Carbon.Rds
 
         public DatabaseCluster(long id, string name, ManagedResource resource, JsonObject properties = null)
         {
-            Validate.Id(id, nameof(id));
-            Validate.NotNullOrEmpty(name, nameof(name));
+            Ensure.IsValidId(id, nameof(id));
+            Ensure.NotNullOrEmpty(name, nameof(name));
 
             Id         = id;
             Name       = name;

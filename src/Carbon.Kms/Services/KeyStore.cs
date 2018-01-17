@@ -28,8 +28,8 @@ namespace Carbon.Kms.Services
 
         public async Task<KeyInfo> GetAsync(long ownerId, string name)
         {
-            Validate.Id(ownerId, nameof(ownerId));
-            Validate.NotNullOrEmpty(name, nameof(name));
+            Ensure.IsValidId(ownerId, nameof(ownerId));
+            Ensure.NotNullOrEmpty(name, nameof(name));
 
             var keys = await db.Keys.QueryAsync(Conjunction(
                 Eq("ownerId", ownerId),
@@ -54,7 +54,7 @@ namespace Carbon.Kms.Services
 
         public Task<IReadOnlyList<KeyInfo>> ListAsync(long ownerId, string name)
         {
-            Validate.NotNullOrEmpty(name, nameof(name));
+            Ensure.NotNullOrEmpty(name, nameof(name));
 
             return db.Keys.QueryAsync(Conjunction(
                 Eq("ownerId", ownerId), 
@@ -65,7 +65,7 @@ namespace Carbon.Kms.Services
 
         public async Task CreateAsync(KeyInfo key)
         {
-            Validate.NotNull(key, nameof(key));
+            Ensure.NotNull(key, nameof(key));
 
             await db.Keys.InsertAsync(key).ConfigureAwait(false);
         }

@@ -8,7 +8,7 @@ namespace Carbon.Platform.Storage
 
         public RegisterVolumeRequest(long ownerId, ByteSize size, ManagedResource resource)
         {
-            Validate.Id(ownerId, nameof(ownerId));
+            Ensure.Id(ownerId, nameof(ownerId));
 
             OwnerId  = ownerId;
             Size     = size;

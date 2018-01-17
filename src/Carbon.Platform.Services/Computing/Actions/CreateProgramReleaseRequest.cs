@@ -16,8 +16,8 @@ namespace Carbon.Platform.Computing
             long? buildId = null,
             JsonObject properties = null)
         {
-            Validate.NotNull(program, nameof(program));
-            Validate.Id(creatorId, nameof(creatorId));
+            Ensure.NotNull(program, nameof(program));
+            Ensure.Id(creatorId, nameof(creatorId));
 
             Program    = program;
             Version    = version;

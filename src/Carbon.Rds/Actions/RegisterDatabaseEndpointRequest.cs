@@ -15,7 +15,7 @@ namespace Carbon.Rds.Services
             DatabaseEndpointFlags flags,
             ILocation location = null)
         {
-            Validate.NotNullOrEmpty(host, nameof(host));
+            Ensure.NotNullOrEmpty(host, nameof(host));
 
             #region Preconditions
 

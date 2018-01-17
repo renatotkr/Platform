@@ -10,8 +10,8 @@ namespace Carbon.Platform.Hosting
             long? originId = null,
             long? certificateId = null)
         {
-            Validate.Id(domainId,         nameof(domainId));
-            Validate.NotNull(environment, nameof(environment));
+            Ensure.IsValidId(domainId,         nameof(domainId));
+            Ensure.NotNull(environment, nameof(environment));
 
             DomainId      = domainId;
             Environment   = environment;

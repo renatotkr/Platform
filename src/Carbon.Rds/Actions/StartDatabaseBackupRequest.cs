@@ -8,7 +8,7 @@
             long bucketId, 
             string name)
         {
-            Validate.Id(databaseId, nameof(databaseId));
+            Ensure.IsValidId(databaseId, nameof(databaseId));
 
             DatabaseId = databaseId;
             SchemaName = schemaName;

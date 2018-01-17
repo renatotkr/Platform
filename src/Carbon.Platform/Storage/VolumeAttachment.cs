@@ -13,8 +13,8 @@ namespace Carbon.Platform.Storage
             DateTime created, 
             DateTime? deleted = null)
         {
-            Validate.Id(volumeId, nameof(volumeId));
-            Validate.Id(hostId,   nameof(hostId));
+            Ensure.IsValidId(volumeId, nameof(volumeId));
+            Ensure.IsValidId(hostId,   nameof(hostId));
 
             VolumeId = volumeId;
             HostId = hostId;

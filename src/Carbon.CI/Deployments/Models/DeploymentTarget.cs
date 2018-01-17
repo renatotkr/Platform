@@ -15,8 +15,8 @@ namespace Carbon.CI
             DeploymentStatus status = DeploymentStatus.Pending,
             string message = null)
         {
-            Validate.Id(deploymentId, nameof(deploymentId));
-            Validate.Id(hostId, nameof(hostId));
+            Ensure.IsValidId(deploymentId, nameof(deploymentId));
+            Ensure.IsValidId(hostId, nameof(hostId));
 
             DeploymentId = deploymentId;
             HostId       = hostId;

@@ -18,7 +18,7 @@ namespace Carbon.Platform.Environments
 
         public Task<IReadOnlyList<EnvironmentEdge>> ListAsync(IEnvironment environment)
         {
-            Validate.NotNull(environment, nameof(environment));
+            Ensure.NotNull(environment, nameof(environment));
 
             return db.EnvironmentEdges.QueryAsync(
                 Expression.And(Expression.Eq("environmentId", environment.Id), Expression.IsNull("deleted"))
@@ -34,7 +34,7 @@ namespace Carbon.Platform.Environments
 
         public async Task<EnvironmentEdge> CreateAsync(CreateEnvironmentEdgeRequest request)
         {
-            Validate.NotNull(request, nameof(request));
+            Ensure.NotNull(request, nameof(request));
 
             var edge = new EnvironmentEdge(
                 environmentId  : request.EnvironmentId,
@@ -49,7 +49,7 @@ namespace Carbon.Platform.Environments
 
         public async Task ActivateAsync(EnvironmentEdge record)
         {
-            Validate.NotNull(record, nameof(record));
+            Ensure.NotNull(record, nameof(record));
 
             await db.EnvironmentEdges.PatchAsync((record.EnvironmentId, record.LocationId), new[] {
                 Change.Replace("activated", Expression.Func("NOW"))
@@ -58,7 +58,7 @@ namespace Carbon.Platform.Environments
 
         public async Task DeactivateAsync(EnvironmentEdge record)
         {
-            Validate.NotNull(record, nameof(record));
+            Ensure.NotNull(record, nameof(record));
 
             await db.EnvironmentEdges.PatchAsync((record.EnvironmentId, record.LocationId), new[] {
                 Change.Remove("activated")
@@ -67,7 +67,7 @@ namespace Carbon.Platform.Environments
 
         public async Task DeleteAsync(EnvironmentEdge record)
         {
-            Validate.NotNull(record, nameof(record));
+            Ensure.NotNull(record, nameof(record));
 
             await db.EnvironmentEdges.PatchAsync((record.EnvironmentId, record.LocationId), new[] {
                 Change.Replace("deleted", Expression.Func("NOW"))

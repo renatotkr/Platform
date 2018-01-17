@@ -24,7 +24,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<ProgramRelease> CreateAsync(RegisterProgramReleaseRequest request)
         {
-            Validate.Object(request, nameof(request));
+            Ensure.Object(request, nameof(request));
             
             if (await ExistsAsync(request.Program.Id, request.Version))
             {

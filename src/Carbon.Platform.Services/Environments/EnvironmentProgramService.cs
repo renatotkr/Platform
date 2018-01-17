@@ -17,7 +17,7 @@ namespace Carbon.Platform.Environments
 
         public Task<IReadOnlyList<EnvironmentProgram>> ListAsync(IEnvironment environment)
         {
-            Validate.NotNull(environment, nameof(environment));
+            Ensure.NotNull(environment, nameof(environment));
 
             return db.EnvironmentPrograms.QueryAsync(
                 Expression.And(Expression.Eq("environmentId", environment.Id), Expression.IsNull("deleted"))
@@ -26,7 +26,7 @@ namespace Carbon.Platform.Environments
 
         public async Task<EnvironmentProgram> CreateAsync(CreateEnvironmentProgramRequest request)
         {
-            Validate.NotNull(request, nameof(request));
+            Ensure.NotNull(request, nameof(request));
 
             var program = new EnvironmentProgram(
                 environment   : request.Environment,

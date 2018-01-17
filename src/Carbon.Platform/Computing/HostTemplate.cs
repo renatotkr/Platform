@@ -22,11 +22,11 @@ namespace Carbon.Platform.Computing
             string startupScript = null,
             JsonObject properties = null)
         {
-            Validate.Id(id);
-            Validate.Id(ownerId,          nameof(ownerId));
-            Validate.NotNullOrEmpty(name, nameof(name));
-            Validate.NotNull(machineType, nameof(machineType));
-            Validate.NotNull(image,       nameof(image));
+            Ensure.IsValidId(id);
+            Ensure.IsValidId(ownerId,          nameof(ownerId));
+            Ensure.NotNullOrEmpty(name, nameof(name));
+            Ensure.NotNull(machineType, nameof(machineType));
+            Ensure.NotNull(image,       nameof(image));
 
             Id            = id;
             OwnerId       = ownerId;

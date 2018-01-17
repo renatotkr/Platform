@@ -18,8 +18,8 @@ namespace Carbon.Platform.Computing
             string[] addresses = null,
             JsonObject properties = null)
         {
-            Validate.Id(hostId,    nameof(hostId));
-            Validate.Id(programId, nameof(programId));
+            Ensure.IsValidId(hostId,    nameof(hostId));
+            Ensure.IsValidId(programId, nameof(programId));
 
             HostId         = hostId;
             ProgramId      = programId;

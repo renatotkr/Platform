@@ -8,8 +8,8 @@
             string[] privileges, 
             string path = null)
         {
-            Validate.Id(repositoryId, nameof(repositoryId));
-            Validate.Id(userId, nameof(userId));
+            Ensure.IsValidId(repositoryId, nameof(repositoryId));
+            Ensure.IsValidId(userId, nameof(userId));
 
             RepositoryId = repositoryId;
             UserId       = userId;

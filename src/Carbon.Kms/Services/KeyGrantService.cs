@@ -31,7 +31,7 @@ namespace Carbon.Kms.Services
 
         public async Task<KeyGrant> CreateAsync(CreateKeyGrantRequest request)
         {
-            Validate.NotNull(request, nameof(request));
+            Ensure.NotNull(request, nameof(request));
 
             var grant = new KeyGrant(
                 grantId     : Guid.NewGuid(),
@@ -51,7 +51,7 @@ namespace Carbon.Kms.Services
 
         public async Task<bool> DeleteAsync(KeyGrant grant)
         {
-            Validate.NotNull(grant, nameof(grant));
+            Ensure.NotNull(grant, nameof(grant));
 
             return await db.KeyGrants.PatchAsync(grant.Id, new[] {
                 Change.Replace("deleted", Expression.Func("NOW"))

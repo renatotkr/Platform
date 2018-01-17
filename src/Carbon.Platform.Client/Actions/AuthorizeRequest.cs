@@ -8,8 +8,9 @@ namespace Carbon.Platform
 
         public AuthorizeRequest(string email, string clientId)
         {
-            Validate.NotNullOrEmpty(email, nameof(email));
-            Validate.NotNull(clientId, nameof(clientId));
+            Ensure.NotNullOrEmpty(email, nameof(email));
+            Ensure.NotNull(clientId, nameof(clientId));
+
             Email = email;
             ClientId = clientId;
         }

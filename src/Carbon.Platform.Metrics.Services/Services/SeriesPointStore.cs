@@ -18,7 +18,7 @@ namespace Carbon.Platform.Metrics
 
         public async Task<IReadOnlyList<DataPoint>> ListAsync(ITimeSeries series, DateRange period)
         {
-            Validate.NotNull(series, nameof(series));
+            Ensure.NotNull(series, nameof(series));
 
             using (var connection = await db.Context.GetConnectionAsync())
             {
@@ -40,7 +40,7 @@ namespace Carbon.Platform.Metrics
 
         public async Task IncrementAsync(IReadOnlyList<SeriesPoint> points)
         {
-            Validate.NotNull(points, nameof(points));
+            Ensure.NotNull(points, nameof(points));
 
             using (var connection = await db.Context.GetConnectionAsync())
             {

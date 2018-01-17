@@ -21,9 +21,9 @@ namespace Carbon.Platform.Computing
             JsonObject properties = null,
             long? healthCheckId = null)
         {
-            Validate.Id(id);
-            Validate.NotNullOrEmpty(name, nameof(name));
-            Validate.Id(locationId, nameof(locationId));
+            Ensure.IsValidId(id);
+            Ensure.NotNullOrEmpty(name, nameof(name));
+            Ensure.IsValidId(locationId, nameof(locationId));
 
             Id             = id;
             Name           = name;

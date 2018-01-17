@@ -16,8 +16,8 @@ namespace Carbon.Kms
             JsonObject claims = null,
             CertificateSubjectFlags flags = default)
         {
-            Validate.Id(certificateId, nameof(certificateId));
-            Validate.NotNullOrEmpty(path, nameof(path));
+            Ensure.IsValidId(certificateId, nameof(certificateId));
+            Ensure.NotNullOrEmpty(path, nameof(path));
 
             CertificateId = certificateId;
             Path          = path;

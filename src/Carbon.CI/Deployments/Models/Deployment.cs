@@ -21,10 +21,10 @@ namespace Carbon.CI
             DeploymentStatus status = DeploymentStatus.Pending,
             JsonObject properties = null)
         {
-            Validate.Id(id);
-            Validate.Id(environmentId, nameof(environmentId));
-            Validate.NotNull(release,  nameof(release));
-            Validate.Id(creatorId,     nameof(creatorId));
+            Ensure.IsValidId(id);
+            Ensure.IsValidId(environmentId, nameof(environmentId));
+            Ensure.NotNull(release,  nameof(release));
+            Ensure.IsValidId(creatorId,     nameof(creatorId));
 
             Id = id;
             Status         = status;

@@ -7,8 +7,8 @@ namespace Carbon.Rds.Services
     {
         public CreateDatabaseSchemaRequest(long databaseId, string schemeName)
         {
-            Validate.Id(databaseId, nameof(databaseId));
-            Validate.NotNullOrEmpty(schemeName, nameof(schemeName));
+            Ensure.IsValidId(databaseId, nameof(databaseId));
+            Ensure.NotNullOrEmpty(schemeName, nameof(schemeName));
 
             DatabaseId = databaseId;
             SchemaName = schemeName;

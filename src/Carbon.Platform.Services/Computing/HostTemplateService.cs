@@ -39,7 +39,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<HostTemplate> CreateAsync(CreateHostTemplateRequest request)
         {            
-            Validate.Object(request, nameof(request)); // Validate the request
+            Ensure.Object(request, nameof(request)); // Validate the request
 
             var templateId = await db.HostTemplates.Sequence.NextAsync();
 

@@ -9,9 +9,9 @@ namespace Carbon.CI
 
         public CreateProjectRequest(long ownerId, string name, long repositoryId)
         {
-            Validate.Id(ownerId, nameof(ownerId));
-            Validate.NotNullOrEmpty(name, nameof(name));
-            Validate.Id(repositoryId, nameof(repositoryId));
+            Ensure.IsValidId(ownerId, nameof(ownerId));
+            Ensure.NotNullOrEmpty(name, nameof(name));
+            Ensure.IsValidId(repositoryId, nameof(repositoryId));
 
             Name         = name;
             OwnerId      = ownerId;

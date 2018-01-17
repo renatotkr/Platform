@@ -18,9 +18,9 @@ namespace Carbon.CI
             ManagedResource resource,
             JsonObject properties = null)
         {
-            Validate.Id(id);
-            Validate.Id(commitId, nameof(commitId));
-            Validate.Id(creatorId, nameof(creatorId));
+            Ensure.IsValidId(id);
+            Ensure.IsValidId(commitId, nameof(commitId));
+            Ensure.IsValidId(creatorId, nameof(creatorId));
 
             Id         = id;
             CommitId   = commitId;

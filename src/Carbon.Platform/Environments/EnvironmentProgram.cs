@@ -18,8 +18,8 @@ namespace Carbon.Platform.Environments
             JsonObject configuration,
             long? userId = null)
         {
-            Validate.NotNull(environment, nameof(environment));
-            Validate.NotNull(program,     nameof(program));
+            Ensure.NotNull(environment, nameof(environment));
+            Ensure.NotNull(program,     nameof(program));
 
             EnvironmentId = environment.Id;
             ProgramId      = program.Id;

@@ -19,9 +19,9 @@ namespace Carbon.Platform.Environments
             string slug = null,
             JsonObject properties = null)
         {
-            Validate.Id(id);
-            Validate.Id(ownerId, nameof(ownerId));
-            Validate.NotNullOrEmpty(name, nameof(name));
+            Ensure.IsValidId(id);
+            Ensure.IsValidId(ownerId, nameof(ownerId));
+            Ensure.NotNullOrEmpty(name, nameof(name));
 
             if (name.Length > 63)
                 throw new ArgumentException("Must be 63 characters or fewer", nameof(name));

@@ -18,7 +18,7 @@ namespace Carbon.Platform.Environments
 
         public Task<IReadOnlyList<EnvironmentUser>> ListAsync(IEnvironment environment)
         {
-            Validate.NotNull(environment, nameof(environment));
+            Ensure.NotNull(environment, nameof(environment));
 
             return db.EnvironmentUsers.QueryAsync(
                 Expression.And(Expression.Eq("environmentId", environment.Id), Expression.IsNull("deleted"))
@@ -32,7 +32,7 @@ namespace Carbon.Platform.Environments
 
         public async Task<EnvironmentUser> CreateAsync(CreateEnvironmentUserRequest request)
         {
-            Validate.NotNull(request, nameof(request));
+            Ensure.NotNull(request, nameof(request));
 
             var environmentUser = new EnvironmentUser(
                 environmentId : request.EnvironmentId,
@@ -47,7 +47,7 @@ namespace Carbon.Platform.Environments
 
         public async Task DeleteAsync(EnvironmentUser environmentUser)
         {
-            Validate.NotNull(environmentUser, nameof(environmentUser));
+            Ensure.NotNull(environmentUser, nameof(environmentUser));
 
             await db.EnvironmentUsers.PatchAsync((environmentUser.EnvironmentId, environmentUser.UserId), new[] {
                 Change.Replace("deleted", Expression.Func("NOW"))

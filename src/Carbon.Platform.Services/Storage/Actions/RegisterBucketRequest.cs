@@ -8,8 +8,8 @@ namespace Carbon.Platform.Storage
     {
         public RegisterBucketRequest(long ownerId, string name, ManagedResource resource)
         {
-            Validate.Id(ownerId, nameof(ownerId));
-            Validate.NotNullOrEmpty(name, nameof(name));
+            Ensure.Id(ownerId, nameof(ownerId));
+            Ensure.NotNullOrEmpty(name, nameof(name));
 
             if (name.Length > 63)
                 throw new ArgumentException("Must be 63 characters or fewer", nameof(name));

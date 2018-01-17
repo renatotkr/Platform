@@ -12,8 +12,8 @@ namespace Carbon.Platform.Environments
 
         public CreateEnvironmentRequest(long ownerId, string name, JsonObject properties = null)
         {
-            Validate.Id(ownerId, nameof(ownerId));
-            Validate.NotNullOrEmpty(name, nameof(name));
+            Ensure.Id(ownerId, nameof(ownerId));
+            Ensure.NotNullOrEmpty(name, nameof(name));
 
             OwnerId    = ownerId;
             Name       = name;

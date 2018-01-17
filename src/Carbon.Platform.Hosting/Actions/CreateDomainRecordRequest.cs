@@ -16,9 +16,9 @@ namespace Carbon.Platform.Hosting
             string value, 
             TimeSpan? ttl)
         {
-            Validate.Id(domainId, nameof(domainId));
-            Validate.NotNullOrEmpty(name, nameof(name));
-            Validate.NotNullOrEmpty(value, nameof(value));
+            Ensure.IsValidId(domainId, nameof(domainId));
+            Ensure.NotNullOrEmpty(name, nameof(name));
+            Ensure.NotNullOrEmpty(value, nameof(value));
 
             DomainId = domainId;
             Name     = name;

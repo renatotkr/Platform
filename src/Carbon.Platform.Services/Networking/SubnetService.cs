@@ -51,7 +51,7 @@ namespace Carbon.Platform.Networking
 
         public async Task<SubnetInfo> RegisterAsync(RegisterSubnetRequest request)
         {
-            Validate.Object(request, nameof(request)); // Validate the request
+            Ensure.Object(request, nameof(request)); // Validate the request
 
             // TODO: Get subnetCount from network?
 

@@ -14,8 +14,8 @@ namespace Carbon.Platform.Environments
             int locationId,
             long? distributionId = null)
         {
-            Validate.Id(environmentId, nameof(environmentId));
-            Validate.Id(locationId,    nameof(locationId));
+            Ensure.IsValidId(environmentId, nameof(environmentId));
+            Ensure.IsValidId(locationId,    nameof(locationId));
 
             EnvironmentId = environmentId;
             LocationId    = locationId;

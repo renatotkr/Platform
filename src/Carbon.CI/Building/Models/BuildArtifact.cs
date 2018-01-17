@@ -9,8 +9,8 @@ namespace Carbon.CI
 
         public BuildArtifact(long id, string name, byte[] sha256 = null)
         {
-            Validate.Id(id);
-            Validate.NotNullOrEmpty(name, nameof(name));
+            Ensure.IsValidId(id);
+            Ensure.NotNullOrEmpty(name, nameof(name));
 
             Id     = id;
             Name   = name;

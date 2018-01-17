@@ -28,8 +28,8 @@ namespace Carbon.Platform.Computing
             NetworkProtocal protocal,
             ManagedResource resource)
         {
-            Validate.Id(id);
-            Validate.Id(ownerId, nameof(ownerId));
+            Ensure.IsValidId(id);
+            Ensure.IsValidId(ownerId, nameof(ownerId));
             
             Id         = id;
             OwnerId    = ownerId;

@@ -20,7 +20,7 @@ namespace Carbon.Platform.Hosting
 
         public Task<IReadOnlyList<DomainAuthorization>> ListAsync(IDomain domain)
         {
-            Validate.NotNull(domain, nameof(domain));
+            Ensure.NotNull(domain, nameof(domain));
 
             var range = ScopedId.GetRange(domain.Id);
 
@@ -31,7 +31,7 @@ namespace Carbon.Platform.Hosting
         
         public async Task<DomainAuthorization> GetLatestAsync(IDomain domain)
         {
-            Validate.NotNull(domain, nameof(domain));
+            Ensure.NotNull(domain, nameof(domain));
 
             var range = ScopedId.GetRange(domain.Id);
 
@@ -44,7 +44,7 @@ namespace Carbon.Platform.Hosting
 
         public async Task<DomainAuthorization> CreateAsync(CreateDomainAuthorizationRequest request)
         {
-            Validate.NotNull(request, nameof(request));
+            Ensure.NotNull(request, nameof(request));
 
             var id = await DomainAuthorizationId.NextAsync(db.Context, request.DomainId);
             
@@ -57,7 +57,7 @@ namespace Carbon.Platform.Hosting
         
         public async Task CompleteAsync(DomainAuthorization authorization, DateTime expires)
         {
-            Validate.NotNull(authorization, nameof(authorization));
+            Ensure.NotNull(authorization, nameof(authorization));
 
             await db.DomainAuthorizations.PatchAsync(authorization.Id, new[] {
                 Change.Replace("completed", Expression.Func("NOW")),
@@ -67,7 +67,7 @@ namespace Carbon.Platform.Hosting
 
         public async Task RevokeAsync(DomainAuthorization authorization)
         {
-            Validate.NotNull(authorization, nameof(authorization));
+            Ensure.NotNull(authorization, nameof(authorization));
 
             await db.DomainAuthorizations.PatchAsync(authorization.Id, new[] {
                 Change.Replace("revoked", Expression.Func("NOW"))

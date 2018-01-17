@@ -17,9 +17,9 @@ namespace Carbon.CI
             byte[] encryptedAccessToken = null,
             JsonObject properties = null)
         {
-            Validate.NotNullOrEmpty(name, nameof(name));
-            Validate.NotNullOrEmpty(origin, nameof(origin));
-            Validate.Id(ownerId, nameof(ownerId));
+            Ensure.NotNullOrEmpty(name, nameof(name));
+            Ensure.NotNullOrEmpty(origin, nameof(origin));
+            Ensure.IsValidId(ownerId, nameof(ownerId));
 
             Name                 = name;
             OwnerId              = ownerId;

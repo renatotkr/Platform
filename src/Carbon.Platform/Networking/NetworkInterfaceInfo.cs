@@ -26,7 +26,7 @@ namespace Carbon.Platform.Networking
             long? hostId = null,
             JsonObject properties = null)
         {
-            Validate.Id(id, nameof(id));
+            Ensure.IsValidId(id, nameof(id));
 
             Id               = id;
             Addresses        = ipAddresses;

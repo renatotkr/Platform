@@ -21,10 +21,10 @@ namespace Carbon.CI
             long imageId = 0,
             JsonObject properties = null)
         {
-            Validate.Id(id);
-            Validate.Id(repositoryId, nameof(repositoryId));
-            Validate.NotNullOrEmpty(name, nameof(name));
-            Validate.Id(ownerId, nameof(ownerId));
+            Ensure.IsValidId(id);
+            Ensure.IsValidId(repositoryId, nameof(repositoryId));
+            Ensure.NotNullOrEmpty(name, nameof(name));
+            Ensure.IsValidId(ownerId, nameof(ownerId));
 
             Id           = id;
             Name         = name;

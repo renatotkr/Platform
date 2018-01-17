@@ -2,9 +2,9 @@
 
 namespace Carbon.Platform
 {
-    internal static class Validate
+    internal static class Ensure
     {
-        public static void Id(long value, string name = "id")
+        public static void IsValidId(long value, string name = "id")
         {
             if (value <= 0)
             {

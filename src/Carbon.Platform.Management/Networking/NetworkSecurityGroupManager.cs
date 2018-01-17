@@ -20,8 +20,8 @@ namespace Carbon.Platform.Networking
             NetworkInfo network, 
             NetworkInterfaceSecurityGroup networkSecurityGroup)
         {
-            Validate.NotNull(network, nameof(network));
-            Validate.NotNull(networkSecurityGroup, nameof(networkSecurityGroup));
+            Ensure.NotNull(network, nameof(network));
+            Ensure.NotNull(networkSecurityGroup, nameof(networkSecurityGroup));
 
             var region = Locations.Get(network.LocationId);
 

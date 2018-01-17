@@ -19,9 +19,9 @@ namespace Carbon.Rds.Services
             string[] privileges,
             long userId)
         {
-            Validate.Id(databaseId, nameof(databaseId));
-            Validate.NotNull(privileges, nameof(privileges));
-            Validate.Id(userId, nameof(userId));
+            Ensure.IsValidId(databaseId, nameof(databaseId));
+            Ensure.NotNull(privileges, nameof(privileges));
+            Ensure.IsValidId(userId, nameof(userId));
 
             #region Preconditions
 

@@ -19,7 +19,7 @@ namespace Carbon.Platform.Hosting
             DateTime? expires = null,
             DomainAuthorizationFlags flags = default)
         {
-            Validate.Id(id);
+            Ensure.IsValidId(id);
 
             Id         = id;
             Type       = type;

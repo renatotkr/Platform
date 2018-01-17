@@ -48,9 +48,9 @@ namespace Carbon.Kms
             KeyType type = KeyType.Secret,
             KeyStatus status = KeyStatus.Active)
         {
-            Validate.Id(ownerId, nameof(ownerId));
-            Validate.NotNullOrEmpty(name, nameof(name));
-            Validate.NotNullOrEmpty(data, nameof(data));
+            Ensure.IsValidId(ownerId, nameof(ownerId));
+            Ensure.NotNullOrEmpty(name, nameof(name));
+            Ensure.NotNullOrEmpty(data, nameof(data));
 
             Id        = id;
             OwnerId   = ownerId;

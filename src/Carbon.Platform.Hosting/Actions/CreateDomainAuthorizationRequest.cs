@@ -9,7 +9,7 @@ namespace Carbon.Platform.Hosting
             DomainAuthorizationType type, 
             JsonObject properties)
         {
-            Validate.Id(domainId, nameof(domainId));
+            Ensure.IsValidId(domainId, nameof(domainId));
 
             DomainId   = domainId;
             Type       = type;

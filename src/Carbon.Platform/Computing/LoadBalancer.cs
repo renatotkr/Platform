@@ -22,10 +22,10 @@ namespace Carbon.Platform.Computing
             long networkId = 0,
             JsonObject properties = null)
         {
-            Validate.Id(id);
-            Validate.Id(ownerId,             nameof(ownerId));
-            Validate.NotNullOrEmpty(name,    nameof(name));
-            Validate.NotNullOrEmpty(address, nameof(address));
+            Ensure.IsValidId(id);
+            Ensure.IsValidId(ownerId,             nameof(ownerId));
+            Ensure.NotNullOrEmpty(name,    nameof(name));
+            Ensure.NotNullOrEmpty(address, nameof(address));
 
             Id         = id;
             OwnerId    = ownerId;

@@ -17,10 +17,10 @@ namespace Carbon.Rds
             long userId,
             string[] columnNames = null)
         {
-            Validate.Id(id);
-            Validate.Id(databaseId, nameof(databaseId));
-            Validate.Id(userId, nameof(userId));
-            Validate.NotNull(privileges, nameof(privileges));
+            Ensure.IsValidId(id);
+            Ensure.IsValidId(databaseId, nameof(databaseId));
+            Ensure.IsValidId(userId, nameof(userId));
+            Ensure.NotNull(privileges, nameof(privileges));
 
             #region Preconditions
             

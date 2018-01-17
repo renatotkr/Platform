@@ -33,7 +33,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<HostInfo> GetAsync(string name)
         {
-            Validate.NotNullOrEmpty(name, nameof(name));
+            Ensure.NotNullOrEmpty(name, nameof(name));
 
             if (long.TryParse(name, out var id))
             {
@@ -62,7 +62,7 @@ namespace Carbon.Platform.Computing
 
         public Task<IReadOnlyList<HostInfo>> ListAsync(ICluster cluster)
         {
-            Validate.NotNull(cluster, nameof(cluster));
+            Ensure.NotNull(cluster, nameof(cluster));
 
             return db.Hosts.QueryAsync(
                 And(Eq("clusterId", cluster.Id), IsNull("terminated"))
@@ -71,7 +71,7 @@ namespace Carbon.Platform.Computing
 
         public Task<IReadOnlyList<HostInfo>> ListAsync(ICluster cluster, HostStatus status)
         {
-            Validate.NotNull(cluster, nameof(cluster));
+            Ensure.NotNull(cluster, nameof(cluster));
 
             return db.Hosts.QueryAsync(
                 And(Eq("clusterId", cluster.Id), Eq("status", status))
@@ -80,7 +80,7 @@ namespace Carbon.Platform.Computing
 
         public Task<IReadOnlyList<HostInfo>> ListAsync(IEnvironment environment)
         {
-            Validate.NotNull(environment, nameof(environment));
+            Ensure.NotNull(environment, nameof(environment));
 
             return db.Hosts.QueryAsync(
                 And(Eq("environmentId", environment.Id), IsNull("terminated"))
@@ -89,7 +89,7 @@ namespace Carbon.Platform.Computing
 
         public Task<IReadOnlyList<HostInfo>> ListAsync(IEnvironment environment, HostStatus status)
         {
-            Validate.NotNull(environment, nameof(environment));
+            Ensure.NotNull(environment, nameof(environment));
 
             return db.Hosts.QueryAsync(
                 And(Eq("environmentId", environment.Id), Eq("status", status))
@@ -98,7 +98,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<HostInfo> RegisterAsync(RegisterHostRequest request)
         {
-            Validate.NotNull(request, nameof(request));
+            Ensure.NotNull(request, nameof(request));
 
             var location = LocationId.Create(request.Resource.LocationId);
             var regionId = location.WithZoneNumber(0);
@@ -148,7 +148,7 @@ namespace Carbon.Platform.Computing
 
         private async Task<MachineType> GetMachineTypeAsync(int providerId, string name)
         {
-            Validate.NotNullOrEmpty(name, nameof(name));
+            Ensure.NotNullOrEmpty(name, nameof(name));
 
             var model = await db.MachineTypes.QueryFirstOrDefaultAsync(
                 And(Eq("providerId", providerId), Eq("name", name))

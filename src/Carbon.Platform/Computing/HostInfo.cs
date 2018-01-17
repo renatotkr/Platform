@@ -28,8 +28,8 @@ namespace Carbon.Platform.Computing
             HostType type     = HostType.Virtual,
             HostStatus status = HostStatus.Running)
         {
-            Validate.Id(id);
-            Validate.Id(ownerId, nameof(ownerId));
+            Ensure.IsValidId(id);
+            Ensure.IsValidId(ownerId, nameof(ownerId));
             
             Id            = id;
             OwnerId       = ownerId;

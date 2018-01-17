@@ -38,7 +38,7 @@ namespace Carbon.Rds.Services
 
         public async Task<DatabaseInfo> RegisterAsync(RegisterDatabaseRequest request)
         {
-            Validate.NotNull(request, nameof(request));
+            Ensure.NotNull(request, nameof(request));
 
             var databaseId = await db.Databases.Sequence.NextAsync();
 
@@ -61,7 +61,7 @@ namespace Carbon.Rds.Services
 
         public async Task<bool> DeleteAsync(IDatabaseInfo database)
         {
-            Validate.NotNull(database, nameof(database));
+            Ensure.NotNull(database, nameof(database));
 
             return await db.Databases.PatchAsync(database.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))

@@ -26,8 +26,8 @@ namespace Carbon.CI
 
         public async Task<ProgramRelease> CreateAsync(CreateProgramReleaseRequest request, ISecurityContext context)
         {
-            Validate.NotNull(request, nameof(request));
-            Validate.NotNull(context, nameof(request));
+            Ensure.NotNull(request, nameof(request));
+            Ensure.NotNull(context, nameof(request));
 
             if (request.Version == default)
             {
@@ -69,7 +69,7 @@ namespace Carbon.CI
 
         public async Task<IPackage> DownloadAsync(IProgram program)
         {
-            Validate.NotNull(program, nameof(program));
+            Ensure.NotNull(program, nameof(program));
 
             var packages = await packageManager.ListAsync(program);
 

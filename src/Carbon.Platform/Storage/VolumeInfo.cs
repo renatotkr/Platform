@@ -21,8 +21,8 @@ namespace Carbon.Platform.Storage
             JsonObject properties = null,
             long? hostId = null)
         {
-            Validate.Id(id);
-            Validate.Id(ownerId, nameof(ownerId));
+            Ensure.IsValidId(id);
+            Ensure.IsValidId(ownerId, nameof(ownerId));
 
             Id         = id;
             OwnerId    = ownerId;

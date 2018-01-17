@@ -19,10 +19,10 @@ namespace Carbon.CI
             long creatorId,
             long? containerId = null)
         {
-            Validate.Id(id);
-            Validate.Id(repositoryId, nameof(repositoryId));
-            Validate.NotNullOrEmpty(name, nameof(name));
-            Validate.Id(creatorId, nameof(creatorId));
+            Ensure.IsValidId(id);
+            Ensure.IsValidId(repositoryId, nameof(repositoryId));
+            Ensure.NotNullOrEmpty(name, nameof(name));
+            Ensure.IsValidId(creatorId, nameof(creatorId));
 
             Id           = id;
             RepositoryId = repositoryId;

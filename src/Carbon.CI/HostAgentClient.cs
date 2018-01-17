@@ -56,7 +56,7 @@ namespace Carbon.CI
 
         public async Task<bool> RestartAsync(IProgram program, IHost host)
         {
-            Validate.NotNull(program, nameof(program));
+            Ensure.NotNull(program, nameof(program));
 
             var path = $"/programs/{program.Id}@{program.Version}/restart";
 
@@ -69,7 +69,7 @@ namespace Carbon.CI
 
         private async Task<string> SendAsync(IHost host, string path)
         {
-            Validate.NotNull(host, nameof(host));
+            Ensure.NotNull(host, nameof(host));
 
             if (path[0] == '/')
             {

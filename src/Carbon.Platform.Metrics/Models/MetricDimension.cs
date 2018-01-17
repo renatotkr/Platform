@@ -10,8 +10,8 @@ namespace Carbon.Platform.Metrics
 
         public MetricDimension(long id, string name)
         {
-            Validate.Id(id);
-            Validate.NotNullOrEmpty(name, nameof(name));
+            Ensure.IsValidId(id);
+            Ensure.NotNullOrEmpty(name, nameof(name));
 
             Id   = id;
             Name = name;

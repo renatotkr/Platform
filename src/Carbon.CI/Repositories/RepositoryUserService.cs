@@ -24,7 +24,7 @@ namespace Carbon.CI
 
         public Task<IReadOnlyList<RepositoryUser>> ListAsync(IRepository repository)
         {
-            Validate.NotNull(repository, nameof(repository));
+            Ensure.NotNull(repository, nameof(repository));
 
             return db.RepositoryUsers.QueryAsync(
                 expression: And(Eq("repositoryId", repository.Id), IsNull("deleted"))
@@ -40,8 +40,8 @@ namespace Carbon.CI
 
         public async Task<RepositoryUser> CreateAsync(CreateRepositoryUserRequest request, ISecurityContext context)
         {
-            Validate.NotNull(request, nameof(request));
-            Validate.NotNull(context, nameof(context));
+            Ensure.NotNull(request, nameof(request));
+            Ensure.NotNull(context, nameof(context));
 
             var record = new RepositoryUser(
                 repositoryId : request.RepositoryId,
@@ -57,8 +57,8 @@ namespace Carbon.CI
         
         public async Task<bool> DeleteAsync(RepositoryUser record, ISecurityContext context)
         {
-            Validate.NotNull(record, nameof(record));
-            Validate.NotNull(context, nameof(context));
+            Ensure.NotNull(record, nameof(record));
+            Ensure.NotNull(context, nameof(context));
 
             var result = await db.RepositoryUsers.PatchAsync((record.RepositoryId, record.UserId), new[] {
                 Change.Replace("deleted", Func("NOW"))

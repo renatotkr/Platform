@@ -2,7 +2,7 @@
 
 namespace Carbon
 {
-    internal static class Validate
+    internal static class Ensure
     {
         public static void Id(long value, string name = "id")
         {

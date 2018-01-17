@@ -8,8 +8,8 @@
             string[] schemaNames = null,
             RegisterDatabaseClusterRequest[] clusters = null)
         {
-            Validate.NotNullOrEmpty(name, nameof(name));
-            Validate.Id(ownerId, nameof(ownerId));
+            Ensure.NotNullOrEmpty(name, nameof(name));
+            Ensure.IsValidId(ownerId, nameof(ownerId));
 
             Name        = name;
             OwnerId     = ownerId;

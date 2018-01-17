@@ -21,7 +21,7 @@ namespace Carbon.Rds.Services
 
         public Task<IReadOnlyList<DatabaseBackup>> ListAsync(IDatabaseInfo database)
         {
-            Validate.NotNull(database, nameof(database));
+            Ensure.NotNull(database, nameof(database));
 
             var range = ScopedId.GetRange(database.Id);
 
@@ -41,7 +41,7 @@ namespace Carbon.Rds.Services
 
         public async Task DeleteAsync(IDatabaseSchema schema)
         {
-            Validate.NotNull(schema, nameof(schema));
+            Ensure.NotNull(schema, nameof(schema));
 
             await db.DatabaseSchemas.PatchAsync(schema.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))

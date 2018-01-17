@@ -13,8 +13,8 @@ namespace Carbon.Platform.Networking
             DateTime created, 
             DateTime? deleted = null)
         {
-            Validate.Id(networkInterfaceId, nameof(networkInterfaceId));
-            Validate.Id(hostId,             nameof(hostId));
+            Ensure.IsValidId(networkInterfaceId, nameof(networkInterfaceId));
+            Ensure.IsValidId(hostId,             nameof(hostId));
 
             NetworkInterfaceId = networkInterfaceId;
             HostId = hostId;

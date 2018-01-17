@@ -11,9 +11,9 @@ namespace Carbon.Rds
 
         public DatabaseUser(long databaseId, long userId, string name)
         {
-            Validate.Id(databaseId, nameof(databaseId));
-            Validate.Id(userId, nameof(userId));
-            Validate.NotNullOrEmpty(name, nameof(name));
+            Ensure.IsValidId(databaseId, nameof(databaseId));
+            Ensure.IsValidId(userId, nameof(userId));
+            Ensure.NotNullOrEmpty(name, nameof(name));
 
             DatabaseId = databaseId;
             UserId     = userId;

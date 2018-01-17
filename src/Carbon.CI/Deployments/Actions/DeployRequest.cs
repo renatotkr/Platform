@@ -8,8 +8,8 @@ namespace Carbon.CI
     {
         public DeployRequest(IProgram program, IEnvironment environment)
         {
-            Validate.NotNull(program,     nameof(program));
-            Validate.NotNull(environment, nameof(environment));
+            Ensure.NotNull(program,     nameof(program));
+            Ensure.NotNull(environment, nameof(environment));
 
             Program = program;
             Environment = environment;

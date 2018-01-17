@@ -16,8 +16,8 @@ namespace Carbon.Platform.Computing
             string startupScript = null,
             JsonObject properties = null)
         {
-            Validate.Id(ownerId);
-            Validate.NotNullOrEmpty(name, nameof(name));
+            Ensure.Id(ownerId);
+            Ensure.NotNullOrEmpty(name, nameof(name));
 
             OwnerId       = ownerId;
             Name          = name;

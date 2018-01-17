@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Carbon.Platform
 {
-    internal static class Validate
+    internal static class Ensure
     {
         public static void Object(object value, string name)
         {

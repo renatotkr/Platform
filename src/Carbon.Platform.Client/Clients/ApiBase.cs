@@ -26,7 +26,7 @@ namespace Carbon.Platform
 
         public ApiBase(string host, IAccessTokenProvider accessTokenProvider)
         {
-            Validate.NotNullOrEmpty(host, nameof(host));
+            Ensure.NotNullOrEmpty(host, nameof(host));
             
             this.baseUri = "https://" + host;
 
@@ -35,7 +35,7 @@ namespace Carbon.Platform
 
         internal async Task<MemoryStream> DownloadAsync(string path)
         {
-            Validate.NotNullOrEmpty(path, nameof(path));
+            Ensure.NotNullOrEmpty(path, nameof(path));
 
             var request = new HttpRequestMessage(HttpMethod.Get, baseUri + path);
 

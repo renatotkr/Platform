@@ -18,8 +18,8 @@ namespace Carbon.Platform.Computing
             ResourceProvider provider,
             JsonObject properties = null)
         {
-            Validate.Id(id);
-            Validate.NotNullOrEmpty(name, nameof(name));
+            Ensure.IsValidId(id);
+            Ensure.NotNullOrEmpty(name, nameof(name));
 
             Id         = id;
             Name       = name;

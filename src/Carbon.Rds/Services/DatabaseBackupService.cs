@@ -20,7 +20,7 @@ namespace Carbon.Rds.Services
 
         public Task<IReadOnlyList<DatabaseBackup>> ListAsync(IDatabaseInfo database)
         {
-            Validate.NotNull(database, nameof(database));
+            Ensure.NotNull(database, nameof(database));
             
             var range = ScopedId.GetRange(database.Id);
 
@@ -31,7 +31,7 @@ namespace Carbon.Rds.Services
 
         public async Task<DatabaseBackup> StartAsync(StartDatabaseBackupRequest request)
         {
-            Validate.NotNull(request, nameof(request));
+            Ensure.NotNull(request, nameof(request));
 
             var id = await DatabaseBackupId.NextAsync(db.Context, request.DatabaseId);
 
@@ -48,7 +48,7 @@ namespace Carbon.Rds.Services
 
         public async Task CompleteAsync(CompleteDatabaseBackupRequest request)
         {
-            Validate.NotNull(request, nameof(request));
+            Ensure.NotNull(request, nameof(request));
 
             await db.DatabaseBackups.PatchAsync(request.BackupId, new[] {
                 Change.Replace("status",    request.Status),

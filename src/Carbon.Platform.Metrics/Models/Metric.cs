@@ -11,10 +11,10 @@ namespace Carbon.Platform.Metrics
 
         public Metric(long id, long ownerId, string name, MetricType type, string unit)
         {
-            Validate.Id(id);
-            Validate.Id(ownerId, nameof(ownerId));
-            Validate.NotNullOrEmpty(name, nameof(name));
-            Validate.NotNull(unit, nameof(unit));
+            Ensure.IsValidId(id);
+            Ensure.IsValidId(ownerId, nameof(ownerId));
+            Ensure.NotNullOrEmpty(name, nameof(name));
+            Ensure.NotNull(unit, nameof(unit));
 
             if (name.Length > 100)
                 throw new ArgumentException("May not exceed 100 characters", nameof(name));

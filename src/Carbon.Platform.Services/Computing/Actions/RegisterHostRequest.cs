@@ -21,11 +21,11 @@ namespace Carbon.Platform.Computing
             HostStatus status = HostStatus.Pending,
             HostType type = HostType.Virtual)
         {
-            Validate.Id(ownerId,          nameof(ownerId));
-            Validate.NotNull(cluster,     nameof(cluster));
-            Validate.NotNull(location,    nameof(location));
-            Validate.NotNull(image,       nameof(image));
-            Validate.NotNull(machineType, nameof(machineType));
+            Ensure.Id(ownerId,          nameof(ownerId));
+            Ensure.NotNull(cluster,     nameof(cluster));
+            Ensure.NotNull(location,    nameof(location));
+            Ensure.NotNull(image,       nameof(image));
+            Ensure.NotNull(machineType, nameof(machineType));
 
             OwnerId       = ownerId;
             Addresses     = addresses;

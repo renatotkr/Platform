@@ -47,7 +47,7 @@ namespace Carbon.CI
 
         public async Task<ProjectInfo> CreateAsync(CreateProjectRequest request)
         {
-            Validate.NotNull(request, nameof(request));
+            Ensure.NotNull(request, nameof(request));
             
             if (await db.Projects.ExistsAsync(And(Eq("ownerId", request.OwnerId), Eq("name", request.Name))))
             {

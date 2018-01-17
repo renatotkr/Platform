@@ -22,9 +22,9 @@ namespace Carbon.Platform.Hosting
             int? ttl = null, 
             DomainRecordFlags flags = default)
         {
-            Validate.Id(id);
-            Validate.NotNullOrEmpty(name, nameof(name));
-            Validate.NotNullOrEmpty(value, nameof(value));
+            Ensure.IsValidId(id);
+            Ensure.NotNullOrEmpty(name, nameof(name));
+            Ensure.NotNullOrEmpty(value, nameof(value));
 
             #region Preconditions
 

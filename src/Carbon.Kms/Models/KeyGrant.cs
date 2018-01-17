@@ -22,9 +22,9 @@ namespace Carbon.Kms
             JsonObject properties = null,
             string externalId = null)
         {
-            Validate.NotNullOrEmpty(name, nameof(name));
-            Validate.NotNullOrEmpty(actions, nameof(actions));
-            Validate.Id(userId, nameof(userId));
+            Ensure.NotNullOrEmpty(name, nameof(name));
+            Ensure.NotNullOrEmpty(actions, nameof(actions));
+            Ensure.IsValidId(userId, nameof(userId));
 
             if (name.Length > 100)
                 throw new ArgumentException("Must be 100 characters or fewer", nameof(name));

@@ -18,8 +18,8 @@ namespace Carbon.Platform.Hosting
             DateTime expires,
             DomainRegistrationFlags flags = default)
         {
-            Validate.Id(id);
-            Validate.Id(domainId, nameof(domainId));
+            Ensure.IsValidId(id);
+            Ensure.IsValidId(domainId, nameof(domainId));
 
             Id          = id;
             DomainId    = domainId;

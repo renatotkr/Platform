@@ -23,7 +23,7 @@ namespace Carbon.Platform.Metrics
 
         public async Task ProcessAsync(IList<MetricData> datas)
         {
-            Validate.NotNull(datas, nameof(datas));
+            Ensure.NotNull(datas, nameof(datas));
 
             await db.InsertAsync(datas);
         }

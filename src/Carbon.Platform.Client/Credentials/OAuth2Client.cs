@@ -26,7 +26,7 @@ namespace Carbon.Platform.Security
 
         public OAuth2Client(Uid clientId, string host)
         {
-            Validate.NotNullOrEmpty(host, nameof(host));
+            Ensure.NotNullOrEmpty(host, nameof(host));
 
             this.clientId = clientId.ToString();
             this.host     = host;

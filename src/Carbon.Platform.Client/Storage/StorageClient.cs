@@ -30,7 +30,7 @@ namespace Carbon.Platform.Storage
        
         public async Task<IBlobResult> GetObjectAsync(GetObjectRequest request)
         {
-            Validate.NotNull(request, nameof(request));
+            Ensure.NotNull(request, nameof(request));
 
             var httpRequest = new HttpRequestMessage(HttpMethod.Get, baseUrl + request.BucketName + "/" + request.Key);
 
@@ -41,7 +41,7 @@ namespace Carbon.Platform.Storage
 
         public async Task<IReadOnlyDictionary<string, string>> GetObjectPropertiesAsync(GetObjectPropertiesRequest request)
         {
-            Validate.NotNull(request, nameof(request));
+            Ensure.NotNull(request, nameof(request));
 
             var httpRequest = new HttpRequestMessage(HttpMethod.Head, baseUrl + request.BucketName + "/" + request.Key);
 
@@ -57,7 +57,7 @@ namespace Carbon.Platform.Storage
 
         public async Task<ObjectDetails> PutObjectAsync(PutObjectRequest request)
         {
-            Validate.NotNull(request, nameof(request));
+            Ensure.NotNull(request, nameof(request));
 
             using (var stream = request.Stream)
             {
@@ -75,7 +75,7 @@ namespace Carbon.Platform.Storage
 
         public async Task DeleteObjectAsync(DeleteObjectRequest request)
         {
-            Validate.NotNull(request, nameof(request));
+            Ensure.NotNull(request, nameof(request));
 
             var httpRequest = new HttpRequestMessage(
                 method      : HttpMethod.Delete, 
@@ -87,7 +87,7 @@ namespace Carbon.Platform.Storage
 
         public async Task<IReadOnlyList<IBlob>> ListBucketAsync(ListBucketRequest request)
         {
-            Validate.NotNull(request, nameof(request));
+            Ensure.NotNull(request, nameof(request));
 
             var sb = new StringBuilder();
 

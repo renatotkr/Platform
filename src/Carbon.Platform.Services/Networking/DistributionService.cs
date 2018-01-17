@@ -29,7 +29,7 @@ namespace Carbon.Platform.Networking
 
         public Task<IReadOnlyList<Distribution>> ListAsync(IEnvironment environment)
         {
-            Validate.NotNull(environment, nameof(environment));
+            Ensure.NotNull(environment, nameof(environment));
 
             return db.Distributions.QueryAsync(
                 And(Eq("environmentId", environment.Id), IsNull("deleted"))
@@ -44,7 +44,7 @@ namespace Carbon.Platform.Networking
 
         public async Task<Distribution> GetAsync(ResourceProvider provider, string resourceId)
         {
-            Validate.NotNull(provider, nameof(provider));
+            Ensure.NotNull(provider, nameof(provider));
 
             return await db.Distributions.QueryFirstOrDefaultAsync(
                 Conjunction(Eq("providerId", provider.Id), Eq("resourceId", resourceId))
@@ -53,7 +53,7 @@ namespace Carbon.Platform.Networking
      
         public async Task<Distribution> CreateAsync(CreateDistributionRequest request)
         {
-            Validate.NotNull(request, nameof(request));
+            Ensure.NotNull(request, nameof(request));
             
             var distribution = new Distribution(
                 id            : await db.Distributions.Sequence.NextAsync(),
@@ -71,7 +71,7 @@ namespace Carbon.Platform.Networking
 
         public async Task ActivateAsync(Distribution record)
         {
-            Validate.NotNull(record, nameof(record));
+            Ensure.NotNull(record, nameof(record));
 
             await db.Distributions.PatchAsync(record.Id, new[] {
                 Change.Replace("activated", Func("NOW"))
@@ -80,7 +80,7 @@ namespace Carbon.Platform.Networking
 
         public async Task DeactivateAsync(Distribution record)
         {
-            Validate.NotNull(record, nameof(record));
+            Ensure.NotNull(record, nameof(record));
 
             await db.Distributions.PatchAsync(record.Id, new[] {
                 Change.Remove("activated")
@@ -89,7 +89,7 @@ namespace Carbon.Platform.Networking
 
         public async Task<bool> DeleteAsync(Distribution record)
         {
-            Validate.NotNull(record, nameof(record));
+            Ensure.NotNull(record, nameof(record));
             
             return await db.Distributions.PatchAsync(record.Id, new[] {
                 Change.Remove("activated"), // deactivate

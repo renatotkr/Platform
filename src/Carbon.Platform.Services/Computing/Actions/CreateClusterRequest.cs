@@ -11,8 +11,8 @@ namespace Carbon.Platform.Computing
             IHostTemplate hostTemplate,
             JsonObject properties = null)
         {
-            Validate.NotNull(environment, nameof(environment));
-            Validate.NotNull(location, nameof(location));
+            Ensure.NotNull(environment, nameof(environment));
+            Ensure.NotNull(location,    nameof(location));
             
             EnvironmentId = environment.Id;
             LocationId    = location.Id;

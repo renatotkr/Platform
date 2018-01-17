@@ -24,9 +24,9 @@ namespace Carbon.Platform.Computing
             string[] addresses = null,
             JsonObject properties = null)
         {
-            Validate.Id(id);
-            Validate.NotNull(program, nameof(program));
-            Validate.Id(creatorId,    nameof(creatorId));
+            Ensure.IsValidId(id);
+            Ensure.NotNull(program, nameof(program));
+            Ensure.IsValidId(creatorId,    nameof(creatorId));
 
             if (version == default)
             {

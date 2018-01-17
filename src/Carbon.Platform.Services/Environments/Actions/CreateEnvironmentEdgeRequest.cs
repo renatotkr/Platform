@@ -7,8 +7,8 @@
             int locationId,
             long? distributionId = null)
         {
-            Validate.Id(environmentId, nameof(environmentId));
-            Validate.Id(locationId,        nameof(locationId));
+            Ensure.Id(environmentId, nameof(environmentId));
+            Ensure.Id(locationId,        nameof(locationId));
 
             EnvironmentId = environmentId;
             LocationId = locationId;

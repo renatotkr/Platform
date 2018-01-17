@@ -25,7 +25,7 @@ namespace Carbon.Rds.Services
 
         public Task<IReadOnlyList<DatabaseCluster>> ListAsync(IDatabaseInfo database)
         {
-            Validate.NotNull(database, nameof(database));
+            Ensure.NotNull(database, nameof(database));
 
             var range = ScopedId.GetRange(database.Id);
 
@@ -36,7 +36,7 @@ namespace Carbon.Rds.Services
 
         public async Task<DatabaseCluster> RegisterAsync(RegisterDatabaseClusterRequest request)
         {
-            Validate.NotNull(request, nameof(request));
+            Ensure.NotNull(request, nameof(request));
             
             #region Preconditions
             

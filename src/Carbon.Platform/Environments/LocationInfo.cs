@@ -16,8 +16,8 @@ namespace Carbon.Platform
             string name, 
             LocationStatus status = LocationStatus.Healthy)
         {
-            Validate.Id(id);
-            Validate.NotNullOrEmpty(name, nameof(name));
+            Ensure.IsValidId(id);
+            Ensure.NotNullOrEmpty(name, nameof(name));
 
             Id         = id;
             ProviderId = LocationId.Create(id).ProviderId;

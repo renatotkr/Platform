@@ -28,7 +28,7 @@ namespace Carbon.Platform.Computing
 
         public Task<ProgramInfo> FindAsync(string name)
         {
-            Validate.NotNull(name, nameof(name));
+            Ensure.NotNull(name, nameof(name));
 
             if (long.TryParse(name, out var id))
             {
@@ -58,7 +58,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<IReadOnlyList<ProgramInfo>> ListAsync(IEnvironment environment)
         {
-            Validate.NotNull(environment, nameof(environment));
+            Ensure.NotNull(environment, nameof(environment));
 
             // TODO: Do a left JOIN on on programs
 
@@ -90,7 +90,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<IReadOnlyList<ProgramInfo>> ListAsync(IHost host)
         {
-            Validate.NotNull(host, nameof(host));
+            Ensure.NotNull(host, nameof(host));
 
             // TODO: Do a left JOIN on on programs
 
@@ -123,7 +123,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<ProgramInfo> CreateAsync(CreateProgramRequest request)
         {
-            Validate.Object(request, nameof(request));
+            Ensure.Object(request, nameof(request));
 
             if (request.Type != ProgramType.Site && ProgramName.Validate(request.Name) == false)
             {
@@ -152,7 +152,7 @@ namespace Carbon.Platform.Computing
 
         public async Task<bool> DeleteAsync(IProgram program)
         {
-            Validate.NotNull(program, nameof(program));
+            Ensure.NotNull(program, nameof(program));
 
             return await db.Programs.PatchAsync(program.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))

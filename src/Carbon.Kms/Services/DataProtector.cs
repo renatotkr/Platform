@@ -16,7 +16,7 @@ namespace Carbon.Kms
 
         public byte[] Encrypt(byte[] plaintext)
         {
-            Validate.NotNullOrEmpty(plaintext, nameof(plaintext));
+            Ensure.NotNullOrEmpty(plaintext, nameof(plaintext));
 
             var iv = Secret.Generate(16); // 128 bit iv
 
@@ -36,7 +36,7 @@ namespace Carbon.Kms
 
         public byte[] Decrypt(byte[] data)
         {
-            Validate.NotNullOrEmpty(data, nameof(data));
+            Ensure.NotNullOrEmpty(data, nameof(data));
 
             var message = Serializer.Deserialize<EncryptedDataMessage>(data);
             
@@ -45,7 +45,7 @@ namespace Carbon.Kms
 
         public byte[] Decrypt(EncryptedDataMessage message)
         {
-            Validate.NotNull(message, nameof(message));
+            Ensure.NotNull(message, nameof(message));
             
             if (message.Ciphertext == null || message.Ciphertext.Length == 0)
                 throw new ArgumentException("Required", "ciphertext");

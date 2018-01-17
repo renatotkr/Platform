@@ -6,7 +6,7 @@ namespace Carbon.Platform.Hosting
     {
         public UpdateDomainRegistrationRequest(long registrationId, DateTime expires)
         {
-            Validate.Id(registrationId, nameof(registrationId));
+            Ensure.IsValidId(registrationId, nameof(registrationId));
 
             RegistrationId = registrationId;
             Expires = expires;

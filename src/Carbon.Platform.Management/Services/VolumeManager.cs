@@ -25,7 +25,7 @@ namespace Carbon.Platform.Services
             string resourceId,
             IHost host = null)
         {
-            Validate.NotNull(resourceId, nameof(resourceId));
+            Ensure.NotNull(resourceId, nameof(resourceId));
 
             var volume = await volumeService.FindAsync(provider, resourceId);;
             

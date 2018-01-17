@@ -14,7 +14,7 @@ namespace Carbon.Platform.Computing
         
         public async Task<HostProgram> CreateAsync(CreateHostProgramRequest request)
         {            
-            Validate.Object(request, nameof(request)); // Validate the request
+            Ensure.Object(request, nameof(request)); // Validate the request
             
             var hostProgram = new HostProgram(
                 hostId         : request.HostId,

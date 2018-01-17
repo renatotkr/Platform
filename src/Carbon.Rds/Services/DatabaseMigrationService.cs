@@ -20,7 +20,7 @@ namespace Carbon.Rds.Services
 
         public Task<IReadOnlyList<DatabaseMigration>> ListAsync(IDatabaseInfo database)
         {
-            Validate.NotNull(database, nameof(database));
+            Ensure.NotNull(database, nameof(database));
 
             var range = ScopedId.GetRange(database.Id);
 
@@ -32,7 +32,7 @@ namespace Carbon.Rds.Services
 
         public async Task<DatabaseMigration> CreateAsync(CreateDatabaseMigrationRequest request)
         {
-            Validate.NotNull(request, nameof(request));
+            Ensure.NotNull(request, nameof(request));
 
             var id = await DatabaseMigrationId.NextAsync(db.Context, request.DatabaseId);
 

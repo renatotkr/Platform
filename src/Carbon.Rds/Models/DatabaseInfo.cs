@@ -18,9 +18,9 @@ namespace Carbon.Rds
             long ownerId,
             JsonObject properties = null)
         {
-            Validate.Id(id);
-            Validate.NotNullOrEmpty(name, nameof(name));
-            Validate.Id(ownerId, nameof(ownerId));
+            Ensure.IsValidId(id);
+            Ensure.NotNullOrEmpty(name, nameof(name));
+            Ensure.IsValidId(ownerId, nameof(ownerId));
 
             Id = id;
             Name       = name;

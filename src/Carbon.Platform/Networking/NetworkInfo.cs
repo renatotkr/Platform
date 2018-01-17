@@ -23,9 +23,9 @@ namespace Carbon.Platform.Networking
             int? asn = null,
             JsonObject properties = null)
         {
-            Validate.Id(id);
-            Validate.Id(ownerId,            nameof(ownerId));
-            Validate.NotNull(addressBlocks, nameof(addressBlocks));
+            Ensure.IsValidId(id);
+            Ensure.IsValidId(ownerId,            nameof(ownerId));
+            Ensure.NotNull(addressBlocks, nameof(addressBlocks));
 
             Id             = id;
             OwnerId        = ownerId;

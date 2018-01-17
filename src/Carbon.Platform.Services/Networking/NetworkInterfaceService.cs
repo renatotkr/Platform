@@ -30,7 +30,7 @@ namespace Carbon.Platform.Networking
 
         public async Task<NetworkInterfaceInfo> GetAsync(string name)
         {
-            Validate.NotNullOrEmpty(name, nameof(name));
+            Ensure.NotNullOrEmpty(name, nameof(name));
 
             if (long.TryParse(name, out var id))
             {
@@ -50,14 +50,14 @@ namespace Carbon.Platform.Networking
 
         public Task<IReadOnlyList<NetworkInterfaceInfo>> ListAsync(IHost host)
         {
-            Validate.NotNull(host, nameof(host));
+            Ensure.NotNull(host, nameof(host));
 
             return db.NetworkInterfaces.QueryAsync(Eq("hostId", host.Id));
         }
 
         public async Task<NetworkInterfaceInfo> RegisterAsync(RegisterNetworkInterfaceRequest request)
         {
-            Validate.Object(request, nameof(request)); // Validate the request
+            Ensure.Object(request, nameof(request)); // Validate the request
             
             var nic = new NetworkInterfaceInfo(
                 id               : await db.NetworkInterfaces.GetNextScopedIdAsync(request.NetworkId),
@@ -75,7 +75,7 @@ namespace Carbon.Platform.Networking
 
         public async Task<bool> DeleteAsync(INetworkInterface networkInterface)
         {
-            Validate.NotNull(networkInterface, nameof(networkInterface));
+            Ensure.NotNull(networkInterface, nameof(networkInterface));
 
             return await db.NetworkInterfaces.PatchAsync(networkInterface.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))

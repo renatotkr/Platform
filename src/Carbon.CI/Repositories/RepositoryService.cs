@@ -55,8 +55,8 @@ namespace Carbon.CI
 
         public async Task<RepositoryInfo> CreateAsync(CreateRepositoryRequest request, ISecurityContext context)
         {
-            Validate.NotNull(request, nameof(request));
-            Validate.NotNull(context, nameof(context));
+            Ensure.NotNull(request, nameof(request));
+            Ensure.NotNull(context, nameof(context));
 
             var repository = new RepositoryInfo(
                 id                  : await db.Repositories.Sequence.NextAsync(),
@@ -90,7 +90,7 @@ namespace Carbon.CI
 
         public async Task<bool> DeleteAsync(IRepository repository)
         {
-            Validate.NotNull(repository, nameof(repository));
+            Ensure.NotNull(repository, nameof(repository));
 
             return await db.Repositories.PatchAsync(repository.Id, new[] {
                 Change.Replace("deleted", Func("NOW"))

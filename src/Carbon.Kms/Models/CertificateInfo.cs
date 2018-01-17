@@ -19,9 +19,9 @@ namespace Carbon.Kms
             byte[] encryptedPrivateKey = null,
             JsonObject properties = null)
         {
-            Validate.Id(id);
-            Validate.Id(ownerId, nameof(ownerId));
-            Validate.NotNull(data, nameof(data));
+            Ensure.IsValidId(id);
+            Ensure.IsValidId(ownerId, nameof(ownerId));
+            Ensure.NotNull(data, nameof(data));
             
             if (data.Length > 32768)
             {
