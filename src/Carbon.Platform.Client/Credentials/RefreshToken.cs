@@ -2,9 +2,9 @@
 
 namespace Carbon.Platform.Security
 {
-    public class RefreshTokenCredential : ICredential
+    public class RefreshToken : ICredential
     {
-        public RefreshTokenCredential(string value)
+        public RefreshToken(string value)
         {
             Value = value ?? throw new ArgumentNullException(nameof(value));
         }

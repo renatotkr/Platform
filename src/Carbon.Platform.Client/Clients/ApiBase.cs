@@ -4,59 +4,46 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 using Carbon.Data.Protection;
 using Carbon.Json;
-using Carbon.Security.Tokens;
 
 namespace Carbon.Platform
 {
-    using Security;
-
     public abstract class ApiBase
     {
         private readonly string baseUri;
-        private readonly ICredential credential;
-        private readonly AccessTokenService accessTokenService;
+        private readonly IAccessTokenProvider accessTokenProvider;
         
-        private readonly HttpClient http = new HttpClient {
+        protected readonly HttpClient httpClient = new HttpClient {
             DefaultRequestHeaders = {
                 { "User-Agent", "Carbon/1.0" },
                 { "Accept",     "application/json" }
             },
-            Timeout = TimeSpan.FromSeconds(15)
+            Timeout = TimeSpan.FromSeconds(30)
         };
 
-        public ApiBase(Uri endpoint, ICredential credential)
+        public ApiBase(string host, IAccessTokenProvider accessTokenProvider)
         {
-            if (endpoint == null)
-            {
-                throw new ArgumentNullException(nameof(endpoint));
-            }
+            Validate.NotNullOrEmpty(host, nameof(host));
+            
+            this.baseUri = "https://" + host;
 
-            if (endpoint.Scheme != "https")
-            {
-                throw new ArgumentException("scheme must be https", nameof(endpoint));
-            }
-
-            this.baseUri            = endpoint.ToString().TrimEnd('/');
-            this.credential         = credential ?? throw new ArgumentNullException(nameof(credential));
-            this.accessTokenService = new AccessTokenService(http, oauthHost: endpoint.Host);
+            this.accessTokenProvider = accessTokenProvider;
         }
 
         internal async Task<MemoryStream> DownloadAsync(string path)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, baseUri + path) {
-                Version = new Version(2, 0)
-            };
+            Validate.NotNullOrEmpty(path, nameof(path));
+
+            var request = new HttpRequestMessage(HttpMethod.Get, baseUri + path);
 
             await SignAsync(request);
 
             var ms = new MemoryStream();
 
-            using (var response = await http.SendAsync(request).ConfigureAwait(false))
+            using (var response = await httpClient.SendAsync(request).ConfigureAwait(false))
             {
                 if (response.StatusCode == HttpStatusCode.NotFound)
                 {
@@ -90,7 +77,6 @@ namespace Carbon.Platform
             stream.Position = 0;
 
             var request = new HttpRequestMessage(HttpMethod.Put, baseUri + path) {
-                Version = new Version(2, 0),
                 Content = new StreamContent(stream) {
                     Headers = {
                         ContentType = new MediaTypeHeaderValue(contentType)
@@ -134,7 +120,6 @@ namespace Carbon.Platform
             var jsonText = JsonObject.FromObject(data).ToString(pretty: false);
 
             var request = new HttpRequestMessage(new HttpMethod("PATCH"), baseUri + path) {
-                Version = new Version(2, 0),
                 Content = new StringContent(jsonText, Encoding.UTF8, "application/json")
             };
 
@@ -144,9 +129,7 @@ namespace Carbon.Platform
         internal Task<T> GetAsync<T>(string path)
             where T : new()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, baseUri + path) {
-                Version = new Version(2, 0)
-            };
+            var request = new HttpRequestMessage(HttpMethod.Get, baseUri + path);
 
             return SendAsync<T>(request);
         }
@@ -154,13 +137,11 @@ namespace Carbon.Platform
         internal async Task<T[]> GetListAsync<T>(string path)
             where T : new()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, baseUri + path) {
-                Version = new Version(2, 0)
-            };
+            var request = new HttpRequestMessage(HttpMethod.Get, baseUri + path);
 
             await SignAsync(request);
 
-            using (var response = await http.SendAsync(request).ConfigureAwait(false))
+            using (var response = await httpClient.SendAsync(request).ConfigureAwait(false))
             {
                 var text = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
@@ -186,7 +167,7 @@ namespace Carbon.Platform
         {
             await SignAsync(request);
 
-            using (var response = await http.SendAsync(request).ConfigureAwait(false))
+            using (var response = await httpClient.SendAsync(request).ConfigureAwait(false))
             {
                 if (response.StatusCode == HttpStatusCode.NotFound)
                 {
@@ -198,7 +179,7 @@ namespace Carbon.Platform
 
                 if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    throw new UnauthorizedException("unauthorized:" + text);
+                    throw new UnauthorizedException(text);
                 }
 
                 // TODO: standarize error response and return a message message
@@ -218,40 +199,17 @@ namespace Carbon.Platform
             }
         }
       
-        private ISecurityToken accessToken;
-        private readonly SemaphoreSlim gate = new SemaphoreSlim(1);
-
         private async Task SignAsync(HttpRequestMessage request)
         {
-            if (accessToken.ShouldRenew())
-            {
-                await gate.WaitAsync();
+            request.Version = new Version(2, 0);
 
-                try
-                {
-                    if (accessToken.ShouldRenew())
-                    {
-                        await RenewAccessToken();
-                    }
-                }
-                finally
-                {
-                    gate.Release();
-                }
-            }
+            var accessToken = accessTokenProvider.Current.ShouldRenew()
+                ? await accessTokenProvider.RenewAsync()
+                : accessTokenProvider.Current;
 
             request.Headers.Date = DateTimeOffset.UtcNow;
 
             request.Headers.Add("Authorization", "Bearer " + accessToken.Value);
-        }
-
-        public Action AccessTokenRenewing { get; set; }
-
-        public async Task RenewAccessToken()
-        {
-            AccessTokenRenewing?.Invoke();
-
-            accessToken = await accessTokenService.GetAsync(credential);       
         }
     }
 }

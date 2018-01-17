@@ -1,13 +1,18 @@
 ﻿using System;
 
+using Carbon.Data.Sequences;
+
 namespace Carbon.Platform
 {
     using Security;
 
     public class PlatformClient : ApiBase
     {
-        public PlatformClient(Uri endpoint, ICredential credential)
-            : base(endpoint, credential)
+        public PlatformClient(string host, ICredential credential)
+            : this(host, new AccessTokenProvider(host, credential)) { }
+
+        public PlatformClient(string host, IAccessTokenProvider accessTokenProvider)
+            : base(host, accessTokenProvider)
         {
             Clusters     = new ClusterClient(this);
             Domains      = new DomainClient(this);
@@ -20,11 +25,7 @@ namespace Carbon.Platform
             Deployments  = new DeploymentClient(this);
             Users        = new UsersClient(this);
         }
-
-        // Builds
-
-        // Buckets
-
+        
         public DeploymentClient Deployments { get; }
 
         public DomainClient Domains { get; }
@@ -48,7 +49,5 @@ namespace Carbon.Platform
         // Volumes
 
         // Networks
-
-        // ...
     }
 }

@@ -3,9 +3,9 @@ using System.Runtime.Serialization;
 
 namespace Carbon.Platform.Security
 {
-    public class AccessKeyCredential : ICredential
+    public class AccessKey : ICredential
     {
-        public AccessKeyCredential(string accessKeyId, string accessKeySecret, long? accountId, string scope = null)
+        public AccessKey(string accessKeyId, string accessKeySecret, long? accountId, string scope = null)
         {
             AccessKeyId     = accessKeyId ?? throw new ArgumentNullException(nameof(accessKeyId));
             AccessKeySecret = accessKeySecret ?? throw new ArgumentNullException(nameof(accessKeySecret));

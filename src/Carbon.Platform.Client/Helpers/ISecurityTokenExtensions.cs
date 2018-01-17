@@ -6,7 +6,7 @@ namespace Carbon.Platform
 {
     internal static class ISecurityTokenExtensions
     {
-        public static bool ShouldRenew(this ISecurityToken token)
+        public static bool ShouldRenew(this SecurityToken token)
         {
             return token == null || token.Expires.Value <= DateTime.UtcNow.AddMinutes(-1);
         }

@@ -8,7 +8,7 @@ namespace Carbon.Platform.Storage
         [DataMember(Name = "id", EmitDefaultValue = false)]
         public long Id { get; set; }
 
-        [DataMember(Name = "name", EmitDefaultValue = false)]
+        [DataMember(Name = "name")]
         public string Name { get; set; }
         
         [DataMember(Name = "origin", EmitDefaultValue = false)]
