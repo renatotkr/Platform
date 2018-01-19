@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 using Carbon.Json;
 
@@ -10,20 +9,22 @@ namespace Carbon.Platform.Computing
         public CreateHostTemplateRequest( 
             long ownerId,
             string name,
-            IImage image,
-            IMachineType machineType,
+            long imageId,
+            long machineTypeId,
             int locationId,
             string startupScript = null,
             JsonObject properties = null)
         {
-            Ensure.Id(ownerId);
-            Ensure.NotNullOrEmpty(name, nameof(name));
+            Ensure.IsValidId(ownerId,       nameof(ownerId));
+            Ensure.NotNullOrEmpty(name,     nameof(name));
+            Ensure.IsValidId(imageId,       nameof(imageId));
+            Ensure.IsValidId(machineTypeId, nameof(machineTypeId));
 
             OwnerId       = ownerId;
             Name          = name;
-            LocationId    = locationId;
-            Image         = image       ?? throw new ArgumentNullException(nameof(image));
-            MachineType   = machineType ?? throw new ArgumentNullException(nameof(machineType));
+            LocationId    = locationId; // may be universal (0)
+            ImageId       = imageId;
+            MachineTypeId = machineTypeId;
             StartupScript = startupScript;
             Properties    = properties;
         }
@@ -31,18 +32,18 @@ namespace Carbon.Platform.Computing
         public long OwnerId { get; }
 
         [Required]
+        [StringLength(63)]
         public string Name { get; }
+        
+        public long ImageId { get; }
 
-        [Required]
-        public IImage Image { get; }
-
-        [Required]
-        public IMachineType MachineType { get; }
+        public long MachineTypeId { get; }
 
         public int LocationId { get; }
 
-        public JsonObject Properties { get; }
-
+        [StringLength(4000)]
         public string StartupScript { get; }
+
+        public JsonObject Properties { get; }
     }    
 }

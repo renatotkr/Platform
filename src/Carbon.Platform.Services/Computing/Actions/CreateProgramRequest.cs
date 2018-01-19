@@ -17,7 +17,7 @@ namespace Carbon.Platform.Computing
             long? repositoryId = null,
             long? parentId = null)
         {
-            Ensure.Id(ownerId, nameof(ownerId));
+            Ensure.IsValidId(ownerId, nameof(ownerId));
             Ensure.NotNullOrEmpty(name, nameof(name));
 
             OwnerId      = ownerId;

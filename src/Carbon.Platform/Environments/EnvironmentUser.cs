@@ -14,9 +14,9 @@ namespace Carbon.Platform.Environments
             long userId, 
             string[] roles)
         {
-            Validate.Id(environmentId, nameof(environmentId));
-            Validate.Id(userId,        nameof(userId));
-            Validate.NotNull(roles,    nameof(roles));
+            Ensure.IsValidId(environmentId, nameof(environmentId));
+            Ensure.IsValidId(userId,        nameof(userId));
+            Ensure.NotNull(roles,    nameof(roles));
 
             EnvironmentId = environmentId;
             UserId        = userId;
@@ -32,6 +32,9 @@ namespace Carbon.Platform.Environments
         [Member("roles")]
         [StringLength(500)]
         public string[] Roles { get; }
+
+        // TODO
+        public string[] Privileges { get; }
 
         [Member("created"), Timestamp]
         public DateTime Created { get; }

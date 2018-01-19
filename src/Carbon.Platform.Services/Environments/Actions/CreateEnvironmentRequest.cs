@@ -12,7 +12,7 @@ namespace Carbon.Platform.Environments
 
         public CreateEnvironmentRequest(long ownerId, string name, JsonObject properties = null)
         {
-            Ensure.Id(ownerId, nameof(ownerId));
+            Ensure.IsValidId(ownerId, nameof(ownerId));
             Ensure.NotNullOrEmpty(name, nameof(name));
 
             OwnerId    = ownerId;

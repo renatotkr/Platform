@@ -22,8 +22,9 @@ namespace Carbon.Platform.Computing
             long? healthCheckId = null)
         {
             Ensure.IsValidId(id);
-            Ensure.NotNullOrEmpty(name, nameof(name));
-            Ensure.IsValidId(locationId, nameof(locationId));
+            Ensure.NotNullOrEmpty(name,     nameof(name));
+            Ensure.IsValidId(environmentId, nameof(environmentId));
+            Ensure.IsValidId(locationId,    nameof(locationId));
 
             Id             = id;
             Name           = name;

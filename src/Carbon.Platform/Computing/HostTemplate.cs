@@ -16,24 +16,24 @@ namespace Carbon.Platform.Computing
             long id,
             long ownerId,
             string name,
-            IMachineType machineType,
-            IImage image,
+            long imageId,
             int locationId,
+            long machineTypeId,
             string startupScript = null,
             JsonObject properties = null)
         {
             Ensure.IsValidId(id);
-            Ensure.IsValidId(ownerId,          nameof(ownerId));
-            Ensure.NotNullOrEmpty(name, nameof(name));
-            Ensure.NotNull(machineType, nameof(machineType));
-            Ensure.NotNull(image,       nameof(image));
-
+            Ensure.IsValidId(ownerId,      nameof(ownerId));
+            Ensure.NotNullOrEmpty(name,     nameof(name));
+            Ensure.IsValidId(imageId,       nameof(imageId));
+            Ensure.IsValidId(machineTypeId, nameof(machineTypeId));
+            
             Id            = id;
             OwnerId       = ownerId;
             Name          = name;
-            MachineTypeId = machineType.Id;
-            ImageId       = image.Id;
-            LocationId    = locationId;
+            MachineTypeId = machineTypeId;
+            ImageId       = imageId;
+            LocationId    = locationId; // may be 0 (global)
             StartupScript = startupScript;
             Properties    = properties ?? new JsonObject();
         }
@@ -92,13 +92,12 @@ namespace Carbon.Platform.Computing
         public const string KernelId         = "kernelId";
         public const string SecurityGroupIds = "securityGroupIds";
         public const string Monitoring       = "monitoring";
-
-        // volumes [ { size: 100, type: "" } ]
-        public const string Volumes  = "volumes";
-        public const string Volume   = "volume";
-
-        public const string IamRole  = "iamRole";
-        public const string SubnetId = "subnetId";
-        public const string KeyName  = "keyName";
+        
+        public const string Volumes          = "volumes";  // [ { size: 100, type: "" } ]
+        public const string Volume           = "volume";   // { size: 100, type: "" }
+                                             
+        public const string IamRole          = "iamRole";
+        public const string SubnetId         = "subnetId";
+        public const string KeyName          = "keyName";
     }
 }

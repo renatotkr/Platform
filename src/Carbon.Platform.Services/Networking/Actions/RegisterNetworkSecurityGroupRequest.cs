@@ -12,7 +12,7 @@ namespace Carbon.Platform.Networking
             ManagedResource resource)
         {
             Ensure.NotNull(name, nameof(name));
-            Ensure.Id(networkId, nameof(networkId));
+            Ensure.IsValidId(networkId, nameof(networkId));
 
             Name      = name;
             NetworkId = networkId;

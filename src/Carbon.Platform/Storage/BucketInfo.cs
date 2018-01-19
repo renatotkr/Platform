@@ -19,12 +19,14 @@ namespace Carbon.Platform.Storage
             ManagedResource resource,
             JsonObject properties = null)
         {
-            Validate.Id(id);
-            Validate.Id(ownerId, nameof(ownerId));
-            Validate.NotNullOrEmpty(name, nameof(name));
+            Ensure.IsValidId(id);
+            Ensure.IsValidId(ownerId, nameof(ownerId));
+            Ensure.NotNullOrEmpty(name, nameof(name));
 
             if (name.Length > 100)
+            {
                 throw new ArgumentException("Must be 100 characters or fewer", nameof(name));
+            }
 
             Id         = id;
             OwnerId    = ownerId;

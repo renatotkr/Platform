@@ -8,7 +8,7 @@ namespace Carbon.Platform.Storage
     {
         public RegisterBucketRequest(long ownerId, string name, ManagedResource resource)
         {
-            Ensure.Id(ownerId, nameof(ownerId));
+            Ensure.IsValidId(ownerId, nameof(ownerId));
             Ensure.NotNullOrEmpty(name, nameof(name));
 
             if (name.Length > 63)

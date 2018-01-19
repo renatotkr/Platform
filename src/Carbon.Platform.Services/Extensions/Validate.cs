@@ -15,7 +15,7 @@ namespace Carbon.Platform
             Validator.ValidateObject(value, new ValidationContext(value, null, null));
         }
 
-        public static void Id(long value, string name = "id")
+        public static void IsValidId(long value, string name = "id")
         {
             if (value <= 0)
             {

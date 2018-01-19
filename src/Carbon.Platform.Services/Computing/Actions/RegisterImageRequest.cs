@@ -13,7 +13,7 @@ namespace Carbon.Platform.Computing
             ImageType type = ImageType.Machine,
             JsonObject properties = null)
         {
-            Ensure.Id(ownerId, nameof(ownerId));
+            Ensure.IsValidId(ownerId, nameof(ownerId));
             Ensure.NotNullOrEmpty(name, nameof(name));
  
             Name       = name;

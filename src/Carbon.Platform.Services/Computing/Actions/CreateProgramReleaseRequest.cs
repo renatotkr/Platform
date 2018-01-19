@@ -17,7 +17,7 @@ namespace Carbon.Platform.Computing
             JsonObject properties = null)
         {
             Ensure.NotNull(program, nameof(program));
-            Ensure.Id(creatorId, nameof(creatorId));
+            Ensure.IsValidId(creatorId, nameof(creatorId));
 
             Program    = program;
             Version    = version;

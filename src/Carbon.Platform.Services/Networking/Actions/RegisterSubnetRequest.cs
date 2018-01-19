@@ -11,7 +11,7 @@ namespace Carbon.Platform.Networking
             long networkId,
             ManagedResource resource)
         {
-            Ensure.Id(networkId, nameof(networkId));
+            Ensure.IsValidId(networkId, nameof(networkId));
 
             AddressBlocks = addressBlocks ?? throw new ArgumentNullException(nameof(addressBlocks));
             NetworkId     = networkId;

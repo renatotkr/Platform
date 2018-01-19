@@ -21,7 +21,7 @@ namespace Carbon.Platform.Computing
             HostStatus status = HostStatus.Pending,
             HostType type = HostType.Virtual)
         {
-            Ensure.Id(ownerId,          nameof(ownerId));
+            Ensure.IsValidId(ownerId,          nameof(ownerId));
             Ensure.NotNull(cluster,     nameof(cluster));
             Ensure.NotNull(location,    nameof(location));
             Ensure.NotNull(image,       nameof(image));
