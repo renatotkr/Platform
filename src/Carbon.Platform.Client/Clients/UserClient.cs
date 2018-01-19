@@ -6,11 +6,11 @@ using Carbon.Platform.Environments;
 
 namespace Carbon.Platform
 {
-    public class UsersClient
+    public class UserClient
     {
         private readonly ApiBase api;
 
-        internal UsersClient(ApiBase api)
+        internal UserClient(ApiBase api)
         {
             this.api = api ?? throw new ArgumentNullException(nameof(api));
         }
@@ -22,20 +22,21 @@ namespace Carbon.Platform
 
         public Task<UserDetails[]> ListAsync(IEnvironment environment)
         {
+            Ensure.NotNull(environment, nameof(environment));
+
             return api.GetListAsync<UserDetails>($"/environments/{environment.Id}/users");
         }
         
         public Task<UserDetails> GetAsync(long id)
         {
+            Ensure.IsValidId(id);
+
             return api.GetAsync<UserDetails>($"/users/{id}");
         }
 
         public Task<UserDetails> CreateAsync(UserDetails user)
         {
-            return api.PostAsync<UserDetails>(
-                path : $"/users",
-                data : user
-            );
+            return api.PostAsync<UserDetails>($"/users", user);
         }
     }
 }

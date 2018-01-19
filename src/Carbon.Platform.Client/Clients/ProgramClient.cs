@@ -28,16 +28,22 @@ namespace Carbon.Platform
 
         public Task<ProgramDetails[]> ListAsync(IEnvironment environment)
         {
+            Ensure.NotNull(environment, nameof(environment));
+
             return api.GetListAsync<ProgramDetails>($"/environments/{environment.Id}/programs");
         }
 
         public Task<ProgramDetails[]> ListAsync(IHost host)
         {
+            Ensure.NotNull(host, nameof(host));
+
             return api.GetListAsync<ProgramDetails>($"/hosts/{host.Id}/programs");
         }
 
         public Task<ProgramDetails> GetAsync(long id)
         {
+            Ensure.IsValidId(id);
+
             return api.GetAsync<ProgramDetails>($"/programs/{id}");
         }
 
@@ -64,6 +70,8 @@ namespace Carbon.Platform
 
         public async Task<IPackage> DownloadAsync(long id, SemanticVersion version)
         {
+            Ensure.IsValidId(id);
+
             var stream = await api.DownloadAsync($"/programs/{id}@{version}/package.zip");
 
             // All zip packages will be rooted...
@@ -73,15 +81,8 @@ namespace Carbon.Platform
 
         public async Task<ProgramDetails> PublishAsync(ProgramDetails program, Package package)
         {
-            #region Preconditions
-
-            if (program == null)
-                throw new ArgumentNullException(nameof(program));
-
-            if (package == null)
-                throw new ArgumentNullException(nameof(package));
-            
-            #endregion
+            Ensure.NotNull(program, nameof(program));
+            Ensure.NotNull(package, nameof(package));
 
             using (var stream = new MemoryStream())
             {

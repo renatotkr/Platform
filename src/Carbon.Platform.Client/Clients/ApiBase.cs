@@ -72,6 +72,8 @@ namespace Carbon.Platform
             JsonObject properties)
             where T: new()
         {
+            Ensure.NotNull(stream, nameof(stream));
+
             var sha256 = Hash.ComputeSHA256(stream, true);
 
             stream.Position = 0;
@@ -94,10 +96,7 @@ namespace Carbon.Platform
         internal Task<T> PostAsync<T>(string path, object data)
              where T : new()
         {
-            if (data == null)
-            {
-                throw new ArgumentNullException(nameof(data));
-            }
+            Ensure.NotNull(data, nameof(data));
 
             var jsonText = JsonObject.FromObject(data).ToString(pretty: false);
 
@@ -175,8 +174,7 @@ namespace Carbon.Platform
                 }
 
                 var text = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-
+                
                 if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     throw new UnauthorizedException(text);
@@ -206,6 +204,11 @@ namespace Carbon.Platform
             var accessToken = accessTokenProvider.Current.ShouldRenew()
                 ? await accessTokenProvider.RenewAsync()
                 : accessTokenProvider.Current;
+
+            if (accessToken == null)
+            {
+                throw new Exception("AccessTokenProvider returned a null token");
+            }
 
             request.Headers.Date = DateTimeOffset.UtcNow;
 

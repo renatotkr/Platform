@@ -21,6 +21,8 @@ namespace Carbon.Platform
 
         public Task<EnvironmentDetails> GetAsync(long id)
         {
+            Ensure.IsValidId(id);
+
             return api.GetAsync<EnvironmentDetails>($"/environments/{id}");
         }
 

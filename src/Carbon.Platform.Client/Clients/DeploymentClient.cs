@@ -20,12 +20,16 @@ namespace Carbon.Platform
 
         public Task<DeploymentDetails> GetAsync(long id)
         {
+            Ensure.IsValidId(id);
+
             return api.GetAsync<DeploymentDetails>($"/deployments/{id}");
         }
 
-        public Task<DeploymentDetails> CreateAsync(DeploymentDetails data)
+        public Task<DeploymentDetails> CreateAsync(DeploymentDetails deployment)
         {
-            return api.PostAsync<DeploymentDetails>($"/deployments", data);
+            Ensure.NotNull(deployment, nameof(deployment));
+
+            return api.PostAsync<DeploymentDetails>($"/deployments", deployment);
         }
     }
 }

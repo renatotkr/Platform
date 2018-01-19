@@ -23,16 +23,22 @@ namespace Carbon.Platform
 
         public Task<HostDetails[]> ListAsync(ICluster cluster)
         {
+            Ensure.NotNull(cluster, nameof(cluster));
+
             return api.GetListAsync<HostDetails>($"/clusters/{cluster.Id}/hosts");
         }
 
         public Task<HostDetails[]> ListAsync(IEnvironment environment)
         {
+            Ensure.NotNull(environment, nameof(environment));
+
             return api.GetListAsync<HostDetails>($"/environments/{environment.Id}/hosts");
         }
 
         public Task<HostDetails> GetAsync(long id)
         {
+            Ensure.IsValidId(id);
+
             return api.GetAsync<HostDetails>($"/hosts/{id}");
         }
 

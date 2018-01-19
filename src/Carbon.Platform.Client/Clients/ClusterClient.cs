@@ -21,11 +21,15 @@ namespace Carbon.Platform
 
         public Task<ClusterDetails> GetAsync(long id)
         {
+            Ensure.IsValidId(id);
+
             return api.GetAsync<ClusterDetails>($"/clusters/{id}");
         }
 
         public Task<ClusterDetails> CreateAsync(ClusterDetails cluster)
         {
+            Ensure.NotNull(cluster, nameof(cluster));
+
             return api.PostAsync<ClusterDetails>($"/clusters", cluster);
         }
     }

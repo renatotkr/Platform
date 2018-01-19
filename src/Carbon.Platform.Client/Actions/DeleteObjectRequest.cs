@@ -4,6 +4,9 @@
     {
         public DeleteObjectRequest(string bucketName, string key)
         {
+            Ensure.NotNullOrEmpty(bucketName, nameof(bucketName));
+            Ensure.NotNull(key,               nameof(key));
+
             BucketName = bucketName;
             Key = key;
         }

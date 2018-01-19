@@ -1,13 +1,14 @@
-﻿using System;
-
-namespace Carbon.Platform.Storage
+﻿namespace Carbon.Platform.Storage
 {
     public class GetObjectRequest
     {
         public GetObjectRequest(string bucketName, string key)
         {
-            BucketName  = bucketName ?? throw new ArgumentNullException(nameof(bucketName));
-            Key         = key ?? throw new ArgumentNullException(nameof(key));
+            Ensure.NotNullOrEmpty(bucketName, nameof(bucketName));
+            Ensure.NotNullOrEmpty(key, nameof(key));
+
+            BucketName = bucketName;
+            Key        = key;
         }
 
         public string BucketName { get; }

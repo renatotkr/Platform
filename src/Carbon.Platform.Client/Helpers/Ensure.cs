@@ -4,7 +4,7 @@ namespace Carbon.Platform
 {
     internal static class Ensure
     {
-        public static void Id(long value, string paramName = "id")
+        public static void IsValidId(long value, string paramName = "id")
         {
             if (value <= 0)
             {
@@ -27,7 +27,7 @@ namespace Carbon.Platform
                 throw new ArgumentNullException(paramName);
             }
 
-            if (string.IsNullOrEmpty(value))
+            if (value.Length == 0)
             {
                 throw new ArgumentException("Must not be empty", paramName);
             }

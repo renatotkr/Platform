@@ -17,6 +17,8 @@ namespace Carbon.Platform
 
         public Task<ExceptionDetails[]> ListAsync(IEnvironment environment)
         {
+            Ensure.NotNull(environment, nameof(environment));
+
             return api.GetListAsync<ExceptionDetails>($"/environments/{environment.Id}/exceptions");
         }
 
@@ -24,11 +26,15 @@ namespace Carbon.Platform
         
         public Task<ExceptionDetails> GetAsync(long id)
         {
+            Ensure.IsValidId(id);
+
             return api.GetAsync<ExceptionDetails>($"/exceptions/{id}");
         }
 
         public Task<ExceptionDetails> CreateAsync(ExceptionDetails exception)
         {
+            Ensure.NotNull(exception);
+
             return api.PostAsync<ExceptionDetails>(
                 path : $"/exceptions",
                 data : exception

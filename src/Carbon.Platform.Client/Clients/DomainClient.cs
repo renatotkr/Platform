@@ -23,26 +23,26 @@ namespace Carbon.Platform
 
         public Task<DomainDetails> GetAsync(long id)
         {
+            Ensure.IsValidId(id);
+
             return api.GetAsync<DomainDetails>($"/domains/{id}");
         }
 
         public Task<DomainDetails> GetAsync(string name)
         {
+            Ensure.NotNullOrEmpty(name, nameof(name));
+
             return api.GetAsync<DomainDetails>($"/domains/{name}");
         }
 
         public Task<DomainDetails> CreateAsync(DomainDetails domain)
         {
-            #region Preconditions
-
-            if (domain == null)
-                throw new ArgumentNullException(nameof(domain));
+            Ensure.NotNull(domain, nameof(domain));
 
             if (domain.Name == null)
                 throw new ArgumentNullException(nameof(domain.Name));
 
-            #endregion
-
+            
             return api.PostAsync<DomainDetails>(
                 path : $"/domains",
                 data : domain

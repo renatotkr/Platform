@@ -24,16 +24,23 @@ namespace Carbon.Platform
 
         public Task<RepositoryDetails> GetAsync(long id)
         {
+            Ensure.IsValidId(id);
+
             return api.GetAsync<RepositoryDetails>($"/repositories/{id}");
         }
         
         public Task<RepositoryDetails> GetAsync(long id, string revision)
         {
+            Ensure.IsValidId(id);
+            Ensure.NotNullOrEmpty(revision, nameof(revision));
+
             return api.GetAsync<RepositoryDetails>($"/repositories/{id}@{revision}");
         }
 
         public async Task<IPackage> DownloadAsync(long id, string revision = "master")
         {
+            Ensure.IsValidId(id);
+
             var packageStream = await api.DownloadAsync($"/repositories/{id}@{revision}/package.zip");
 
             return ZipPackage.FromStream(packageStream, stripFirstLevel: false);
