@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="Carbon.Data.Sql" Version="0.38.0" />
-    <PackageReference Include="protobuf-net" Version="2.3.3" />
+    <PackageReference Include="protobuf-net" Version="2.3.4" />
   </ItemGroup>
 
   <ItemGroup>

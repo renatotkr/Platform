@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Carbon.Platform.Client</AssemblyName>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <Version>0.77.0</Version>
+    <Version>0.78.3</Version>
 
     <!-- Package Details -->
     <Authors>iamcarbon</Authors>
@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="Carbon.Data" Version="0.26.0" />
-    <PackageReference Include="Carbon.Jose" Version="0.4.0" />
+    <PackageReference Include="Carbon.Jose" Version="0.6.0" />
     <PackageReference Include="Carbon.Security.Primitives" Version="0.23.0" />
   </ItemGroup>
 
