@@ -8,6 +8,9 @@ namespace Carbon.Platform.Computing
     {
         [DataMember(Name = "id", EmitDefaultValue = false)]
         public long Id { get; set; }
+        
+        [DataMember(Name = "ownerId", EmitDefaultValue = false)]
+        public long OwnerId { get; set; }
 
         [DataMember(Name = "type", EmitDefaultValue = false)]
         public ImageType Type { get; set; }
@@ -18,6 +21,9 @@ namespace Carbon.Platform.Computing
         [DataMember(Name = "size", EmitDefaultValue = false)]
         public long Size { get; set; }
 
+        [DataMember(Name = "location", EmitDefaultValue = false)]
+        public LocationDetails Location { get; set; }
+        
         [DataMember(Name = "name", EmitDefaultValue = false)]
         public ManagedResource Resource { get; set; }
 
