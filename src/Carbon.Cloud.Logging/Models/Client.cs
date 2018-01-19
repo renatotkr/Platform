@@ -16,9 +16,12 @@ namespace Carbon.Cloud.Logging
 
         public Client(Uid id, IPAddress ip, string userAgent)
         {
+            Ensure.NotNull(ip, nameof(ip));
+            Ensure.NotNull(userAgent, nameof(userAgent));
+
             Id        = id;
-            Ip        = ip        ?? throw new ArgumentNullException(nameof(ip));
-            UserAgent = userAgent ?? throw new ArgumentNullException(nameof(userAgent));
+            Ip        = ip;
+            UserAgent = userAgent;
             Hash      = ClientHash.Compute(this); // sha1(id, ip, userAgent)
         }
 

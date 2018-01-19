@@ -20,8 +20,11 @@ namespace Carbon.Cloud.Logging
             JsonObject context = null,
             JsonObject properties = null)
         {
-            Action     = action   ?? throw new ArgumentNullException(nameof(action));
-            Resource   = resource ?? throw new ArgumentNullException(nameof(resource));
+            Ensure.NotNullOrEmpty(action, nameof(action));
+            Ensure.NotNullOrEmpty(resource, nameof(resource));
+
+            Action     = action;
+            Resource   = resource;
             Context    = context;
             Properties = properties;
             Source     = source;

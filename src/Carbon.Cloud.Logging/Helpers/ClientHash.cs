@@ -15,32 +15,22 @@ namespace Carbon.Cloud.Logging
 
         public static byte[] Compute(ISecurityContext context)
         {
-            #region Preconditions
-
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
-            #endregion
+            Ensure.NotNull(context, nameof(context));
 
             return Compute(Uid.Parse(context.ClientId), context.ClientIp, context.UserAgent);
         }
 
         public static byte[] Compute(IClient client)
         {
+            Ensure.NotNull(client, nameof(client));
+
             return Compute(Uid.Parse(client.Id), client.Ip, client.UserAgent);
         }
 
         public static byte[] Compute(Uid id, IPAddress ip, string userAgent)
         {
-            #region Preconditions
-
-            if (ip == null)
-                throw new ArgumentNullException(nameof(ip));
-
-            if (userAgent == null)
-                throw new ArgumentNullException(nameof(userAgent));
-
-            #endregion
+            Ensure.NotNull(ip, nameof(ip));
+            Ensure.NotNull(userAgent, nameof(userAgent));
 
             // TODO: Avoid some of these allocations....
 

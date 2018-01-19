@@ -10,6 +10,8 @@ namespace Carbon.Platform.Diagnostics
 
         public CreateExceptionRequest(Exception ex)
         {
+            Ensure.NotNull(ex, nameof(ex));
+
             Type       = ex.GetType().ToString();
             Message    = ex.Message;
             StackTrace = ex.StackTrace;

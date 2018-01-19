@@ -18,7 +18,7 @@ namespace Carbon.Platform.Diagnostics
         public long ProgramId { get; set; }
 
         // [Member("programVersion")]
-        [Ascii, StringLength(1000)]
+        [Ascii, StringLength(50)]
         public string ProgramVersion { get; set; }
         
         [Member("hostId")]
