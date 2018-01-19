@@ -9,6 +9,8 @@ namespace Carbon.Platform.Computing
 
         Task<HostTemplate> GetAsync(long id);
 
+        Task<HostTemplate> FindAsync(long ownerId, string name);
+
         Task<IReadOnlyList<HostTemplate>> ListAsync();
 
         Task<IReadOnlyList<HostTemplate>> ListAsync(long ownerId);

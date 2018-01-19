@@ -49,15 +49,22 @@ namespace Carbon.Platform.Computing
             );
         }
 
-        public async Task<ImageInfo> GetAsync(ResourceProvider provider, string resourceId)
+        public async Task<ImageInfo> FindAsync(ResourceProvider provider, string resourceId)
         {
             Ensure.NotNull(resourceId, nameof(resourceId));
 
-            var image = await db.Images.FindAsync(provider, resourceId);
+            return await db.Images.QueryFirstOrDefaultAsync(
+                And(Eq("providerId", provider.Id), Eq("resourceId", resourceId)
+            ));
+        }
+
+        public async Task<ImageInfo> GetAsync(ResourceProvider provider, string resourceId)
+        {
+            var image = await FindAsync(provider, resourceId);
 
             if (image == null)
             {
-                // Automatically register machine images until we can depend on the manager to register them before use
+                // Automatically register machine images until we can depend on the manager to register them for us before use
 
                 var registerRequest = new RegisterImageRequest(
                     name     : Guid.NewGuid().ToString("N"),

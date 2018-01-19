@@ -11,6 +11,8 @@ namespace Carbon.Platform.Computing
 
         Task<ImageInfo> GetAsync(long ownerId, string name);
 
+        Task<ImageInfo> FindAsync(ResourceProvider provider, string resourceId);
+
         Task<ImageInfo> GetAsync(ResourceProvider provider, string resourceId);
 
         Task<bool> ExistsAsync(ResourceProvider provider, string resourceId);
