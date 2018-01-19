@@ -19,13 +19,9 @@ namespace Carbon.Packaging
 
         public Manifest(IEnumerable<IManifestEntry> items)
         {
-            #region Preconditions
-
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
-
-            #endregion
-
+            
             foreach (var item in items)
             {
                 Add(item.Key, item);

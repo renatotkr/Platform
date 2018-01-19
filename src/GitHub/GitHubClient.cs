@@ -36,15 +36,11 @@ namespace GitHub
             string password,
             AuthorizationRequest request)
         {
-            #region Preconditions
+            if (string.IsNullOrEmpty(userName))
+                throw new ArgumentException("Required", nameof(userName));
 
-            if (userName == null)
-                throw new ArgumentNullException(nameof(userName));
-
-            if (password == null)
-                throw new ArgumentNullException(nameof(password));
-
-            #endregion
+            if (string.IsNullOrEmpty(password))
+                throw new ArgumentException("Required", nameof(password));
 
             var postData = JsonObject.FromObject(request).ToString();
 
@@ -77,12 +73,10 @@ namespace GitHub
 
         public async Task<GitUser> GetUserAsync(string userName)
         {
-            #region Preconditions
-
-            if (userName == null)
-                throw new ArgumentNullException(nameof(userName));
-
-            #endregion
+            if (string.IsNullOrEmpty(userName))
+            {
+                throw new ArgumentException("Required", nameof(userName));
+            }
 
             // GET /users/:username
             var result = await SendAsync(
@@ -140,7 +134,7 @@ namespace GitHub
 
             // GET /repos/:owner/:repo/git/refs/heads/skunkworkz/featureA
 
-            refName = refName.Replace("refs/", "");
+            refName = refName.Replace("refs/", string.Empty);
 
             var result = await SendAsync(
                 method : HttpMethod.Get,

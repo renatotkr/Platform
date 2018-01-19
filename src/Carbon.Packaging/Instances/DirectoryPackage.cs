@@ -32,7 +32,7 @@ namespace Carbon.Packaging
         private string GetKey(FileInfo file)
         {
             return file.FullName
-                .Replace(root.FullName, "")
+                .Replace(root.FullName, string.Empty)
                 .Replace('\\', '/')
                 .TrimStart(Seperators.ForwardSlash);
         }

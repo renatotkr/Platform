@@ -18,11 +18,7 @@ namespace Carbon.Packaging
 
         public void Add(string key, Stream stream)
         {
-            #region Preconditions
-
             if (key == null) throw new ArgumentNullException(nameof(key));
-
-            #endregion
 
             var blob = new Blob(key, stream);
 

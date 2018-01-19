@@ -5,7 +5,9 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Carbon.Storage;
+
 using SharpCompress.Archives.Tar;
 using SharpCompress.Readers;
 
@@ -51,7 +53,7 @@ namespace Carbon.Packaging
             {
                 var trim = key.Split('/')[0] + '/';
 
-                return key.Replace(trim, "");
+                return key.Replace(trim, string.Empty);
             }
 
             return key;

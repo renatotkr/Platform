@@ -43,7 +43,7 @@ namespace Carbon.Packaging
             {
                 var trim = key.Split(Seperators.ForwardSlash)[0] + '/';
 
-                return key.Replace(trim, "");
+                return key.Replace(trim, string.Empty);
             }
 
             return key;

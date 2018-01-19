@@ -4,7 +4,10 @@
     {
         public AwsVolumeSpecification() { }
 
-        public AwsVolumeSpecification(string deviceName, string type, long size)
+        public AwsVolumeSpecification(
+            string deviceName, 
+            string type,
+            long size)
         {
             DeviceName = deviceName;
             Type       = type;
