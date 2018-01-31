@@ -25,12 +25,16 @@ namespace Carbon.Rds.Services
 
         public async Task<DatabaseInfo> GetAsync(long id)
         {
+            Ensure.IsValidId(id);
+
             return await db.Databases.FindAsync(id)
                 ?? throw ResourceError.NotFound(ResourceTypes.Database, id);
         }
 
         public Task<IReadOnlyList<DatabaseInfo>> ListAsync(long ownerId)
         {
+            Ensure.IsValidId(ownerId, nameof(ownerId));
+
             return db.Databases.QueryAsync(
                 And(Eq("ownerId", ownerId), IsNull("deleted"))
             );
@@ -64,7 +68,7 @@ namespace Carbon.Rds.Services
             Ensure.NotNull(database, nameof(database));
 
             return await db.Databases.PatchAsync(database.Id, new[] {
-                Change.Replace("deleted", Func("NOW"))
+                Change.Replace("deleted", Now)
             }, condition: IsNull("deleted")) > 0;
         }
     }

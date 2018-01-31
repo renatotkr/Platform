@@ -55,7 +55,7 @@ namespace Carbon.Rds.Services
                 Change.Replace("message",   request.Message),
                 Change.Replace("size",      request.Size),
                 Change.Replace("sha256",    request.Sha256),
-                Change.Replace("completed", Func("NOW"))
+                Change.Replace("completed", Now)
             });
         }
     }

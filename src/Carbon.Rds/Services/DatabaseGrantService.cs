@@ -100,7 +100,7 @@ namespace Carbon.Rds.Services
             Ensure.NotNull(grant, nameof(grant));
 
             return await db.DatabaseGrants.PatchAsync(grant.Id, new[] {
-                Change.Replace("deleted", Func("NOW"))
+                Change.Replace("deleted", Now)
             }, condition: IsNull("deleted")) > 0;
         }
     }

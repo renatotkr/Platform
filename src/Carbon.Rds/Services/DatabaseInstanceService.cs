@@ -54,7 +54,7 @@ namespace Carbon.Rds.Services
             Ensure.NotNull(instance, nameof(instance));
             
             await db.DatabaseInstances.PatchAsync(instance.Id, new[] {
-                Change.Replace("terminated", Func("NOW"))
+                Change.Replace("terminated", Now)
             });
         }
     }

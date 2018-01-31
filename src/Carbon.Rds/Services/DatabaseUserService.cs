@@ -33,6 +33,9 @@ namespace Carbon.Rds.Services
 
         public async Task<DatabaseUser> FindAsync(long databaseId, string name)
         {
+            Ensure.IsValidId(databaseId, nameof(databaseId));
+            Ensure.NotNullOrEmpty(name,  nameof(name));
+
             return await db.DatabaseUsers.QueryFirstOrDefaultAsync(
                 Conjunction(
                     Eq("databaseId", databaseId),
@@ -51,6 +54,8 @@ namespace Carbon.Rds.Services
         
         public async Task RestoreAsync(long databaseId, long userId)
         {
+            Ensure.IsValidId(databaseId, nameof(databaseId));
+
             await db.DatabaseUsers.PatchAsync((databaseId, userId), new[] {
                 Change.Remove("deleted")
             });
@@ -72,7 +77,7 @@ namespace Carbon.Rds.Services
             Ensure.NotNull(user, nameof(user));
 
             await db.DatabaseUsers.PatchAsync((user.DatabaseId, user.UserId), new[] {
-                Change.Replace("deleted", Func("NOW"))
+                Change.Replace("deleted", Now)
             }, condition: IsNull("deleted"));
         }
     }
