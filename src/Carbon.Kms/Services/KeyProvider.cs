@@ -26,44 +26,45 @@ namespace Carbon.Kms.Services
 
         public async ValueTask<CryptoKey> GetAsync(long ownerId, string name)
         {
-            var key = await keyStore.GetAsync(ownerId, name).ConfigureAwait(false);
+            Ensure.IsValidId(ownerId,   nameof(ownerId));
+            Ensure.NotNullOrEmpty(name, nameof(name));
 
-            return await DecryptAsync(key).ConfigureAwait(false);
+            var key = await keyStore.GetAsync(ownerId, name);
+
+            return await DecryptAsync(key);
         }
 
         public async ValueTask<CryptoKey> GetAsync(Uid id)
         {
-            var key = await keyStore.GetAsync(id).ConfigureAwait(false);
+            var key = await keyStore.GetAsync(id);
 
-            return await DecryptAsync(key).ConfigureAwait(false);
+            return await DecryptAsync(key);
         }
 
         private async Task<CryptoKey> DecryptAsync(KeyInfo key)
         {
-            #region Preconditions
+            Ensure.NotNull(key, nameof(key));
 
             switch (key.Status)
             {
                 case KeyStatus.Deactivated : throw new Exception($"key#{key.Id} is deactivated");
-                case KeyStatus.Compromised : throw new Exception($"key#{key.Id} was comprimised and may not longer be used");
+                case KeyStatus.Compromised : throw new Exception($"key#{key.Id} was compromised and may not longer be used");
                 case KeyStatus.Destroyed   : throw new Exception($"key#{key.Id} is destroyed");
                 case KeyStatus.Suspended   : throw new Exception($"key#{key.Id} is suspended");
             }
 
             if (key.Expires != null && key.Expires <= clock.Observe())
             {
-                throw new Exception($"key#{key.Id} expired on '{key.Expires}'");
+                throw new KeyExpiredException(key, key.Expires.Value);
             }
-
-            #endregion
 
             var kek = await protectorFactory.GetAsync(
                 keyId : key.KekId.ToString(),
                 aad   : key.GetAad()
-            ).ConfigureAwait(false);
+            );
 
             // use the key encryption key to decrypt it
-            var result = await kek.DecryptAsync(key.Data).ConfigureAwait(false);
+            var result = await kek.DecryptAsync(key.Data);
 
             return new CryptoKey(
                 id    : key.Id.ToString(),

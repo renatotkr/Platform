@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Carbon.Kms</AssemblyName>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <VersionPrefix>0.42.1</VersionPrefix>
+    <VersionPrefix>0.44.0</VersionPrefix>
     <LangVersion>7.2</LangVersion>
 
     <!-- Package Details -->
@@ -18,10 +18,10 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Carbon.Data.Sql" Version="0.38.0" />
+    <PackageReference Include="Carbon.Data.Sql" Version="0.40.0" />
     <PackageReference Include="Carbon.Json" Version="1.6.0" />
     <PackageReference Include="Carbon.Time" Version="1.7.0" />
-    <PackageReference Include="protobuf-net" Version="2.3.4" />
+    <PackageReference Include="protobuf-net" Version="2.3.5" />
   </ItemGroup>
 
 </Project>

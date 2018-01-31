@@ -18,7 +18,7 @@ namespace Carbon.Kms
         {
             Ensure.NotNull(message, nameof(message));
 
-            var protector = await protectorProvider.GetAsync(message.Header.KeyId).ConfigureAwait(false) as DataProtector;
+            var protector = await protectorProvider.GetAsync(message.Header.KeyId) as DataProtector;
 
             return protector.Decrypt(message);
         }

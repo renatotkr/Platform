@@ -11,6 +11,8 @@ namespace Carbon.Kms.Services
         [StringLength(100)]
         public string Name { get; set; }
 
+        // privileges?
+
         public string[] Actions { get; set; }
 
         public JsonObject Constraints { get; set; }
@@ -20,11 +22,5 @@ namespace Carbon.Kms.Services
         public long UserId { get; set; }
 
         public string ExternalId { get; set; }
-    }
-
-    public static class KeyGrantPrivilege
-    {
-        public const string Encrypt = "encrypt";
-        public const string Decrypt = "decrypt";
     }
 }

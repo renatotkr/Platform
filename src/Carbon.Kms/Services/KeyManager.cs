@@ -34,14 +34,12 @@ namespace Carbon.Kms.Services
 
             var aes = Aes.Create();
             
-            // keying material.
-
             aes.KeySize = 256;
             aes.GenerateKey();
 
-            var masterKey = await protectorProvider.GetAsync(masterKeyId.ToString(), request.Aad).ConfigureAwait(false);
+            var masterKey = await protectorProvider.GetAsync(masterKeyId.ToString(), request.Aad);
 
-            var ciphertext = await masterKey.EncryptAsync(aes.Key).ConfigureAwait(false);
+            var ciphertext = await masterKey.EncryptAsync(aes.Key);
 
             Uid id = Guid.NewGuid();
 
@@ -57,7 +55,7 @@ namespace Carbon.Kms.Services
                 aad         : ToJson(request.Aad)
             );
 
-            await keyStore.CreateAsync(key).ConfigureAwait(false);
+            await keyStore.CreateAsync(key);
 
             return key;
         }

@@ -54,7 +54,7 @@ namespace Carbon.Kms.Services
             Ensure.NotNull(grant, nameof(grant));
 
             return await db.KeyGrants.PatchAsync(grant.Id, new[] {
-                Change.Replace("deleted", Expression.Func("NOW"))
+                Change.Replace("deleted", Expression.Now)
             }, Expression.IsNull("deleted")) > 0;
         }
     }

@@ -11,24 +11,14 @@ namespace Carbon.Kms
             byte[] encryptedPrivateKey = null,
             long? parentId = null)
         {
-            #region Preconditions
-            
-            if (data == null)
-            {
-                throw new ArgumentNullException(nameof(data));
-            }
-            else if (data.Length == 0)
-            {
-                throw new ArgumentException("Must not be empty", nameof(data));
-            }
+            Ensure.IsValidId(ownerId,   nameof(ownerId));
+            Ensure.NotNullOrEmpty(data, nameof(data));
 
             if (parentId != null && parentId <= 0)
             {
                 throw new ArgumentException("Must be > 0", nameof(parentId));
             }
-
-            #endregion
-
+            
             OwnerId             = ownerId;
             Subjects            = subjects;
             Data                = data;

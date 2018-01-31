@@ -14,16 +14,14 @@ namespace Carbon.Kms
             int size = 256, 
             IEnumerable<KeyValuePair<string, string>> aad = null)
         {
-            #region Preconditions
+            Ensure.IsValidId(ownerId, nameof(ownerId));
 
             if (type == default)
                 throw new ArgumentException(nameof(type));
             
             if (size <= 0)
                 throw new ArgumentOutOfRangeException(nameof(size), size, "Must be > 0");
-
-            #endregion
-
+            
             OwnerId = ownerId;
             Name    = name;
             Type    = type;

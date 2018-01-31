@@ -34,6 +34,8 @@ namespace Carbon.Kms
         [Ascii, StringLength(500)]
         public string Path { get; }
 
+        // Type (DNS)
+
         // CN=a
         // DNS=a
         [Member("name")]

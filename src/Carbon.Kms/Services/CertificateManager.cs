@@ -19,6 +19,8 @@ namespace Carbon.Kms.Services
 
         public async Task<ICertificate> GetAsync(long id)
         {
+            Ensure.IsValidId(id);
+
             var certificate = await db.Certificates.FindAsync(id);
 
             if (certificate == null || certificate.Deleted != null)
@@ -89,7 +91,7 @@ namespace Carbon.Kms.Services
             Ensure.NotNull(certificate, nameof(certificate));
 
             await db.Certificates.PatchAsync(certificate.Id, new[] {
-                Change.Replace("deleted", Expression.Func("NOW"))
+                Change.Replace("deleted", Expression.Now)
             }, condition: Expression.IsNull("deleted"));
         }
 
@@ -98,7 +100,7 @@ namespace Carbon.Kms.Services
             Ensure.NotNull(certificate, nameof(certificate));
 
             await db.Certificates.PatchAsync(certificate.Id, new[] {
-                Change.Replace("revoked", Expression.Func("NOW"))
+                Change.Replace("revoked", Expression.Now)
             }, condition: Expression.IsNull("revoked"));
         }
     }

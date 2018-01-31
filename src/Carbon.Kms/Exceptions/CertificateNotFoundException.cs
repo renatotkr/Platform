@@ -5,6 +5,6 @@ namespace Carbon.Kms
     public class CertificateNotFoundException : Exception
     {
         public CertificateNotFoundException(long certificateId)
-            : base($"certificate#{certificateId} does not exist") { }
+            : base($"borg:certificate/{certificateId} not found") { }
     }
 }

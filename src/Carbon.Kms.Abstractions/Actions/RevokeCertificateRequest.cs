@@ -2,9 +2,13 @@
 {
     public class RevokeCertificateRequest
     {
-        public RevokeCertificateRequest(long id, CertificateRevocationReason reason)
+        public RevokeCertificateRequest(
+            long id,
+            CertificateRevocationReason reason = CertificateRevocationReason.Unspecified)
         {
-            Id = id;
+            Ensure.IsValidId(id);
+
+            Id     = id;
             Reason = reason;
         }
 

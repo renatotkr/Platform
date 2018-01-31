@@ -4,7 +4,7 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace Carbon.Kms
 {
-    public static class X509Certificate2Extensions
+    public static partial class X509Certificate2Extensions
     {
         public static IEnumerable<AlternateSubject> GetAlternateSubjectNames(this X509Certificate2 cert)
         {
@@ -33,25 +33,5 @@ namespace Carbon.Kms
                 }
             }
         }
-
-        public readonly struct AlternateSubject
-        {
-            public AlternateSubject(string type, string name)
-            {
-                Type = type;
-                Name = name;
-            }
-
-            public readonly string Type;
-
-            public readonly string Name;
-
-            public void Deconstruct(out string type, out string name)
-            {
-                type = Type;
-                name = Name;
-            }
-        }
-
     }
 }

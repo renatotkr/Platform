@@ -27,7 +27,9 @@ namespace Carbon.Kms
             Ensure.IsValidId(userId, nameof(userId));
 
             if (name.Length > 100)
+            {
                 throw new ArgumentException("Must be 100 characters or fewer", nameof(name));
+            }
 
             Id          = grantId;
             KeyId       = keyId;
